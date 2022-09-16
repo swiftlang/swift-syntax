@@ -5534,11 +5534,11 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax?,
-    _ unexpectedBetweenAttributesAndIsolated: UnexpectedNodesSyntax? = nil,
-    isolated: TokenSyntax?,
-    _ unexpectedBetweenIsolatedAndConst: UnexpectedNodesSyntax? = nil,
-    const: TokenSyntax?,
-    _ unexpectedBetweenConstAndFirstName: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndIsolatedToken: UnexpectedNodesSyntax? = nil,
+    isolatedToken: TokenSyntax?,
+    _ unexpectedBetweenIsolatedTokenAndConstToken: UnexpectedNodesSyntax? = nil,
+    constToken: TokenSyntax?,
+    _ unexpectedBetweenConstTokenAndFirstName: UnexpectedNodesSyntax? = nil,
     firstName: TokenSyntax?,
     _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
     secondName: TokenSyntax?,
@@ -5556,11 +5556,11 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      unexpectedBetweenAttributesAndIsolated?.raw,
-      isolated?.raw,
-      unexpectedBetweenIsolatedAndConst?.raw,
-      const?.raw,
-      unexpectedBetweenConstAndFirstName?.raw,
+      unexpectedBetweenAttributesAndIsolatedToken?.raw,
+      isolatedToken?.raw,
+      unexpectedBetweenIsolatedTokenAndConstToken?.raw,
+      constToken?.raw,
+      unexpectedBetweenConstTokenAndFirstName?.raw,
       firstName?.raw,
       unexpectedBetweenFirstNameAndSecondName?.raw,
       secondName?.raw,
@@ -5641,105 +5641,105 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var unexpectedBetweenAttributesAndIsolated: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndIsolatedToken: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenAttributesAndIsolated(value)
+      self = withUnexpectedBetweenAttributesAndIsolatedToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndIsolated` replaced.
-  /// - param newChild: The new `unexpectedBetweenAttributesAndIsolated` to replace the node's
-  ///                   current `unexpectedBetweenAttributesAndIsolated`, if present.
-  public func withUnexpectedBetweenAttributesAndIsolated(
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndIsolatedToken` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributesAndIsolatedToken` to replace the node's
+  ///                   current `unexpectedBetweenAttributesAndIsolatedToken`, if present.
+  public func withUnexpectedBetweenAttributesAndIsolatedToken(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
     return FunctionParameterSyntax(newData)
   }
 
-  public var isolated: TokenSyntax? {
+  public var isolatedToken: TokenSyntax? {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withIsolated(value)
+      self = withIsolatedToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `isolated` replaced.
-  /// - param newChild: The new `isolated` to replace the node's
-  ///                   current `isolated`, if present.
-  public func withIsolated(
+  /// Returns a copy of the receiver with its `isolatedToken` replaced.
+  /// - param newChild: The new `isolatedToken` to replace the node's
+  ///                   current `isolatedToken`, if present.
+  public func withIsolatedToken(
     _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 3)
     return FunctionParameterSyntax(newData)
   }
 
-  public var unexpectedBetweenIsolatedAndConst: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenIsolatedTokenAndConstToken: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenIsolatedAndConst(value)
+      self = withUnexpectedBetweenIsolatedTokenAndConstToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenIsolatedAndConst` replaced.
-  /// - param newChild: The new `unexpectedBetweenIsolatedAndConst` to replace the node's
-  ///                   current `unexpectedBetweenIsolatedAndConst`, if present.
-  public func withUnexpectedBetweenIsolatedAndConst(
+  /// Returns a copy of the receiver with its `unexpectedBetweenIsolatedTokenAndConstToken` replaced.
+  /// - param newChild: The new `unexpectedBetweenIsolatedTokenAndConstToken` to replace the node's
+  ///                   current `unexpectedBetweenIsolatedTokenAndConstToken`, if present.
+  public func withUnexpectedBetweenIsolatedTokenAndConstToken(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return FunctionParameterSyntax(newData)
   }
 
-  public var const: TokenSyntax? {
+  public var constToken: TokenSyntax? {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withConst(value)
+      self = withConstToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `const` replaced.
-  /// - param newChild: The new `const` to replace the node's
-  ///                   current `const`, if present.
-  public func withConst(
+  /// Returns a copy of the receiver with its `constToken` replaced.
+  /// - param newChild: The new `constToken` to replace the node's
+  ///                   current `constToken`, if present.
+  public func withConstToken(
     _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 5)
     return FunctionParameterSyntax(newData)
   }
 
-  public var unexpectedBetweenConstAndFirstName: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenConstTokenAndFirstName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenConstAndFirstName(value)
+      self = withUnexpectedBetweenConstTokenAndFirstName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenConstAndFirstName` replaced.
-  /// - param newChild: The new `unexpectedBetweenConstAndFirstName` to replace the node's
-  ///                   current `unexpectedBetweenConstAndFirstName`, if present.
-  public func withUnexpectedBetweenConstAndFirstName(
+  /// Returns a copy of the receiver with its `unexpectedBetweenConstTokenAndFirstName` replaced.
+  /// - param newChild: The new `unexpectedBetweenConstTokenAndFirstName` to replace the node's
+  ///                   current `unexpectedBetweenConstTokenAndFirstName`, if present.
+  public func withUnexpectedBetweenConstTokenAndFirstName(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 6)
@@ -6025,11 +6025,11 @@ extension FunctionParameterSyntax: CustomReflectable {
     return Mirror(self, children: [
       "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenAttributesAndIsolated": unexpectedBetweenAttributesAndIsolated.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "isolated": isolated.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenIsolatedAndConst": unexpectedBetweenIsolatedAndConst.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "const": const.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenConstAndFirstName": unexpectedBetweenConstAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributesAndIsolatedToken": unexpectedBetweenAttributesAndIsolatedToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "isolatedToken": isolatedToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenIsolatedTokenAndConstToken": unexpectedBetweenIsolatedTokenAndConstToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "constToken": constToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenConstTokenAndFirstName": unexpectedBetweenConstTokenAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "firstName": firstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenFirstNameAndSecondName": unexpectedBetweenFirstNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "secondName": secondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

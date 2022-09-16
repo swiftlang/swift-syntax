@@ -730,8 +730,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolated: nil,
-        const: nil,
+        isolatedToken: nil,
+        constToken: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third"))]),
@@ -753,8 +753,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolated: nil,
-        const: nil,
+        isolatedToken: nil,
+        constToken: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third")), Syntax(TokenSyntax.identifier("fourth"))]),
@@ -775,8 +775,8 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^MISSING_COLON^#third #^MISSING_RPAREN^#struct#^MISSING_IDENTIFIER^##^BRACES^#: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolated: nil,
-        const: nil,
+        isolatedToken: nil,
+        constToken: nil,
         firstName: .identifier("first"),
         secondName: .identifier("second"),
         colon: .colonToken(presence: .missing),
@@ -803,8 +803,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolated: nil,
-        const: nil,
+        isolatedToken: nil,
+        constToken: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([
@@ -830,8 +830,8 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^COLON^#[third #^END_ARRAY^#fourth: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolated: nil,
-        const: nil,
+        isolatedToken: nil,
+        constToken: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),
@@ -860,8 +860,8 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolated: nil,
-        const: nil,
+        isolatedToken: nil,
+        constToken: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),

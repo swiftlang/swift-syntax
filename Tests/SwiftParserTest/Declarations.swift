@@ -150,6 +150,13 @@ final class DeclarationTests: XCTestCase {
   func testVariableDeclarations() {
     AssertParse(
       """
+      z
+
+      var x: Double = z
+      """)
+    
+    AssertParse(
+      """
       async let a = fetch("1.jpg")
       async let b: Image = fetch("2.jpg")
       async let secondPhotoToFetch = fetch("3.jpg")

@@ -30,14 +30,16 @@ extension TokenConsumer {
       _ = subparser.consumeAttributeList()
     }
 
-    var modifierProgress = LoopProgressCondition()
-    while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
-            modifierKind != .classKeyword,
-            modifierProgress.evaluate(subparser.currentToken) {
-      subparser.eat(handle)
-      if subparser.at(.leftParen) {
-        subparser.consumeAnyToken()
-        subparser.consume(to: .rightParen)
+    if subparser.currentToken.isKeyword {
+      var modifierProgress = LoopProgressCondition()
+      while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
+              modifierKind != .classKeyword,
+              modifierProgress.evaluate(subparser.currentToken) {
+        subparser.eat(handle)
+        if subparser.at(.leftParen) {
+          subparser.consumeAnyToken()
+          subparser.consume(to: .rightParen)
+        }
       }
     }
 
@@ -75,9 +77,16 @@ extension TokenConsumer {
         lookahead.consumeAnyToken()
       } while lookahead.atStartOfDeclaration()
       return lookahead.at(.identifier)
-    case .caseKeyword, nil:
+    case .caseKeyword:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
+      return false
+    case nil:
+      if subparser.at(anyIn: ContextualDeclKeyword.self)?.0 != nil {
+        subparser.consumeAnyToken()
+        return subparser.atStartOfDeclaration(
+          isAtTopLevel: isAtTopLevel, allowRecovery: allowRecovery)
+      }
       return false
     default: return true
     }

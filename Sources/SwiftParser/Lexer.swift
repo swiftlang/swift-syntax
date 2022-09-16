@@ -31,6 +31,7 @@ public struct Lexer {
       }
 
       public static let isAtStartOfLine = Flags(rawValue: 1 << 0)
+      public static let isMultilineStringLiteral = Flags(rawValue: 1 << 1)
     }
 
     @_spi(RawSyntax)

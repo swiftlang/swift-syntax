@@ -64,4 +64,26 @@ final class StringInterpolationTests: XCTestCase {
        """
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
+
+  func testRewriter() throws {
+    let sourceFile = try Parser.parse(source: """
+      class Foo {
+        func method() {}
+      }
+      """)
+    class Rewriter: SyntaxRewriter {
+      override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
+        let newFunc = DeclSyntax("func newName() {}")
+          .withLeadingTrivia(node.leadingTrivia!)
+          .withTrailingTrivia(node.trailingTrivia!)
+        return DeclSyntax(newFunc)
+      }
+    }
+    let rewrittenSourceFile = Rewriter().visit(sourceFile)
+    XCTAssertEqual(rewrittenSourceFile.description, """
+      class Foo {
+        func newName() {}
+      }
+      """)
+  }
 }

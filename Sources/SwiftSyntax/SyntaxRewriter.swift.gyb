@@ -199,6 +199,10 @@ open class SyntaxRewriter {
     // nodes are being collected.
     var newLayout: ContiguousArray<RawSyntax?>?
 
+    // Rewritten children just to keep their 'SyntaxArena' alive until they are
+    // wrapped with 'Syntax'
+    var rewrittens: ContiguousArray<Syntax> = []
+
     let syntaxNode = node._syntaxNode
 
     // Incrementing i manually is faster than using .enumerated()
@@ -237,6 +241,7 @@ open class SyntaxRewriter {
         
         // Now that we know we have a new layout in which we collect rewritten 
         // nodes, add it.
+        rewrittens.append(rewritten)
         newLayout!.append(rewritten.raw)
       } else {
         // The node was not changed by the rewriter. Only store it if a previous
@@ -249,13 +254,15 @@ open class SyntaxRewriter {
 
     if let newLayout = newLayout {
       // A child node was rewritten. Build the updated node.
-      
+
       // Sanity check, ensure the new children are the same length.
       assert(newLayout.count == node.raw.layoutView!.children.count)
-      
+
       let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: .default)
-      let newNode = SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
-      return newNode
+      // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
+      return withExtendedLifetime(rewrittens) {
+        SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
+      }
     } else {
       // No child node was rewritten. So no need to change this node as well.
       return node

@@ -33,6 +33,21 @@ extension Parser {
   ///     type → '(' type ')'
   @_spi(RawSyntax)
   public mutating func parseType() -> RawTypeSyntax {
+    let type = self.parseTypeScalar()
+
+    // Parse pack expansion 'T...'.
+    if self.currentToken.isEllipsis {
+      let ellipsis = self.consumeAnyToken(remapping: .ellipsis)
+      return RawTypeSyntax(
+        RawPackExpansionTypeSyntax(
+          patternType: type,
+          ellipsis: ellipsis,
+          arena: self.arena))
+    }
+    return type
+  }
+
+  mutating func parseTypeScalar() -> RawTypeSyntax {
     let (specifier, attrList) = self.parseTypeAttributeList()
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
     if self.lookahead().isAtFunctionTypeArrow() {

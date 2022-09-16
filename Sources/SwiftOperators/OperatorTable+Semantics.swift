@@ -73,12 +73,7 @@ extension Operator {
 
     name = syntax.identifier.text
 
-    if let operatorSyntax = syntax.operatorPrecedenceAndTypes?
-        .precedenceGroupAndDesignatedTypes {
-      precedenceGroup = operatorSyntax.firstToken?.text
-    } else {
-      precedenceGroup = nil
-    }
+    precedenceGroup = syntax.operatorPrecedenceAndTypes?.precedenceGroup.text
   }
 }
 

@@ -1801,7 +1801,7 @@ extension Parser {
       // At this point, we know we have a closure signature. Parse the capture list
       // and parameters.
       var elements = [RawClosureCaptureItemSyntax]()
-      do {
+      if !self.at(.rightSquareBracket) {
         var keepGoing: RawTokenSyntax? = nil
         var loopProgress = LoopProgressCondition()
         repeat {

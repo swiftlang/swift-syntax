@@ -36,6 +36,14 @@ final class TypeTests: XCTestCase {
   }
 
   func testClosureSignatures() throws {
+
+    AssertParse(
+      """
+      simple { [] str in
+        print("closure with empty capture list")
+      }
+      """)
+    
     AssertParse("""
                 { ()
                 throws -> Void in }

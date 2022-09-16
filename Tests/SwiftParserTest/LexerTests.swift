@@ -560,9 +560,7 @@ public class LexerTests: XCTestCase {
         lexeme(.eof, "\n\n///", leading: 5),
       ])
     }
-  }
 
-  func testLex() {
     do {
       var data =
       """

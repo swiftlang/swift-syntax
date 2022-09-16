@@ -112,8 +112,9 @@ public struct SubtreeMatcher {
   /// `init(markedText:)` has the same structure as `expected`.
   public func assertSameStructure(afterMarker: String? = nil, _ expected: Syntax, includeTrivia: Bool = false,
                                   file: StaticString = #filePath, line: UInt = #line) throws {
-    let diff = try findFirstDifference(afterMarker: afterMarker, baseline: expected, includeTrivia: includeTrivia)
-    XCTAssertNil(diff, diff!.debugDescription, file: file, line: line)
+    if let diff = try findFirstDifference(afterMarker: afterMarker, baseline: expected, includeTrivia: includeTrivia) {
+      XCTFail(diff.debugDescription, file: file, line: line)
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import XCTest
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
+
 
 public class MultithreadingTests: XCTestCase {
 
@@ -12,6 +13,24 @@ public class MultithreadingTests: XCTestCase {
 
     DispatchQueue.concurrentPerform(iterations: 100) { _ in
       XCTAssertEqual(tuple.leftParen, tuple.leftParen)
+    }
+  }
+
+  public func testConcurrentArena() {
+    let arena = SyntaxArena()
+
+    DispatchQueue.concurrentPerform(iterations: 100) { i in
+      var identStr = " ident\(i) "
+      let tokenRaw = identStr.withSyntaxText { text in
+        RawTokenSyntax(
+          kind: .identifier,
+          wholeText: arena.intern(text),
+          textRange: 1..<(text.count-1),
+          presence: .present,
+          arena: arena)
+      }
+      let token = Syntax(raw: RawSyntax(tokenRaw)).as(TokenSyntax.self)!
+      XCTAssertEqual(token.text, "ident\(i)")
     }
   }
 

@@ -83,13 +83,19 @@ public struct OperatorTable {
 }
 
 extension OperatorTable {
+  /// Returns the ``Operator`` corresponding to the given infix operator, or
+  /// `nil` if it is not defined in the operator table.
+  public func infixOperator(named operatorName: OperatorName) -> Operator? {
+    return infixOperators[operatorName]
+  }
+
   /// Look for the precedence group corresponding to the given operator.
   func lookupOperatorPrecedenceGroupName(
     _ operatorName: OperatorName,
     referencedFrom syntax: Syntax,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
-    guard let op = infixOperators[operatorName] else {
+    guard let op = infixOperator(named: operatorName) else {
       try errorHandler(
         .missingOperator(operatorName, referencedFrom: syntax))
       return nil

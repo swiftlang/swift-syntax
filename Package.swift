@@ -45,6 +45,8 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
+    .library(name: "SwiftOperators", type: .static,
+             targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
@@ -118,13 +120,19 @@ let package = Package(
         "DeclarationAttribute.swift.gyb",
       ]
     ),
+    .target(
+      name: "SwiftOperators",
+      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"]
+    ),
     .executableTarget(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
     ),
     .executableTarget(
       name: "swift-parser-test",
-      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", .product(name: "ArgumentParser", package: "swift-argument-parser")]
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser",
+                     "SwiftOperators",
+                     .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .executableTarget(
         name: "generate-swift-syntax-builder",
@@ -171,7 +179,13 @@ let package = Package(
     ),
     .testTarget(
       name: "SwiftParserTest",
-      dependencies: ["SwiftDiagnostics", "SwiftParser", "_SwiftSyntaxTestSupport"]
+      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser",
+                     "_SwiftSyntaxTestSupport"]
+    ),
+    .testTarget(
+      name: "SwiftOperatorsTest",
+      dependencies: ["SwiftOperators", "_SwiftSyntaxTestSupport",
+                     "SwiftParser"]
     ),
   ]
 )

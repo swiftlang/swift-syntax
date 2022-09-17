@@ -65,6 +65,14 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
 
+  func testSourceFile() throws {
+    let _: SourceFileSyntax =
+      """
+      print("Hello, world!")
+      """
+  }
+
+
   func testRewriter() throws {
     let sourceFile = try Parser.parse(source: """
       class Foo {

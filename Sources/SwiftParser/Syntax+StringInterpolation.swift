@@ -117,6 +117,12 @@ extension PatternSyntaxProtocol {
 }
 
 // String interpolation support for the primary node kinds.
+extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation {
+  public static func parse(from parser: inout Parser) -> Self {
+    return Syntax(raw: parser.parseSourceFile().raw).as(Self.self)!
+  }
+}
+
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation { }
 extension ExprSyntax: SyntaxExpressibleByStringInterpolation { }
 extension StmtSyntax: SyntaxExpressibleByStringInterpolation { }

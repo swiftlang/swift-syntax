@@ -388,4 +388,21 @@ public class OperatorPrecedenceTests: XCTestCase {
     try opPrecedence.assertExpectedFold(
       "await x + y + z", "await ((x + y) + z)")
   }
+
+  func testInfixOperatorLookup() throws {
+    let opPrecedence = OperatorTable.standardOperators
+    do {
+      let op = try XCTUnwrap(opPrecedence.infixOperator(named: "+"))
+      XCTAssertEqual(op.kind, .infix)
+      XCTAssertEqual(op.name, "+")
+      XCTAssertEqual(op.precedenceGroup, "AdditionPrecedence")
+    }
+    do {
+      let op = try XCTUnwrap(opPrecedence.infixOperator(named: "..."))
+      XCTAssertEqual(op.kind, .infix)
+      XCTAssertEqual(op.name, "...")
+      XCTAssertEqual(op.precedenceGroup, "RangeFormationPrecedence")
+    }
+    XCTAssertNil(opPrecedence.infixOperator(named: "^*^"))
+  }
 }

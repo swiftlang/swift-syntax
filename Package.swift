@@ -124,6 +124,11 @@ let package = Package(
       name: "SwiftOperators",
       dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"]
     ),
+    .target(
+      name: "SwiftCompilerSupport",
+      dependencies: [
+        "SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftOperators"]
+    ),
     .executableTarget(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]

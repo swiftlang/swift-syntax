@@ -127,7 +127,11 @@ let package = Package(
     .target(
       name: "SwiftCompilerSupport",
       dependencies: [
-        "SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftOperators"]
+        "SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftOperators"],
+      exclude: [
+        "CMakeLists.txt",
+        "SwiftCompilerSupport.h"
+      ]
     ),
     .executableTarget(
       name: "lit-test-helper",

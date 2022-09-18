@@ -9,3 +9,4 @@
 add_subdirectory(SwiftSyntax)
 add_subdirectory(SwiftDiagnostics)
 add_subdirectory(SwiftParser)
+add_subdirectory(SwiftOperators)

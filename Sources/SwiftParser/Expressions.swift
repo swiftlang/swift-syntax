@@ -1557,7 +1557,7 @@ extension Parser {
   mutating func parseCollectionElement(_ existing: CollectionKind?) -> CollectionKind {
     let key = self.parseExpression()
     switch existing {
-    case .array(_):
+    case .array:
       return .array(key)
     case nil:
       guard self.at(.colon) else {
@@ -1630,7 +1630,7 @@ extension Parser {
             valueExpression: value,
             trailingComma: comma,
             arena: self.arena)))
-          if key.is(RawMissingExprSyntax.self), colon.isMissing, value.is(RawMissingExprSyntax.self) {
+          if key.is(RawMissingExprSyntax.self) || colon.isMissing || value.is(RawMissingExprSyntax.self) {
             break COLLECTION_LOOP
           }
         }

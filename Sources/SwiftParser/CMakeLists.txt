@@ -10,7 +10,6 @@ add_library(SwiftParser STATIC
   Attributes.swift
   Availability.swift
   CharacterInfo.swift
-  CompilerSupport.swift
   Declarations.swift
   Directives.swift
   Expressions.swift

@@ -136,6 +136,7 @@ TYPE_ATTR_KINDS = [
     TypeAttribute('unchecked'),
     TypeAttribute('_typeSequence'),
     TypeAttribute('_local'),
+    TypeAttribute('_noMetadata'),
 
     # Generated interface attributes
     TypeAttribute('_opaqueReturnTypeOf'),
@@ -690,6 +691,13 @@ DECL_ATTR_KINDS = [
                         OnVar,
                         ABIStableToAdd, ABIStableToRemove, APIStableToAdd, APIStableToRemove,
                         code=137),
+
+    SimpleDeclAttribute('_noMetadata', 'NoMetadata',
+                        OnGenericTypeParam,
+                        UserInaccessible,
+                        NotSerialized,
+                        ABIStableToAdd, ABIBreakingToRemove, APIStableToAdd, APIStableToRemove,
+                        code=138)
 ]
 
 # Schema for declaration modifiers:

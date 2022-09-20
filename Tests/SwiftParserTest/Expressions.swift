@@ -443,7 +443,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse("#keyPath(#^DIAG^#(b:)",
                 diagnostics: [
-                  DiagnosticSpec(message: "Expected '' in '#keyPath' expression"),
+                  DiagnosticSpec(message: "Expected identifier in '#keyPath' expression"),
                   DiagnosticSpec(message: "Expected ')' to end '#keyPath' expression"),
                 ])
   }

@@ -58,7 +58,7 @@ final class TypeTests: XCTestCase {
     AssertParse("{[#^DIAG_1^#class]in#^DIAG_2^#",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '' in closure capture item"),
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected identifier in closure capture item"),
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text 'class' in closure capture signature"),
                   DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end closure"),
                 ])
@@ -72,7 +72,7 @@ final class TypeTests: XCTestCase {
     AssertParse("{[weak#^DIAG^#^]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(message: "Expected '' in closure capture item"),
+                  DiagnosticSpec(message: "Expected identifier in closure capture item"),
                   DiagnosticSpec(message: "Unexpected text '^' in closure capture signature"),
                 ])
   }

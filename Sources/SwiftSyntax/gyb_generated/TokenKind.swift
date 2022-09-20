@@ -1377,6 +1377,137 @@ public enum RawTokenKind: Equatable, Hashable {
     }
   }
 
+  public var nameForDiagnostics: String {
+    switch self {
+    case .eof: return "end of file"
+    case .associatedtypeKeyword: return "associatedtype"
+    case .classKeyword: return "class"
+    case .deinitKeyword: return "deinit"
+    case .enumKeyword: return "enum"
+    case .extensionKeyword: return "extension"
+    case .funcKeyword: return "func"
+    case .importKeyword: return "import"
+    case .initKeyword: return "init"
+    case .inoutKeyword: return "inout"
+    case .letKeyword: return "let"
+    case .operatorKeyword: return "operator"
+    case .precedencegroupKeyword: return "precedencegroup"
+    case .protocolKeyword: return "protocol"
+    case .structKeyword: return "struct"
+    case .subscriptKeyword: return "subscript"
+    case .typealiasKeyword: return "typealias"
+    case .varKeyword: return "var"
+    case .fileprivateKeyword: return "fileprivate"
+    case .internalKeyword: return "internal"
+    case .privateKeyword: return "private"
+    case .publicKeyword: return "public"
+    case .staticKeyword: return "static"
+    case .deferKeyword: return "defer"
+    case .ifKeyword: return "if"
+    case .guardKeyword: return "guard"
+    case .doKeyword: return "do"
+    case .repeatKeyword: return "repeat"
+    case .elseKeyword: return "else"
+    case .forKeyword: return "for"
+    case .inKeyword: return "in"
+    case .whileKeyword: return "while"
+    case .returnKeyword: return "return"
+    case .breakKeyword: return "break"
+    case .continueKeyword: return "continue"
+    case .fallthroughKeyword: return "fallthrough"
+    case .switchKeyword: return "switch"
+    case .caseKeyword: return "case"
+    case .defaultKeyword: return "default"
+    case .whereKeyword: return "where"
+    case .catchKeyword: return "catch"
+    case .throwKeyword: return "throw"
+    case .asKeyword: return "as"
+    case .anyKeyword: return "Any"
+    case .falseKeyword: return "false"
+    case .isKeyword: return "is"
+    case .nilKeyword: return "nil"
+    case .rethrowsKeyword: return "rethrows"
+    case .superKeyword: return "super"
+    case .selfKeyword: return "self"
+    case .capitalSelfKeyword: return "Self"
+    case .trueKeyword: return "true"
+    case .tryKeyword: return "try"
+    case .throwsKeyword: return "throws"
+    case .__file__Keyword: return "__FILE__"
+    case .__line__Keyword: return "__LINE__"
+    case .__column__Keyword: return "__COLUMN__"
+    case .__function__Keyword: return "__FUNCTION__"
+    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
+    case .wildcardKeyword: return "_"
+    case .leftParen: return "("
+    case .rightParen: return ")"
+    case .leftBrace: return "{"
+    case .rightBrace: return "}"
+    case .leftSquareBracket: return "["
+    case .rightSquareBracket: return "]"
+    case .leftAngle: return "<"
+    case .rightAngle: return ">"
+    case .period: return "."
+    case .prefixPeriod: return "."
+    case .comma: return ","
+    case .ellipsis: return "..."
+    case .colon: return ":"
+    case .semicolon: return ";"
+    case .equal: return "="
+    case .atSign: return "@"
+    case .pound: return "#"
+    case .prefixAmpersand: return "&"
+    case .arrow: return "->"
+    case .backtick: return "`"
+    case .backslash: return "\\"
+    case .exclamationMark: return "!"
+    case .postfixQuestionMark: return "?"
+    case .infixQuestionMark: return "?"
+    case .stringQuote: return "\""
+    case .singleQuote: return "\'"
+    case .multilineStringQuote: return "\"\"\""
+    case .poundKeyPathKeyword: return "#keyPath"
+    case .poundLineKeyword: return "#line"
+    case .poundSelectorKeyword: return "#selector"
+    case .poundFileKeyword: return "#file"
+    case .poundFileIDKeyword: return "#fileID"
+    case .poundFilePathKeyword: return "#filePath"
+    case .poundColumnKeyword: return "#column"
+    case .poundFunctionKeyword: return "#function"
+    case .poundDsohandleKeyword: return "#dsohandle"
+    case .poundAssertKeyword: return "#assert"
+    case .poundSourceLocationKeyword: return "#sourceLocation"
+    case .poundWarningKeyword: return "#warning"
+    case .poundErrorKeyword: return "#error"
+    case .poundIfKeyword: return "#if"
+    case .poundElseKeyword: return "#else"
+    case .poundElseifKeyword: return "#elseif"
+    case .poundEndifKeyword: return "#endif"
+    case .poundAvailableKeyword: return "#available"
+    case .poundUnavailableKeyword: return "#unavailable"
+    case .poundFileLiteralKeyword: return "file reference"
+    case .poundImageLiteralKeyword: return "image"
+    case .poundColorLiteralKeyword: return "color"
+    case .poundHasSymbolKeyword: return "#_hasSymbol"
+    case .integerLiteral: return "integer literal"
+    case .floatingLiteral: return "floating literal"
+    case .stringLiteral: return "string literal"
+    case .regexLiteral: return "regex literal"
+    case .unknown: return "token"
+    case .identifier: return "identifier"
+    case .unspacedBinaryOperator: return "binary operator"
+    case .spacedBinaryOperator: return "binary operator"
+    case .postfixOperator: return "postfix operator"
+    case .prefixOperator: return "prefix operator"
+    case .dollarIdentifier: return "dollar identifier"
+    case .contextualKeyword: return "keyword"
+    case .rawStringDelimiter: return "raw string delimiter"
+    case .stringSegment: return "string segment"
+    case .stringInterpolationAnchor: return "string interpolation anchor"
+    case .yield: return "yield"
+    }
+  }
+
   /// Returns `true` if the token is a Swift keyword.
   ///
   /// Keywords are reserved unconditionally for use by Swift and may not
@@ -1801,376 +1932,378 @@ public enum RawTokenKind: Equatable, Hashable {
 
 extension TokenKind {
   /// If the `rawKind` has a `defaultText`, `text` can be empty.
-  static func fromRaw(kind rawKind: RawTokenKind, text: SyntaxText) -> TokenKind {
+  @_spi(RawSyntax)
+  public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind {
     switch rawKind {
     case .eof: return .eof
     case .associatedtypeKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .associatedtypeKeyword
     case .classKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .classKeyword
     case .deinitKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .deinitKeyword
     case .enumKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .enumKeyword
     case .extensionKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .extensionKeyword
     case .funcKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .funcKeyword
     case .importKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .importKeyword
     case .initKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .initKeyword
     case .inoutKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .inoutKeyword
     case .letKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .letKeyword
     case .operatorKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .operatorKeyword
     case .precedencegroupKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .precedencegroupKeyword
     case .protocolKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .protocolKeyword
     case .structKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .structKeyword
     case .subscriptKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .subscriptKeyword
     case .typealiasKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .typealiasKeyword
     case .varKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .varKeyword
     case .fileprivateKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .fileprivateKeyword
     case .internalKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .internalKeyword
     case .privateKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .privateKeyword
     case .publicKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .publicKeyword
     case .staticKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .staticKeyword
     case .deferKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .deferKeyword
     case .ifKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .ifKeyword
     case .guardKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .guardKeyword
     case .doKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .doKeyword
     case .repeatKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .repeatKeyword
     case .elseKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .elseKeyword
     case .forKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .forKeyword
     case .inKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .inKeyword
     case .whileKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .whileKeyword
     case .returnKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .returnKeyword
     case .breakKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .breakKeyword
     case .continueKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .continueKeyword
     case .fallthroughKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .fallthroughKeyword
     case .switchKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .switchKeyword
     case .caseKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .caseKeyword
     case .defaultKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .defaultKeyword
     case .whereKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .whereKeyword
     case .catchKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .catchKeyword
     case .throwKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .throwKeyword
     case .asKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .asKeyword
     case .anyKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .anyKeyword
     case .falseKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .falseKeyword
     case .isKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .isKeyword
     case .nilKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .nilKeyword
     case .rethrowsKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rethrowsKeyword
     case .superKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .superKeyword
     case .selfKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .selfKeyword
     case .capitalSelfKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .capitalSelfKeyword
     case .trueKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .trueKeyword
     case .tryKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .tryKeyword
     case .throwsKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .throwsKeyword
     case .__file__Keyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .__file__Keyword
     case .__line__Keyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .__line__Keyword
     case .__column__Keyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .__column__Keyword
     case .__function__Keyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .__function__Keyword
     case .__dso_handle__Keyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .__dso_handle__Keyword
     case .wildcardKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .wildcardKeyword
     case .leftParen:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftParen
     case .rightParen:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightParen
     case .leftBrace:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftBrace
     case .rightBrace:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightBrace
     case .leftSquareBracket:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftSquareBracket
     case .rightSquareBracket:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightSquareBracket
     case .leftAngle:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftAngle
     case .rightAngle:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightAngle
     case .period:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .period
     case .prefixPeriod:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .prefixPeriod
     case .comma:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .comma
     case .ellipsis:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .ellipsis
     case .colon:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .colon
     case .semicolon:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .semicolon
     case .equal:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .equal
     case .atSign:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .atSign
     case .pound:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .pound
     case .prefixAmpersand:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .prefixAmpersand
     case .arrow:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .arrow
     case .backtick:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .backtick
     case .backslash:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .backslash
     case .exclamationMark:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .exclamationMark
     case .postfixQuestionMark:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .postfixQuestionMark
     case .infixQuestionMark:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .infixQuestionMark
     case .stringQuote:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .stringQuote
     case .singleQuote:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .singleQuote
     case .multilineStringQuote:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .multilineStringQuote
     case .poundKeyPathKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundKeyPathKeyword
     case .poundLineKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundLineKeyword
     case .poundSelectorKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundSelectorKeyword
     case .poundFileKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundFileKeyword
     case .poundFileIDKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundFileIDKeyword
     case .poundFilePathKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundFilePathKeyword
     case .poundColumnKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundColumnKeyword
     case .poundFunctionKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundFunctionKeyword
     case .poundDsohandleKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundDsohandleKeyword
     case .poundAssertKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundAssertKeyword
     case .poundSourceLocationKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundSourceLocationKeyword
     case .poundWarningKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundWarningKeyword
     case .poundErrorKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundErrorKeyword
     case .poundIfKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundIfKeyword
     case .poundElseKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundElseKeyword
     case .poundElseifKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundElseifKeyword
     case .poundEndifKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundEndifKeyword
     case .poundAvailableKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundAvailableKeyword
     case .poundUnavailableKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundUnavailableKeyword
     case .poundFileLiteralKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundFileLiteralKeyword
     case .poundImageLiteralKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundImageLiteralKeyword
     case .poundColorLiteralKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundColorLiteralKeyword
     case .poundHasSymbolKeyword:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundHasSymbolKeyword
     case .integerLiteral:
-      return .integerLiteral(String(syntaxText: text))
+      return .integerLiteral(text)
     case .floatingLiteral:
-      return .floatingLiteral(String(syntaxText: text))
+      return .floatingLiteral(text)
     case .stringLiteral:
-      return .stringLiteral(String(syntaxText: text))
+      return .stringLiteral(text)
     case .regexLiteral:
-      return .regexLiteral(String(syntaxText: text))
+      return .regexLiteral(text)
     case .unknown:
-      return .unknown(String(syntaxText: text))
+      return .unknown(text)
     case .identifier:
-      return .identifier(String(syntaxText: text))
+      return .identifier(text)
     case .unspacedBinaryOperator:
-      return .unspacedBinaryOperator(String(syntaxText: text))
+      return .unspacedBinaryOperator(text)
     case .spacedBinaryOperator:
-      return .spacedBinaryOperator(String(syntaxText: text))
+      return .spacedBinaryOperator(text)
     case .postfixOperator:
-      return .postfixOperator(String(syntaxText: text))
+      return .postfixOperator(text)
     case .prefixOperator:
-      return .prefixOperator(String(syntaxText: text))
+      return .prefixOperator(text)
     case .dollarIdentifier:
-      return .dollarIdentifier(String(syntaxText: text))
+      return .dollarIdentifier(text)
     case .contextualKeyword:
-      return .contextualKeyword(String(syntaxText: text))
+      return .contextualKeyword(text)
     case .rawStringDelimiter:
-      return .rawStringDelimiter(String(syntaxText: text))
+      return .rawStringDelimiter(text)
     case .stringSegment:
-      return .stringSegment(String(syntaxText: text))
+      return .stringSegment(text)
     case .stringInterpolationAnchor:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .stringInterpolationAnchor
     case .yield:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .yield
     }
   }
 
   /// Returns the `RawTokenKind` of this `TokenKind` and, if this `TokenKind`
   /// has associated text, the associated text, otherwise `nil`.
-  func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
+  @_spi(RawSyntax)
+  public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
     switch self {
     case .eof: return (.eof, nil)
     case .associatedtypeKeyword: return (.associatedtypeKeyword, nil)

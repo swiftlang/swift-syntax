@@ -5,7 +5,7 @@ STMT_NODES = [
     # labeled-stmt -> label ':' stmt
     Node('LabeledStmt', name_for_diagnostics='labeled statement', kind='Stmt',
          children=[
-             Child('LabelName', kind='IdentifierToken'),
+             Child('LabelName', kind='IdentifierToken', name_for_diagnostics='name'),
              Child('LabelColon', kind='ColonToken'),
              Child('Statement', kind='Stmt'),
          ]),
@@ -14,7 +14,7 @@ STMT_NODES = [
     Node('ContinueStmt', name_for_diagnostics="'continue' statement", kind='Stmt',
          children=[
              Child('ContinueKeyword', kind='ContinueToken'),
-             Child('Label', kind='IdentifierToken',
+             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
                    is_optional=True),
          ]),
 
@@ -53,9 +53,9 @@ STMT_NODES = [
          traits=['WithCodeBlock'],
          children=[
              Child('RepeatKeyword', kind='RepeatToken'),
-             Child('Body', kind='CodeBlock'),
+             Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
              Child('WhileKeyword', kind='WhileToken'),
-             Child('Condition', kind='Expr'),
+             Child('Condition', kind='Expr', name_for_diagnostics='condition'),
          ]),
 
     # guard-stmt -> 'guard' condition-list 'else' code-block ';'?
@@ -63,10 +63,10 @@ STMT_NODES = [
          traits=['WithCodeBlock'],
          children=[
              Child('GuardKeyword', kind='GuardToken'),
-             Child('Conditions', kind='ConditionElementList',
+             Child('Conditions', kind='ConditionElementList', name_for_diagnostics='conditions',
                    collection_element_name='Condition'),
              Child('ElseKeyword', kind='ElseToken'),
-             Child('Body', kind='CodeBlock'),
+             Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
          ]),
 
     Node('WhereClause', name_for_diagnostics="'where' clause", kind='Syntax',
@@ -96,7 +96,7 @@ STMT_NODES = [
              Child('SequenceExpr', kind='Expr'),
              Child('WhereClause', kind='WhereClause',
                    is_optional=True),
-             Child('Body', kind='CodeBlock'),
+             Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
          ]),
 
     # switch-stmt -> identifier? ':'? 'switch' expr '{'
@@ -122,7 +122,7 @@ STMT_NODES = [
          traits=['WithCodeBlock'],
          children=[
              Child('DoKeyword', kind='DoToken'),
-             Child('Body', kind='CodeBlock'),
+             Child('Body', kind='CodeBlock', name_for_diagnostics='body',),
              Child('CatchClauses', kind='CatchClauseList',
                    collection_element_name='CatchClause', is_optional=True),
          ]),
@@ -165,7 +165,7 @@ STMT_NODES = [
     Node('BreakStmt', name_for_diagnostics="'break' statement", kind='Stmt',
          children=[
              Child('BreakKeyword', kind='BreakToken'),
-             Child('Label', kind='IdentifierToken',
+             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
                    is_optional=True),
          ]),
 
@@ -280,10 +280,10 @@ STMT_NODES = [
              Child('IfKeyword', kind='IfToken'),
              Child('Conditions', kind='ConditionElementList',
                    collection_element_name='Condition'),
-             Child('Body', kind='CodeBlock'),
+             Child('Body', kind='CodeBlock', name_for_diagnostics='body'),
              Child('ElseKeyword', kind='ElseToken',
                    is_optional=True),
-             Child('ElseBody', kind='Syntax',
+             Child('ElseBody', kind='Syntax', name_for_diagnostics='else body',
                    node_choices=[
                        Child('IfStmt', kind='IfStmt'),
                        Child('CodeBlock', kind='CodeBlock'),
@@ -311,7 +311,7 @@ STMT_NODES = [
          traits=['WithStatements'],
          children=[
              Child('UnknownAttr', kind='Attribute', is_optional=True),
-             Child('Label', kind='Syntax',
+             Child('Label', kind='Syntax', name_for_diagnostics='label',
                    node_choices=[
                        Child('Default', kind='SwitchDefaultLabel'),
                        Child('Case', kind='SwitchCaseLabel'),
@@ -374,11 +374,11 @@ STMT_NODES = [
          children=[
              Child('PoundAssert', kind='PoundAssertToken'),
              Child('LeftParen', kind='LeftParenToken'),
-             Child('Condition', kind='Expr',
+             Child('Condition', kind='Expr', name_for_diagnostics='condition',
                    description='The assertion condition.'),
              Child('Comma', kind='CommaToken', is_optional=True,
                    description='The comma after the assertion condition.'),
-             Child('Message', kind='StringLiteralToken', is_optional=True,
+             Child('Message', kind='StringLiteralToken', name_for_diagnostics='message', is_optional=True,
                    description='The assertion message.'),
              Child('RightParen', kind='RightParenToken'),
          ]),

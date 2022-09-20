@@ -120,6 +120,10 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
   public func asProtocol(_: ${node.name}Protocol.Protocol) -> ${node.name}Protocol {
     return Syntax(self).asProtocol(${node.name}Protocol.self)!
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return Syntax(self).childNameForDiagnostics(index)
+  }
 }
 
 extension ${node.name}: CustomReflectable {

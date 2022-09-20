@@ -571,6 +571,555 @@ extension Syntax {
       return node
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch self.as(SyntaxEnum.self) {
+    case .token(let node):
+      return node.childNameForDiagnostics(index)
+    case .unknown(let node):
+      return node.childNameForDiagnostics(index)
+    case .unknownDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .unknownExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .unknownStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .unknownType(let node):
+      return node.childNameForDiagnostics(index)
+    case .unknownPattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .missing(let node):
+      return node.childNameForDiagnostics(index)
+    case .missingDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .missingExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .missingStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .missingType(let node):
+      return node.childNameForDiagnostics(index)
+    case .missingPattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .codeBlockItem(let node):
+      return node.childNameForDiagnostics(index)
+    case .codeBlockItemList(let node):
+      return node.childNameForDiagnostics(index)
+    case .codeBlock(let node):
+      return node.childNameForDiagnostics(index)
+    case .unexpectedNodes(let node):
+      return node.childNameForDiagnostics(index)
+    case .inOutExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundColumnExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .tupleExprElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .arrayElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .dictionaryElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .stringLiteralSegments(let node):
+      return node.childNameForDiagnostics(index)
+    case .tryExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .awaitExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .moveExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .declNameArgument(let node):
+      return node.childNameForDiagnostics(index)
+    case .declNameArgumentList(let node):
+      return node.childNameForDiagnostics(index)
+    case .declNameArguments(let node):
+      return node.childNameForDiagnostics(index)
+    case .identifierExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .superRefExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .nilLiteralExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .discardAssignmentExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .assignmentExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .sequenceExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .exprList(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundLineExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundFileExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundFileIDExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundFilePathExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundFunctionExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundDsohandleExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .symbolicReferenceExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .prefixOperatorExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .binaryOperatorExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .arrowExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .infixOperatorExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .floatLiteralExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .tupleExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .arrayExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .dictionaryExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .tupleExprElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .arrayElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .dictionaryElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .integerLiteralExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .booleanLiteralExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .unresolvedTernaryExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .ternaryExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .memberAccessExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .unresolvedIsExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .isExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .unresolvedAsExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .asExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .typeExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .closureCaptureItem(let node):
+      return node.childNameForDiagnostics(index)
+    case .closureCaptureItemList(let node):
+      return node.childNameForDiagnostics(index)
+    case .closureCaptureSignature(let node):
+      return node.childNameForDiagnostics(index)
+    case .closureParam(let node):
+      return node.childNameForDiagnostics(index)
+    case .closureParamList(let node):
+      return node.childNameForDiagnostics(index)
+    case .closureSignature(let node):
+      return node.childNameForDiagnostics(index)
+    case .closureExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .unresolvedPatternExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .multipleTrailingClosureElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .multipleTrailingClosureElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .functionCallExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .subscriptExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .optionalChainingExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .forcedValueExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .postfixUnaryExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .specializeExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .stringSegment(let node):
+      return node.childNameForDiagnostics(index)
+    case .expressionSegment(let node):
+      return node.childNameForDiagnostics(index)
+    case .stringLiteralExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .regexLiteralExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .keyPathExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .keyPathBaseExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .objcNamePiece(let node):
+      return node.childNameForDiagnostics(index)
+    case .objcName(let node):
+      return node.childNameForDiagnostics(index)
+    case .objcKeyPathExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .objcSelectorExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .postfixIfConfigExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .editorPlaceholderExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .objectLiteralExpr(let node):
+      return node.childNameForDiagnostics(index)
+    case .typeInitializerClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .typealiasDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .associatedtypeDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .functionParameterList(let node):
+      return node.childNameForDiagnostics(index)
+    case .parameterClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .returnClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .functionSignature(let node):
+      return node.childNameForDiagnostics(index)
+    case .ifConfigClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .ifConfigClauseList(let node):
+      return node.childNameForDiagnostics(index)
+    case .ifConfigDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundErrorDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundWarningDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundSourceLocation(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundSourceLocationArgs(let node):
+      return node.childNameForDiagnostics(index)
+    case .declModifierDetail(let node):
+      return node.childNameForDiagnostics(index)
+    case .declModifier(let node):
+      return node.childNameForDiagnostics(index)
+    case .inheritedType(let node):
+      return node.childNameForDiagnostics(index)
+    case .inheritedTypeList(let node):
+      return node.childNameForDiagnostics(index)
+    case .typeInheritanceClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .classDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .actorDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .structDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .protocolDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .extensionDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .memberDeclBlock(let node):
+      return node.childNameForDiagnostics(index)
+    case .memberDeclList(let node):
+      return node.childNameForDiagnostics(index)
+    case .memberDeclListItem(let node):
+      return node.childNameForDiagnostics(index)
+    case .sourceFile(let node):
+      return node.childNameForDiagnostics(index)
+    case .initializerClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .functionParameter(let node):
+      return node.childNameForDiagnostics(index)
+    case .modifierList(let node):
+      return node.childNameForDiagnostics(index)
+    case .functionDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .initializerDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .deinitializerDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .subscriptDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .accessLevelModifier(let node):
+      return node.childNameForDiagnostics(index)
+    case .accessPathComponent(let node):
+      return node.childNameForDiagnostics(index)
+    case .accessPath(let node):
+      return node.childNameForDiagnostics(index)
+    case .importDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .accessorParameter(let node):
+      return node.childNameForDiagnostics(index)
+    case .accessorDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .accessorList(let node):
+      return node.childNameForDiagnostics(index)
+    case .accessorBlock(let node):
+      return node.childNameForDiagnostics(index)
+    case .patternBinding(let node):
+      return node.childNameForDiagnostics(index)
+    case .patternBindingList(let node):
+      return node.childNameForDiagnostics(index)
+    case .variableDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .enumCaseElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .enumCaseElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .enumCaseDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .enumDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .operatorDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .designatedTypeList(let node):
+      return node.childNameForDiagnostics(index)
+    case .designatedTypeElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .operatorPrecedenceAndTypes(let node):
+      return node.childNameForDiagnostics(index)
+    case .precedenceGroupDecl(let node):
+      return node.childNameForDiagnostics(index)
+    case .precedenceGroupAttributeList(let node):
+      return node.childNameForDiagnostics(index)
+    case .precedenceGroupRelation(let node):
+      return node.childNameForDiagnostics(index)
+    case .precedenceGroupNameList(let node):
+      return node.childNameForDiagnostics(index)
+    case .precedenceGroupNameElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .precedenceGroupAssignment(let node):
+      return node.childNameForDiagnostics(index)
+    case .precedenceGroupAssociativity(let node):
+      return node.childNameForDiagnostics(index)
+    case .tokenList(let node):
+      return node.childNameForDiagnostics(index)
+    case .nonEmptyTokenList(let node):
+      return node.childNameForDiagnostics(index)
+    case .customAttribute(let node):
+      return node.childNameForDiagnostics(index)
+    case .attribute(let node):
+      return node.childNameForDiagnostics(index)
+    case .attributeList(let node):
+      return node.childNameForDiagnostics(index)
+    case .specializeAttributeSpecList(let node):
+      return node.childNameForDiagnostics(index)
+    case .availabilityEntry(let node):
+      return node.childNameForDiagnostics(index)
+    case .labeledSpecializeEntry(let node):
+      return node.childNameForDiagnostics(index)
+    case .targetFunctionEntry(let node):
+      return node.childNameForDiagnostics(index)
+    case .namedAttributeStringArgument(let node):
+      return node.childNameForDiagnostics(index)
+    case .declName(let node):
+      return node.childNameForDiagnostics(index)
+    case .implementsAttributeArguments(let node):
+      return node.childNameForDiagnostics(index)
+    case .objCSelectorPiece(let node):
+      return node.childNameForDiagnostics(index)
+    case .objCSelector(let node):
+      return node.childNameForDiagnostics(index)
+    case .differentiableAttributeArguments(let node):
+      return node.childNameForDiagnostics(index)
+    case .differentiabilityParamsClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .differentiabilityParams(let node):
+      return node.childNameForDiagnostics(index)
+    case .differentiabilityParamList(let node):
+      return node.childNameForDiagnostics(index)
+    case .differentiabilityParam(let node):
+      return node.childNameForDiagnostics(index)
+    case .derivativeRegistrationAttributeArguments(let node):
+      return node.childNameForDiagnostics(index)
+    case .qualifiedDeclName(let node):
+      return node.childNameForDiagnostics(index)
+    case .functionDeclName(let node):
+      return node.childNameForDiagnostics(index)
+    case .backDeployAttributeSpecList(let node):
+      return node.childNameForDiagnostics(index)
+    case .backDeployVersionList(let node):
+      return node.childNameForDiagnostics(index)
+    case .backDeployVersionArgument(let node):
+      return node.childNameForDiagnostics(index)
+    case .opaqueReturnTypeOfAttributeArguments(let node):
+      return node.childNameForDiagnostics(index)
+    case .conventionAttributeArguments(let node):
+      return node.childNameForDiagnostics(index)
+    case .conventionWitnessMethodAttributeArguments(let node):
+      return node.childNameForDiagnostics(index)
+    case .labeledStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .continueStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .whileStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .deferStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .expressionStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .switchCaseList(let node):
+      return node.childNameForDiagnostics(index)
+    case .repeatWhileStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .guardStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .whereClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .forInStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .switchStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .catchClauseList(let node):
+      return node.childNameForDiagnostics(index)
+    case .doStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .returnStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .yieldStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .yieldList(let node):
+      return node.childNameForDiagnostics(index)
+    case .fallthroughStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .breakStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .caseItemList(let node):
+      return node.childNameForDiagnostics(index)
+    case .catchItemList(let node):
+      return node.childNameForDiagnostics(index)
+    case .conditionElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .availabilityCondition(let node):
+      return node.childNameForDiagnostics(index)
+    case .matchingPatternCondition(let node):
+      return node.childNameForDiagnostics(index)
+    case .optionalBindingCondition(let node):
+      return node.childNameForDiagnostics(index)
+    case .unavailabilityCondition(let node):
+      return node.childNameForDiagnostics(index)
+    case .hasSymbolCondition(let node):
+      return node.childNameForDiagnostics(index)
+    case .conditionElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .declarationStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .throwStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .ifStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .elseIfContinuation(let node):
+      return node.childNameForDiagnostics(index)
+    case .elseBlock(let node):
+      return node.childNameForDiagnostics(index)
+    case .switchCase(let node):
+      return node.childNameForDiagnostics(index)
+    case .switchDefaultLabel(let node):
+      return node.childNameForDiagnostics(index)
+    case .caseItem(let node):
+      return node.childNameForDiagnostics(index)
+    case .catchItem(let node):
+      return node.childNameForDiagnostics(index)
+    case .switchCaseLabel(let node):
+      return node.childNameForDiagnostics(index)
+    case .catchClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .poundAssertStmt(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericWhereClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericRequirementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericRequirement(let node):
+      return node.childNameForDiagnostics(index)
+    case .sameTypeRequirement(let node):
+      return node.childNameForDiagnostics(index)
+    case .layoutRequirement(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericParameterList(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericParameter(let node):
+      return node.childNameForDiagnostics(index)
+    case .primaryAssociatedTypeList(let node):
+      return node.childNameForDiagnostics(index)
+    case .primaryAssociatedType(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericParameterClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .conformanceRequirement(let node):
+      return node.childNameForDiagnostics(index)
+    case .primaryAssociatedTypeClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .simpleTypeIdentifier(let node):
+      return node.childNameForDiagnostics(index)
+    case .memberTypeIdentifier(let node):
+      return node.childNameForDiagnostics(index)
+    case .classRestrictionType(let node):
+      return node.childNameForDiagnostics(index)
+    case .arrayType(let node):
+      return node.childNameForDiagnostics(index)
+    case .dictionaryType(let node):
+      return node.childNameForDiagnostics(index)
+    case .metatypeType(let node):
+      return node.childNameForDiagnostics(index)
+    case .optionalType(let node):
+      return node.childNameForDiagnostics(index)
+    case .constrainedSugarType(let node):
+      return node.childNameForDiagnostics(index)
+    case .implicitlyUnwrappedOptionalType(let node):
+      return node.childNameForDiagnostics(index)
+    case .compositionTypeElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .compositionTypeElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .compositionType(let node):
+      return node.childNameForDiagnostics(index)
+    case .packExpansionType(let node):
+      return node.childNameForDiagnostics(index)
+    case .tupleTypeElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .tupleTypeElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .tupleType(let node):
+      return node.childNameForDiagnostics(index)
+    case .functionType(let node):
+      return node.childNameForDiagnostics(index)
+    case .attributedType(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericArgumentList(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericArgument(let node):
+      return node.childNameForDiagnostics(index)
+    case .genericArgumentClause(let node):
+      return node.childNameForDiagnostics(index)
+    case .namedOpaqueReturnType(let node):
+      return node.childNameForDiagnostics(index)
+    case .typeAnnotation(let node):
+      return node.childNameForDiagnostics(index)
+    case .enumCasePattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .isTypePattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .optionalPattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .identifierPattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .asTypePattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .tuplePattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .wildcardPattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .tuplePatternElement(let node):
+      return node.childNameForDiagnostics(index)
+    case .expressionPattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .tuplePatternElementList(let node):
+      return node.childNameForDiagnostics(index)
+    case .valueBindingPattern(let node):
+      return node.childNameForDiagnostics(index)
+    case .availabilitySpecList(let node):
+      return node.childNameForDiagnostics(index)
+    case .availabilityArgument(let node):
+      return node.childNameForDiagnostics(index)
+    case .availabilityLabeledArgument(let node):
+      return node.childNameForDiagnostics(index)
+    case .availabilityVersionRestriction(let node):
+      return node.childNameForDiagnostics(index)
+    case .versionTuple(let node):
+      return node.childNameForDiagnostics(index)
+    }
+  }
 }
 
 extension SyntaxKind {

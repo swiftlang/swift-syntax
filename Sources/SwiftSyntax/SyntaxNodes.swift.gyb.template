@@ -171,6 +171,21 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     return ${node.name}(newData)
   }
 %     end
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+%     for (index, child) in enumerate(node.children):
+    case ${index}:
+%       if child.name_for_diagnostics:
+      return "${child.name_for_diagnostics}"
+%       else:
+      return nil
+%       end
+%     end
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension ${node.name}: CustomReflectable {

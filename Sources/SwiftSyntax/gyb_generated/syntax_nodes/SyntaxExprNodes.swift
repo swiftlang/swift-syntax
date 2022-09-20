@@ -42,6 +42,13 @@ public struct UnknownExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension UnknownExprSyntax: CustomReflectable {
@@ -79,6 +86,13 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -208,6 +222,21 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return InOutExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension InOutExprSyntax: CustomReflectable {
@@ -294,6 +323,17 @@ public struct PoundColumnExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundColumnKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return PoundColumnExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -471,6 +511,25 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return TryExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension TryExprSyntax: CustomReflectable {
@@ -605,6 +664,21 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return AwaitExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension AwaitExprSyntax: CustomReflectable {
@@ -736,6 +810,21 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return MoveExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -870,6 +959,21 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return IdentifierExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension IdentifierExprSyntax: CustomReflectable {
@@ -957,6 +1061,17 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 1)
     return SuperRefExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension SuperRefExprSyntax: CustomReflectable {
@@ -1041,6 +1156,17 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.nilKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return NilLiteralExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1127,6 +1253,17 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 1)
     return DiscardAssignmentExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension DiscardAssignmentExprSyntax: CustomReflectable {
@@ -1211,6 +1348,17 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return AssignmentExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1315,6 +1463,17 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 1)
     return SequenceExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension SequenceExprSyntax: CustomReflectable {
@@ -1399,6 +1558,17 @@ public struct PoundLineExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundLineKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return PoundLineExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1485,6 +1655,17 @@ public struct PoundFileExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 1)
     return PoundFileExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension PoundFileExprSyntax: CustomReflectable {
@@ -1569,6 +1750,17 @@ public struct PoundFileIDExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundFileIDKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return PoundFileIDExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1655,6 +1847,17 @@ public struct PoundFilePathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 1)
     return PoundFilePathExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension PoundFilePathExprSyntax: CustomReflectable {
@@ -1740,6 +1943,17 @@ public struct PoundFunctionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 1)
     return PoundFunctionExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension PoundFunctionExprSyntax: CustomReflectable {
@@ -1824,6 +2038,17 @@ public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundDsohandleKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return PoundDsohandleExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1955,6 +2180,21 @@ public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 3)
     return SymbolicReferenceExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -2089,6 +2329,21 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return PrefixOperatorExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension PrefixOperatorExprSyntax: CustomReflectable {
@@ -2175,6 +2430,17 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return BinaryOperatorExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -2352,6 +2618,25 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.arrow, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return ArrowExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -2532,6 +2817,25 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return InfixOperatorExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension InfixOperatorExprSyntax: CustomReflectable {
@@ -2620,6 +2924,17 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.floatingLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return FloatLiteralExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -2813,6 +3128,25 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return TupleExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -3011,6 +3345,25 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return ArrayExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension ArrayExprSyntax: CustomReflectable {
@@ -3190,6 +3543,25 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return DictionaryExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension DictionaryExprSyntax: CustomReflectable {
@@ -3279,6 +3651,17 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 1)
     return IntegerLiteralExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension IntegerLiteralExprSyntax: CustomReflectable {
@@ -3363,6 +3746,17 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.trueKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return BooleanLiteralExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -3538,6 +3932,25 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return UnresolvedTernaryExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -3808,6 +4221,33 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 9)
     return TernaryExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "condition"
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "first choice"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "second choice"
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension TernaryExprSyntax: CustomReflectable {
@@ -4038,6 +4478,29 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 7)
     return MemberAccessExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "base"
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "name"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension MemberAccessExprSyntax: CustomReflectable {
@@ -4128,6 +4591,17 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return UnresolvedIsExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -4304,6 +4778,25 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return IsExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension IsExprSyntax: CustomReflectable {
@@ -4438,6 +4931,21 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 3)
     return UnresolvedAsExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -4662,6 +5170,29 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 7)
     return AsExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension AsExprSyntax: CustomReflectable {
@@ -4752,6 +5283,17 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return TypeExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -4992,6 +5534,29 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 7)
     return ClosureExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension ClosureExprSyntax: CustomReflectable {
@@ -5082,6 +5647,17 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return UnresolvedPatternExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -5432,6 +6008,37 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 11)
     return FunctionCallExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "called expression"
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "arguments"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "trailing closure"
+    case 10:
+      return nil
+    case 11:
+      return "trailing closures"
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -5791,6 +6398,37 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 11)
     return SubscriptExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "called expression"
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "arguments"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "trailing closure"
+    case 10:
+      return nil
+    case 11:
+      return "trailing closures"
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension SubscriptExprSyntax: CustomReflectable {
@@ -5931,6 +6569,21 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return OptionalChainingExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension OptionalChainingExprSyntax: CustomReflectable {
@@ -6062,6 +6715,21 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.exclamationMark, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return ForcedValueExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -6195,6 +6863,21 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return PostfixUnaryExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension PostfixUnaryExprSyntax: CustomReflectable {
@@ -6326,6 +7009,21 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericArgumentClause, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return SpecializeExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -6614,6 +7312,33 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 9)
     return StringLiteralExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension StringLiteralExprSyntax: CustomReflectable {
@@ -6706,6 +7431,17 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.regexLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return RegexLiteralExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -6883,6 +7619,25 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return KeyPathExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "root"
+    case 4:
+      return nil
+    case 5:
+      return "expression"
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension KeyPathExprSyntax: CustomReflectable {
@@ -6971,6 +7726,17 @@ public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return KeyPathBaseExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -7209,6 +7975,29 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: 7)
     return ObjcKeyPathExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "name"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -7528,6 +8317,37 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 11)
     return ObjcSelectorExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "name"
+    case 10:
+      return nil
+    case 11:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension ObjcSelectorExprSyntax: CustomReflectable {
@@ -7669,6 +8489,21 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return PostfixIfConfigExprSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension PostfixIfConfigExprSyntax: CustomReflectable {
@@ -7755,6 +8590,17 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return EditorPlaceholderExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -7993,6 +8839,29 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: 7)
     return ObjectLiteralExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 

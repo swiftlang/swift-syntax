@@ -42,6 +42,13 @@ public struct UnknownStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension UnknownStmtSyntax: CustomReflectable {
@@ -79,6 +86,13 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -253,6 +267,25 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return LabeledStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "name"
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension LabeledStmtSyntax: CustomReflectable {
@@ -387,6 +420,21 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 3)
     return ContinueStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "label"
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -583,6 +631,25 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return WhileStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension WhileStmtSyntax: CustomReflectable {
@@ -717,6 +784,21 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return DeferStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension DeferStmtSyntax: CustomReflectable {
@@ -803,6 +885,17 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return ExpressionStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1023,6 +1116,29 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: 7)
     return RepeatWhileStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "body"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return "condition"
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1267,6 +1383,29 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlock, arena: .default)
     let newData = data.replacingChild(raw, at: 7)
     return GuardStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "conditions"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return "body"
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -1769,6 +1908,53 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 19)
     return ForInStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    case 10:
+      return nil
+    case 11:
+      return nil
+    case 12:
+      return nil
+    case 13:
+      return nil
+    case 14:
+      return nil
+    case 15:
+      return nil
+    case 16:
+      return nil
+    case 17:
+      return nil
+    case 18:
+      return nil
+    case 19:
+      return "body"
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension ForInStmtSyntax: CustomReflectable {
@@ -2070,6 +2256,33 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 9)
     return SwitchStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension SwitchStmtSyntax: CustomReflectable {
@@ -2272,6 +2485,25 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 5)
     return DoStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "body"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension DoStmtSyntax: CustomReflectable {
@@ -2407,6 +2639,21 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return ReturnStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension ReturnStmtSyntax: CustomReflectable {
@@ -2539,6 +2786,21 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return YieldStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension YieldStmtSyntax: CustomReflectable {
@@ -2625,6 +2887,17 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.fallthroughKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return FallthroughStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -2757,6 +3030,21 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: 3)
     return BreakStmtSyntax(newData)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "label"
+    default:
+      fatalError("Invalid index")
+    }
+  }
 }
 
 extension BreakStmtSyntax: CustomReflectable {
@@ -2843,6 +3131,17 @@ public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingDecl, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return DeclarationStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -2973,6 +3272,21 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return ThrowStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -3260,6 +3574,33 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 9)
     return IfStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "body"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "else body"
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 
@@ -3583,6 +3924,37 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: 11)
     return PoundAssertStmtSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "condition"
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "message"
+    case 10:
+      return nil
+    case 11:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
   }
 }
 

@@ -263,7 +263,7 @@ EXPR_NODES = [
     Node('TupleExprElement', name_for_diagnostics=None, kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-             Child('Label', kind='Token',
+             Child('Label', kind='Token', name_for_diagnostics='label',
                    is_optional=True,
                    token_choices=[
                        'IdentifierToken',
@@ -271,26 +271,26 @@ EXPR_NODES = [
                    ]),
              Child('Colon', kind='ColonToken',
                    is_optional=True),
-             Child('Expression', kind='Expr'),
+             Child('Expression', kind='Expr', name_for_diagnostics='value'),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True),
          ]),
 
     # element inside an array expression: expression ','?
-    Node('ArrayElement', name_for_diagnostics=None, kind='Syntax',
+    Node('ArrayElement', name_for_diagnostics='array element', kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-             Child('Expression', kind='Expr'),
+             Child('Expression', kind='Expr', name_for_diagnostics='value'),
              Child('TrailingComma', kind='CommaToken', is_optional=True),
          ]),
 
     # element inside an array expression: expression ','?
-    Node('DictionaryElement', name_for_diagnostics=None, kind='Syntax',
+    Node('DictionaryElement', name_for_diagnostics='dictionary element', kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-             Child('KeyExpression', kind='Expr'),
+             Child('KeyExpression', kind='Expr', name_for_diagnostics='key'),
              Child('Colon', kind='ColonToken'),
-             Child('ValueExpression', kind='Expr'),
+             Child('ValueExpression', kind='Expr', name_for_diagnostics='value'),
              Child('TrailingComma', kind='CommaToken', is_optional=True),
          ]),
 
@@ -330,11 +330,11 @@ EXPR_NODES = [
     # relationships amongst the different infix operators.
     Node('TernaryExpr', name_for_diagnostics='ternay expression', kind='Expr',
          children=[
-             Child("ConditionExpression", kind='Expr'),
+             Child("ConditionExpression", kind='Expr', name_for_diagnostics='condition'),
              Child("QuestionMark", kind='InfixQuestionMarkToken'),
-             Child("FirstChoice", kind='Expr'),
+             Child("FirstChoice", kind='Expr', name_for_diagnostics='first choice'),
              Child("ColonMark", kind='ColonToken'),
-             Child("SecondChoice", kind='Expr')
+             Child("SecondChoice", kind='Expr', name_for_diagnostics='second choice')
          ]),
 
     # expr?.name
@@ -342,13 +342,13 @@ EXPR_NODES = [
          children=[
              # The base needs to be optional to parse expressions in key paths
              # like \.a
-             Child("Base", kind='Expr', is_optional=True),
+             Child("Base", kind='Expr',  name_for_diagnostics='base', is_optional=True),
              Child("Dot", kind='Token',
                    token_choices=[
                        'PeriodToken', 'PrefixPeriodToken'
                    ]),
              # Name could be 'self'
-             Child("Name", kind='Token'),
+             Child("Name", kind='Token', name_for_diagnostics='name'),
              Child('DeclNameArguments', kind='DeclNameArguments',
                    is_optional=True),
          ]),
@@ -437,7 +437,7 @@ EXPR_NODES = [
     Node('ClosureParam', name_for_diagnostics='closure parameter', kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-             Child('Name', kind='Token',
+             Child('Name', kind='Token', name_for_diagnostics='name',
                    token_choices=[
                        'IdentifierToken',
                        'WildcardToken',
@@ -451,7 +451,7 @@ EXPR_NODES = [
 
     Node('ClosureSignature', name_for_diagnostics='closure signature', kind='Syntax',
          children=[
-             Child('Attributes', kind='AttributeList',
+             Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
              Child('Capture', kind='ClosureCaptureSignature',
                    is_optional=True),
@@ -488,7 +488,7 @@ EXPR_NODES = [
     Node('MultipleTrailingClosureElement', name_for_diagnostics='trailing closure',
          kind='Syntax',
          children=[
-             Child('Label', kind='Token',
+             Child('Label', kind='Token', name_for_diagnostics='label',
                    token_choices=[
                        'IdentifierToken',
                        'WildcardToken'
@@ -504,16 +504,16 @@ EXPR_NODES = [
     #            | expr closure-expr
     Node('FunctionCallExpr', name_for_diagnostics='function call', kind='Expr',
          children=[
-             Child('CalledExpression', kind='Expr'),
+             Child('CalledExpression', kind='Expr', name_for_diagnostics='called expression'),
              Child('LeftParen', kind='LeftParenToken',
                    is_optional=True),
-             Child('ArgumentList', kind='TupleExprElementList',
+             Child('ArgumentList', kind='TupleExprElementList', name_for_diagnostics='arguments',
                    collection_element_name='Argument'),
              Child('RightParen', kind='RightParenToken',
                    is_optional=True),
-             Child('TrailingClosure', kind='ClosureExpr',
+             Child('TrailingClosure', kind='ClosureExpr', name_for_diagnostics='trailing closure',
                    is_optional=True),
-             Child('AdditionalTrailingClosures',
+             Child('AdditionalTrailingClosures', name_for_diagnostics='trailing closures',
                    kind='MultipleTrailingClosureElementList',
                    collection_element_name='AdditionalTrailingClosure',
                    is_optional=True),
@@ -522,14 +522,14 @@ EXPR_NODES = [
     # subscript-expr -> expr '[' call-argument-list ']' closure-expr?
     Node('SubscriptExpr', name_for_diagnostics='subscript', kind='Expr',
          children=[
-             Child('CalledExpression', kind='Expr'),
+             Child('CalledExpression', kind='Expr', name_for_diagnostics='called expression'),
              Child('LeftBracket', kind='LeftSquareBracketToken'),
-             Child('ArgumentList', kind='TupleExprElementList',
+             Child('ArgumentList', kind='TupleExprElementList', name_for_diagnostics='arguments',
                    collection_element_name='Argument'),
              Child('RightBracket', kind='RightSquareBracketToken'),
-             Child('TrailingClosure', kind='ClosureExpr',
+             Child('TrailingClosure', kind='ClosureExpr', name_for_diagnostics='trailing closure',
                    is_optional=True),
-             Child('AdditionalTrailingClosures',
+             Child('AdditionalTrailingClosures', name_for_diagnostics='trailing closures',
                    kind='MultipleTrailingClosureElementList',
                    collection_element_name='AdditionalTrailingClosure',
                    is_optional=True),
@@ -618,13 +618,13 @@ EXPR_NODES = [
     Node('KeyPathExpr', name_for_diagnostics='key path', kind='Expr',
          children=[
              Child('Backslash', kind='BackslashToken'),
-             Child('RootExpr', kind='Expr', is_optional=True,
+             Child('RootExpr', kind='Expr', name_for_diagnostics='root', is_optional=True,
                    node_choices=[
                        Child('IdentifierExpr', kind='IdentifierExpr'),
                        Child('SpecializeExpr', kind='SpecializeExpr'),
                        Child('OptionalChainingExpr', kind='OptionalChainingExpr'),
                    ]),
-             Child('Expression', kind='Expr'),
+             Child('Expression', kind='Expr', name_for_diagnostics='expression'),
          ]),
 
     # The period in the key path serves as the base on which the
@@ -651,7 +651,7 @@ EXPR_NODES = [
          children=[
              Child('KeyPath', kind='PoundKeyPathToken'),
              Child('LeftParen', kind='LeftParenToken'),
-             Child('Name', kind='ObjcName',
+             Child('Name', kind='ObjcName', name_for_diagnostics='name',
                    collection_element_name='NamePiece'),
              Child('RightParen', kind='RightParenToken'),
          ]),
@@ -667,7 +667,7 @@ EXPR_NODES = [
                    is_optional=True),
              Child('Colon', kind='ColonToken',
                    is_optional=True),
-             Child('Name', kind='Expr'),
+             Child('Name', kind='Expr', name_for_diagnostics='name'),
              Child('RightParen', kind='RightParenToken'),
          ]),
 

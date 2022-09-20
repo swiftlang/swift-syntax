@@ -46,11 +46,11 @@ AVAILABILITY_NODES = [
          a value, e.g. `message: "This has been deprecated"`.
          ''',
          children=[
-             Child('Label', kind='IdentifierToken',
+             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating label and value'),
-             Child('Value', kind='Syntax',
+             Child('Value', kind='Syntax', name_for_diagnostics='value',
                    node_choices=[
                        Child('String', 'StringLiteralToken'),
                        Child('Version', 'VersionTuple'),
@@ -66,14 +66,14 @@ AVAILABILITY_NODES = [
          certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
          ''',
          children=[
-             Child('Platform', kind='IdentifierToken',
+             Child('Platform', kind='IdentifierToken', name_for_diagnostics='platform',
                    classification='Keyword',
                    description='''
                    The name of the OS on which the availability should be
                    restricted or 'swift' if the availability should be
                    restricted based on a Swift version.
                    '''),
-             Child('Version', kind='VersionTuple', is_optional=True),
+             Child('Version', kind='VersionTuple', name_for_diagnostics='version', is_optional=True),
          ]),
 
     # version-tuple -> integer-literal

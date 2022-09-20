@@ -18,13 +18,13 @@ TYPE_NODES = [
     # member-type-identifier -> type '.' identifier generic-argument-clause?
     Node('MemberTypeIdentifier', name_for_diagnostics='member type', kind='Type',
          children=[
-             Child('BaseType', kind='Type'),
+             Child('BaseType', kind='Type', name_for_diagnostics='base type'),
              Child('Period', kind='Token',
                    token_choices=[
                        'PeriodToken',
                        'PrefixPeriodToken',
                    ]),
-             Child('Name', kind='Token', classification='TypeIdentifier',
+             Child('Name', kind='Token',  name_for_diagnostics='member type', classification='TypeIdentifier',
                    token_choices=[
                        'IdentifierToken',
                        'CapitalSelfToken',
@@ -51,9 +51,9 @@ TYPE_NODES = [
     Node('DictionaryType', name_for_diagnostics='dictionary type', kind='Type',
          children=[
              Child('LeftSquareBracket', kind='LeftSquareBracketToken'),
-             Child('KeyType', kind='Type'),
+             Child('KeyType', kind='Type', name_for_diagnostics='key type',),
              Child('Colon', kind='ColonToken'),
-             Child('ValueType', kind='Type'),
+             Child('ValueType', kind='Type', name_for_diagnostics='value type'),
              Child('RightSquareBracket', kind='RightSquareBracketToken'),
          ]),
 
@@ -61,7 +61,7 @@ TYPE_NODES = [
     #                | type '.' 'Protocol
     Node('MetatypeType', name_for_diagnostics='metatype', kind='Type',
          children=[
-             Child('BaseType', kind='Type'),
+             Child('BaseType', kind='Type', name_for_diagnostics='base type'),
              Child('Period', kind='PeriodToken'),
              Child('TypeOrProtocol', kind='IdentifierToken',
                    text_choices=[
@@ -129,13 +129,13 @@ TYPE_NODES = [
          children=[
              Child('InOut', kind='InoutToken',
                    is_optional=True),
-             Child('Name', kind='Token',
+             Child('Name', kind='Token', name_for_diagnostics='name',
                    is_optional=True,
                    token_choices=[
                        'IdentifierToken',
                        'WildcardToken'
                    ]),
-             Child('SecondName', kind='Token',
+             Child('SecondName', kind='Token', name_for_diagnostics='internal name',
                    is_optional=True,
                    token_choices=[
                        'IdentifierToken',

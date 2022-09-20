@@ -101,6 +101,10 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
     return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return Syntax(self).childNameForDiagnostics(index)
+  }
 }
 
 extension DeclSyntax: CustomReflectable {
@@ -199,6 +203,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// Note that this will incur an existential conversion.
   public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
     return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return Syntax(self).childNameForDiagnostics(index)
   }
 }
 
@@ -299,6 +307,10 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
     return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return Syntax(self).childNameForDiagnostics(index)
+  }
 }
 
 extension StmtSyntax: CustomReflectable {
@@ -398,6 +410,10 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
     return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return Syntax(self).childNameForDiagnostics(index)
+  }
 }
 
 extension TypeSyntax: CustomReflectable {
@@ -496,6 +512,10 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// Note that this will incur an existential conversion.
   public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol {
     return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return Syntax(self).childNameForDiagnostics(index)
   }
 }
 

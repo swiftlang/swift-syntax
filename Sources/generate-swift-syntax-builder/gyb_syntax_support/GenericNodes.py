@@ -36,7 +36,7 @@ GENERIC_NODES = [
     Node('SameTypeRequirement', name_for_diagnostics='same type requirement',
          kind='Syntax',
          children=[
-             Child('LeftTypeIdentifier', kind='Type'),
+             Child('LeftTypeIdentifier', kind='Type', name_for_diagnostics='left-hand type'),
              Child('EqualityToken', kind='Token',
                    token_choices=[
                        'SpacedBinaryOperatorToken',
@@ -44,22 +44,22 @@ GENERIC_NODES = [
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
                    ]),
-             Child('RightTypeIdentifier', kind='Type'),
+             Child('RightTypeIdentifier', name_for_diagnostics='right-hand type', kind='Type'),
          ]),
 
     # layout-requirement -> type-name : layout-constraint
     # layout-constraint -> identifier '('? integer-literal? ','? integer-literal? ')'?
     Node('LayoutRequirement', name_for_diagnostics='layout requirement', kind='Syntax',
          children=[
-             Child('TypeIdentifier', kind='Type'),
+             Child('TypeIdentifier', kind='Type', name_for_diagnostics='constrained type'),
              Child('Colon', kind='ColonToken'),
              Child('LayoutConstraint', kind='IdentifierToken'),
              Child('LeftParen', kind='LeftParenToken',
                    is_optional=True),
-             Child('Size', kind='IntegerLiteralToken', is_optional=True),
+             Child('Size', kind='IntegerLiteralToken', name_for_diagnostics='size', is_optional=True),
              Child('Comma', kind='CommaToken',
                    is_optional=True),
-             Child('Alignment', kind='IntegerLiteralToken', is_optional=True),
+             Child('Alignment', kind='IntegerLiteralToken', name_for_diagnostics='alignment', is_optional=True),
              Child('RightParen', kind='RightParenToken',
                    is_optional=True),
          ]),
@@ -75,10 +75,10 @@ GENERIC_NODES = [
          children=[
              Child('Attributes', kind='AttributeList',
                    collection_element_name='Attribute', is_optional=True),
-             Child('Name', kind='IdentifierToken'),
+             Child('Name', name_for_diagnostics='name', kind='IdentifierToken'),
              Child('Colon', kind='ColonToken',
                    is_optional=True),
-             Child('InheritedType', kind='Type',
+             Child('InheritedType', name_for_diagnostics='inherited type', kind='Type',
                    is_optional=True),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True),
@@ -91,7 +91,7 @@ GENERIC_NODES = [
     Node('PrimaryAssociatedType', name_for_diagnostics=None, kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-             Child('Name', kind='IdentifierToken'),
+             Child('Name', name_for_diagnostics='name', kind='IdentifierToken'),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True),
          ]),

@@ -1617,21 +1617,27 @@ extension Parser {
 
         switch elementKind! {
         case .array(let el):
-          elements.append(RawSyntax(RawArrayElementSyntax(
-            expression: el, trailingComma: comma, arena: self.arena)))
-          if el.is(RawMissingExprSyntax.self) {
+          let element = RawArrayElementSyntax(
+            expression: el, trailingComma: comma, arena: self.arena
+          )
+          if element.raw.byteLength == 0 {
             break COLLECTION_LOOP
+          } else {
+            elements.append(RawSyntax(element))
           }
         case .dictionary(let key, let unexpectedBeforeColon, let colon, let value):
-          elements.append(RawSyntax(RawDictionaryElementSyntax(
+          let element = RawDictionaryElementSyntax(
             keyExpression: key,
             unexpectedBeforeColon,
             colon: colon,
             valueExpression: value,
             trailingComma: comma,
-            arena: self.arena)))
-          if key.is(RawMissingExprSyntax.self), colon.isMissing, value.is(RawMissingExprSyntax.self) {
+            arena: self.arena
+          )
+          if element.raw.byteLength == 0 {
             break COLLECTION_LOOP
+          } else {
+            elements.append(RawSyntax(element))
           }
         }
 

@@ -162,8 +162,6 @@ final class ExpressionTests: XCTestCase {
       ([1:#^DIAG^#)
       """,
       diagnostics: [
-        // FIXME: Why is this diagnostic produced?
-        DiagnosticSpec(message: "Expected ':' in dictionary"),
         DiagnosticSpec(message: "Expected ']' to end dictionary"),
       ]
     )

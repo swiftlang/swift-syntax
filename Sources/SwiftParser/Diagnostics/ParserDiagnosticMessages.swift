@@ -16,12 +16,12 @@ import SwiftSyntax
 let diagnosticDomain: String = "SwiftParser"
 
 extension SyntaxProtocol {
-  /// Return a name of this syntax node that can be used to describe it in
-  /// diagnostics.
-  /// Nodes that mostly exist for the syntax tree's structure and don't have a
-  /// correspondence in the source code that's meeingful to the user by default
-  /// use the name of the parent node that encloses it. Pass `false` to `inherit`
-  /// to prevent this name inheritance.
+  /// Return the name of this syntax node to be used to describe it in
+  /// diagnostics. If the node itself has no diagnostic name (eg. it exists for
+  /// the syntax tree's structure), use the name of the enclosing parent node by
+  /// default.
+  /// Pass inherit: false to prevent this behavior, in which case `nil` will be
+  /// returned instead.
   func nodeTypeNameForDiagnostics(inherit: Bool = true) -> String? {
     if let name = Syntax(self).as(SyntaxEnum.self).nameForDiagnostics {
       return name

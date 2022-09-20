@@ -13,14 +13,19 @@
 #if canImport(Darwin)
 import Darwin
 
-class ScopeGuard {
-  private var lock: os_unfair_lock
-  init() {
-    self.lock = os_unfair_lock()
+struct ScopeGuard {
+  private let lock: os_unfair_lock_t
+  init(allocator: BumpPtrAllocator) {
+    let storage = allocator.allocate(os_unfair_lock.self, count: 1).baseAddress!
+    storage.initialize(to: os_unfair_lock())
+    self.lock = os_unfair_lock_t(storage)
   }
+
+  func deinitialize() {}
+
   func withGuard<T>(body: () throws -> T) rethrows -> T {
-    os_unfair_lock_lock(&lock)
-    defer { os_unfair_lock_unlock(&lock)}
+    os_unfair_lock_lock(lock)
+    defer { os_unfair_lock_unlock(lock)}
     return try body()
   }
 }
@@ -28,27 +33,31 @@ class ScopeGuard {
 #elseif canImport(Glibc)
 import Glibc
 
-class ScopeGuard {
-  var lock: pthread_mutex_t
-  init() {
-    self.lock = pthread_mutex_t()
-    pthread_mutex_init(&self.lock, nil)
+struct ScopeGuard {
+  private let lock: UnsafeMutablePointer<pthread_mutex_t>
+  init(allocator: BumpPtrAllocator) {
+    let storage = allocator.allocate(pthread_mutex_t.self, count: 1).baseAddress!
+    storage.initialize(to: pthread_mutex_t())
+    pthread_mutex_init(storage, nil)
+    self.lock = storage
   }
-  deinit {
-    pthread_mutex_destroy(&self.lock)
+  func deinitialize() {
+    pthread_mutex_destroy(self.lock)
   }
   func withGuard<T>(body: () throws -> T) rethrows -> T {
-    pthread_mutex_lock(&lock)
-    defer { pthread_mutex_unlock(&lock) }
+    pthread_mutex_lock(self.lock)
+    defer { pthread_mutex_unlock(self.lock) }
     return try body()
   }
 }
+
 #else
 // FIXME: Support other platforms.
 
 /// Dummy mutex that doesn't actually guard at all.
 class ScopeGuard {
   init() {}
+  func deinitialize() {}
   func withGuard<T>(body: () throws -> T) rethrows -> T {
     return try body()
   }
@@ -79,20 +88,28 @@ public class SyntaxArena {
 
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
-    lock = ScopeGuard()
+    let allocator = BumpPtrAllocator()
+    self.lock = ScopeGuard(allocator: allocator)
     self.singleThreadMode = false
-    allocator = BumpPtrAllocator()
+    self.allocator = allocator
     children = []
     sourceBuffer = .init(start: nil, count: 0)
     hasParent = false
     self.parseTriviaFunction = parseTriviaFunction
   }
 
+  deinit {
+    // NOTE: We don't make `ScopeGuard` a class and `deinit` in it to
+    // deinitialize it because the actual lock value is in `allocator`, and we
+    // want to make sure to deinitialize the lock before destroying the allocator.
+    lock.deinitialize()
+  }
+
   public convenience init() {
     self.init(parseTriviaFunction: _defaultParseTriviaFunction(_:_:))
   }
 
-  private func withGuard<R>(body: () throws -> R) rethrows -> R {
+  private func withGuard<R>(_ body: () throws -> R) rethrows -> R {
     if self.singleThreadMode {
       return try body()
     } else {
@@ -114,7 +131,7 @@ public class SyntaxArena {
   /// `contains(address _:)` is faster if the address is inside the memory
   /// range this function returned.
   public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
-    let allocated = lock.withGuard {
+    let allocated = self.withGuard {
       allocator.allocate(UInt8.self, count: buffer.count + /* for NULL */1)
     }
     precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
@@ -189,7 +206,7 @@ public class SyntaxArena {
   /// Copies a `RawSyntaxData` to the memory this arena manages, and retuns the
   /// pointer to the destination.
   func intern(_ value: RawSyntaxData) -> UnsafePointer<RawSyntaxData> {
-    let allocated = lock.withGuard {
+    let allocated = self.withGuard {
       allocator.allocate(RawSyntaxData.self, count: 1).baseAddress!
     }
     allocated.initialize(to: value)
@@ -236,7 +253,7 @@ public class SyntaxArena {
   public func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty ||
             sourceBufferContains(text.baseAddress!) ||
-            allocator.contains(address: text.baseAddress!))
+            self.withGuard({allocator.contains(address: text.baseAddress!)}))
   }
 
   @_spi(RawSyntax)

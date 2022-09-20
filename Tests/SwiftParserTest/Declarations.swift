@@ -653,7 +653,6 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // FIXME: This diagnostic should be more contextual
         DiagnosticSpec(message: "Expected '->' in return clause")
       ]
     )

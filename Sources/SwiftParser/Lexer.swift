@@ -22,7 +22,7 @@ public struct Lexer {
   /// A lexeme is the fundamental output unit of lexical analysis. Each lexeme
   /// represents a fully identified, meaningful part of the input text that
   /// will can be consumed by a ``Parser``.
-  public struct Lexeme {
+  public struct Lexeme: CustomDebugStringConvertible {
     public struct Flags: OptionSet {
       public var rawValue: UInt8
 
@@ -100,6 +100,10 @@ public struct Lexer {
     public var trailingTriviaText: SyntaxText {
       SyntaxText(baseAddress: start.advanced(by: leadingTriviaByteLength+textByteLength),
                  count: trailingTriviaByteLength)
+    }
+
+    public var debugDescription: String {
+      return String(syntaxText: SyntaxText(baseAddress: start, count: byteLength))
     }
   }
 }

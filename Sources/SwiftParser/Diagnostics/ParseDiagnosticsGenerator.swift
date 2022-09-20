@@ -67,15 +67,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, position: AbsolutePosition? = nil, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
     diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
-    diagnostics.append(Diagnostic(node: Syntax(node), message: message, highlights: highlights, fixIts: fixIts))
+    diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, fixIts: fixIts))
     self.handledNodes.append(contentsOf: handledNodes)
   }
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
-    addDiagnostic(node, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts, handledNodes: handledNodes)
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T,position: AbsolutePosition? = nil,  _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+    addDiagnostic(node, position: position, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts, handledNodes: handledNodes)
   }
 
   /// Whether the node should be skipped for diagnostic emission.

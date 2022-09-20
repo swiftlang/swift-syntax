@@ -29,8 +29,13 @@ public class MultithreadingTests: XCTestCase {
           presence: .present,
           arena: arena)
       }
-      let token = Syntax(raw: RawSyntax(tokenRaw)).as(TokenSyntax.self)!
-      XCTAssertEqual(token.text, "ident\(i)")
+      let identifierExprRaw = RawIdentifierExprSyntax(
+        identifier: tokenRaw,
+        declNameArguments: nil,
+        arena: arena)
+
+      let expr = Syntax(raw: RawSyntax(identifierExprRaw)).as(IdentifierExprSyntax.self)!
+      XCTAssertEqual(expr.identifier.text, "ident\(i)")
     }
   }
 

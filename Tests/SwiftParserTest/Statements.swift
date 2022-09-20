@@ -251,7 +251,7 @@ final class StatementTests: XCTestCase {
       ]
     )
   }
-  
+
   func testIfHasSymbol() {
     AssertParse(
       """

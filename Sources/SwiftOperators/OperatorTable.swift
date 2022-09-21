@@ -89,6 +89,18 @@ extension OperatorTable {
     return infixOperators[operatorName]
   }
 
+  /// Returns the ``Operator`` corresponding to the given prefix operator, or
+  /// `nil` if it is not defined in the operator table.
+  public func prefixOperator(named operatorName: OperatorName) -> Operator? {
+    return prefixOperators[operatorName]
+  }
+
+  /// Returns the ``Operator`` corresponding to the given prefix operator, or
+  /// `nil` if it is not defined in the operator table.
+  public func postfixOperator(named operatorName: OperatorName) -> Operator? {
+    return postfixOperators[operatorName]
+  }
+
   /// Look for the precedence group corresponding to the given operator.
   func lookupOperatorPrecedenceGroupName(
     _ operatorName: OperatorName,

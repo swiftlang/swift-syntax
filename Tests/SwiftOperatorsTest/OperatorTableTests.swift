@@ -405,4 +405,22 @@ public class OperatorPrecedenceTests: XCTestCase {
     }
     XCTAssertNil(opPrecedence.infixOperator(named: "^*^"))
   }
+
+  func testUnaryOperatorLookup() throws {
+    let opPrecedence = OperatorTable.standardOperators
+    do {
+      let op = try XCTUnwrap(opPrecedence.prefixOperator(named: "-"))
+      XCTAssertEqual(op.kind, .prefix)
+      XCTAssertEqual(op.name, "-")
+      XCTAssertNil(op.precedenceGroup)
+    }
+
+    do {
+      let op = try XCTUnwrap(opPrecedence.postfixOperator(named: "..."))
+      XCTAssertEqual(op.kind, .postfix)
+      XCTAssertEqual(op.name, "...")
+      XCTAssertNil(op.precedenceGroup)
+    }
+
+  }
 }

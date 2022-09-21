@@ -42,6 +42,10 @@ public extension RawSyntaxNodeProtocol {
   func write<Target>(to target: inout Target) where Target : TextOutputStream {
     raw.write(to: &target)
   }
+
+  var isEmpty: Bool {
+    return raw.byteLength == 0
+  }
 }
 
 /// `RawSyntax` itself conforms to `RawSyntaxNodeProtocol`.

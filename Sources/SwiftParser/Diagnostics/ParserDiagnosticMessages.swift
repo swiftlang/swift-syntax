@@ -150,15 +150,16 @@ public struct MissingNodeError: ParserError {
     if let parent = missingNode.parent,
         let childName = parent.childNameForDiagnostics(missingNode.index) {
       message = "Expected \(childName)"
-      if let parent = missingNode.parent,
-          let parentTypeName = parent.nodeTypeNameForDiagnostics(inherit: false) {
+      if let parentTypeName = parent.nodeTypeNameForDiagnostics(inherit: false) {
         message += " of \(parentTypeName)"
         hasNamedParent = true
       }
     } else {
       message = "Expected \(missingNode.nodeTypeNameForDiagnostics() ?? "syntax")"
-      if let lastChild = missingNode.lastToken(viewMode: .fixedUp), lastChild.presence == .present {
-        message += " after '\(lastChild.text)'"
+      if let missingDecl = missingNode.as(MissingDeclSyntax.self), let lastModifier = missingDecl.modifiers?.last {
+        message += " after '\(lastModifier.name.text)' modifier"
+      } else if let missingDecl = missingNode.as(MissingDeclSyntax.self), missingDecl.attributes != nil {
+        message += " after attribute"
       } else if let previousToken = missingNode.previousToken(viewMode: .fixedUp), previousToken.presence == .present {
         message += " after '\(previousToken.text)'"
       }

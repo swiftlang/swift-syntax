@@ -148,9 +148,9 @@ final class DirectiveTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected declaration after 'foo' in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected declaration after 'foo' in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after 'frozen' in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after attribute in conditional compilation clause"),
       ]
     )
   }

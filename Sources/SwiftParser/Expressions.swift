@@ -1620,7 +1620,7 @@ extension Parser {
           let element = RawArrayElementSyntax(
             expression: el, trailingComma: comma, arena: self.arena
           )
-          if element.raw.byteLength == 0 {
+          if element.isEmpty {
             break COLLECTION_LOOP
           } else {
             elements.append(RawSyntax(element))
@@ -1634,7 +1634,7 @@ extension Parser {
             trailingComma: comma,
             arena: self.arena
           )
-          if element.raw.byteLength == 0 {
+          if element.isEmpty {
             break COLLECTION_LOOP
           } else {
             elements.append(RawSyntax(element))

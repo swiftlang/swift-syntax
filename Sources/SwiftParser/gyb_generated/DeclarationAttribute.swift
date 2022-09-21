@@ -119,6 +119,7 @@ extension Parser {
     case _spiOnly = "_spiOnly"
     case _documentation = "_documentation"
     case typeWrapperIgnored = "typeWrapperIgnored"
+    case _noMetadata = "_noMetadata"
     case _spi_available = "_spi_available"
   }
 }

@@ -39,7 +39,7 @@ public struct Operator {
 
   public init(
     kind: OperatorKind, name: OperatorName,
-    precedenceGroup: PrecedenceGroupName?,
+    precedenceGroup: PrecedenceGroupName? = nil,
     syntax: OperatorDeclSyntax? = nil
   ) {
     self.kind = kind

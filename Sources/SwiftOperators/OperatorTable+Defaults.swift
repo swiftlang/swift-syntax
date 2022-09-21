@@ -26,6 +26,7 @@ extension OperatorTable {
     ]
 
     let operators: [Operator] = [
+      Operator(kind: .prefix, name: "!"),
       Operator(kind: .infix, name: "&&",
                precedenceGroup: "LogicalConjunctionPrecedence"),
       Operator(kind: .infix, name: "||",
@@ -121,6 +122,21 @@ extension OperatorTable {
     ]
 
     let operators: [Operator] = [
+      // Standard postfix operators.
+      Operator(kind: .postfix, name: "++"),
+      Operator(kind: .postfix, name: "--"),
+      Operator(kind: .postfix, name: "..."),
+
+      // Standard prefix operators.
+      Operator(kind: .prefix, name: "++"),
+      Operator(kind: .prefix, name: "--"),
+      Operator(kind: .prefix, name: "!"),
+      Operator(kind: .prefix, name: "~"),
+      Operator(kind: .prefix, name: "+"),
+      Operator(kind: .prefix, name: "-"),
+      Operator(kind: .prefix, name: "..."),
+      Operator(kind: .prefix, name: "..<"),
+
       // "Exponentiative"
       Operator(
         kind: .infix,

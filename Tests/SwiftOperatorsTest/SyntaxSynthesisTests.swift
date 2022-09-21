@@ -52,6 +52,7 @@ public class SyntaxSynthesisTests: XCTestCase {
       precedencegroup LogicalDisjunctionPrecedence {
           associativity: left
       }
+      prefix operator !
       infix operator &&: LogicalConjunctionPrecedence
       infix operator ||: LogicalDisjunctionPrecedence
 

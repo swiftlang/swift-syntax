@@ -473,6 +473,14 @@ enum IdentifierOrRethrowsTokens: RawTokenKindSubset {
     case .rethrowsKeyword: return .rethrowsKeyword
     }
   }
+
+  var remappedKind: RawTokenKind? {
+    switch self {
+    case .rethrowsKeyword: return .identifier
+    default: return nil
+    }
+  }
+
 }
 
 enum Operator: RawTokenKindSubset {

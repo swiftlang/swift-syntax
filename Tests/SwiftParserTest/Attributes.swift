@@ -73,9 +73,12 @@ final class AttributeTests: XCTestCase {
   func testRethrowsAttribute() {
     AssertParse(
       """
-      @rethrows
+      @#^NAME^#rethrows
       protocol P { }
-      """
+      """,
+      { $0.parseDeclaration() },
+      substructure: Syntax(TokenSyntax.identifier("rethrows")),
+      substructureAfterMarker: "NAME"
     )
   }
 

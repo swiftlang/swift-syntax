@@ -1,0 +1,2 @@
+# Ignore Data Xcode stores when opening the project directly
+/.swiftpm/xcode

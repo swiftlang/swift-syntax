@@ -51,7 +51,6 @@ let package = Package(
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
-    .executable(name: "generate-swift-syntax-builder", targets: ["generate-swift-syntax-builder"])
   ],
   targets: [
     .target(
@@ -141,31 +140,6 @@ let package = Package(
       dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser",
                      "SwiftOperators",
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
-    ),
-    .executableTarget(
-        name: "generate-swift-syntax-builder",
-        dependencies: ["SwiftSyntaxBuilder", .product(name: "ArgumentParser", package: "swift-argument-parser")],
-        exclude: [
-          "gyb_helpers",
-          "gyb_syntax_support",
-          "AttributeNodes.swift.gyb",
-          "AvailabilityNodes.swift.gyb",
-          "BuilderInitializableTypes.swift.gyb",
-          "Classification.swift.gyb",
-          "CommonNodes.swift.gyb",
-          "DeclNodes.swift.gyb",
-          "ExpressibleAsConformances.swift.gyb",
-          "ExprNodes.swift.gyb",
-          "GenericNodes.swift.gyb",
-          "NodeSerializationCodes.swift.gyb",
-          "PatternNodes.swift.gyb",
-          "StmtNodes.swift.gyb",
-          "SyntaxBaseKinds.swift.gyb",
-          "TokenSpec.swift.gyb",
-          "Traits.swift.gyb",
-          "Trivia.swift.gyb",
-          "TypeNodes.swift.gyb"
-        ]
     ),
     .testTarget(
       name: "SwiftSyntaxTest",

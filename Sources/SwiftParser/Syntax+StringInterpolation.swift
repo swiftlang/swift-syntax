@@ -73,9 +73,7 @@ extension SyntaxExpressibleByStringInterpolation {
       var parser = Parser(buffer)
       // FIXME: When the parser supports incremental parsing, put the
       // interpolatedSyntaxNodes in so we don't have to parse them again.
-      return parser.arena.assumingSingleThread {
-        return Self.parse(from: &parser)
-      }
+      return Self.parse(from: &parser)
     }
   }
 

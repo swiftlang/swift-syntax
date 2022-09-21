@@ -9,7 +9,7 @@ class Child(object):
     A child of a node, that may be declared optional or a token with a
     restricted subset of acceptable kinds or texts.
     """
-    def __init__(self, name, kind, description=None, is_optional=False,
+    def __init__(self, name, kind, name_for_diagnostics=None, description=None, is_optional=False,
                  token_choices=None, text_choices=None, node_choices=None,
                  collection_element_name=None,
                  classification=None, force_classification=False,
@@ -22,6 +22,7 @@ class Child(object):
         identifiers) inherit the syntax classification.
         """
         self.name = name
+        self.name_for_diagnostics = name_for_diagnostics
         self.swift_name = lowercase_first_word(name)
         self.syntax_kind = kind
         self.description = description

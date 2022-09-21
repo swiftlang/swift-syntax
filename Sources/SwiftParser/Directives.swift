@@ -89,7 +89,7 @@ extension Parser {
         do {
           var elementsProgress = LoopProgressCondition()
           while !self.at(any: [.eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword]) && elementsProgress.evaluate(currentToken) {
-            guard let element = parseElement(&self), element.raw.byteLength > 0 else {
+            guard let element = parseElement(&self), !element.isEmpty else {
               break
             }
             elements.append(element)

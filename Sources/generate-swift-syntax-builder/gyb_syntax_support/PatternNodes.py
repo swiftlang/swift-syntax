@@ -16,8 +16,8 @@ PATTERN_NODES = [
              Child('Type', kind='Type',
                    is_optional=True),
              Child('Period', kind='PeriodToken'),
-             Child('CaseName', kind='IdentifierToken'),
-             Child('AssociatedTuple', kind='TuplePattern',
+             Child('CaseName', kind='IdentifierToken', name_for_diagnostics='case name'),
+             Child('AssociatedTuple', kind='TuplePattern', name_for_diagnostics='associated values',
                    is_optional=True),
          ]),
 
@@ -75,7 +75,7 @@ PATTERN_NODES = [
     Node('TuplePatternElement', name_for_diagnostics=None, kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-             Child('LabelName', kind='IdentifierToken',
+             Child('LabelName', kind='IdentifierToken', name_for_diagnostics='label',
                    is_optional=True),
              Child('LabelColon', kind='ColonToken',
                    is_optional=True),

@@ -20,7 +20,7 @@ public struct SyntaxChildrenIndexData: Comparable {
   fileprivate let offset: UInt32
   /// The index of the node in the parent.
   /// See `AbsoluteSyntaxPosition.indexInParent`
-  fileprivate let indexInParent: UInt32
+  let indexInParent: UInt32
   /// Unique value for a node within its own tree.
   /// See `SyntaxIdentifier.indexIntree`
   fileprivate let indexInTree: SyntaxIndexInTree
@@ -61,7 +61,7 @@ public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
   /// SyntaxChildrenIndex` an enumbecause the optional value can be
   /// force-unwrapped when we know that an index is not the end index, saving a
   /// switch case comparison.
-  fileprivate let data: SyntaxChildrenIndexData?
+  let data: SyntaxChildrenIndexData?
 
   fileprivate init(offset: UInt32, indexInParent: UInt32,
                    indexInTree: SyntaxIndexInTree) {

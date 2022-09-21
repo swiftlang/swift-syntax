@@ -22,13 +22,19 @@ extension SyntaxProtocol {
   /// default.
   /// Pass inherit: false to prevent this behavior, in which case `nil` will be
   /// returned instead.
-  func nodeTypeNameForDiagnostics(inherit: Bool = true) -> String? {
+  /// If `allowSourceFile` is `false`, `nil` will be returned if the inherited
+  /// node type name is "source file".
+  func nodeTypeNameForDiagnostics(inherit: Bool = true, allowSourceFile: Bool = true) -> String? {
     if let name = Syntax(self).as(SyntaxEnum.self).nameForDiagnostics {
-      return name
+      if Syntax(self).is(SourceFileSyntax.self) && !allowSourceFile {
+        return nil
+      } else {
+        return name
+      }
     }
     if inherit {
       if let parent = self.parent {
-        return parent.nodeTypeNameForDiagnostics(inherit: inherit)
+        return parent.nodeTypeNameForDiagnostics(inherit: inherit, allowSourceFile: allowSourceFile)
       }
     }
     return nil
@@ -132,6 +138,38 @@ public struct InvalidIdentifierError: ParserError {
     default:
       return "'\(invalidIdentifier.text)' is not a valid identifier"
     }
+  }
+}
+
+public struct MissingNodeError: ParserError {
+  public let missingNode: Syntax
+
+  public var message: String {
+    var message: String
+    var hasNamedParent = false
+    if let parent = missingNode.parent,
+        let childName = parent.childNameForDiagnostics(missingNode.index) {
+      message = "Expected \(childName)"
+      if let parentTypeName = parent.nodeTypeNameForDiagnostics(inherit: false) {
+        message += " of \(parentTypeName)"
+        hasNamedParent = true
+      }
+    } else {
+      message = "Expected \(missingNode.nodeTypeNameForDiagnostics() ?? "syntax")"
+      if let missingDecl = missingNode.as(MissingDeclSyntax.self), let lastModifier = missingDecl.modifiers?.last {
+        message += " after '\(lastModifier.name.text)' modifier"
+      } else if let missingDecl = missingNode.as(MissingDeclSyntax.self), missingDecl.attributes != nil {
+        message += " after attribute"
+      } else if let previousToken = missingNode.previousToken(viewMode: .fixedUp), previousToken.presence == .present {
+        message += " after '\(previousToken.text)'"
+      }
+    }
+    if !hasNamedParent {
+      if let parent = missingNode.parent, let parentTypeName = parent.nodeTypeNameForDiagnostics(allowSourceFile: false) {
+        message += " in \(parentTypeName)"
+      }
+    }
+    return message
   }
 }
 

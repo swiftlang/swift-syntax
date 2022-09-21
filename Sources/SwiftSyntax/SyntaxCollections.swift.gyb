@@ -217,6 +217,10 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `${node.name}` to the `BidirectionalCollection` protocol.

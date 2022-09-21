@@ -39,6 +39,10 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 extension UnknownSyntax: CustomReflectable {
@@ -191,6 +195,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The length of this node including all of its trivia.
   public var totalLength: SourceLength {
     return raw.totalLength
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 

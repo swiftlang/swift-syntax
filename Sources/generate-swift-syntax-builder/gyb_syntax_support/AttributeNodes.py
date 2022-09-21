@@ -17,7 +17,8 @@ ATTRIBUTE_NODES = [
          children=[
              Child('AtSignToken', kind='AtSignToken',
                    description='The `@` sign.'),
-             Child('AttributeName', kind='Type', classification='Attribute',
+             Child('AttributeName', kind='Type', name_for_diagnostics='name',
+                   classification='Attribute',
                    description='The name of the attribute.'),
              Child('LeftParen', kind='LeftParenToken',
                    is_optional=True),
@@ -44,7 +45,8 @@ ATTRIBUTE_NODES = [
          children=[
              Child('AtSignToken', kind='AtSignToken',
                    description='The `@` sign.'),
-             Child('AttributeName', kind='Token', classification='Attribute',
+             Child('AttributeName', kind='Token', name_for_diagnostics='name',
+                   classification='Attribute',
                    description='The name of the attribute.'),
              Child('LeftParen', kind='LeftParenToken', is_optional=True,
                    description='''
@@ -124,7 +126,7 @@ ATTRIBUTE_NODES = [
          The availability argument for the _specialize attribute
          ''',
          children=[
-             Child('Label', kind='IdentifierToken',
+             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
@@ -143,11 +145,11 @@ ATTRIBUTE_NODES = [
          ''',
          traits=['WithTrailingComma'],
          children=[
-             Child('Label', kind='IdentifierToken',
+             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
-             Child('Value', kind='Token',
+             Child('Value', kind='Token', name_for_diagnostics='value',
                    description='The value for this argument'),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True, description='''
@@ -165,11 +167,11 @@ ATTRIBUTE_NODES = [
          ''',
          traits=['WithTrailingComma'],
          children=[
-             Child('Label', kind='IdentifierToken',
+             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
-             Child('Declname', kind='DeclName',
+             Child('Declname', kind='DeclName', name_for_diagnostics='declaration name',
                    description='The value for this argument'),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True, description='''
@@ -187,24 +189,24 @@ ATTRIBUTE_NODES = [
          "Src.swift"`
          ''',
          children=[
-             Child('NameTok', kind='Token',
+             Child('NameTok', kind='Token', name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
-             Child('StringOrDeclname', kind='Syntax', node_choices=[
+             Child('StringOrDeclname', kind='Syntax', name_for_diagnostics='value', node_choices=[
                  Child('String', kind='StringLiteralToken'),
                  Child('Declname', kind='DeclName'),
              ]),
          ]),
     Node('DeclName', name_for_diagnostics='declaration name', kind='Syntax', children=[
-         Child('DeclBaseName', kind='Syntax', description='''
+         Child('DeclBaseName', kind='Syntax', name_for_diagnostics='base name', description='''
                The base name of the protocol\'s requirement.
                ''',
                node_choices=[
                    Child('Identifier', kind='IdentifierToken'),
                    Child('Operator', kind='PrefixOperatorToken'),
                ]),
-         Child('DeclNameArguments', kind='DeclNameArguments',
+         Child('DeclNameArguments', kind='DeclNameArguments', name_for_diagnostics='arguments',
                is_optional=True, description='''
                The argument labels of the protocol\'s requirement if it
                is a function requirement.
@@ -220,7 +222,7 @@ ATTRIBUTE_NODES = [
          `Type, methodName(arg1Label:arg2Label:)`
          ''',
          children=[
-             Child('Type', kind='Type', description='''
+             Child('Type', kind='Type', name_for_diagnostics='type', description='''
                    The type for which the method with this attribute
                    implements a requirement.
                    '''),
@@ -228,10 +230,10 @@ ATTRIBUTE_NODES = [
                    description='''
                    The comma separating the type and method name
                    '''),
-             Child('DeclBaseName', kind='Token', description='''
+             Child('DeclBaseName', kind='Token', name_for_diagnostics='declaration base name', description='''
                    The base name of the protocol\'s requirement.
                    '''),
-             Child('DeclNameArguments', kind='DeclNameArguments',
+             Child('DeclNameArguments', name_for_diagnostics='declaration name arguments', kind='DeclNameArguments',
                    is_optional=True, description='''
                    The argument labels of the protocol\'s requirement if it
                    is a function requirement.
@@ -247,7 +249,7 @@ ATTRIBUTE_NODES = [
          labeled argument or just a colon for an unlabeled argument
          ''',
          children=[
-             Child('Name', kind='IdentifierToken', is_optional=True),
+             Child('Name', kind='IdentifierToken', name_for_diagnostics='name', is_optional=True),
              Child('Colon', kind='ColonToken', is_optional=True),
          ]),
 
@@ -293,7 +295,7 @@ ATTRIBUTE_NODES = [
              Child('Colon', kind='ColonToken', description='''
                    The colon separating "wrt" and the parameter list.
                    '''),
-             Child('Parameters', kind='Syntax',
+             Child('Parameters', kind='Syntax', name_for_diagnostics='parameters',
                    node_choices=[
                        Child('Parameter', kind='DifferentiabilityParam'),
                        Child('ParameterList', kind='DifferentiabilityParams'),
@@ -389,14 +391,14 @@ ATTRIBUTE_NODES = [
          `A.B.C.foo(_:_:)`).
          ''',
          children=[
-             Child('BaseType', kind='Type', description='''
+             Child('BaseType', kind='Type', name_for_diagnostics='base type', description='''
                    The base type of the qualified name, optionally specified.
                    ''', is_optional=True),
              Child('Dot', kind='Token',
                    token_choices=[
                        'PeriodToken', 'PrefixPeriodToken'
                    ], is_optional=True),
-             Child('Name', kind='Token', description='''
+             Child('Name', kind='Token', name_for_diagnostics='base name', description='''
                    The base name of the referenced function.
                    ''',
                    token_choices=[
@@ -406,7 +408,7 @@ ATTRIBUTE_NODES = [
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
                    ]),
-             Child('Arguments', kind='DeclNameArguments',
+             Child('Arguments', name_for_diagnostics='arguments', kind='DeclNameArguments',
                    is_optional=True, description='''
                    The argument labels of the referenced function, optionally
                    specified.
@@ -420,7 +422,7 @@ ATTRIBUTE_NODES = [
          name_for_diagnostics='function declaration name',
          description='A function declaration name (e.g. `foo(_:_:)`).',
          children=[
-             Child('Name', kind='Syntax', description='''
+             Child('Name', kind='Syntax', name_for_diagnostics='base name', description='''
                    The base name of the referenced function.
                    ''',
                    node_choices=[
@@ -429,7 +431,7 @@ ATTRIBUTE_NODES = [
                        Child('SpacedBinaryOperator',
                              kind='SpacedBinaryOperatorToken'),
                    ]),
-             Child('Arguments', kind='DeclNameArguments',
+             Child('Arguments', name_for_diagnostics='arguments', kind='DeclNameArguments',
                    is_optional=True, description='''
                    The argument labels of the referenced function, optionally
                    specified.

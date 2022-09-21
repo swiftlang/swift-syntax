@@ -131,6 +131,10 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Converts the given `Syntax` node to this type. Returns `nil` if the
   /// conversion is not possible.
   init?(_ syntaxNode: Syntax)
+
+  /// Return a name with which the child at the given `index` can be referred to
+  /// in diagnostics.
+  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?
 }
 
 extension SyntaxProtocol {

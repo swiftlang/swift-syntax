@@ -394,9 +394,9 @@ public enum SyntaxEnum {
     case .tupleExprElement:
       return nil
     case .arrayElement:
-      return nil
+      return "array element"
     case .dictionaryElement:
-      return nil
+      return "dictionary element"
     case .integerLiteralExpr:
       return "integer literal"
     case .booleanLiteralExpr:
@@ -486,7 +486,7 @@ public enum SyntaxEnum {
     case .parameterClause:
       return "parameter clause"
     case .returnClause:
-      return "return clause"
+      return nil
     case .functionSignature:
       return "function signature"
     case .ifConfigClause:
@@ -528,7 +528,7 @@ public enum SyntaxEnum {
     case .memberDeclList:
       return nil
     case .memberDeclListItem:
-      return "member"
+      return nil
     case .sourceFile:
       return "source file"
     case .initializerClause:

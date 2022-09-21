@@ -11,6 +11,7 @@ final class AttributeTests: XCTestCase {
       }
       """,
       diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected declaration after attribute"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected 'for' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute"),
@@ -27,7 +28,9 @@ final class AttributeTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in '@differentiable' argument"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected parameters of '@differentiable' argument"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '=' in same type requirement"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected right-hand type of same type requirement"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute"),
       ]
     )
@@ -36,21 +39,23 @@ final class AttributeTests: XCTestCase {
   func testMissingClosingParenToAttribute() {
     AssertParse(
       """
-      @_specialize(e#^DIAG_1^#
+      @_specialize(e#^DIAG^#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ')' to end attribute"),
+        DiagnosticSpec(message: "Expected declaration after attribute"),
+        DiagnosticSpec(message: "Expected ':' in attribute argument"),
+        DiagnosticSpec(message: "Expected ')' to end attribute"),
       ]
     )
   }
-  
+
   func testMultipleInvalidSpecializeParams() {
     AssertParse(
       """
-      @_specialize(e#^DIAG_1^#, exported#^DIAG_2^#)
+      @_specialize(e#^DIAG_1^#, exported#^DIAG_2^#)#^DIAG_3^#
       """,
       diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after attribute"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ':' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected 'false' in attribute argument"),

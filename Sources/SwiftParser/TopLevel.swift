@@ -119,7 +119,7 @@ extension Parser {
     let item = self.parseItem(isAtTopLevel: isAtTopLevel)
     let semi = self.consume(if: .semicolon)
 
-    if item.raw.byteLength == 0 && semi == nil {
+    if item.isEmpty && semi == nil {
       return nil
     }
     return .init(item: item, semicolon: semi, errorTokens: nil, arena: self.arena)

@@ -202,6 +202,10 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `CodeBlockItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -450,6 +454,10 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -700,6 +708,10 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `TupleExprElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -948,6 +960,10 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -1198,6 +1214,10 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `DictionaryElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -1446,6 +1466,10 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -1696,6 +1720,10 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `DeclNameArgumentListSyntax` to the `BidirectionalCollection` protocol.
@@ -1944,6 +1972,10 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -2194,6 +2226,10 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `ClosureCaptureItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -2442,6 +2478,10 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -2692,6 +2732,10 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `MultipleTrailingClosureElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -2940,6 +2984,10 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -3190,6 +3238,10 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `FunctionParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -3438,6 +3490,10 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -3688,6 +3744,10 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `InheritedTypeListSyntax` to the `BidirectionalCollection` protocol.
@@ -3936,6 +3996,10 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -4186,6 +4250,10 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `ModifierListSyntax` to the `BidirectionalCollection` protocol.
@@ -4434,6 +4502,10 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -4684,6 +4756,10 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `AccessorListSyntax` to the `BidirectionalCollection` protocol.
@@ -4933,6 +5009,10 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `PatternBindingListSyntax` to the `BidirectionalCollection` protocol.
@@ -5178,6 +5258,10 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -5428,6 +5512,10 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `DesignatedTypeListSyntax` to the `BidirectionalCollection` protocol.
@@ -5676,6 +5764,10 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -5926,6 +6018,10 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `PrecedenceGroupNameListSyntax` to the `BidirectionalCollection` protocol.
@@ -6174,6 +6270,10 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -6424,6 +6524,10 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `NonEmptyTokenListSyntax` to the `BidirectionalCollection` protocol.
@@ -6673,6 +6777,10 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `AttributeListSyntax` to the `BidirectionalCollection` protocol.
@@ -6920,6 +7028,10 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -7170,6 +7282,10 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `ObjCSelectorSyntax` to the `BidirectionalCollection` protocol.
@@ -7418,6 +7534,10 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -7668,6 +7788,10 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `BackDeployVersionListSyntax` to the `BidirectionalCollection` protocol.
@@ -7916,6 +8040,10 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -8166,6 +8294,10 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `CatchClauseListSyntax` to the `BidirectionalCollection` protocol.
@@ -8414,6 +8546,10 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -8664,6 +8800,10 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `CatchItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -8912,6 +9052,10 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -9162,6 +9306,10 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `GenericRequirementListSyntax` to the `BidirectionalCollection` protocol.
@@ -9410,6 +9558,10 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -9660,6 +9812,10 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `PrimaryAssociatedTypeListSyntax` to the `BidirectionalCollection` protocol.
@@ -9908,6 +10064,10 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -10158,6 +10318,10 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `TupleTypeElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -10406,6 +10570,10 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 
@@ -10656,6 +10824,10 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
+  }
 }
 
 /// Conformance for `TuplePatternElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -10904,6 +11076,10 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return nil
   }
 }
 

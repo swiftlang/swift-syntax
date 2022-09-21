@@ -479,7 +479,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ArrayElement",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "array element",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -496,7 +496,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "DictionaryElement",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "dictionary element",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"

@@ -67,15 +67,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, position: AbsolutePosition? = nil, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
     diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
-    diagnostics.append(Diagnostic(node: Syntax(node), message: message, highlights: highlights, fixIts: fixIts))
+    diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, fixIts: fixIts))
     self.handledNodes.append(contentsOf: handledNodes)
   }
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
-    addDiagnostic(node, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts, handledNodes: handledNodes)
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T,position: AbsolutePosition? = nil,  _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+    addDiagnostic(node, position: position, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts, handledNodes: handledNodes)
   }
 
   /// Whether the node should be skipped for diagnostic emission.
@@ -118,7 +118,39 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .skipChildren
   }
 
+  private func handleMissingSyntax<T: SyntaxProtocol>(_ node: T) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    addDiagnostic(node, position: node.endPosition, MissingNodeError(missingNode: Syntax(node)))
+    return .visitChildren
+  }
+
   // MARK: - Specialized diagnostic generation
+
+  public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
 
   public override func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
@@ -145,7 +177,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           Syntax(node.unexpectedBetweenWhereClauseAndBody),
           Syntax(unexpectedCondition)
         ] as [Syntax?]).compactMap({ $0 }),
-        handledNodes: [node.inKeyword.id, unexpectedCondition.id]
+        handledNodes: [node.inKeyword.id, node.sequenceExpr.id, unexpectedCondition.id]
       )
     }
     return .visitChildren

@@ -41,6 +41,7 @@ final class DeclarationTests: XCTestCase {
                   DiagnosticSpec(locationMarker: "DIAG1", message: "Expected identifier in function"),
                   DiagnosticSpec(locationMarker: "DIAG1", message: "Expected argument list in function declaration"),
                   DiagnosticSpec(locationMarker: "DIAG2", message: "Expected '=' in same type requirement"),
+                  DiagnosticSpec(locationMarker: "DIAG2", message: "Expected right-hand type of same type requirement"),
                 ])
   }
 
@@ -77,12 +78,14 @@ final class DeclarationTests: XCTestCase {
     AssertParse("class T where t#^DIAG^#",
                 diagnostics: [
                   DiagnosticSpec(message: "Expected '=' in same type requirement"),
+                  DiagnosticSpec(message: "Expected right-hand type of same type requirement"),
                   DiagnosticSpec(message: "Expected '{' to start class"),
                   DiagnosticSpec(message: "Expected '}' to end class"),
                 ])
     AssertParse("class B<where g#^DIAG^#",
                 diagnostics: [
                   DiagnosticSpec(message: "Expected '=' in same type requirement"),
+                  DiagnosticSpec(message: "Expected right-hand type of same type requirement"),
                   DiagnosticSpec(message: "Expected '>' to end generic parameter clause"),
                   DiagnosticSpec(message: "Expected '{' to start class"),
                   DiagnosticSpec(message: "Expected '}' to end class"),
@@ -171,7 +174,8 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "_ = foo/* */?.description#^DIAG^#",
       diagnostics: [
-        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression")
+        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression"),
+        DiagnosticSpec(message: "Expected expression"),
       ]
     )
     
@@ -545,9 +549,12 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       """
       struct a {
-        public
+        public#^DIAG^#
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected declaration after 'public' modifier in struct")
+      ]
     )
   }
 
@@ -638,7 +645,12 @@ final class DeclarationTests: XCTestCase {
 
   func testExtraneousRightBraceRecovery() {
     AssertParse(
-      "class ABC { let def = ghi(jkl: mno) } #^DIAG^#}",
+      """
+      class ABC {
+        let def = ghi(jkl: mno)
+      }
+      #^DIAG^#}
+      """,
       diagnostics: [
         DiagnosticSpec(message: "Extraneous '}' at top level")
       ]
@@ -653,7 +665,8 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected '->' in return clause")
+        DiagnosticSpec(message: "Expected '->' in subscript"),
+        DiagnosticSpec(message: "Expected return type in subscript"),
       ]
     )
   }
@@ -693,16 +706,13 @@ final class DeclarationTests: XCTestCase {
   func testExpressionMember() {
     AssertParse(
       """
-      struct S {
-        #^DIAG^#/ ###line 25 "line-directive.swift"
+      struct S {#^EXPECTED_DECL^#
+        #^UNEXPECTED_TEXT^#/ ###line 25 "line-directive.swift"
       }
       """,
       diagnostics: [
-        DiagnosticSpec(
-          message: """
-            Unexpected text '/ ###line 25 "line-directive.swift"' in struct
-            """
-        )
+        DiagnosticSpec(locationMarker: "EXPECTED_DECL", message: "Expected declaration after '{' in struct"),
+        DiagnosticSpec(locationMarker: "UNEXPECTED_TEXT", message: #"Unexpected text '/ ###line 25 "line-directive.swift"' in struct"#)
       ]
     )
   }
@@ -887,12 +897,17 @@ final class DeclarationTests: XCTestCase {
   func testMalforedStruct() {
     AssertParse(
       """
-      struct n#^OPENINGBRACES^##if@#^ENDIF^##^CLOSINGBRACES^#
+      struct n#^OPENING_BRACE^#
+      #if#^AFTER_POUND_IF^#
+      @#^END^#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "OPENINGBRACES", message: "Expected '{' to start struct"),
-        DiagnosticSpec(locationMarker: "ENDIF", message: "Expected '#endif' in conditional compilation block"),
-        DiagnosticSpec(locationMarker: "CLOSINGBRACES", message: "Expected '}' to end struct")
+        DiagnosticSpec(locationMarker: "OPENING_BRACE", message: "Expected '{' to start struct"),
+        DiagnosticSpec(locationMarker: "AFTER_POUND_IF", message: "Expected condition of conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected name of attribute"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected '#endif' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end struct")
       ]
     )
   }
@@ -994,7 +1009,8 @@ final class DeclarationTests: XCTestCase {
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before subscript"),
                   DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected argument list in function declaration"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '->' in return clause"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '->' in subscript"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected return type in subscript"),
                 ])
   }
 

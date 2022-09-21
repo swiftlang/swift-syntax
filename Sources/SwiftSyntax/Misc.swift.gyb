@@ -42,6 +42,19 @@ extension Syntax {
 % end
     }
   }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch self.as(SyntaxEnum.self) {
+    case .token(let node):
+      return node.childNameForDiagnostics(index)
+    case .unknown(let node):
+      return node.childNameForDiagnostics(index)
+% for node in NON_BASE_SYNTAX_NODES:
+    case .${node.swift_syntax_kind}(let node):
+      return node.childNameForDiagnostics(index)
+% end
+    }
+  }
 }
 
 extension SyntaxKind {

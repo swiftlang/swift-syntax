@@ -323,12 +323,19 @@ extension Parser {
   ///     a missing token of the requested kind.
   @_spi(RawSyntax)
   public mutating func expect(
-    _ kind: RawTokenKind
+    _ kind: RawTokenKind,
+    remapping: RawTokenKind? = nil
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
-      consume: { $0.consume(if: kind) },
+      consume: { $0.consume(if: kind, remapping: remapping) },
       canRecoverTo: { $0.canRecoverTo([kind]) },
-      makeMissing: { $0.missingToken(kind, text: nil) }
+      makeMissing: {
+        if let remapping = remapping {
+          return $0.missingToken(remapping, text: kind.defaultText)
+        } else {
+          return $0.missingToken(kind, text: nil)
+        }
+      }
     )
   }
 

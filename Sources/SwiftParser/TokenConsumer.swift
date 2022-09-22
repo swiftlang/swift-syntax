@@ -139,10 +139,15 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public mutating func consume(
     if kind: RawTokenKind,
+    remapping: RawTokenKind? = nil,
     where condition: (Lexer.Lexeme) -> Bool = { _ in true}
   ) -> Token? {
     if self.at(kind, where: condition) {
-      return self.consumeAnyToken()
+      if let remapping = remapping {
+        return self.consumeAnyToken(remapping: remapping)
+      } else {
+        return self.consumeAnyToken()
+      }
     }
     return nil
   }

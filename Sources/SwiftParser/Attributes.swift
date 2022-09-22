@@ -685,11 +685,18 @@ extension Parser {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforeDynamicReplacementToken, dynamicReplacementToken) = self.expectContextualKeyword("_dynamicReplacement")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeLabel, label) = self.expect(.forKeyword)
+    let (unexpectedBeforeLabel, label) = self.expect(.forKeyword, remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let (base, args) = self.parseDeclNameRef([
-      .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
-    ])
+    let base: RawTokenSyntax
+    let args: RawDeclNameArgumentsSyntax?
+    if label.isMissing && colon.isMissing && self.currentToken.isAtStartOfLine {
+      base = RawTokenSyntax(missing: .identifier, arena: self.arena)
+      args = nil
+    } else {
+      (base, args) = self.parseDeclNameRef([
+        .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
+      ])
+    }
     let method = RawDeclNameSyntax(declBaseName: RawSyntax(base), declNameArguments: args, arena: self.arena)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(

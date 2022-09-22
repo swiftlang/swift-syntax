@@ -1259,7 +1259,8 @@ public enum RawTokenKind: Equatable, Hashable {
   case stringInterpolationAnchor
   case yield
 
-  var defaultText: SyntaxText? {
+  @_spi(RawSyntax)
+  public var defaultText: SyntaxText? {
     switch self {
     case .eof: return ""
     case .associatedtypeKeyword: return "associatedtype"

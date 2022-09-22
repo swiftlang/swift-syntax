@@ -1,1 +1,1 @@
-../../../CodeGeneration/Sources/generate-swiftsyntaxbuilder/gyb_helpers/BuilderInitializableTypes.py
+../../../CodeGeneration/Sources/SyntaxSupport/gyb_helpers/BuilderInitializableTypes.py

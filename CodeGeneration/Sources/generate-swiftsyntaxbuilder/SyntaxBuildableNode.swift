@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SyntaxSupport
+
 /// Extension to the `Node` type to provide functionality specific to
 /// SwiftSyntaxBuilder.
 extension Node {

@@ -1,0 +1,25 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_helpers import BUILDER_INITIALIZABLE_TYPES
+  # -*- mode: Swift -*-
+  # Ignore the following admonition; it applies to the resulting .swift file only
+}%
+//// Automatically Generated From BuilderInitializableTypes.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+public let BUILDER_INITIALIZABLE_TYPES: [String: String?] = [
+% for type, resolved_type in BUILDER_INITIALIZABLE_TYPES.items():
+  "${type}": ${'"' + resolved_type + '"' if resolved_type is not None else 'nil'},
+% end
+]

@@ -19,8 +19,12 @@ let package = Package(
       name: "generate-swiftsyntaxbuilder",
       dependencies: [
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-        .product(name: "ArgumentParser", package: "swift-argument-parser")
-      ],
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        "SyntaxSupport"
+      ]
+    ),
+    .target(
+      name: "SyntaxSupport",
       exclude: [
         "gyb_helpers",
         "AttributeNodes.swift.gyb",

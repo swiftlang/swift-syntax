@@ -12,6 +12,7 @@
 
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SyntaxSupport
 
 /// Wrapper around the syntax kind strings to provide functionality specific to
 /// SwiftSyntaxBuilder. In particular, this includes the functionality to create

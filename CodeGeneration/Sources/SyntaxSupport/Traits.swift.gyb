@@ -1,0 +1,45 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_syntax_support.Traits import *
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From Traits.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+public class Trait {
+  public let traitName: String
+  public let children: [Child]
+  public let description: String?
+
+  init(traitName: String, children: [Child], description: String? = nil) {
+    self.traitName = traitName
+    self.children = children
+    self.description = description
+  }
+}
+
+public let TRAITS: [Trait] = [
+% for trait in TRAITS:
+  Trait(traitName: "${trait.trait_name}",
+        children: [
+%   for child in trait.children:
+%     is_optional = ", isOptional: true" if child.is_optional else ""
+%     description = ", description: %s" % child.description if child.description else ""
+          Child(name: "${child.name}", kind: "${child.syntax_kind}"${is_optional}${description}),
+%   end
+  ${"],\n description: %s" % trait.description if trait.description else "      ]"}
+  ),
+% end
+]

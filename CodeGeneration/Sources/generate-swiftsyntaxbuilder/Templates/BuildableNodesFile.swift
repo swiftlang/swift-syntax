@@ -13,6 +13,7 @@
 import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SyntaxSupport
 
 let buildableNodesFile = SourceFile {
   ImportDecl(

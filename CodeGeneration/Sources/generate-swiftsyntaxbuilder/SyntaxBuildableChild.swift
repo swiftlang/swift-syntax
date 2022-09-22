@@ -12,6 +12,7 @@
 
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SyntaxSupport
 
 /// Extension to the `Child` type to provide functionality specific to
 /// SwiftSyntaxBuilder.

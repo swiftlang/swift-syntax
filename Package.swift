@@ -45,14 +45,20 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
-    .library(name: "SwiftOperators", type: .static,
-             targets: ["SwiftOperators"]),
+    .library(name: "SwiftOperators", type: .static, targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
   ],
   targets: [
+    .target(
+      name: "SwiftBasicFormat",
+      dependencies: ["SwiftSyntax"],
+      exclude: [
+        "CMakeLists.txt"
+      ]
+    ),
     .target(
       name: "SwiftDiagnostics",
       dependencies: ["SwiftSyntax"],
@@ -88,7 +94,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntaxBuilder",
-      dependencies: ["SwiftSyntax"],
+      dependencies: ["SwiftBasicFormat", "SwiftSyntax"],
       exclude: [
         "gyb_helpers",
         "ResultBuilders.swift.gyb",
@@ -140,6 +146,10 @@ let package = Package(
       dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser",
                      "SwiftOperators",
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
+    ),
+    .testTarget(
+      name: "SwiftBasicFormatTest",
+      dependencies: ["SwiftBasicFormat"]
     ),
     .testTarget(
       name: "SwiftSyntaxTest",

@@ -8,6 +8,7 @@ let package = Package(
       .macOS(.v10_15),
     ],
   products: [
+    .executable(name: "generate-swiftbasicformat", targets: ["generate-swiftbasicformat"]),
     .executable(name: "generate-swiftsyntaxbuilder", targets: ["generate-swiftsyntaxbuilder"]),
   ],
   dependencies: [
@@ -16,11 +17,23 @@ let package = Package(
   ],
   targets: [
     .executableTarget(
-      name: "generate-swiftsyntaxbuilder",
+      name: "generate-swiftbasicformat",
       dependencies: [
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
-        "SyntaxSupport"
+        "SyntaxSupport",
+        "Utils"
+      ]
+    ),
+    .executableTarget(
+      name: "generate-swiftsyntaxbuilder",
+      dependencies: [
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        "SyntaxSupport",
+        "Utils"
       ]
     ),
     .target(
@@ -44,6 +57,14 @@ let package = Package(
         "Traits.swift.gyb",
         "Trivia.swift.gyb",
         "TypeNodes.swift.gyb"
+      ]
+    ),
+    .target(
+      name: "Utils",
+      dependencies: [
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+        "SyntaxSupport"
       ]
     ),
   ]

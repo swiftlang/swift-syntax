@@ -13,6 +13,8 @@
 import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SyntaxSupport
+import Utils
 
 let formatFile = SourceFile {
   ImportDecl(
@@ -136,6 +138,7 @@ private func createFormatFunctionSignature(type: SyntaxBuildableType) -> Functio
 /// Generate the format implementation for a buildable node.
 private func createBuildableNodeFormatFunction(node: Node) -> FunctionDecl {
   FunctionDecl(
+    modifiers: Token.public,
     identifier: .identifier("format"),
     signature: createFormatFunctionSignature(type: node.type)
   ) {
@@ -191,6 +194,7 @@ private func createBuildableNodeFormatFunction(node: Node) -> FunctionDecl {
 /// The implementation updates the leading trivia of the elements with their indentation.
 private func createBuildableCollectionNodeFormatFunction(node: Node) -> FunctionDecl {
   FunctionDecl(
+    modifiers: Token.public,
     identifier: .identifier("format"),
     signature: createFormatFunctionSignature(type: node.type)
   ) {
@@ -229,6 +233,7 @@ private func createBuildableCollectionNodeFormatFunction(node: Node) -> Function
 private func createTokenFormatFunction() -> FunctionDecl {
   let tokenType = SyntaxBuildableType(syntaxKind: "Token")
   return FunctionDecl(
+    modifiers: Token.public,
     identifier: .identifier("format"),
     signature: createFormatFunctionSignature(type: tokenType)
   ) {

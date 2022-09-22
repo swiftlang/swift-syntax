@@ -10,10 +10,26 @@
 //
 //===----------------------------------------------------------------------===//
 
+import ArgumentParser
 import Foundation
+import SwiftSyntaxBuilder
+import Utils
 
-extension StringProtocol {
-    var withFirstCharacterLowercased: String { prefix(1).lowercased() + dropFirst() }
-    var withFirstCharacterUppercased: String { prefix(1).uppercased() + dropFirst() }
-    var backticked: String { "`\(self)`" }
+@main
+struct GenerateSwiftStaticFormat: ParsableCommand {
+  @Argument(help: "The path to the destination directory where the source files are to be generated")
+  var generatedPath: String
+
+  @Flag(help: "Enable verbose output")
+  var verbose: Bool = false
+
+  func run() throws {
+    try generateTemplates(
+      templates: [
+        (formatFile, "Format.swift"),
+      ],
+      destination: URL(fileURLWithPath: generatedPath),
+      verbose: verbose
+    )
+  }
 }

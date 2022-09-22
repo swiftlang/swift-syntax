@@ -14,13 +14,18 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport
+import Utils
 
 let buildableNodesFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
     path: "SwiftSyntax"
   )
-
+  ImportDecl(
+    trailingTrivia: .newline,
+    path: "SwiftBasicFormat"
+  )
+  
   let triviaSides = ["leading", "trailing"]
   let trivias = triviaSides.map { "\($0)Trivia" }
 

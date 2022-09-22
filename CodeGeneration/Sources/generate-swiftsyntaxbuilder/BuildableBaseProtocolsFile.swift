@@ -14,11 +14,16 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport
+import Utils
 
 let buildableBaseProtocolsFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
     path: "SwiftSyntax"
+  )
+  ImportDecl(
+    trailingTrivia: .newline,
+    path: "SwiftBasicFormat"
   )
 
   // `SyntaxCollectionBuildable` and `ExpressibleAsSyntaxCollectionBuildable` don't exist because of the following reason:

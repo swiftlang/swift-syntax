@@ -1,6 +1,6 @@
 import XCTest
-import SwiftSyntax
-@_spi(Testing) import SwiftSyntaxBuilder
+
+@_spi(Testing) import SwiftBasicFormat
 
 final class FormatTests: XCTestCase {
   func test_makeIndented() {

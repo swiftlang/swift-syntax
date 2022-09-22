@@ -19,6 +19,7 @@ SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAX_DOCUMENTATION_DIR = \
         os.path.join(SWIFTSYNTAX_DIR, "Documentation.docc")
+SWIFTBASICFORMAT_DIR = os.path.join(SOURCES_DIR, "SwiftBasicFormat")
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftParser")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
@@ -343,27 +344,33 @@ def generate_gyb_files(
 
 
 def run_code_generation(
-    toolchain: str, verbose: bool, swiftsyntaxbuilder_destination: str
+    swiftbasicformat_destination: str,
+    swiftsyntaxbuilder_destination: str,
+    toolchain: str,
+    verbose: bool
 ) -> None:
     print("** Running code generation **")
 
-    swift_exec = os.path.join(toolchain, "bin", "swift")
+    target_to_dest_dir = {
+        "generate-swiftbasicformat": swiftbasicformat_destination,
+        "generate-swiftsyntaxbuilder": swiftsyntaxbuilder_destination,
+    }
 
-    swiftpm_call = [
-        swift_exec, 'run',
-        "--package-path", CODE_GENERATION_DIR,
-        "generate-swift-syntax-builder", swiftsyntaxbuilder_destination
-    ]
-    
-    if verbose:
-        swiftpm_call.extend(["--verbose"])
+    for target, destination_dir in target_to_dest_dir.items():
+        swift_exec = os.path.join(toolchain, "bin", "swift")
 
-    env = dict(os.environ)
-    env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
-    # Tell other projects in the unified build to use local dependencies
-    env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
-        os.path.join(toolchain, "lib", "swift", "macosx")
-    check_call(swiftpm_call, env=env, verbose=verbose)
+        swiftpm_call = [
+            swift_exec, 'run',
+            "--package-path", CODE_GENERATION_DIR,
+            target, destination_dir
+        ]
+        
+        if verbose:
+            swiftpm_call.extend(["--verbose"])
+
+        env = dict(os.environ)
+        env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+        check_call(swiftpm_call, env=env, verbose=verbose)
 
 
 def make_dir_if_needed(path: str) -> None:
@@ -483,17 +490,22 @@ def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
 def verify_code_generated_files(
     toolchain: str, verbose: bool
 ) -> None:
+    user_swiftbasicformat_generated_dir = os.path.join(
+        SWIFTBASICFORMAT_DIR, "generated"
+    )
     user_swiftsyntaxbuilder_generated_dir = os.path.join(
         SWIFTSYNTAXBUILDER_DIR, "generated"
     )
 
+    self_swiftbasicformat_generated_dir = tempfile.mkdtemp()
     self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
 
     try:
         run_code_generation(
+            swiftbasicformat_destination=self_swiftsyntaxbuilder_generated_dir,
+            swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
             toolchain=toolchain,
-            verbose=verbose,
-            swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir
+            verbose=verbose
         )
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error(
@@ -503,6 +515,10 @@ def verify_code_generated_files(
 
     print("** Verifing code generated files **")
 
+    check_generated_files_match(
+        self_swiftbasicformat_generated_dir,
+        user_swiftbasicformat_generated_dir
+    )
     check_generated_files_match(
         self_swiftsyntaxbuilder_generated_dir,
         user_swiftsyntaxbuilder_generated_dir
@@ -674,11 +690,15 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
 
     try:
         if not args.gyb_only:
-            destination = os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
+            swiftbasicformat_destination = \
+                os.path.join(SWIFTBASICFORMAT_DIR, "generated")
+            swiftsyntaxbuilder_destination = \
+                os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
             run_code_generation(
+                swiftbasicformat_destination=swiftbasicformat_destination,
+                swiftsyntaxbuilder_destination=swiftsyntaxbuilder_destination,
                 toolchain=args.toolchain,
-                verbose=args.verbose,
-                swiftsyntaxbuilder_destination=destination
+                verbose=args.verbose
             )
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error(

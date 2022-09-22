@@ -14,6 +14,7 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport
+import Utils
 
 let expressibleAsProtocolsFile = SourceFile {
   ImportDecl(

@@ -16,7 +16,7 @@ import SyntaxSupport
 
 /// Extension to the `Child` type to provide functionality specific to
 /// SwiftSyntaxBuilder.
-extension Child {
+public extension Child {
   /// The type of this child, represented by a `SyntaxBuildableType`, which can
   /// be used to create the corresponding `Buildable` and `ExpressibleAs` types.
   var type: SyntaxBuildableType {

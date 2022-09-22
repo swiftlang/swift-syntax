@@ -14,11 +14,15 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport
+import Utils
 
 let tokenFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
     path: "SwiftSyntax"
+  )
+  ImportDecl(
+    path: "SwiftBasicFormat"
   )
 
   let tokenType = SyntaxBuildableType(syntaxKind: "Token")

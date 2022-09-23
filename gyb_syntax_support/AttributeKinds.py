@@ -136,6 +136,7 @@ TYPE_ATTR_KINDS = [
     TypeAttribute('unchecked'),
     TypeAttribute('_local'),
     TypeAttribute('_noMetadata'),
+    TypeAttribute('_GenerateLayoutBytecode'),
 
     # Generated interface attributes
     TypeAttribute('_opaqueReturnTypeOf'),
@@ -706,7 +707,13 @@ DECL_ATTR_KINDS = [
     SimpleDeclAttribute('runtimeMetadata', 'RuntimeMetadata',
                         OnStruct,  OnClass,
                         ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
-                        code=139)
+                        code=139),
+
+    SimpleDeclAttribute('_GenerateLayoutBytecode', 'GenerateLayoutBytecode',
+                        OnClass, OnStruct, OnEnum,
+                        LongAttribute, UserInaccessible,
+                        ABIStableToAdd, ABIStableToRemove, APIStableToAdd, APIStableToRemove,
+                        code=140)
 ]
 
 # Schema for declaration modifiers:

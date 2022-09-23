@@ -27,6 +27,7 @@ extension Parser {
     case unchecked = "unchecked"
     case _local = "_local"
     case _noMetadata = "_noMetadata"
+    case _GenerateLayoutBytecode = "_GenerateLayoutBytecode"
     case _opaqueReturnTypeOf = "_opaqueReturnTypeOf"
   }
 }

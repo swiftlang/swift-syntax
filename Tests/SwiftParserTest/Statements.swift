@@ -265,4 +265,13 @@ final class StatementTests: XCTestCase {
       """
     )
   }
+
+  func testIdentifierPattern() {
+    AssertParse(
+      "switch x { case let .y(z): break }",
+      substructure: Syntax(IdentifierPatternSyntax(
+        identifier: .identifier("z")
+      ))
+    )
+  }
 }

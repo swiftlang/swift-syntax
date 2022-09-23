@@ -577,4 +577,12 @@ final class ExpressionTests: XCTestCase {
       _ = ##""" foo # "# "##
       """###)
   }
+
+  func testOperatorReference() {
+    AssertParse(
+      "reduce(0, #^PLUS^#+)",
+      substructure: Syntax(TokenSyntax.unspacedBinaryOperator("+")),
+      substructureAfterMarker: "PLUS"
+    )
+  }
 }

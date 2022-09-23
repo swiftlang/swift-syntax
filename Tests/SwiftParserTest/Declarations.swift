@@ -702,7 +702,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "EXPECTED_DECL", message: "Expected declaration after '{' in struct"),
+        DiagnosticSpec(locationMarker: "EXPECTED_DECL", message: "Expected declaration in struct"),
         DiagnosticSpec(locationMarker: "UNEXPECTED_TEXT", message: #"Unexpected text '/ ###line 25 "line-directive.swift"' in struct"#)
       ]
     )
@@ -893,8 +893,8 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "OPENING_BRACE", message: "Expected '{' in struct"),
-        DiagnosticSpec(locationMarker: "AFTER_POUND_IF", message: "Expected condition after '#if' in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "END", message: "Expected name after '@' in attribute"),
+        DiagnosticSpec(locationMarker: "AFTER_POUND_IF", message: "Expected condition in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected name in attribute"),
         DiagnosticSpec(locationMarker: "END", message: "Expected declaration after attribute in conditional compilation clause"),
         DiagnosticSpec(locationMarker: "END", message: "Expected '#endif' in conditional compilation block"),
         DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end struct")
@@ -1055,7 +1055,7 @@ final class DeclarationTests: XCTestCase {
       struct U<@#^DIAG^#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected name after '@' in attribute"),
+        DiagnosticSpec(message: "Expected name in attribute"),
         DiagnosticSpec(message: "Expected identifier in generic parameter"),
         DiagnosticSpec(message: "Expected '>' to end generic parameter clause"),
         DiagnosticSpec(message: "Expected member block in struct"),

@@ -31,9 +31,9 @@ final class TypeTests: XCTestCase {
 
   func testFunctionTypes() throws {
     AssertParse("t as(#^DIAG^#..)->#^END^#", diagnostics: [
-      DiagnosticSpec(message: "Expected type after '(' in function type"),
+      DiagnosticSpec(message: "Expected type in function type"),
       DiagnosticSpec(message: "Unexpected text '..' in function type"),
-      DiagnosticSpec(locationMarker: "END", message: "Expected type after '->' in function type"),
+      DiagnosticSpec(locationMarker: "END", message: "Expected type in function type"),
     ])
   }
 
@@ -95,8 +95,8 @@ final class TypeTests: XCTestCase {
       """#,
       diagnostics: [
         // FIXME: This should be a valid parse
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected expression after 'i' in key path"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected expression after 'i' in key path"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected expression in key path"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected expression in key path"),
       ]
     )
   }

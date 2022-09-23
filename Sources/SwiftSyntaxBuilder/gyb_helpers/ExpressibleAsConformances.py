@@ -1,1 +1,1 @@
-../../../Code-Generation/Sources/generate-swiftsyntaxbuilder/gyb_helpers/ExpressibleAsConformances.py
+../../../CodeGeneration/Sources/generate-swiftsyntaxbuilder/gyb_helpers/ExpressibleAsConformances.py

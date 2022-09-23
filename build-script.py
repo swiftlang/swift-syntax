@@ -22,8 +22,10 @@ SWIFTSYNTAX_DOCUMENTATION_DIR = \
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftParser")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
+
+CODE_GENERATION_DIR = os.path.join(PACKAGE_DIR, "Code-Generation")
 GENERATESWIFTSYNTAXBUILDER_DIR = \
-        os.path.join(SOURCES_DIR, "generate-swift-syntax-builder")
+        os.path.join(CODE_GENERATION_DIR, "Sources", "generate-swiftsyntaxbuilder")
 
 LLVM_DIR = os.path.join(WORKSPACE_DIR, "llvm-project", "llvm")
 SWIFT_DIR = os.path.join(WORKSPACE_DIR, "swift")
@@ -175,7 +177,7 @@ def generate_single_gyb_file(
     gyb_command += additional_gyb_flags
 
     env = dict()
-    env["PYTHONPATH"] = GENERATESWIFTSYNTAXBUILDER_DIR
+    env["PYTHONPATH"] = PACKAGE_DIR
     check_call(gyb_command, env=env, verbose=verbose)
 
     # Copy the file if different from the file already present in
@@ -291,7 +293,16 @@ def generate_syntax_node_template_gyb_files(
 # `source_dirs` to a unique temporary directory.
 # If `temp_directories` is False, it maps each source dir to the corresponding
 # gyb_generated directory.
-def gyb_dir_mapping(temp_directories: bool, source_dirs: List[str]) -> Dict[str, str]:
+def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
+    source_dirs = [
+        GENERATESWIFTSYNTAXBUILDER_DIR,
+        SWIFTSYNTAX_DIR,
+        os.path.join(SWIFTSYNTAX_DIR, "Raw"),
+        SWIFTSYNTAXBUILDER_DIR,
+        SWIFTSYNTAXPARSER_DIR,
+        SWIFTSYNTAX_DOCUMENTATION_DIR,
+        SWIFTPARSER_DIR,
+    ]
     mapping = {}
     for source_dir in source_dirs:
         if temp_directories:
@@ -299,33 +310,6 @@ def gyb_dir_mapping(temp_directories: bool, source_dirs: List[str]) -> Dict[str,
         else:
             mapping[source_dir] = os.path.join(source_dir, "gyb_generated")
     return mapping
-
-
-# Gyb-files that should be generated before running generate-swift-syntax-builder.
-# Maps directories containing .gyb files to the directories the generated files should
-# live in.
-def first_stage_gyb_dir_mapping(
-    temp_directories: bool
-) -> Dict[str, str]:
-    return gyb_dir_mapping(temp_directories=temp_directories, source_dirs=[
-        GENERATESWIFTSYNTAXBUILDER_DIR
-    ])
-
-
-# Gyb-files that should be generated after running generate-swift-syntax-builder.
-# Maps directories containing .gyb files to the directories the generated files should
-# live in.
-def second_stage_gyb_dir_mapping(
-    temp_directories: bool
-) -> Dict[str, str]:
-    return gyb_dir_mapping(temp_directories=temp_directories, source_dirs=[
-        SWIFTSYNTAX_DIR,
-        os.path.join(SWIFTSYNTAX_DIR, "Raw"),
-        SWIFTSYNTAXBUILDER_DIR,
-        SWIFTSYNTAXPARSER_DIR,
-        SWIFTSYNTAX_DOCUMENTATION_DIR,
-        SWIFTPARSER_DIR,
-    ])
 
 
 def generate_gyb_files(
@@ -357,29 +341,24 @@ def generate_gyb_files(
 
 
 def run_code_generation(
-    toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
-    release: bool, verbose: bool, swiftsyntaxbuilder_destination: str
+    toolchain: str, verbose: bool, swiftsyntaxbuilder_destination: str
 ) -> None:
     print("** Running code generation **")
-    swiftpm_call = get_swiftpm_invocation(
-        toolchain=toolchain,
-        action="run",
-        build_dir=build_dir,
-        multiroot_data_file=multiroot_data_file,
-        release=release,
-    )
 
-    swiftpm_call.extend([
+    swift_exec = os.path.join(toolchain, "bin", "swift")
+
+    swiftpm_call = [
+        swift_exec, 'run',
+        "--package-path", os.path.join(PACKAGE_DIR, 'Code-Generation'),
         "generate-swift-syntax-builder", swiftsyntaxbuilder_destination
-    ])
-
+    ]
+    
     if verbose:
         swiftpm_call.extend(["--verbose"])
 
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
     # Tell other projects in the unified build to use local dependencies
-    env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
         os.path.join(toolchain, "lib", "swift", "macosx")
     check_call(swiftpm_call, env=env, verbose=verbose)
@@ -479,14 +458,7 @@ class Builder(object):
 
 
 def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
-    first_stage_gyb_dirs = first_stage_gyb_dir_mapping(
-        temp_directories=True
-    )
-    second_stage_gyb_dirs = second_stage_gyb_dir_mapping(
-        temp_directories=True
-    )
-    gyb_dirs = first_stage_gyb_dirs
-    gyb_dirs.update(second_stage_gyb_dirs)
+    gyb_dirs = gyb_dir_mapping(temp_directories=True)
 
     generate_gyb_files(
         gyb_exec,
@@ -507,8 +479,7 @@ def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
 
 
 def verify_code_generated_files(
-    toolchain: str, build_dir: Optional[str],  multiroot_data_file: Optional[str],
-    release: bool, verbose: bool
+    toolchain: str, verbose: bool
 ) -> None:
     user_swiftsyntaxbuilder_generated_dir = os.path.join(
         SWIFTSYNTAXBUILDER_DIR, "generated"
@@ -519,9 +490,6 @@ def verify_code_generated_files(
     try:
         run_code_generation(
             toolchain=toolchain,
-            build_dir=realpath(build_dir),
-            multiroot_data_file=multiroot_data_file,
-            release=release,
             verbose=verbose,
             swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir
         )
@@ -695,7 +663,7 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
     try:
         generate_gyb_files(
             args.gyb_exec,
-            gyb_dir_mapping=first_stage_gyb_dir_mapping(temp_directories=False),
+            gyb_dir_mapping=gyb_dir_mapping(temp_directories=False),
             add_source_locations=args.add_source_locations,
             verbose=args.verbose,
         )
@@ -707,9 +675,6 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
             destination = os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
             run_code_generation(
                 toolchain=args.toolchain,
-                build_dir=realpath(args.build_dir),
-                multiroot_data_file=args.multiroot_data_file,
-                release=args.release,
                 verbose=args.verbose,
                 swiftsyntaxbuilder_destination=destination
             )
@@ -717,28 +682,16 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
         fail_for_called_process_error(
             "Source generation using SwiftSyntaxBuilder failed", e)
 
-    try:
-        generate_gyb_files(
-            args.gyb_exec,
-            gyb_dir_mapping=second_stage_gyb_dir_mapping(temp_directories=False),
-            add_source_locations=args.add_source_locations,
-            verbose=args.verbose,
-        )
-    except subprocess.CalledProcessError as e:
-        fail_for_called_process_error("Generating .gyb files failed", e)
-
 
 def verify_source_code_command(args: argparse.Namespace) -> None:
     try:
         verify_gyb_generated_files(args.gyb_exec, verbose=args.verbose)
 
-        verify_code_generated_files(
-            toolchain=args.toolchain,
-            build_dir=realpath(args.build_dir),
-            multiroot_data_file=args.multiroot_data_file,
-            release=args.release,
-            verbose=args.verbose,
-        )
+        if not args.gyb_only:
+            verify_code_generated_files(
+                toolchain=args.toolchain,
+                verbose=args.verbose,
+            )
     except subprocess.CalledProcessError:
         printerr(
             "FAIL: Gyb-generated files committed to repository do " +
@@ -766,7 +719,6 @@ def build_command(args: argparse.Namespace) -> None:
         builder.build("SwiftSyntax")
         builder.build("SwiftSyntaxParser")
         builder.build("SwiftSyntaxBuilder")
-        builder.build("generate-swift-syntax-builder")
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 
@@ -861,6 +813,31 @@ def parse_args() -> argparse.Namespace:
             "-v", "--verbose", action="store_true", help="Enable verbose logging."
         )
 
+    def add_generate_source_code_args(parser: argparse.ArgumentParser) -> None:
+            parser.add_argument(
+                "--toolchain",
+                required=True,
+                help="The path to the toolchain that shall be used to build SwiftSyntax.",
+            )
+
+            parser.add_argument(
+                "--gyb-exec",
+                default=GYB_EXEC,
+                help="Path to the gyb tool (default: %(default)s).",
+            )
+
+            parser.add_argument(
+                "--gyb-only",
+                action="store_true",
+                help="""
+                Only generate gyb templates (and not generate-swift-syntax-builder's templates)
+                """,
+            )
+
+            parser.add_argument(
+                "-v", "--verbose", action="store_true", help="Enable verbose logging."
+            )
+
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter, description=_DESCRIPTION
     )
@@ -889,22 +866,8 @@ def parse_args() -> argparse.Namespace:
     # -------------------------------------------------------------------------
     generate_source_code_parser = sub_parsers.add_parser("generate-source-code")
     generate_source_code_parser.set_defaults(func=generate_source_code_command)
-
-    add_default_build_arguments(generate_source_code_parser)
-
-    generate_source_code_parser.add_argument(
-        "--gyb-only",
-        action="store_true",
-        help="""
-        Only generate gyb templates (and not generate-swift-syntax-builder's templates)
-        """,
-    )
-
-    generate_source_code_parser.add_argument(
-        "--gyb-exec",
-        default=GYB_EXEC,
-        help="Path to the gyb tool (default: %(default)s).",
-    )
+    
+    add_generate_source_code_args(generate_source_code_parser)
 
     generate_source_code_parser.add_argument(
         "--add-source-locations",
@@ -943,14 +906,8 @@ def parse_args() -> argparse.Namespace:
     # -------------------------------------------------------------------------
     verify_source_code_parser = sub_parsers.add_parser("verify-source-code")
     verify_source_code_parser.set_defaults(func=verify_source_code_command)
-
-    add_default_build_arguments(verify_source_code_parser)
-
-    verify_source_code_parser.add_argument(
-        "--gyb-exec",
-        default=GYB_EXEC,
-        help="Path to the gyb tool (default: %(default)s).",
-    )
+    
+    add_generate_source_code_args(verify_source_code_parser)
 
     return parser.parse_args()
 

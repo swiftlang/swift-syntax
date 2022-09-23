@@ -3726,12 +3726,12 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return MatchingPatternConditionSyntax(data)
   }
-  public static func makeOptionalBindingCondition(letOrVarKeyword: TokenSyntax, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax) -> OptionalBindingConditionSyntax {
+  public static func makeOptionalBindingCondition(letOrVarKeyword: TokenSyntax, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax?) -> OptionalBindingConditionSyntax {
     let layout: [RawSyntax?] = [
       letOrVarKeyword.raw,
       pattern.raw,
       typeAnnotation?.raw,
-      initializer.raw,
+      initializer?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalBindingCondition,
       layout: layout, presence: SourcePresence.present)
@@ -3745,7 +3745,7 @@ public enum SyntaxFactory {
       RawSyntax.missingToken(TokenKind.letKeyword),
       RawSyntax.missing(SyntaxKind.pattern),
       nil,
-      RawSyntax.missing(SyntaxKind.initializerClause),
+      nil,
     ], length: .zero, presence: .present))
     return OptionalBindingConditionSyntax(data)
   }

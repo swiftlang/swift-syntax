@@ -1059,6 +1059,21 @@ final class DeclarationTests: XCTestCase {
       }
       """)
   }
+
+  func testStandaloneAtSignInGenericParameter() {
+    AssertParse(
+      """
+      struct U<@#^DIAG^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected name of attribute"),
+        DiagnosticSpec(message: "Expected identifier in generic parameter"),
+        DiagnosticSpec(message: "Expected '>' to end generic parameter clause"),
+        DiagnosticSpec(message: "Expected '{' to start struct"),
+        DiagnosticSpec(message: "Expected '}' to end struct"),
+      ]
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

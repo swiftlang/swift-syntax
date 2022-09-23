@@ -302,7 +302,7 @@ extension Parser {
         let attributes = self.parseAttributeList()
 
         let (unexpectedBeforeName, name) = self.expectIdentifier()
-        if unexpectedBeforeName == nil && name.isMissing && elements.isEmpty {
+        if attributes == nil && unexpectedBeforeName == nil && name.isMissing && elements.isEmpty {
           break
         }
 

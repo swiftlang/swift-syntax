@@ -177,6 +177,7 @@ func AssertDiagnostic<T: SyntaxProtocol>(
 func AssertParse(
   _ markedSource: String,
   substructure expectedSubstructure: Syntax? = nil,
+  substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   fixedSource expectedFixedSource: String? = nil,
   file: StaticString = #file,
@@ -185,6 +186,7 @@ func AssertParse(
   return AssertParse(markedSource,
                      { $0.parseSourceFile() },
                      substructure: expectedSubstructure,
+                     substructureAfterMarker: substructureAfterMarker,
                      diagnostics: expectedDiagnostics,
                      fixedSource: expectedFixedSource,
                      file: file,

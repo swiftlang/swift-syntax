@@ -904,8 +904,8 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "OPENING_BRACE", message: "Expected '{' to start struct"),
         DiagnosticSpec(locationMarker: "AFTER_POUND_IF", message: "Expected condition of conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "END", message: "Expected declaration after attribute in conditional compilation clause"),
         DiagnosticSpec(locationMarker: "END", message: "Expected name of attribute"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected declaration after attribute in conditional compilation clause"),
         DiagnosticSpec(locationMarker: "END", message: "Expected '#endif' in conditional compilation block"),
         DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end struct")
       ]

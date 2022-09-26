@@ -15,7 +15,7 @@ final class BooleanLiteralTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let syntax = builder.buildSyntax(format: Format())
+      let syntax = builder.buildSyntax()
 
       var text = ""
       syntax.write(to: &text)

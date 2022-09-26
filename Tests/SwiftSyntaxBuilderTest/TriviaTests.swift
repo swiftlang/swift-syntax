@@ -15,7 +15,7 @@ final class TriviaTests: XCTestCase {
       )
     }
 
-    let syntax = decl.buildSyntax(format: Format())
+    let syntax = decl.buildSyntax()
     var text = ""
     syntax.write(to: &text)
 
@@ -46,7 +46,7 @@ final class TriviaTests: XCTestCase {
     ]
     for (line, testCase) in testCases {
       let (decl, expected) = testCase
-      let syntax = decl.buildSyntax(format: Format())
+      let syntax = decl.buildSyntax()
       XCTAssertEqual(syntax.description, expected, line: line)
     }
   }
@@ -64,7 +64,7 @@ final class TriviaTests: XCTestCase {
     ]
     for (line, testCase) in testCases {
       let (decl, expected) = testCase
-      let syntax = decl.buildSyntax(format: Format())
+      let syntax = decl.buildSyntax()
       XCTAssertEqual(syntax.description, expected, line: line)
     }
   }

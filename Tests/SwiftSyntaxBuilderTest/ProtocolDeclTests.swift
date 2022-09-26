@@ -15,7 +15,7 @@ final class ProtocolDeclTests: XCTestCase {
       FunctionDecl(identifier: .identifier("buildDeclList"), signature: functionSignature, body: nil)
     }
 
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
 
     var text = ""
     syntax.write(to: &text)

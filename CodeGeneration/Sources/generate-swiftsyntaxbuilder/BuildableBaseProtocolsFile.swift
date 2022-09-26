@@ -131,4 +131,17 @@ let buildableBaseProtocolsFile = SourceFile {
       }
     }
   }
+  createBuildSyntaxExtensionWithDefaultFormat()
+}
+
+func createBuildSyntaxExtensionWithDefaultFormat() -> ExtensionDecl {
+  return ExtensionDecl(modifiers: [Token.public], extendedType: "SyntaxBuildable") {
+    FunctionDecl(
+      identifier: .identifier("buildSyntax"),
+      signature: FunctionSignature(input: ParameterClause(parameterList: []), output: "Syntax")) {
+        ReturnStmt(expression: FunctionCallExpr("buildSyntax") {
+          TupleExprElement(label: "format", expression: FunctionCallExpr("Format"))
+        })
+      }
+  }
 }

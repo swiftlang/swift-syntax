@@ -192,3 +192,8 @@ public extension TypeBuildable {
     return Syntax(buildType(format: format))
   }
 }
+public extension SyntaxBuildable {
+  func buildSyntax() -> Syntax {
+    return buildSyntax(format: Format())
+  }
+}

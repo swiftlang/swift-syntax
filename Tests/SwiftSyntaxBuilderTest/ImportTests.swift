@@ -12,7 +12,7 @@ final class ImportTests: XCTestCase {
       path: AccessPath([AccessPathComponent(name: identifier)])
     )
 
-    let syntax = importDecl.buildDecl(format: Format())
+    let syntax = importDecl.buildSyntax()
 
     var text = ""
     syntax.write(to: &text)

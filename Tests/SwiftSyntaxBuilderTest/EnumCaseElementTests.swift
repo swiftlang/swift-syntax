@@ -24,7 +24,7 @@ final class EnumCaseElementTests: XCTestCase {
         EnumCaseElement(identifier: "hi")
       }
     }
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
 
     XCTAssertEqual(syntax.description,
       """

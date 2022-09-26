@@ -110,6 +110,21 @@ final class StatementTests: XCTestCase {
     )
 
     AssertParse("return true ? nil : nil")
+
+    AssertParse(
+      """
+      switch command {
+      case .start:
+        break
+
+      case .stop:
+        return
+
+      default:
+        break
+      }
+      """
+    )
   }
 
   func testSwitch() {

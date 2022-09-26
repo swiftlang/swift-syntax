@@ -865,7 +865,7 @@ extension Parser {
     let expr: RawExprSyntax?
     if
       !self.at(any: [
-        .rightBrace, .caseKeyword, .semicolon, .eof,
+        .rightBrace, .caseKeyword, .defaultKeyword, .semicolon, .eof,
         .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
         .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword
       ])

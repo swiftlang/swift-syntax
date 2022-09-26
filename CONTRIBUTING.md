@@ -6,7 +6,7 @@ Since SwiftSyntax relies on definitions in the main Swift repository to generate
 
 To build the `main` branch of SwiftSyntax, follow the following instructions:
 
-1. Check `swift-syntax` and  `swift` out side by side:
+1. Check `swift-syntax`, `swift-argument-parser` and  `swift` out side by side:
     ```
     - (enclosing directory)
       - swift

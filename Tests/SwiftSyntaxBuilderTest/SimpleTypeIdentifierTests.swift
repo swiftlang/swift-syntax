@@ -13,7 +13,7 @@ final class SimpleTypeIdentifierTests: XCTestCase {
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let identifier = builder.createSimpleTypeIdentifier()
-      let syntax = identifier.buildSyntax(format: Format())
+      let syntax = identifier.buildSyntax()
 
       var text = ""
       syntax.write(to: &text)

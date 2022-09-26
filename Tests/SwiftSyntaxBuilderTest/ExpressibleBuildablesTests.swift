@@ -15,7 +15,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
       StructDecl(identifier: "InnerStruct") {}
     }
 
-    let syntax = myStruct.buildSyntax(format: Format())
+    let syntax = myStruct.buildSyntax()
     XCTAssertEqual(syntax.description, """
     struct MyStruct {
         var myFirstVar: Int
@@ -33,7 +33,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
       StructDecl(identifier: "MyStruct2") {}
     }
 
-    let syntax = myCodeBlock.buildSyntax(format: Format())
+    let syntax = myCodeBlock.buildSyntax()
     XCTAssertEqual(syntax.description, """
 
     struct MyStruct1 {
@@ -50,7 +50,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
       "someIdentifier"
     }
     
-    let syntax = myCodeBlock.buildSyntax(format: Format())
+    let syntax = myCodeBlock.buildSyntax()
     XCTAssertEqual(syntax.description, """
     {
         print("Hello world")
@@ -76,7 +76,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
       }
     }
 
-    let syntax = switchStmt.buildSyntax(format: Format())
+    let syntax = switchStmt.buildSyntax()
     XCTAssertEqual(
       syntax.description,
       """

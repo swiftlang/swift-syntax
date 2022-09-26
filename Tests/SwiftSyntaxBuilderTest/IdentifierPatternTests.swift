@@ -13,7 +13,7 @@ final class IdentifierPatternTests: XCTestCase {
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let identifierPattern = builder.createIdentifierPattern()
-      let syntax = identifierPattern.buildSyntax(format: Format())
+      let syntax = identifierPattern.buildSyntax()
 
       var text = ""
       syntax.write(to: &text)

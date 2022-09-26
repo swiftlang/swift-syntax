@@ -10,7 +10,7 @@ final class VariableTests: XCTestCase {
       PatternBinding(pattern: "a", typeAnnotation: ArrayType(elementType: "Int"))
     }
 
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "␣let a: [Int]")
   }
 
@@ -24,7 +24,7 @@ final class VariableTests: XCTestCase {
         initializer: DictionaryExpr())
     }
 
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "␣var d: [String: Int] = [:]")
   }
 
@@ -38,7 +38,7 @@ final class VariableTests: XCTestCase {
         }
       })
     ])
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "let a = [\n1,\n2,\n3,\n]")
   }
 
@@ -57,7 +57,7 @@ final class VariableTests: XCTestCase {
       PatternBinding(pattern: "i", typeAnnotation: "Int")
       PatternBinding(pattern: "s", typeAnnotation: "String")
     }
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
   }
 
@@ -66,7 +66,7 @@ final class VariableTests: XCTestCase {
     let buildable = VariableDecl(letOrVarKeyword: .let) {
       return PatternBinding(pattern: "c", typeAnnotation: TypeAnnotation(type: type))
     }
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "let c: (Int) -> Bool")
   }
 
@@ -83,7 +83,7 @@ final class VariableTests: XCTestCase {
     for (line, testCase) in testCases {
       let (keyword, name, type, initializer, expected) = testCase
       let builder = VariableDecl(leadingTrivia: leadingTrivia, keyword, name: name, type: type, initializer: initializer)
-      let syntax = builder.buildSyntax(format: Format())
+      let syntax = builder.buildSyntax()
 
       XCTAssertEqual(syntax.description, expected, line: line)
     }
@@ -98,7 +98,7 @@ final class VariableTests: XCTestCase {
       }
     }
 
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, """
       var test: Int {
           4 + 5
@@ -168,7 +168,7 @@ final class VariableTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let syntax = builder.buildSyntax(format: Format())
+      let syntax = builder.buildSyntax()
 
       XCTAssertEqual(syntax.description, expected, line: line)
     }

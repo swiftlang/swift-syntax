@@ -12,18 +12,8 @@
 
 import ArgumentParser
 import Foundation
-import SwiftSyntax
 import SwiftSyntaxBuilder
-
-/// SwiftSyntaxBuilder sources to be generated
-private let sourceTemplates: [(SourceFile, String)] = [
-  (buildableBaseProtocolsFile, "BuildableBaseProtocols.swift"),
-  (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
-  (buildableNodesFile, "BuildableNodes.swift"),
-  (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
-  (formatFile, "Format.swift"),
-  (tokenFile, "Token.swift"),
-]
+import Utils
 
 @main
 struct GenerateSwiftSyntaxBuilder: ParsableCommand {
@@ -34,22 +24,16 @@ struct GenerateSwiftSyntaxBuilder: ParsableCommand {
   var verbose: Bool = false
 
   func run() throws {
-    let generatedURL = URL(fileURLWithPath: generatedPath)
-    let format = Format(indentWidth: 2)
-
-    try FileManager.default.createDirectory(
-      atPath: generatedURL.path,
-      withIntermediateDirectories: true,
-      attributes: nil
+    try generateTemplates(
+      templates: [
+        (buildableBaseProtocolsFile, "BuildableBaseProtocols.swift"),
+        (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
+        (buildableNodesFile, "BuildableNodes.swift"),
+        (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
+        (tokenFile, "Token.swift"),
+      ],
+      destination: URL(fileURLWithPath: generatedPath),
+      verbose: verbose
     )
-
-    for (sourceFile, name) in sourceTemplates {
-      let fileURL = generatedURL.appendingPathComponent(name)
-      if verbose {
-        print("Generating \(fileURL.path)...")
-      }
-      let syntax = sourceFile.buildSyntax(format: format)
-      try "\(syntax)\n".write(to: fileURL, atomically: true, encoding: .utf8)
-    }
   }
 }

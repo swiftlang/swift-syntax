@@ -1,0 +1,50 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_syntax_support.Token import *
+  from gyb_syntax_support.kinds import lowercase_first_word
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From Classification.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+/// Represents a classification a token can receive for syntax highlighting.
+public class SyntaxClassification {
+  public let name: String
+  public let description: String
+
+  public var swiftName: String {
+    lowercaseFirstWord(name: name)
+  }
+
+  public init(name: String, description: String) {
+    self.name = name
+    self.description = description
+  }
+}
+
+public let SYNTAX_CLASSIFICATIONS: [SyntaxClassification] = [
+% for syntaxClassification in SYNTAX_CLASSIFICATIONS:
+  SyntaxClassification(name: "${syntaxClassification.name}", description: "${syntaxClassification.description.strip()}"),
+% end
+]
+
+func classificationByName(_ name: String?) -> SyntaxClassification? {
+  guard let name = name else { return nil }
+  for classification in SYNTAX_CLASSIFICATIONS where classification.name == name {
+    return classification
+  }
+
+  fatalError("Unknown syntax classification '\(name)'")
+}

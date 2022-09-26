@@ -43,7 +43,7 @@ final class FunctionTests: XCTestCase {
         }
       })
     }
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
 
     XCTAssertEqual(syntax.description, """
       ␣func fibonacci(_ n: Int) -> Int {
@@ -61,13 +61,13 @@ final class FunctionTests: XCTestCase {
         TupleExprElement(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: "value\(param)")
       }
     }
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "test(value1, p2: value2, value3, p4: value4, value5)")
   }
 
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
     let buildable = FunctionCallExpr("test")
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "test()")
   }
 
@@ -75,7 +75,7 @@ final class FunctionTests: XCTestCase {
     let buildable = FunctionCallExpr("test", trailingClosure: ClosureExpr()) {
       TupleExprElement(expression: "42")
     }
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "test(42) {\n}")
   }
 
@@ -86,7 +86,7 @@ final class FunctionTests: XCTestCase {
       }
     })
     let buildable = FunctionCallExpr("test", trailingClosure: closure)
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(
       syntax.description,
       """

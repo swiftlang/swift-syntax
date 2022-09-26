@@ -1,0 +1,83 @@
+%{
+  from gyb_syntax_support import *
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From Trivia.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+public class Trivia {
+  public let name: String
+  public let comment: String
+  public let serializationCode: Int
+  public let characters: [Character]
+  public let swiftCharacters: [Character]
+  public let isNewLine: Bool
+  public let isComment: Bool
+  
+  public var lowerName: String { lowercaseFirstWord(name: name) }
+  
+  public var charactersLen: Int { characters.count }
+  
+  public var isCollection: Bool { charactersLen > 0 }
+  
+  init(name: String,
+       comment: String,
+       serializationCode: Int, characters: [Character] = [],
+       swiftCharacters: [Character] = [],
+       isNewLine: Bool = false,
+       isComment: Bool = false){
+    self.name = name
+    self.comment = comment
+    self.serializationCode = serializationCode
+    self.isNewLine = isNewLine
+    self.isComment = isComment
+    self.characters = characters
+    
+    // Swift sometimes doesn't support escaped characters like \f or \v;
+    // we should allow specifying alternatives explicitly.
+    if !swiftCharacters.isEmpty {
+      self.swiftCharacters = swiftCharacters
+    } else {
+      self.swiftCharacters = characters
+    }
+  }
+}
+
+public let TRIVIAS: [Trivia] = [
+% for trivia in TRIVIAS:
+%   parameters = [
+%   'name: "%s"' % trivia.name,
+%   'comment: #"%s"#'  % trivia.comment,
+%   'serializationCode: %d' % trivia.serialization_code
+%   ]
+%   if trivia.characters:
+%     spaces = 11
+%     mapped_characters = list(map(lambda x: (' ' * spaces) + 'Character(#"%s"#)' % x, trivia.characters))
+%     parameters += ['characters: [\n%s\n' % ',\n'.join(mapped_characters) + (' ' * (spaces - 2) + ']')]
+%   end
+%   if trivia.swift_characters:
+%     spaces = 10
+%     mapped_swift_characters = list(map(lambda x: (' ' * spaces) + 'Character(#"%s"#)' % x, trivia.swift_characters))
+%     parameters += ['swiftCharacters: [\n%s\n' % ',\n'.join(mapped_swift_characters) + (' ' * (spaces - 2) + ']')]
+%   end
+%   if trivia.is_new_line:
+%     parameters += ['isNewLine: true']
+%   end
+%   if trivia.is_comment:
+%     parameters += ['isComment: true']
+%   end
+  Trivia(${",\n         ".join(parameters)}),
+% end
+]

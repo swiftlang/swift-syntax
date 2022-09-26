@@ -24,7 +24,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       buildOuterCodeBlockItemList()
     }
 
-    let test = codeBlock.buildSyntax(format: Format())
+    let test = codeBlock.buildSyntax()
 
     var result = ""
     test.write(to: &result)
@@ -63,7 +63,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       )
     )
     
-    let test = codeBlock.buildSyntax(format: Format())
+    let test = codeBlock.buildSyntax()
     
     var result = ""
     test.write(to: &result)

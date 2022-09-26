@@ -12,7 +12,7 @@ final class TypeInitializerClauseTests: XCTestCase {
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let typeInitializerClause = builder.createTypeInitializerClause()
-      let syntax = typeInitializerClause.buildSyntax(format: Format())
+      let syntax = typeInitializerClause.buildSyntax()
       
       var text = ""
       syntax.write(to: &text)

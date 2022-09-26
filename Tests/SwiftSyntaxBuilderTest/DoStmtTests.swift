@@ -29,7 +29,7 @@ final class DoStmtTests: XCTestCase {
         }
       ])
 
-    let syntax = buildable.buildSyntax(format: Format())
+    let syntax = buildable.buildSyntax()
     XCTAssertEqual(
       syntax.description,
       """

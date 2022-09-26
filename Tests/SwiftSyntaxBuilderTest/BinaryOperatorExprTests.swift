@@ -13,7 +13,7 @@ final class BinaryOperatorExprTests: XCTestCase {
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let binaryOperatorExpr = builder.createBinaryOperatorExpr()
-      let syntax = binaryOperatorExpr.buildSyntax(format: Format())
+      let syntax = binaryOperatorExpr.buildSyntax()
 
       var text = ""
       syntax.write(to: &text)

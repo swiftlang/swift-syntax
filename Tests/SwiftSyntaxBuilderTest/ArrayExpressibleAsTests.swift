@@ -7,7 +7,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
     let modifiers: ExpressibleAsModifierList = [Token.public, Token.static]
 
     var result = ""
-    modifiers.createModifierList().buildSyntax(format: Format()).write(to: &result)
+    modifiers.createModifierList().buildSyntax().write(to: &result)
     XCTAssertEqual(result, "public static ")
   }
 
@@ -15,7 +15,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
     let modifiers: ExpressibleAsModifierList = [Token.open, DeclModifier(name: Token.internal)]
 
     var result = ""
-    modifiers.createModifierList().buildSyntax(format: Format()).write(to: &result)
+    modifiers.createModifierList().buildSyntax().write(to: &result)
     XCTAssertEqual(result, "open internal ")
   }
 
@@ -24,7 +24,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
     let expressible: ExpressibleAsModifierList = modifiers as [ExpressibleAsDeclModifier]
 
     var result = ""
-    expressible.createModifierList().buildSyntax(format: Format()).write(to: &result)
+    expressible.createModifierList().buildSyntax().write(to: &result)
     XCTAssertEqual(result, "private ")
   }
 
@@ -43,7 +43,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
     )
 
     var result = ""
-    signature.buildSyntax(format: Format()).write(to: &result)
+    signature.buildSyntax().write(to: &result)
     XCTAssertEqual(result, "(_ args: [String]) -> Int")
   }
 }

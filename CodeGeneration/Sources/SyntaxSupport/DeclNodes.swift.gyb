@@ -1,0 +1,26 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_helpers import make_swift_child, make_swift_node
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From DeclNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+public let DECL_NODES: [Node] = [
+% for node in DECL_NODES:
+  ${make_swift_node(node)},
+
+% end
+]

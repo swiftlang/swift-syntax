@@ -12,7 +12,7 @@ final class SourceFileTests: XCTestCase {
       })
     }
 
-    let syntax = source.buildSyntax(format: Format())
+    let syntax = source.buildSyntax()
 
     var text = ""
     syntax.write(to: &text)

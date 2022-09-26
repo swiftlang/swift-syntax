@@ -15,7 +15,7 @@ final class TypeAnnotationTests: XCTestCase {
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let typeAnnotation = builder.createTypeAnnotation()
-      let syntax = typeAnnotation.buildSyntax(format: Format())
+      let syntax = typeAnnotation.buildSyntax()
 
       var text = ""
       syntax.write(to: &text)

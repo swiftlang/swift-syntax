@@ -73,7 +73,7 @@ public func _parserConsistencyCheck(
           continue
         }
 
-        print("\(diag.debugDescription)")
+        print("\(String(cString: filename)): error: \(diag.debugDescription)")
         anyDiags = true
       }
 

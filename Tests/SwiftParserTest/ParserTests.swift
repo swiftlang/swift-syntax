@@ -33,7 +33,7 @@ public class ParserTests: XCTestCase {
     }
   }
 
-  /// Run parsr tests on all of the Swift files in the
+  /// Run parsr tests on all of the Swift files in the given path, recursively.
   func runParserTests(
     name: String, path: URL, checkDiagnostics: Bool,
     shouldExclude: (URL) -> Bool = { _ in false }
@@ -76,6 +76,9 @@ public class ParserTests: XCTestCase {
     )
   }
 
+  /// Test all of the files in the "test" directory of the main Swift compiler.
+  /// This requires the Swift compiler to have been checked out into the "swift"
+  /// directory alongside swift-syntax.
   func testSwiftTestsuite() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
     let testDir = URL(fileURLWithPath: #file)
@@ -97,6 +100,9 @@ public class ParserTests: XCTestCase {
     )
   }
 
+  /// Test all of the files in the "validation-text" directory of the main
+  /// Swift compiler. This requires the Swift compiler to have been checked
+  /// out into the "swift" directory alongside swift-syntax.
   func testSwiftValidationTestsuite() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
     let testDir = URL(fileURLWithPath: #file)
@@ -139,6 +145,7 @@ public class ParserTests: XCTestCase {
         || fileURL.absoluteString.contains("26101-swift-parser-parsenewdeclattribute.swift")
         || fileURL.absoluteString.contains("26773-swift-diagnosticengine-diagnose.swift")
         || fileURL.absoluteString.contains("parser-cutoff.swift")
+        || fileURL.absoluteString.contains("26233-swift-iterabledeclcontext-getmembers.swift")
       }
     )
   }

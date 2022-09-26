@@ -117,6 +117,12 @@ final class ExpressionTests: XCTestCase {
       \(UnsafeRawPointer?, String).1
       """#
     )
+
+    AssertParse(
+      #"""
+      \a.b.c
+      """#
+    )
   }
 
   func testBasicLiterals() {

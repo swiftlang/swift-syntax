@@ -558,7 +558,8 @@ extension Parser {
         // (.? and .! end up being operators, and so aren't handled here.)
         if periodHasKeyPathBehavior &&
             (self.peek().tokenKind == .leftSquareBracket ||
-             self.peek().tokenKind == .integerLiteral) {
+             self.peek().tokenKind == .integerLiteral ||
+             self.peek().tokenKind == .identifier) {
           break
         }
 

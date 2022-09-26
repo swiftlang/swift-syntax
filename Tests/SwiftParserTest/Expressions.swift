@@ -111,6 +111,12 @@ final class ExpressionTests: XCTestCase {
       #"""
       _ = \Lens<[Int]>.[0]
       """#)
+
+    AssertParse(
+      #"""
+      \(UnsafeRawPointer?, String).1
+      """#
+    )
   }
 
   func testBasicLiterals() {

@@ -23,7 +23,7 @@ SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftParser")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
 
-CODE_GENERATION_DIR = os.path.join(PACKAGE_DIR, "Code-Generation")
+CODE_GENERATION_DIR = os.path.join(PACKAGE_DIR, "CodeGeneration")
 GENERATESWIFTSYNTAXBUILDER_DIR = \
         os.path.join(CODE_GENERATION_DIR, "Sources", "generate-swiftsyntaxbuilder")
 
@@ -349,7 +349,7 @@ def run_code_generation(
 
     swiftpm_call = [
         swift_exec, 'run',
-        "--package-path", os.path.join(PACKAGE_DIR, 'Code-Generation'),
+        "--package-path", CODE_GENERATION_DIR,
         "generate-swift-syntax-builder", swiftsyntaxbuilder_destination
     ]
     

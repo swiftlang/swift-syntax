@@ -553,10 +553,12 @@ extension Parser {
 
       // Check for a .foo suffix.
       if self.at(any: [.period, .prefixPeriod]) {
-        // A key path is special, because it allows .[, unlike anywhere else. The
-        // period itself should be left in the token stream. (.? and .! end up
-        // being operators, and so aren't handled here.)
-        if periodHasKeyPathBehavior && self.peek().tokenKind == .leftSquareBracket {
+        // A key path is special, because it allows .[ and .<N>, unlike
+        // anywhere else. The period itself should be left in the token stream.
+        // (.? and .! end up being operators, and so aren't handled here.)
+        if periodHasKeyPathBehavior &&
+            (self.peek().tokenKind == .leftSquareBracket ||
+             self.peek().tokenKind == .integerLiteral) {
           break
         }
 

@@ -23,6 +23,19 @@ extension UnexpectedNodesSyntax {
   }
 }
 
+extension Syntax {
+  func hasParent(_ expectedParent: Syntax) -> Bool {
+    var walk = self.parent
+    while walk != nil {
+      if walk == expectedParent {
+        return true
+      }
+      walk = walk?.parent
+    }
+    return false
+  }
+}
+
 fileprivate extension FixIt.Change {
   /// Replaced a present node with a missing node
   static func makeMissing(node: TokenSyntax) -> FixIt.Change {
@@ -59,7 +72,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     let diagProducer = ParseDiagnosticsGenerator()
     diagProducer.walk(tree)
     diagProducer.diagnostics.sort {
-      return $0.node.id.indexInTree < $1.node.id.indexInTree
+      if $0.position != $1.position {
+        return $0.position < $1.position
+      }
+
+      // Emit children diagnostics before parent diagnostics.
+      // This makes sure that for missing declarations with attributes, we emit diagnostics on the attribute before we complain about the missing declaration.
+      if $0.node.hasParent($1.node) {
+        return true
+      } else if $1.node.hasParent($0.node) {
+        return false
+      } else {
+        // If multiple tokens are missing at the same location, emit diagnostics about nodes that occur earlier in the tree first.
+        return $0.node.id.indexInTree < $1.node.id.indexInTree
+      }
     }
     return diagProducer.diagnostics
   }

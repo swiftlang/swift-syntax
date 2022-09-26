@@ -11,10 +11,10 @@ final class AttributeTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected declaration after attribute"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected 'for' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected declaration after attribute"),
       ]
     )
   }
@@ -42,9 +42,9 @@ final class AttributeTests: XCTestCase {
       @_specialize(e#^DIAG^#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected declaration after attribute"),
         DiagnosticSpec(message: "Expected ':' in attribute argument"),
         DiagnosticSpec(message: "Expected ')' to end attribute"),
+        DiagnosticSpec(message: "Expected declaration after attribute"),
       ]
     )
   }
@@ -55,10 +55,10 @@ final class AttributeTests: XCTestCase {
       @_specialize(e#^DIAG_1^#, exported#^DIAG_2^#)#^DIAG_3^#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after attribute"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ':' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected 'false' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after attribute"),
       ]
     )
   }

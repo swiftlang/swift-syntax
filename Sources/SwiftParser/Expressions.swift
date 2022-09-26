@@ -596,7 +596,12 @@ extension Parser {
       // Check for a [expr] suffix.
       // Note that this cannot be the start of a new line.
       if let lsquare = self.consume(if: .leftSquareBracket, where: { !$0.isAtStartOfLine }) {
-        let args = self.parseArgumentListElements(inLetOrVar: inLetOrVar)
+        let args: [RawTupleExprElementSyntax]
+        if self.at(.rightSquareBracket) {
+          args = []
+        } else {
+          args = self.parseArgumentListElements(inLetOrVar: inLetOrVar)
+        }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
 
         // If we can parse trailing closures, do so.

@@ -437,7 +437,13 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
-  func testRangeSubscript() {
+  func testSubscript() {
+    AssertParse(
+      """
+      array[]
+      """
+    )
+
     AssertParse(
       """
       text[...]

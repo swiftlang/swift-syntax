@@ -288,7 +288,7 @@ public enum SyntaxKind {
   case availabilityVersionRestriction
   case versionTuple
 
-  var isSyntaxCollection: Bool {
+  public var isSyntaxCollection: Bool {
     switch self {
     case .codeBlockItemList: return true
     case .unexpectedNodes: return true
@@ -339,7 +339,7 @@ public enum SyntaxKind {
     }
   }
 
-  var isUnknown: Bool {
+  public var isUnknown: Bool {
     switch self {
     case .unknownDecl: return true
     case .unknownExpr: return true
@@ -351,7 +351,7 @@ public enum SyntaxKind {
     }
   }
 
-  var isMissing: Bool {
+  public var isMissing: Bool {
     switch self {
     case .missingDecl: return true
     case .missingExpr: return true

@@ -40,8 +40,7 @@ final class DeclarationTests: XCTestCase {
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG1", message: "Expected identifier in function"),
                   DiagnosticSpec(locationMarker: "DIAG1", message: "Expected argument list in function declaration"),
-                  DiagnosticSpec(locationMarker: "DIAG2", message: "Expected '=' in same type requirement"),
-                  DiagnosticSpec(locationMarker: "DIAG2", message: "Expected right-hand type of same type requirement"),
+                  DiagnosticSpec(locationMarker: "DIAG2", message: "Expected '=' and right-hand type in same type requirement"),
                 ])
   }
 
@@ -77,18 +76,14 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse("class T where t#^DIAG^#",
                 diagnostics: [
-                  DiagnosticSpec(message: "Expected '=' in same type requirement"),
-                  DiagnosticSpec(message: "Expected right-hand type of same type requirement"),
-                  DiagnosticSpec(message: "Expected '{' to start class"),
-                  DiagnosticSpec(message: "Expected '}' to end class"),
+                  DiagnosticSpec(message: "Expected '=' and right-hand type in same type requirement"),
+                  DiagnosticSpec(message: "Expected member block in class"),
                 ])
     AssertParse("class B<where g#^DIAG^#",
                 diagnostics: [
-                  DiagnosticSpec(message: "Expected '=' in same type requirement"),
-                  DiagnosticSpec(message: "Expected right-hand type of same type requirement"),
+                  DiagnosticSpec(message: "Expected '=' and right-hand type in same type requirement"),
                   DiagnosticSpec(message: "Expected '>' to end generic parameter clause"),
-                  DiagnosticSpec(message: "Expected '{' to start class"),
-                  DiagnosticSpec(message: "Expected '}' to end class"),
+                  DiagnosticSpec(message: "Expected member block in class"),
                 ])
   }
 
@@ -260,8 +255,7 @@ final class DeclarationTests: XCTestCase {
       ) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected 'set' in modifier"),
-        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        DiagnosticSpec(message: "Expected 'set)' to end modifier"),
         // FIXME: It should print `+` as detail of text.
         DiagnosticSpec(message: "Unexpected text in variable")
       ]
@@ -299,8 +293,7 @@ final class DeclarationTests: XCTestCase {
       private(#^DIAG^#var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected 'set' in modifier"),
-        DiagnosticSpec(message: "Expected ')' to end modifier")
+        DiagnosticSpec(message: "Expected 'set)' to end modifier"),
       ]
     )
 
@@ -319,8 +312,7 @@ final class DeclarationTests: XCTestCase {
       private(#^DIAG^#get, didSet var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected 'set' in modifier"),
-        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        DiagnosticSpec(message: "Expected 'set)' to end modifier"),
         DiagnosticSpec(message: "Unexpected text 'get, didSet' in variable")
       ]
     )
@@ -665,8 +657,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected '->' in subscript"),
-        DiagnosticSpec(message: "Expected return type in subscript"),
+        DiagnosticSpec(message: "Expected '->' and return type in subscript"),
       ]
     )
   }
@@ -806,8 +797,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "MISSING_COLON", message: "Expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "MISSING_RPAREN", message: "Expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "BRACES", message: "Expected '{' to start struct"),
-        DiagnosticSpec(locationMarker: "BRACES", message: "Expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "BRACES", message: "Expected member block in struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Extraneous ': Int) {}' at top level"),
       ]
     )
@@ -902,9 +892,9 @@ final class DeclarationTests: XCTestCase {
       @#^END^#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "OPENING_BRACE", message: "Expected '{' to start struct"),
-        DiagnosticSpec(locationMarker: "AFTER_POUND_IF", message: "Expected condition of conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "END", message: "Expected name of attribute"),
+        DiagnosticSpec(locationMarker: "OPENING_BRACE", message: "Expected '{' in struct"),
+        DiagnosticSpec(locationMarker: "AFTER_POUND_IF", message: "Expected condition after '#if' in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected name after '@' in attribute"),
         DiagnosticSpec(locationMarker: "END", message: "Expected declaration after attribute in conditional compilation clause"),
         DiagnosticSpec(locationMarker: "END", message: "Expected '#endif' in conditional compilation block"),
         DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end struct")
@@ -965,35 +955,35 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testLeadingUnexpectedTokens() {
-    AssertParse("#^DIAG_1^#}class C#^DIAG_2^#",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before class"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start class"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end class"),
-                ])
+    AssertParse(
+      "#^DIAG_1^#}class C#^DIAG_2^#",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before class"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected member block in class"),
+      ],
+      fixedSource: """
+        }class C {}
+        """
+    )
     AssertParse("#^DIAG_1^#}enum C#^DIAG_2^#",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before enum"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start enum"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end enum"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected member block in enum"),
                 ])
     AssertParse("#^DIAG_1^#}protocol C#^DIAG_2^#",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before protocol"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start protocol"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end protocol"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected member block in protocol"),
                 ])
     AssertParse("#^DIAG_1^#}actor C#^DIAG_2^#",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before actor"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start actor"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end actor"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected member block in actor"),
                 ])
     AssertParse("#^DIAG_1^#}struct C#^DIAG_2^#",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before struct"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start struct"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end struct"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected member block in struct"),
                 ])
     AssertParse("#^DIAG_1^#}func C#^DIAG_2^#",
                 diagnostics: [
@@ -1009,8 +999,7 @@ final class DeclarationTests: XCTestCase {
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before subscript"),
                   DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected argument list in function declaration"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '->' in subscript"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected return type in subscript"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '->' and return type in subscript"),
                 ])
   }
 
@@ -1066,11 +1055,10 @@ final class DeclarationTests: XCTestCase {
       struct U<@#^DIAG^#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected name of attribute"),
+        DiagnosticSpec(message: "Expected name after '@' in attribute"),
         DiagnosticSpec(message: "Expected identifier in generic parameter"),
         DiagnosticSpec(message: "Expected '>' to end generic parameter clause"),
-        DiagnosticSpec(message: "Expected '{' to start struct"),
-        DiagnosticSpec(message: "Expected '}' to end struct"),
+        DiagnosticSpec(message: "Expected member block in struct"),
       ]
     )
   }

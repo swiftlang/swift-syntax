@@ -95,8 +95,8 @@ final class TypeTests: XCTestCase {
       """#,
       diagnostics: [
         // FIXME: This should be a valid parse
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected expression of key path"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected expression of key path"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected expression after 'i' in key path"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected expression after 'i' in key path"),
       ]
     )
   }

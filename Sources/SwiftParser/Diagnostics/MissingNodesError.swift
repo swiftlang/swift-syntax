@@ -169,7 +169,7 @@ public struct MissingNodesError: ParserError {
   }
 
   public var message: String {
-    var message = "Expected \(missingNodesDescription(missingNodes: missingNodes, commonParent: commonParent))"
+    var message = "expected \(missingNodesDescription(missingNodes: missingNodes, commonParent: commonParent))"
     if let afterClause = afterClause {
       message += " \(afterClause)"
     }

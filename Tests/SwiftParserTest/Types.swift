@@ -31,9 +31,9 @@ final class TypeTests: XCTestCase {
 
   func testFunctionTypes() throws {
     AssertParse("t as(#^DIAG^#..)->#^END^#", diagnostics: [
-      DiagnosticSpec(message: "Expected type in function type"),
-      DiagnosticSpec(message: "Unexpected text '..' in function type"),
-      DiagnosticSpec(locationMarker: "END", message: "Expected type in function type"),
+      DiagnosticSpec(message: "expected type in function type"),
+      DiagnosticSpec(message: "unexpected text '..' in function type"),
+      DiagnosticSpec(locationMarker: "END", message: "expected type in function type"),
     ])
   }
 
@@ -60,22 +60,22 @@ final class TypeTests: XCTestCase {
     AssertParse("{[#^DIAG_1^#class]in#^DIAG_2^#",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected identifier in closure capture item"),
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text 'class' in closure capture signature"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end closure"),
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in closure capture item"),
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text 'class' in closure capture signature"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '}' to end closure"),
                 ])
 
     AssertParse("{[n#^DIAG^#`]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(message: "Unexpected text '`' in closure capture signature")
+                  DiagnosticSpec(message: "unexpected text '`' in closure capture signature")
                 ])
 
     AssertParse("{[weak#^DIAG^#^]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(message: "Expected identifier in closure capture item"),
-                  DiagnosticSpec(message: "Unexpected text '^' in closure capture signature"),
+                  DiagnosticSpec(message: "expected identifier in closure capture item"),
+                  DiagnosticSpec(message: "unexpected text '^' in closure capture signature"),
                 ])
   }
 
@@ -95,8 +95,8 @@ final class TypeTests: XCTestCase {
       """#,
       diagnostics: [
         // FIXME: This should be a valid parse
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected expression in key path"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected expression in key path"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in key path"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in key path"),
       ]
     )
   }

@@ -94,7 +94,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntaxBuilder",
-      dependencies: ["SwiftBasicFormat", "SwiftSyntax"],
+      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftParser"],
       exclude: [
         "gyb_helpers",
         "ResultBuilders.swift.gyb",
@@ -157,7 +157,7 @@ let package = Package(
     ),
     .testTarget(
       name: "SwiftSyntaxBuilderTest",
-      dependencies: ["SwiftSyntaxBuilder"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder"]
     ),
     .testTarget(
       name: "SwiftSyntaxParserTest",

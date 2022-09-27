@@ -35,7 +35,7 @@ public extension Child {
   /// Generate a Swift expression that creates a proper SwiftSyntax node of type
   /// `type.syntax` from a variable named `varName` of type `type.buildable` that
   /// represents this child node.
-  func generateExprBuildSyntaxNode(varName: String, formatName: String) -> ExpressibleAsExprBuildable {
+  func generateExprBuildSyntaxNode(varName: ExpressibleAsExprBuildable, formatName: String) -> ExpressibleAsExprBuildable {
     if type.isToken {
       return FunctionCallExpr(MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken")) {
         TupleExprElement(label: "format", expression: "format")

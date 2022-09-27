@@ -128,7 +128,7 @@ func createWithTriviaFunction(trivia: String) -> FunctionDecl {
   }
 }
 
-func createTriviaAttachment(varName: String, triviaVarName: String, trivia: String) -> IfStmt {
+func createTriviaAttachment(varName: ExpressibleAsExprBuildable, triviaVarName: ExpressibleAsExprBuildable, trivia: String) -> IfStmt {
   IfStmt(
     conditions: ExprList {
       PrefixOperatorExpr(

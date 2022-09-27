@@ -1,4 +1,4 @@
-//===----------------------------------------------------------------------===//
+//===--- ParserIntegration.swift ------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -10,17 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+import SwiftParser
+import SwiftBasicFormat
 
-protocol HasTrailingComma {
-  var hasTrailingComma: Bool { get }
-
-  /// Returns this node overriding presence of the trailing comma
-  func withTrailingComma(_ withComma: Bool) -> Self
-}
-
-extension HasTrailingComma {
-  func ensuringTrailingComma() -> Self {
-    hasTrailingComma ? self : withTrailingComma(true)
+/// Make `SyntaxBuildable` nodes participate in SyntaxStringInterpolation
+public extension SyntaxStringInterpolation {
+  mutating func appendInterpolation<Buildable: SyntaxBuildable>(
+    _ buildable: Buildable
+  ) {
+    self.appendInterpolation(buildable.buildSyntax())
   }
 }

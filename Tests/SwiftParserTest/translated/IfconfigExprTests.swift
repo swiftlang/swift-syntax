@@ -55,10 +55,7 @@ final class IfconfigExprTests: XCTestCase {
             .methodTwo()
       #endif
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 4: result of call to 'methodOne()' is unused
-      ]
+      """
     )
   }
 
@@ -71,10 +68,7 @@ final class IfconfigExprTests: XCTestCase {
       #else
         .methodTwo()
       #endif
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 3: result of call to 'methodOne()' is unused
-      ]
+      """
     )
   }
 
@@ -98,13 +92,8 @@ final class IfconfigExprTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected warning on line 2: expression of type 'MyStruct' is unused
-        // TODO: Old parser expected error on line 4: closure expression is unused
-        // TODO: Old parser expected warning on line 6: expression of type 'MyStruct' is unused
         // TODO: Old parser expected error on line 8: unary operator cannot be separated from its operand
-        // TODO: Old parser expected warning on line 8: result of operator '+' is unused
         DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '+ otherExpr' in conditional compilation block"),
-        // TODO: Old parser expected warning on line 12: result of call to 'methodOne()' is unused
         // TODO: Old parser expected error on line 13: unexpected tokens in '#if' expression body
         DiagnosticSpec(locationMarker: "DIAG_2", message: #"unexpected text 'print("debug")' in conditional compilation block"#),
       ]
@@ -130,9 +119,7 @@ final class IfconfigExprTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 4: result of operator '++' is unused
         // TODO: Old parser expected error on line 12: unexpected tokens in '#if' expression body
-        // TODO: Old parser expected warning on line 12: result of call to 'methodOne()' is unused
         DiagnosticSpec(message: "unexpected text '+ 12' in conditional compilation block"),
       ]
     )
@@ -157,9 +144,7 @@ final class IfconfigExprTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 4: result of call to 'methodOne()' is unused
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in conditional compilation clause"),
-        // TODO: Old parser expected warning on line 10: result of call to 'methodOne()' is unused
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in conditional compilation clause"),
         // TODO: Old parser expected error on line 12: unexpected tokens in '#if' expression body
         DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text 'return' in conditional compilation block"),
@@ -180,10 +165,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
         .unknownMethod() 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 9: value of type 'OneResult' has no member 'unknownMethod'
-      ]
+      """
     )
   }
 
@@ -206,10 +188,7 @@ final class IfconfigExprTests: XCTestCase {
         #endif
       #endif
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 8: result of call to 'methodTwo()' is unused
-      ]
+      """
     )
   }
 
@@ -226,10 +205,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
         )
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: result of call to 'globalFunc' is unused
-      ]
+      """
     )
   }
 

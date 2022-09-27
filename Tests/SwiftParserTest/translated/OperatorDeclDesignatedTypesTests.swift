@@ -192,8 +192,6 @@ final class OperatorDeclDesignatedTypesTests: XCTestCase {
       infix operator **^^ : InfixMagicOperatorProtocol
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: previous operator declaration here
-        // TODO: Old parser expected error on line 2: operator redeclared
         // TODO: Old parser expected warning on line 2: designated types are no longer used by the compiler, Fix-It replacements: 21 - 50 = ''
       ]
     )

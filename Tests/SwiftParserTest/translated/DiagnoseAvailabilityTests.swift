@@ -204,11 +204,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
         """)
       func multilineMessage() {}
       multilineMessage()
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected note on line 4: 'multilineMessage()' has been explicitly marked unavailable here
-        // TODO: Old parser expected error on line 5: 'multilineMessage()' is unavailable: foobar message.
-      ]
+      """#
     )
   }
 
@@ -218,11 +214,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
       @available(*, unavailable, message: " ")
       func emptyMessage() {}
       emptyMessage()
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: 'emptyMessage()' has been explicitly marked unavailable here
-        // TODO: Old parser expected error on line 3: 'emptyMessage()' is unavailable:  
-      ]
+      """#
     )
   }
 

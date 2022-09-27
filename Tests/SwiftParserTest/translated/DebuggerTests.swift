@@ -7,10 +7,7 @@ final class DebuggerTests: XCTestCase {
     AssertParse(
       """
       import Nonexistent_Module
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: no such module
-      ]
+      """
     )
   }
 
@@ -35,10 +32,7 @@ final class DebuggerTests: XCTestCase {
     AssertParse(
       """
       var x: Double = z
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot convert value of type 'Int' to specified type 'Double'
-      ]
+      """
     )
   }
 

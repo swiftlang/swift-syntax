@@ -125,10 +125,7 @@ final class TrailingClosuresTests: XCTestCase {
         duration: Int,
         animations: (() -> Void)? = nil,
         completion: (() -> Void)? = nil) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 1: declared here
-      ]
+      """
     )
   }
 
@@ -136,10 +133,7 @@ final class TrailingClosuresTests: XCTestCase {
     AssertParse(
       """
       multiple_trailing_with_defaults(duration: 42) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'completion' to suppress this warning
-      ]
+      """
     )
   }
 
@@ -171,13 +165,8 @@ final class TrailingClosuresTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: missing argument label 'g:' in call, Fix-It replacements: 9 - 10 = 'g'
         // TODO: Old parser expected error on line 5: editor placeholder in source file
         DiagnosticSpec(message: "unexpected text ': <#T##() -> Void#>' before function"),
-        // TODO: Old parser expected note on line 9: 'mixed_args_2(_:a:_:)' declared here
-        // TODO: Old parser expected error on line 11: extraneous argument label 'a:' in call, Fix-It replacements: 19 - 20 = '_'
-        // TODO: Old parser expected error on line 13: missing argument for parameter 'a' in call, Fix-It replacements: 18 - 18 = ' a: <#() -> Void#>'
-        // TODO: Old parser expected error on line 14: missing argument label 'a:' in call, Fix-It replacements: 19 - 20 = 'a'
       ]
     )
   }
@@ -193,13 +182,10 @@ final class TrailingClosuresTests: XCTestCase {
       _ = produce { 2 } `default`: { 3 }
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: declared here
-        // TODO: Old parser expected error on line 5: missing argument for parameter 'default' in call
         // TODO: Old parser expected error on line 5: consecutive statements
         // TODO: Old parser expected error on line 5: 'default' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 6: labeled block needs 'do'
-        // TODO: Old parser expected warning on line 6: integer literal is unused
       ]
     )
   }
@@ -222,10 +208,7 @@ final class TrailingClosuresTests: XCTestCase {
               3
           }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: extra trailing closure passed in call
-      ]
+      """
     )
   }
 

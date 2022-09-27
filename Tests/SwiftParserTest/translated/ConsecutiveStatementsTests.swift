@@ -19,13 +19,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         a 
         [0, 1, 2] 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 6: variable is unused
-        // TODO: Old parser expected warning on line 7: integer literal is unused
-        // TODO: Old parser expected warning on line 11: variable is unused
-        // TODO: Old parser expected warning on line 12: expression of type '[Int]' is unused
-      ]
+      """
     )
   }
 

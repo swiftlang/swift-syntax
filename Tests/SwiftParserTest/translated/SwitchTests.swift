@@ -94,7 +94,6 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected ':' after 'case'
-        // TODO: Old parser expected warning on line 3: immutable value 'z' was never used, Fix-It replacements: 8 - 13 = '_'
         DiagnosticSpec(message: "expected ':' in switch case"),
       ]
     )
@@ -165,10 +164,7 @@ final class SwitchTests: XCTestCase {
       default:
         x = 1
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 23: type 'Int' cannot be used as a boolean; test for '!= 0' instead
-      ]
+      """
     )
   }
 
@@ -183,8 +179,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: switch must be exhaustive
-        // TODO: Old parser expected note on line 2: do you want to add a default clause?
         // TODO: Old parser expected error on line 3: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
       ]
     )
@@ -215,8 +209,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: do you want to add a default clause?
         // TODO: Old parser expected error on line 4: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
       ]
     )
@@ -248,8 +240,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: do you want to add a default clause?
         DiagnosticSpec(message: "expected expression in switch case"),
         // TODO: Old parser expected error on line 3: ';' statements are not allowed, Fix-It replacements: 3 - 5 = ''
       ]
@@ -365,8 +355,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: do you want to add a default clause?
         // TODO: Old parser expected error on line 2: 'default' cannot be used with a 'where' guard expression
         DiagnosticSpec(message: "unexpected text 'where x == 0' in switch case"),
       ]
@@ -381,8 +369,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: do you want to add a default clause?
         // TODO: Old parser expected error on line 2: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
       ]
     )
@@ -398,8 +384,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: do you want to add a default clause?
         // TODO: Old parser expected error on line 2: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
       ]
     )
@@ -415,8 +399,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: do you want to add a default clause?
         // TODO: Old parser expected error on line 4: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
       ]
     )
@@ -537,28 +519,9 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'a' must be bound in every pattern
-        // TODO: Old parser expected warning on line 2: variable 'a' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected error on line 4: 'a' must be bound in every pattern
-        // TODO: Old parser expected error on line 6: 'a' must be bound in every pattern
-        // TODO: Old parser expected error on line 6: 'b' must be bound in every pattern
-        // TODO: Old parser expected warning on line 6: variable 'a' was never used; consider replacing with '_' or removing it
         // TODO: Old parser expected error on line 8: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 17 - 17 = ' break'
-        // TODO: Old parser expected warning on line 8: variable 'a' was never used; consider replacing with '_' or removing it
         // TODO: Old parser expected error on line 11: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 13 - 13 = ' break'
-        // TODO: Old parser expected warning on line 12: variable 'a' was never used; consider replacing with '_' or removing it
         // TODO: Old parser expected error on line 14: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 17 - 17 = ' break'
-        // TODO: Old parser expected warning on line 14: variable 'a' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected warning on line 15: variable 'b' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected error on line 19: 'a' must be bound in every pattern
-        // TODO: Old parser expected warning on line 19: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 24: variable 'a' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected warning on line 24: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 24: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 26: variable 'a' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected warning on line 26: variable 'b' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected warning on line 26: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 26: case is already handled by previous patterns; consider removing it
         // TODO: Old parser expected error on line 28: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 13 - 13 = ' break'
       ]
     )
@@ -574,11 +537,7 @@ final class SwitchTests: XCTestCase {
           break
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'a' must be bound in every pattern
-        // TODO: Old parser expected error on line 4: cannot find 'value' in scope
-      ]
+      """
     )
   }
 

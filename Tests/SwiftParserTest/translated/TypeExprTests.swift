@@ -104,15 +104,7 @@ final class TypeExprTests: XCTestCase {
         _ = Foo.dynamicType 
         _ = Bad 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 9: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 9: add arguments, Fix-It replacements: 10 - 10 = '()'
-        // TODO: Old parser expected note on line 9: use '.self', Fix-It replacements: 10 - 10 = '.self'
-        // TODO: Old parser expected error on line 10: type 'Foo' has no member 'dynamicType'
-        // TODO: Old parser expected error on line 11: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 11: use '.self' to reference the type object, Fix-It replacements: 10 - 10 = '.self'
-      ]
+      """
     )
   }
 
@@ -131,14 +123,7 @@ final class TypeExprTests: XCTestCase {
         _ = Foo.Bar 
         _ = Foo.Bar.dynamicType 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: cannot use 'Protocol' with non-protocol type 'Foo'
-        // TODO: Old parser expected error on line 10: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 10: add arguments, Fix-It replacements: 14 - 14 = '()'
-        // TODO: Old parser expected note on line 10: use '.self', Fix-It replacements: 14 - 14 = '.self'
-        // TODO: Old parser expected error on line 11: type 'Foo.Bar' has no member 'dynamicType'
-      ]
+      """
     )
   }
 
@@ -152,13 +137,7 @@ final class TypeExprTests: XCTestCase {
         let _ = Foo.Type 
         let _ = type(of: Foo.Type) 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 5: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 6: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 6: use '.self' to reference the type object
-      ]
+      """
     )
   }
 
@@ -174,12 +153,7 @@ final class TypeExprTests: XCTestCase {
         _ = Gen<Foo>.instMeth
         _ = Gen<Foo> 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 8: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 8: use '.self' to reference the type object
-        // TODO: Old parser expected note on line 8: add arguments after the type to construct a value of the type
-      ]
+      """
     )
   }
 
@@ -196,13 +170,7 @@ final class TypeExprTests: XCTestCase {
         _ = Gen<Foo>.Bar 
         _ = Gen<Foo>.Bar.dynamicType 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 8: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 8: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 8: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 9: type 'Gen<Foo>.Bar' has no member 'dynamicType'
-      ]
+      """
     )
   }
 
@@ -229,14 +197,7 @@ final class TypeExprTests: XCTestCase {
         _ = type(fo: Foo.Bar.self) // No error here.
         _ = type(of: Foo.Bar.self, [1, 2, 3]) // No error here.
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 3: 'type(of:flag:)' declared here
-        // TODO: Old parser expected error on line 15: missing argument for parameter 'flag' in call, Fix-It replacements: 28 - 28 = ', flag: <#Bool#>'
-        // TODO: Old parser expected error on line 16: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 16: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 16: use '.self' to reference the type object
-      ]
+      """
     )
   }
 
@@ -251,12 +212,7 @@ final class TypeExprTests: XCTestCase {
         let _ : () = T.meth()
         _ = T 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 7: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 7: add arguments, Fix-It replacements: 8 - 8 = '()'
-        // TODO: Old parser expected note on line 7: use '.self', Fix-It replacements: 8 - 8 = '.self'
-      ]
+      """
     )
   }
 
@@ -271,12 +227,7 @@ final class TypeExprTests: XCTestCase {
         let _ : () = T.Zang.meth()
         _ = T.Zang 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 7: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 7: add arguments, Fix-It replacements: 13 - 13 = '()'
-        // TODO: Old parser expected note on line 7: use '.self', Fix-It replacements: 13 - 13 = '.self'
-      ]
+      """
     )
   }
 
@@ -306,15 +257,7 @@ final class TypeExprTests: XCTestCase {
         let _: B.Type = D 
         let _: D.Type = D 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 8: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 8: add arguments, Fix-It replacements: 20 - 20 = '()'
-        // TODO: Old parser expected note on line 8: use '.self', Fix-It replacements: 20 - 20 = '.self'
-        // TODO: Old parser expected error on line 9: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 9: add arguments, Fix-It replacements: 20 - 20 = '()'
-        // TODO: Old parser expected note on line 9: use '.self', Fix-It replacements: 20 - 20 = '.self'
-      ]
+      """
     )
   }
 
@@ -328,12 +271,7 @@ final class TypeExprTests: XCTestCase {
         let prop = Foo.nonexistent 
         let meth = Foo.nonexistent() 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: argument passed to call that takes no arguments
-        // TODO: Old parser expected error on line 5: type 'Foo' has no member 'nonexistent'
-        // TODO: Old parser expected error on line 6: type 'Foo' has no member 'nonexistent'
-      ]
+      """#
     )
   }
 
@@ -356,10 +294,7 @@ final class TypeExprTests: XCTestCase {
         _ = P.Protocol.Type.self
         _ = B.Type.self
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: cannot use 'Protocol' with non-protocol type '(any P).Type'
-      ]
+      """
     )
   }
 
@@ -379,11 +314,7 @@ final class TypeExprTests: XCTestCase {
       func inAccessibleInit() {
         _ = E 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 2: use '.self', Fix-It replacements: 8 - 8 = '.self'
-      ]
+      """
     )
   }
 
@@ -414,15 +345,7 @@ final class TypeExprTests: XCTestCase {
         _ = F 
         _ = G 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 2: add arguments, Fix-It replacements: 8 - 8 = '()'
-        // TODO: Old parser expected note on line 2: use '.self', Fix-It replacements: 8 - 8 = '.self'
-        // TODO: Old parser expected error on line 3: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 3: add arguments, Fix-It replacements: 8 - 8 = '()'
-        // TODO: Old parser expected note on line 3: use '.self', Fix-It replacements: 8 - 8 = '.self'
-      ]
+      """
     )
   }
 
@@ -466,13 +389,7 @@ final class TypeExprTests: XCTestCase {
         // TODO: Old parser expected error on line 12: single argument function types require parentheses
         // TODO: Old parser expected error on line 16: expected type before '->'
         // TODO: Old parser expected error on line 17: expected type after '->'
-        // TODO: Old parser expected error on line 18: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 18: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 19: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 19: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 20: cannot convert value of type '(@convention(c) () -> Int).Type' to expected argument type 'Int'
         // TODO: Old parser expected error on line 21: expected type after '->'
-        // TODO: Old parser expected error on line 22: type '(@autoclosure () -> Int) -> (Int, Int)' has no member '1'
         // TODO: Old parser expected error on line 27: argument type of @autoclosure parameter must be '()'
         // TODO: Old parser expected error on line 28: 'throws' may only occur before '->'
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in array element"),
@@ -507,20 +424,9 @@ final class TypeExprTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 5: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 5: use '.self', Fix-It replacements: 7 - 7 = '(', 14 - 14 = ').self'
-        // TODO: Old parser expected error on line 6: binary operator '&' cannot be applied to operands of type '(any P1).Type' and '(any P2).Type'
-        // TODO: Old parser expected error on line 9: non-protocol, non-class type '(any P2, any P3)' cannot be used within a protocol-constrained type
-        // TODO: Old parser expected error on line 10: non-protocol, non-class type 'Int' cannot be used within a protocol-constrained type
-        // TODO: Old parser expected error on line 11: non-protocol, non-class type '(any P1)?' cannot be used within a protocol-constrained type
-        // TODO: Old parser expected error on line 12: non-protocol, non-class type 'any P2.Type' cannot be used within a protocol-constrained type
         // TODO: Old parser expected error on line 13: single argument function types require parentheses, Fix-It replacements: 7 - 7 = '(', 14 - 14 = ')'
-        // TODO: Old parser expected error on line 13: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 13: use '.self', Fix-It replacements: 7 - 7 = '(', 20 - 20 = ').self'
         // TODO: Old parser expected error on line 14: single argument function types require parentheses, Fix-It replacements: 18 - 18 = '(', 25 - 25 = ')'
         // TODO: Old parser expected error on line 14: single argument function types require parentheses, Fix-It replacements: 7 - 7 = '(', 14 - 14 = ')'
-        // TODO: Old parser expected error on line 14: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 14: use '.self', Fix-It replacements: 7 - 7 = '(', 32 - 32 = ').self'
         // TODO: Old parser expected error on line 16: single argument function types require parentheses, Fix-It replacements: 8 - 8 = '(', 15 - 15 = ')'
       ]
     )
@@ -538,10 +444,7 @@ final class TypeExprTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 6: no calls to throwing functions occur within 'try' expression
         // TODO: Old parser expected error on line 6: single argument function types require parentheses, Fix-It replacements: 11 - 11 = '(', 18 - 18 = ')'
-        // TODO: Old parser expected error on line 6: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 6: use '.self' to reference the type object, Fix-It replacements: 11 - 11 = '(', 36 - 36 = ').self'
       ]
     )
   }
@@ -581,28 +484,7 @@ final class TypeExprTests: XCTestCase {
         Swift.Int 
         _ = Swift.Int
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 4: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 4: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 5: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 5: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 5: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 6: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 6: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 6: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 7: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 7: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 7: use '.self' to reference the type object
-        // TODO: Old parser expected warning on line 8: expression of type 'Int.Type' is unused
-        // TODO: Old parser expected error on line 8: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 8: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 8: use '.self' to reference the type object
-        // TODO: Old parser expected error on line 9: expected member name or constructor call after type name
-        // TODO: Old parser expected note on line 9: add arguments after the type to construct a value of the type
-        // TODO: Old parser expected note on line 9: use '.self' to reference the type object
-      ]
+      """
     )
   }
 

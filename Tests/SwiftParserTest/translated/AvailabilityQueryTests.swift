@@ -176,11 +176,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(iDishwasherOS 10.51) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'iDishwasherOS'
-        // TODO: Old parser expected error on line 1: must handle potential future platforms with '*'
-      ]
+      """
     )
   }
 
@@ -189,10 +185,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(iDishwasherOS 10.51, *) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'iDishwasherOS'
-      ]
+      """
     )
   }
 
@@ -201,10 +194,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(macos 10.51, *) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'macos'; did you mean 'macOS'?, Fix-It replacements: 15 - 20 = 'macOS'
-      ]
+      """
     )
   }
 
@@ -213,10 +203,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(mscos 10.51, *) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'mscos'; did you mean 'macOS'?, Fix-It replacements: 15 - 20 = 'macOS'
-      ]
+      """
     )
   }
 
@@ -225,10 +212,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(macoss 10.51, *) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'macoss'; did you mean 'macOS'?, Fix-It replacements: 15 - 21 = 'macOS'
-      ]
+      """
     )
   }
 
@@ -237,10 +221,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(mac 10.51, *) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'mac'; did you mean 'macOS'?, Fix-It replacements: 15 - 18 = 'macOS'
-      ]
+      """
     )
   }
 
@@ -249,10 +230,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(OSX 10.51, OSX 10.52, *) {  
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: version for 'macOS' already specified
-      ]
+      """
     )
   }
 
@@ -260,10 +238,7 @@ final class AvailabilityQueryTests: XCTestCase {
     AssertParse(
       """
       if #available(OSX 10.52) { }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: must handle potential future platforms with '*', Fix-It replacements: 24 - 24 = ', *'
-      ]
+      """
     )
   }
 
@@ -271,10 +246,7 @@ final class AvailabilityQueryTests: XCTestCase {
     AssertParse(
       """
       if #available(OSX 10.51, iOS 8.0) { }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: must handle potential future platforms with '*', Fix-It replacements: 33 - 33 = ', *'
-      ]
+      """
     )
   }
 
@@ -380,11 +352,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(OSX 10.51, iOS 8.0, iDishwasherOS 10.51) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'iDishwasherOS'
-        // TODO: Old parser expected error on line 1: must handle potential future platforms with '*'
-      ]
+      """
     )
   }
 
@@ -393,11 +361,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """
       if #available(iDishwasherOS 10.51, OSX 10.51) { 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unrecognized platform name 'iDishwasherOS'
-        // TODO: Old parser expected error on line 1: must handle potential future platforms with '*'
-      ]
+      """
     )
   }
 

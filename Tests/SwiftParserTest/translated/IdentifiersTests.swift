@@ -42,11 +42,7 @@ final class IdentifiersTests: XCTestCase {
       """
       // Identifiers cannot start with combining chars.
       _ = .́duh()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot find 'duh' in scope
-        // TODO: Old parser expected error on line 2: cannot find operator '.́' in scope
-      ]
+      """
     )
   }
 
@@ -135,18 +131,7 @@ final class IdentifiersTests: XCTestCase {
       _ = sil_default_witness_table 
       _ = sil_coverage_map 
       _ = sil_scope
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot find 'undef' in scope
-        // TODO: Old parser expected error on line 3: cannot find 'sil' in scope
-        // TODO: Old parser expected error on line 4: cannot find 'sil_stage' in scope
-        // TODO: Old parser expected error on line 5: cannot find 'sil_vtable' in scope
-        // TODO: Old parser expected error on line 6: cannot find 'sil_global' in scope
-        // TODO: Old parser expected error on line 7: cannot find 'sil_witness_table' in scope
-        // TODO: Old parser expected error on line 8: cannot find 'sil_default_witness_table' in scope
-        // TODO: Old parser expected error on line 9: cannot find 'sil_coverage_map' in scope
-        // TODO: Old parser expected error on line 10: cannot find 'sil_scope' in scope
-      ]
+      """
     )
   }
 

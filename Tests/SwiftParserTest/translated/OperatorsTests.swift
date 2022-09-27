@@ -229,12 +229,7 @@ final class OperatorsTests: XCTestCase {
     AssertParse(
       """
       var _ : God = Man()^()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot convert value of type 'Man' to expected argument type 'TheDevil'
-        // TODO: Old parser expected error on line 1: cannot convert value of type '()' to expected argument type 'God'
-        // TODO: Old parser expected error on line 1: cannot convert value of type 'Man' to specified type 'God'
-      ]
+      """
     )
   }
 
@@ -312,10 +307,7 @@ final class OperatorsTests: XCTestCase {
       foo!!foo
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: cannot force unwrap value of non-optional type 'Man', Fix-It replacements: 4 - 5 = ''
-        // TODO: Old parser expected error on line 4: cannot force unwrap value of non-optional type 'Man', Fix-It replacements: 5 - 6 = ''
         // TODO: Old parser expected error on line 4: consecutive statements, Fix-It replacements: 6 - 6 = ';'
-        // TODO: Old parser expected warning on line 4: expression of type 'Man' is unused
       ]
     )
   }
@@ -326,9 +318,7 @@ final class OperatorsTests: XCTestCase {
       foo??bar
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: broken standard library
         // TODO: Old parser expected error on line 1: consecutive statements, Fix-It replacements: 6 - 6 = ';'
-        // TODO: Old parser expected warning on line 1: expression of type 'TheDevil' is unused
       ]
     )
   }

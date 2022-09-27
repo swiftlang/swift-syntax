@@ -50,20 +50,7 @@ final class TryTests: XCTestCase {
       x += try foo() %%%% bar() 
       x += try foo() %%% bar()
       x = foo() + try bar()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 4: result of operator '%%%%' is unused
-        // TODO: Old parser expected error on line 4: call can throw but is not marked with 'try'
-        // TODO: Old parser expected error on line 4: 'try' following assignment operator does not cover everything to its right
-        // TODO: Old parser expected note on line 4: did you mean to use 'try'?, Fix-It replacements: 21 - 21 = 'try '
-        // TODO: Old parser expected note on line 4: did you mean to handle error as optional value?, Fix-It replacements: 21 - 21 = 'try? '
-        // TODO: Old parser expected note on line 4: did you mean to disable error propagation?, Fix-It replacements: 21 - 21 = 'try! '
-        // TODO: Old parser expected error on line 6: call can throw but is not marked with 'try'
-        // TODO: Old parser expected error on line 6: 'try' cannot appear to the right of a non-assignment operator
-        // TODO: Old parser expected note on line 6: did you mean to use 'try'?, Fix-It replacements: 5 - 5 = 'try '
-        // TODO: Old parser expected note on line 6: did you mean to handle error as optional value?, Fix-It replacements: 5 - 5 = 'try? '
-        // TODO: Old parser expected note on line 6: did you mean to disable error propagation?, Fix-It replacements: 5 - 5 = 'try! '
-      ]
+      """
     )
   }
 
@@ -72,10 +59,7 @@ final class TryTests: XCTestCase {
       """
       var y = true ? try foo() : try bar() + 0
       var z = true ? try foo() : try bar() %%% 0
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'try' following conditional operator does not cover everything to its right
-      ]
+      """
     )
   }
 
@@ -88,20 +72,7 @@ final class TryTests: XCTestCase {
       a += try! foo() %%%% bar() 
       a += try! foo() %%% bar()
       a = foo() + try! bar()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 4: result of operator '%%%%' is unused
-        // TODO: Old parser expected error on line 4: call can throw but is not marked with 'try'
-        // TODO: Old parser expected error on line 4: 'try!' following assignment operator does not cover everything to its right
-        // TODO: Old parser expected note on line 4: did you mean to use 'try'?, Fix-It replacements: 22 - 22 = 'try '
-        // TODO: Old parser expected note on line 4: did you mean to handle error as optional value?, Fix-It replacements: 22 - 22 = 'try? '
-        // TODO: Old parser expected note on line 4: did you mean to disable error propagation?, Fix-It replacements: 22 - 22 = 'try! '
-        // TODO: Old parser expected error on line 6: call can throw but is not marked with 'try'
-        // TODO: Old parser expected error on line 6: 'try!' cannot appear to the right of a non-assignment operator
-        // TODO: Old parser expected note on line 6: did you mean to use 'try'?, Fix-It replacements: 5 - 5 = 'try '
-        // TODO: Old parser expected note on line 6: did you mean to handle error as optional value?, Fix-It replacements: 5 - 5 = 'try? '
-        // TODO: Old parser expected note on line 6: did you mean to disable error propagation?, Fix-It replacements: 5 - 5 = 'try! '
-      ]
+      """
     )
   }
 
@@ -110,10 +81,7 @@ final class TryTests: XCTestCase {
       """
       var b = true ? try! foo() : try! bar() + 0
       var c = true ? try! foo() : try! bar() %%% 0
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'try!' following conditional operator does not cover everything to its right
-      ]
+      """
     )
   }
 
@@ -141,29 +109,7 @@ final class TryTests: XCTestCase {
       _ = (try? foo()) == bar() 
       _ = foo() == (try? bar()) 
       _ = (try? foo()) == (try? bar())
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'Int?' to specified type 'Double'
-        // TODO: Old parser expected warning on line 5: result of operator '%%%%' is unused
-        // TODO: Old parser expected error on line 5: call can throw but is not marked with 'try'
-        // TODO: Old parser expected error on line 5: 'try?' following assignment operator does not cover everything to its right
-        // TODO: Old parser expected note on line 5: did you mean to use 'try'?, Fix-It replacements: 23 - 23 = 'try '
-        // TODO: Old parser expected note on line 5: did you mean to handle error as optional value?, Fix-It replacements: 23 - 23 = 'try? '
-        // TODO: Old parser expected note on line 5: did you mean to disable error propagation?, Fix-It replacements: 23 - 23 = 'try! '
-        // TODO: Old parser expected error on line 7: call can throw but is not marked with 'try'
-        // TODO: Old parser expected error on line 7: 'try?' cannot appear to the right of a non-assignment operator
-        // TODO: Old parser expected note on line 7: did you mean to use 'try'?, Fix-It replacements: 5 - 5 = 'try '
-        // TODO: Old parser expected note on line 7: did you mean to handle error as optional value?, Fix-It replacements: 5 - 5 = 'try? '
-        // TODO: Old parser expected note on line 7: did you mean to disable error propagation?, Fix-It replacements: 5 - 5 = 'try! '
-        // TODO: Old parser expected error on line 8: call can throw but is not marked with 'try'
-        // TODO: Old parser expected note on line 8: did you mean to use 'try'?, Fix-It replacements: 21 - 21 = 'try '
-        // TODO: Old parser expected note on line 8: did you mean to handle error as optional value?, Fix-It replacements: 21 - 21 = 'try? '
-        // TODO: Old parser expected note on line 8: did you mean to disable error propagation?, Fix-It replacements: 21 - 21 = 'try! '
-        // TODO: Old parser expected error on line 9: call can throw but is not marked with 'try'
-        // TODO: Old parser expected note on line 9: did you mean to use 'try'?, Fix-It replacements: 5 - 5 = 'try '
-        // TODO: Old parser expected note on line 9: did you mean to handle error as optional value?, Fix-It replacements: 5 - 5 = 'try? '
-        // TODO: Old parser expected note on line 9: did you mean to disable error propagation?, Fix-It replacements: 5 - 5 = 'try! '
-      ]
+      """
     )
   }
 
@@ -172,10 +118,7 @@ final class TryTests: XCTestCase {
       """
       let j = true ? try? foo() : try? bar() + 0
       let k = true ? try? foo() : try? bar() %%% 0
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'try?' following conditional operator does not cover everything to its right
-      ]
+      """
     )
   }
 
@@ -271,13 +214,7 @@ final class TryTests: XCTestCase {
       let _ = try! "foo"*"bar"
       let _ = try? "foo"*"bar"
       let _ = (try? "foo"*"bar") ?? 0
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: operator can throw but expression is not marked with 'try'
-        // TODO: Old parser expected note on line 4: did you mean to use 'try'?, Fix-It replacements: 9 - 9 = 'try '
-        // TODO: Old parser expected note on line 4: did you mean to handle error as optional value?, Fix-It replacements: 9 - 9 = 'try? '
-        // TODO: Old parser expected note on line 4: did you mean to disable error propagation?, Fix-It replacements: 9 - 9 = 'try! '
-      ]
+      """#
     )
   }
 
@@ -291,13 +228,7 @@ final class TryTests: XCTestCase {
         } catch {
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: call can throw but is not marked with 'try'
-        // TODO: Old parser expected note on line 4: did you mean to use 'try'?, Fix-It replacements: 5 - 5 = 'try '
-        // TODO: Old parser expected note on line 4: did you mean to handle error as optional value?, Fix-It replacements: 5 - 5 = 'try? '
-        // TODO: Old parser expected note on line 4: did you mean to disable error propagation?, Fix-It replacements: 5 - 5 = 'try! '
-      ]
+      """
     )
   }
 
@@ -311,11 +242,7 @@ final class TryTests: XCTestCase {
           x(f)  
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: call can throw but is not marked with 'try'
-        // TODO: Old parser expected note on line 5: call is to 'rethrows' function, but argument function can throw
-      ]
+      """
     )
   }
 
@@ -326,14 +253,7 @@ final class TryTests: XCTestCase {
       func callThrowingClosureWithoutTry(closure: (Int) throws -> Int) rethrows {
         closure(0)  
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: call can throw but is not marked with 'try'
-        // TODO: Old parser expected warning on line 3: result of call to function returning 'Int' is unused
-        // TODO: Old parser expected note on line 3: did you mean to use 'try'?, Fix-It replacements: 3 - 3 = 'try '
-        // TODO: Old parser expected note on line 3: did you mean to handle error as optional value?, Fix-It replacements: 3 - 3 = 'try? '
-        // TODO: Old parser expected note on line 3: did you mean to disable error propagation?, Fix-It replacements: 3 - 3 = 'try! '
-      ]
+      """
     )
   }
 
@@ -342,10 +262,7 @@ final class TryTests: XCTestCase {
       """
       func producesOptional() throws -> Int? { return nil }
       let _: String = try? producesOptional()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'Int??' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -353,10 +270,7 @@ final class TryTests: XCTestCase {
     AssertParse(
       """
       let _ = (try? foo())!!
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot force unwrap value of non-optional type 'Int'
-      ]
+      """
     )
   }
 
@@ -365,10 +279,7 @@ final class TryTests: XCTestCase {
       """
       func producesDoubleOptional() throws -> Int?? { return 3 }
       let _: String = try? producesDoubleOptional()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'Int???' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -399,11 +310,7 @@ final class TryTests: XCTestCase {
       if try? maybeThrow() { 
       }
       let _: Int = try? foo()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot be used as a boolean, Fix-It replacements: 4 - 4 = '((', 21 - 21 = ') != nil)'
-        // TODO: Old parser expected error on line 3: value of optional type 'Int?' not unwrapped; did you mean to use 'try!' or chain with '?'?, Fix-It replacements: 14 - 18 = 'try!'
-      ]
+      """
     )
   }
 
@@ -414,11 +321,7 @@ final class TryTests: XCTestCase {
       func test(_: X) {}
       func producesObject() throws -> AnyObject { return X() }
       test(try producesObject())
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'AnyObject' is not convertible to 'X'
-        // TODO: Old parser expected note on line 4: did you mean to use 'as!' to force downcast?, Fix-It replacements: 26 - 26 = ' as! X'
-      ]
+      """
     )
   }
 
@@ -428,13 +331,7 @@ final class TryTests: XCTestCase {
       _ = "a\(try maybeThrow())b"
       _ = try "a\(maybeThrow())b"
       _ = "a\(maybeThrow())"
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: call can throw but is not marked with 'try'
-        // TODO: Old parser expected note on line 3: did you mean to use 'try'?, Fix-It replacements: 9 - 9 = 'try '
-        // TODO: Old parser expected note on line 3: did you mean to handle error as optional value?, Fix-It replacements: 9 - 9 = 'try? '
-        // TODO: Old parser expected note on line 3: did you mean to disable error propagation?, Fix-It replacements: 9 - 9 = 'try! '
-      ]
+      """#
     )
   }
 
@@ -454,13 +351,7 @@ final class TryTests: XCTestCase {
       _ = try "a\()b"
       _ = "a\()b" 
       _ = try "\() \(1)"
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: interpolation can throw but is not marked with 'try'
-        // TODO: Old parser expected note on line 2: did you mean to use 'try'?, Fix-It replacements: 5 - 5 = 'try '
-        // TODO: Old parser expected note on line 2: did you mean to handle error as optional value?, Fix-It replacements: 5 - 5 = 'try? '
-        // TODO: Old parser expected note on line 2: did you mean to disable error propagation?, Fix-It replacements: 5 - 5 = 'try! '
-      ]
+      """#
     )
   }
 
@@ -470,10 +361,7 @@ final class TryTests: XCTestCase {
       func testGenericOptionalTry<T>(_ call: () throws -> T ) {
         let _: String = try? call() 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'T?' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -493,10 +381,7 @@ final class TryTests: XCTestCase {
       """
       // Test with a non-optional type
       let _: String = genericOptionalTry({ () throws -> Int in return 3 })
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'Int?' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -505,10 +390,7 @@ final class TryTests: XCTestCase {
       """
       // Test with an optional type
       let _: String = genericOptionalTry({ () throws -> Int? in return nil })
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'Int??' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -529,12 +411,7 @@ final class TryTests: XCTestCase {
       let _: Int?? = (try? produceAny()) as? Int // good
       let _: String = try? produceAny() as? Int 
       let _: String = (try? produceAny()) as? Int
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: value of optional type 'Int??' not unwrapped; did you mean to use 'try!' or chain with '?'?
-        // TODO: Old parser expected error on line 3: cannot convert value of type 'Int??' to specified type 'String'
-        // TODO: Old parser expected error on line 4: cannot convert value of type 'Int?' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -560,12 +437,7 @@ final class TryTests: XCTestCase {
       let _: Int = try? optProducer?.produceInt() 
       let _: String = try? optProducer?.produceInt() 
       let _: Int?? = try? optProducer?.produceInt() // good
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: value of optional type 'Int??' not unwrapped; did you mean to use 'try!' or chain with '?'?
-        // TODO: Old parser expected error on line 3: cannot convert value of type 'Int??' to specified type 'Int'
-        // TODO: Old parser expected error on line 4: cannot convert value of type 'Int??' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -574,11 +446,7 @@ final class TryTests: XCTestCase {
       """
       let _: Int? = try? optProducer?.produceIntNoThrowing() 
       let _: Int?? = try? optProducer?.produceIntNoThrowing()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: value of optional type 'Int??' not unwrapped; did you mean to use 'try!' or chain with '?'?
-        // TODO: Old parser expected warning on line 2: no calls to throwing functions occur within 'try' expression
-      ]
+      """
     )
   }
 
@@ -589,11 +457,7 @@ final class TryTests: XCTestCase {
       let _: Int? = try? optProducer?.produceAny() as? Int 
       let _: Int?? = try? optProducer?.produceAny() as? Int // good
       let _: String = try? optProducer?.produceAny() as? Int
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: value of optional type 'Int??' not unwrapped; did you mean to use 'try!' or chain with '?'?
-        // TODO: Old parser expected error on line 4: cannot convert value of type 'Int??' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -601,10 +465,7 @@ final class TryTests: XCTestCase {
     AssertParse(
       """
       let _: String = try? optProducer?.produceDoubleOptionalInt()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot convert value of type 'Int???' to specified type 'String'
-      ]
+      """
     )
   }
 
@@ -624,13 +485,7 @@ final class TryTests: XCTestCase {
       let _: Int?? = try? producer.produceDoubleOptionalInt() 
       let _: Int??? = try? producer.produceDoubleOptionalInt() // good
       let _: String = try? producer.produceDoubleOptionalInt()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: value of optional type 'Int???' not unwrapped; did you mean to use 'try!' or chain with '?'?
-        // TODO: Old parser expected error on line 2: value of optional type 'Int???' not unwrapped; did you mean to use 'try!' or chain with '?'?
-        // TODO: Old parser expected error on line 3: value of optional type 'Int???' not unwrapped; did you mean to use 'try!' or chain with '?'?
-        // TODO: Old parser expected error on line 5: cannot convert value of type 'Int???' to specified type 'String'
-      ]
+      """
     )
   }
 

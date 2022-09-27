@@ -67,14 +67,6 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
         // TODO: Old parser expected note on line 3: while parsing this '<' as a type parameter bracket
         // TODO: Old parser expected error on line 5: cannot specialize a non-generic definition
         // TODO: Old parser expected note on line 5: while parsing this '<' as a type parameter bracket
-        // TODO: Old parser expected error on line 7: pattern with associated values does not match enum case 'C'
-        // TODO: Old parser expected note on line 7: remove associated values to make the pattern match, Fix-It replacements: 10 - 12 = ''
-        // TODO: Old parser expected error on line 9: pattern with associated values does not match enum case 'D'
-        // TODO: Old parser expected note on line 9: remove associated values to make the pattern match, Fix-It replacements: 10 - 23 = ''
-        // TODO: Old parser expected error on line 16: pattern with associated values does not match enum case 'C'
-        // TODO: Old parser expected note on line 16: remove associated values to make the pattern match, Fix-It replacements: 12 - 14 = ''
-        // TODO: Old parser expected error on line 17: pattern with associated values does not match enum case 'D'
-        // TODO: Old parser expected note on line 17: remove associated values to make the pattern match, Fix-It replacements: 12 - 25 = ''
       ]
     )
   }
@@ -100,13 +92,7 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
       } catch E.B(let payload) { 
         let _: () = payload
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: pattern with associated values does not match enum case 'A'
-        // TODO: Old parser expected note on line 3: remove associated values to make the pattern match, Fix-It replacements: 12 - 14 = ''
-        // TODO: Old parser expected error on line 5: pattern with associated values does not match enum case 'B'
-        // TODO: Old parser expected note on line 5: remove associated values to make the pattern match, Fix-It replacements: 12 - 25 = ''
-      ]
+      """
     )
   }
 

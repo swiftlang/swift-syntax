@@ -74,12 +74,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected expression after '? ... :' in ternary expression
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in 'do' statement"),
-        // TODO: Old parser expected warning on line 7: 'catch' block is unreachable because no errors are thrown in 'do' block
-        // TODO: Old parser expected warning on line 11: 'catch' block is unreachable because no errors are thrown in 'do' block
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in pattern"),
-        // TODO: Old parser expected error on line 18: 'is' keyword required to pattern match against type name, Fix-It replacements: 11 - 11 = 'is '
-        // TODO: Old parser expected warning on line 23: 'is' test is always true
-        // TODO: Old parser expected error on line 40: 'num' must be bound in every pattern
       ]
     )
   }
@@ -119,20 +114,7 @@ final class ErrorsTests: XCTestCase {
         takesThrowingAutoclosure(genError()) 
         takesThrowingAutoclosure(genNoError())
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: call can throw, but it is not marked with 'try' and it is executed in a non-throwing autoclosure
-        // TODO: Old parser expected error on line 4: call can throw, but it is executed in a non-throwing autoclosure
-        // TODO: Old parser expected warning on line 5: no calls to throwing functions occur within 'try' expression
-        // TODO: Old parser expected error on line 6: call can throw, but it is executed in a non-throwing autoclosure
-        // TODO: Old parser expected warning on line 7: no calls to throwing functions occur within 'try' expression
-        // TODO: Old parser expected warning on line 9: no calls to throwing functions occur within 'try' expression
-        // TODO: Old parser expected warning on line 11: no calls to throwing functions occur within 'try' expression
-        // TODO: Old parser expected error on line 12: call can throw but is not marked with 'try'
-        // TODO: Old parser expected note on line 12: did you mean to use 'try'?, Fix-It replacements: 28 - 28 = 'try '
-        // TODO: Old parser expected note on line 12: did you mean to handle error as optional value?, Fix-It replacements: 28 - 28 = 'try? '
-        // TODO: Old parser expected note on line 12: did you mean to disable error propagation?, Fix-It replacements: 28 - 28 = 'try! '
-      ]
+      """
     )
   }
 
@@ -147,7 +129,6 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: call can throw, but errors cannot be thrown out of a catch guard expression
         // TODO: Old parser expected error on line 4: expected '{'
         DiagnosticSpec(message: "unexpected text ')' in 'catch' clause"),
       ]

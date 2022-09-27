@@ -7,10 +7,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct X { }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 1: did you mean
-      ]
+      """
     )
   }
 
@@ -139,10 +136,7 @@ final class SubscriptingTests: XCTestCase {
           }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: cannot find type 'i' in scope
-      ]
+      """
     )
   }
 
@@ -173,11 +167,7 @@ final class SubscriptingTests: XCTestCase {
       // FIXME: This test case does not belong in Parse/
       let y2 = Y2() 
       _ = y2[0]
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: change 'let' to 'var' to make it mutable, Fix-It replacements: 1 - 4 = 'var'
-        // TODO: Old parser expected error on line 3: cannot use mutating getter on immutable value: 'y2' is a 'let' constant
-      ]
+      """
     )
   }
 
@@ -329,12 +319,9 @@ final class SubscriptingTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '->' for subscript element type
         // TODO: Old parser expected error on line 2: function types cannot have argument labels
-        // TODO: Old parser expected note on line 2: did you mean
         DiagnosticSpec(message: "expected '->' and return type in subscript"),
         DiagnosticSpec(message: "expected declaration in struct"),
         DiagnosticSpec(message: "unexpected text in struct"),
-        // TODO: Old parser expected error on line 4: cannot find 'j' in scope
-        // TODO: Old parser expected error on line 4: cannot convert return expression of type 'Int' to return type '(Int) -> Int'
       ]
     )
   }

@@ -10,10 +10,7 @@ final class HashbangMainTests: XCTestCase {
       let x = 42
       x + x 
       // Check that we skip the hashbang at the beginning of the file.
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 3: result of operator '+' is unused
-      ]
+      """
     )
   }
 

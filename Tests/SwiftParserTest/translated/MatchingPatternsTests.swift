@@ -98,14 +98,7 @@ final class MatchingPatternsTests: XCTestCase {
       case _: 
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: invalid redeclaration of 'a'
-        // TODO: Old parser expected note on line 2: 'a' previously declared here
-        // TODO: Old parser expected warning on line 2: variable 'a' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected warning on line 2: variable 'a' was never used; consider replacing with '_' or removing it
-        // TODO: Old parser expected warning on line 4: case is already handled by previous patterns; consider removing it
-      ]
+      """
     )
   }
 
@@ -129,11 +122,7 @@ final class MatchingPatternsTests: XCTestCase {
            is (a: Int, b: Int):
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: do you want to add a default clause?
-      ]
+      """
     )
   }
 
@@ -189,22 +178,7 @@ final class MatchingPatternsTests: XCTestCase {
           }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 4: 'Twain' declared here
-        // TODO: Old parser expected error on line 10: pattern with associated values does not match enum case 'Naught'
-        // TODO: Old parser expected note on line 10: remove associated values to make the pattern match, Fix-It replacements: 17 - 19 = ''
-        // TODO: Old parser expected error on line 11: pattern with associated values does not match enum case 'Naught'
-        // TODO: Old parser expected note on line 11: remove associated values to make the pattern match, Fix-It replacements: 17 - 20 = ''
-        // TODO: Old parser expected error on line 12: pattern with associated values does not match enum case 'Naught'
-        // TODO: Old parser expected note on line 12: remove associated values to make the pattern match, Fix-It replacements: 17 - 23 = ''
-        // TODO: Old parser expected error on line 15: tuple pattern cannot match values of the non-tuple type 'T'
-        // TODO: Old parser expected error on line 17: tuple pattern cannot match values of the non-tuple type 'T'
-        // TODO: Old parser expected error on line 19: tuple pattern has the wrong length for tuple type '(T, T)'
-        // TODO: Old parser expected warning on line 20: enum case 'Twain' has 2 associated values; matching them as a tuple is deprecated
-        // TODO: Old parser expected error on line 22: tuple pattern has the wrong length for tuple type '(T, T)'
-        // TODO: Old parser expected error on line 26: type 'Foo' has no member 'Naught'
-      ]
+      """
     )
   }
 
@@ -214,13 +188,7 @@ final class MatchingPatternsTests: XCTestCase {
       var n : Voluntary<Int> = .Naught
       if case let .Naught(value) = n {} 
       if case let .Naught(value1, value2, value3) = n {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: pattern with associated values does not match enum case 'Naught'
-        // TODO: Old parser expected note on line 2: remove associated values to make the pattern match, Fix-It replacements: 20 - 27 = ''
-        // TODO: Old parser expected error on line 3: pattern with associated values does not match enum case 'Naught'
-        // TODO: Old parser expected note on line 3: remove associated values to make the pattern match, Fix-It replacements: 20 - 44 = ''
-      ]
+      """
     )
   }
 
@@ -250,18 +218,7 @@ final class MatchingPatternsTests: XCTestCase {
            .Twain(_, _, _): 
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line -47: 'Twain' declared here
-        // TODO: Old parser expected error on line 2: enum case 'A' is not a member of type 'Voluntary<Int>'
-        // TODO: Old parser expected error on line 5: pattern with associated values does not match enum case 'Naught'
-        // TODO: Old parser expected note on line 5: remove associated values to make the pattern match, Fix-It replacements: 27 - 29 = ''
-        // TODO: Old parser expected error on line 6: pattern with associated values does not match enum case 'Naught'
-        // TODO: Old parser expected note on line 6: remove associated values to make the pattern match, Fix-It replacements: 27 - 33 = ''
-        // TODO: Old parser expected error on line 12: tuple pattern cannot match values of the non-tuple type 'Int'
-        // TODO: Old parser expected warning on line 19: enum case 'Twain' has 2 associated values; matching them as a tuple is deprecated
-        // TODO: Old parser expected error on line 21: tuple pattern has the wrong length for tuple type '(Int, Int)'
-      ]
+      """
     )
   }
 
@@ -280,10 +237,7 @@ final class MatchingPatternsTests: XCTestCase {
       case .Foo: 
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: type 'Int' has no member 'Foo'
-      ]
+      """
     )
   }
 
@@ -307,16 +261,7 @@ final class MatchingPatternsTests: XCTestCase {
           }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 8: switch must be exhaustive
-        // TODO: Old parser expected note on line 8: missing case: '.Mere(_)'
-        // TODO: Old parser expected note on line 8: missing case: '.Twain(_, _)'
-        // TODO: Old parser expected warning on line 10: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 11: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 12: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 13: case is already handled by previous patterns; consider removing it
-      ]
+      """
     )
   }
 
@@ -330,13 +275,7 @@ final class MatchingPatternsTests: XCTestCase {
           ()
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: switch must be exhaustive
-        // TODO: Old parser expected note on line 2: missing case: '.Mere(_)'
-        // TODO: Old parser expected note on line 2: missing case: '.Twain(_, _)'
-        // TODO: Old parser expected warning on line 4: case is already handled by previous patterns; consider removing it
-      ]
+      """
     )
   }
 
@@ -364,16 +303,7 @@ final class MatchingPatternsTests: XCTestCase {
            .Compound(_): 
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 3: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 4: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 7: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 8: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 9: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 10: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 11: case is already handled by previous patterns; consider removing it
-      ]
+      """
     )
   }
 
@@ -435,15 +365,7 @@ final class MatchingPatternsTests: XCTestCase {
         acceptInt(x)
         acceptString("\(x)")
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 9: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 12: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 15: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 18: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 21: case is already handled by previous patterns; consider removing it
-        // TODO: Old parser expected warning on line 24: case is already handled by previous patterns; consider removing it
-      ]
+      """#
     )
   }
 
@@ -551,11 +473,7 @@ final class MatchingPatternsTests: XCTestCase {
       default:
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: collection downcast in cast pattern is not implemented; use an explicit downcast to '[Derived]' instead
-        // TODO: Old parser expected error on line 4: collection downcast in cast pattern is not implemented; use an explicit downcast to '[Derived]' instead
-      ]
+      """
     )
   }
 
@@ -590,10 +508,7 @@ final class MatchingPatternsTests: XCTestCase {
       case (1?)?: break
       case (_?)?: break 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 5: case is already handled by previous patterns; consider removing it
-      ]
+      """
     )
   }
 
@@ -606,7 +521,6 @@ final class MatchingPatternsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected ',' separator, Fix-It replacements: 25 - 25 = ','
         // TODO: Old parser expected error on line 2: expected pattern
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'Int?' to specified type '(responseObject: _)'
         DiagnosticSpec(message: "unexpected text '?' in tuple pattern"),
       ]
     )

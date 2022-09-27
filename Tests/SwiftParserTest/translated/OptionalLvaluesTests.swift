@@ -56,14 +56,7 @@ final class OptionalLvaluesTests: XCTestCase {
       mutT!.immS! = S() 
       mutT!.immS!.x = 0 
       mutT!.immS!.y = 0
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: cannot assign to property: 'y' is a 'let' constant
-        // TODO: Old parser expected error on line 6: cannot assign to property: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 7: cannot assign through '!': 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 8: cannot assign to property: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 9: cannot assign to property: 'y' is a 'let' constant
-      ]
+      """
     )
   }
 
@@ -79,18 +72,7 @@ final class OptionalLvaluesTests: XCTestCase {
       immT!.immS! = S() 
       immT!.immS!.x = 0 
       immT!.immS!.y = 0
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot assign through '!': 'immT' is a 'let' constant
-        // TODO: Old parser expected error on line 2: cannot assign to property: 'immT' is a 'let' constant
-        // TODO: Old parser expected error on line 3: cannot assign through '!': 'immT' is a 'let' constant
-        // TODO: Old parser expected error on line 4: cannot assign to property: 'immT' is a 'let' constant
-        // TODO: Old parser expected error on line 5: cannot assign to property: 'y' is a 'let' constant
-        // TODO: Old parser expected error on line 6: cannot assign to property: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 7: cannot assign through '!': 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 8: cannot assign to property: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 9: cannot assign to property: 'y' is a 'let' constant
-      ]
+      """
     )
   }
 
@@ -110,12 +92,7 @@ final class OptionalLvaluesTests: XCTestCase {
       mutIUO!.immS = S() 
       immIUO!.mutS = S() 
       immIUO!.immS = S()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot assign to property: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 3: cannot assign to property: 'immIUO' is a 'let' constant
-        // TODO: Old parser expected error on line 4: cannot assign to property: 'immS' is a 'let' constant
-      ]
+      """
     )
   }
 
@@ -126,12 +103,7 @@ final class OptionalLvaluesTests: XCTestCase {
       mutIUO.immS = S() 
       immIUO.mutS = S() 
       immIUO.immS = S()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot assign to property: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 3: cannot assign to property: 'immIUO' is a 'let' constant
-        // TODO: Old parser expected error on line 4: cannot assign to property: 'immS' is a 'let' constant
-      ]
+      """
     )
   }
 
@@ -149,11 +121,7 @@ final class OptionalLvaluesTests: XCTestCase {
       var nonOptional: S = S()
       _ = nonOptional! 
       _ = nonOptional!.x
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot force unwrap value of non-optional type 'S', Fix-It replacements: 16 - 17 = ''
-        // TODO: Old parser expected error on line 3: cannot force unwrap value of non-optional type 'S', Fix-It replacements: 16 - 17 = ''
-      ]
+      """
     )
   }
 
@@ -171,10 +139,7 @@ final class OptionalLvaluesTests: XCTestCase {
       """
       let c = C()
       let d = (c as! D)!
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot force unwrap value of non-optional type 'D', Fix-It replacements: 18 - 19 = ''
-      ]
+      """
     )
   }
 

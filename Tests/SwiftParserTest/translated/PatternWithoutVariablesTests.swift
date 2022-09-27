@@ -73,7 +73,6 @@ final class PatternWithoutVariablesTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected warning on line 3: 'let' pattern has no effect; sub-pattern didn't bind any variables, Fix-It replacements: 8 - 12 = ''
         // TODO: Old parser expected warning on line 9: 'let' pattern has no effect; sub-pattern didn't bind any variables, Fix-It replacements: 8 - 12 = ''
-        // TODO: Old parser expected warning on line 14: 'if' condition is always true
         // TODO: Old parser expected warning on line 14: 'let' pattern has no effect; sub-pattern didn't bind any variables, Fix-It replacements: 11 - 15 = ''
       ]
     )

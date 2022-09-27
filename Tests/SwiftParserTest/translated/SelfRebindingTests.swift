@@ -68,10 +68,7 @@ final class SelfRebindingTests: XCTestCase {
               something() // this should still refer `MyCls.something`.
           }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 4: initialization of immutable value 'self' was never used
-      ]
+      """
     )
   }
 
@@ -109,16 +106,7 @@ final class SelfRebindingTests: XCTestCase {
           func `self`() {
           }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: 'self' refers to the method 'TypeWithSelfMethod.self', which may be unexpected
-        // TODO: Old parser expected note on line 2: use 'TypeWithSelfMethod.self' to silence this warning, Fix-It replacements: 20 - 20 = 'TypeWithSelfMethod.'
-        // TODO: Old parser expected error on line 4: cannot use instance member 'self' within property initializer; property initializers run before 'self' is available
-        // TODO: Old parser expected warning on line 6: 'self' refers to the method 'TypeWithSelfMethod.self', which may be unexpected
-        // TODO: Old parser expected note on line 6: use 'TypeWithSelfMethod.self' to silence this warning, Fix-It replacements: 15 - 15 = 'TypeWithSelfMethod.'
-        // TODO: Old parser expected warning on line 8: 'self' refers to the method 'TypeWithSelfMethod.self', which may be unexpected
-        // TODO: Old parser expected note on line 8: use 'TypeWithSelfMethod.self' to silence this warning, Fix-It replacements: 53 - 53 = 'TypeWithSelfMethod.'
-      ]
+      """
     )
   }
 
@@ -137,12 +125,7 @@ final class SelfRebindingTests: XCTestCase {
               ()
           }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: cannot use instance member 'self' within property initializer; property initializers run before 'self' is available
-        // TODO: Old parser expected error on line 6: cannot use instance member 'self' within property initializer; property initializers run before 'self' is available
-        // TODO: Old parser expected error on line 8: cannot use instance member 'self' within property initializer; property initializers run before 'self' is available
-      ]
+      """
     )
   }
 
@@ -159,12 +142,7 @@ final class SelfRebindingTests: XCTestCase {
           let propertyFromFunc = funcThatReturnsSomething(self) 
           let `self`: () = ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: cannot use instance member 'self' within property initializer; property initializers run before 'self' is available
-        // TODO: Old parser expected error on line 6: cannot use instance member 'self' within property initializer; property initializers run before 'self' is available
-        // TODO: Old parser expected error on line 8: cannot use instance member 'self' within property initializer; property initializers run before 'self' is available
-      ]
+      """
     )
   }
 

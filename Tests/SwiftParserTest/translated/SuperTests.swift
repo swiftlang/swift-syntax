@@ -16,11 +16,7 @@ final class SuperTests: XCTestCase {
           set {}
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 4: found this candidate
-        // TODO: Old parser expected note on line 5: found this candidate
-      ]
+      """
     )
   }
 
@@ -68,18 +64,6 @@ final class SuperTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: missing argument label 'x:' in call
-        // TODO: Old parser expected error on line 7: cannot reference 'super.init' initializer chain as function value
-        // TODO: Old parser expected error on line 10: cannot reference 'self.init' initializer delegation as function value
-        // TODO: Old parser expected warning on line 17: property is accessed but result is unused
-        // TODO: Old parser expected error on line 18: value of type 'Int' has no member 'bar'
-        // TODO: Old parser expected error on line 19: function is unused
-        // TODO: Old parser expected error on line 22: no exact matches in reference to initializer
-        // TODO: Old parser expected error on line 23: 'super.init' cannot be called outside of an initializer
-        // TODO: Old parser expected error on line 24: missing argument label 'x:' in call
-        // TODO: Old parser expected error on line 24: 'super.init' cannot be called outside of an initializer
-        // TODO: Old parser expected warning on line 25: subscript is accessed but result is unused
-        // TODO: Old parser expected error on line 30: expected identifier or 'init'
         DiagnosticSpec(message: "expected identifier in member access"),
         // TODO: Old parser expected error on line 33: expected '.' or '[' after 'super'
         // TODO: Old parser expected error on line 36: expected '.' or '[' after 'super'
@@ -124,15 +108,7 @@ final class SuperTests: XCTestCase {
           g()
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: using 'super' in a closure where 'self' is explicitly captured is not yet supported
-        // TODO: Old parser expected error on line 10: using 'super' in a closure where 'self' is explicitly captured is not yet supported
-        // TODO: Old parser expected error on line 17: using 'super' in a closure where 'self' is explicitly captured is not yet supported
-        // TODO: Old parser expected error on line 18: using 'super' in a closure where 'self' is explicitly captured is not yet supported
-        // TODO: Old parser expected error on line 27: using 'super' in a closure where 'self' is explicitly captured is not yet supported
-        // TODO: Old parser expected error on line 28: using 'super' in a closure where 'self' is explicitly captured is not yet supported
-      ]
+      """
     )
   }
 

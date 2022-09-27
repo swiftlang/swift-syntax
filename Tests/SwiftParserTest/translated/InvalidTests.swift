@@ -78,7 +78,6 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot find 'undeclared_func' in scope
         DiagnosticSpec(message: "expected value in function call"),
         DiagnosticSpec(message: "expected ')' to end function call"),
         // TODO: Old parser expected error on line 3: expected expression in list of expressions
@@ -90,10 +89,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func runAction() {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 1: 'runAction' declared here
-      ]
+      """
     )
   }
 
@@ -107,11 +103,8 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: argument passed to call that takes no arguments
-        // TODO: Old parser expected error on line 3: cannot find 'SKAction' in scope; did you mean 'runAction'?, Fix-It replacements: 13 - 21 = 'runAction'
         // TODO: Old parser expected error on line 3: expected ',' separator, Fix-It replacements: 32 - 32 = ','
         DiagnosticSpec(message: "expected ')' to end function call"),
-        // TODO: Old parser expected error on line 4: cannot find 'skview' in scope
       ]
     )
   }
@@ -137,9 +130,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot find 'state' in scope
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '}' to end 'switch' statement"),
-        // TODO: Old parser expected error on line 2: all statements inside a switch must be covered by a 'case' or 'default'
         DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
       ]
     )
@@ -166,8 +157,6 @@ final class InvalidTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '}' to end 'switch' statement"),
-        // TODO: Old parser expected error on line 3: all statements inside a switch must be covered by a 'case' or 'default'
-        // TODO: Old parser expected error on line 8: expression pattern of type 'String' cannot match values of type 'Int'
         DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text in function"),
         DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous '}' at top level"),
       ]
@@ -262,8 +251,6 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_4", message: "expected type in function type"),
         DiagnosticSpec(locationMarker: "DIAG_4", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "DIAG_5", message: "unexpected text ') {}' before protocol"),
-        // TODO: Old parser expected error on line 5: an associated type named 'Food' must be declared in the protocol 'Animal' or a protocol it inherits
-        // TODO: Old parser expected error on line 6: cannot find type 'Food' in scope
         // TODO: Old parser expected error on line 13: expected ':' following argument label and parameter name
         DiagnosticSpec(locationMarker: "DIAG_6", message: "expected ':' and type in function parameter"),
         // TODO: Old parser expected error on line 20: unexpected ',' separator
@@ -325,12 +312,6 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_25", message: "expected '}' to end 'for' statement"),
         DiagnosticSpec(locationMarker: "DIAG_25", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 41: 'weak' must be a mutable variable, because it may change at runtime
-        // TODO: Old parser expected error on line 41: 'weak' variable should have optional type 'T?'
-        // TODO: Old parser expected error on line 41: 'weak' must not be applied to non-class-bound 'T'; consider adding a protocol conformance that has a class bound
-        // TODO: Old parser expected error on line 44: cannot convert value of type '()' to expected argument type 'Bool'
-        // TODO: Old parser expected error on line 45: cannot convert value of type '()' to expected argument type 'Bool'
-        // TODO: Old parser expected error on line 46: cannot convert value of type '()' to expected argument type 'Bool'
-        // TODO: Old parser expected error on line 47: cannot convert value of type '()' to expected argument type 'Bool'
         // TODO: Old parser expected error on line 49: @NSApplicationMain may only be used on 'class' declarations
         // TODO: Old parser expected error on line 50: '@available' attribute cannot be applied to this declaration
         // TODO: Old parser expected error on line 51: '@discardableResult' attribute cannot be applied to this declaration

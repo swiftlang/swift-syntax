@@ -45,8 +45,6 @@ final class ForeachTests: XCTestCase {
       }#^DIAG_3^#
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: 'r' declared here
-        // TODO: Old parser expected error on line 8: cannot find 'i' in scope; did you mean 'r'?
         // TODO: Old parser expected error on line 21: found an unexpected second identifier in constant declaration
         // TODO: Old parser expected note on line 21: join the identifiers together
         // TODO: Old parser expected note on line 21: join the identifiers together with camel-case

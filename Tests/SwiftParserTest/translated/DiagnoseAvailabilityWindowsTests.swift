@@ -8,10 +8,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
       #"""
       @available(Windows, unavailable, message: "unsupported")
       func unavailable() {}
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: 'unavailable()' has been explicitly marked unavailable here
-      ]
+      """#
     )
   }
 
@@ -19,10 +16,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
     AssertParse(
       """
       unavailable()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'unavailable()' is unavailable in Windows: unsupported
-      ]
+      """
     )
   }
 
@@ -39,11 +33,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
     AssertParse(
       """
       introduced_deprecated()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'introduced_deprecated()' is only available in * 10.0.17763 or newe
-        // TODO: Old parser expected note on line 1: add 'if #available' version check
-      ]
+      """
     )
   }
 
@@ -60,11 +50,7 @@ final class DiagnoseAvailabilityWindowsTests: XCTestCase {
     AssertParse(
       """
       windows10()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'windows10()' is only available in * 10 or newer
-        // TODO: Old parser expected note on line 1: add 'if #available' version check
-      ]
+      """
     )
   }
 

@@ -16,10 +16,7 @@ final class GenericDisambiguationTests: XCTestCase {
       }
       struct B {}
       struct D {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 1: generic type 'A' declared here
-      ]
+      """
     )
   }
 
@@ -114,10 +111,7 @@ final class GenericDisambiguationTests: XCTestCase {
     AssertParse(
       """
       A<B>(x: 0)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unused
-      ]
+      """
     )
   }
 
@@ -182,10 +176,7 @@ final class GenericDisambiguationTests: XCTestCase {
     AssertParse(
       """
       A<B, D>.c()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: generic type 'A' specialized with too many type parameters (got 2, but expected 1)
-      ]
+      """
     )
   }
 
@@ -194,10 +185,7 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       A<B?>(x: 0) // parses as type 
       _ = a < b ? c : d
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unused
-      ]
+      """
     )
   }
 
@@ -205,10 +193,7 @@ final class GenericDisambiguationTests: XCTestCase {
     AssertParse(
       """
       A<(B) throws -> D>(x: 0)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: unused
-      ]
+      """
     )
   }
 

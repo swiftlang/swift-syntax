@@ -37,11 +37,7 @@ final class MetatypeObjectConversionTests: XCTestCase {
         takesAnyObject(S.self) 
         takesAnyObject(ClassConstrainedProto.self) 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: argument type 'S.Type' expected to be an instance of a class or class-constrained type
-        // TODO: Old parser expected error on line 4: argument type '(any ClassConstrainedProto).Type' expected to be an instance of a class or class-constrained type
-      ]
+      """
     )
   }
 
@@ -55,10 +51,7 @@ final class MetatypeObjectConversionTests: XCTestCase {
         takesAnyObject(classConstrained)
         takesAnyObject(compo)
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: argument type 'any NonClassProto.Type' expected to be an instance of a class or class-constrained type
-      ]
+      """
     )
   }
 

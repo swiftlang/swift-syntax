@@ -9,11 +9,7 @@ final class DelayedExtensionTests: XCTestCase {
       extension X { } 
       _ = 1
       f()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot find type 'X' in scope
-        // TODO: Old parser expected error on line 3: cannot find 'f' in scope
-      ]
+      """
     )
   }
 

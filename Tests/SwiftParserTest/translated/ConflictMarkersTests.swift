@@ -73,8 +73,6 @@ final class ConflictMarkersTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "DIAG_3", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 8: cannot find 'a' in scope
-        // TODO: Old parser expected error on line 8: cannot find 'b' in scope
       ]
     )
   }
@@ -93,7 +91,6 @@ final class ConflictMarkersTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text before variable"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 5: cannot find 'd' in scope
       ]
     )
   }
@@ -126,8 +123,6 @@ final class ConflictMarkersTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text before variable"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 10: cannot find 'fake_b' in scope
-        // TODO: Old parser expected error on line 10: cannot find 'fake_c' in scope
       ]
     )
   }
@@ -158,7 +153,6 @@ final class ConflictMarkersTests: XCTestCase {
       }()
       """#,
       diagnostics: [
-        // TODO: Old parser expected warning on line 4: expression of type 'String' is unused
         // TODO: Old parser expected error on line 5: source control conflict marker in source file
       ]
     )
@@ -190,8 +184,6 @@ final class ConflictMarkersTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
         DiagnosticSpec(message: "unexpected text '>>>> ORIGINAL' before variable"),
-        // TODO: Old parser expected error on line 11: cannot find 'a' in scope
-        // TODO: Old parser expected error on line 11: cannot find 'b' in scope
       ]
     )
   }
@@ -209,7 +201,6 @@ final class ConflictMarkersTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
         DiagnosticSpec(message: "unexpected text before variable"),
-        // TODO: Old parser expected error on line 6: cannot find 'd' in scope
       ]
     )
   }

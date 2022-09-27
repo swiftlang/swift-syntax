@@ -34,10 +34,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
       """
       var mutT: T?
       let immT: T? = nil
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: change 'let' to 'var' to make it mutable, Fix-It replacements: 1 - 4 = 'var'
-      ]
+      """
     )
   }
 
@@ -68,12 +65,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
       mutT?.immS?.mutateS() 
       mutT?.mutS?.x += 1
       mutT?.mutS?.y++
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot use mutating member on immutable value: 'immT' is a 'let' constant
-        // TODO: Old parser expected error on line 4: cannot use mutating member on immutable value: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 6: cannot pass immutable value to mutating operator: 'y' is a 'let' constant
-      ]
+      """
     )
   }
 
@@ -83,11 +75,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
       // Prefix operators don't chain
       ++mutT?.mutS?.x 
       ++mutT?.mutS?.y
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot pass immutable value of type 'Int?' to mutating operator
-        // TODO: Old parser expected error on line 3: cannot pass immutable value of type 'Int?' to mutating operator
-      ]
+      """
     )
   }
 
@@ -104,17 +92,7 @@ final class OptionalChainLvaluesTests: XCTestCase {
       mutT?.immS? = S() 
       mutT?.immS?.x += 0 
       mutT?.immS?.y -= 0
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: value of optional type 'Int?' must be unwrapped
-        // TODO: Old parser expected note on line 5: coalesce
-        // TODO: Old parser expected note on line 5: force-unwrap
-        // TODO: Old parser expected error on line 6: left side of mutating operator isn't mutable: 'y' is a 'let' constant
-        // TODO: Old parser expected error on line 7: cannot assign to property: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 8: cannot assign to value: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 9: left side of mutating operator isn't mutable: 'immS' is a 'let' constant
-        // TODO: Old parser expected error on line 10: left side of mutating operator isn't mutable: 'y' is a 'let' constant
-      ]
+      """
     )
   }
 

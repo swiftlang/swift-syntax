@@ -166,10 +166,7 @@ final class EnumTests: XCTestCase {
       enum EnumCaseAttributes {
         @xyz case EmptyAttributes  
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: unknown attribute 'xyz'
-      ]
+      """
     )
   }
 
@@ -343,11 +340,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum RawTypeEmpty : Int {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: an enum with no cases cannot declare a raw type
-        // TODO: Old parser expected error on line 1: 'RawTypeEmpty' declares raw type 'Int', but does not conform to RawRepresentable and conformance could not be synthesized
-      ]
+      """
     )
   }
 
@@ -381,10 +374,7 @@ final class EnumTests: XCTestCase {
       enum RawTypeNotFirst : RawTypeNotFirstProtocol, Int { 
         case E
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: raw type 'Int' must appear first in the enum inheritance clause, Fix-It replacements: 24 - 24 = 'Int, ', 47 - 52 = ''
-      ]
+      """
     )
   }
 
@@ -394,11 +384,7 @@ final class EnumTests: XCTestCase {
       enum ExpressibleByRawTypeNotLiteral : Array<Int> { 
         case Ladd, Elliott, Sixteenth, Harrison
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: raw type 'Array<Int>' is not expressible by a string, integer, or floating-point literal
-        // TODO: Old parser expected error on line 1: 'ExpressibleByRawTypeNotLiteral' declares raw type 'Array<Int>', but does not conform to RawRepresentable and conformance could not be synthesized
-      ]
+      """
     )
   }
 
@@ -411,10 +397,7 @@ final class EnumTests: XCTestCase {
           self = .Morrison
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'RawTypeCircularityA' has a raw type that depends on itself
-      ]
+      """
     )
   }
 
@@ -427,10 +410,7 @@ final class EnumTests: XCTestCase {
           self = .Willamette
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 1: enum 'RawTypeCircularityB' declared here
-      ]
+      """
     )
   }
 
@@ -444,12 +424,7 @@ final class EnumTests: XCTestCase {
         case Everett 
         case Flanders
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'ExpressibleByRawTypeNotIntegerLiteral' declares raw type 'ExpressibleByFloatLiteralOnly', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 4: RawRepresentable conformance cannot be synthesized because raw type 'ExpressibleByFloatLiteralOnly' is not Equatable
-        // TODO: Old parser expected error on line 5: enum cases require explicit raw values when the raw type is not expressible by integer or string literal
-      ]
+      """
     )
   }
 
@@ -482,11 +457,7 @@ final class EnumTests: XCTestCase {
         case Lovejoy 
         case Marshall = "M"
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'RawTypeWithUnicodeScalarValues' declares raw type 'UnicodeScalar' (aka 'Unicode.Scalar'), but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 3: enum cases require explicit raw values when the raw type is not expressible by integer or string literal
-      ]
+      """#
     )
   }
 
@@ -498,11 +469,7 @@ final class EnumTests: XCTestCase {
         case Second 
         case Third = "は"
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'RawTypeWithCharacterValues' declares raw type 'Character', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 3: enum cases require explicit raw values when the raw type is not expressible by integer or string literal
-      ]
+      """#
     )
   }
 
@@ -525,11 +492,7 @@ final class EnumTests: XCTestCase {
       enum RawTypeWithCharacterValues_Error1 : Character { 
         case First = "abc" 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'RawTypeWithCharacterValues_Error1' declares raw type 'Character', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'String' to raw type 'Character'
-      ]
+      """#
     )
   }
 
@@ -541,11 +504,7 @@ final class EnumTests: XCTestCase {
         case Overton 
         case Pettygrove = 2.25
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'RawTypeWithFloatValues' declares raw type 'Float', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 3: enum case must declare a raw value when the preceding raw value is not an integer
-      ]
+      """
     )
   }
 
@@ -568,10 +527,7 @@ final class EnumTests: XCTestCase {
       enum RawValuesWithoutRawType {
         case Upshur = 22 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: enum case cannot have a raw value if the enum does not have a raw type
-      ]
+      """
     )
   }
 
@@ -582,11 +538,7 @@ final class EnumTests: XCTestCase {
         case Vaughn = 22 
         case Wilson = 22 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value previously used here
-        // TODO: Old parser expected error on line 3: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -597,11 +549,7 @@ final class EnumTests: XCTestCase {
         case Vaughn = 22   
         case Wilson = 22.0 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value previously used here
-        // TODO: Old parser expected error on line 3: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -613,11 +561,7 @@ final class EnumTests: XCTestCase {
         case Vaughn = 9223372036854775807   
         case Wilson = 9223372036854775807.0 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 3: raw value previously used here
-        // TODO: Old parser expected error on line 4: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -629,11 +573,7 @@ final class EnumTests: XCTestCase {
         case Vaughn = 18446744073709551615   
         case Wilson = 18446744073709551615.0 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 3: raw value previously used here
-        // TODO: Old parser expected error on line 4: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -683,11 +623,7 @@ final class EnumTests: XCTestCase {
         case Vaughn = "XYZ" 
         case Wilson = "XYZ" 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value previously used here
-        // TODO: Old parser expected error on line 3: raw value for enum case is not unique
-      ]
+      """#
     )
   }
 
@@ -712,12 +648,7 @@ final class EnumTests: XCTestCase {
         case Wilson    
         case Yeon = 23 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value auto-incremented from here
-        // TODO: Old parser expected note on line 3: raw value previously used here
-        // TODO: Old parser expected error on line 4: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -729,12 +660,7 @@ final class EnumTests: XCTestCase {
         case Wilson = 22 
         case Yeon 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value previously used here
-        // TODO: Old parser expected note on line 3: raw value auto-incremented from here
-        // TODO: Old parser expected error on line 4: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -746,12 +672,7 @@ final class EnumTests: XCTestCase {
         case Wilson 
         case Yeon = 1 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value implicitly auto-incremented from zero
-        // TODO: Old parser expected note on line 3: raw value previously used here
-        // TODO: Old parser expected error on line 4: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -762,11 +683,7 @@ final class EnumTests: XCTestCase {
         case A = "B" 
         case B 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value previously used here
-        // TODO: Old parser expected error on line 3: raw value for enum case is not unique
-      ]
+      """#
     )
   }
 
@@ -777,11 +694,7 @@ final class EnumTests: XCTestCase {
         case A 
         case B = "A" 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value previously used here
-        // TODO: Old parser expected error on line 3: raw value for enum case is not unique
-      ]
+      """#
     )
   }
 
@@ -793,11 +706,7 @@ final class EnumTests: XCTestCase {
         case B 
         case C = "B" 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected note on line 3: raw value previously used here
-        // TODO: Old parser expected error on line 4: raw value for enum case is not unique
-      ]
+      """#
     )
   }
 
@@ -821,14 +730,7 @@ final class EnumTests: XCTestCase {
         case Powell(Int) 
         case Terwilliger(Int) = 17 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'RawTypeWithPayload' declares raw type 'Int', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected note on line 1: declared raw type 'Int' here
-        // TODO: Old parser expected note on line 1: declared raw type 'Int' here
-        // TODO: Old parser expected error on line 2: enum with raw type cannot have cases with arguments
-        // TODO: Old parser expected error on line 3: enum with raw type cannot have cases with arguments
-      ]
+      """
     )
   }
 
@@ -838,11 +740,7 @@ final class EnumTests: XCTestCase {
       enum RawTypeMismatch : Int { 
         case Barbur = "foo" 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'RawTypeMismatch' declares raw type 'Int', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 2: 
-      ]
+      """#
     )
   }
 
@@ -853,11 +751,7 @@ final class EnumTests: XCTestCase {
         case Foo 
         case Foo 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: 'Foo' previously declared here
-        // TODO: Old parser expected error on line 3: invalid redeclaration of 'Foo'
-      ]
+      """
     )
   }
 
@@ -869,13 +763,7 @@ final class EnumTests: XCTestCase {
         case Foo 
         case Bar 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: 'Foo' previously declared here
-        // TODO: Old parser expected note on line 2: 'Bar' previously declared here
-        // TODO: Old parser expected error on line 3: invalid redeclaration of 'Foo'
-        // TODO: Old parser expected error on line 4: invalid redeclaration of 'Bar'
-      ]
+      """
     )
   }
 
@@ -886,11 +774,7 @@ final class EnumTests: XCTestCase {
         case Foo 
         case Foo(Int) 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: 'Foo' previously declared here
-        // TODO: Old parser expected error on line 3: invalid redeclaration of 'Foo'
-      ]
+      """
     )
   }
 
@@ -901,12 +785,7 @@ final class EnumTests: XCTestCase {
         case Foo = 1 
         case Foo = 2 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'DuplicateMembers4' declares raw type 'Int', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected note on line 2: 'Foo' previously declared here
-        // TODO: Old parser expected error on line 3: invalid redeclaration of 'Foo'
-      ]
+      """
     )
   }
 
@@ -919,9 +798,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'DuplicateMembers5' declares raw type 'Int', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected note on line 2: 'Foo' previously declared here
-        // TODO: Old parser expected error on line 3: invalid redeclaration of 'Foo'
         // TODO: Old parser expected error on line 3: raw value for enum case must be a literal
       ]
     )
@@ -935,11 +811,7 @@ final class EnumTests: XCTestCase {
         case Foo 
         case Foo 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: invalid redeclaration of 'Foo'
-        // TODO: Old parser expected error on line 4: invalid redeclaration of 'Foo'
-      ]
+      """
     )
   }
 
@@ -950,12 +822,7 @@ final class EnumTests: XCTestCase {
         case Foo 
         case Foo = "Bar" 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'DuplicateMembers7' declares raw type 'String', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected note on line 2: 'Foo' previously declared here
-        // TODO: Old parser expected error on line 3: invalid redeclaration of 'Foo'
-      ]
+      """#
     )
   }
 
@@ -1024,12 +891,7 @@ final class EnumTests: XCTestCase {
         case A 
         case B = 0 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 2: raw value previously used here
-        // TODO: Old parser expected note on line 2: raw value implicitly auto-incremented from zero
-        // TODO: Old parser expected error on line 3: raw value for enum case is not unique
-      ]
+      """
     )
   }
 
@@ -1040,11 +902,7 @@ final class EnumTests: XCTestCase {
         case A = "abc"
         case B 
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'ManyLiteralB' declares raw type 'ManyLiteralable', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 3: enum case must declare a raw value when the preceding raw value is not an integer
-      ]
+      """#
     )
   }
 
@@ -1108,11 +966,7 @@ final class EnumTests: XCTestCase {
       enum foo : String { 
         case bar = nil 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'foo' declares raw type 'String', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 2: cannot convert 'nil' to raw type 'String'
-      ]
+      """
     )
   }
 
@@ -1141,10 +995,7 @@ final class EnumTests: XCTestCase {
           let _ = staticVar 
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: static member 'staticVar' cannot be used on instance of type 'EnumWithStaticMember'
-      ]
+      """
     )
   }
 
@@ -1227,13 +1078,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 11: enum case 'A' cannot be used as an instance member, Fix-It replacements: 9 - 9 = 'SE0036.'
-        // TODO: Old parser expected error on line 12: enum case 'A' cannot be used as an instance member, Fix-It replacements: 9 - 13 = 'SE0036'
-        // TODO: Old parser expected error on line 24: enum case 'A' cannot be used as an instance member, Fix-It replacements: 10 - 10 = '.'
         // TODO: Old parser expected error on line 25: '_' can only appear in a pattern or on the left side of an assignment
-        // TODO: Old parser expected error on line 26: enum case 'C' cannot be used as an instance member, Fix-It replacements: 10 - 10 = '.'
-        // TODO: Old parser expected error on line 52: enum case 'A' cannot be used as an instance member, Fix-It replacements: 12 - 12 = 'SE0036.'
-        // TODO: Old parser expected error on line 55: enum case 'B' cannot be used as an instance member, Fix-It replacements: 12 - 12 = 'SE0036.'
       ]
     )
   }
@@ -1434,12 +1279,9 @@ final class EnumTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'CasesWithMissingElement' declares raw type 'Int', but does not conform to RawRepresentable and conformance could not be synthesized
         // TODO: Old parser expected error on line 2: expected identifier after comma in enum 'case' declaration
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'String' to raw type 'Int'
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum case"),
         // TODO: Old parser expected error on line 3: expected identifier after comma in enum 'case' declaration
-        // TODO: Old parser expected error on line 3: cannot convert value of type 'String' to raw type 'Int'
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in enum case"),
       ]
     )

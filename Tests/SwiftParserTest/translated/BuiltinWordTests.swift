@@ -39,11 +39,7 @@ final class BuiltinWordTests: XCTestCase {
       word = Builtin.truncOrBitCast_Int64_Word(i64)
       word = Builtin.truncOrBitCast_Int32_Word(i32) 
       word = Builtin.truncOrBitCast_Int16_Word(i16)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 
-        // TODO: Old parser expected error on line 4: 
-      ]
+      """
     )
   }
 
@@ -54,11 +50,7 @@ final class BuiltinWordTests: XCTestCase {
       i32 = Builtin.truncOrBitCast_Word_Int32(word)
       i64 = Builtin.truncOrBitCast_Word_Int64(word) 
       i128 = Builtin.truncOrBitCast_Word_Int128(word)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 
-        // TODO: Old parser expected error on line 4: 
-      ]
+      """
     )
   }
 
@@ -69,11 +61,7 @@ final class BuiltinWordTests: XCTestCase {
       word = Builtin.zextOrBitCast_Int64_Word(i64) 
       word = Builtin.zextOrBitCast_Int32_Word(i32)
       word = Builtin.zextOrBitCast_Int16_Word(i16)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 
-        // TODO: Old parser expected error on line 2: 
-      ]
+      """
     )
   }
 
@@ -84,11 +72,7 @@ final class BuiltinWordTests: XCTestCase {
       i32 = Builtin.zextOrBitCast_Word_Int32(word) 
       i64 = Builtin.zextOrBitCast_Word_Int64(word)
       i128 = Builtin.zextOrBitCast_Word_Int128(word)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 
-        // TODO: Old parser expected error on line 2: 
-      ]
+      """
     )
   }
 
@@ -99,12 +83,7 @@ final class BuiltinWordTests: XCTestCase {
       word = Builtin.trunc_Int64_Word(i64) 
       word = Builtin.trunc_Int32_Word(i32) 
       word = Builtin.trunc_Int16_Word(i16)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 
-        // TODO: Old parser expected error on line 3: 
-        // TODO: Old parser expected error on line 4: 
-      ]
+      """
     )
   }
 
@@ -115,12 +94,7 @@ final class BuiltinWordTests: XCTestCase {
       i32 = Builtin.trunc_Word_Int32(word) 
       i64 = Builtin.trunc_Word_Int64(word) 
       i128 = Builtin.trunc_Word_Int128(word)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 
-        // TODO: Old parser expected error on line 3: 
-        // TODO: Old parser expected error on line 4: 
-      ]
+      """
     )
   }
 
@@ -131,12 +105,7 @@ final class BuiltinWordTests: XCTestCase {
       word = Builtin.zext_Int64_Word(i64) 
       word = Builtin.zext_Int32_Word(i32) 
       word = Builtin.zext_Int16_Word(i16)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 
-        // TODO: Old parser expected error on line 2: 
-        // TODO: Old parser expected error on line 3: 
-      ]
+      """
     )
   }
 
@@ -147,12 +116,7 @@ final class BuiltinWordTests: XCTestCase {
       i32 = Builtin.zext_Word_Int32(word) 
       i64 = Builtin.zext_Word_Int64(word) 
       i128 = Builtin.zext_Word_Int128(word)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 
-        // TODO: Old parser expected error on line 2: 
-        // TODO: Old parser expected error on line 3: 
-      ]
+      """
     )
   }
 

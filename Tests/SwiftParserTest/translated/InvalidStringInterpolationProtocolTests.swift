@@ -22,14 +22,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
           //  {{educational-notes=string-interpolation-conformance}}
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: type conforming to 'StringInterpolationProtocol' does not implement a valid 'appendInterpolation' method
-        // TODO: Old parser expected warning on line 6: 'appendInterpolation' method will never be used because it is static, Fix-It replacements: 10 - 17 = ''
-        // TODO: Old parser expected warning on line 9: 'appendInterpolation' method is private, but 'BadStringInterpolation' is public
-        // TODO: Old parser expected warning on line 11: 'appendInterpolation' method is internal, but 'BadStringInterpolation' is public
-        // TODO: Old parser expected warning on line 13: 'appendInterpolation' method does not return 'Void' or have a discardable result, Fix-It replacements: 10 - 10 = '@discardableResult '
-      ]
+      """
     )
   }
 
@@ -41,10 +34,7 @@ final class InvalidStringInterpolationProtocolTests: XCTestCase {
         public init(literalCapacity: Int, interpolationCount: Int) {}
         public mutating func appendLiteral(_: String) {}
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: type conforming to 'StringInterpolationProtocol' does not implement a valid 'appendInterpolation' method
-      ]
+      """
     )
   }
 

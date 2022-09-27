@@ -15,13 +15,9 @@ final class ToplevelLibraryInvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expressions are not allowed at the top level
-        // TODO: Old parser expected warning on line 2: result of operator '+' is unused
         // TODO: Old parser expected error on line 3: expressions are not allowed at the top level
-        // TODO: Old parser expected warning on line 3: result of operator '+' is unused
         // TODO: Old parser expected error on line 5: expressions are not allowed at the top level
-        // TODO: Old parser expected error on line 5: function is unused
         // TODO: Old parser expected error on line 6: expressions are not allowed at the top level
-        // TODO: Old parser expected warning on line 6: result of call to closure returning 'Int' is unused
       ]
     )
   }

@@ -42,13 +42,10 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '(', Fix-It replacements: 7 - 7 = '()'
-        // TODO: Old parser expected note on line 2: 'init()' previously declared here
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected argument list in function declaration"),
         // TODO: Old parser expected error on line 3: expected '(', Fix-It replacements: 10 - 10 = '()'
-        // TODO: Old parser expected error on line 3: generic parameter 'T' is not used in function signature
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected argument list in function declaration"),
         // TODO: Old parser expected error on line 4: expected '(', Fix-It replacements: 8 - 8 = '()'
-        // TODO: Old parser expected error on line 4: invalid redeclaration of 'init()'
         DiagnosticSpec(locationMarker: "DIAG_3", message: "expected argument list in function declaration"),
       ]
     )
@@ -330,9 +327,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 2: variable 'x' was never used; consider replacing with '_' or removing it
         // TODO: Old parser expected error on line 3: initializers may only be declared within a type
-        // TODO: Old parser expected warning on line 6: variable 'y' was never used; consider replacing with '_' or removing it
         // TODO: Old parser expected error on line 7: deinitializers may only be declared within a class or actor
       ]
     )

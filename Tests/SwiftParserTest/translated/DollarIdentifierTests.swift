@@ -201,7 +201,6 @@ final class DollarIdentifierTests: XCTestCase {
         // TODO: Old parser expected error on line 27: cannot declare entity named '$Struct'; the '$' prefix is reserved
         // TODO: Old parser expected error on line 32: cannot declare entity named '$Protocol'; the '$' prefix is reserved
         // TODO: Old parser expected error on line 33: cannot declare entity named '$Precedence'; the '$' prefix is reserved
-        // TODO: Old parser expected error on line 34: cycle in 'higherThan' relation
         // TODO: Old parser expected error on line 37: use of unknown directive '#$UnknownDirective'
         DiagnosticSpec(message: "extraneous '#$UnknownDirective()' at top level"),
       ]

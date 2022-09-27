@@ -46,7 +46,7 @@ Then, import `SwiftSyntax` in your Swift code.
 ## Documentation
 
 Documentation can be found in the following places:
-- For the new parser: [Sources/SwiftParser/SwiftParser.docc](Sources/SwiftParser/SwiftParser.docc) 
+- For the parser: [Sources/SwiftParser/SwiftParser.docc](Sources/SwiftParser/SwiftParser.docc) 
   - You can either directly view this documentation on GitHub or build a documenation bundle by opening the project in Xcode and clicking Product -> Build Documentation
 - General documentation: [Documentation](Documentation) 
 - Examples of using SwiftSyntax: [Examples](Examples).

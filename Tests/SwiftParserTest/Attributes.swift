@@ -30,12 +30,15 @@ final class AttributeTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in '@differentiable' argument"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected parameters of '@differentiable' argument"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '=' in same type requirement"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected right-hand type of same type requirement"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute"),
-      ]
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' and parameters in '@differentiable' argument", fixIts: ["Insert ':' and parameters"]),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '=' and right-hand type in same type requirement", fixIts: ["Insert '=' and right-hand type"]),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute", fixIts: ["Insert ')'"]),
+      ],
+      fixedSource: """
+        @differentiable(reverse wrt: <#syntax#>,where T = <#type#>)
+        func podcastPlaybackSpeed() {
+        }
+        """
     )
   }
   
@@ -59,8 +62,7 @@ final class AttributeTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ':' in attribute argument"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected 'false' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ': false' in attribute argument"),
         DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after attribute"),
       ]
     )
@@ -224,5 +226,16 @@ final class AttributeTests: XCTestCase {
         return testRecursion(10)
       }
       """)
+  }
+
+  func testMissingDeclarationAfterAttributes() {
+    AssertParse(
+      "@resultBuilder#^DIAG^#",
+      diagnostics: [DiagnosticSpec(message: "Expected declaration after attribute")],
+      fixedSource: """
+        @resultBuilder
+        <#declaration#>
+        """
+    )
   }
 }

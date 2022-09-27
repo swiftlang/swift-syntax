@@ -13,53 +13,6 @@
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
 
-extension UnexpectedNodesSyntax {
-  func tokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {
-    return self.children(viewMode: .sourceAccurate).compactMap({ $0.as(TokenSyntax.self) }).filter(isIncluded)
-  }
-
-  func tokens(withKind kind: TokenKind) -> [TokenSyntax] {
-    return self.tokens(satisfying: { $0.tokenKind == kind })
-  }
-}
-
-extension Syntax {
-  func hasParent(_ expectedParent: Syntax) -> Bool {
-    var walk = self.parent
-    while walk != nil {
-      if walk == expectedParent {
-        return true
-      }
-      walk = walk?.parent
-    }
-    return false
-  }
-}
-
-fileprivate extension FixIt.Change {
-  /// Replaced a present node with a missing node
-  static func makeMissing(node: TokenSyntax) -> FixIt.Change {
-    assert(node.presence == .present)
-    return .replace(
-      oldNode: Syntax(node),
-      newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
-    )
-  }
-
-  static func makePresent<T: SyntaxProtocol>(node: T) -> FixIt.Change {
-    return .replace(
-      oldNode: Syntax(node),
-      newNode: PresentMaker().visit(Syntax(node))
-    )
-  }
-}
-
-fileprivate extension FixIt {
-  init(message: StaticParserFixIt, changes: [Change]) {
-    self.init(message: message as FixItMessage, changes: changes)
-  }
-}
-
 public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   private var diagnostics: [Diagnostic] = []
 
@@ -98,20 +51,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, position: AbsolutePosition? = nil, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+  func addDiagnostic<T: SyntaxProtocol>(_ node: T, position: AbsolutePosition? = nil, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
     diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
     diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, fixIts: fixIts))
     self.handledNodes.append(contentsOf: handledNodes)
   }
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T,position: AbsolutePosition? = nil,  _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+  func addDiagnostic<T: SyntaxProtocol>(_ node: T,position: AbsolutePosition? = nil,  _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
     addDiagnostic(node, position: position, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts, handledNodes: handledNodes)
   }
 
   /// Whether the node should be skipped for diagnostic emission.
   /// Every visit method must check this at the beginning.
-  private func shouldSkip<T: SyntaxProtocol>(_ node: T) -> Bool {
+  func shouldSkip<T: SyntaxProtocol>(_ node: T) -> Bool {
     return handledNodes.contains(node.id)
   }
 
@@ -143,22 +96,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self) {
         addDiagnostic(invalidIdentifier, InvalidIdentifierError(invalidIdentifier: invalidIdentifier), handledNodes: [previousParent.id])
       } else {
-        addDiagnostic(node, MissingTokenError(missingToken: node), fixIts: [
-          FixIt(message: InsertTokenFixIt(missingToken: node), changes: [
-            .makePresent(node: node)
-          ])
-        ])
+        return handleMissingSyntax(node)
       }
     }
     return .skipChildren
-  }
-
-  private func handleMissingSyntax<T: SyntaxProtocol>(_ node: T) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    addDiagnostic(node, position: node.endPosition, MissingNodeError(missingNode: Syntax(node)))
-    return .visitChildren
   }
 
   // MARK: - Specialized diagnostic generation

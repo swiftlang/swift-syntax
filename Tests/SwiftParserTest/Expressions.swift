@@ -102,7 +102,7 @@ final class ExpressionTests: XCTestCase {
       c[#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "Expected value in subscript"),
+        DiagnosticSpec(message: "Expected value after '[' in subscript"),
         DiagnosticSpec(message: "Expected ']' to end subscript"),
       ]
     )
@@ -173,7 +173,7 @@ final class ExpressionTests: XCTestCase {
         ,#^END_ARRAY^#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "EXPECTED_EXPR", message: "Expected value of array element"),
+        DiagnosticSpec(locationMarker: "EXPECTED_EXPR", message: "Expected value after '[' in array element"),
         DiagnosticSpec(locationMarker: "END_ARRAY", message: "Expected ']' to end array"),
       ]
     )
@@ -183,7 +183,7 @@ final class ExpressionTests: XCTestCase {
       ([1:#^DIAG^#)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected value of dictionary element"),
+        DiagnosticSpec(message: "Expected value after ':' in dictionary element"),
         DiagnosticSpec(message: "Expected ']' to end dictionary"),
       ]
     )
@@ -264,7 +264,7 @@ final class ExpressionTests: XCTestCase {
       "\",#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in string literal"#)
+        DiagnosticSpec(message: #"Expected '"' to end string literal"#)
       ]
     )
 
@@ -331,7 +331,7 @@ final class ExpressionTests: XCTestCase {
        """"#^DIAG^#
        """##,
        diagnostics: [
-         DiagnosticSpec(message: #"Expected '"""' in string literal"#)
+         DiagnosticSpec(message: #"Expected '"""' to end string literal"#)
        ]
      )
 
@@ -340,7 +340,7 @@ final class ExpressionTests: XCTestCase {
        """""#^DIAG^#
        """##,
        diagnostics: [
-         DiagnosticSpec(message: #"Expected '"""' in string literal"#)
+         DiagnosticSpec(message: #"Expected '"""' to end string literal"#)
        ]
      )
 
@@ -357,8 +357,7 @@ final class ExpressionTests: XCTestCase {
       #"#^DIAG^#
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in string literal"#),
-        DiagnosticSpec(message: #"Expected '#' in string literal"#)
+        DiagnosticSpec(message: ##"Expected '"#' to end string literal"##),
       ]
     )
 
@@ -367,8 +366,7 @@ final class ExpressionTests: XCTestCase {
       #"""#^DIAG^#
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"""' in string literal"#),
-        DiagnosticSpec(message: #"Expected '#' in string literal"#)
+        DiagnosticSpec(message: ##"Expected '"""#' to end string literal"##),
       ]
     )
 
@@ -377,8 +375,7 @@ final class ExpressionTests: XCTestCase {
       #"""a#^DIAG^#
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"""' in string literal"#),
-        DiagnosticSpec(message: #"Expected '#' in string literal"#)
+        DiagnosticSpec(message: ##"Expected '"""#' to end string literal"##),
       ]
     )
 
@@ -404,11 +401,10 @@ final class ExpressionTests: XCTestCase {
       \#^AFTER_SLASH^#\(#^AFTER_PAREN^#
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "Expected root of key path"),
-        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "Expected expression of key path"),
-        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected value in tuple"),
+        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: #"Expected root and expression after '\' in key path"#),
+        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected value after '(' in tuple"),
         DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected ')' to end tuple"),
-        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected expression of key path"),
+        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected expression in key path"),
       ]
     )
 
@@ -423,7 +419,7 @@ final class ExpressionTests: XCTestCase {
       "#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in string literal"#)
+        DiagnosticSpec(message: #"Expected '"' to end string literal"#)
       ]
     )
 
@@ -432,7 +428,7 @@ final class ExpressionTests: XCTestCase {
       "'#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in string literal"#)
+        DiagnosticSpec(message: #"Expected '"' to end string literal"#)
       ]
     )
   }
@@ -471,9 +467,9 @@ final class ExpressionTests: XCTestCase {
           print "\(i)\"\n#^END^#
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "KEY_PATH_1", message: "Expected expression of key path"),
-        DiagnosticSpec(locationMarker: "KEY_PATH_2", message: "Expected expression of key path"),
-        DiagnosticSpec(locationMarker: "END", message: #"Expected '"' in string literal"#),
+        DiagnosticSpec(locationMarker: "KEY_PATH_1", message: "Expected expression after 'n' in key path"),
+        DiagnosticSpec(locationMarker: "KEY_PATH_2", message: "Expected expression after 'n' in key path"),
+        DiagnosticSpec(locationMarker: "END", message: #"Expected '"' to end string literal"#),
         DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end 'if' statement"),
         DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end function"),
       ]
@@ -483,7 +479,7 @@ final class ExpressionTests: XCTestCase {
                 diagnostics: [
                   DiagnosticSpec(message: "Expected identifier in '#keyPath' expression"),
                   DiagnosticSpec(message: "Expected ')' to end '#keyPath' expression"),
-                  DiagnosticSpec(locationMarker: "MISSING_VALUE", message: "Expected value in function call"),
+                  DiagnosticSpec(locationMarker: "MISSING_VALUE", message: "Expected value after ':' in function call"),
                 ])
   }
 

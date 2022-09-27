@@ -30,9 +30,13 @@ add_library(SwiftParser STATIC
   TriviaParser.swift
   Types.swift
 
+  Diagnostics/DiagnosticExtensions.swift
+  Diagnostics/MissingNodesError.swift
   Diagnostics/ParserDiagnosticMessages.swift
   Diagnostics/ParseDiagnosticsGenerator.swift
   Diagnostics/PresenceUtils.swift
+  Diagnostics/SyntaxExtensions.swift
+  Diagnostics/Utils.swift
 
   gyb_generated/DeclarationAttribute.swift
   gyb_generated/DeclarationModifier.swift

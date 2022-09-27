@@ -27,7 +27,7 @@ public enum SyntaxKind {
   case ${node.swift_syntax_kind}
 % end
 
-  var isSyntaxCollection: Bool {
+  public var isSyntaxCollection: Bool {
     switch self {
 % for node in SYNTAX_NODES:
 %   if node.base_kind == "SyntaxCollection":
@@ -39,7 +39,7 @@ public enum SyntaxKind {
     }
   }
 
-  var isUnknown: Bool {
+  public var isUnknown: Bool {
     switch self {
 % for name in SYNTAX_BASE_KINDS:
 %   if name not in ["Syntax", "SyntaxCollection"]:
@@ -51,7 +51,7 @@ public enum SyntaxKind {
     }
   }
 
-  var isMissing: Bool {
+  public var isMissing: Bool {
     switch self {
 % for name in SYNTAX_BASE_KINDS:
 %   if name not in ["Syntax", "SyntaxCollection"]:

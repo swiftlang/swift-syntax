@@ -11,8 +11,8 @@ final class AttributeTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected argument for '@_dynamicReplacement' attribute", fixIts: ["Insert attribute argument"]),
-        DiagnosticSpec(message: "Expected ')' to end attribute", fixIts: ["Insert ')'"]),
+        DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute", fixIts: ["insert attribute argument"]),
+        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["Insert ')'"]),
       ],
       fixedSource: """
         @_dynamicReplacement(for: <#identifier#>)
@@ -30,9 +30,9 @@ final class AttributeTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' and parameters in '@differentiable' argument", fixIts: ["Insert ':' and parameters"]),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '=' and right-hand type in same type requirement", fixIts: ["Insert '=' and right-hand type"]),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute", fixIts: ["Insert ')'"]),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected ':' and parameters in '@differentiable' argument", fixIts: ["Insert ':' and parameters"]),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '=' and right-hand type in same type requirement", fixIts: ["Insert '=' and right-hand type"]),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end attribute", fixIts: ["Insert ')'"]),
       ],
       fixedSource: """
         @differentiable(reverse wrt: <#syntax#>,where T = <#type#>)
@@ -48,9 +48,9 @@ final class AttributeTests: XCTestCase {
       @_specialize(e#^DIAG^#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected ':' in attribute argument"),
-        DiagnosticSpec(message: "Expected ')' to end attribute"),
-        DiagnosticSpec(message: "Expected declaration after attribute"),
+        DiagnosticSpec(message: "expected ':' in attribute argument"),
+        DiagnosticSpec(message: "expected ')' to end attribute"),
+        DiagnosticSpec(message: "expected declaration after attribute"),
       ]
     )
   }
@@ -61,9 +61,9 @@ final class AttributeTests: XCTestCase {
       @_specialize(e#^DIAG_1^#, exported#^DIAG_2^#)#^DIAG_3^#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ': false' in attribute argument"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after attribute"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected ':' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ': false' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration after attribute"),
       ]
     )
   }
@@ -231,7 +231,7 @@ final class AttributeTests: XCTestCase {
   func testMissingDeclarationAfterAttributes() {
     AssertParse(
       "@resultBuilder#^DIAG^#",
-      diagnostics: [DiagnosticSpec(message: "Expected declaration after attribute")],
+      diagnostics: [DiagnosticSpec(message: "expected declaration after attribute")],
       fixedSource: """
         @resultBuilder
         <#declaration#>

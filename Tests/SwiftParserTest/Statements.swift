@@ -45,9 +45,9 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected expression after 'case' in pattern"),
-        DiagnosticSpec(message: "Expected '=' and expression in pattern matching"),
-        DiagnosticSpec(message: "Unexpected text '* ! = x' in 'if' statement"),
+        DiagnosticSpec(message: "expected expression in pattern"),
+        DiagnosticSpec(message: "expected '=' and expression in pattern matching"),
+        DiagnosticSpec(message: "unexpected text '* ! = x' in 'if' statement"),
       ]
     )
   }
@@ -178,14 +178,14 @@ final class StatementTests: XCTestCase {
     AssertParse(
       "/*#-editable-code Swift Platground editable area*/#^DIAG^#default/*#-end-editable-code*/",
       diagnostics: [
-        DiagnosticSpec(message: "Extraneous 'default' at top level")
+        DiagnosticSpec(message: "extraneous 'default' at top level")
       ]
     )
 
     AssertParse(
       "#^DIAG^#case:",
       diagnostics: [
-        DiagnosticSpec(message: "Extraneous 'case:' at top level")
+        DiagnosticSpec(message: "extraneous 'case:' at top level")
       ])
 
     AssertParse(
@@ -193,7 +193,7 @@ final class StatementTests: XCTestCase {
       #^DIAG^#case: { ("Hello World") }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Extraneous 'case: { ("Hello World") }' at top level"#)
+        DiagnosticSpec(message: #"extraneous 'case: { ("Hello World") }' at top level"#)
       ]
     )
   }
@@ -213,8 +213,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "TEST_1", message: "Unexpected text '@s return' in function"),
-        DiagnosticSpec(locationMarker: "TEST_2", message: "Unexpected text '@unknown return' in function")
+        DiagnosticSpec(locationMarker: "TEST_1", message: "unexpected text '@s return' in function"),
+        DiagnosticSpec(locationMarker: "TEST_2", message: "unexpected text '@unknown return' in function")
       ]
     )
   }
@@ -232,8 +232,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "FOO", message: "Unexpected text 'foo()' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "BAR", message: "Unexpected text 'bar()' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "FOO", message: "unexpected text 'foo()' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "BAR", message: "unexpected text 'bar()' in conditional compilation block"),
       ]
     )
 
@@ -252,7 +252,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text 'print()' before conditional compilation clause")
+        DiagnosticSpec(message: "unexpected text 'print()' before conditional compilation clause")
       ]
     )
   }
@@ -261,7 +261,7 @@ final class StatementTests: XCTestCase {
     AssertParse(
       "LABEL#^DIAG^#:",
       diagnostics: [
-        DiagnosticSpec(message: "Extraneous ':' at top level")
+        DiagnosticSpec(message: "extraneous ':' at top level")
       ]
     )
   }

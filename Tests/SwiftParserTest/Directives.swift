@@ -88,7 +88,7 @@ final class DirectiveTests: XCTestCase {
     AssertParse(
       "#if test#^DIAG^#",
       diagnostics: [
-        DiagnosticSpec(message: "Expected '#endif' in conditional compilation block")
+        DiagnosticSpec(message: "expected '#endif' in conditional compilation block")
       ]
     )
   }
@@ -105,8 +105,8 @@ final class DirectiveTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Unexpected text '}' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '}' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '}' in conditional compilation block"),
       ]
     )
   }
@@ -148,9 +148,9 @@ final class DirectiveTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected declaration after attribute in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected declaration after attribute in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "Expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration after attribute in conditional compilation clause"),
       ]
     )
   }

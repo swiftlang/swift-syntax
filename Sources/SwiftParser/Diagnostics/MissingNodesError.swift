@@ -128,13 +128,6 @@ public struct MissingNodesError: ParserError {
       }
     }
 
-    // The after clause only provides value if the first missing node is not a token.
-    // TODO: Revisit whether we want to have this clause at all.
-    if !firstMissingNode.is(TokenSyntax.self) {
-      if let previousToken = firstMissingNode.previousToken(viewMode: .fixedUp), previousToken.presence == .present {
-        return "after '\(previousToken.text)'"
-      }
-    }
     return nil
   }
 
@@ -176,7 +169,7 @@ public struct MissingNodesError: ParserError {
   }
 
   public var message: String {
-    var message = "Expected \(missingNodesDescription(missingNodes: missingNodes, commonParent: commonParent))"
+    var message = "expected \(missingNodesDescription(missingNodes: missingNodes, commonParent: commonParent))"
     if let afterClause = afterClause {
       message += " \(afterClause)"
     }

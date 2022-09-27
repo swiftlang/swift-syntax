@@ -53,8 +53,8 @@ public extension ParserFixIt {
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticParserError: String, DiagnosticMessage {
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"
-  case missingColonInTernaryExprDiagnostic = "Expected ':' after '? ...' in ternary expression"
-  case missingFunctionParameterClause = "Expected argument list in function declaration"
+  case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
+  case missingFunctionParameterClause = "expected argument list in function declaration"
   case throwsInReturnPosition = "'throws' may only occur before '->'"
 
   public var message: String { self.rawValue }
@@ -73,9 +73,9 @@ public struct ExtaneousCodeAtTopLevel: ParserError {
 
   public var message: String {
     if let shortContent = extraneousCode.contentForDiagnosticsIfShortSingleLine {
-      return "Extraneous '\(shortContent)' at top level"
+      return "extraneous '\(shortContent)' at top level"
     } else {
-      return "Extraneous code at top level"
+      return "extraneous code at top level"
     }
   }
 }
@@ -98,7 +98,7 @@ public struct MissingAttributeArgument: ParserError {
   public let attributeName: TokenSyntax
 
   public var message: String {
-    return "Expected argument for '@\(attributeName)' attribute"
+    return "expected argument for '@\(attributeName)' attribute"
   }
 }
 
@@ -106,7 +106,7 @@ public struct UnexpectedNodesError: ParserError {
   public let unexpectedNodes: UnexpectedNodesSyntax
 
   public var message: String {
-    var message = "Unexpected text"
+    var message = "unexpected text"
     if let shortContent = unexpectedNodes.contentForDiagnosticsIfShortSingleLine {
       message += " '\(shortContent)'"
     }
@@ -124,8 +124,8 @@ public struct UnexpectedNodesError: ParserError {
 // MARK: - Fix-Its (please sort alphabetically)
 
 public enum StaticParserFixIt: String, FixItMessage {
-  case insertAttributeArguments = "Insert attribute argument"
-  case moveThrowBeforeArrow = "Move 'throws' before '->'"
+  case insertAttributeArguments = "insert attribute argument"
+  case moveThrowBeforeArrow = "move 'throws' before '->'"
 
   public var message: String { self.rawValue }
 

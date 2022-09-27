@@ -6,10 +6,11 @@ Since SwiftSyntax relies on definitions in the main Swift repository to generate
 
 To build the `main` branch of SwiftSyntax, follow the following instructions:
 
-1. Check `swift-syntax` and  `swift` out side by side:
+1. Check `swift-syntax`, `swift-argument-parser` and  `swift` out side by side:
     ```
     - (enclosing directory)
       - swift
+      - swift-argument-parser
       - swift-syntax
     ```
 
@@ -29,8 +30,6 @@ To build the `main` branch of SwiftSyntax, follow the following instructions:
     ```
 
 Swift-CI will automatically run the code generation step whenever a new toolchain (development snapshot or release) is published. It should thus almost never be necessary to perform the above build yourself.
-
-Afterward, SwiftPM can also generate an Xcode project to develop SwiftSyntax by running `swift package generate-xcodeproj`.
 
 If you also want to run tests locally, read the section below as testing has additional requirements.
 

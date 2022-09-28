@@ -2231,11 +2231,7 @@ extension Parser.Lookahead {
 
     // Skip by a closure capture list if present.
     if lookahead.consume(if: .leftSquareBracket) != nil {
-      var captureListProgress = LoopProgressCondition()
-      while !lookahead.at(any: [.eof, .rightSquareBracket]) && captureListProgress.evaluate(lookahead.currentToken) {
-        lookahead.consumeAnyToken()
-      }
-
+      lookahead.skipUntil(.rightSquareBracket, .rightSquareBracket)
       if lookahead.consume(if: .rightSquareBracket) == nil {
         return false
       }

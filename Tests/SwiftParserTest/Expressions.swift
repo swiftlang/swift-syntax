@@ -593,4 +593,21 @@ final class ExpressionTests: XCTestCase {
       substructureAfterMarker: "PLUS"
     )
   }
+
+  func testBogusCaptureLists() {
+    // N.B. This test ensures that capture list lookahead doesn't try to pair
+    // the opening square bracket from the array literal with the closing
+    // square bracket from the capture list.
+    AssertParse(
+      """
+      {
+          [
+              AboutItem(title: TextContent.legalAndMore, accessoryType: .disclosureIndicator, action: { [weak self] context in
+                  self?.tracker.buttonPressed(.legal)
+                  context.showSubmenu(title: TextContent.legalAndMore, configuration: LegalAndMoreSubmenuConfiguration())
+              }),
+          ]
+      }()
+      """)
+  }
 }

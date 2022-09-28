@@ -181,7 +181,7 @@ private func createBuildableNodeFormatFunction(node: Node) -> FunctionDecl {
         "result"
         AssignmentExpr()
         FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
-          TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: "leadingTrivia", name: "addingSpacingAfterNewlinesIfNeeded")))
+          TupleExprElement(expression: "leadingTrivia")
         }
       }
     }
@@ -203,8 +203,7 @@ private func createBuildableCollectionNodeFormatFunction(node: Node) -> Function
           MemberAccessExpr(base: "syntax", name: "map"),
           trailingClosure: ClosureExpr {
             FunctionCallExpr(MemberAccessExpr(base: "$0", name: "withLeadingTrivia")) {
-              TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
-                base: TupleExpr {
+              TupleExprElement(expression: TupleExpr {
                   SequenceExpr {
                     "indentedNewline"
                     BinaryOperatorExpr("+")
@@ -216,9 +215,8 @@ private func createBuildableCollectionNodeFormatFunction(node: Node) -> Function
                       }
                     }
                   }
-                },
-                name: "addingSpacingAfterNewlinesIfNeeded"
-              )))
+                }
+              )
             }
           }
         ))

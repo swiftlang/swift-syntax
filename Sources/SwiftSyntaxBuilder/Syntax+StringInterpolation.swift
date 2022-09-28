@@ -2,43 +2,6 @@
 import SwiftSyntax
 import SwiftParser
 
-fileprivate class Indenter: SyntaxRewriter {
-  let indentation: Trivia
-
-  init(indentation: Trivia) {
-    self.indentation = indentation
-  }
-
-  /// Adds `indentation` after all newlines in the syntax tree.
-  public static func indent<SyntaxType: SyntaxProtocol>(
-    _ node: SyntaxType,
-    indentation: Trivia
-  ) -> SyntaxType {
-    return Indenter(indentation: indentation).visit(Syntax(node)).as(SyntaxType.self)!
-  }
-
-  public override func visit(_ token: TokenSyntax) -> Syntax {
-    return Syntax(TokenSyntax(
-      token.tokenKind,
-      leadingTrivia: indent(trivia: token.leadingTrivia),
-      trailingTrivia: indent(trivia: token.trailingTrivia),
-      presence: token.presence
-    ))
-  }
-
-  private func indent(trivia: Trivia) -> Trivia {
-    let mappedPieces = trivia.flatMap { (piece) -> [TriviaPiece] in
-      if piece.isNewline {
-        return [piece] + indentation.pieces
-      } else {
-        return [piece]
-      }
-    }
-    return Trivia(pieces: mappedPieces)
-  }
-}
-
-
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
   let node: Syntax

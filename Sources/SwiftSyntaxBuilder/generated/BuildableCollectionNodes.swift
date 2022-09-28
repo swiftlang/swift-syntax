@@ -45,10 +45,12 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       $0.buildCodeBlockItem(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -106,10 +108,12 @@ public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
       $0.buildSyntax(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -172,10 +176,12 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildTupleExprElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -238,10 +244,12 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
       $0.buildArrayElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -299,10 +307,12 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildDictionaryElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -365,10 +375,12 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildSyntax(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -431,10 +443,12 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildDeclNameArgument(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -497,10 +511,12 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
       $0.buildExpr(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -558,10 +574,12 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
       $0.buildClosureCaptureItem(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -624,10 +642,12 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
       $0.buildClosureParam(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -690,10 +710,12 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
       $0.buildMultipleTrailingClosureElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -756,10 +778,12 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
       $0.buildObjcNamePiece(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -822,10 +846,12 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildFunctionParameter(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -888,10 +914,12 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
       $0.buildIfConfigClause(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -954,10 +982,12 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       $0.buildInheritedType(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1020,10 +1050,12 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       $0.buildMemberDeclListItem(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1081,10 +1113,12 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildDeclModifier(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1147,10 +1181,12 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
       $0.buildAccessPathComponent(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1213,10 +1249,12 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildAccessorDecl(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1274,10 +1312,12 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
       $0.buildPatternBinding(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1340,10 +1380,12 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
       $0.buildEnumCaseElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1406,10 +1448,12 @@ public struct DesignatedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
       $0.buildDesignatedTypeElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1472,10 +1516,12 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
       $0.buildSyntax(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1538,10 +1584,12 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
       $0.buildPrecedenceGroupNameElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1602,10 +1650,12 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
       $0.buildToken(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1666,10 +1716,12 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       $0.buildToken(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1732,10 +1784,12 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
       $0.buildSyntax(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1798,10 +1852,12 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
       $0.buildSyntax(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1864,10 +1920,12 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildObjCSelectorPiece(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1930,10 +1988,12 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
       $0.buildDifferentiabilityParam(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -1996,10 +2056,12 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildBackDeployVersionArgument(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2062,10 +2124,12 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       $0.buildSyntax(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2128,10 +2192,12 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
       $0.buildCatchClause(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2194,10 +2260,12 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildCaseItem(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2260,10 +2328,12 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
       $0.buildCatchItem(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2326,10 +2396,12 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildConditionElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2392,10 +2464,12 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
       $0.buildGenericRequirement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2458,10 +2532,12 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildGenericParameter(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2524,10 +2600,12 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
       $0.buildPrimaryAssociatedType(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2590,10 +2668,12 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
       $0.buildCompositionTypeElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2656,10 +2736,12 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildTupleTypeElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2722,10 +2804,12 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
       $0.buildGenericArgument(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2788,10 +2872,12 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
       $0.buildTuplePatternElement(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }
@@ -2854,10 +2940,12 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildAvailabilityArgument(format: format)
     })
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
     }
     if !trailingTrivia.isEmpty {
-      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
     }
     return format.format(syntax: result)
   }

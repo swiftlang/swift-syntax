@@ -98,7 +98,7 @@ final class FunctionTests: XCTestCase {
       """)
   }
 
-  func testParserInterop() {
+  func testParserBuilderInStringInterpolation() {
     let cases = SwitchCaseList {
       for i in 0..<2 {
         SwitchCase("""
@@ -132,5 +132,28 @@ final class FunctionTests: XCTestCase {
       }
     }
     """)
+  }
+
+  func testStringInterpolationInBuilder() {
+    let ext = ExtensionDecl(extendedType: "MyType") {
+      FunctionDecl(
+      """
+      ///
+      /// Satisfies conformance to `SyntaxBuildable`.
+      func buildSyntax(format: Format) -> Syntax {
+        return Syntax(buildTest(format: format))
+      }
+      """
+      )
+    }
+    XCTAssertEqual(ext.buildSyntax().description, """
+      extension MyType {
+          ///
+          /// Satisfies conformance to `SyntaxBuildable`.
+          func buildSyntax(format: Format) -> Syntax {
+            return Syntax(buildTest(format: format))
+          }
+      }
+      """)
   }
 }

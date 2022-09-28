@@ -137,21 +137,36 @@ func createTriviaAttachment(varName: ExpressibleAsExprBuildable, triviaVarName: 
       )
     }
   ) {
+    VariableDecl(
+      .let,
+      name: "trivia",
+      initializer: FunctionCallExpr(MemberAccessExpr(
+        base: TupleExpr {
+          SequenceExpr {
+            triviaVarName
+            BinaryOperatorExpr("+")
+            TupleExpr {
+              SequenceExpr {
+                MemberAccessExpr(base: varName, name: trivia)
+                BinaryOperatorExpr("??")
+                ArrayExpr()
+              }
+            }
+          }
+        },
+        name: "indented"
+      )) {
+        TupleExprElement(
+          label: "indentation",
+          expression: MemberAccessExpr(base: "format", name: "indentTrivia")
+        )
+      }
+    )
     SequenceExpr {
       varName
       AssignmentExpr()
       FunctionCallExpr(MemberAccessExpr(base: varName, name: "with\(trivia.withFirstCharacterUppercased)")) {
-        TupleExprElement(expression: SequenceExpr {
-          triviaVarName
-          BinaryOperatorExpr("+")
-          TupleExpr {
-            SequenceExpr {
-              MemberAccessExpr(base: varName, name: trivia)
-              BinaryOperatorExpr("??")
-              ArrayExpr()
-            }
-          }
-        })
+        TupleExprElement(expression: "trivia")
       }
     }
   }

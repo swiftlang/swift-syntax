@@ -7,7 +7,6 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_library(SwiftBasicFormat STATIC
-  Trivia+Extension.swift
   generated/Format.swift
 )
 

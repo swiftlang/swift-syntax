@@ -22,23 +22,32 @@ public struct Token: SyntaxBuildable, ExpressibleAsBinaryOperatorExpr, Expressib
   let tokenSyntax: TokenSyntax
   let leadingTrivia: Trivia?
   let trailingTrivia: Trivia?
+  var text: String { tokenSyntax.text }
   
-  var text: String {
-    tokenSyntax.text
-  }
-  
-  public init (tokenSyntax: TokenSyntax, leadingTrivia: Trivia? = nil, trailingTrivia: Trivia? = nil) {
+  public init(
+    tokenSyntax: TokenSyntax,
+    leadingTrivia: Trivia? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
     self.tokenSyntax = tokenSyntax
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
   }
   
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Token {
-    Token(tokenSyntax: tokenSyntax, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+    Token(
+      tokenSyntax: tokenSyntax,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia
+    )
   }
   
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Token {
-    Token(tokenSyntax: tokenSyntax, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+    Token(
+      tokenSyntax: tokenSyntax,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia
+    )
   }
   
   public func buildToken(format: Format) -> TokenSyntax {

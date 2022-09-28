@@ -17,7 +17,7 @@ import SwiftSyntax
 public struct Format {
   public let indentWidth: Int
   private var indents: Int = 0
-  public init (indentWidth: Int = 4) {
+  public init(indentWidth: Int = 4) {
     self.indentWidth = indentWidth
   }
 }

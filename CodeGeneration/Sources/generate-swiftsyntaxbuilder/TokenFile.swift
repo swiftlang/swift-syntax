@@ -41,185 +41,101 @@ let tokenFile = SourceFile {
     identifier: "Token",
     inheritanceClause: createTypeInheritanceClause(conformances: conformances)
   ) {
-    VariableDecl(.let, name: "tokenSyntax", type: "TokenSyntax")
-    VariableDecl(.let, name: "leadingTrivia", type: OptionalType(wrappedType: "Trivia"))
-    VariableDecl(.let, name: "trailingTrivia", type: OptionalType(wrappedType: "Trivia"))
-
-    VariableDecl(
-      leadingTrivia: .newline,
-      letOrVarKeyword: .var
-    ) {
-      PatternBinding(pattern: "text",
-                     typeAnnotation: "String",
-                     accessor: CodeBlock {
-        MemberAccessExpr(base: "tokenSyntax", name: "text")
-      })
-    }
+    VariableDecl("let tokenSyntax: TokenSyntax")
+    VariableDecl("let leadingTrivia: \(OptionalType(wrappedType: "Trivia"))")
+    VariableDecl("let trailingTrivia: \(OptionalType(wrappedType: "Trivia"))")
+    VariableDecl("var text: String { tokenSyntax.text }")
 
     InitializerDecl(
-      leadingTrivia: .newline,
-      modifiers: [Token.public],
-      signature: FunctionSignature(
-        input: ParameterClause() {
-          FunctionParameter(
-            firstName: .identifier("tokenSyntax"),
-            colon: .colon,
-            type: "TokenSyntax"
-          )
-          FunctionParameter(
-            firstName: .identifier("leadingTrivia"),
-            colon: .colon,
-            type: OptionalType(wrappedType: "Trivia"),
-            defaultArgument: InitializerClause(value: NilLiteralExpr())
-          )
-          FunctionParameter(
-            firstName: .identifier("trailingTrivia"),
-            colon: .colon,
-            type: OptionalType(wrappedType: "Trivia"),
-            defaultArgument: InitializerClause(value: NilLiteralExpr())
-          )
-        }
-      )
-    ) {
-      for member in ["tokenSyntax", "leadingTrivia", "trailingTrivia"] {
-        SequenceExpr {
-          MemberAccessExpr(base: "self", name: member)
-          AssignmentExpr()
-          member
-        }
+      """
+
+      public init(
+        tokenSyntax: TokenSyntax,
+        leadingTrivia: \(OptionalType(wrappedType: "Trivia")) = nil,
+        trailingTrivia: \(OptionalType(wrappedType: "Trivia")) = nil
+      ) {
+        self.tokenSyntax = tokenSyntax
+        self.leadingTrivia = leadingTrivia
+        self.trailingTrivia = trailingTrivia
       }
-    }
+      """
+    )
 
     for leadingTrailing in ["Leading", "Trailing"] {
       FunctionDecl(
-        leadingTrivia: .newline,
-        modifiers: [Token.public],
-        identifier: .identifier("with\(leadingTrailing)Trivia"),
-        signature: FunctionSignature(
-          input: ParameterClause {
-            FunctionParameter(
-              firstName: .wildcard,
-              secondName: .identifier("\(lowercaseFirstWord(name: leadingTrailing))Trivia"),
-              colon: .colon,
-              type: "Trivia"
-            )
-          },
-          output: "Token"
-        )
-      ) {
-        FunctionCallExpr("Token") {
-          for arg in ["tokenSyntax", "leadingTrivia", "trailingTrivia"] {
-            TupleExprElement(
-              label: arg,
-              expression: arg
-            )
-          }
+        """
+
+        public func with\(leadingTrailing)Trivia(_ \(lowercaseFirstWord(name: leadingTrailing))Trivia: Trivia) -> Token {
+          Token(
+            tokenSyntax: tokenSyntax,
+            leadingTrivia: leadingTrivia,
+            trailingTrivia: trailingTrivia
+          )
         }
-      }
+        """
+      )
     }
 
     FunctionDecl(
-      leadingTrivia: .newline,
-      modifiers: [Token.public],
-      identifier: .identifier("buildToken"),
-      signature: FunctionSignature(
-        input: ParameterClause {
-          FunctionParameter(
-            firstName: .identifier("format"),
-            colon: .colon,
-            type: "Format"
-          )
-        },
-        output: "TokenSyntax"
-      )
-    ) {
-      VariableDecl(.var, name: "result", initializer: FunctionCallExpr(MemberAccessExpr(base: "format", name: "format")) {
-        TupleExprElement(label: "syntax", expression: IdentifierExpr("tokenSyntax"))
-      })
-      for leadingTrailing in ["Leading", "Trailing"] {
-        let varName = "\(lowercaseFirstWord(name: leadingTrailing))Trivia"
-        IfStmt(conditions: OptionalBindingCondition(letOrVarKeyword: .let, pattern: IdentifierPattern(varName), initializer: InitializerClause(value: varName))) {
-          SequenceExpr {
-            "result"
-            AssignmentExpr()
-            FunctionCallExpr(MemberAccessExpr(base: "result", name: "with\(leadingTrailing)Trivia")) {
-              TupleExprElement(expression: varName)
-            }
-          }
+      """
+
+      public func buildToken(format: Format) -> TokenSyntax {
+        var result = format.format(syntax: tokenSyntax)
+        if let leadingTrivia = leadingTrivia {
+          result = result.withLeadingTrivia(leadingTrivia)
         }
+        if let trailingTrivia = trailingTrivia {
+          result = result.withTrailingTrivia(trailingTrivia)
+        }
+        return result
       }
-      ReturnStmt(expression: "result")
-    }
+      """
+    )
 
     FunctionDecl(
-      leadingTrivia: .newline,
-      modifiers: [Token.public],
-      identifier: .identifier("buildSyntax"),
-      signature: FunctionSignature(
-        input: ParameterClause {
-          FunctionParameter(
-            firstName: .identifier("format"),
-            colon: .colon,
-            type: "Format"
-          )
-        },
-        output: "Syntax"
-      )
-    ) {
-      FunctionCallExpr("Syntax") {
-        TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: IdentifierExpr(identifier: .`self`), name: "buildToken")) {
-          TupleExprElement(label: "format", expression: "format")
-        })
+      """
+
+      public func buildSyntax(format: Format) -> Syntax {
+        Syntax(self.buildToken(format: format))
       }
-    }
+      """
+    )
 
     for conformance in tokenType.elementInCollections {
       FunctionDecl(
-        leadingTrivia: .newline + .docLineComment("/// Conformance to \(conformance.expressibleAsBaseName)") + .newline,
-        modifiers: [Token.public],
-        identifier: .identifier("create\(conformance.buildableBaseName)"),
-        signature: FunctionSignature(
-          input: ParameterClause(),
-          output: conformance.buildableBaseName
-        )
-      ) {
-        ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
-          TupleExprElement(expression: ArrayExpr {
-            ArrayElement(expression: "self")
-          })
-        })
-      }
+        """
+
+        /// Conformance to \(conformance.expressibleAsBaseName)
+        public func create\(conformance.buildableBaseName)() -> \(conformance.buildableBaseName) {
+          return \(conformance.buildableBaseName)([self])
+        }
+        """
+      )
     }
 
     for conformance in tokenType.convertibleToTypes {
       let param = Node.from(type: conformance).singleNonDefaultedChild
       FunctionDecl(
-        leadingTrivia: .newline + .docLineComment("/// Conformance to \(conformance.expressibleAsBaseName)") + .newline,
-        modifiers: [Token.public],
-        identifier: .identifier("create\(conformance.buildableBaseName)"),
-        signature: FunctionSignature(
-          input: ParameterClause(),
-          output: conformance.buildableBaseName
-        )
-      ) {
-        ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
-          TupleExprElement(label: param.swiftName, expression: "self")
-        })
-      }
+        """
+
+        /// Conformance to \(conformance.expressibleAsBaseName)
+        public func create\(conformance.buildableBaseName)() -> \(conformance.buildableBaseName) {
+          return \(conformance.buildableBaseName)(\(param.swiftName): self)
+        }
+        """
+      )
     }
 
     for buildable in ["SyntaxBuildable", "ExprBuildable"] {
       FunctionDecl(
-        leadingTrivia: .newline + .docLineComment("/// `Token` conforms to `\(buildable)` via different paths, so we need to pick one default conversion path.") + .newline,
-        modifiers: [Token.public],
-        identifier: .identifier("create\(buildable)"),
-        signature: FunctionSignature(
-          input: ParameterClause(),
-          output: buildable
-        )
-      ) {
-        ReturnStmt(expression: FunctionCallExpr("createIdentifierExpr"))
-      }
+        """
+
+        /// `Token` conforms to `\(buildable)` via different paths, so we need to pick one default conversion path.
+        public func create\(buildable)() -> \(buildable) {
+          return createIdentifierExpr()
+        }
+        """
+      )
     }
   }
 
@@ -231,97 +147,51 @@ let tokenFile = SourceFile {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {
         VariableDecl(
-          leadingTrivia: token.text.map { .newline + .docLineComment("/// The `\($0)` keyword") + .newline } ?? [],
-          modifiers: [Token.static],
-          letOrVarKeyword: .var
-        ) {
-          // We need to use `CodeBlock` here to ensure there is braces around.
+          """
 
-          let accessor = CodeBlock {
-            FunctionCallExpr("Token") {
-              TupleExprElement(label: "tokenSyntax", expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: token.swiftKind)))
-            }
+          /// The `\(token.text!)` keyword
+          static var \(token.name.withFirstCharacterLowercased.backticked): Token {
+            Token(tokenSyntax: TokenSyntax.\(token.swiftKind)())
           }
-
-          createTokenPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
-        }
+          """
+        )
       } else if let text = token.text {
         VariableDecl(
-          leadingTrivia: .newline + .docLineComment("/// The `\(text)` token") + .newline,
-          modifiers: [Token.static],
-          letOrVarKeyword: .var
-        ) {
-          // We need to use `CodeBlock` here to ensure there is braces around.
-          let accessor = CodeBlock {
-            FunctionCallExpr("Token") {
-              TupleExprElement(label: "tokenSyntax", expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "\(token.swiftKind)Token")))
-            }
-          }
+          """
 
-          createTokenPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
-        }
-      } else {
-        let signature = FunctionSignature(
-          input: ParameterClause {
-            FunctionParameter(
-              attributes: nil,
-              firstName: .wildcard,
-              secondName: .identifier("text"),
-              colon: .colon,
-              type: "String"
-            )
-          },
-          output: "Token"
+          /// The `\(text)` token
+          static var \(token.name.withFirstCharacterLowercased.backticked): Token {
+            Token(tokenSyntax: TokenSyntax.\(token.swiftKind)Token())
+          }
+          """
         )
-
+      } else {
         FunctionDecl(
-          modifiers: [Token.static],
-          identifier: .identifier(token.name.withFirstCharacterLowercased.backticked),
-          signature: signature
-        ) {
-          FunctionCallExpr("Token") {
-            TupleExprElement(
-              label: "tokenSyntax",
-              expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: token.swiftKind)) {
-                TupleExprElement(expression: "text")
-              })
+          """
+          static func \(token.name.withFirstCharacterLowercased.backticked)(_ text: String) -> Token {
+            Token(tokenSyntax: TokenSyntax.\(token.swiftKind)(text))
           }
-        }
+          """
+        )
       }
     }
     VariableDecl(
-      leadingTrivia: .newline + .docLineComment("/// The `eof` token") + .newline,
-      modifiers: [Token.static],
-      letOrVarKeyword: .var
-    ) {
-      // We need to use `CodeBlock` here to ensure there is braces around.
-      let body = CodeBlock {
-        FunctionCallExpr("Token") {
-          TupleExprElement(label: "tokenSyntax", expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "eof")))
-        }
-      }
+      """
 
-      createTokenPatternBinding("eof", accessor: body)
-    }
+      /// The `eof` token
+      static var eof: Token {
+        Token(tokenSyntax: TokenSyntax.eof())
+      }
+      """
+    )
     VariableDecl(
-      leadingTrivia: .newline + .docLineComment("/// The `open` contextual token") + .newline,
-      modifiers: [Token.static],
-      letOrVarKeyword: .var
-    ) {
-      // We need to use `CodeBlock` here to ensure there is braces around.
-      let body = CodeBlock {
-        let tokenSyntax = FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "contextualKeyword")) {
-          TupleExprElement(expression: StringLiteralExpr("open"))
-        }
-        let tokenSyntaxWithTrailingTrivia = FunctionCallExpr(MemberAccessExpr(base: tokenSyntax, name: "withTrailingTrivia")) {
-          TupleExprElement(expression: createSpacingCall())
-        }
-        FunctionCallExpr("Token") {
-          TupleExprElement(label: "tokenSyntax", expression: tokenSyntaxWithTrailingTrivia)
-        }
-      }
+      """
 
-      createTokenPatternBinding("open", accessor: body)
-    }
+      /// The `open` contextual token
+      static var open: Token {
+        Token(tokenSyntax: TokenSyntax.contextualKeyword("open").withTrailingTrivia(.space))
+      }
+      """
+    )
   }
 }

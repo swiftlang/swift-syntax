@@ -32,29 +32,6 @@ let copyrightHeader = """
 
     """
 
-func createSpacingCall() -> MemberAccessExpr {
-  MemberAccessExpr(name: "space")
-}
-
-func createWithLeadingTriviaCall() -> FunctionCallExpr {
-  FunctionCallExpr(MemberAccessExpr(name: "withLeadingTrivia")) {
-    TupleExprElement(expression: createSpacingCall())
-  }
-}
-
-func createWithTrailingTriviaCall() -> FunctionCallExpr {
-  FunctionCallExpr(MemberAccessExpr(name: "withTrailingTrivia")) {
-    TupleExprElement(expression: createSpacingCall())
-  }
-}
-
-func createTokenPatternBinding(_ pattern: ExpressibleAsPatternBuildable, accessor: ExpressibleAsSyntaxBuildable) -> PatternBinding {
-  PatternBinding(pattern: pattern,
-                 typeAnnotation: "Token",
-                 initializer: nil,
-                 accessor: accessor)
-}
-
 func createTypeInheritanceClause(conformances: [String]) -> TypeInheritanceClause? {
   conformances.isEmpty ? nil : TypeInheritanceClause {
     for conformance in conformances {
@@ -76,19 +53,17 @@ func createFormatParameters() -> ParameterClause {
 
 /// Generate the `create...` function for an `ExpressibleAs...` conformance.
 func createExpressibleAsCreateFunction(type: SyntaxBuildableType, additionalDocComments: [String] = []) -> FunctionDecl {
-  FunctionDecl(
-    leadingTrivia: ([
-      "/// Conformance to `\(type.expressibleAsBaseName)`.",
-    ] + additionalDocComments).map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [Token.public],
-    identifier: .identifier("create\(type.buildableBaseName)"),
-    signature: FunctionSignature(
-      input: ParameterClause(),
-      output: type.buildable
-    )
-  ) {
-    ReturnStmt(expression: "self")
-  }
+  let docComment = ([
+    "/// Conformance to `\(type.expressibleAsBaseName)`."
+  ] + additionalDocComments).joined(separator: "\n")
+  return FunctionDecl(
+    """
+    \(docComment)
+    public func create\(type.buildableBaseName)() -> \(type.buildable) {
+      return self
+    }
+    """
+  )
 }
 
 /// Generate the `create...` function for an `ExpressibleAs...` conformance
@@ -98,76 +73,29 @@ func createDisambiguatingExpressibleAsCreateFunction(type: SyntaxBuildableType, 
     "/// `\(type.buildableBaseName)` may conform to `\(baseType.expressibleAsBaseName)` via different `ExpressibleAs*` paths.",
     "/// Thus, there are multiple default implementations of `create\(baseType.buildableBaseName)`, some of which perform conversions",
     "/// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.",
-  ]) 
+  ])
 }
-
+//
 /// Generate a `withATrivia` function.
 func createWithTriviaFunction(trivia: String) -> FunctionDecl {
   FunctionDecl(
-    modifiers: [Token.public],
-    identifier: .identifier("with\(trivia.withFirstCharacterUppercased)"),
-    signature: FunctionSignature(
-      input: ParameterClause {
-        FunctionParameter(
-          firstName: .wildcard,
-          secondName: .identifier(trivia),
-          colon: .colon,
-          type: "Trivia"
-        )
-      },
-      output: "Self"
-    )
-  ) {
-    VariableDecl(.var, name: "result", initializer: "self")
-    SequenceExpr {
-      MemberAccessExpr(base: "result", name: trivia)
-      AssignmentExpr()
-      trivia
+    """
+    public func with\(trivia.withFirstCharacterUppercased)(_ \(trivia): Trivia) -> Self {
+      var result = self
+      result.\(trivia) = \(trivia)
+      return result
     }
-    ReturnStmt(expression: "result")
-  }
+    """
+  )
 }
 
-func createTriviaAttachment(varName: ExpressibleAsExprBuildable, triviaVarName: ExpressibleAsExprBuildable, trivia: String) -> IfStmt {
+func createTriviaAttachment(varName: ExprBuildable, triviaVarName: ExprBuildable, trivia: String) -> IfStmt {
   IfStmt(
-    conditions: ExprList {
-      PrefixOperatorExpr(
-        operatorToken: .prefixOperator("!"),
-        postfixExpression: MemberAccessExpr(base: triviaVarName, name: "isEmpty")
-      )
+    """
+    if !\(triviaVarName).isEmpty {
+      let trivia = (\(triviaVarName) + (\(varName).\(trivia) ?? [])).indented(indentation: format.indentTrivia)
+      \(varName) = \(varName).with\(trivia.withFirstCharacterUppercased)(trivia)
     }
-  ) {
-    VariableDecl(
-      .let,
-      name: "trivia",
-      initializer: FunctionCallExpr(MemberAccessExpr(
-        base: TupleExpr {
-          SequenceExpr {
-            triviaVarName
-            BinaryOperatorExpr("+")
-            TupleExpr {
-              SequenceExpr {
-                MemberAccessExpr(base: varName, name: trivia)
-                BinaryOperatorExpr("??")
-                ArrayExpr()
-              }
-            }
-          }
-        },
-        name: "indented"
-      )) {
-        TupleExprElement(
-          label: "indentation",
-          expression: MemberAccessExpr(base: "format", name: "indentTrivia")
-        )
-      }
-    )
-    SequenceExpr {
-      varName
-      AssignmentExpr()
-      FunctionCallExpr(MemberAccessExpr(base: varName, name: "with\(trivia.withFirstCharacterUppercased)")) {
-        TupleExprElement(expression: "trivia")
-      }
-    }
-  }
+    """
+  )
 }

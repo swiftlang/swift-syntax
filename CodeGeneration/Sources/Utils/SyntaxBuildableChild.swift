@@ -37,7 +37,7 @@ public extension Child {
   /// represents this child node.
   func generateExprBuildSyntaxNode(varName: ExpressibleAsExprBuildable, formatName: String) -> ExpressibleAsExprBuildable {
     if type.isToken {
-      return FunctionCallExpr(MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken")) {
+      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken")) {
         TupleExprElement(label: "format", expression: "format")
       }
     } else {
@@ -46,7 +46,7 @@ public extension Child {
         format = MemberAccessExpr(base: format, name: "_indented")
       }
       let expr = type.optionalChained(expr: varName)
-      return FunctionCallExpr(MemberAccessExpr(base: expr, name: "build\(type.baseName)")) {
+      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: expr, name: "build\(type.baseName)")) {
         TupleExprElement(label: "format", expression: format)
       }
     }
@@ -88,7 +88,7 @@ public extension Child {
       })
     }
     let disjunction = ExprList(assertChoices.flatMap { [$0, BinaryOperatorExpr("||")] }.dropLast())
-    return FunctionCallExpr("assert") {
+    return FunctionCallExpr(calledExpression: "assert") {
       SequenceExpr(elements: disjunction)
     }
   }

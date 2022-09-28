@@ -15,6 +15,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
+import SwiftBasicFormat
 
 let buildableCollectionNodesFile = SourceFile {
   ImportDecl(
@@ -45,11 +46,10 @@ let buildableCollectionNodesFile = SourceFile {
     ) {
       for (side, trivia) in zip(triviaSides, trivias) {
         VariableDecl(
-          leadingTrivia: .docLineComment("/// The \(side) trivia attached to this syntax node once built.") + .newline,
-          .var,
-          name: trivia,
-          type: "Trivia",
-          initializer: ArrayExpr()
+          """
+          /// The \(side) trivia attached to this syntax node once built.
+          var \(trivia): Trivia = []
+          """
         )
       }
 
@@ -87,17 +87,12 @@ let buildableCollectionNodesFile = SourceFile {
         }
       ) {
         FunctionDecl(
-          modifiers: [Token.public],
-          identifier: .identifier("create\(type.buildableBaseName)"),
-          signature: FunctionSignature(
-            input: ParameterClause(),
-            output: type.buildable
-          )
-        ) {
-          ReturnStmt(expression: FunctionCallExpr(type.buildableBaseName) {
-            TupleExprElement(expression: "self")
-          })
-        }
+          """
+          public func create\(type.buildableBaseName)() -> \(type.buildable) {
+            return \(type.buildableBaseName)(self)
+          }
+          """
+        )
       }
     }
   }
@@ -107,153 +102,80 @@ let buildableCollectionNodesFile = SourceFile {
 private func createArrayInitializer(node: Node) -> InitializerDecl {
   let type = node.type
   let elementType = node.collectionElementType
-  return InitializerDecl(
-    leadingTrivia: [
-      "/// Creates a `\(type.buildableBaseName)` with the provided list of elements.",
-      "/// - Parameters:",
-      "///   - elements: A list of `\(elementType.expressibleAsBaseName)`",
-    ].map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [Token.public],
-    signature: FunctionSignature(
-      input: ParameterClause {
-        FunctionParameter(
-          firstName: .wildcard,
-          secondName: .identifier("elements"),
-          colon: .colon,
-          type: ArrayType(elementType: elementType.expressibleAs)
-        )
-      }
+  var elementsInit: ExprBuildable = IdentifierExpr("elements")
+  if !elementType.isToken {
+    elementsInit = FunctionCallExpr(
+      calledExpression: MemberAccessExpr(base: elementsInit, name: "map"),
+      trailingClosure: ClosureExpr(" { $0.create\(elementType.buildableBaseName)() }")
     )
-  ) {
-    SequenceExpr {
-      MemberAccessExpr(base: "self", name: "elements")
-      AssignmentExpr()
-      if elementType.isToken {
-        "elements"
-      } else {
-        FunctionCallExpr(MemberAccessExpr(base: "elements", name: "map"), trailingClosure: ClosureExpr {
-          FunctionCallExpr(MemberAccessExpr(base: "$0", name: "create\(elementType.buildableBaseName)"))
-        })
-      }
-    }
   }
+  return InitializerDecl(
+    """
+    /// Creates a `\(type.buildableBaseName)` with the provided list of elements.
+    /// - Parameters:
+    ///   - elements: A list of `\(elementType.expressibleAsBaseName)`
+    public init(_ elements: \(ArrayType(elementType: elementType.expressibleAs))) {
+      self.elements = \(elementsInit)
+    }
+    """
+  )
 }
 
 /// Generate a flattening initializer taking an array of collections.
 private func createCombiningInitializer(node: Node) -> InitializerDecl {
   let type = node.type
   return InitializerDecl(
-    leadingTrivia: .docLineComment("/// Creates a new `\(type.buildableBaseName)` by flattening the elements in `lists`") + .newline,
-    modifiers: [Token.public],
-    signature: FunctionSignature(
-      input: ParameterClause {
-        FunctionParameter(
-          firstName: .identifier("combining").withTrailingTrivia(.space),
-          secondName: .identifier("lists"),
-          colon: .colon,
-          type: ArrayType(elementType: type.expressibleAs)
-        )
-      }
-    )
-  ) {
-    SequenceExpr {
-      "elements"
-      AssignmentExpr()
-      FunctionCallExpr(MemberAccessExpr(base: "lists", name: "flatMap"), trailingClosure: ClosureExpr {
-        MemberAccessExpr(
-          base: FunctionCallExpr(MemberAccessExpr(base: "$0", name: "create\(type.buildableBaseName)")),
-          name: "elements"
-        )
-      })
+    """
+    /// Creates a new `\(type.buildableBaseName)` by flattening the elements in `lists`
+    public init(combining lists: \(ArrayType(elementType: type.expressibleAs))) {
+      elements = lists.flatMap { $0.create\(type.buildableBaseName)().elements }
     }
-  }
+    """
+  )
 }
 
 /// Generate the initializer for the `ExpressibleByArrayLiteral` conformance.
 private func createArrayLiteralInitializer(node: Node) -> InitializerDecl {
   let elementType = node.collectionElementType
   return InitializerDecl(
-    modifiers: [Token.public],
-    signature: FunctionSignature(
-      input: ParameterClause {
-        FunctionParameter(
-          firstName: .identifier("arrayLiteral").withTrailingTrivia(.space),
-          secondName: .identifier("elements"),
-          colon: .colon,
-          type: elementType.expressibleAs,
-          ellipsis: .ellipsis
-        )
-      }
-    )
-  ) {
-    FunctionCallExpr(MemberAccessExpr(base: "self", name: "init")) {
-      TupleExprElement(expression: "elements")
+    """
+    public init(arrayLiteral elements: \(elementType.expressibleAs)...) {
+      self.init(elements)
     }
-  }
+    """
+  )
 }
 
 /// Generate the function building the collection syntax.
 private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl {
   let type = node.type
   let elementType = node.collectionElementType
-  return FunctionDecl(
-    modifiers: [Token.public],
-    identifier: .identifier("build\(type.baseName)"),
-    signature: FunctionSignature(
-      input: createFormatParameters(),
-      output: type.syntax
-    )
-  ) {
-    VariableDecl(
-      .var,
-      name: "result",
-      initializer: FunctionCallExpr("\(type.syntaxBaseName)") {
-        if elementType.isToken {
-          TupleExprElement(
-            expression: FunctionCallExpr(MemberAccessExpr(base: "elements", name: "map"), trailingClosure: ClosureExpr {
-              FunctionCallExpr(MemberAccessExpr(base: Token.dollarIdentifier("$0"), name: "buildToken")) {
-                TupleExprElement(label: "format", expression: "format")
-              }
-            })
-          )
-        } else {
-          TupleExprElement(
-            expression: FunctionCallExpr(MemberAccessExpr(base: "elements", name: "map"), trailingClosure: ClosureExpr {
-              FunctionCallExpr(MemberAccessExpr(base: "$0", name: "build\(elementType.baseName)")) {
-                TupleExprElement(label: "format", expression: "format")
-              }
-            })
-          )
-        }
-      }
-    )
+  let buildCall = elementType.isToken ? "buildToken" : "build\(elementType.baseName)"
+
+  let body = CodeBlockItemList {
+    VariableDecl("var result = \(type.syntaxBaseName)(elements.map { $0.\(buildCall)(format: format) })")
     for trivia in trivias {
-      createTriviaAttachment(varName: "result", triviaVarName: trivia, trivia: trivia)
+      createTriviaAttachment(varName: IdentifierExpr("result"), triviaVarName: IdentifierExpr(trivia), trivia: trivia)
     }
-    ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "format")) {
-      TupleExprElement(
-        label: "syntax",
-        expression: "result"
-      )
-    })
-  }
+    ReturnStmt("return format.format(syntax: result)")
+  }.buildSyntax(format: Format(indentWidth: 2))
+
+  return FunctionDecl(
+    """
+    public func build\(type.baseName)(format: Format) -> \(type.syntax) {
+      \(body)
+    }
+    """)
 }
 
 /// Generate the function building the syntax.
 private func createBuildSyntaxFunction(node: Node) -> FunctionDecl {
   let type = node.type
   return FunctionDecl(
-    modifiers: [Token.public],
-    identifier: .identifier("buildSyntax"),
-    signature: FunctionSignature(
-      input: createFormatParameters(),
-      output: "Syntax"
-    )
-  ) {
-    ReturnStmt(expression: FunctionCallExpr("Syntax") {
-      TupleExprElement(expression: FunctionCallExpr("build\(type.baseName)") {
-        TupleExprElement(label: "format", expression: "format")
-      })
-    })
-  }
+    """
+    public func buildSyntax(format: Format) -> Syntax {
+      return Syntax(build\(type.baseName)(format: format))
+    }
+    """
+  )
 }

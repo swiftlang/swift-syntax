@@ -26,24 +26,19 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   /// Creates a `CodeBlockItemList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsCodeBlockItem`
-  public init (_ elements: [ExpressibleAsCodeBlockItem]) {
-    self.elements = elements.map {
-      $0.createCodeBlockItem()
-    }
+  public init(_ elements: [ExpressibleAsCodeBlockItem]) {
+    self.elements = elements.map { $0.createCodeBlockItem() }
   }
   /// Creates a new `CodeBlockItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCodeBlockItemList]) {
-    elements = lists.flatMap {
-      $0.createCodeBlockItemList().elements
-    }
+  public init(combining lists: [ExpressibleAsCodeBlockItemList]) {
+    elements = lists.flatMap { $0.createCodeBlockItemList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsCodeBlockItem...) {
+  public init(arrayLiteral elements: ExpressibleAsCodeBlockItem...) {
     self.init(elements)
   }
   public func buildCodeBlockItemList(format: Format) -> CodeBlockItemListSyntax {
-    var result = CodeBlockItemListSyntax(elements.map {
-      $0.buildCodeBlockItem(format: format)
-    })
+    
+    var result = CodeBlockItemListSyntax(elements.map { $0.buildCodeBlockItem(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -89,24 +84,19 @@ public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   /// Creates a `UnexpectedNodes` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map {
-      $0.createSyntaxBuildable()
-    }
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
   /// Creates a new `UnexpectedNodes` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsUnexpectedNodes]) {
-    elements = lists.flatMap {
-      $0.createUnexpectedNodes().elements
-    }
+  public init(combining lists: [ExpressibleAsUnexpectedNodes]) {
+    elements = lists.flatMap { $0.createUnexpectedNodes().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
   public func buildUnexpectedNodes(format: Format) -> UnexpectedNodesSyntax {
-    var result = UnexpectedNodesSyntax(elements.map {
-      $0.buildSyntax(format: format)
-    })
+    
+    var result = UnexpectedNodesSyntax(elements.map { $0.buildSyntax(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -157,24 +147,19 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// Creates a `TupleExprElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsTupleExprElement`
-  public init (_ elements: [ExpressibleAsTupleExprElement]) {
-    self.elements = elements.map {
-      $0.createTupleExprElement()
-    }
+  public init(_ elements: [ExpressibleAsTupleExprElement]) {
+    self.elements = elements.map { $0.createTupleExprElement() }
   }
   /// Creates a new `TupleExprElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTupleExprElementList]) {
-    elements = lists.flatMap {
-      $0.createTupleExprElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsTupleExprElementList]) {
+    elements = lists.flatMap { $0.createTupleExprElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsTupleExprElement...) {
+  public init(arrayLiteral elements: ExpressibleAsTupleExprElement...) {
     self.init(elements)
   }
   public func buildTupleExprElementList(format: Format) -> TupleExprElementListSyntax {
-    var result = TupleExprElementListSyntax(elements.map {
-      $0.buildTupleExprElement(format: format)
-    })
+    
+    var result = TupleExprElementListSyntax(elements.map { $0.buildTupleExprElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -225,24 +210,19 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   /// Creates a `ArrayElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsArrayElement`
-  public init (_ elements: [ExpressibleAsArrayElement]) {
-    self.elements = elements.map {
-      $0.createArrayElement()
-    }
+  public init(_ elements: [ExpressibleAsArrayElement]) {
+    self.elements = elements.map { $0.createArrayElement() }
   }
   /// Creates a new `ArrayElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsArrayElementList]) {
-    elements = lists.flatMap {
-      $0.createArrayElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsArrayElementList]) {
+    elements = lists.flatMap { $0.createArrayElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsArrayElement...) {
+  public init(arrayLiteral elements: ExpressibleAsArrayElement...) {
     self.init(elements)
   }
   public func buildArrayElementList(format: Format) -> ArrayElementListSyntax {
-    var result = ArrayElementListSyntax(elements.map {
-      $0.buildArrayElement(format: format)
-    })
+    
+    var result = ArrayElementListSyntax(elements.map { $0.buildArrayElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -288,24 +268,19 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
   /// Creates a `DictionaryElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsDictionaryElement`
-  public init (_ elements: [ExpressibleAsDictionaryElement]) {
-    self.elements = elements.map {
-      $0.createDictionaryElement()
-    }
+  public init(_ elements: [ExpressibleAsDictionaryElement]) {
+    self.elements = elements.map { $0.createDictionaryElement() }
   }
   /// Creates a new `DictionaryElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDictionaryElementList]) {
-    elements = lists.flatMap {
-      $0.createDictionaryElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsDictionaryElementList]) {
+    elements = lists.flatMap { $0.createDictionaryElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsDictionaryElement...) {
+  public init(arrayLiteral elements: ExpressibleAsDictionaryElement...) {
     self.init(elements)
   }
   public func buildDictionaryElementList(format: Format) -> DictionaryElementListSyntax {
-    var result = DictionaryElementListSyntax(elements.map {
-      $0.buildDictionaryElement(format: format)
-    })
+    
+    var result = DictionaryElementListSyntax(elements.map { $0.buildDictionaryElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -356,24 +331,19 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
   /// Creates a `StringLiteralSegments` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map {
-      $0.createSyntaxBuildable()
-    }
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
   /// Creates a new `StringLiteralSegments` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsStringLiteralSegments]) {
-    elements = lists.flatMap {
-      $0.createStringLiteralSegments().elements
-    }
+  public init(combining lists: [ExpressibleAsStringLiteralSegments]) {
+    elements = lists.flatMap { $0.createStringLiteralSegments().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
   public func buildStringLiteralSegments(format: Format) -> StringLiteralSegmentsSyntax {
-    var result = StringLiteralSegmentsSyntax(elements.map {
-      $0.buildSyntax(format: format)
-    })
+    
+    var result = StringLiteralSegmentsSyntax(elements.map { $0.buildSyntax(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -424,24 +394,19 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// Creates a `DeclNameArgumentList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsDeclNameArgument`
-  public init (_ elements: [ExpressibleAsDeclNameArgument]) {
-    self.elements = elements.map {
-      $0.createDeclNameArgument()
-    }
+  public init(_ elements: [ExpressibleAsDeclNameArgument]) {
+    self.elements = elements.map { $0.createDeclNameArgument() }
   }
   /// Creates a new `DeclNameArgumentList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDeclNameArgumentList]) {
-    elements = lists.flatMap {
-      $0.createDeclNameArgumentList().elements
-    }
+  public init(combining lists: [ExpressibleAsDeclNameArgumentList]) {
+    elements = lists.flatMap { $0.createDeclNameArgumentList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsDeclNameArgument...) {
+  public init(arrayLiteral elements: ExpressibleAsDeclNameArgument...) {
     self.init(elements)
   }
   public func buildDeclNameArgumentList(format: Format) -> DeclNameArgumentListSyntax {
-    var result = DeclNameArgumentListSyntax(elements.map {
-      $0.buildDeclNameArgument(format: format)
-    })
+    
+    var result = DeclNameArgumentListSyntax(elements.map { $0.buildDeclNameArgument(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -492,24 +457,19 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   /// Creates a `ExprList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsExprBuildable`
-  public init (_ elements: [ExpressibleAsExprBuildable]) {
-    self.elements = elements.map {
-      $0.createExprBuildable()
-    }
+  public init(_ elements: [ExpressibleAsExprBuildable]) {
+    self.elements = elements.map { $0.createExprBuildable() }
   }
   /// Creates a new `ExprList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsExprList]) {
-    elements = lists.flatMap {
-      $0.createExprList().elements
-    }
+  public init(combining lists: [ExpressibleAsExprList]) {
+    elements = lists.flatMap { $0.createExprList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsExprBuildable...) {
+  public init(arrayLiteral elements: ExpressibleAsExprBuildable...) {
     self.init(elements)
   }
   public func buildExprList(format: Format) -> ExprListSyntax {
-    var result = ExprListSyntax(elements.map {
-      $0.buildExpr(format: format)
-    })
+    
+    var result = ExprListSyntax(elements.map { $0.buildExpr(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -555,24 +515,19 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
   /// Creates a `ClosureCaptureItemList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsClosureCaptureItem`
-  public init (_ elements: [ExpressibleAsClosureCaptureItem]) {
-    self.elements = elements.map {
-      $0.createClosureCaptureItem()
-    }
+  public init(_ elements: [ExpressibleAsClosureCaptureItem]) {
+    self.elements = elements.map { $0.createClosureCaptureItem() }
   }
   /// Creates a new `ClosureCaptureItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsClosureCaptureItemList]) {
-    elements = lists.flatMap {
-      $0.createClosureCaptureItemList().elements
-    }
+  public init(combining lists: [ExpressibleAsClosureCaptureItemList]) {
+    elements = lists.flatMap { $0.createClosureCaptureItemList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsClosureCaptureItem...) {
+  public init(arrayLiteral elements: ExpressibleAsClosureCaptureItem...) {
     self.init(elements)
   }
   public func buildClosureCaptureItemList(format: Format) -> ClosureCaptureItemListSyntax {
-    var result = ClosureCaptureItemListSyntax(elements.map {
-      $0.buildClosureCaptureItem(format: format)
-    })
+    
+    var result = ClosureCaptureItemListSyntax(elements.map { $0.buildClosureCaptureItem(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -623,24 +578,19 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   /// Creates a `ClosureParamList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsClosureParam`
-  public init (_ elements: [ExpressibleAsClosureParam]) {
-    self.elements = elements.map {
-      $0.createClosureParam()
-    }
+  public init(_ elements: [ExpressibleAsClosureParam]) {
+    self.elements = elements.map { $0.createClosureParam() }
   }
   /// Creates a new `ClosureParamList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsClosureParamList]) {
-    elements = lists.flatMap {
-      $0.createClosureParamList().elements
-    }
+  public init(combining lists: [ExpressibleAsClosureParamList]) {
+    elements = lists.flatMap { $0.createClosureParamList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsClosureParam...) {
+  public init(arrayLiteral elements: ExpressibleAsClosureParam...) {
     self.init(elements)
   }
   public func buildClosureParamList(format: Format) -> ClosureParamListSyntax {
-    var result = ClosureParamListSyntax(elements.map {
-      $0.buildClosureParam(format: format)
-    })
+    
+    var result = ClosureParamListSyntax(elements.map { $0.buildClosureParam(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -691,24 +641,19 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
   /// Creates a `MultipleTrailingClosureElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsMultipleTrailingClosureElement`
-  public init (_ elements: [ExpressibleAsMultipleTrailingClosureElement]) {
-    self.elements = elements.map {
-      $0.createMultipleTrailingClosureElement()
-    }
+  public init(_ elements: [ExpressibleAsMultipleTrailingClosureElement]) {
+    self.elements = elements.map { $0.createMultipleTrailingClosureElement() }
   }
   /// Creates a new `MultipleTrailingClosureElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsMultipleTrailingClosureElementList]) {
-    elements = lists.flatMap {
-      $0.createMultipleTrailingClosureElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsMultipleTrailingClosureElementList]) {
+    elements = lists.flatMap { $0.createMultipleTrailingClosureElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsMultipleTrailingClosureElement...) {
+  public init(arrayLiteral elements: ExpressibleAsMultipleTrailingClosureElement...) {
     self.init(elements)
   }
   public func buildMultipleTrailingClosureElementList(format: Format) -> MultipleTrailingClosureElementListSyntax {
-    var result = MultipleTrailingClosureElementListSyntax(elements.map {
-      $0.buildMultipleTrailingClosureElement(format: format)
-    })
+    
+    var result = MultipleTrailingClosureElementListSyntax(elements.map { $0.buildMultipleTrailingClosureElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -759,24 +704,19 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   /// Creates a `ObjcName` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsObjcNamePiece`
-  public init (_ elements: [ExpressibleAsObjcNamePiece]) {
-    self.elements = elements.map {
-      $0.createObjcNamePiece()
-    }
+  public init(_ elements: [ExpressibleAsObjcNamePiece]) {
+    self.elements = elements.map { $0.createObjcNamePiece() }
   }
   /// Creates a new `ObjcName` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsObjcName]) {
-    elements = lists.flatMap {
-      $0.createObjcName().elements
-    }
+  public init(combining lists: [ExpressibleAsObjcName]) {
+    elements = lists.flatMap { $0.createObjcName().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsObjcNamePiece...) {
+  public init(arrayLiteral elements: ExpressibleAsObjcNamePiece...) {
     self.init(elements)
   }
   public func buildObjcName(format: Format) -> ObjcNameSyntax {
-    var result = ObjcNameSyntax(elements.map {
-      $0.buildObjcNamePiece(format: format)
-    })
+    
+    var result = ObjcNameSyntax(elements.map { $0.buildObjcNamePiece(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -827,24 +767,19 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
   /// Creates a `FunctionParameterList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsFunctionParameter`
-  public init (_ elements: [ExpressibleAsFunctionParameter]) {
-    self.elements = elements.map {
-      $0.createFunctionParameter()
-    }
+  public init(_ elements: [ExpressibleAsFunctionParameter]) {
+    self.elements = elements.map { $0.createFunctionParameter() }
   }
   /// Creates a new `FunctionParameterList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsFunctionParameterList]) {
-    elements = lists.flatMap {
-      $0.createFunctionParameterList().elements
-    }
+  public init(combining lists: [ExpressibleAsFunctionParameterList]) {
+    elements = lists.flatMap { $0.createFunctionParameterList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsFunctionParameter...) {
+  public init(arrayLiteral elements: ExpressibleAsFunctionParameter...) {
     self.init(elements)
   }
   public func buildFunctionParameterList(format: Format) -> FunctionParameterListSyntax {
-    var result = FunctionParameterListSyntax(elements.map {
-      $0.buildFunctionParameter(format: format)
-    })
+    
+    var result = FunctionParameterListSyntax(elements.map { $0.buildFunctionParameter(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -895,24 +830,19 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   /// Creates a `IfConfigClauseList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsIfConfigClause`
-  public init (_ elements: [ExpressibleAsIfConfigClause]) {
-    self.elements = elements.map {
-      $0.createIfConfigClause()
-    }
+  public init(_ elements: [ExpressibleAsIfConfigClause]) {
+    self.elements = elements.map { $0.createIfConfigClause() }
   }
   /// Creates a new `IfConfigClauseList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsIfConfigClauseList]) {
-    elements = lists.flatMap {
-      $0.createIfConfigClauseList().elements
-    }
+  public init(combining lists: [ExpressibleAsIfConfigClauseList]) {
+    elements = lists.flatMap { $0.createIfConfigClauseList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsIfConfigClause...) {
+  public init(arrayLiteral elements: ExpressibleAsIfConfigClause...) {
     self.init(elements)
   }
   public func buildIfConfigClauseList(format: Format) -> IfConfigClauseListSyntax {
-    var result = IfConfigClauseListSyntax(elements.map {
-      $0.buildIfConfigClause(format: format)
-    })
+    
+    var result = IfConfigClauseListSyntax(elements.map { $0.buildIfConfigClause(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -963,24 +893,19 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   /// Creates a `InheritedTypeList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsInheritedType`
-  public init (_ elements: [ExpressibleAsInheritedType]) {
-    self.elements = elements.map {
-      $0.createInheritedType()
-    }
+  public init(_ elements: [ExpressibleAsInheritedType]) {
+    self.elements = elements.map { $0.createInheritedType() }
   }
   /// Creates a new `InheritedTypeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsInheritedTypeList]) {
-    elements = lists.flatMap {
-      $0.createInheritedTypeList().elements
-    }
+  public init(combining lists: [ExpressibleAsInheritedTypeList]) {
+    elements = lists.flatMap { $0.createInheritedTypeList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsInheritedType...) {
+  public init(arrayLiteral elements: ExpressibleAsInheritedType...) {
     self.init(elements)
   }
   public func buildInheritedTypeList(format: Format) -> InheritedTypeListSyntax {
-    var result = InheritedTypeListSyntax(elements.map {
-      $0.buildInheritedType(format: format)
-    })
+    
+    var result = InheritedTypeListSyntax(elements.map { $0.buildInheritedType(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1031,24 +956,19 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   /// Creates a `MemberDeclList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsMemberDeclListItem`
-  public init (_ elements: [ExpressibleAsMemberDeclListItem]) {
-    self.elements = elements.map {
-      $0.createMemberDeclListItem()
-    }
+  public init(_ elements: [ExpressibleAsMemberDeclListItem]) {
+    self.elements = elements.map { $0.createMemberDeclListItem() }
   }
   /// Creates a new `MemberDeclList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsMemberDeclList]) {
-    elements = lists.flatMap {
-      $0.createMemberDeclList().elements
-    }
+  public init(combining lists: [ExpressibleAsMemberDeclList]) {
+    elements = lists.flatMap { $0.createMemberDeclList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsMemberDeclListItem...) {
+  public init(arrayLiteral elements: ExpressibleAsMemberDeclListItem...) {
     self.init(elements)
   }
   public func buildMemberDeclList(format: Format) -> MemberDeclListSyntax {
-    var result = MemberDeclListSyntax(elements.map {
-      $0.buildMemberDeclListItem(format: format)
-    })
+    
+    var result = MemberDeclListSyntax(elements.map { $0.buildMemberDeclListItem(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1094,24 +1014,19 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   /// Creates a `ModifierList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsDeclModifier`
-  public init (_ elements: [ExpressibleAsDeclModifier]) {
-    self.elements = elements.map {
-      $0.createDeclModifier()
-    }
+  public init(_ elements: [ExpressibleAsDeclModifier]) {
+    self.elements = elements.map { $0.createDeclModifier() }
   }
   /// Creates a new `ModifierList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsModifierList]) {
-    elements = lists.flatMap {
-      $0.createModifierList().elements
-    }
+  public init(combining lists: [ExpressibleAsModifierList]) {
+    elements = lists.flatMap { $0.createModifierList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsDeclModifier...) {
+  public init(arrayLiteral elements: ExpressibleAsDeclModifier...) {
     self.init(elements)
   }
   public func buildModifierList(format: Format) -> ModifierListSyntax {
-    var result = ModifierListSyntax(elements.map {
-      $0.buildDeclModifier(format: format)
-    })
+    
+    var result = ModifierListSyntax(elements.map { $0.buildDeclModifier(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1162,24 +1077,19 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
   /// Creates a `AccessPath` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsAccessPathComponent`
-  public init (_ elements: [ExpressibleAsAccessPathComponent]) {
-    self.elements = elements.map {
-      $0.createAccessPathComponent()
-    }
+  public init(_ elements: [ExpressibleAsAccessPathComponent]) {
+    self.elements = elements.map { $0.createAccessPathComponent() }
   }
   /// Creates a new `AccessPath` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAccessPath]) {
-    elements = lists.flatMap {
-      $0.createAccessPath().elements
-    }
+  public init(combining lists: [ExpressibleAsAccessPath]) {
+    elements = lists.flatMap { $0.createAccessPath().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsAccessPathComponent...) {
+  public init(arrayLiteral elements: ExpressibleAsAccessPathComponent...) {
     self.init(elements)
   }
   public func buildAccessPath(format: Format) -> AccessPathSyntax {
-    var result = AccessPathSyntax(elements.map {
-      $0.buildAccessPathComponent(format: format)
-    })
+    
+    var result = AccessPathSyntax(elements.map { $0.buildAccessPathComponent(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1230,24 +1140,19 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   /// Creates a `AccessorList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsAccessorDecl`
-  public init (_ elements: [ExpressibleAsAccessorDecl]) {
-    self.elements = elements.map {
-      $0.createAccessorDecl()
-    }
+  public init(_ elements: [ExpressibleAsAccessorDecl]) {
+    self.elements = elements.map { $0.createAccessorDecl() }
   }
   /// Creates a new `AccessorList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAccessorList]) {
-    elements = lists.flatMap {
-      $0.createAccessorList().elements
-    }
+  public init(combining lists: [ExpressibleAsAccessorList]) {
+    elements = lists.flatMap { $0.createAccessorList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsAccessorDecl...) {
+  public init(arrayLiteral elements: ExpressibleAsAccessorDecl...) {
     self.init(elements)
   }
   public func buildAccessorList(format: Format) -> AccessorListSyntax {
-    var result = AccessorListSyntax(elements.map {
-      $0.buildAccessorDecl(format: format)
-    })
+    
+    var result = AccessorListSyntax(elements.map { $0.buildAccessorDecl(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1293,24 +1198,19 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   /// Creates a `PatternBindingList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsPatternBinding`
-  public init (_ elements: [ExpressibleAsPatternBinding]) {
-    self.elements = elements.map {
-      $0.createPatternBinding()
-    }
+  public init(_ elements: [ExpressibleAsPatternBinding]) {
+    self.elements = elements.map { $0.createPatternBinding() }
   }
   /// Creates a new `PatternBindingList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPatternBindingList]) {
-    elements = lists.flatMap {
-      $0.createPatternBindingList().elements
-    }
+  public init(combining lists: [ExpressibleAsPatternBindingList]) {
+    elements = lists.flatMap { $0.createPatternBindingList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsPatternBinding...) {
+  public init(arrayLiteral elements: ExpressibleAsPatternBinding...) {
     self.init(elements)
   }
   public func buildPatternBindingList(format: Format) -> PatternBindingListSyntax {
-    var result = PatternBindingListSyntax(elements.map {
-      $0.buildPatternBinding(format: format)
-    })
+    
+    var result = PatternBindingListSyntax(elements.map { $0.buildPatternBinding(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1361,24 +1261,19 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   /// Creates a `EnumCaseElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsEnumCaseElement`
-  public init (_ elements: [ExpressibleAsEnumCaseElement]) {
-    self.elements = elements.map {
-      $0.createEnumCaseElement()
-    }
+  public init(_ elements: [ExpressibleAsEnumCaseElement]) {
+    self.elements = elements.map { $0.createEnumCaseElement() }
   }
   /// Creates a new `EnumCaseElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsEnumCaseElementList]) {
-    elements = lists.flatMap {
-      $0.createEnumCaseElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsEnumCaseElementList]) {
+    elements = lists.flatMap { $0.createEnumCaseElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsEnumCaseElement...) {
+  public init(arrayLiteral elements: ExpressibleAsEnumCaseElement...) {
     self.init(elements)
   }
   public func buildEnumCaseElementList(format: Format) -> EnumCaseElementListSyntax {
-    var result = EnumCaseElementListSyntax(elements.map {
-      $0.buildEnumCaseElement(format: format)
-    })
+    
+    var result = EnumCaseElementListSyntax(elements.map { $0.buildEnumCaseElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1429,24 +1324,19 @@ public struct DesignatedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   /// Creates a `DesignatedTypeList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsDesignatedTypeElement`
-  public init (_ elements: [ExpressibleAsDesignatedTypeElement]) {
-    self.elements = elements.map {
-      $0.createDesignatedTypeElement()
-    }
+  public init(_ elements: [ExpressibleAsDesignatedTypeElement]) {
+    self.elements = elements.map { $0.createDesignatedTypeElement() }
   }
   /// Creates a new `DesignatedTypeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDesignatedTypeList]) {
-    elements = lists.flatMap {
-      $0.createDesignatedTypeList().elements
-    }
+  public init(combining lists: [ExpressibleAsDesignatedTypeList]) {
+    elements = lists.flatMap { $0.createDesignatedTypeList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsDesignatedTypeElement...) {
+  public init(arrayLiteral elements: ExpressibleAsDesignatedTypeElement...) {
     self.init(elements)
   }
   public func buildDesignatedTypeList(format: Format) -> DesignatedTypeListSyntax {
-    var result = DesignatedTypeListSyntax(elements.map {
-      $0.buildDesignatedTypeElement(format: format)
-    })
+    
+    var result = DesignatedTypeListSyntax(elements.map { $0.buildDesignatedTypeElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1497,24 +1387,19 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
   /// Creates a `PrecedenceGroupAttributeList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map {
-      $0.createSyntaxBuildable()
-    }
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
   /// Creates a new `PrecedenceGroupAttributeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPrecedenceGroupAttributeList]) {
-    elements = lists.flatMap {
-      $0.createPrecedenceGroupAttributeList().elements
-    }
+  public init(combining lists: [ExpressibleAsPrecedenceGroupAttributeList]) {
+    elements = lists.flatMap { $0.createPrecedenceGroupAttributeList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
   public func buildPrecedenceGroupAttributeList(format: Format) -> PrecedenceGroupAttributeListSyntax {
-    var result = PrecedenceGroupAttributeListSyntax(elements.map {
-      $0.buildSyntax(format: format)
-    })
+    
+    var result = PrecedenceGroupAttributeListSyntax(elements.map { $0.buildSyntax(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1565,24 +1450,19 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
   /// Creates a `PrecedenceGroupNameList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsPrecedenceGroupNameElement`
-  public init (_ elements: [ExpressibleAsPrecedenceGroupNameElement]) {
-    self.elements = elements.map {
-      $0.createPrecedenceGroupNameElement()
-    }
+  public init(_ elements: [ExpressibleAsPrecedenceGroupNameElement]) {
+    self.elements = elements.map { $0.createPrecedenceGroupNameElement() }
   }
   /// Creates a new `PrecedenceGroupNameList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPrecedenceGroupNameList]) {
-    elements = lists.flatMap {
-      $0.createPrecedenceGroupNameList().elements
-    }
+  public init(combining lists: [ExpressibleAsPrecedenceGroupNameList]) {
+    elements = lists.flatMap { $0.createPrecedenceGroupNameList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsPrecedenceGroupNameElement...) {
+  public init(arrayLiteral elements: ExpressibleAsPrecedenceGroupNameElement...) {
     self.init(elements)
   }
   public func buildPrecedenceGroupNameList(format: Format) -> PrecedenceGroupNameListSyntax {
-    var result = PrecedenceGroupNameListSyntax(elements.map {
-      $0.buildPrecedenceGroupNameElement(format: format)
-    })
+    
+    var result = PrecedenceGroupNameListSyntax(elements.map { $0.buildPrecedenceGroupNameElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1633,22 +1513,19 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   /// Creates a `TokenList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `Token`
-  public init (_ elements: [Token]) {
+  public init(_ elements: [Token]) {
     self.elements = elements
   }
   /// Creates a new `TokenList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTokenList]) {
-    elements = lists.flatMap {
-      $0.createTokenList().elements
-    }
+  public init(combining lists: [ExpressibleAsTokenList]) {
+    elements = lists.flatMap { $0.createTokenList().elements }
   }
-  public init (arrayLiteral elements: Token...) {
+  public init(arrayLiteral elements: Token...) {
     self.init(elements)
   }
   public func buildTokenList(format: Format) -> TokenListSyntax {
-    var result = TokenListSyntax(elements.map {
-      $0.buildToken(format: format)
-    })
+    
+    var result = TokenListSyntax(elements.map { $0.buildToken(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1699,22 +1576,19 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   /// Creates a `NonEmptyTokenList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `Token`
-  public init (_ elements: [Token]) {
+  public init(_ elements: [Token]) {
     self.elements = elements
   }
   /// Creates a new `NonEmptyTokenList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsNonEmptyTokenList]) {
-    elements = lists.flatMap {
-      $0.createNonEmptyTokenList().elements
-    }
+  public init(combining lists: [ExpressibleAsNonEmptyTokenList]) {
+    elements = lists.flatMap { $0.createNonEmptyTokenList().elements }
   }
-  public init (arrayLiteral elements: Token...) {
+  public init(arrayLiteral elements: Token...) {
     self.init(elements)
   }
   public func buildNonEmptyTokenList(format: Format) -> NonEmptyTokenListSyntax {
-    var result = NonEmptyTokenListSyntax(elements.map {
-      $0.buildToken(format: format)
-    })
+    
+    var result = NonEmptyTokenListSyntax(elements.map { $0.buildToken(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1765,24 +1639,19 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   /// Creates a `AttributeList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map {
-      $0.createSyntaxBuildable()
-    }
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
   /// Creates a new `AttributeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAttributeList]) {
-    elements = lists.flatMap {
-      $0.createAttributeList().elements
-    }
+  public init(combining lists: [ExpressibleAsAttributeList]) {
+    elements = lists.flatMap { $0.createAttributeList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
   public func buildAttributeList(format: Format) -> AttributeListSyntax {
-    var result = AttributeListSyntax(elements.map {
-      $0.buildSyntax(format: format)
-    })
+    
+    var result = AttributeListSyntax(elements.map { $0.buildSyntax(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1833,24 +1702,19 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
   /// Creates a `SpecializeAttributeSpecList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map {
-      $0.createSyntaxBuildable()
-    }
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
   /// Creates a new `SpecializeAttributeSpecList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsSpecializeAttributeSpecList]) {
-    elements = lists.flatMap {
-      $0.createSpecializeAttributeSpecList().elements
-    }
+  public init(combining lists: [ExpressibleAsSpecializeAttributeSpecList]) {
+    elements = lists.flatMap { $0.createSpecializeAttributeSpecList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
   public func buildSpecializeAttributeSpecList(format: Format) -> SpecializeAttributeSpecListSyntax {
-    var result = SpecializeAttributeSpecListSyntax(elements.map {
-      $0.buildSyntax(format: format)
-    })
+    
+    var result = SpecializeAttributeSpecListSyntax(elements.map { $0.buildSyntax(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1901,24 +1765,19 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   /// Creates a `ObjCSelector` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsObjCSelectorPiece`
-  public init (_ elements: [ExpressibleAsObjCSelectorPiece]) {
-    self.elements = elements.map {
-      $0.createObjCSelectorPiece()
-    }
+  public init(_ elements: [ExpressibleAsObjCSelectorPiece]) {
+    self.elements = elements.map { $0.createObjCSelectorPiece() }
   }
   /// Creates a new `ObjCSelector` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsObjCSelector]) {
-    elements = lists.flatMap {
-      $0.createObjCSelector().elements
-    }
+  public init(combining lists: [ExpressibleAsObjCSelector]) {
+    elements = lists.flatMap { $0.createObjCSelector().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsObjCSelectorPiece...) {
+  public init(arrayLiteral elements: ExpressibleAsObjCSelectorPiece...) {
     self.init(elements)
   }
   public func buildObjCSelector(format: Format) -> ObjCSelectorSyntax {
-    var result = ObjCSelectorSyntax(elements.map {
-      $0.buildObjCSelectorPiece(format: format)
-    })
+    
+    var result = ObjCSelectorSyntax(elements.map { $0.buildObjCSelectorPiece(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -1969,24 +1828,19 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   /// Creates a `DifferentiabilityParamList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsDifferentiabilityParam`
-  public init (_ elements: [ExpressibleAsDifferentiabilityParam]) {
-    self.elements = elements.map {
-      $0.createDifferentiabilityParam()
-    }
+  public init(_ elements: [ExpressibleAsDifferentiabilityParam]) {
+    self.elements = elements.map { $0.createDifferentiabilityParam() }
   }
   /// Creates a new `DifferentiabilityParamList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDifferentiabilityParamList]) {
-    elements = lists.flatMap {
-      $0.createDifferentiabilityParamList().elements
-    }
+  public init(combining lists: [ExpressibleAsDifferentiabilityParamList]) {
+    elements = lists.flatMap { $0.createDifferentiabilityParamList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsDifferentiabilityParam...) {
+  public init(arrayLiteral elements: ExpressibleAsDifferentiabilityParam...) {
     self.init(elements)
   }
   public func buildDifferentiabilityParamList(format: Format) -> DifferentiabilityParamListSyntax {
-    var result = DifferentiabilityParamListSyntax(elements.map {
-      $0.buildDifferentiabilityParam(format: format)
-    })
+    
+    var result = DifferentiabilityParamListSyntax(elements.map { $0.buildDifferentiabilityParam(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2037,24 +1891,19 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
   /// Creates a `BackDeployVersionList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsBackDeployVersionArgument`
-  public init (_ elements: [ExpressibleAsBackDeployVersionArgument]) {
-    self.elements = elements.map {
-      $0.createBackDeployVersionArgument()
-    }
+  public init(_ elements: [ExpressibleAsBackDeployVersionArgument]) {
+    self.elements = elements.map { $0.createBackDeployVersionArgument() }
   }
   /// Creates a new `BackDeployVersionList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsBackDeployVersionList]) {
-    elements = lists.flatMap {
-      $0.createBackDeployVersionList().elements
-    }
+  public init(combining lists: [ExpressibleAsBackDeployVersionList]) {
+    elements = lists.flatMap { $0.createBackDeployVersionList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsBackDeployVersionArgument...) {
+  public init(arrayLiteral elements: ExpressibleAsBackDeployVersionArgument...) {
     self.init(elements)
   }
   public func buildBackDeployVersionList(format: Format) -> BackDeployVersionListSyntax {
-    var result = BackDeployVersionListSyntax(elements.map {
-      $0.buildBackDeployVersionArgument(format: format)
-    })
+    
+    var result = BackDeployVersionListSyntax(elements.map { $0.buildBackDeployVersionArgument(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2105,24 +1954,19 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   /// Creates a `SwitchCaseList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map {
-      $0.createSyntaxBuildable()
-    }
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
   /// Creates a new `SwitchCaseList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsSwitchCaseList]) {
-    elements = lists.flatMap {
-      $0.createSwitchCaseList().elements
-    }
+  public init(combining lists: [ExpressibleAsSwitchCaseList]) {
+    elements = lists.flatMap { $0.createSwitchCaseList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
   public func buildSwitchCaseList(format: Format) -> SwitchCaseListSyntax {
-    var result = SwitchCaseListSyntax(elements.map {
-      $0.buildSyntax(format: format)
-    })
+    
+    var result = SwitchCaseListSyntax(elements.map { $0.buildSyntax(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2173,24 +2017,19 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   /// Creates a `CatchClauseList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsCatchClause`
-  public init (_ elements: [ExpressibleAsCatchClause]) {
-    self.elements = elements.map {
-      $0.createCatchClause()
-    }
+  public init(_ elements: [ExpressibleAsCatchClause]) {
+    self.elements = elements.map { $0.createCatchClause() }
   }
   /// Creates a new `CatchClauseList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCatchClauseList]) {
-    elements = lists.flatMap {
-      $0.createCatchClauseList().elements
-    }
+  public init(combining lists: [ExpressibleAsCatchClauseList]) {
+    elements = lists.flatMap { $0.createCatchClauseList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsCatchClause...) {
+  public init(arrayLiteral elements: ExpressibleAsCatchClause...) {
     self.init(elements)
   }
   public func buildCatchClauseList(format: Format) -> CatchClauseListSyntax {
-    var result = CatchClauseListSyntax(elements.map {
-      $0.buildCatchClause(format: format)
-    })
+    
+    var result = CatchClauseListSyntax(elements.map { $0.buildCatchClause(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2241,24 +2080,19 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   /// Creates a `CaseItemList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsCaseItem`
-  public init (_ elements: [ExpressibleAsCaseItem]) {
-    self.elements = elements.map {
-      $0.createCaseItem()
-    }
+  public init(_ elements: [ExpressibleAsCaseItem]) {
+    self.elements = elements.map { $0.createCaseItem() }
   }
   /// Creates a new `CaseItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCaseItemList]) {
-    elements = lists.flatMap {
-      $0.createCaseItemList().elements
-    }
+  public init(combining lists: [ExpressibleAsCaseItemList]) {
+    elements = lists.flatMap { $0.createCaseItemList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsCaseItem...) {
+  public init(arrayLiteral elements: ExpressibleAsCaseItem...) {
     self.init(elements)
   }
   public func buildCaseItemList(format: Format) -> CaseItemListSyntax {
-    var result = CaseItemListSyntax(elements.map {
-      $0.buildCaseItem(format: format)
-    })
+    
+    var result = CaseItemListSyntax(elements.map { $0.buildCaseItem(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2309,24 +2143,19 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   /// Creates a `CatchItemList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsCatchItem`
-  public init (_ elements: [ExpressibleAsCatchItem]) {
-    self.elements = elements.map {
-      $0.createCatchItem()
-    }
+  public init(_ elements: [ExpressibleAsCatchItem]) {
+    self.elements = elements.map { $0.createCatchItem() }
   }
   /// Creates a new `CatchItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCatchItemList]) {
-    elements = lists.flatMap {
-      $0.createCatchItemList().elements
-    }
+  public init(combining lists: [ExpressibleAsCatchItemList]) {
+    elements = lists.flatMap { $0.createCatchItemList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsCatchItem...) {
+  public init(arrayLiteral elements: ExpressibleAsCatchItem...) {
     self.init(elements)
   }
   public func buildCatchItemList(format: Format) -> CatchItemListSyntax {
-    var result = CatchItemListSyntax(elements.map {
-      $0.buildCatchItem(format: format)
-    })
+    
+    var result = CatchItemListSyntax(elements.map { $0.buildCatchItem(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2377,24 +2206,19 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// Creates a `ConditionElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsConditionElement`
-  public init (_ elements: [ExpressibleAsConditionElement]) {
-    self.elements = elements.map {
-      $0.createConditionElement()
-    }
+  public init(_ elements: [ExpressibleAsConditionElement]) {
+    self.elements = elements.map { $0.createConditionElement() }
   }
   /// Creates a new `ConditionElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsConditionElementList]) {
-    elements = lists.flatMap {
-      $0.createConditionElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsConditionElementList]) {
+    elements = lists.flatMap { $0.createConditionElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsConditionElement...) {
+  public init(arrayLiteral elements: ExpressibleAsConditionElement...) {
     self.init(elements)
   }
   public func buildConditionElementList(format: Format) -> ConditionElementListSyntax {
-    var result = ConditionElementListSyntax(elements.map {
-      $0.buildConditionElement(format: format)
-    })
+    
+    var result = ConditionElementListSyntax(elements.map { $0.buildConditionElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2445,24 +2269,19 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
   /// Creates a `GenericRequirementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsGenericRequirement`
-  public init (_ elements: [ExpressibleAsGenericRequirement]) {
-    self.elements = elements.map {
-      $0.createGenericRequirement()
-    }
+  public init(_ elements: [ExpressibleAsGenericRequirement]) {
+    self.elements = elements.map { $0.createGenericRequirement() }
   }
   /// Creates a new `GenericRequirementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsGenericRequirementList]) {
-    elements = lists.flatMap {
-      $0.createGenericRequirementList().elements
-    }
+  public init(combining lists: [ExpressibleAsGenericRequirementList]) {
+    elements = lists.flatMap { $0.createGenericRequirementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsGenericRequirement...) {
+  public init(arrayLiteral elements: ExpressibleAsGenericRequirement...) {
     self.init(elements)
   }
   public func buildGenericRequirementList(format: Format) -> GenericRequirementListSyntax {
-    var result = GenericRequirementListSyntax(elements.map {
-      $0.buildGenericRequirement(format: format)
-    })
+    
+    var result = GenericRequirementListSyntax(elements.map { $0.buildGenericRequirement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2513,24 +2332,19 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// Creates a `GenericParameterList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsGenericParameter`
-  public init (_ elements: [ExpressibleAsGenericParameter]) {
-    self.elements = elements.map {
-      $0.createGenericParameter()
-    }
+  public init(_ elements: [ExpressibleAsGenericParameter]) {
+    self.elements = elements.map { $0.createGenericParameter() }
   }
   /// Creates a new `GenericParameterList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsGenericParameterList]) {
-    elements = lists.flatMap {
-      $0.createGenericParameterList().elements
-    }
+  public init(combining lists: [ExpressibleAsGenericParameterList]) {
+    elements = lists.flatMap { $0.createGenericParameterList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsGenericParameter...) {
+  public init(arrayLiteral elements: ExpressibleAsGenericParameter...) {
     self.init(elements)
   }
   public func buildGenericParameterList(format: Format) -> GenericParameterListSyntax {
-    var result = GenericParameterListSyntax(elements.map {
-      $0.buildGenericParameter(format: format)
-    })
+    
+    var result = GenericParameterListSyntax(elements.map { $0.buildGenericParameter(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2581,24 +2395,19 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
   /// Creates a `PrimaryAssociatedTypeList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsPrimaryAssociatedType`
-  public init (_ elements: [ExpressibleAsPrimaryAssociatedType]) {
-    self.elements = elements.map {
-      $0.createPrimaryAssociatedType()
-    }
+  public init(_ elements: [ExpressibleAsPrimaryAssociatedType]) {
+    self.elements = elements.map { $0.createPrimaryAssociatedType() }
   }
   /// Creates a new `PrimaryAssociatedTypeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPrimaryAssociatedTypeList]) {
-    elements = lists.flatMap {
-      $0.createPrimaryAssociatedTypeList().elements
-    }
+  public init(combining lists: [ExpressibleAsPrimaryAssociatedTypeList]) {
+    elements = lists.flatMap { $0.createPrimaryAssociatedTypeList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsPrimaryAssociatedType...) {
+  public init(arrayLiteral elements: ExpressibleAsPrimaryAssociatedType...) {
     self.init(elements)
   }
   public func buildPrimaryAssociatedTypeList(format: Format) -> PrimaryAssociatedTypeListSyntax {
-    var result = PrimaryAssociatedTypeListSyntax(elements.map {
-      $0.buildPrimaryAssociatedType(format: format)
-    })
+    
+    var result = PrimaryAssociatedTypeListSyntax(elements.map { $0.buildPrimaryAssociatedType(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2649,24 +2458,19 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
   /// Creates a `CompositionTypeElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsCompositionTypeElement`
-  public init (_ elements: [ExpressibleAsCompositionTypeElement]) {
-    self.elements = elements.map {
-      $0.createCompositionTypeElement()
-    }
+  public init(_ elements: [ExpressibleAsCompositionTypeElement]) {
+    self.elements = elements.map { $0.createCompositionTypeElement() }
   }
   /// Creates a new `CompositionTypeElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCompositionTypeElementList]) {
-    elements = lists.flatMap {
-      $0.createCompositionTypeElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsCompositionTypeElementList]) {
+    elements = lists.flatMap { $0.createCompositionTypeElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsCompositionTypeElement...) {
+  public init(arrayLiteral elements: ExpressibleAsCompositionTypeElement...) {
     self.init(elements)
   }
   public func buildCompositionTypeElementList(format: Format) -> CompositionTypeElementListSyntax {
-    var result = CompositionTypeElementListSyntax(elements.map {
-      $0.buildCompositionTypeElement(format: format)
-    })
+    
+    var result = CompositionTypeElementListSyntax(elements.map { $0.buildCompositionTypeElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2717,24 +2521,19 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// Creates a `TupleTypeElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsTupleTypeElement`
-  public init (_ elements: [ExpressibleAsTupleTypeElement]) {
-    self.elements = elements.map {
-      $0.createTupleTypeElement()
-    }
+  public init(_ elements: [ExpressibleAsTupleTypeElement]) {
+    self.elements = elements.map { $0.createTupleTypeElement() }
   }
   /// Creates a new `TupleTypeElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTupleTypeElementList]) {
-    elements = lists.flatMap {
-      $0.createTupleTypeElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsTupleTypeElementList]) {
+    elements = lists.flatMap { $0.createTupleTypeElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsTupleTypeElement...) {
+  public init(arrayLiteral elements: ExpressibleAsTupleTypeElement...) {
     self.init(elements)
   }
   public func buildTupleTypeElementList(format: Format) -> TupleTypeElementListSyntax {
-    var result = TupleTypeElementListSyntax(elements.map {
-      $0.buildTupleTypeElement(format: format)
-    })
+    
+    var result = TupleTypeElementListSyntax(elements.map { $0.buildTupleTypeElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2785,24 +2584,19 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   /// Creates a `GenericArgumentList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsGenericArgument`
-  public init (_ elements: [ExpressibleAsGenericArgument]) {
-    self.elements = elements.map {
-      $0.createGenericArgument()
-    }
+  public init(_ elements: [ExpressibleAsGenericArgument]) {
+    self.elements = elements.map { $0.createGenericArgument() }
   }
   /// Creates a new `GenericArgumentList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsGenericArgumentList]) {
-    elements = lists.flatMap {
-      $0.createGenericArgumentList().elements
-    }
+  public init(combining lists: [ExpressibleAsGenericArgumentList]) {
+    elements = lists.flatMap { $0.createGenericArgumentList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsGenericArgument...) {
+  public init(arrayLiteral elements: ExpressibleAsGenericArgument...) {
     self.init(elements)
   }
   public func buildGenericArgumentList(format: Format) -> GenericArgumentListSyntax {
-    var result = GenericArgumentListSyntax(elements.map {
-      $0.buildGenericArgument(format: format)
-    })
+    
+    var result = GenericArgumentListSyntax(elements.map { $0.buildGenericArgument(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2853,24 +2647,19 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
   /// Creates a `TuplePatternElementList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsTuplePatternElement`
-  public init (_ elements: [ExpressibleAsTuplePatternElement]) {
-    self.elements = elements.map {
-      $0.createTuplePatternElement()
-    }
+  public init(_ elements: [ExpressibleAsTuplePatternElement]) {
+    self.elements = elements.map { $0.createTuplePatternElement() }
   }
   /// Creates a new `TuplePatternElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTuplePatternElementList]) {
-    elements = lists.flatMap {
-      $0.createTuplePatternElementList().elements
-    }
+  public init(combining lists: [ExpressibleAsTuplePatternElementList]) {
+    elements = lists.flatMap { $0.createTuplePatternElementList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsTuplePatternElement...) {
+  public init(arrayLiteral elements: ExpressibleAsTuplePatternElement...) {
     self.init(elements)
   }
   public func buildTuplePatternElementList(format: Format) -> TuplePatternElementListSyntax {
-    var result = TuplePatternElementListSyntax(elements.map {
-      $0.buildTuplePatternElement(format: format)
-    })
+    
+    var result = TuplePatternElementListSyntax(elements.map { $0.buildTuplePatternElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)
@@ -2921,24 +2710,19 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// Creates a `AvailabilitySpecList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsAvailabilityArgument`
-  public init (_ elements: [ExpressibleAsAvailabilityArgument]) {
-    self.elements = elements.map {
-      $0.createAvailabilityArgument()
-    }
+  public init(_ elements: [ExpressibleAsAvailabilityArgument]) {
+    self.elements = elements.map { $0.createAvailabilityArgument() }
   }
   /// Creates a new `AvailabilitySpecList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAvailabilitySpecList]) {
-    elements = lists.flatMap {
-      $0.createAvailabilitySpecList().elements
-    }
+  public init(combining lists: [ExpressibleAsAvailabilitySpecList]) {
+    elements = lists.flatMap { $0.createAvailabilitySpecList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsAvailabilityArgument...) {
+  public init(arrayLiteral elements: ExpressibleAsAvailabilityArgument...) {
     self.init(elements)
   }
   public func buildAvailabilitySpecList(format: Format) -> AvailabilitySpecListSyntax {
-    var result = AvailabilitySpecListSyntax(elements.map {
-      $0.buildAvailabilityArgument(format: format)
-    })
+    
+    var result = AvailabilitySpecListSyntax(elements.map { $0.buildAvailabilityArgument(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)

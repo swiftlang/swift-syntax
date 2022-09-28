@@ -45,18 +45,14 @@ let buildableBaseProtocolsFile = SourceFile {
       inheritanceClause: createTypeInheritanceClause(conformances: listConformances)
     ) {
       FunctionDecl(
-        leadingTrivia: [
-          "/// Builds list of `\(type.syntaxBaseName)`s.",
-          "/// - Parameter format: The `Format` to use.",
-        ].map { .docLineComment($0) + .newline }.reduce([], +),
-        identifier: .identifier("build\(type.baseName)List"),
-        signature: FunctionSignature(
-          input: createFormatParameters(),
-          output: ArrayType(elementType: type.syntaxBaseName)
-        ),
-        body: nil
+        """
+        /// Builds list of `\(type.syntaxBaseName)`s.
+        /// - Parameter format: The `Format` to use.
+        func build\(type.baseName)List(format: Format) -> \(ArrayType(elementType: type.syntaxBaseName))
+        """
       )
     }
+
 
     ProtocolDecl(
       modifiers: [Token.public],
@@ -64,16 +60,11 @@ let buildableBaseProtocolsFile = SourceFile {
       inheritanceClause: createTypeInheritanceClause(conformances: buildableConformances)
     ) {
       FunctionDecl(
-        leadingTrivia: [
-          "/// Builds list of `\(type.syntaxBaseName)`s.",
-          "/// - Parameter format: The `Format` to use.",
-        ].map { .docLineComment($0) + .newline }.reduce([], +),
-        identifier: .identifier("build\(type.baseName)"),
-        signature: FunctionSignature(
-          input: createFormatParameters(),
-          output: type.syntaxBaseName
-        ),
-        body: nil
+        """
+        /// Builds list of `\(type.syntaxBaseName)`s.
+        /// - Parameter format: The `Format` to use.
+        func build\(type.baseName)(format: Format) -> \(type.syntaxBaseName)
+        """
       )
     }
 
@@ -82,71 +73,49 @@ let buildableBaseProtocolsFile = SourceFile {
       extendedType: type.buildableBaseName
     ) {
       FunctionDecl(
-        leadingTrivia: .docLineComment("/// Satisfies conformance to `\(type.expressibleAsBaseName)`.") + .newline,
-        identifier: .identifier("create\(type.buildableBaseName)"),
-        signature: FunctionSignature(
-          input: ParameterClause(),
-          output: type.buildableBaseName
-        )
-      ) {
-        ReturnStmt(expression: "self")
-      }
+        """
+        /// Satisfies conformance to `\(type.expressibleAsBaseName)`.
+        func create\(type.buildableBaseName)() -> \(type.buildableBaseName) {
+          return self
+        }
+        """
+      )
 
       FunctionDecl(
-        leadingTrivia: [
-          "/// Builds list of `\(type.syntaxBaseName)`s.",
-          "/// - Parameter format: The `Format` to use.",
-          "///",
-          "/// Satisfies conformance to `\(type.listBuildable)`",
-        ].map { .docLineComment($0) + .newline }.reduce([], +),
-        identifier: .identifier("build\(type.baseName)List"),
-        signature: FunctionSignature(
-          input: createFormatParameters(),
-          output: ArrayType(elementType: type.syntaxBaseName)
-        )
-      ) {
-        ReturnStmt(expression: ArrayExpr {
-          ArrayElement(expression: FunctionCallExpr("build\(type.baseName)") {
-            TupleExprElement(label: "format", expression: "format")
-          })
-        })
-      }
+        """
+        /// Builds list of `\(type.syntaxBaseName)`s.
+        /// - Parameter format: The `Format` to use.
+        ///
+        /// Satisfies conformance to `\(type.listBuildable)`
+        func build\(type.baseName)List(format: Format) -> \(ArrayType(elementType: type.syntaxBaseName)) {
+          return [build\(type.baseName)(format: format)]
+        }
+        """
+      )
 
       if !isSyntax {
         FunctionDecl(
-          leadingTrivia: [
-          "/// Builds a `\(type.syntaxBaseName)`.",
-          "/// - Parameter format: The `Format` to use.",
-          "/// - Returns: A new `Syntax` with the built `\(type.syntaxBaseName)`.",
-          "///",
-          "/// Satisfies conformance to `SyntaxBuildable`.",
-        ].map { .docLineComment($0) + .newline }.reduce([], +),
-          identifier: .identifier("buildSyntax"),
-          signature: FunctionSignature(
-            input: createFormatParameters(),
-            output: "Syntax"
-          )
-        ) {
-          ReturnStmt(expression: FunctionCallExpr("Syntax") {
-            TupleExprElement(expression: FunctionCallExpr("build\(type.baseName)") {
-              TupleExprElement(label: "format", expression: "format")
-            })
-          })
-        }
+          """
+          /// Builds a `\(type.syntaxBaseName)`.
+          /// - Parameter format: The `Format` to use.
+          /// - Returns: A new `Syntax` with the built `\(type.syntaxBaseName)`.
+          ///
+          /// Satisfies conformance to `SyntaxBuildable`.
+          func buildSyntax(format: Format) -> Syntax {
+            return Syntax(build\(type.baseName)(format: format))
+          }
+          """
+        )
       }
     }
   }
-  createBuildSyntaxExtensionWithDefaultFormat()
-}
-
-func createBuildSyntaxExtensionWithDefaultFormat() -> ExtensionDecl {
-  return ExtensionDecl(modifiers: [Token.public], extendedType: "SyntaxBuildable") {
+  ExtensionDecl(modifiers: [Token.public], extendedType: "SyntaxBuildable") {
     FunctionDecl(
-      identifier: .identifier("buildSyntax"),
-      signature: FunctionSignature(input: ParameterClause(parameterList: []), output: "Syntax")) {
-        ReturnStmt(expression: FunctionCallExpr("buildSyntax") {
-          TupleExprElement(label: "format", expression: FunctionCallExpr("Format"))
-        })
+      """
+      func buildSyntax() -> Syntax {
+        return buildSyntax(format: Format())
       }
+      """
+    )
   }
 }

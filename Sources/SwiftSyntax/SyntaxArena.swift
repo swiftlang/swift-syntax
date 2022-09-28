@@ -10,67 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if canImport(Darwin)
-import Darwin
-
-struct ScopeGuard {
-  private let lock: os_unfair_lock_t
-  init(allocator: BumpPtrAllocator) {
-    let storage = allocator.allocate(os_unfair_lock.self, count: 1).baseAddress!
-    storage.initialize(to: os_unfair_lock())
-    self.lock = os_unfair_lock_t(storage)
-  }
-
-  func deinitialize() {}
-
-  func withGuard<T>(body: () throws -> T) rethrows -> T {
-    os_unfair_lock_lock(lock)
-    defer { os_unfair_lock_unlock(lock)}
-    return try body()
-  }
-}
-
-#elseif canImport(Glibc)
-import Glibc
-
-struct ScopeGuard {
-  private let lock: UnsafeMutablePointer<pthread_mutex_t>
-  init(allocator: BumpPtrAllocator) {
-    let storage = allocator.allocate(pthread_mutex_t.self, count: 1).baseAddress!
-    storage.initialize(to: pthread_mutex_t())
-    pthread_mutex_init(storage, nil)
-    self.lock = storage
-  }
-  func deinitialize() {
-    pthread_mutex_destroy(self.lock)
-  }
-  func withGuard<T>(body: () throws -> T) rethrows -> T {
-    pthread_mutex_lock(self.lock)
-    defer { pthread_mutex_unlock(self.lock) }
-    return try body()
-  }
-}
-
-#else
-// FIXME: Support other platforms.
-
-/// Dummy mutex that doesn't actually guard at all.
-class ScopeGuard {
-  init() {}
-  func deinitialize() {}
-  func withGuard<T>(body: () throws -> T) rethrows -> T {
-    return try body()
-  }
-}
-#endif
-
 public class SyntaxArena {
 
   @_spi(RawSyntax)
   public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
 
   /// Thread safe guard.
-  private let lock: ScopeGuard
+  private let lock: PlatformMutex
   private var singleThreadMode: Bool
 
   /// Bump-pointer allocator for all "intern" methods.
@@ -89,7 +35,7 @@ public class SyntaxArena {
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
     let allocator = BumpPtrAllocator()
-    self.lock = ScopeGuard(allocator: allocator)
+    self.lock = PlatformMutex(allocator: allocator)
     self.singleThreadMode = false
     self.allocator = allocator
     children = []
@@ -99,9 +45,8 @@ public class SyntaxArena {
   }
 
   deinit {
-    // NOTE: We don't make `ScopeGuard` a class and `deinit` in it to
-    // deinitialize it because the actual lock value is in `allocator`, and we
-    // want to make sure to deinitialize the lock before destroying the allocator.
+    // Make sure we give the platform lock a chance to deinitialize any
+    // memory it used.
     lock.deinitialize()
   }
 

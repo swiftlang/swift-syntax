@@ -10,6 +10,7 @@ add_library(SwiftSyntax STATIC
   AbsolutePosition.swift
   BumpPtrAllocator.swift
   IncrementalParseTransition.swift
+  PlatformMutex.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift

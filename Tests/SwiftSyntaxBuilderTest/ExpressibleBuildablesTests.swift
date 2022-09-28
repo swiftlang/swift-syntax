@@ -45,7 +45,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
 
   func testExprExpressibleAsCodeBlockItem() {
     let myCodeBlock = CodeBlock(leftBrace: .leftBrace.withLeadingTrivia([])) {
-      FunctionCallExpr("print") { TupleExprElement(expression: StringLiteralExpr("Hello world")) }
+      FunctionCallExpr(calledExpression: "print") { TupleExprElement(expression: StringLiteralExpr("Hello world")) }
       IntegerLiteralExpr(42)
       "someIdentifier"
     }

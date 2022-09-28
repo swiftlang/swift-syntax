@@ -18,7 +18,7 @@ extension FunctionCallExpr {
   /// instead of having to wrap them in a `TupleExprElementList`.
   /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
   public init(
-    _ calledExpression: ExpressibleAsExprBuildable,
+    calledExpression: ExpressibleAsExprBuildable,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
     @TupleExprElementListBuilder argumentList: () -> ExpressibleAsTupleExprElementList = { [] }

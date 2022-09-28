@@ -1,5 +1,6 @@
 @_spi(RawSyntax)
 import SwiftSyntax
+import SwiftParser
 
 fileprivate class Indenter: SyntaxRewriter {
   let indentation: Trivia
@@ -111,6 +112,12 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   ) {
     sourceText.append(contentsOf: value.description.utf8)
     self.lastIndentation = nil
+  }
+
+  public mutating func appendInterpolation<Buildable: SyntaxBuildable>(
+    _ buildable: Buildable
+  ) {
+    self.appendInterpolation(buildable.buildSyntax())
   }
 }
 

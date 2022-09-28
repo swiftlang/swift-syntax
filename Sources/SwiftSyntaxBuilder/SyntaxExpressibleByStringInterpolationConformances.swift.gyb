@@ -19,6 +19,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
 
 % STRING_INTERPOLATION_BASE_KINDS = [base_kind for base_kind in SYNTAX_BASE_KINDS if base_kind != 'Syntax' and base_kind != 'SyntaxCollection']
 % for base_kind in STRING_INTERPOLATION_BASE_KINDS:

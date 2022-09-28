@@ -138,7 +138,6 @@ public struct Parser: TokenConsumer {
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be the registered source
   ///            buffer of `arena` or a slice of the source buffer.
-  @_spi(Testing)
   public init(_ input: UnsafeBufferPointer<UInt8>, arena: SyntaxArena? = nil) {
     var sourceBuffer: UnsafeBufferPointer<UInt8>
     if let arena = arena {

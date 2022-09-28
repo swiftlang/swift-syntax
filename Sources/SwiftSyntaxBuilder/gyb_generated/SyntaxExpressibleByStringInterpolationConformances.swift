@@ -13,6 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
 
 extension DeclSyntaxProtocol {
   public static func parse(from parser: inout Parser) -> Self {

@@ -309,6 +309,7 @@ STMT_NODES = [
     #              | unknown-attr? switch-default-label stmt-list
     Node('SwitchCase', name_for_diagnostics='switch case', kind='Syntax',
          traits=['WithStatements'],
+         parser_function='parseSwitchCase',
          children=[
              Child('UnknownAttr', kind='Attribute', is_optional=True),
              Child('Label', kind='Syntax', name_for_diagnostics='label',
@@ -362,6 +363,7 @@ STMT_NODES = [
     # catch-clause 'catch' case-item-list? code-block
     Node('CatchClause', name_for_diagnostics="'catch' clause", kind='Syntax',
          traits=['WithCodeBlock'],
+         parser_function='parseCatchClause',
          children=[
              Child('CatchKeyword', kind='CatchToken'),
              Child('CatchItems', kind='CatchItemList',

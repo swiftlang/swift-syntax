@@ -43,7 +43,7 @@ extension Parser {
     // be alive until `Syntax(raw:)` retains the arena.
     return withExtendedLifetime(parser) {
       let rawSourceFile =  parser.parseSourceFile()
-      return Syntax(raw: rawSourceFile.raw).as(SourceFileSyntax.self)!
+      return rawSourceFile.syntax
     }
   }
 }

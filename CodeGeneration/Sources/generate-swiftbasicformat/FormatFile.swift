@@ -75,7 +75,6 @@ let formatFile = SourceFile {
     }
 
     VariableDecl(
-      attributes: [CustomAttribute("_spi") { TupleExprElement(expression: "Testing") }],
       modifiers: [Token.public],
       name: "indentTrivia",
       type: "Trivia"

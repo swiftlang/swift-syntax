@@ -1,6 +1,8 @@
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SwiftBasicFormat
+import _SwiftSyntaxTestSupport
 
 final class FunctionTests: XCTestCase {
   func testFibonacci() {
@@ -94,5 +96,41 @@ final class FunctionTests: XCTestCase {
           f(a)
       }
       """)
+  }
+
+  func testParserInterop() {
+    let cases = SwitchCaseList {
+      for i in 0..<2 {
+        SwitchCase("""
+        case \(i):
+          return \(i + 1)
+        """)
+      }
+      SwitchCase("""
+      default:
+        return -1
+      """)
+    }
+    let plusOne = FunctionDeclSyntax("""
+    func plusOne(base: Int) -> Int {
+      switch base {
+      \(cases)
+      }
+    }
+    """)
+    
+    XCTAssertEqual(plusOne.description.trimmingTrailingWhitespace(), """
+    func plusOne(base: Int) -> Int {
+      switch base {
+
+      case 0:
+        return 1
+      case 1:
+        return 2
+      default:
+        return -1
+      }
+    }
+    """)
   }
 }

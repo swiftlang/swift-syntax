@@ -1,4 +1,4 @@
-//===----------------------------------------------------------------------===//
+//===--- String+TrimmingTrailingWhitespace.swift --------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -10,17 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-
-protocol HasTrailingComma {
-  var hasTrailingComma: Bool { get }
-
-  /// Returns this node overriding presence of the trailing comma
-  func withTrailingComma(_ withComma: Bool) -> Self
-}
-
-extension HasTrailingComma {
-  func ensuringTrailingComma() -> Self {
-    hasTrailingComma ? self : withTrailingComma(true)
+public extension String {
+  // This implementation is really slow; to use it outside a test it should be optimized.
+  func trimmingTrailingWhitespace() -> String {
+    return self.replacingOccurrences(of: "[ ]+\\n", with: "\n", options: .regularExpression)
   }
 }

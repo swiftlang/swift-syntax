@@ -27,7 +27,7 @@ extension Format {
     copy.indents += 1
     return copy
   }
-  @_spi(Testing) public var indentTrivia: Trivia {
+  public var indentTrivia: Trivia {
     indents == 0 ? .zero : .spaces(indents * indentWidth)
   }
   private var indentedNewline: Trivia {

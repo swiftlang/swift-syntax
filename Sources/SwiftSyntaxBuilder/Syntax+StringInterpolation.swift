@@ -1,6 +1,5 @@
-@_spi(RawSyntax)
-import SwiftSyntax
-import SwiftParser
+@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {

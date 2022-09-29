@@ -15,10 +15,6 @@ public class SyntaxArena {
   @_spi(RawSyntax)
   public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
 
-  /// Thread safe guard.
-  private let lock: PlatformMutex
-  private var singleThreadMode: Bool
-
   /// Bump-pointer allocator for all "intern" methods.
   private let allocator: BumpPtrAllocator
   /// Source file buffer the Syntax tree represents.
@@ -32,15 +28,18 @@ public class SyntaxArena {
   private var hasParent: Bool
   private var parseTriviaFunction: ParseTriviaFunction
 
+  /// Thread safe guard.
+  private let lock: PlatformMutex
+  private var singleThreadMode: Bool
+
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
-    let allocator = BumpPtrAllocator()
-    self.lock = PlatformMutex(allocator: allocator)
+    self.allocator = BumpPtrAllocator()
+    self.lock = PlatformMutex(allocator: self.allocator)
     self.singleThreadMode = false
-    self.allocator = allocator
-    children = []
-    sourceBuffer = .init(start: nil, count: 0)
-    hasParent = false
+    self.children = []
+    self.sourceBuffer = .init(start: nil, count: 0)
+    self.hasParent = false
     self.parseTriviaFunction = parseTriviaFunction
   }
 

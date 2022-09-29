@@ -117,7 +117,7 @@ extension Parser {
         leftParen: nil, argumentList: nil, rightParen: nil,
         arena: self.arena)
     }
-    let arguments = self.parseArgumentListElements(inLetOrVar: false)
+    let arguments = self.parseArgumentListElements(pattern: .none)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawCustomAttributeSyntax(
       unexpectedBeforeAtSign,

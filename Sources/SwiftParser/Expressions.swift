@@ -33,6 +33,34 @@ extension Parser {
     case trailingClosure
   }
 
+  public enum PatternContext {
+    /// There is no ambient pattern context.
+    case none
+    /// We're parsing a matching pattern that is not introduced via `let` or `var`.
+    ///
+    /// In this context, identifiers are references to the enclosing scopes, not a variable binding.
+    ///
+    /// ```
+    /// case x.y <- 'x' must refer to some 'x' defined in another scope, it cannot be e.g. an enum type.
+    /// ```
+    case matching
+    /// We're parsing a matching pattern that is introduced via `let` or `var`.
+    ///
+    /// ```
+    /// case let x.y <- 'x' must refer to the base of some member access, y must refer to some pattern-compatible identfier
+    /// ```
+    case letOrVar
+
+    var admitsBinding: Bool {
+      switch self {
+      case .letOrVar:
+        return true
+      case .none, .matching:
+        return false
+      }
+    }
+  }
+
   /// Parse an expression.
   ///
   /// Grammar
@@ -41,18 +69,18 @@ extension Parser {
   ///     expression → try-operator? await-operator? prefix-expression infix-expressions?
   ///     expression-list → expression | expression ',' expression-list
   @_spi(RawSyntax)
-  public mutating func parseExpression(_ flavor: ExprFlavor = .trailingClosure, inLetOrVar: Bool = false) -> RawExprSyntax {
+  public mutating func parseExpression(_ flavor: ExprFlavor = .trailingClosure, pattern: PatternContext = .none) -> RawExprSyntax {
     // If we are parsing a refutable pattern, check to see if this is the start
     // of a let/var/is pattern.  If so, parse it as an UnresolvedPatternExpr and
     // let pattern type checking determine its final form.
     //
     // Only do this if we're parsing a pattern, to improve QoI on malformed
     // expressions followed by (e.g.) let/var decls.
-    if self.at(anyIn: MatchingPatternStart.self) != nil {
-      let pattern = self.parseMatchingPattern()
+    if pattern != .none, self.at(anyIn: MatchingPatternStart.self) != nil {
+      let pattern = self.parseMatchingPattern(context: .matching)
       return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))
     }
-    return RawExprSyntax(self.parseSequenceExpression(flavor, inVarOrLet: inLetOrVar))
+    return RawExprSyntax(self.parseSequenceExpression(flavor, pattern: pattern))
   }
 }
 
@@ -71,7 +99,7 @@ extension Parser {
   public mutating func parseSequenceExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
-    inVarOrLet: Bool = false
+    pattern: PatternContext = .none
   ) -> RawExprSyntax {
     if forDirective && self.currentToken.isAtStartOfLine {
       return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
@@ -87,7 +115,7 @@ extension Parser {
 
     lastElement = self.parseSequenceExpressionElement(flavor,
                                                       forDirective: forDirective,
-                                                      inVarOrLet: inVarOrLet)
+                                                      pattern: pattern)
 
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
@@ -101,7 +129,7 @@ extension Parser {
       // Parse the operator.
       guard
         let (operatorExpr, rhsExpr) =
-          self.parseSequenceExpressionOperator(flavor, inVarOrLet: inVarOrLet)
+          self.parseSequenceExpressionOperator(flavor, pattern: pattern)
       else {
         // Not an operator. We're done.
         break
@@ -120,7 +148,7 @@ extension Parser {
       } else {
         lastElement = self.parseSequenceExpressionElement(flavor,
                                                           forDirective: forDirective,
-                                                          inVarOrLet: inVarOrLet)
+                                                          pattern: pattern)
       }
     }
 
@@ -160,7 +188,7 @@ extension Parser {
   ///     arrow-operator -> 'throws' '->'
   ///     arrow-operator -> 'async' 'throws' '->'
   mutating func parseSequenceExpressionOperator(
-    _ flavor: ExprFlavor, inVarOrLet: Bool
+    _ flavor: ExprFlavor, pattern: PatternContext
   ) -> (operator: RawExprSyntax, rhs: RawExprSyntax?)? {
     enum ExpectedTokenKind: RawTokenKindSubset {
       case spacedBinaryOperator
@@ -220,7 +248,7 @@ extension Parser {
     case (.infixQuestionMark, let handle)?:
       // Save the '?'.
       let question = self.eat(handle)
-      let firstChoice = self.parseSequenceExpression(flavor, inVarOrLet: inVarOrLet)
+      let firstChoice = self.parseSequenceExpression(flavor, pattern: pattern)
       // Make sure there's a matching ':' after the middle expr.
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
@@ -243,9 +271,10 @@ extension Parser {
       return (RawExprSyntax(op), rhs)
 
     case (.equal, let handle)?:
-      if inVarOrLet {
+      switch pattern {
+      case .matching, .letOrVar:
         return nil
-      } else {
+      case .none:
         let eq = self.eat(handle)
         let op = RawAssignmentExprSyntax(
           assignToken: eq,
@@ -253,6 +282,7 @@ extension Parser {
         )
         return (RawExprSyntax(op), nil)
       }
+
       
     case (.isKeyword, let handle)?:
       let isKeyword = self.eat(handle)
@@ -320,7 +350,7 @@ extension Parser {
   public mutating func parseSequenceExpressionElement(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
-    inVarOrLet: Bool = false
+    pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // Try to parse '@' sign or 'inout' as a attributed typerepr.
     if self.at(any: [.atSign, .inoutKeyword]) {
@@ -336,7 +366,7 @@ extension Parser {
     case (.awaitContextualKeyword, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
-        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+        flavor, forDirective: forDirective, pattern: pattern)
       return RawExprSyntax(RawAwaitExprSyntax(
         awaitKeyword: awaitTok,
         expression: sub,
@@ -347,7 +377,7 @@ extension Parser {
       let mark = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark])
 
       let expression = self.parseSequenceExpressionElement(
-        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+        flavor, forDirective: forDirective, pattern: pattern)
       return RawExprSyntax(RawTryExprSyntax(
         tryKeyword: tryKeyword,
         questionOrExclamationMark: mark,
@@ -357,13 +387,13 @@ extension Parser {
     case (._moveContextualKeyword, let handle)?:
       let moveTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
-        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+        flavor, forDirective: forDirective, pattern: pattern)
       return RawExprSyntax(RawMoveExprSyntax(
         moveKeyword: moveTok,
         expression: sub,
         arena: self.arena))
     case nil:
-      return self.parseUnaryExpression(flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+      return self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
     }
   }
 
@@ -380,14 +410,14 @@ extension Parser {
   public mutating func parseUnaryExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
-    inVarOrLet: Bool = false
+    pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // First check to see if we have the start of a regex literal `/.../`.
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
     switch self.at(anyIn: ExpressionPrefixOperator.self) {
     case (.prefixAmpersand, let handle)?:
       let amp = self.eat(handle)
-      let expr = self.parseUnaryExpression(flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+      let expr = self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
       return RawExprSyntax(RawInOutExprSyntax(
         ampersand: amp,
         expression: RawExprSyntax(expr),
@@ -395,11 +425,11 @@ extension Parser {
       ))
 
     case (.backslash, _)?:
-      return RawExprSyntax(self.parseKeyPathExpression(forDirective: forDirective, inVarOrLet: inVarOrLet))
+      return RawExprSyntax(self.parseKeyPathExpression(forDirective: forDirective, pattern: pattern))
 
     case (.prefixOperator, let handle)?:
       let op = self.eat(handle)
-      let postfix = self.parseUnaryExpression(flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+      let postfix = self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
       return RawExprSyntax(RawPrefixOperatorExprSyntax(
         operatorToken: op,
         postfixExpression: postfix,
@@ -409,7 +439,7 @@ extension Parser {
     default:
       // If the next token is not an operator, just parse this as expr-postfix.
       return self.parsePostfixExpression(
-        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet,
+        flavor, forDirective: forDirective, pattern: pattern,
         periodHasKeyPathBehavior: false)
     }
   }
@@ -432,16 +462,16 @@ extension Parser {
   public mutating func parsePostfixExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool,
-    inVarOrLet: Bool,
+    pattern: PatternContext,
     periodHasKeyPathBehavior: Bool
   ) -> RawExprSyntax {
-    let head = self.parsePrimaryExpression(inVarOrLet: inVarOrLet)
+    let head = self.parsePrimaryExpression(pattern: pattern)
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
     return self.parsePostfixExpressionSuffix(
       head, flavor, forDirective: forDirective,
-      periodHasKeyPathBehavior: periodHasKeyPathBehavior, inLetOrVar: inVarOrLet)
+      periodHasKeyPathBehavior: periodHasKeyPathBehavior, pattern: pattern)
   }
 
   @_spi(RawSyntax)
@@ -503,7 +533,7 @@ extension Parser {
       let result = parser.parsePostfixExpressionSuffix(
         head, flavor, forDirective: forDirective,
         periodHasKeyPathBehavior: false,
-        inLetOrVar: false
+        pattern: .none
       )
 
       // TODO: diagnose and skip the remaining token in the current clause.
@@ -541,7 +571,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     forDirective: Bool,
     periodHasKeyPathBehavior: Bool,
-    inLetOrVar: Bool
+    pattern: PatternContext
   ) -> RawExprSyntax {
     // Handle suffix expressions.
     var leadingExpr = start
@@ -568,7 +598,7 @@ extension Parser {
 
       // If there is an expr-call-suffix, parse it and form a call.
       if let lparen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine }) {
-        let args = self.parseArgumentListElements(inLetOrVar: inLetOrVar)
+        let args = self.parseArgumentListElements(pattern: pattern)
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
         // If we can parse trailing closures, do so.
@@ -600,7 +630,7 @@ extension Parser {
         if self.at(.rightSquareBracket) {
           args = []
         } else {
-          args = self.parseArgumentListElements(inLetOrVar: inLetOrVar)
+          args = self.parseArgumentListElements(pattern: pattern)
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
 
@@ -731,7 +761,7 @@ extension Parser {
   ///     key-path-postfixes → key-path-postfix key-path-postfixes?
   ///     key-path-postfix → '?' | '!' | 'self' | '[' function-call-argument-list ']'
   @_spi(RawSyntax)
-  public mutating func parseKeyPathExpression(forDirective: Bool, inVarOrLet: Bool) -> RawKeyPathExprSyntax {
+  public mutating func parseKeyPathExpression(forDirective: Bool, pattern: PatternContext) -> RawKeyPathExprSyntax {
     // Consume '\'.
     let (unexpectedBeforeBackslash, backslash) = self.expect(.backslash)
 
@@ -743,7 +773,7 @@ extension Parser {
     let root: RawExprSyntax?
     if !self.currentToken.starts(with: ".") {
       root = self.parsePostfixExpression(
-        .basic, forDirective: forDirective, inVarOrLet: inVarOrLet,
+        .basic, forDirective: forDirective, pattern: pattern,
         periodHasKeyPathBehavior: true)
     } else {
       root = nil
@@ -761,7 +791,7 @@ extension Parser {
       expression = self.parsePostfixExpressionSuffix(
         base, .basic, forDirective: forDirective,
         periodHasKeyPathBehavior: false,
-        inLetOrVar: inVarOrLet
+        pattern: pattern
       )
     } else if self.at(any: [.period, .prefixPeriod]) {
       // Inside a keypath's path, the period always behaves normally: the key path
@@ -770,7 +800,7 @@ extension Parser {
       expression = self.parsePostfixExpressionSuffix(
         base, .basic, forDirective: forDirective,
         periodHasKeyPathBehavior: false,
-        inLetOrVar: inVarOrLet
+        pattern: pattern
       )
     } else {
       expression = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
@@ -805,7 +835,7 @@ extension Parser {
   ///     primary-expression → selector-expression
   ///     primary-expression → key-path-string-expression
   @_spi(RawSyntax)
-  public mutating func parsePrimaryExpression(inVarOrLet: Bool) -> RawExprSyntax {
+  public mutating func parsePrimaryExpression(pattern: PatternContext) -> RawExprSyntax {
     switch self.at(anyIn: PrimaryExpressionStart.self) {
     case (.integerLiteral, let handle)?:
       let digits = self.eat(handle)
@@ -912,7 +942,7 @@ extension Parser {
       // If we have "case let x." or "case let x(", we parse x as a normal
       // name, not a binding, because it is the start of an enum pattern or
       // call pattern.
-      if inVarOrLet && !self.lookahead().isNextTokenCallPattern() {
+      if pattern.admitsBinding && !self.lookahead().isNextTokenCallPattern() {
         let identifier = self.eat(handle)
         let pattern = RawPatternSyntax(RawIdentifierPatternSyntax(
           identifier: identifier, arena: self.arena))
@@ -970,7 +1000,7 @@ extension Parser {
       // only one element without label. However, libSyntax tree doesn't have this
       // differentiation. A tuple expression node in libSyntax can have a single
       // element without label.
-      return RawExprSyntax(self.parseTupleExpression(inLetOrVar: inVarOrLet))
+      return RawExprSyntax(self.parseTupleExpression(pattern: pattern))
 
     case (.leftSquareBracket, _)?:
       return self.parseCollectionLiteral()
@@ -1026,7 +1056,7 @@ extension Parser {
   public mutating func parseObjectLiteralExpression() -> RawObjectLiteralExprSyntax {
     let poundKeyword = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let arguments = self.parseArgumentListElements(inLetOrVar: false)
+    let arguments = self.parseArgumentListElements(pattern: .none)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawObjectLiteralExprSyntax(
       identifier: poundKeyword,
@@ -1380,7 +1410,7 @@ extension Parser {
         expressionContent.withBuffer { buf in
           var subparser = Parser(buf, arena: self.arena)
           let (lunexpected, lparen) = subparser.expect(.leftParen)
-          let args = subparser.parseArgumentListElements(inLetOrVar: false)
+          let args = subparser.parseArgumentListElements(pattern: .none)
           // If we stopped parsing the expression before the expression segment is
           // over, eat the remaining tokens into a token list.
           var runexpectedTokens = [RawSyntax]()
@@ -1540,9 +1570,9 @@ extension Parser {
   ///     tuple-expression → '(' ')' | '(' tuple-element ',' tuple-element-list ')'
   ///     tuple-element-list → tuple-element | tuple-element ',' tuple-element-list
   @_spi(RawSyntax)
-  public mutating func parseTupleExpression(inLetOrVar: Bool) -> RawTupleExprSyntax {
+  public mutating func parseTupleExpression(pattern: PatternContext) -> RawTupleExprSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let elements = self.parseArgumentListElements(inLetOrVar: inLetOrVar)
+    let elements = self.parseArgumentListElements(pattern: pattern)
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawTupleExprSyntax(
       unexpectedBeforeLParen,
@@ -2009,7 +2039,7 @@ extension Parser {
   ///
   ///     tuple-element → expression | identifier ':' expression
   @_spi(RawSyntax)
-  public mutating func parseArgumentListElements(inLetOrVar: Bool) -> [RawTupleExprElementSyntax] {
+  public mutating func parseArgumentListElements(pattern: PatternContext) -> [RawTupleExprElementSyntax] {
     guard !self.at(.rightParen) else {
       return []
     }
@@ -2031,7 +2061,7 @@ extension Parser {
         expr = RawExprSyntax(RawIdentifierExprSyntax(
           identifier: ident, declNameArguments: args, arena: self.arena))
       } else {
-        expr = self.parseExpression(inLetOrVar: inLetOrVar)
+        expr = self.parseExpression(pattern: pattern)
       }
       keepGoing = self.consume(if: .comma)
       result.append(RawTupleExprElementSyntax(
@@ -2056,9 +2086,9 @@ extension Parser {
   ///     tuple-expression → '(' ')' | '(' tuple-element ',' tuple-element-list ')'
   ///     tuple-element-list → tuple-element | tuple-element ',' tuple-element-list
   @_spi(RawSyntax)
-  public mutating func parseArgumentList(_ flavor: ExprFlavor, inLetOrVar: Bool) -> RawTupleExprSyntax {
+  public mutating func parseArgumentList(_ flavor: ExprFlavor, pattern: PatternContext) -> RawTupleExprSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let args = self.parseArgumentListElements(inLetOrVar: inLetOrVar)
+    let args = self.parseArgumentListElements(pattern: pattern)
     let (unexpectedBeforeRightParen, rparen) = self.expect(.rightParen)
 
     // FIXME: Introduce new SyntaxKind for ArgumentList (rdar://81786229)

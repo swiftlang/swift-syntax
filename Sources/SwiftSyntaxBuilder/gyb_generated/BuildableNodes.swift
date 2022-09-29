@@ -10147,7 +10147,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   let letOrVarKeyword: TokenSyntax
   let pattern: PatternBuildable
   let typeAnnotation: TypeAnnotation?
-  let initializer: InitializerClause
+  let initializer: InitializerClause?
 
   /// Creates a `OptionalBindingCondition` using the provided parameters.
   /// - Parameters:
@@ -10159,13 +10159,13 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
     letOrVarKeyword: TokenSyntax,
     pattern: ExpressibleAsPatternBuildable,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
-    initializer: ExpressibleAsInitializerClause
+    initializer: ExpressibleAsInitializerClause? = nil
   ) {
     self.letOrVarKeyword = letOrVarKeyword
     assert(letOrVarKeyword.text == "let" || letOrVarKeyword.text == "var")
     self.pattern = pattern.createPatternBuildable()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
-    self.initializer = initializer.createInitializerClause()
+    self.initializer = initializer?.createInitializerClause()
   }
 
 
@@ -10174,7 +10174,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
       letOrVarKeyword: letOrVarKeyword,
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
-      initializer: initializer.buildInitializerClause(format: format, leadingTrivia: nil)
+      initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil)
     )
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))

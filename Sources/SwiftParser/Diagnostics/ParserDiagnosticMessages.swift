@@ -34,6 +34,20 @@ public extension ParserError {
   }
 }
 
+public protocol ParserNote: NoteMessage {
+  var fixItID: MessageID { get }
+}
+
+public extension ParserNote {
+  static var fixItID: MessageID {
+    return MessageID(domain: diagnosticDomain, id: "\(self)")
+  }
+
+  var fixItID: MessageID {
+    return Self.fixItID
+  }
+}
+
 public protocol ParserFixIt: FixItMessage {
   var fixItID: MessageID { get }
 }

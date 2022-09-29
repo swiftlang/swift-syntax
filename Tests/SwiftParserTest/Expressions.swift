@@ -99,11 +99,13 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       #"""
       \a
-      c[#^DIAG^#
+      c#^NOTE^#[#^DIAG^#
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected value in subscript"),
-        DiagnosticSpec(message: "expected ']' to end subscript"),
+        DiagnosticSpec(message: "expected ']' to end subscript", notes: [
+          NoteSpec(message: "to match this opening '['")
+        ]),
       ]
     )
 
@@ -261,10 +263,12 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       #"""
-      "\",#^DIAG^#
+      #^NOTE^#"\",#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#)
+        DiagnosticSpec(message: #"expected '"' to end string literal"#, notes: [
+          NoteSpec(message: #"to match this opening '"'"#)
+        ])
       ]
     )
 
@@ -328,10 +332,12 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
        ##"""
-       """"#^DIAG^#
+       #^NOTE^#""""#^DIAG^#
        """##,
        diagnostics: [
-         DiagnosticSpec(message: #"expected '"""' to end string literal"#)
+         DiagnosticSpec(message: #"expected '"""' to end string literal"#, notes: [
+          NoteSpec(message: #"to match this opening '"""'"#)
+         ])
        ]
      )
 
@@ -354,10 +360,10 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       ##"""
-      #"#^DIAG^#
+      #^NOTE^##"#^DIAG^#
       """##,
       diagnostics: [
-        DiagnosticSpec(message: ##"expected '"#' to end string literal"##),
+        DiagnosticSpec(message: ##"expected '"#' to end string literal"##, notes: []),
       ]
     )
 

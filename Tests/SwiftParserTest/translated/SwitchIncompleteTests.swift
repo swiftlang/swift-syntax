@@ -8,13 +8,13 @@ final class SwitchIncompleteTests: XCTestCase {
       """
       // <rdar://problem/15971438> Incomplete switch was parsing to an AST that
       // triggered an assertion failure.
-      switch 1 { 
+      switch 1 #^NOTE^#{ 
       case 1:#^DIAG^#
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 3: to match this opening '{'
-        DiagnosticSpec(message: "expected '}' to end 'switch' statement"),
-        // TODO: Old parser expected error on line 5: expected '}' at end of 'switch' statement
+        DiagnosticSpec(message: "expected '}' to end 'switch' statement", notes: [
+          NoteSpec(message: "to match this opening '{'")
+        ]),
       ]
     )
   }

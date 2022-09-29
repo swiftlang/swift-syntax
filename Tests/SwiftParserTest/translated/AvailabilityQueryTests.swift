@@ -102,14 +102,14 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery8() {
     AssertParse(
       """
-      if #available( { 
+      if #available#^NOTE^#( {
       }#^DIAG^#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
         DiagnosticSpec(message: "expected code block in 'if' statement"),
       ]
     )
@@ -132,14 +132,14 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery10() {
     AssertParse(
       """
-      if #available(OSX #^DIAG^#{ 
+      if #available#^NOTE^#(OSX #^DIAG^#{
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected version number
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }
@@ -159,14 +159,14 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery12() {
     AssertParse(
       """
-      if #available(OSX 10.51 #^DIAG^#{ 
+      if #available#^NOTE^#(OSX 10.51 #^DIAG^#{
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        // TODO: Old parser expected error on line 1: must handle potential future platforms with '*', Fix-It replacements: 24 - 24 = ', *'
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }
@@ -281,13 +281,13 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery25() {
     AssertParse(
       """
-      if #available(* #^DIAG^#{ 
+      if #available#^NOTE^#(* #^DIAG^#{
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')' in availability query
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }
@@ -305,14 +305,14 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery27() {
     AssertParse(
       """
-      if #available(OSX 10.51, { 
+      if #available#^NOTE^#(OSX 10.51, {
       }#^DIAG^#
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
         // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
         DiagnosticSpec(message: "expected code block in 'if' statement"),
       ]
     )
@@ -335,14 +335,14 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery29() {
     AssertParse(
       """
-      if #available(OSX 10.51, iOS #^DIAG^#{ 
+      if #available#^NOTE^#(OSX 10.51, iOS #^DIAG^#{
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
         // TODO: Old parser expected error on line 1: expected version number
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }

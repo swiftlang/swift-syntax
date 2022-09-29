@@ -51,6 +51,30 @@ func AssertEqualTokens(_ actual: [Lexer.Lexeme], _ expected: [Lexer.Lexeme], fil
 
 // MARK: Parsing Assertions
 
+struct NoteSpec {
+  /// The location to which the note should point.
+  let locationMarker: String
+
+  /// Asserts that the note has this message.
+  let message: String
+
+  /// The file and line at which this `NoteSpec` was created, so that assertion failures can be reported at its location.
+  let file: StaticString
+  let line: UInt
+
+  init(
+    locationMarker: String = "NOTE",
+    message: String,
+    file: StaticString = #file,
+    line: UInt = #line
+  ) {
+    self.locationMarker = locationMarker
+    self.message = message
+    self.file = file
+    self.line = line
+  }
+}
+
 /// An abstract data structure to describe how a diagnostic produced by the parser should look like.
 struct DiagnosticSpec {
   /// The name of a maker (of the form `#^DIAG^#`) in the source code that marks the location where the diagnostis should be produced.
@@ -61,9 +85,13 @@ struct DiagnosticSpec {
   let message: String?
   /// If not `nil`, assert that the highlighted range has this content.
   let highlight: String?
+  /// If not `nil`, assert that the diagnostic contains notes with these messages.
+  let notes: [NoteSpec]?
   /// If not `nil`, assert that the diagnostic contains fix-its with these messages.
   /// Use the `fixedSource` parameter on `AssertParse` to check that applying the Fix-It yields the expected result.
   let fixIts: [String]?
+
+  /// The file and line at which this `DiagnosticSpec` was created, so that assertion failures can be reported at its location.
   let file: StaticString
   let line: UInt
 
@@ -72,6 +100,7 @@ struct DiagnosticSpec {
     id: MessageID? = nil,
     message: String?,
     highlight: String? = nil,
+    notes: [NoteSpec]? = nil,
     fixIts: [String]? = nil,
     file: StaticString = #file,
     line: UInt = #line
@@ -80,6 +109,7 @@ struct DiagnosticSpec {
     self.id = id
     self.message = message
     self.highlight = highlight
+    self.notes = notes
     self.fixIts = fixIts
     self.file = file
     self.line = line
@@ -112,6 +142,56 @@ class FixItApplier: SyntaxRewriter {
   }
 }
 
+/// Assert that `location` is the same as that of `locationMarker` in `tree`.
+func AssertLocation<T: SyntaxProtocol>(
+  _ location: SourceLocation,
+  in tree: T,
+  markerLocations: [String: Int],
+  expectedLocationMarker locationMarker: String,
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  if let markerLoc = markerLocations[locationMarker] {
+    let locationConverter = SourceLocationConverter(file: "", source: tree.description)
+    let actualLocation = location
+    let expectedLocation = locationConverter.location(for: AbsolutePosition(utf8Offset: markerLoc))
+    if let actualLine = actualLocation.line,
+       let actualColumn = actualLocation.column,
+       let expectedLine = expectedLocation.line,
+       let expectedColumn = expectedLocation.column {
+      if actualLine != expectedLine || actualColumn != expectedColumn {
+        XCTFail("Expected location \(expectedLine):\(expectedColumn) but got \(actualLine):\(actualColumn)", file: file, line: line)
+      }
+    } else {
+      XCTFail("Failed to resolve diagnostic location to line/column", file: file, line: line)
+    }
+  } else {
+    XCTFail("Did not find marker #^\(locationMarker)^# in the source code", file: file, line: line)
+  }
+}
+
+/// Assert that the diagnostic `note` produced in `tree` matches `spec`,
+/// using `markerLocations` to translate markers to actual source locations.
+func AssertNote<T: SyntaxProtocol>(
+  _ note: Note,
+  in tree: T,
+  markerLocations: [String: Int],
+  expected spec: NoteSpec,
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  XCTAssertEqual(note.message, spec.message, file: file, line: line)
+  let locationConverter = SourceLocationConverter(file: "", source: tree.description)
+  AssertLocation(
+    note.location(converter: locationConverter),
+    in: tree,
+    markerLocations: markerLocations,
+    expectedLocationMarker: spec.locationMarker,
+    file: file,
+    line: line
+  )
+}
+
 /// Assert that the diagnostic `diag` produced in `tree` matches `spec`,
 /// using `markerLocations` to translate markers to actual source locations.
 func AssertDiagnostic<T: SyntaxProtocol>(
@@ -122,25 +202,15 @@ func AssertDiagnostic<T: SyntaxProtocol>(
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
-  if let markerLoc = markerLocations[spec.locationMarker] {
-    let locationConverter = SourceLocationConverter(file: "/test.swift", source: tree.description)
-    let actualLocation = diag.location(converter: locationConverter)
-    let expectedLocation = locationConverter.location(for: AbsolutePosition(utf8Offset: markerLoc))
-    if let actualLine = actualLocation.line,
-       let actualColumn = actualLocation.column,
-       let expectedLine = expectedLocation.line,
-       let expectedColumn = expectedLocation.column {
-      if actualLine != expectedLine || actualColumn != expectedColumn {
-        XCTFail("Expected diagnostic with message '\(spec.message ?? "<nil>")' on \(expectedLine):\(expectedColumn) but got \(actualLine):\(actualColumn)",
-                file: file, line: line
-        )
-      }
-    } else {
-      XCTFail("Failed to resolve diagnostic location to line/column", file: file, line: line)
-    }
-  } else {
-    XCTFail("Did not find marker #^\(spec.locationMarker)^# in the source code", file: file, line: line)
-  }
+  let locationConverter = SourceLocationConverter(file: "", source: tree.description)
+  AssertLocation(
+    diag.location(converter: locationConverter),
+    in: tree,
+    markerLocations: markerLocations,
+    expectedLocationMarker: spec.locationMarker,
+    file: file,
+    line: line
+  )
   if let id = spec.id {
     XCTAssertEqual(diag.diagnosticID, id, file: file, line: line)
   }
@@ -155,6 +225,18 @@ func AssertDiagnostic<T: SyntaxProtocol>(
   }
   if let highlight = spec.highlight {
     AssertStringsEqualWithDiff(diag.highlights.map(\.description).joined(), highlight, file: file, line: line)
+  }
+  if let notes = spec.notes {
+    if diag.notes.count != notes.count {
+      XCTFail("""
+      Expected \(notes.count) notes but received \(diag.notes.count):
+      \(diag.notes.map(\.debugDescription).joined(separator: "\n"))
+      """, file: file, line: line)
+    } else {
+      for (note, expectedNote) in zip(diag.notes, notes) {
+        AssertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote, file: expectedNote.file, line: expectedNote.line)
+      }
+    }
   }
   if let fixIts = spec.fixIts {
     XCTAssertEqual(
@@ -246,9 +328,10 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
         Expected \(expectedDiagnostics.count) diagnostics but received \(diags.count):
         \(diags.map(\.debugDescription).joined(separator: "\n"))
         """, file: file, line: line)
-      }
-      for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
-        AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: expectedDiag.file, line: expectedDiag.line)
+      } else {
+        for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
+          AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: expectedDiag.file, line: expectedDiag.line)
+        }
       }
 
       // Applying Fix-Its

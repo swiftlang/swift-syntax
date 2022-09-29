@@ -730,7 +730,7 @@ public enum SyntaxEnum {
     case .catchClause:
       return "'catch' clause"
     case .poundAssertStmt:
-      return "'#assert' statement"
+      return "'#assert' directive"
     case .genericWhereClause:
       return "'where' clause"
     case .genericRequirementList:

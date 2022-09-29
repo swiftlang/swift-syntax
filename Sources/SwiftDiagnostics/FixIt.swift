@@ -16,7 +16,7 @@ import SwiftSyntax
 /// shown to the client.
 /// The messages should describe the change that the Fix-It will perform
 public protocol FixItMessage {
-  /// The diagnostic message that should be displayed in the client.
+  /// The Fix-It message that should be displayed in the client.
   var message: String { get }
 
   /// See ``MessageID``.
@@ -38,7 +38,7 @@ public struct FixIt {
   public let changes: [Change]
 
   public init(message: FixItMessage, changes: [Change]) {
-    assert(!changes.isEmpty, "A Fix-It must have at least one diagnostic associated with it")
+    assert(!changes.isEmpty, "A Fix-It must have at least one change associated with it")
     self.message = message
     self.changes = changes
   }

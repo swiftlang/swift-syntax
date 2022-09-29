@@ -7,13 +7,13 @@ final class BraceRecoveryEofTests: XCTestCase {
     AssertParse(
       """
       // Make sure source ranges satisfy the verifier.
-      for foo in [1, 2] { 
+      for foo in [1, 2] #^NOTE^#{
         _ = foo#^DIAG^#
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 2: to match this opening '{'
-        DiagnosticSpec(message: "expected '}' to end 'for' statement"),
-        // TODO: Old parser expected error on line 4: expected '}' at end of brace statement
+        DiagnosticSpec(message: "expected '}' to end 'for' statement", notes: [
+          NoteSpec(message: "to match this opening '{'")
+        ]),
       ]
     )
   }

@@ -705,7 +705,7 @@ public let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "PoundAssertStmt",
-       nameForDiagnostics: "'#assert' statement",
+       nameForDiagnostics: "'#assert' directive",
        kind: "Stmt",
        children: [
          Child(name: "PoundAssert",

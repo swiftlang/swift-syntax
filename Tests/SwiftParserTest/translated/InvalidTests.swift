@@ -273,10 +273,10 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_12", message: "expected identifier in function"),
         DiagnosticSpec(locationMarker: "DIAG_12", message: "expected argument list in function declaration"),
         DiagnosticSpec(locationMarker: "DIAG_13", message: "unexpected text '()' in 'repeat' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_14", message: "expected 'while' in 'repeat' statement"),
+        DiagnosticSpec(locationMarker: "DIAG_14", message: "expected 'while' and condition in 'repeat' statement"),
         // TODO: Old parser expected error on line 30: keyword 'for' cannot be used as an identifier here
         // TODO: Old parser expected note on line 30: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
-        DiagnosticSpec(locationMarker: "DIAG_15", message: "expected expression in pattern"),
+        DiagnosticSpec(locationMarker: "DIAG_15", message: "expected pattern in variable"),
         DiagnosticSpec(locationMarker: "DIAG_16", message: "expected pattern, 'in' and expression in 'for' statement"),
         DiagnosticSpec(locationMarker: "DIAG_16", message: "expected '{' in 'for' statement"),
         DiagnosticSpec(locationMarker: "DIAG_16", message: "unexpected text '= 2' before function"),

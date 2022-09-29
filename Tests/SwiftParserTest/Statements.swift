@@ -288,4 +288,72 @@ final class StatementTests: XCTestCase {
       ))
     )
   }
+
+  func testCaseContext() {
+    AssertParse(
+      """
+      graphQLMap["clientMutationId"] as? #^SPECIALIZATION^#Swift.Optional<String?> ?? Swift.Optional<String?>.none
+      """,
+//      0: MemberTypeIdentifierSyntax children=4
+//        0: SimpleTypeIdentifierSyntax children=1
+//          0: identifier("Swift")
+//        1: period
+//        2: identifier("Optional")
+//        3: GenericArgumentClauseSyntax children=3
+//          0: leftAngle
+//          1: GenericArgumentListSyntax children=1
+//            0: GenericArgumentSyntax children=1
+//              0: OptionalTypeSyntax children=2
+//                0: SimpleTypeIdentifierSyntax children=1
+//                  0: identifier("String")
+//                1: postfixQuestionMark
+//          2: rightAngle
+    substructure: Syntax(MemberTypeIdentifierSyntax(
+      baseType: TypeSyntax(SimpleTypeIdentifierSyntax(
+        name: .identifier("Swift"),
+        genericArgumentClause: nil)),
+      period: .periodToken(),
+      name: .identifier("Optional"),
+      genericArgumentClause: GenericArgumentClauseSyntax(
+        leftAngleBracket: .leftAngleToken(),
+        arguments: GenericArgumentListSyntax([
+          GenericArgumentSyntax(
+            argumentType: TypeSyntax(OptionalTypeSyntax(
+              wrappedType: TypeSyntax(SimpleTypeIdentifierSyntax(
+                name: .identifier("String"),
+                genericArgumentClause: nil)),
+              questionMark: .postfixQuestionMarkToken())),
+            trailingComma: nil)
+        ]),
+        rightAngleBracket: .rightAngleToken()))),
+    substructureAfterMarker: "SPECIALIZATION")
+
+    AssertParse(
+      """
+      if case #^SPECIALIZATION^#Optional<Any>.none = object["anyCol"] { }
+      """,
+//      0: SpecializeExprSyntax children=2
+//        0: IdentifierExprSyntax children=1
+//          0: identifier("Optional")
+//        1: GenericArgumentClauseSyntax children=3
+//          0: leftAngle
+//          1: GenericArgumentListSyntax children=1
+//            0: GenericArgumentSyntax children=1
+//              0: SimpleTypeIdentifierSyntax children=1
+//                0: anyKeyword
+//          2: rightAngle
+//      1: period
+//      2: identifier("none")
+      substructure: Syntax(SpecializeExprSyntax(
+        expression: ExprSyntax(IdentifierExprSyntax(
+          identifier: .identifier("Optional"), declNameArguments: nil)),
+        genericArgumentClause: GenericArgumentClauseSyntax(
+          leftAngleBracket: .leftAngleToken(), arguments: GenericArgumentListSyntax([
+        GenericArgumentSyntax(
+          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
+            name: .anyKeyword(), genericArgumentClause: nil)),
+          trailingComma: nil)
+      ]), rightAngleBracket: .rightAngleToken()))),
+      substructureAfterMarker: "SPECIALIZATION")
+  }
 }

@@ -261,11 +261,11 @@ extension Parser {
 
     let kind: BindingKind
     if let caseKeyword = self.consume(if: .caseKeyword) {
-      let pattern = self.parseMatchingPattern()
+      let pattern = self.parseMatchingPattern(context: .matching)
       kind = .pattern(caseKeyword, pattern)
     } else {
       let letOrVar = self.consumeAnyToken()
-      let pattern = self.parseMatchingPattern()
+      let pattern = self.parseMatchingPattern(context: .letOrVar)
       kind = .optional(letOrVar, pattern)
     }
 
@@ -563,7 +563,7 @@ extension Parser {
     let pattern: RawPatternSyntax
     let type: RawTypeAnnotationSyntax?
     if caseKeyword != nil {
-      pattern = self.parseMatchingPattern()
+      pattern = self.parseMatchingPattern(context: .matching)
       // Now parse an optional type annotation.
       if let colon = self.consume(if: .colon) {
         let resultType = self.parseType()
@@ -827,7 +827,7 @@ extension Parser {
       flavor = .basic
     }
 
-    let pattern = self.parseMatchingPattern()
+    let pattern = self.parseMatchingPattern(context: .matching)
 
     // Parse the optional 'where' guard, with this particular pattern's bound
     // vars in scope.

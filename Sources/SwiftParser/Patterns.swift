@@ -72,7 +72,6 @@ extension Parser {
         case .varKeyword: return .varKeyword
         }
       }
-
     }
 
     switch self.at(anyIn: ExpectedTokens.self) {
@@ -171,13 +170,13 @@ extension Parser {
 extension Parser {
   /// Parse a pattern that appears immediately under syntax for conditionals like
   /// for-in loops and guard clauses.
-  mutating func parseMatchingPattern() -> RawPatternSyntax {
+  mutating func parseMatchingPattern(context: PatternContext) -> RawPatternSyntax {
     // Parse productions that can only be patterns.
     switch self.at(anyIn: MatchingPatternStart.self) {
     case (.varKeyword, let handle)?,
-      (.letKeyword, let handle)?:
+         (.letKeyword, let handle)?:
       let letOrVar = self.eat(handle)
-      let value = self.parseMatchingPattern()
+      let value = self.parseMatchingPattern(context: .letOrVar)
       return RawPatternSyntax(RawValueBindingPatternSyntax(
         letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
     case (.isKeyword, let handle)?:
@@ -192,7 +191,7 @@ extension Parser {
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will
       // disambiguate.
-      let patternSyntax = self.parseSequenceExpression(.basic, pattern: .matching)
+      let patternSyntax = self.parseSequenceExpression(.basic, pattern: context)
       if let pat = patternSyntax.as(RawUnresolvedPatternExprSyntax.self) {
         // The most common case here is to parse something that was a lexically
         // obvious pattern, which will come back wrapped in an immediate

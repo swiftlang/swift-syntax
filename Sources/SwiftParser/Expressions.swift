@@ -34,15 +34,26 @@ extension Parser {
   }
 
   public enum PatternContext {
+    /// There is no ambient pattern context.
     case none
+    /// We're parsing a matching pattern that is not introduced via `let` or `var`.
+    ///
+    /// In this context, identifiers are references to the enclosing scopes, not a variable binding.
+    ///
+    /// ```
+    /// case x.y <- 'x' must refer to some 'x' defined in another scope, it cannot be e.g. an enum type.
+    /// ```
     case matching
-    case `var`
-    case `let`
-    case implicitlyImmutable
+    /// We're parsing a matching pattern that is introduced via `let` or `var`.
+    ///
+    /// ```
+    /// case let x.y <- 'x' must refer to the base of some member access, y must refer to some pattern-compatible identfier
+    /// ```
+    case letOrVar
 
     var admitsBinding: Bool {
       switch self {
-      case .implicitlyImmutable, .var, .let:
+      case .letOrVar:
         return true
       case .none, .matching:
         return false
@@ -65,8 +76,8 @@ extension Parser {
     //
     // Only do this if we're parsing a pattern, to improve QoI on malformed
     // expressions followed by (e.g.) let/var decls.
-    if self.at(anyIn: MatchingPatternStart.self) != nil {
-      let pattern = self.parseMatchingPattern()
+    if pattern != .none, self.at(anyIn: MatchingPatternStart.self) != nil {
+      let pattern = self.parseMatchingPattern(context: .matching)
       return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))
     }
     return RawExprSyntax(self.parseSequenceExpression(flavor, pattern: pattern))
@@ -261,9 +272,9 @@ extension Parser {
 
     case (.equal, let handle)?:
       switch pattern {
-      case .matching, .let, .var:
+      case .matching, .letOrVar:
         return nil
-      case .none, .implicitlyImmutable:
+      case .none:
         let eq = self.eat(handle)
         let op = RawAssignmentExprSyntax(
           assignToken: eq,

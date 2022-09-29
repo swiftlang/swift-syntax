@@ -39,20 +39,20 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
   public func format(syntax: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
     CodeBlockItemListSyntax(syntax.map {
-      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])))
     })
   }
   public func format(syntax: CodeBlockSyntax) -> CodeBlockSyntax {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -63,7 +63,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -71,7 +71,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -91,7 +91,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -99,7 +99,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -107,7 +107,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -115,7 +115,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -126,7 +126,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -134,7 +134,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -142,7 +142,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -150,7 +150,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -158,7 +158,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -166,7 +166,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -174,7 +174,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -185,7 +185,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -193,7 +193,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -201,7 +201,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -209,7 +209,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -217,7 +217,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -225,7 +225,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -233,7 +233,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -241,7 +241,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -249,7 +249,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -257,7 +257,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -265,7 +265,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -273,7 +273,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -281,7 +281,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -289,7 +289,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -297,7 +297,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -305,7 +305,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -313,7 +313,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -321,7 +321,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -329,7 +329,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -337,7 +337,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -345,7 +345,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -353,7 +353,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -361,7 +361,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -369,7 +369,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -377,7 +377,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -385,7 +385,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -393,7 +393,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -401,7 +401,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -409,7 +409,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -420,7 +420,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -428,7 +428,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -439,7 +439,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -447,7 +447,7 @@ extension Format {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -455,7 +455,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -463,7 +463,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -474,7 +474,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -482,7 +482,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -490,7 +490,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -498,7 +498,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -506,7 +506,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -514,7 +514,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -522,7 +522,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -530,7 +530,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -538,7 +538,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -546,7 +546,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -554,7 +554,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -562,7 +562,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -570,7 +570,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -581,7 +581,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -589,7 +589,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -597,7 +597,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -605,7 +605,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -613,7 +613,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -621,7 +621,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -629,7 +629,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -637,7 +637,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -648,7 +648,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -656,7 +656,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -664,7 +664,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -672,7 +672,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -683,7 +683,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -691,7 +691,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -699,7 +699,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -707,7 +707,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -715,7 +715,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -723,7 +723,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -731,7 +731,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -739,7 +739,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -750,7 +750,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -758,7 +758,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -766,7 +766,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -774,7 +774,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -782,7 +782,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -790,7 +790,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -798,20 +798,20 @@ extension Format {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
   public func format(syntax: MemberDeclListSyntax) -> MemberDeclListSyntax {
     MemberDeclListSyntax(syntax.map {
-      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])))
     })
   }
   public func format(syntax: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -819,7 +819,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -827,7 +827,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -835,7 +835,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -846,7 +846,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -854,7 +854,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -862,7 +862,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -870,7 +870,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -878,7 +878,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -886,7 +886,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -897,7 +897,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -905,7 +905,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -913,7 +913,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -924,7 +924,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -932,7 +932,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -943,7 +943,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -951,7 +951,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -962,7 +962,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -970,7 +970,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -978,7 +978,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -989,7 +989,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -997,7 +997,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1005,7 +1005,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1016,7 +1016,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1027,7 +1027,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1035,7 +1035,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1043,7 +1043,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1057,7 +1057,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1065,7 +1065,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1079,7 +1079,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1087,7 +1087,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1095,7 +1095,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1103,7 +1103,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1111,7 +1111,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1119,7 +1119,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1127,7 +1127,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1138,7 +1138,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1146,7 +1146,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1154,7 +1154,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1165,7 +1165,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1173,7 +1173,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1181,7 +1181,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1189,7 +1189,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1197,7 +1197,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1208,7 +1208,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1216,7 +1216,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1224,7 +1224,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1232,7 +1232,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1240,7 +1240,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1248,7 +1248,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1256,7 +1256,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1264,7 +1264,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1272,20 +1272,20 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
   public func format(syntax: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
     SwitchCaseListSyntax(syntax.map {
-      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])))
     })
   }
   public func format(syntax: RepeatWhileStmtSyntax) -> RepeatWhileStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1293,7 +1293,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1301,7 +1301,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1309,7 +1309,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1317,7 +1317,7 @@ extension Format {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1328,7 +1328,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1336,7 +1336,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1344,7 +1344,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1352,7 +1352,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1360,7 +1360,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1368,7 +1368,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1382,7 +1382,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1390,7 +1390,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1398,7 +1398,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1406,7 +1406,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1414,7 +1414,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1422,7 +1422,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1433,7 +1433,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1441,7 +1441,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1449,7 +1449,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1457,7 +1457,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1465,7 +1465,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1473,7 +1473,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1481,7 +1481,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1489,7 +1489,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1497,7 +1497,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1505,7 +1505,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1513,7 +1513,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1521,7 +1521,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1529,7 +1529,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1540,7 +1540,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1548,7 +1548,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1556,7 +1556,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1567,7 +1567,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1578,7 +1578,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1586,7 +1586,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1594,7 +1594,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1602,7 +1602,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1610,7 +1610,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1618,7 +1618,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1626,7 +1626,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1634,7 +1634,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1642,7 +1642,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1650,7 +1650,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1658,7 +1658,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1666,7 +1666,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1674,7 +1674,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1682,7 +1682,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1693,7 +1693,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1701,7 +1701,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1709,7 +1709,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1720,7 +1720,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1728,7 +1728,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1736,7 +1736,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1747,7 +1747,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1755,7 +1755,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1763,7 +1763,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1771,7 +1771,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1779,7 +1779,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1787,7 +1787,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1795,7 +1795,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1803,7 +1803,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1811,7 +1811,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1819,7 +1819,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1827,7 +1827,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1835,7 +1835,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1843,7 +1843,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1854,7 +1854,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1865,7 +1865,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1873,7 +1873,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1881,7 +1881,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }
@@ -1889,7 +1889,7 @@ extension Format {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+      result = result.withLeadingTrivia(leadingTrivia)
     }
     return result
   }

@@ -1,0 +1,66 @@
+%{
+  from gyb_syntax_support import *
+  NODE_MAP = create_node_map()
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxExpressilbeByStringInterpolationConformances.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
+
+% STRING_INTERPOLATION_BASE_KINDS = [base_kind for base_kind in SYNTAX_BASE_KINDS if base_kind != 'Syntax' and base_kind != 'SyntaxCollection']
+% for base_kind in STRING_INTERPOLATION_BASE_KINDS:
+%   node = NODE_MAP[base_kind]
+extension ${base_kind}SyntaxProtocol {
+  public static func parse(from parser: inout Parser) -> Self {
+    let node = parser.${node.parser_function}().syntax
+    guard let result = node.as(Self.self) else {
+      fatalError("Parsing was expected to produce a \(Self.self) but produced \(type(of: node.asProtocol(${base_kind}SyntaxProtocol.self)))")
+    }
+    return result
+  }
+}
+
+% end
+
+%{
+def parser_invocation(node):
+  if node.kind == 'Expr':
+    return "return ExprSyntax(parser.parseExpression().syntax).castOrFatalError(Self.self)"
+  elif node.kind == 'Stmt':
+    return "return StmtSyntax(parser.parseStatement().syntax).castOrFatalError(Self.self)"
+  elif node.kind == 'Type':
+    return "return TypeSyntax(parser.parseType().syntax).castOrFatalError(Self.self)"
+  elif node.kind == 'Pattern':
+    return "return PatternSyntax(parser.parsePattern().syntax).castOrFatalError(Self.self)"
+  elif node.parser_function is not None:
+    return f"return parser.{node.parser_function}().syntax"
+  else:
+    return None
+}%
+% for node in SYNTAX_NODES:
+%   if node.kind in STRING_INTERPOLATION_BASE_KINDS:
+extension ${node.name}: SyntaxExpressibleByStringInterpolation {}
+
+%   elif node.parser_function:
+extension ${node.name}: SyntaxExpressibleByStringInterpolation {
+  public static func parse(from parser: inout Parser) -> Self {
+    return parser.${node.parser_function}().syntax
+  }
+}
+
+%   end
+% end

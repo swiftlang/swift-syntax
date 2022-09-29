@@ -416,7 +416,14 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
           )
         )
       ) {
-        ReturnStmt(expression: "node")
+        ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "Indenter", name: "indent")) {
+          TupleExprElement(expression: "node")
+          TupleExprElement(
+            label: "indentation",
+            expression: MemberAccessExpr(base: "format", name: "indentTrivia")
+          )
+        }
+        )
       }
     }
   }

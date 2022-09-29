@@ -26,7 +26,7 @@ final class FunctionTests: XCTestCase {
         body: ifCodeBlock)
 
       ReturnStmt(expression: SequenceExpr {
-        FunctionCallExpr("fibonacci") {
+        FunctionCallExpr(calledExpression: "fibonacci") {
           SequenceExpr {
             IntegerLiteralExpr(digits: "n")
             BinaryOperatorExpr("-")
@@ -36,7 +36,7 @@ final class FunctionTests: XCTestCase {
 
         BinaryOperatorExpr("+")
 
-        FunctionCallExpr(MemberAccessExpr(base: "self", name: "fibonacci")) {
+        FunctionCallExpr(calledExpression: MemberAccessExpr(base: "self", name: "fibonacci")) {
           SequenceExpr {
             IntegerLiteralExpr(digits: "n")
             BinaryOperatorExpr("-")
@@ -58,7 +58,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testArguments() {
-    let buildable = FunctionCallExpr("test") {
+    let buildable = FunctionCallExpr(calledExpression: "test") {
       for param in (1...5) {
         TupleExprElement(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: "value\(param)")
       }
@@ -68,13 +68,13 @@ final class FunctionTests: XCTestCase {
   }
 
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
-    let buildable = FunctionCallExpr("test")
+    let buildable = FunctionCallExpr(calledExpression: "test")
     let syntax = buildable.buildSyntax()
     XCTAssertEqual(syntax.description, "test()")
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
-    let buildable = FunctionCallExpr("test", trailingClosure: ClosureExpr()) {
+    let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: ClosureExpr()) {
       TupleExprElement(expression: "42")
     }
     let syntax = buildable.buildSyntax()
@@ -83,11 +83,11 @@ final class FunctionTests: XCTestCase {
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
     let closure = ClosureExpr(statementsBuilder: {
-      FunctionCallExpr("f") {
+      FunctionCallExpr(calledExpression: "f") {
         TupleExprElement(expression: "a")
       }
     })
-    let buildable = FunctionCallExpr("test", trailingClosure: closure)
+    let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: closure)
     let syntax = buildable.buildSyntax()
     XCTAssertEqual(
       syntax.description,
@@ -98,7 +98,7 @@ final class FunctionTests: XCTestCase {
       """)
   }
 
-  func testParserInterop() {
+  func testParserBuilderInStringInterpolation() {
     let cases = SwitchCaseList {
       for i in 0..<2 {
         SwitchCase("""
@@ -132,5 +132,28 @@ final class FunctionTests: XCTestCase {
       }
     }
     """)
+  }
+
+  func testStringInterpolationInBuilder() {
+    let ext = ExtensionDecl(extendedType: "MyType") {
+      FunctionDecl(
+      """
+      ///
+      /// Satisfies conformance to `SyntaxBuildable`.
+      func buildSyntax(format: Format) -> Syntax {
+        return Syntax(buildTest(format: format))
+      }
+      """
+      )
+    }
+    XCTAssertEqual(ext.buildSyntax().description, """
+      extension MyType {
+          ///
+          /// Satisfies conformance to `SyntaxBuildable`.
+          func buildSyntax(format: Format) -> Syntax {
+            return Syntax(buildTest(format: format))
+          }
+      }
+      """)
   }
 }

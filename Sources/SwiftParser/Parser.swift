@@ -43,7 +43,7 @@ extension Parser {
     // be alive until `Syntax(raw:)` retains the arena.
     return withExtendedLifetime(parser) {
       let rawSourceFile =  parser.parseSourceFile()
-      return Syntax(raw: rawSourceFile.raw).as(SourceFileSyntax.self)!
+      return rawSourceFile.syntax
     }
   }
 }
@@ -138,7 +138,6 @@ public struct Parser: TokenConsumer {
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be the registered source
   ///            buffer of `arena` or a slice of the source buffer.
-  @_spi(Testing)
   public init(_ input: UnsafeBufferPointer<UInt8>, arena: SyntaxArena? = nil) {
     var sourceBuffer: UnsafeBufferPointer<UInt8>
     if let arena = arena {

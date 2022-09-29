@@ -2,11 +2,16 @@ from .Child import Child
 from .Node import Node  # noqa: I201
 
 COMMON_NODES = [
-    Node('Decl', name_for_diagnostics='declaration', kind='Syntax'),
-    Node('Expr', name_for_diagnostics='expression', kind='Syntax'),
-    Node('Stmt', name_for_diagnostics='statement', kind='Syntax'),
-    Node('Type', name_for_diagnostics='type', kind='Syntax'),
-    Node('Pattern', name_for_diagnostics='pattern', kind='Syntax'),
+    Node('Decl', name_for_diagnostics='declaration', kind='Syntax', 
+         parser_function='parseDeclaration'),
+    Node('Expr', name_for_diagnostics='expression', kind='Syntax',
+         parser_function='parseExpression'),
+    Node('Stmt', name_for_diagnostics='statement', kind='Syntax',
+         parser_function='parseStatement'),
+    Node('Type', name_for_diagnostics='type', kind='Syntax',
+         parser_function='parseType'),
+    Node('Pattern', name_for_diagnostics='pattern', kind='Syntax',
+         parser_function='parsePattern'),
     Node('UnknownDecl', name_for_diagnostics='declaration', kind='Decl'),
     Node('UnknownExpr', name_for_diagnostics='expression', kind='Expr'),
     Node('UnknownStmt', name_for_diagnostics='statement', kind='Stmt'),

@@ -327,6 +327,7 @@ DECL_NODES = [
 
     Node('MemberDeclBlock', name_for_diagnostics=None, kind='Syntax',
          traits=['Braced'],
+         parser_function='parseMemberDeclList',
          children=[
              Child('LeftBrace', kind='LeftBraceToken'),
              Child('Members', kind='MemberDeclList',
@@ -356,6 +357,7 @@ DECL_NODES = [
     # source-file = code-block-item-list eof
     Node('SourceFile', name_for_diagnostics='source file', kind='Syntax',
          traits=['WithStatements'],
+         parser_function='parseSourceFile',
          children=[
              Child('Statements', kind='CodeBlockItemList',
                    collection_element_name='Statement'),

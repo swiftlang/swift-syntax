@@ -9,18 +9,18 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     
     @CodeBlockItemListBuilder
     func buildInnerCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
-      FunctionCallExpr("innerBuilder")
+      FunctionCallExpr(calledExpression: "innerBuilder")
     }
     
     @CodeBlockItemListBuilder
     func buildOuterCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
-      FunctionCallExpr("outerBuilder")
+      FunctionCallExpr(calledExpression: "outerBuilder")
       
       buildInnerCodeBlockItemList()
     }
     
     let codeBlock = CodeBlock(leadingTrivia: leadingTrivia) {
-      FunctionCallExpr("outsideBuilder")
+      FunctionCallExpr(calledExpression: "outsideBuilder")
       buildOuterCodeBlockItemList()
     }
 
@@ -41,13 +41,13 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
     
     func buildInnerCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
-      CodeBlockItemList([FunctionCallExpr("innerBuilder")])
+      CodeBlockItemList([FunctionCallExpr(calledExpression: "innerBuilder")])
     }
     
     func buildOuterCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
       CodeBlockItemList(
         combining: [
-          CodeBlockItemList([FunctionCallExpr("outerBuilder")]),
+          CodeBlockItemList([FunctionCallExpr(calledExpression: "outerBuilder")]),
           buildInnerCodeBlockItemList()
         ]
       )
@@ -57,7 +57,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       leadingTrivia: leadingTrivia,
       statements: CodeBlockItemList(
         combining: [
-          CodeBlockItemList([FunctionCallExpr("outsideBuilder")]),
+          CodeBlockItemList([FunctionCallExpr(calledExpression: "outsideBuilder")]),
           buildOuterCodeBlockItemList()
         ]
       )

@@ -12,8 +12,8 @@ class Node(object):
     """
 
     def __init__(self, name, name_for_diagnostics, description=None, kind=None,
-                 traits=None, children=[], element=None, element_name=None,
-                 element_choices=None, omit_when_empty=False,
+                 traits=None, parser_function=None, children=[], element=None, 
+                 element_name=None, element_choices=None, omit_when_empty=False,
                  elements_separated_by_newline=False):
         self.syntax_kind = name
         self.element_name = element_name
@@ -22,6 +22,7 @@ class Node(object):
         self.kind = kind
         self.name_for_diagnostics = name_for_diagnostics
         self.description = description
+        self.parser_function = parser_function
 
         self.traits = traits or []
         self.children = []

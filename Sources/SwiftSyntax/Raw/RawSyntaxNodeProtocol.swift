@@ -178,3 +178,20 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+/// Provides the `Syntax` type that a RawSyntax node represents.
+/// All syntax nodes conform to this protocol.
+/// We cannot add `SyntaxType` to `RawSyntaxNodeProtocol` because then
+/// `RawSyntaxNodeProtocol` has associated type requirements, which limits the
+/// places that `RawSyntaxNodeProtocol` can be used.
+@_spi(RawSyntax)
+public protocol RawSyntaxToSyntax: RawSyntaxNodeProtocol {
+  associatedtype SyntaxType: SyntaxProtocol
+}
+
+@_spi(RawSyntax)
+public extension RawSyntaxToSyntax {
+  /// Realizes a `Syntax` node for this `RawSyntax` node.
+  var syntax: SyntaxType {
+    return Syntax(raw: raw).as(SyntaxType.self)!
+  }
+}

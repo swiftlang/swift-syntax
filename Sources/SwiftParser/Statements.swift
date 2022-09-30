@@ -108,12 +108,10 @@ extension Parser {
       return label(self.parseDoStatement(), with: optLabel)
 
     case (.poundAssertKeyword, _)?:
-      // FIXME: This drops `optLabel`.
-      return RawStmtSyntax(self.parsePoundAssertStatement())
+      return label(self.parsePoundAssertStatement(), with: optLabel)
     case (.yieldAsIdentifier, _)?,
-      (.yield, _)?:
-      // FIXME: This drops `optLabel`.
-      return RawStmtSyntax(self.parseYieldStatement())
+         (.yield, _)?:
+      return label(self.parseYieldStatement(), with: optLabel)
     case nil:
       let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
       return label(missingStmt, with: optLabel)

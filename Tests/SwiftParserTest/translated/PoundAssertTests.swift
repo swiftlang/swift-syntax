@@ -31,8 +31,7 @@ final class PoundAssertTests: XCTestCase {
       #assert #^DIAG^#true, "error message")
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '(' in #assert directive
-        DiagnosticSpec(message: "expected '(' in '#assert' statement"),
+        DiagnosticSpec(message: "expected '(' in '#assert' directive"),
       ]
     )
   }
@@ -44,7 +43,7 @@ final class PoundAssertTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected a condition expression
-        DiagnosticSpec(message: "expected condition in '#assert' statement"),
+        DiagnosticSpec(message: "expected condition in '#assert' directive"),
       ]
     )
   }
@@ -53,13 +52,13 @@ final class PoundAssertTests: XCTestCase {
     AssertParse(
       """
       func unbalanced1() {
-        #assert(true #^DIAG^#
+        #assert#^NOTE^#(true #^DIAG^#
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected ')' in #assert directive
-        // TODO: Old parser expected note on line 2: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#assert' statement"),
+        DiagnosticSpec(message: "expected ')' to end '#assert' directive", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }
@@ -68,13 +67,13 @@ final class PoundAssertTests: XCTestCase {
     AssertParse(
       #"""
       func unbalanced2() {
-        #assert(true, "hello world" #^DIAG^#
+        #assert#^NOTE^#(true, "hello world" #^DIAG^#
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected ')' in #assert directive
-        // TODO: Old parser expected note on line 2: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#assert' statement"),
+        DiagnosticSpec(message: "expected ')' to end '#assert' directive", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }

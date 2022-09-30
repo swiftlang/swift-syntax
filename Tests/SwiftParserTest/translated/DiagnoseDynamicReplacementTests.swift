@@ -46,13 +46,14 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
   func testDiagnoseDynamicReplacement4() {
     AssertParse(
       """
-      @_dynamicReplacement(for: dynamically_replaceable() #^DIAG^#
+      @_dynamicReplacement#^NOTE^#(for: dynamically_replaceable() #^DIAG^#
       func test_dynamic_replacement_for3() {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end attribute"),
+        DiagnosticSpec(message: "expected ')' to end attribute", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
         // TODO: Old parser expected error on line 2: expected ')' after function name for @_dynamicReplacement
       ]
     )

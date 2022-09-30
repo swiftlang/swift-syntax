@@ -9,7 +9,6 @@ final class ActorTests: XCTestCase {
       actor MyActor1#^DIAG^#
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '{' in actor
         DiagnosticSpec(message: "expected member block in actor"),
       ]
     )
@@ -18,17 +17,16 @@ final class ActorTests: XCTestCase {
   func testActor2() {
     AssertParse(
       """
-      actor MyActor2 { 
+      actor MyActor2 #^NOTE^#{
           init() {
           }
       func hello() { }#^DIAG^#
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: to match this opening '{'
-        DiagnosticSpec(message: "expected '}' to end actor"),
-        // TODO: Old parser expected error on line 5: expected '}' in actor
+        DiagnosticSpec(message: "expected '}' to end actor", notes: [
+          NoteSpec(message: "to match this opening '{'")
+        ]),
       ]
     )
   }
-
 }

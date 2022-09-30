@@ -371,7 +371,7 @@ STMT_NODES = [
          ]),
 
     # e.g. #assert(1 == 2)
-    Node('PoundAssertStmt', name_for_diagnostics="'#assert' statement", kind='Stmt',
+    Node('PoundAssertStmt', name_for_diagnostics="'#assert' directive", kind='Stmt',
          children=[
              Child('PoundAssert', kind='PoundAssertToken'),
              Child('LeftParen', kind='LeftParenToken'),

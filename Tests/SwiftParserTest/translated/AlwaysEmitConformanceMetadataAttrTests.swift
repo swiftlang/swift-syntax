@@ -3,15 +3,7 @@
 import XCTest
 
 final class AlwaysEmitConformanceMetadataAttrTests: XCTestCase {
-  func testAlwaysEmitConformanceMetadataAttr1() {
-    AssertParse(
-      """
-      import Swift
-      """
-    )
-  }
-
-  func testAlwaysEmitConformanceMetadataAttr2() {
+  func testAlwaysEmitConformanceMetadataAttr() {
     AssertParse(
       """
       @_alwaysEmitConformanceMetadata

@@ -102,6 +102,38 @@ private func missingNodesDescription(missingNodes: [Syntax], commonParent: Synta
   }
 }
 
+fileprivate extension TokenKind {
+  var isStartMarker: Bool {
+    switch self {
+    case .leftBrace, .leftAngle, .leftParen, .leftSquareBracket:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var isEndMarker: Bool {
+    return matchingStartMarkerKind != nil
+  }
+
+  var matchingStartMarkerKind: TokenKind? {
+    switch self {
+    case .rightBrace:
+      return .leftBrace
+    case .rightAngle:
+      return .leftAngle
+    case .rightParen:
+      return .leftParen
+    case .rightSquareBracket:
+      return .leftSquareBracket
+    case .stringQuote, .multilineStringQuote, .rawStringDelimiter:
+      return self
+    default:
+      return nil
+    }
+  }
+}
+
 // MARK: - Error
 
 public struct MissingNodesError: ParserError {
@@ -142,22 +174,8 @@ public struct MissingNodesError: ParserError {
       return nil
     }
 
-    var isFirstTokenStartMarker: Bool
-    switch missingNodes.first?.as(TokenSyntax.self)?.tokenKind {
-    case .leftBrace, .leftAngle, .leftParen, .leftSquareBracket:
-      isFirstTokenStartMarker = true
-    default:
-      isFirstTokenStartMarker = false
-    }
-
-    var isLastTokenEndMarker: Bool
-    switch missingNodes.last?.as(TokenSyntax.self)?.tokenKind {
-    case .rightBrace, .rightAngle, .rightParen, .rightSquareBracket, .stringQuote, .multilineStringQuote, .rawStringDelimiter(_):
-      isLastTokenEndMarker = true
-    default:
-      isLastTokenEndMarker = false
-    }
-
+    let isFirstTokenStartMarker = missingNodes.first?.as(TokenSyntax.self)?.tokenKind.isStartMarker ?? false
+    let isLastTokenEndMarker = missingNodes.last?.as(TokenSyntax.self)?.tokenKind.isEndMarker ?? false
     switch (isFirstTokenStartMarker, isLastTokenEndMarker) {
     case (true, false) where Syntax(anchorParent.firstToken(viewMode: .all)) == missingNodes.first:
       return "to start \(anchorTypeName)"
@@ -178,6 +196,14 @@ public struct MissingNodesError: ParserError {
     }
     return message
   }
+}
+
+// MARK: - Note
+
+public struct MatchingOpeningTokenNote: ParserNote {
+  let openingToken: TokenSyntax
+
+  public var message: String { "to match this opening '\(openingToken.text)'" }
 }
 
 // MARK: - Fix-It
@@ -233,10 +259,19 @@ extension ParseDiagnosticsGenerator {
       changes: missingNodes.map(FixIt.Change.makePresent)
     )
 
+    var notes: [Note] = []
+    if missingNodes.count == 1,
+       let token = missingNodes.last?.as(TokenSyntax.self),
+       let matchingStartMarkerKind = token.tokenKind.matchingStartMarkerKind,
+       let startToken = token.parent?.children(viewMode: .sourceAccurate).lazy.compactMap({ $0.as(TokenSyntax.self) }).first(where: { $0.tokenKind == matchingStartMarkerKind }) {
+      notes.append(Note(node: Syntax(startToken), message: MatchingOpeningTokenNote(openingToken: startToken)))
+    }
+
     addDiagnostic(
       node,
       position: node.endPosition,
       MissingNodesError(missingNodes: missingNodes),
+      notes: notes,
       fixIts: [fixIt],
       handledNodes: missingNodes.map(\.id)
     )

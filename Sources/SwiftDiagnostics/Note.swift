@@ -1,4 +1,4 @@
-//===--- Diagnostics.swift ------------------------------------------------===//
+//===--- Note.swift -------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -12,55 +12,45 @@
 
 import SwiftSyntax
 
-public struct Diagnostic: CustomDebugStringConvertible {
-  /// The message that should be displayed to the user
-  public let diagMessage: DiagnosticMessage
+/// Types conforming to this protocol represent note messages that can be
+/// shown to the client.
+/// The messages should describe what the note is pointing at.
+public protocol NoteMessage {
+  /// The message that should be displayed in the client.
+  var message: String { get }
 
-  /// The node at whose start location the message should be displayed.
+  /// See ``MessageID``.
+  var fixItID: MessageID { get }
+}
+
+/// A note that points to another node that's relevant for a Diagnostic.
+public struct Note: CustomDebugStringConvertible {
+  /// The node whose location the node is pointing.
   public let node: Syntax
 
   /// The position at which the location should be anchored.
   /// By default, this is the start location of `node`.
   public let position: AbsolutePosition
 
-  /// Nodes that should be highlighted in the source code.
-  public let highlights: [Syntax]
-
-  /// Notes that point to additional locations which are relevant for this diagnostic.
-  public let notes: [Note]
-
-  /// Fix-Its that can be applied to resolve this diagnostic.
-  /// Each Fix-It offers a different way to resolve the diagnostic. Usually, there's only one.
-  public let fixIts: [FixIt]
+  /// A description of what this note is pointing at.
+  public let noteMessage: NoteMessage
 
   public init(
     node: Syntax,
     position: AbsolutePosition? = nil,
-    message: DiagnosticMessage,
-    highlights: [Syntax] = [],
-    notes: [Note] = [],
-    fixIts: [FixIt] = []
+    message: NoteMessage
   ) {
     self.node = node
     self.position = position ?? node.positionAfterSkippingLeadingTrivia
-    self.diagMessage = message
-    self.highlights = highlights
-    self.notes = notes
-    self.fixIts = fixIts
+    self.noteMessage = message
   }
 
   /// The message that should be displayed to the user.
   public var message: String {
-    return diagMessage.message
+    return noteMessage.message
   }
 
-  /// An ID that identifies the diagnostic's message.
-  /// See ``MessageID``.
-  public var diagnosticID: MessageID {
-    return diagMessage.diagnosticID
-  }
-
-  /// The location at which the diagnostic should be displayed.
+  /// The location at which the note should be displayed.
   public func location(converter: SourceLocationConverter) -> SourceLocation {
     return converter.location(for: position)
   }

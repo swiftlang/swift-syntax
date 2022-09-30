@@ -51,15 +51,39 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  func addDiagnostic<T: SyntaxProtocol>(_ node: T, position: AbsolutePosition? = nil, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+  func addDiagnostic<T: SyntaxProtocol>(
+    _ node: T,
+    position: AbsolutePosition? = nil,
+    _ message: DiagnosticMessage,
+    highlights: [Syntax] = [],
+    notes: [Note] = [],
+    fixIts: [FixIt] = [],
+    handledNodes: [SyntaxIdentifier] = []
+  ) {
     diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
-    diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, fixIts: fixIts))
+    diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, notes: notes, fixIts: fixIts))
     self.handledNodes.append(contentsOf: handledNodes)
   }
 
   /// Produce a diagnostic.
-  func addDiagnostic<T: SyntaxProtocol>(_ node: T,position: AbsolutePosition? = nil,  _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
-    addDiagnostic(node, position: position, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts, handledNodes: handledNodes)
+  func addDiagnostic<T: SyntaxProtocol>(
+    _ node: T,
+    position: AbsolutePosition? = nil,
+    _ message: StaticParserError,
+    highlights: [Syntax] = [],
+    notes: [Note] = [],
+    fixIts: [FixIt] = [],
+    handledNodes: [SyntaxIdentifier] = []
+  ) {
+    addDiagnostic(
+      node,
+      position: position,
+      message as DiagnosticMessage,
+      highlights: highlights,
+      notes: notes,
+      fixIts: fixIts,
+      handledNodes: handledNodes
+    )
   }
 
   /// Whether the node should be skipped for diagnostic emission.

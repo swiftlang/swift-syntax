@@ -76,14 +76,14 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability5() {
     AssertParse(
       """
-      if #unavailable( { 
+      if #unavailable#^NOTE^#( { 
       }#^DIAG^#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
         DiagnosticSpec(message: "expected code block in 'if' statement"),
       ]
     )
@@ -106,14 +106,14 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability7() {
     AssertParse(
       """
-      if #unavailable(OSX #^DIAG^#{ 
+      if #unavailable#^NOTE^#(OSX #^DIAG^#{
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected version number
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }
@@ -133,13 +133,13 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability9() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51 #^DIAG^#{ 
+      if #unavailable#^NOTE^#(OSX 10.51 #^DIAG^#{
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }
@@ -244,13 +244,13 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability20() {
     AssertParse(
       """
-      if #unavailable(OSX 10 #^DIAG^#{ 
+      if #unavailable#^NOTE^#(OSX 10 #^DIAG^#{
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')' in availability query
-        // TODO: Old parser expected note on line 1: to match this opening '('
-        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }
@@ -268,14 +268,14 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability22() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51, { 
+      if #unavailable#^NOTE^#(OSX 10.51, {
       }#^DIAG^#
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
         // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
         DiagnosticSpec(message: "expected code block in 'if' statement"),
       ]
     )
@@ -298,14 +298,14 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability24() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51, iOS #^DIAG^#{ 
+      if #unavailable#^NOTE^#(OSX 10.51, iOS #^DIAG^#{
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ')'
-        // TODO: Old parser expected note on line 1: to match this opening '('
         // TODO: Old parser expected error on line 1: expected version number
-        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition"),
+        DiagnosticSpec(message: "expected ')' to end '#unavailable' condition", notes: [
+          NoteSpec(message: "to match this opening '('")
+        ]),
       ]
     )
   }

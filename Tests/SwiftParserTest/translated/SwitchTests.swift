@@ -1421,7 +1421,7 @@ final class SwitchTests: XCTestCase {
       func testIncompleteArrayLiteral() {
         switch x { 
         case 1:
-          _ = [1 #^DIAG^#
+          _ = #^NOTE^#[1 #^DIAG^#
         @unknown default: 
           ()
         }
@@ -1430,8 +1430,9 @@ final class SwitchTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: switch must be exhaustive
         // TODO: Old parser expected error on line 4: expected ']' in container literal expression
-        // TODO: Old parser expected note on line 4: to match this opening '['
-        DiagnosticSpec(message: "expected ']' to end array"),
+        DiagnosticSpec(message: "expected ']' to end array", notes: [
+          NoteSpec(message: "to match this opening '['")
+        ]),
         // TODO: Old parser expected note on line 5: remove '@unknown' to handle remaining values
       ]
     )

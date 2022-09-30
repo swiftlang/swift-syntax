@@ -7,9 +7,10 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_library(SwiftDiagnostics STATIC
+  Diagnostic.swift
   FixIt.swift
   Message.swift
-  Diagnostic.swift
+  Note.swift
 )
 
 target_link_libraries(SwiftDiagnostics PUBLIC

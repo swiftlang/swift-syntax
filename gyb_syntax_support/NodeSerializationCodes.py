@@ -288,6 +288,7 @@ SYNTAX_NODE_SERIALIZATION_CODES = {
     'KeyPathOptionalComponent': 284,
     'KeyPathComponentList': 285,
     'KeyPathComponent': 286,
+    'OldKeyPathExpr': 287,
 }
 
 

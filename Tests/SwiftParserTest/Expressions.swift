@@ -117,6 +117,66 @@ final class ExpressionTests: XCTestCase {
       \(UnsafeRawPointer?, String).1
       """#
     )
+
+    AssertParse(
+      #"""
+      \a.b.c
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \ABCProtocol[100]
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \S<T>.x
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \TupleProperties.self
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \Tuple<Int, Int>.self
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \T.extension
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \T.12[14]
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \String?.!.count.?
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \Optional.?!?!?!?
+      """#
+    )
+
+    AssertParse(
+      #"""
+      \Optional.?!?!?!?.??!
+      """#
+    )
   }
 
   func testBasicLiterals() {
@@ -401,10 +461,8 @@ final class ExpressionTests: XCTestCase {
       \#^AFTER_SLASH^#\(#^AFTER_PAREN^#
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "expected root and expression in key path"),
-        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "expected value in tuple"),
-        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "expected ')' to end tuple"),
-        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "expected expression in key path"),
+        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "expected root in key path"),
+        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "expected ')' to end tuple type"),
       ]
     )
 
@@ -467,8 +525,6 @@ final class ExpressionTests: XCTestCase {
           print "\(i)\"\n#^END^#
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "KEY_PATH_1", message: "expected expression in key path"),
-        DiagnosticSpec(locationMarker: "KEY_PATH_2", message: "expected expression in key path"),
         DiagnosticSpec(locationMarker: "END", message: #"expected '"' to end string literal"#),
         DiagnosticSpec(locationMarker: "END", message: "expected '}' to end 'if' statement"),
         DiagnosticSpec(locationMarker: "END", message: "expected '}' to end function"),

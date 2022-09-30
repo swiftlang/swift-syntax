@@ -475,37 +475,54 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
+  public mutating func parseDottedExpressionSuffix() -> (
+      period: RawTokenSyntax, name: RawTokenSyntax,
+      declNameArgs: RawDeclNameArgumentsSyntax?,
+      generics: RawGenericArgumentClauseSyntax?
+  ) {
     assert(self.at(any: [.period, .prefixPeriod]))
     let period = self.consumeAnyToken(remapping: .period)
-    // Handle "x.42" - a tuple index.
-    if let name = self.consume(if: .integerLiteral) {
-      return RawExprSyntax(RawMemberAccessExprSyntax(
-        base: start, dot: period, name: name, declNameArguments: nil,
-        arena: self.arena))
+
+    // Parse the name portion.
+    let name: RawTokenSyntax
+    let declNameArgs: RawDeclNameArgumentsSyntax?
+    if let index = self.consume(if: .integerLiteral) {
+        // Handle "x.42" - a tuple index.
+      name = index
+      declNameArgs = nil
+    }
+    else if let selfKeyword = self.consume(if: .selfKeyword) {
+        // Handle "x.self" expr.
+      name = selfKeyword
+      declNameArgs = nil
+    } else {
+      // Handle an arbitrary declararion name.
+      (name, declNameArgs) = self.parseDeclNameRef([.keywords, .compoundNames])
     }
 
-    // Handle "x.self" expr.
-    if let selfKeyword = self.consume(if: .selfKeyword) {
-      return RawExprSyntax(RawMemberAccessExprSyntax(
-        base: start,
-        dot: period,
-        name: selfKeyword,
-        declNameArguments: nil,
-        arena: self.arena
-      ))
+    // Parse the generic arguments, if any.
+    let generics: RawGenericArgumentClauseSyntax?
+    if self.lookahead().canParseAsGenericArgumentList() {
+      generics = self.parseGenericArguments()
+    } else {
+      generics = nil
     }
 
-    let (ident, args) = self.parseDeclNameRef([ .keywords, .compoundNames ])
+    return (period, name, declNameArgs, generics)
+  }
+
+  @_spi(RawSyntax)
+  public mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
+    let (period, name, declNameArgs, generics) = parseDottedExpressionSuffix()
+
     let memberAccess = RawMemberAccessExprSyntax(
-      base: start, dot: period, name: ident, declNameArguments: args,
+      base: start, dot: period, name: name, declNameArguments: declNameArgs,
       arena: self.arena)
 
-    guard self.lookahead().canParseAsGenericArgumentList() else {
+    guard let generics = generics else {
       return RawExprSyntax(memberAccess)
     }
 
-    let generics = self.parseGenericArguments()
     return RawExprSyntax(RawSpecializeExprSyntax(
       expression: RawExprSyntax(memberAccess),
       genericArgumentClause: generics,
@@ -586,9 +603,7 @@ extension Parser {
         // A key path is special, because it allows .[ and .<N>, unlike
         // anywhere else. The period itself should be left in the token stream.
         // (.? and .! end up being operators, and so aren't handled here.)
-        if periodHasKeyPathBehavior &&
-            (self.peek().tokenKind == .leftSquareBracket ||
-             self.peek().tokenKind == .integerLiteral) {
+        if periodHasKeyPathBehavior {
           break
         }
 
@@ -748,6 +763,74 @@ extension Parser {
 }
 
 extension Parser {
+  /// Determine if this is a key path postfix operator like ".?!?".
+  private func getNumOptionalKeyPathPostfixComponents(
+    _ tokenText: SyntaxText
+  ) -> Int? {
+    // Make sure every character is ".", "!", or "?", without two "."s in a row.
+    var numComponents = 0
+    var lastWasDot = false
+    for byte in tokenText {
+      if byte == UInt8(ascii: ".") {
+        if lastWasDot {
+          return nil
+        }
+
+        lastWasDot = true
+        continue
+      }
+
+      if byte == UInt8(ascii: "!") || byte == UInt8(ascii: "?") {
+        lastWasDot = false
+        numComponents += 1
+        continue
+      }
+
+      return nil
+    }
+
+    // Make sure the end isn't a ".".
+    if lastWasDot {
+      return nil
+    }
+
+    return numComponents
+  }
+
+  /// Consume the optional key path postfix ino a set of key path components.
+  private mutating func consumeOptionalKeyPathPostfix(
+    numComponents: Int
+  ) -> [RawKeyPathComponentSyntax] {
+    var components: [RawKeyPathComponentSyntax] = []
+
+    for _ in 0..<numComponents {
+      // Consume a period, if there is one.
+      let period: RawTokenSyntax?
+      if self.currentToken.starts(with: ".") {
+        period = self.consumePrefix(".", as: .period)
+      } else {
+        period = nil
+      }
+
+      // Consume the '!' or '?'.
+      let questionOrExclaim: RawTokenSyntax
+      if self.currentToken.starts(with: "!") {
+        questionOrExclaim = self.consumePrefix("!", as: .exclamationMark)
+      } else {
+        assert(self.currentToken.starts(with: "?"))
+        questionOrExclaim = self.consumePrefix("?", as: .postfixQuestionMark)
+      }
+
+      components.append(RawKeyPathComponentSyntax(
+        period: period,
+        component: RawSyntax(RawKeyPathOptionalComponentSyntax(
+          questionOrExclamationMark: questionOrExclaim, arena: self.arena)),
+        arena: self.arena))
+    }
+
+    return components
+  }
+
   /// Parse a keypath expression.
   ///
   /// Grammar
@@ -770,47 +853,83 @@ extension Parser {
     // sense. This is all made more complicated by .?. being considered an
     // operator token. Since keypath allows '.!' '.?' and '.[', consume '.'
     // the token is a operator starts with '.', or the following token is '['.
-    let root: RawExprSyntax?
+    let rootType: RawTypeSyntax?
     if !self.currentToken.starts(with: ".") {
-      root = self.parsePostfixExpression(
-        .basic, forDirective: forDirective, pattern: pattern,
-        periodHasKeyPathBehavior: true)
+      rootType = self.parseSimpleType(stopAtFirstPeriod: true)
     } else {
-      root = nil
+      rootType = nil
     }
 
-    let expression: RawExprSyntax
-    if (self.at(anyIn: Operator.self) != nil && self.currentToken.tokenText.count != 1) || self.peek().tokenKind == .leftSquareBracket {
-      let dot: RawTokenSyntax
-      if self.currentToken.starts(with: ".") {
-        dot = self.consumePrefix(".", as: .period)
-      } else {
-        dot = self.consumeAnyToken()
+    var components: [RawKeyPathComponentSyntax] = []
+    var loopCondition = LoopProgressCondition()
+    while loopCondition.evaluate(currentToken) {
+      // Check for a [] or .[] suffix. The latter is only permitted when there
+      // are no components.
+      if self.at(.leftSquareBracket, where: { !$0.isAtStartOfLine }) ||
+          (components.isEmpty && self.at(any: [.period, .prefixPeriod]) &&
+           self.peek().tokenKind == .leftSquareBracket) {
+        // Consume the '.', if it's allowed here.
+        let period: RawTokenSyntax?
+        if !self.at(.leftSquareBracket) {
+          period = self.consumeAnyToken(remapping: .period)
+        } else {
+          period = nil
+        }
+
+        assert(self.at(.leftSquareBracket))
+        let lsquare = self.consumeAnyToken()
+        let args: [RawTupleExprElementSyntax]
+        if self.at(.rightSquareBracket) {
+          args = []
+        } else {
+          args = self.parseArgumentListElements(pattern: pattern)
+        }
+        let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
+
+        components.append(RawKeyPathComponentSyntax(
+          period: period,
+          component: RawSyntax(RawKeyPathSubscriptComponentSyntax(
+            leftBracket: lsquare,
+            argumentList: RawTupleExprElementListSyntax(
+              elements: args, arena: self.arena),
+            unexpectedBeforeRSquare, rightBracket: rsquare,
+            arena: self.arena)),
+            arena: self.arena))
+        continue
       }
-      let base = RawExprSyntax(RawKeyPathBaseExprSyntax(period: dot, arena: self.arena))
-      expression = self.parsePostfixExpressionSuffix(
-        base, .basic, forDirective: forDirective,
-        periodHasKeyPathBehavior: false,
-        pattern: pattern
-      )
-    } else if self.at(any: [.period, .prefixPeriod]) {
-      // Inside a keypath's path, the period always behaves normally: the key path
-      // behavior is only the separation between type and path.
-      let base = self.parseDottedExpressionSuffix(nil)
-      expression = self.parsePostfixExpressionSuffix(
-        base, .basic, forDirective: forDirective,
-        periodHasKeyPathBehavior: false,
-        pattern: pattern
-      )
-    } else {
-      expression = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+
+      // Check for a postfix operator starting with '.' that contains only
+      // periods, '?'s, and '!'s. Expand that into key path components.
+      if self.at(any: [.postfixOperator,.postfixQuestionMark,.exclamationMark]),
+         let numComponents = getNumOptionalKeyPathPostfixComponents(
+          self.currentToken.tokenText) {
+        components.append(
+          contentsOf: self.consumeOptionalKeyPathPostfix(
+            numComponents: numComponents))
+        continue
+      }
+
+      // Check for a .name or .1 suffix.
+      if self.at(any: [.period, .prefixPeriod]) {
+        let (period, name, declNameArgs, generics) = parseDottedExpressionSuffix()
+        components.append(RawKeyPathComponentSyntax(
+          period: period,
+          component: RawSyntax(RawKeyPathPropertyComponentSyntax(
+            identifier: name, declNameArguments: declNameArgs,
+            genericArgumentClause: generics, arena: self.arena)),
+          arena: self.arena))
+        continue
+      }
+
+      // No more postfix expressions.
+      break
     }
 
     return RawKeyPathExprSyntax(
       unexpectedBeforeBackslash,
-      backslash: backslash,
-      rootExpr: root,
-      expression: expression,
+      backslash: backslash, root: rootType,
+      components: RawKeyPathComponentListSyntax(
+        elements: components, arena: self.arena),
       arena: self.arena)
   }
 }

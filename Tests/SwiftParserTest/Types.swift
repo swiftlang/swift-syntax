@@ -92,12 +92,7 @@ final class TypeTests: XCTestCase {
       let _: (S...) -> Int = \.i
       let _: (S...) -> Int = \Array.i#^DIAG_1^#
       let _: (S...) -> Int = \S.i#^DIAG_2^#
-      """#,
-      diagnostics: [
-        // FIXME: This should be a valid parse
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in key path"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in key path"),
-      ]
+      """#
     )
   }
 

@@ -174,13 +174,15 @@ extension Parser {
   ///
   ///     metatype-type → type '.' 'Type' | type '.' 'Protocol'
   @_spi(RawSyntax)
-  public mutating func parseSimpleType() -> RawTypeSyntax {
+  public mutating func parseSimpleType(
+    stopAtFirstPeriod: Bool = false
+  ) -> RawTypeSyntax {
     var base: RawTypeSyntax
     switch self.currentToken.tokenKind {
     case .capitalSelfKeyword,
         .anyKeyword,
         .identifier:
-      base = self.parseTypeIdentifier()
+      base = self.parseTypeIdentifier(stopAtFirstPeriod: stopAtFirstPeriod)
     case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
     case .leftSquareBracket:
@@ -194,7 +196,7 @@ extension Parser {
     // '.Type', '.Protocol', '?', '!', and '[]' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if let (period, type) = self.consume(
+      if !stopAtFirstPeriod, let (period, type) = self.consume(
         if: { [.period, .prefixPeriod].contains($0.tokenKind) },
         followedBy: { $0.isContextualKeyword(["Type", "Protocol"])}
       ) {
@@ -253,8 +255,10 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.anyKeyword) {
+  public mutating func parseTypeIdentifier(
+    stopAtFirstPeriod: Bool = false
+  ) -> RawTypeSyntax {
+    if self.at(.anyKeyword) && !stopAtFirstPeriod {
       return RawTypeSyntax(self.parseAnyType())
     }
 
@@ -280,7 +284,12 @@ extension Parser {
         result = RawTypeSyntax(RawSimpleTypeIdentifierSyntax(
           name: name, genericArgumentClause: generics, arena: self.arena))
       }
-      keepGoing = self.consume(if: .period) ?? self.consume(if: .prefixPeriod)
+
+      if stopAtFirstPeriod {
+        keepGoing = nil
+      } else {
+        keepGoing = self.consume(if: .period) ?? self.consume(if: .prefixPeriod)
+      }
     } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
     return result!

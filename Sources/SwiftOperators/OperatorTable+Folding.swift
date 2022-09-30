@@ -435,6 +435,15 @@ extension OperatorTable {
       self.errorHandler = errorHandler
     }
 
+    override func visitAny(_ node: Syntax) -> Syntax? {
+      /// Return a non-nil value from `visitAny` to indicate to the SyntaxRewriter
+      /// that it shouldn't visit any of these node's children.
+      if !node.hasSequenceExpr {
+        return node
+      }
+      return nil
+    }
+
     override func visit(_ node: SequenceExprSyntax) -> ExprSyntax {
       // If the error handler threw in response to an error, don't
       // continue folding.

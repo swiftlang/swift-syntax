@@ -23,7 +23,7 @@ final class LinkageTest: XCTestCase {
       .library("-lswiftDarwin"),
       .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
       .library("-lswift_Concurrency"),
-      .library("-lswift_StringProcessing", condition: .when(swiftVersionAtLeast: .v5_7)),
+      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
     ])
 
     try assertLinkage(of: "SwiftParser", in: baseURL, assertions: [
@@ -35,7 +35,7 @@ final class LinkageTest: XCTestCase {
       .library("-lswiftDarwin"),
       .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
       .library("-lswift_Concurrency"),
-      .library("-lswift_StringProcessing", condition: .when(swiftVersionAtLeast: .v5_7)),
+      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
     ])
   }
 }
@@ -102,6 +102,11 @@ extension LinkageTest {
       // always a bad thing, but it's worth calling out so we document this
       // with `.mayBeAbsent(...)`.
       guard expectedLinkagesIdx < sortedLinkages.endIndex else {
+        // Skip flaky linkages if they're absent.
+        if case .flaky = assert.condition {
+          continue
+        }
+
         XCTFail("Expected linkage was not present: \(assert.linkage)",
                 file: assert.file, line: assert.line)
         continue
@@ -197,11 +202,9 @@ extension LinkageTest {
 
         switch command.cmd {
         case .linkerOption:
-          let (namePtr, cmdCount) = commandStart.withMemoryRebound(to: LinkerOptionCommand.self, capacity: 1, { cmd in
-            return cmd.withMemoryRebound(to: CChar.self, capacity: 1) { p in
-              return (p.advanced(by: MemoryLayout<LinkerOptionCommand>.size), Int(cmd.pointee.count))
-            }
-          })
+          let cmd = commandStart.bindMemory(to: LinkerOptionCommand.self, capacity: 1)
+          let cmdCount = Int(cmd.pointee.count)
+          let namePtr = commandStart.advanced(by: MemoryLayout<LinkerOptionCommand>.size).assumingMemoryBound(to: CChar.self)
           if cmdCount == 1 {
             result.append(.library(String(cString: namePtr)))
           } else if cmdCount == 2 {

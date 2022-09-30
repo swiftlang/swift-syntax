@@ -44,14 +44,7 @@ let expressibleAsProtocolsFile = SourceFile {
       identifier: type.expressibleAsBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: declaredConformances.map(\.expressibleAsBaseName))
     ) {
-      FunctionDecl(
-        identifier: .identifier("create\(type.buildableBaseName)"),
-        signature: FunctionSignature(
-          input: ParameterClause(),
-          output: type.buildable
-        ),
-        body: nil
-      )
+      FunctionDecl("func create\(type.buildableBaseName)() -> \(type.buildable)")
     }
 
     if !conformances.isEmpty {
@@ -61,45 +54,33 @@ let expressibleAsProtocolsFile = SourceFile {
       ) {
         for conformance in type.elementInCollections {
           FunctionDecl(
-            leadingTrivia: .docLineComment("/// Conformance to `\(conformance.expressibleAsBaseName)`") + .newline,
-            identifier: .identifier("create\(conformance.buildableBaseName)"),
-            signature: FunctionSignature(
-              input: ParameterClause(),
-              output: conformance.buildable
-            )
-          ) {
-            ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
-              TupleExprElement(expression: ArrayExpr {
-                ArrayElement(expression: "self")
-              })
-            })
-          }
+            """
+            /// Conformance to `\(conformance.expressibleAsBaseName)`
+            func create\(conformance.buildableBaseName)() -> \(conformance.buildable) {
+              return \(conformance.buildableBaseName)([self])
+            }
+            """
+          )
         }
         for conformance in type.convertibleToTypes {
           let param = Node.from(type: conformance).singleNonDefaultedChild
           FunctionDecl(
-            leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAsBaseName)") + .newline,
-            identifier: .identifier("create\(conformance.buildableBaseName)"),
-            signature: FunctionSignature(
-              input: ParameterClause(),
-              output: conformance.buildableBaseName
-            )
-          ) {
-            ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
-              TupleExprElement(label: param.swiftName, expression: "self")
-            })
-          }
+            """
+            /// Conformance to \(conformance.expressibleAsBaseName)
+            func create\(conformance.buildableBaseName)() -> \(conformance.buildableBaseName) {
+              return \(conformance.buildableBaseName)(\(param.swiftName): self)
+            }
+            """
+          )
         }
         if let baseType = baseType, baseType.baseName != "SyntaxCollection" {
           FunctionDecl(
-            identifier: .identifier("create\(baseType.buildableBaseName)"),
-            signature: FunctionSignature(
-              input: ParameterClause(),
-              output: baseType.buildable
-            )
-          ) {
-            ReturnStmt(expression: FunctionCallExpr("create\(type.buildableBaseName)"))
-          }
+            """
+            func create\(baseType.buildableBaseName)() -> \(baseType.buildable) {
+              return create\(type.buildableBaseName)()
+            }
+            """
+          )
         }
       }
     }

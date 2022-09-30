@@ -12,6 +12,7 @@
 
 import Foundation
 import SwiftSyntaxBuilder
+import SwiftBasicFormat
 
 public func generateTemplates(templates: [(SourceFile, String)], destination: URL, verbose: Bool) throws {
   let format = Format(indentWidth: 2)

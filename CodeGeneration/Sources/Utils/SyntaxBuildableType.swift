@@ -75,8 +75,8 @@ public struct SyntaxBuildableType: Hashable {
   ///  - For base kinds: `<BaseKind>Buildable`, e.g. `ExprBuildable` (these are implemented as protocols)
   ///  - For token: `TokenSyntax` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
   /// If the type is optional, the type is wrapped in an `OptionalType`.
-  public var buildable: ExpressibleAsTypeBuildable {
-    optionalWrapped(type: buildableBaseName)
+  public var buildable: TypeBuildable {
+    optionalWrapped(type: buildableBaseName).createTypeBuildable()
   }
 
   /// Whether parameters of this type should be initializable by a result builder.
@@ -119,7 +119,7 @@ public struct SyntaxBuildableType: Hashable {
   /// The `ExpressibleAs*` Swift type for this syntax kind. Tokens don't
   /// have an `ExpressibleAs*` type, so for those this method just returns
   /// `TokenSyntax`. If the type is optional, this terminates with a `?`.
-  public var expressibleAs: ExpressibleAsTypeBuildable {
+  public var expressibleAs: TypeBuildable {
     optionalWrapped(type: expressibleAsBaseName)
   }
 
@@ -136,7 +136,7 @@ public struct SyntaxBuildableType: Hashable {
   /// The corresponding `*Syntax` type defined in the `SwiftSyntax` module,
   /// which will eventually get built from `SwiftSyntaxBuilder`. If the type
   /// is optional, this terminates with a `?`.
-  public var syntax: ExpressibleAsTypeBuildable {
+  public var syntax: TypeBuildable {
     optionalWrapped(type: syntaxBaseName)
   }
 
@@ -148,7 +148,7 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   /// Assuming that this is a base kind, return the corresponding `*ListBuildable` type.
-  public var listBuildable: ExpressibleAsTypeBuildable {
+  public var listBuildable: TypeBuildable {
     optionalWrapped(type: listBuildableBaseName)
   }
 
@@ -237,11 +237,11 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   /// Wraps a type in an optional depending on whether `isOptional` is true.
-  public func optionalWrapped(type: ExpressibleAsTypeBuildable) -> ExpressibleAsTypeBuildable {
+  public func optionalWrapped(type: ExpressibleAsTypeBuildable) -> TypeBuildable {
     if isOptional {
       return OptionalType(wrappedType: type)
     } else {
-      return type
+      return type.createTypeBuildable()
     }
   }
 
@@ -269,7 +269,7 @@ public struct SyntaxBuildableType: Hashable {
     if isToken {
       return varName
     } else {
-      return FunctionCallExpr(MemberAccessExpr(base: optionalChained(expr: varName), name: "create\(buildableBaseName)"))
+      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: optionalChained(expr: varName), name: "create\(buildableBaseName)"))
     }
   }
 }

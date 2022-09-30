@@ -25,7 +25,7 @@ let buildableNodesFile = SourceFile {
     trailingTrivia: .newline,
     path: "SwiftBasicFormat"
   )
-  
+
   let triviaSides = ["leading", "trailing"]
   let trivias = triviaSides.map { "\($0)Trivia" }
 
@@ -47,28 +47,28 @@ let buildableNodesFile = SourceFile {
       StructDecl(identifier: "BuildableData") {
         for (side, trivia) in zip(triviaSides, trivias) {
           VariableDecl(
-            leadingTrivia: .docLineComment("/// The \(side) trivia attached to this syntax node once built.") + .newline,
-            .var,
-            name: trivia,
-            type: "Trivia"
+            """
+            /// The \(side) trivia attached to this syntax node once built.
+            var \(trivia): Trivia
+            """
           )
         }
 
         // Generate members
         for child in node.children {
-          VariableDecl(.var, name: child.swiftName, type: child.type.buildable)
+          VariableDecl("var \(child.swiftName): \(child.type.buildable)")
         }
       }
-      EnumDecl(identifier: "Data") {
-        EnumCaseDecl(elements: EnumCaseElement(identifier: "buildable", associatedValue: ParameterClause(parameterList: FunctionParameterList {
-          FunctionParameter(type: "BuildableData")
-        })))
-        EnumCaseDecl(elements: EnumCaseElement(identifier: "constructed", associatedValue: ParameterClause(parameterList: FunctionParameterList {
-          FunctionParameter(type: type.syntax)
-        })))
-      }
+      EnumDecl(
+        """
+        enum Data {
+          case buildable(BuildableData)
+          case constructed(\(type.syntax))
+        }
+        """
+      )
 
-      VariableDecl(modifiers: [Token.private], .var, name: "data", type: "Data")
+      VariableDecl("private var data: Data")
       if hasTrailingComma {
         createHasTrailingCommaVariable()
       }
@@ -99,58 +99,18 @@ let buildableNodesFile = SourceFile {
 }
 
 private func createHasTrailingCommaVariable() -> VariableDecl {
-  VariableDecl(name: "hasTrailingComma", type: "Bool") {
-    SwitchStmt(expression: "data") {
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "buildable")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .let,
-                      valuePattern: IdentifierPattern("buildableData")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        ReturnStmt(expression: SequenceExpr {
-          MemberAccessExpr(base: "buildableData", name: "trailingComma")
-          BinaryOperatorExpr("!=")
-          NilLiteralExpr()
-        })
-      }
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "constructed")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .let,
-                      valuePattern: IdentifierPattern("node")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        ReturnStmt(expression: SequenceExpr {
-          MemberAccessExpr(base: "node", name: "trailingComma")
-          BinaryOperatorExpr("!=")
-          NilLiteralExpr()
-        })
+  return VariableDecl(
+    """
+    var hasTrailingComma: Bool {
+      switch data {
+      case .buildable(let buildableData):
+        return buildableData.trailingComma != nil
+      case .constructed(let node):
+        return node.trailingComma != nil
       }
     }
-  }
+    """
+  )
 }
 
 /// Create the default initializer for the given node.
@@ -190,23 +150,18 @@ private func createDefaultInitializer(node: Node, trivias: [String]) -> Initiali
         assertStmt
       }
     }
-    SequenceExpr {
-      MemberAccessExpr(base: "self", name: "data")
-      AssignmentExpr()
-      FunctionCallExpr(MemberAccessExpr(name: "buildable")) {
-        TupleExprElement(expression: FunctionCallExpr("BuildableData") {
-          for trivia in trivias {
-            TupleExprElement(label: trivia, expression: trivia)
-          }
-          for child in node.children {
-            TupleExprElement(
-              label: child.swiftName,
-              expression: child.type.generateExprConvertParamTypeToStorageType(varName: child.swiftName)
-            )
-          }
-        })
+    let buildableData = FunctionCallExpr(calledExpression: "BuildableData") {
+      for trivia in trivias {
+        TupleExprElement(label: trivia, expression: trivia)
+      }
+      for child in node.children {
+        TupleExprElement(
+          label: child.swiftName,
+          expression: child.type.generateExprConvertParamTypeToStorageType(varName: child.swiftName)
+        )
       }
     }
+    SequenceExpr("self.data = .buildable(\(buildableData))")
   }
 }
 
@@ -230,7 +185,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       // Allow initializing certain syntax collections with result builders
       shouldCreateInitializer = true
       let builderInitializableType = child.type.builderInitializableType
-      produceExpr = FunctionCallExpr("\(child.swiftName)Builder")
+      produceExpr = FunctionCallExpr(calledExpression: "\(child.swiftName)Builder")
       builderParameters.append(FunctionParameter(
         attributes: [CustomAttribute(attributeName: builderInitializableType.resultBuilderBaseName, argumentList: nil)],
         firstName: .identifier("\(child.swiftName)Builder").withLeadingTrivia(.space),
@@ -243,9 +198,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
           if child.type.isOptional {
             NilLiteralExpr()
           } else {
-            FunctionCallExpr(builderInitializableType.buildableBaseName) {
-              TupleExprElement(expression: ArrayExpr())
-            }
+            FunctionCallExpr("\(builderInitializableType.buildableBaseName)([])")
           }
         }
       ))
@@ -253,17 +206,11 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       // Allow initializing identifiers and other tokens without default text with a String
       shouldCreateInitializer = true
       let paramType = child.type.optionalWrapped(type: "String")
-      let tokenExpr = MemberAccessExpr(base: "Token", name: token.swiftKind.withFirstCharacterLowercased.backticked)
+      let tokenExpr = MemberAccessExpr("Token.\(token.swiftKind.withFirstCharacterLowercased.backticked)")
       if child.type.isOptional {
-        produceExpr = FunctionCallExpr(MemberAccessExpr(base: child.swiftName, name: "map"), trailingClosure: ClosureExpr {
-          FunctionCallExpr(tokenExpr) {
-            TupleExprElement(expression: "$0")
-          }
-        })
+        produceExpr = FunctionCallExpr("\(child.swiftName).map { \(tokenExpr)($0) }")
       } else {
-        produceExpr = FunctionCallExpr(tokenExpr) {
-          TupleExprElement(expression: child.swiftName)
-        }
+        produceExpr = FunctionCallExpr("\(tokenExpr)(\(child.swiftName))")
       }
       normalParameters.append(FunctionParameter(
         firstName: .identifier(child.swiftName),
@@ -307,7 +254,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       }
     )
   ) {
-    FunctionCallExpr(MemberAccessExpr(base: "self", name: "init")) {
+    FunctionCallExpr(calledExpression: MemberAccessExpr("self.init")) {
       TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
       for arg in delegatedInitArgs {
         arg
@@ -317,24 +264,13 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
 }
 
 private func createConstructedInitializer(node: Node) -> InitializerDecl {
-  InitializerDecl(
-    modifiers: [Token.public],
-    signature: FunctionSignature(input: ParameterClause {
-    FunctionParameter(
-      firstName: .wildcard,
-      secondName: .identifier("constructedNode"),
-      colon: .colon,
-      type: node.type.syntax
-    )
-  })) {
-    SequenceExpr {
-      MemberAccessExpr(base: "self", name: "data")
-      AssignmentExpr()
-      FunctionCallExpr(MemberAccessExpr(name: "constructed")) {
-        TupleExprElement(expression: "constructedNode")
-      }
+  return InitializerDecl(
+    """
+    public init(_ constructedNode: \(node.type.syntax)) {
+      self.data = .constructed(constructedNode)
     }
-  }
+    """
+  )
 }
 
 /// Generate the function building the node syntax.
@@ -359,7 +295,7 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
         label: SwitchCaseLabel(
           caseItems: CaseItem(
             pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "buildable")) {
+              expression: FunctionCallExpr(calledExpression: MemberAccessExpr(name: "buildable")) {
                 TupleExprElement(
                   expression: UnresolvedPatternExpr(
                     pattern: ValueBindingPattern(
@@ -376,7 +312,7 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
         VariableDecl(
           .var,
           name: "result",
-          initializer: FunctionCallExpr(type.syntaxBaseName) {
+          initializer: FunctionCallExpr(calledExpression: type.syntaxBaseName) {
             for child in children {
               TupleExprElement(
                 label: child.isUnexpectedNodes ? nil : child.swiftName,
@@ -389,20 +325,15 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
           }
         )
         for trivia in trivias {
-          createTriviaAttachment(varName: "result", triviaVarName: MemberAccessExpr(base: "buildableData", name: trivia), trivia: trivia)
+          createTriviaAttachment(varName: IdentifierExpr("result"), triviaVarName: MemberAccessExpr(base: "buildableData", name: trivia), trivia: trivia)
         }
-        ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "format")) {
-          TupleExprElement(
-            label: "syntax",
-            expression: "result"
-          )
-        })
+        ReturnStmt("return format.format(syntax: result)")
       }
       SwitchCase(
         label: SwitchCaseLabel(
           caseItems: CaseItem(
             pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "constructed")) {
+              expression: FunctionCallExpr(calledExpression: MemberAccessExpr(name: "constructed")) {
                 TupleExprElement(
                   expression: UnresolvedPatternExpr(
                     pattern: ValueBindingPattern(
@@ -416,14 +347,7 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
           )
         )
       ) {
-        ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "Indenter", name: "indent")) {
-          TupleExprElement(expression: "node")
-          TupleExprElement(
-            label: "indentation",
-            expression: MemberAccessExpr(base: "format", name: "indentTrivia")
-          )
-        }
-        )
+        ReturnStmt("return Indenter.indent(node, indentation: format.indentTrivia)")
       }
     }
   }
@@ -434,204 +358,57 @@ private func createBuildBaseTypeFunction(node: Node) -> FunctionDecl {
   let type = node.type
   let baseType = node.baseType
   return FunctionDecl(
-    leadingTrivia: .docLineComment("/// Conformance to `\(baseType.buildableBaseName)`.") + .newline,
-    modifiers: [Token.public],
-    identifier: .identifier("build\(baseType.baseName)"),
-    signature: FunctionSignature(
-      input: createFormatParameters(),
-      output: baseType.syntax
-    )
-  ) {
-    VariableDecl(
-      .let,
-      name: "result",
-      initializer: FunctionCallExpr("build\(type.baseName)") {
-        TupleExprElement(label: "format", expression: "format")
-      }
-    )
-    ReturnStmt(expression: FunctionCallExpr(baseType.syntaxBaseName) {
-      TupleExprElement(expression: "result")
-    })
-  }
+    """
+    /// Conformance to `\(baseType.buildableBaseName)`.
+    public func build\(baseType.baseName)(format: Format) -> \(baseType.syntax) {
+      let result = build\(type.baseName)(format: format)
+      return \(baseType.syntaxBaseName)(result)
+    }
+    """
+  )
 }
 
 /// Generate the `withTrailingComma` function.
 private func createWithTrailingCommaFunction() -> FunctionDecl {
-  FunctionDecl(
-    leadingTrivia: .docLineComment("/// Conformance to `HasTrailingComma`.") + .newline,
-    modifiers: [Token.public],
-    identifier: .identifier("withTrailingComma"),
-    signature: FunctionSignature(
-      input: ParameterClause {
-        FunctionParameter(
-          firstName: .wildcard,
-          secondName: .identifier("withComma"),
-          colon: .colon,
-          type: "Bool"
-        )
-      },
-      output: "Self"
-    )
-  ) {
-    SwitchStmt(expression: "data") {
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "buildable")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .var,
-                      valuePattern: IdentifierPattern("buildableData")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        SequenceExpr {
-          MemberAccessExpr(base: "buildableData", name: "trailingComma")
-          AssignmentExpr()
-          TernaryExpr(
-            if: "withComma",
-            then: MemberAccessExpr(name: "comma"),
-            else: NilLiteralExpr()
-          )
-        }
-        VariableDecl(.var, name: "result", initializer: "self")
-        SequenceExpr {
-          MemberAccessExpr(base: "result", name: "data")
-          AssignmentExpr()
-          FunctionCallExpr(MemberAccessExpr(name: "buildable")) {
-            TupleExprElement(expression: "buildableData")
-          }
-        }
-        ReturnStmt(expression: "result")
-      }
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "constructed")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .let,
-                      valuePattern: IdentifierPattern("node")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        VariableDecl(.let, name: "withComma", initializer: FunctionCallExpr(MemberAccessExpr(base: "node", name: "withTrailingComma")) {
-          TupleExprElement(expression: TernaryExpr(
-            if: "withComma",
-            then: FunctionCallExpr(MemberAccessExpr(name: "commaToken")),
-            else: NilLiteralExpr()
-          ))
-        })
-        VariableDecl(.var, name: "result", initializer: "self")
-        SequenceExpr {
-          MemberAccessExpr(base: "result", name: "data")
-          AssignmentExpr()
-          FunctionCallExpr(MemberAccessExpr(name: "constructed")) {
-            TupleExprElement(expression: "withComma")
-          }
-        }
-        ReturnStmt(expression: "result")
+  return FunctionDecl(
+    """
+    /// Conformance to `HasTrailingComma`.
+    public func withTrailingComma(_ withComma: Bool) -> Self {
+      switch data {
+      case .buildable(var buildableData):
+        buildableData.trailingComma = withComma ? .comma : nil
+        var result = self
+        result.data = .buildable(buildableData)
+        return result
+      case .constructed(let node):
+        let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
+        var result = self
+        result.data = .constructed(withComma)
+        return result
       }
     }
-  }
+    """
+  )
 }
 
 /// Generate a `withATrivia` function.
 func createWithTriviaFunction2(trivia: String) -> FunctionDecl {
-  FunctionDecl(
-    modifiers: [Token.public],
-    identifier: .identifier("with\(trivia.withFirstCharacterUppercased)"),
-    signature: FunctionSignature(
-      input: ParameterClause {
-        FunctionParameter(
-          firstName: .wildcard,
-          secondName: .identifier(trivia),
-          colon: .colon,
-          type: "Trivia"
-        )
-      },
-      output: "Self"
-    )
-  ) {
-    SwitchStmt(expression: "data") {
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "buildable")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .var,
-                      valuePattern: IdentifierPattern("buildableData")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        SequenceExpr {
-          MemberAccessExpr(base: "buildableData", name: trivia)
-          AssignmentExpr()
-          trivia
-        }
-        VariableDecl(.var, name: "result", initializer: "self")
-        SequenceExpr {
-          MemberAccessExpr(base: "result", name: "data")
-          AssignmentExpr()
-          FunctionCallExpr(MemberAccessExpr(name: "buildable")) {
-            TupleExprElement(expression: "buildableData")
-          }
-        }
-        ReturnStmt(expression: "result")
-      }
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(MemberAccessExpr(name: "constructed")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .let,
-                      valuePattern: IdentifierPattern("node")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        VariableDecl(.let, name: "withNewTrivia", initializer: FunctionCallExpr(MemberAccessExpr(base: "node", name: "withTrailingTrivia")) {
-          TupleExprElement(expression: trivia)
-        })
-        VariableDecl(.var, name: "result", initializer: "self")
-        SequenceExpr {
-          MemberAccessExpr(base: "result", name: "data")
-          AssignmentExpr()
-          FunctionCallExpr(MemberAccessExpr(name: "constructed")) {
-            TupleExprElement(expression: "withNewTrivia")
-          }
-        }
-        ReturnStmt(expression: "result")
+  return FunctionDecl(
+    """
+    public func with\(trivia.withFirstCharacterUppercased)(_ \(trivia): Trivia) -> Self {
+      switch data {
+      case .buildable(var buildableData):
+        buildableData.\(trivia) = \(trivia)
+        var result = self
+        result.data = .buildable(buildableData)
+        return result
+      case .constructed(let node):
+        let withNewTrivia = node.with\(trivia.withFirstCharacterUppercased)(\(trivia))
+        var result = self
+        result.data = .constructed(withNewTrivia)
+        return result
       }
     }
-  }
+    """
+  )
 }

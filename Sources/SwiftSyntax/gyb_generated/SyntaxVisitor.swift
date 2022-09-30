@@ -951,6 +951,26 @@ open class SyntaxVisitor {
   /// The function called after visiting `ObjectLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ObjectLiteralExprSyntax) {}
+  /// Visiting `YieldExprListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: YieldExprListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `YieldExprListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: YieldExprListSyntax) {}
+  /// Visiting `YieldExprListElementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: YieldExprListElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `YieldExprListElementSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: YieldExprListElementSyntax) {}
   /// Visiting `TypeInitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3821,6 +3841,28 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplYieldExprListSyntax(_ data: SyntaxData) {
+      let node = YieldExprListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplYieldExprListElementSyntax(_ data: SyntaxData) {
+      let node = YieldExprListElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) {
       let node = TypeInitializerClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5991,6 +6033,10 @@ open class SyntaxVisitor {
       visitImplEditorPlaceholderExprSyntax(data)
     case .objectLiteralExpr:
       visitImplObjectLiteralExprSyntax(data)
+    case .yieldExprList:
+      visitImplYieldExprListSyntax(data)
+    case .yieldExprListElement:
+      visitImplYieldExprListElementSyntax(data)
     case .typeInitializerClause:
       visitImplTypeInitializerClauseSyntax(data)
     case .typealiasDecl:

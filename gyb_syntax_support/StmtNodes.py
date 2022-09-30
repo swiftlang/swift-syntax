@@ -149,9 +149,8 @@ STMT_NODES = [
     Node('YieldList', name_for_diagnostics=None, kind='Syntax',
          children=[
              Child('LeftParen', kind='LeftParenToken'),
-             Child('ElementList', kind='ExprList',
+             Child('ElementList', kind='YieldExprList',
                    collection_element_name='Element'),
-             Child('TrailingComma', kind='CommaToken', is_optional=True),
              Child('RightParen', kind='RightParenToken'),
          ]),
 

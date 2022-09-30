@@ -744,6 +744,21 @@ public extension ExpressibleAsObjectLiteralExpr {
     return createObjectLiteralExpr()
   }
 }
+public protocol ExpressibleAsYieldExprList {
+  func createYieldExprList() -> YieldExprList
+}
+public protocol ExpressibleAsYieldExprListElement: ExpressibleAsYieldExprList, ExpressibleAsSyntaxBuildable {
+  func createYieldExprListElement() -> YieldExprListElement
+}
+public extension ExpressibleAsYieldExprListElement {
+  /// Conformance to `ExpressibleAsYieldExprList`
+  func createYieldExprList() -> YieldExprList {
+    return YieldExprList([self])
+  }
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createYieldExprListElement()
+  }
+}
 public protocol ExpressibleAsTypeInitializerClause: ExpressibleAsSyntaxBuildable {
   func createTypeInitializerClause() -> TypeInitializerClause
 }

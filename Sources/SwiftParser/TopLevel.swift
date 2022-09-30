@@ -46,7 +46,10 @@ extension Parser {
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while let newElement = self.parseCodeBlockItem(isAtTopLevel: true), loopProgress.evaluate(currentToken) {
+    while
+      let newElement = self.parseCodeBlockItem(context: .topLevel),
+      loopProgress.evaluate(currentToken)
+    {
       elements.append(newElement)
     }
     return .init(elements: elements, arena: self.arena)
@@ -57,11 +60,11 @@ extension Parser {
   ///
   /// This function is used when parsing places where function bodies are
   /// optional - like the function requirements in protocol declarations.
-  mutating func parseOptionalCodeBlock() -> RawCodeBlockSyntax? {
+  mutating func parseOptionalCodeBlock(context: ItemContext? = nil) -> RawCodeBlockSyntax? {
     guard self.at(.leftBrace) else {
       return nil
     }
-    return self.parseCodeBlock()
+    return self.parseCodeBlock(context: context)
   }
 
   /// Parse a code block.
@@ -70,11 +73,15 @@ extension Parser {
   /// =======
   ///
   ///     code-block → '{' statements? '}'
-  mutating func parseCodeBlock() -> RawCodeBlockSyntax {
+  mutating func parseCodeBlock(context: ItemContext? = nil) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var items = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem(), loopProgress.evaluate(currentToken) {
+    while
+      !self.at(.rightBrace),
+      let newItem = self.parseCodeBlockItem(context: context),
+      loopProgress.evaluate(currentToken)
+    {
       items.append(newItem)
     }
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -92,6 +99,14 @@ extension Parser {
       unexpectedBeforeRBrace,
       rightBrace: rbrace,
       arena: self.arena)
+  }
+}
+
+extension Parser {
+  public enum ItemContext {
+    case topLevel
+    // Enables the 'yield' contextual keyword in statement position.
+    case coroutineAccessor
   }
 
   /// Parse an individual item - either in a code block or at the top level.
@@ -113,10 +128,10 @@ extension Parser {
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
   @_spi(RawSyntax)
-  public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false) -> RawCodeBlockItemSyntax? {
+  public mutating func parseCodeBlockItem(context: ItemContext? = nil) -> RawCodeBlockItemSyntax? {
     // FIXME: It is unfortunate that the Swift book refers to these as
     // "statements" and not "items".
-    let item = self.parseItem(isAtTopLevel: isAtTopLevel)
+    let item = self.parseItem(context: context)
     let semi = self.consume(if: .semicolon)
 
     if item.isEmpty && semi == nil {
@@ -130,7 +145,7 @@ extension Parser {
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the
   /// wrapping declaration instead of being consumed by lookeahead.
-  private mutating func parseItem(isAtTopLevel: Bool = false) -> RawSyntax {
+  private mutating func parseItem(context: ItemContext? = nil) -> RawSyntax {
     if self.at(.poundIfKeyword) {
       return RawSyntax(self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
@@ -143,11 +158,11 @@ extension Parser {
       return RawSyntax(self.parsePoundSourceLocationDirective())
     } else if self.atStartOfDeclaration() {
       return RawSyntax(self.parseDeclaration())
-    } else if self.atStartOfStatement() {
+    } else if self.atStartOfStatement(context: context) {
       return RawSyntax(self.parseStatement())
     } else if self.atStartOfExpression() {
       return RawSyntax(self.parseExpression())
-    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowRecovery: true) {
+    } else if self.atStartOfDeclaration(context: context, allowRecovery: true) {
       return RawSyntax(self.parseDeclaration())
     } else {
       return RawSyntax(RawMissingExprSyntax(arena: self.arena))

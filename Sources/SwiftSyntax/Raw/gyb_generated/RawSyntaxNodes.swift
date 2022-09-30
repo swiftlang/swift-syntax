@@ -5080,6 +5080,101 @@ public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
+public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public typealias SyntaxType = YieldExprListSyntax
+
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .yieldExprList
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(elements: [RawYieldExprListElementSyntax], arena: __shared SyntaxArena) {
+    let raw = RawSyntax.makeLayout(
+      kind: .yieldExprList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
+    self.init(raw: raw)
+  }
+
+  public var elements: [RawYieldExprListElementSyntax] {
+    layoutView.children.map { RawYieldExprListElementSyntax(raw: $0!) }
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public typealias SyntaxType = YieldExprListElementSyntax
+
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .yieldExprListElement
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
+    expression: RawExprSyntax,
+    _ unexpectedBetweenExpressionAndComma: RawUnexpectedNodesSyntax? = nil,
+    comma: RawTokenSyntax?,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .yieldExprListElement, uninitializedCount: 4, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeExpression?.raw
+      layout[1] = expression.raw
+      layout[2] = unexpectedBetweenExpressionAndComma?.raw
+      layout[3] = comma?.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var expression: RawExprSyntax {
+    layoutView.children[1].map(RawExprSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenExpressionAndComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var comma: RawTokenSyntax? {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
 public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public typealias SyntaxType = TypeInitializerClauseSyntax
 
@@ -12231,24 +12326,20 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
     _ unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? = nil,
-    elementList: RawExprListSyntax,
-    _ unexpectedBetweenElementListAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
-    trailingComma: RawTokenSyntax?,
-    _ unexpectedBetweenTrailingCommaAndRightParen: RawUnexpectedNodesSyntax? = nil,
+    elementList: RawYieldExprListSyntax,
+    _ unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .yieldList, uninitializedCount: 8, arena: arena) { layout in
+      kind: .yieldList, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
       layout[2] = unexpectedBetweenLeftParenAndElementList?.raw
       layout[3] = elementList.raw
-      layout[4] = unexpectedBetweenElementListAndTrailingComma?.raw
-      layout[5] = trailingComma?.raw
-      layout[6] = unexpectedBetweenTrailingCommaAndRightParen?.raw
-      layout[7] = rightParen.raw
+      layout[4] = unexpectedBetweenElementListAndRightParen?.raw
+      layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
@@ -12262,20 +12353,14 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var elementList: RawExprListSyntax {
-    layoutView.children[3].map(RawExprListSyntax.init(raw:))!
+  public var elementList: RawYieldExprListSyntax {
+    layoutView.children[3].map(RawYieldExprListSyntax.init(raw:))!
   }
-  public var unexpectedBetweenElementListAndTrailingComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var trailingComma: RawTokenSyntax? {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public var unexpectedBetweenTrailingCommaAndRightParen: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
   public var rightParen: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
 }
 

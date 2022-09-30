@@ -384,6 +384,14 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ObjectLiteralExprSyntax) -> ResultType
+  /// Visiting `YieldExprListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: YieldExprListSyntax) -> ResultType
+  /// Visiting `YieldExprListElementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: YieldExprListElementSyntax) -> ResultType
   /// Visiting `TypeInitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1657,6 +1665,18 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: ObjectLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
+  /// Visiting `YieldExprListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: YieldExprListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `YieldExprListElementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: YieldExprListElementSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
   /// Visiting `TypeInitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2919,6 +2939,10 @@ extension SyntaxTransformVisitor {
     case .editorPlaceholderExpr(let derived):
       return visit(derived)
     case .objectLiteralExpr(let derived):
+      return visit(derived)
+    case .yieldExprList(let derived):
+      return visit(derived)
+    case .yieldExprListElement(let derived):
       return visit(derived)
     case .typeInitializerClause(let derived):
       return visit(derived)

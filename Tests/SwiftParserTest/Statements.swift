@@ -356,4 +356,66 @@ final class StatementTests: XCTestCase {
       ]), rightAngleBracket: .rightAngleToken()))),
       substructureAfterMarker: "SPECIALIZATION")
   }
+
+  func testYield() {
+    // Make sure these are always considered a yield statement
+    AssertParse(
+      """
+      var x: Int {
+        _read {
+          #^YIELD^#yield ()
+        }
+      }
+      """,
+    substructure: Syntax(YieldStmtSyntax(
+      yieldKeyword: .contextualKeyword("yield"),
+      yields: Syntax(YieldListSyntax(
+        leftParen: .leftParenToken(),
+        elementList: YieldExprListSyntax([]),
+        rightParen: .rightParenToken())))),
+    substructureAfterMarker: "YIELD")
+
+    // Make sure these are not.
+    AssertParse(
+      """
+      var x: Int {
+        get {
+          #^YIELD^#yield ()
+        }
+      }
+      """,
+      substructure: Syntax(FunctionCallExprSyntax(
+        calledExpression: ExprSyntax(IdentifierExprSyntax(
+          identifier: .identifier("yield"),
+          declNameArguments: nil)),
+        leftParen: .leftParenToken(),
+        argumentList: TupleExprElementListSyntax([]),
+        rightParen: .rightParenToken(),
+        trailingClosure: nil,
+        additionalTrailingClosures: nil)),
+    substructureAfterMarker: "YIELD")
+
+    AssertParse(
+      """
+      yield([])
+      """,
+      substructure: Syntax(FunctionCallExprSyntax(
+        calledExpression: ExprSyntax(IdentifierExprSyntax(
+          identifier: .identifier("yield"),
+          declNameArguments: nil)),
+        leftParen: .leftParenToken(),
+        argumentList: TupleExprElementListSyntax([
+          TupleExprElementSyntax(
+            label: nil,
+            colon: nil,
+            expression: ExprSyntax(ArrayExprSyntax(
+              leftSquare: .leftSquareBracketToken(),
+              elements: ArrayElementListSyntax([]),
+              rightSquare: .rightSquareBracketToken())),
+            trailingComma: nil),
+        ]),
+        rightParen: .rightParenToken(),
+        trailingClosure: nil,
+        additionalTrailingClosures: nil)))
+  }
 }

@@ -699,4 +699,14 @@ EXPR_NODES = [
                    collection_element_name='Argument'),
              Child('RightParen', kind='RightParenToken'),
          ]),
+
+    Node('YieldExprList', name_for_diagnostics='yield list',
+         kind='SyntaxCollection',
+         element='YieldExprListElement',
+         element_name='Yields'),
+    Node('YieldExprListElement', name_for_diagnostics=None, kind='Syntax',
+     children=[
+         Child('Expression', kind='Expr'),
+         Child('Comma', kind='CommaToken', is_optional=True),
+     ]),
 ]

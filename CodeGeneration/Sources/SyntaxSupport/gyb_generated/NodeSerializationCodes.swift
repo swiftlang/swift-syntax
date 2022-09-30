@@ -290,4 +290,6 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "ConventionWitnessMethodAttributeArguments": 277,
   "DesignatedTypeElement": 278,
   "NamedOpaqueReturnType": 279,
+  "YieldExprList": 280,
+  "YieldExprListElement": 281,
 ]

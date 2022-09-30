@@ -7291,6 +7291,101 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
     }
   }
 }
+public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListElement {
+  struct BuildableData {
+    /// The leading trivia attached to this syntax node once built.
+    var leadingTrivia: Trivia
+    /// The trailing trivia attached to this syntax node once built.
+    var trailingTrivia: Trivia
+    var unexpectedBeforeExpression: UnexpectedNodes?
+    var expression: ExprBuildable
+    var unexpectedBetweenExpressionAndComma: UnexpectedNodes?
+    var comma: Token?
+  }
+  enum Data {
+    case buildable(BuildableData)
+    case constructed(YieldExprListElementSyntax)
+  }
+  private var data: Data
+  /// Creates a `YieldExprListElement` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeExpression: 
+  ///   - expression: 
+  ///   - unexpectedBetweenExpressionAndComma: 
+  ///   - comma: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil) {
+    assert(comma == nil || comma!.text == #","#)
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndComma: unexpectedBetweenExpressionAndComma?.createUnexpectedNodes(), comma: comma))
+  }
+  public init (_ constructedNode: YieldExprListElementSyntax) {
+    self.data = .constructed(constructedNode)
+  }
+  /// Builds a `YieldExprListElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `YieldExprListElementSyntax`.
+  func buildYieldExprListElement(format: Format) -> YieldExprListElementSyntax {
+    switch data {
+    case .buildable(let buildableData): 
+      var result = YieldExprListElementSyntax(buildableData.unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: buildableData.expression.buildExpr(format: format), buildableData.unexpectedBetweenExpressionAndComma?.buildUnexpectedNodes(format: format), comma: buildableData.comma?.buildToken(format: format))
+      if !buildableData.leadingTrivia.isEmpty {
+        let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withLeadingTrivia(trivia)
+      }
+      if !buildableData.trailingTrivia.isEmpty {
+        let trivia = (buildableData.trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withTrailingTrivia(trivia)
+      }
+      return format.format(syntax: result)
+    case .constructed(let node): 
+      return Indenter.indent(node, indentation: format.indentTrivia)
+    }
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildYieldExprListElement(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsYieldExprListElement`.
+  public func createYieldExprListElement() -> YieldExprListElement {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `YieldExprListElement` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData): 
+      buildableData.leadingTrivia = leadingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node): 
+      let withNewTrivia = node.withTrailingTrivia(leadingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData): 
+      buildableData.trailingTrivia = trailingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node): 
+      let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+}
 public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializerClause {
   struct BuildableData {
     /// The leading trivia attached to this syntax node once built.
@@ -16719,10 +16814,8 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     var unexpectedBeforeLeftParen: UnexpectedNodes?
     var leftParen: Token
     var unexpectedBetweenLeftParenAndElementList: UnexpectedNodes?
-    var elementList: ExprList
-    var unexpectedBetweenElementListAndTrailingComma: UnexpectedNodes?
-    var trailingComma: Token?
-    var unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodes?
+    var elementList: YieldExprList
+    var unexpectedBetweenElementListAndRightParen: UnexpectedNodes?
     var rightParen: Token
   }
   enum Data {
@@ -16736,23 +16829,12 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   ///   - leftParen: 
   ///   - unexpectedBetweenLeftParenAndElementList: 
   ///   - elementList: 
-  ///   - unexpectedBetweenElementListAndTrailingComma: 
-  ///   - trailingComma: 
-  ///   - unexpectedBetweenTrailingCommaAndRightParen: 
+  ///   - unexpectedBetweenElementListAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, elementList: ExpressibleAsExprList, unexpectedBetweenElementListAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil, unexpectedBetweenTrailingCommaAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, elementList: ExpressibleAsYieldExprList, unexpectedBetweenElementListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     assert(leftParen.text == #"("#)
-    assert(trailingComma == nil || trailingComma!.text == #","#)
     assert(rightParen.text == #")"#)
-    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndElementList: unexpectedBetweenLeftParenAndElementList?.createUnexpectedNodes(), elementList: elementList.createExprList(), unexpectedBetweenElementListAndTrailingComma: unexpectedBetweenElementListAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma, unexpectedBetweenTrailingCommaAndRightParen: unexpectedBetweenTrailingCommaAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
-  }
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementListAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil, unexpectedBetweenTrailingCommaAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @ExprListBuilder elementListBuilder: () -> ExpressibleAsExprList =  {
-    ExprList([])
-  }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList: unexpectedBetweenLeftParenAndElementList, elementList: elementListBuilder(), unexpectedBetweenElementListAndTrailingComma: unexpectedBetweenElementListAndTrailingComma, trailingComma: trailingComma, unexpectedBetweenTrailingCommaAndRightParen: unexpectedBetweenTrailingCommaAndRightParen, rightParen: rightParen)
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndElementList: unexpectedBetweenLeftParenAndElementList?.createUnexpectedNodes(), elementList: elementList.createYieldExprList(), unexpectedBetweenElementListAndRightParen: unexpectedBetweenElementListAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
   public init(_ constructedNode: YieldListSyntax) {
     self.data = .constructed(constructedNode)
@@ -16764,7 +16846,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   func buildYieldList(format: Format) -> YieldListSyntax {
     switch data {
     case .buildable(let buildableData): 
-      var result = YieldListSyntax(buildableData.unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: buildableData.leftParen.buildToken(format: format), buildableData.unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: buildableData.elementList.buildExprList(format: format), buildableData.unexpectedBetweenElementListAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: buildableData.trailingComma?.buildToken(format: format), buildableData.unexpectedBetweenTrailingCommaAndRightParen?.buildUnexpectedNodes(format: format), rightParen: buildableData.rightParen.buildToken(format: format))
+      var result = YieldListSyntax(buildableData.unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: buildableData.leftParen.buildToken(format: format), buildableData.unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: buildableData.elementList.buildYieldExprList(format: format), buildableData.unexpectedBetweenElementListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: buildableData.rightParen.buildToken(format: format))
       if !buildableData.leadingTrivia.isEmpty {
         let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
         result = result.withLeadingTrivia(trivia)

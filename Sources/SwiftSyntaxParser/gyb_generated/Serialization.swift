@@ -110,6 +110,8 @@ extension SyntaxKind {
     case 250: self = .postfixIfConfigExpr
     case 69: self = .editorPlaceholderExpr
     case 70: self = .objectLiteralExpr
+    case 280: self = .yieldExprList
+    case 281: self = .yieldExprListElement
     case 107: self = .typeInitializerClause
     case 3: self = .typealiasDecl
     case 4: self = .associatedtypeDecl

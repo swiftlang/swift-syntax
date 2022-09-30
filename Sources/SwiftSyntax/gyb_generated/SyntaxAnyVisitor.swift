@@ -698,6 +698,20 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: ObjectLiteralExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: YieldExprListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: YieldExprListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: YieldExprListElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: YieldExprListElementSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

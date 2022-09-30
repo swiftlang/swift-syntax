@@ -108,6 +108,8 @@ public enum SyntaxKind {
   case postfixIfConfigExpr
   case editorPlaceholderExpr
   case objectLiteralExpr
+  case yieldExprList
+  case yieldExprListElement
   case typeInitializerClause
   case typealiasDecl
   case associatedtypeDecl
@@ -302,6 +304,7 @@ public enum SyntaxKind {
     case .closureParamList: return true
     case .multipleTrailingClosureElementList: return true
     case .objcName: return true
+    case .yieldExprList: return true
     case .functionParameterList: return true
     case .ifConfigClauseList: return true
     case .inheritedTypeList: return true

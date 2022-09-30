@@ -3369,6 +3369,154 @@ extension ObjcNamePieceSyntax: CustomReflectable {
   }
 }
 
+// MARK: - YieldExprListElementSyntax
+
+public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `YieldExprListElementSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .yieldExprListElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `YieldExprListElementSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .yieldExprListElement)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+    expression: ExprSyntax,
+    _ unexpectedBetweenExpressionAndComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax?
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndComma?.raw,
+      comma?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprListElement,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeExpression` replaced.
+  /// - param newChild: The new `unexpectedBeforeExpression` to replace the node's
+  ///                   current `unexpectedBeforeExpression`, if present.
+  public func withUnexpectedBeforeExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> YieldExprListElementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return YieldExprListElementSyntax(newData)
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(
+    _ newChild: ExprSyntax?) -> YieldExprListElementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return YieldExprListElementSyntax(newData)
+  }
+
+  public var unexpectedBetweenExpressionAndComma: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenExpressionAndComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionAndComma` to replace the node's
+  ///                   current `unexpectedBetweenExpressionAndComma`, if present.
+  public func withUnexpectedBetweenExpressionAndComma(
+    _ newChild: UnexpectedNodesSyntax?) -> YieldExprListElementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return YieldExprListElementSyntax(newData)
+  }
+
+  public var comma: TokenSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `comma` replaced.
+  /// - param newChild: The new `comma` to replace the node's
+  ///                   current `comma`, if present.
+  public func withComma(
+    _ newChild: TokenSyntax?) -> YieldExprListElementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 3)
+    return YieldExprListElementSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension YieldExprListElementSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenExpressionAndComma": unexpectedBetweenExpressionAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - TypeInitializerClauseSyntax
 
 public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
@@ -14389,10 +14537,8 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
     _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
-    elementList: ExprListSyntax,
-    _ unexpectedBetweenElementListAndTrailingComma: UnexpectedNodesSyntax? = nil,
-    trailingComma: TokenSyntax?,
-    _ unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodesSyntax? = nil,
+    elementList: YieldExprListSyntax,
+    _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
@@ -14400,9 +14546,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
       leftParen.raw,
       unexpectedBetweenLeftParenAndElementList?.raw,
       elementList.raw,
-      unexpectedBetweenElementListAndTrailingComma?.raw,
-      trailingComma?.raw,
-      unexpectedBetweenTrailingCommaAndRightParen?.raw,
+      unexpectedBetweenElementListAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldList,
@@ -14473,10 +14617,10 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
     return YieldListSyntax(newData)
   }
 
-  public var elementList: ExprListSyntax {
+  public var elementList: YieldExprListSyntax {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
-      return ExprListSyntax(childData!)
+      return YieldExprListSyntax(childData!)
     }
     set(value) {
       self = withElementList(value)
@@ -14489,12 +14633,12 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `elementList` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elementList` collection.
-  public func addElement(_ element: ExprSyntax) -> YieldListSyntax {
+  public func addElement(_ element: YieldExprListElementSyntax) -> YieldListSyntax {
     var collection: RawSyntax
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
         from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection, at: 3)
@@ -14505,78 +14649,36 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `elementList` to replace the node's
   ///                   current `elementList`, if present.
   public func withElementList(
-    _ newChild: ExprListSyntax?) -> YieldListSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.exprList, arena: .default)
+    _ newChild: YieldExprListSyntax?) -> YieldListSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.yieldExprList, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return YieldListSyntax(newData)
   }
 
-  public var unexpectedBetweenElementListAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenElementListAndTrailingComma(value)
+      self = withUnexpectedBetweenElementListAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenElementListAndTrailingComma` replaced.
-  /// - param newChild: The new `unexpectedBetweenElementListAndTrailingComma` to replace the node's
-  ///                   current `unexpectedBetweenElementListAndTrailingComma`, if present.
-  public func withUnexpectedBetweenElementListAndTrailingComma(
+  /// Returns a copy of the receiver with its `unexpectedBetweenElementListAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenElementListAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenElementListAndRightParen`, if present.
+  public func withUnexpectedBetweenElementListAndRightParen(
     _ newChild: UnexpectedNodesSyntax?) -> YieldListSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return YieldListSyntax(newData)
   }
 
-  public var trailingComma: TokenSyntax? {
-    get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withTrailingComma(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `trailingComma` replaced.
-  /// - param newChild: The new `trailingComma` to replace the node's
-  ///                   current `trailingComma`, if present.
-  public func withTrailingComma(
-    _ newChild: TokenSyntax?) -> YieldListSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 5)
-    return YieldListSyntax(newData)
-  }
-
-  public var unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenTrailingCommaAndRightParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenTrailingCommaAndRightParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenTrailingCommaAndRightParen` to replace the node's
-  ///                   current `unexpectedBetweenTrailingCommaAndRightParen`, if present.
-  public func withUnexpectedBetweenTrailingCommaAndRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> YieldListSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
-    return YieldListSyntax(newData)
-  }
-
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -14590,7 +14692,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   public func withRightParen(
     _ newChild: TokenSyntax?) -> YieldListSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 5)
     return YieldListSyntax(newData)
   }
 
@@ -14608,10 +14710,6 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
       return nil
     case 5:
       return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
     default:
       fatalError("Invalid index")
     }
@@ -14625,9 +14723,7 @@ extension YieldListSyntax: CustomReflectable {
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenLeftParenAndElementList": unexpectedBetweenLeftParenAndElementList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "elementList": Syntax(elementList).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenElementListAndTrailingComma": unexpectedBetweenElementListAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenTrailingCommaAndRightParen": unexpectedBetweenTrailingCommaAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenElementListAndRightParen": unexpectedBetweenElementListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }

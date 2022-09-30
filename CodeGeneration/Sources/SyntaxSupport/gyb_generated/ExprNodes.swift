@@ -1241,4 +1241,24 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "YieldExprList",
+       nameForDiagnostics: "yield list",
+       kind: "SyntaxCollection",
+       element: "YieldExprListElement",
+       elementName: "Yields"),
+
+  Node(name: "YieldExprListElement",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       children: [
+         Child(name: "Expression",
+               kind: "Expr"),
+         Child(name: "Comma",
+               kind: "CommaToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ])
+       ]),
+
 ]

@@ -2181,6 +2181,47 @@ public enum SyntaxFactory {
     ], arena: .default))
     return ObjectLiteralExprSyntax(data)
   }
+  @available(*, deprecated, message: "Use initializer on YieldExprListSyntax")
+  public static func makeYieldExprList(
+    _ elements: [YieldExprListElementSyntax]) -> YieldExprListSyntax {
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
+      from: elements.map { $0.raw }, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return YieldExprListSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on YieldExprListSyntax")
+  public static func makeBlankYieldExprList(presence: SourcePresence = .present) -> YieldExprListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .yieldExprList,
+      from: [
+    ], arena: .default))
+    return YieldExprListSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on YieldExprListElementSyntax")
+  public static func makeYieldExprListElement(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?) -> YieldExprListElementSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndComma?.raw,
+      comma?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprListElement,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return YieldExprListElementSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on YieldExprListElementSyntax")
+  public static func makeBlankYieldExprListElement(presence: SourcePresence = .present) -> YieldExprListElementSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .yieldExprListElement,
+      from: [
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default),
+      nil,
+      nil,
+    ], arena: .default))
+    return YieldExprListElementSyntax(data)
+  }
   @available(*, deprecated, message: "Use initializer on TypeInitializerClauseSyntax")
   public static func makeTypeInitializerClause(_ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil, equal: TokenSyntax, _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil, value: TypeSyntax) -> TypeInitializerClauseSyntax {
     let layout: [RawSyntax?] = [
@@ -5281,15 +5322,13 @@ public enum SyntaxFactory {
     return YieldStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on YieldListSyntax")
-  public static func makeYieldList(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, elementList: ExprListSyntax, _ unexpectedBetweenElementListAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> YieldListSyntax {
+  public static func makeYieldList(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, elementList: YieldExprListSyntax, _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> YieldListSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
       unexpectedBetweenLeftParenAndElementList?.raw,
       elementList.raw,
-      unexpectedBetweenElementListAndTrailingComma?.raw,
-      trailingComma?.raw,
-      unexpectedBetweenTrailingCommaAndRightParen?.raw,
+      unexpectedBetweenElementListAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldList,
@@ -5305,9 +5344,7 @@ public enum SyntaxFactory {
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default),
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.exprList, arena: .default),
-      nil,
-      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.yieldExprList, arena: .default),
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default),
     ], arena: .default))

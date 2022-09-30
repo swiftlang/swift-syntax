@@ -617,6 +617,17 @@ extension Format {
     }
     return result
   }
+  public func format(syntax: YieldExprListSyntax) -> YieldExprListSyntax {
+    syntax
+  }
+  public func format(syntax: YieldExprListElementSyntax) -> YieldExprListElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia)
+    }
+    return result
+  }
   public func format(syntax: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []

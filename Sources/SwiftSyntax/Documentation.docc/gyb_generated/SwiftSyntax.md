@@ -217,6 +217,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MultipleTrailingClosureElementSyntax>
 - <doc:SwiftSyntax/ObjcNameSyntax>
 - <doc:SwiftSyntax/ObjcNamePieceSyntax>
+- <doc:SwiftSyntax/YieldExprListSyntax>
+- <doc:SwiftSyntax/YieldExprListElementSyntax>
 - <doc:SwiftSyntax/FunctionParameterListSyntax>
 - <doc:SwiftSyntax/FunctionParameterSyntax>
 - <doc:SwiftSyntax/IfConfigClauseListSyntax>
@@ -301,6 +303,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ExpressionSegmentSyntax>
 - <doc:SwiftSyntax/ObjcNamePieceSyntax>
 - <doc:SwiftSyntax/ObjcNameSyntax>
+- <doc:SwiftSyntax/YieldExprListSyntax>
+- <doc:SwiftSyntax/YieldExprListElementSyntax>
 - <doc:SwiftSyntax/TypeInitializerClauseSyntax>
 - <doc:SwiftSyntax/FunctionParameterListSyntax>
 - <doc:SwiftSyntax/ParameterClauseSyntax>

@@ -18,10 +18,8 @@ extension TokenConsumer {
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  func atStartOfStatement() -> Bool {
-    var lookahead = self.lookahead()
-    _ = lookahead.consume(if: .identifier, followedBy: .colon)
-    return lookahead.at(anyIn: CanBeStatementStart.self) != nil
+  func atStartOfStatement(context: Parser.ItemContext? = nil) -> Bool {
+    return self.lookahead().isStartOfStatement(context: context)
   }
 }
 
@@ -896,22 +894,27 @@ extension Parser {
 
     let yields: RawSyntax
     if let lparen = self.consume(if: .leftParen) {
-      let exprList: RawExprListSyntax
+      let exprList: RawYieldExprListSyntax
       do {
         var keepGoing = true
-        var elementList = [RawExprSyntax]()
+        var elementList = [RawYieldExprListElementSyntax]()
         var loopProgress = LoopProgressCondition()
         while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
-          elementList.append(self.parseExpression())
-          // FIXME: Need explicit syntax for yield lists or we'll drop this comma!
-          keepGoing = self.consume(if: .comma) != nil
+          let expr = self.parseExpression()
+          let comma = self.consume(if: .comma)
+          elementList.append(RawYieldExprListElementSyntax(
+            expression: expr,
+            comma: comma,
+            arena: self.arena))
+
+          keepGoing = (comma != nil)
         }
-        exprList = RawExprListSyntax(elements: elementList, arena: self.arena)
+        exprList = RawYieldExprListSyntax(elements: elementList, arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       yields = RawSyntax(RawYieldListSyntax(
         leftParen: lparen,
-        elementList: exprList, trailingComma: nil,
+        elementList: exprList,
         unexpectedBeforeRParen,
         rightParen: rparen,
         arena: self.arena))
@@ -1066,6 +1069,82 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
+  /// Returns `true` if the current token represents the start of a statement
+  /// item.
+  ///
+  /// - Note: This function must be kept in sync with `parseStatement()`.
+  /// - Seealso: ``Parser/parseStatement()``
+  public func isStartOfStatement(context: Parser.ItemContext?) -> Bool {
+    switch self.currentToken.tokenKind {
+    case .returnKeyword,
+        .throwKeyword,
+        .deferKeyword,
+        .ifKeyword,
+        .guardKeyword,
+        .whileKeyword,
+        .doKeyword,
+        .repeatKeyword,
+        .forKeyword,
+        .breakKeyword,
+        .continueKeyword,
+        .fallthroughKeyword,
+        .switchKeyword,
+        .caseKeyword,
+        .defaultKeyword,
+        .yield,
+        .poundAssertKeyword,
+        .poundIfKeyword,
+        .poundWarningKeyword,
+        .poundErrorKeyword,
+        .poundSourceLocationKeyword:
+      return true
+
+    case .poundLineKeyword:
+      // #line at the start of a line is a directive, when within, it is an expr.
+      return self.currentToken.isAtStartOfLine
+
+    case .identifier:
+      // "identifier ':' for/while/do/switch" is a label on a loop/switch.
+      guard self.peek().tokenKind == .colon else {
+        // "yield" in the right context begins a yield statement.
+        if context == .coroutineAccessor, self.atContextualKeyword("yield") {
+          return true
+        }
+        return false
+      }
+
+      // To disambiguate other cases of "identifier :", which might be part of a
+      // question colon expression or something else, we look ahead to the second
+      // token.
+      var backtrack = self.lookahead()
+      backtrack.expectIdentifierWithoutRecovery()
+      backtrack.eat(.colon)
+
+      // We treating IDENTIFIER: { as start of statement to provide missed 'do'
+      // diagnostics. This case will be handled in `parseStatement()`.
+      if self.at(.leftBrace) {
+        return true
+      }
+      // For better recovery, we just accept a label on any statement.  We reject
+      // putting a label on something inappropriate in `parseStatement()`.
+      return backtrack.isStartOfStatement(context: context)
+
+    case .atSign:
+      // Might be a statement or case attribute. The only one of these we have
+      // right now is `@unknown default`, so hardcode a check for an attribute
+      // without any parens.
+      guard self.peek().tokenKind == .identifier else {
+        return false
+      }
+      var backtrack = self.lookahead()
+      backtrack.eat(.atSign)
+      backtrack.expectIdentifierWithoutRecovery()
+      return backtrack.isStartOfStatement(context: context)
+    default:
+      return false
+    }
+  }
+
   func isBooleanExpr() -> Bool {
     var lookahead = self.lookahead()
     return !lookahead.canParseTypedPattern() || !lookahead.at(.equal)

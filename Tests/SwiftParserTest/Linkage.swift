@@ -102,6 +102,11 @@ extension LinkageTest {
       // always a bad thing, but it's worth calling out so we document this
       // with `.mayBeAbsent(...)`.
       guard expectedLinkagesIdx < sortedLinkages.endIndex else {
+        // Skip flaky linkages if they're absent.
+        if case .flaky = assert.condition {
+          continue
+        }
+
         XCTFail("Expected linkage was not present: \(assert.linkage)",
                 file: assert.file, line: assert.line)
         continue

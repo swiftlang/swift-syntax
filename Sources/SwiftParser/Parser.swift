@@ -42,8 +42,10 @@ extension Parser {
     // Extended lifetime is required because `SyntaxArena` in the parser must
     // be alive until `Syntax(raw:)` retains the arena.
     return withExtendedLifetime(parser) {
-      let rawSourceFile =  parser.parseSourceFile()
-      return rawSourceFile.syntax
+      parser.arena.assumingSingleThread {
+        let rawSourceFile =  parser.parseSourceFile()
+        return rawSourceFile.syntax
+      }
     }
   }
 }
@@ -120,7 +122,8 @@ extension Parser {
 /// tokens as needed to disambiguate a parse. However, because lookahead
 /// operates on a copy of the lexical stream, no input tokens are lost..
 public struct Parser: TokenConsumer {
-  let arena: SyntaxArena
+  @_spi(RawSyntax)
+  public var arena: SyntaxArena
   /// A view of the sequence of lexemes in the input.
   var lexemes: Lexer.LexemeSequence
   /// The current token. If there was no input, this token will have a kind of `.eof`.

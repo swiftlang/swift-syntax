@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if canImport(Darwin)
-import Darwin
+@_implementationOnly import Darwin
 #elseif canImport(Glibc)
-import Glibc
+@_implementationOnly import Glibc
 #endif
 
 /// Represent a string.

@@ -56,5 +56,6 @@
     "SyntaxArena.swift",
     "SyntaxVerifier.swift",
     "BumpPtrAllocator.swift",
+    "PlatformMutex.swift",
   ]
 }

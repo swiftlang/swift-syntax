@@ -1,6 +1,5 @@
-@_spi(RawSyntax)
-import SwiftSyntax
-import SwiftParser
+@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -101,7 +100,9 @@ extension SyntaxExpressibleByStringInterpolation {
       var parser = Parser(buffer)
       // FIXME: When the parser supports incremental parsing, put the
       // interpolatedSyntaxNodes in so we don't have to parse them again.
-      return Self.parse(from: &parser)
+      return parser.arena.assumingSingleThread {
+        return Self.parse(from: &parser)
+      }
     }
   }
 

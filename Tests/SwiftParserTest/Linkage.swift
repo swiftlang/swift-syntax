@@ -23,7 +23,7 @@ final class LinkageTest: XCTestCase {
       .library("-lswiftDarwin"),
       .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
       .library("-lswift_Concurrency"),
-      .library("-lswift_StringProcessing", condition: .when(swiftVersionAtLeast: .v5_7)),
+      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
     ])
 
     try assertLinkage(of: "SwiftParser", in: baseURL, assertions: [
@@ -35,7 +35,7 @@ final class LinkageTest: XCTestCase {
       .library("-lswiftDarwin"),
       .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
       .library("-lswift_Concurrency"),
-      .library("-lswift_StringProcessing", condition: .when(swiftVersionAtLeast: .v5_7)),
+      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
     ])
   }
 }

@@ -192,6 +192,11 @@ public extension SyntaxProtocol {
     return raw.recursiveFlags.contains(.hasError)
   }
 
+  /// Whether this tree contains a missing token or unexpected node.
+  var hasSequenceExpr: Bool {
+    return raw.recursiveFlags.contains(.hasSequenceExpr)
+  }
+
   /// The parent of this syntax node, or `nil` if this node is the root.
   var parent: Syntax? {
     return data.parent.map(Syntax.init(_:))

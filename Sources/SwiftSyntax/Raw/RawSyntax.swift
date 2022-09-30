@@ -25,6 +25,7 @@ struct RecursiveRawSyntaxFlags: OptionSet {
 
   /// Whether the tree contained by this layout has any missing or unexpected nodes.
   static let hasError = RecursiveRawSyntaxFlags(rawValue: 1 << 0)
+  static let hasSequenceExpr = RecursiveRawSyntaxFlags(rawValue: 1 << 1)
 }
 
 /// Node data for RawSyntax tree. Tagged union plus common data.
@@ -612,8 +613,12 @@ extension RawSyntax {
   ) -> RawSyntax {
     validateLayout(layout: layout, as: kind)
     let payload = RawSyntaxData.Layout(
-      kind: kind, layout: layout,
-      byteLength: byteLength, descendantCount: descendantCount, recursiveFlags: recursiveFlags)
+      kind: kind,
+      layout: layout,
+      byteLength: byteLength,
+      descendantCount: descendantCount,
+      recursiveFlags: recursiveFlags
+    )
     return RawSyntax(arena: arena, payload: .layout(payload))
   }
 
@@ -646,6 +651,9 @@ extension RawSyntax {
       descendantCount += node.totalNodes
       recursiveFlags.insert(node.recursiveFlags)
       arena.addChild(node.arenaReference)
+    }
+    if kind == .sequenceExpr {
+      recursiveFlags.insert(.hasSequenceExpr)
     }
     return .layout(
       kind: kind,

@@ -189,6 +189,36 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: "expected ']' to end dictionary"),
       ]
     )
+
+    AssertParse(
+      """
+      [
+        #line : Calendar(identifier: .gregorian),
+        #^STRUCTURE^##line : Calendar(identifier: .buddhist),
+      ]
+      """,
+      substructure: Syntax(DictionaryElementSyntax.init(
+        keyExpression: ExprSyntax(PoundLineExprSyntax(poundLine: .poundLineKeyword())),
+        colon: .colonToken(),
+        valueExpression: ExprSyntax(FunctionCallExprSyntax(
+          calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("Calendar"), declNameArguments: nil)),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([
+            TupleExprElementSyntax(
+              label: .identifier("identifier"),
+              colon: .colonToken(),
+              expression: ExprSyntax(MemberAccessExprSyntax(
+                base: nil,
+                dot: .prefixPeriodToken(),
+                name: .identifier("buddhist"),
+                declNameArguments: nil)),
+              trailingComma: nil)
+          ]),
+          rightParen: .rightParenToken(),
+          trailingClosure: nil,
+          additionalTrailingClosures: nil)),
+        trailingComma: .commaToken())),
+    substructureAfterMarker: "STRUCTURE")
   }
 
   func testInterpolatedStringLiterals() {

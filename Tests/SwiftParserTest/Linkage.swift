@@ -197,11 +197,9 @@ extension LinkageTest {
 
         switch command.cmd {
         case .linkerOption:
-          let (namePtr, cmdCount) = commandStart.withMemoryRebound(to: LinkerOptionCommand.self, capacity: 1, { cmd in
-            return cmd.withMemoryRebound(to: CChar.self, capacity: 1) { p in
-              return (p.advanced(by: MemoryLayout<LinkerOptionCommand>.size), Int(cmd.pointee.count))
-            }
-          })
+          let cmd = commandStart.bindMemory(to: LinkerOptionCommand.self, capacity: 1)
+          let cmdCount = Int(cmd.pointee.count)
+          let namePtr = commandStart.advanced(by: MemoryLayout<LinkerOptionCommand>.size).assumingMemoryBound(to: CChar.self)
           if cmdCount == 1 {
             result.append(.library(String(cString: namePtr)))
           } else if cmdCount == 2 {

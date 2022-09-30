@@ -439,8 +439,7 @@ extension Parser {
     default:
       // If the next token is not an operator, just parse this as expr-postfix.
       return self.parsePostfixExpression(
-        flavor, forDirective: forDirective, pattern: pattern,
-        periodHasKeyPathBehavior: false)
+        flavor, forDirective: forDirective, pattern: pattern)
     }
   }
 
@@ -462,16 +461,14 @@ extension Parser {
   public mutating func parsePostfixExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool,
-    pattern: PatternContext,
-    periodHasKeyPathBehavior: Bool
+    pattern: PatternContext
   ) -> RawExprSyntax {
     let head = self.parsePrimaryExpression(pattern: pattern)
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
     return self.parsePostfixExpressionSuffix(
-      head, flavor, forDirective: forDirective,
-      periodHasKeyPathBehavior: periodHasKeyPathBehavior, pattern: pattern)
+      head, flavor, forDirective: forDirective, pattern: pattern)
   }
 
   @_spi(RawSyntax)
@@ -549,7 +546,6 @@ extension Parser {
       }
       let result = parser.parsePostfixExpressionSuffix(
         head, flavor, forDirective: forDirective,
-        periodHasKeyPathBehavior: false,
         pattern: .none
       )
 
@@ -587,7 +583,6 @@ extension Parser {
     _ start: RawExprSyntax,
     _ flavor: ExprFlavor,
     forDirective: Bool,
-    periodHasKeyPathBehavior: Bool,
     pattern: PatternContext
   ) -> RawExprSyntax {
     // Handle suffix expressions.
@@ -600,13 +595,6 @@ extension Parser {
 
       // Check for a .foo suffix.
       if self.at(any: [.period, .prefixPeriod]) {
-        // A key path is special, because it allows .[ and .<N>, unlike
-        // anywhere else. The period itself should be left in the token stream.
-        // (.? and .! end up being operators, and so aren't handled here.)
-        if periodHasKeyPathBehavior {
-          break
-        }
-
         leadingExpr = self.parseDottedExpressionSuffix(leadingExpr)
         continue
       }
@@ -713,11 +701,6 @@ extension Parser {
 
       // Check for a postfix-operator suffix.
       if let op = self.consume(if: .postfixOperator) {
-        // KeyPaths are more restricted in what can go after a ., and so we treat
-        // them specially.
-        //        if (periodHasKeyPathBehavior && startsWithSymbol(Tok, '.'))
-        //          break
-
         leadingExpr = RawExprSyntax(RawPostfixUnaryExprSyntax(
           expression: leadingExpr,
           operatorToken: op,

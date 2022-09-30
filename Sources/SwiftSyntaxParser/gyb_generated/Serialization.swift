@@ -102,6 +102,12 @@ extension SyntaxKind {
     case 48: self = .stringLiteralExpr
     case 253: self = .regexLiteralExpr
     case 65: self = .keyPathExpr
+    case 285: self = .keyPathComponentList
+    case 286: self = .keyPathComponent
+    case 282: self = .keyPathPropertyComponent
+    case 283: self = .keyPathSubscriptComponent
+    case 284: self = .keyPathOptionalComponent
+    case 287: self = .oldKeyPathExpr
     case 66: self = .keyPathBaseExpr
     case 106: self = .objcNamePiece
     case 173: self = .objcName

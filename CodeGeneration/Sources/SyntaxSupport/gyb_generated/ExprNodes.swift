@@ -1073,6 +1073,104 @@ public let EXPR_NODES: [Node] = [
                tokenChoices: [
                  "Backslash"
                ]),
+         Child(name: "Root",
+               kind: "Type",
+               isOptional: true),
+         Child(name: "Components",
+               kind: "KeyPathComponentList",
+               collectionElementName: "KeyPathComponent")
+       ]),
+
+  Node(name: "KeyPathComponentList",
+       nameForDiagnostics: nil,
+       kind: "SyntaxCollection",
+       element: "KeyPathComponent"),
+
+  Node(name: "KeyPathComponent",
+       nameForDiagnostics: "key path component",
+       kind: "Syntax",
+       children: [
+         Child(name: "Period",
+               kind: "Token",
+               isOptional: true,
+               tokenChoices: [
+                 "Period",
+                 "PrefixPeriod"
+               ]),
+         Child(name: "Component",
+               kind: "Syntax",
+               nodeChoices: [
+                 Child(name: "Property",
+                       kind: "KeyPathPropertyComponent"),
+                 Child(name: "Subscript",
+                       kind: "KeyPathSubscriptComponent"),
+                 Child(name: "Optional",
+                       kind: "KeyPathOptionalComponent")
+               ])
+       ]),
+
+  Node(name: "KeyPathPropertyComponent",
+       nameForDiagnostics: "key path property component",
+       kind: "Syntax",
+       children: [
+         Child(name: "Identifier",
+               kind: "Token",
+               tokenChoices: [
+                 "Identifier",
+                 "Self",
+                 "CapitalSelf",
+                 "DollarIdentifier",
+                 "SpacedBinaryOperator",
+                 "IntegerLiteral"
+               ]),
+         Child(name: "DeclNameArguments",
+               kind: "DeclNameArguments",
+               isOptional: true),
+         Child(name: "GenericArgumentClause",
+               kind: "GenericArgumentClause",
+               isOptional: true)
+       ]),
+
+  Node(name: "KeyPathSubscriptComponent",
+       nameForDiagnostics: "key path subscript component",
+       kind: "Syntax",
+       children: [
+         Child(name: "LeftBracket",
+               kind: "LeftSquareBracketToken",
+               tokenChoices: [
+                 "LeftSquareBracket"
+               ]),
+         Child(name: "ArgumentList",
+               kind: "TupleExprElementList",
+               collectionElementName: "Argument"),
+         Child(name: "RightBracket",
+               kind: "RightSquareBracketToken",
+               tokenChoices: [
+                 "RightSquareBracket"
+               ])
+       ]),
+
+  Node(name: "KeyPathOptionalComponent",
+       nameForDiagnostics: "key path optional component",
+       kind: "Syntax",
+       children: [
+         Child(name: "QuestionOrExclamationMark",
+               kind: "Token",
+               tokenChoices: [
+                 "PostfixQuestionMark",
+                 "ExclamationMark"
+               ])
+       ]),
+
+  Node(name: "OldKeyPathExpr",
+       nameForDiagnostics: "key path",
+       kind: "Expr",
+       children: [
+         Child(name: "Backslash",
+               kind: "BackslashToken",
+               tokenChoices: [
+                 "Backslash"
+               ]),
          Child(name: "RootExpr",
                kind: "Expr",
                isOptional: true,

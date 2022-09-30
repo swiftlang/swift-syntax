@@ -99,6 +99,12 @@ public enum SyntaxEnum {
   case stringLiteralExpr(StringLiteralExprSyntax)
   case regexLiteralExpr(RegexLiteralExprSyntax)
   case keyPathExpr(KeyPathExprSyntax)
+  case keyPathComponentList(KeyPathComponentListSyntax)
+  case keyPathComponent(KeyPathComponentSyntax)
+  case keyPathPropertyComponent(KeyPathPropertyComponentSyntax)
+  case keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax)
+  case keyPathOptionalComponent(KeyPathOptionalComponentSyntax)
+  case oldKeyPathExpr(OldKeyPathExprSyntax)
   case keyPathBaseExpr(KeyPathBaseExprSyntax)
   case objcNamePiece(ObjcNamePieceSyntax)
   case objcName(ObjcNameSyntax)
@@ -460,6 +466,18 @@ public enum SyntaxEnum {
     case .regexLiteralExpr:
       return "regex literal"
     case .keyPathExpr:
+      return "key path"
+    case .keyPathComponentList:
+      return nil
+    case .keyPathComponent:
+      return "key path component"
+    case .keyPathPropertyComponent:
+      return "key path property component"
+    case .keyPathSubscriptComponent:
+      return "key path subscript component"
+    case .keyPathOptionalComponent:
+      return "key path optional component"
+    case .oldKeyPathExpr:
       return "key path"
     case .keyPathBaseExpr:
       return nil
@@ -1017,6 +1035,18 @@ public extension Syntax {
       return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
     case .keyPathExpr:
       return .keyPathExpr(KeyPathExprSyntax(self)!)
+    case .keyPathComponentList:
+      return .keyPathComponentList(KeyPathComponentListSyntax(self)!)
+    case .keyPathComponent:
+      return .keyPathComponent(KeyPathComponentSyntax(self)!)
+    case .keyPathPropertyComponent:
+      return .keyPathPropertyComponent(KeyPathPropertyComponentSyntax(self)!)
+    case .keyPathSubscriptComponent:
+      return .keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax(self)!)
+    case .keyPathOptionalComponent:
+      return .keyPathOptionalComponent(KeyPathOptionalComponentSyntax(self)!)
+    case .oldKeyPathExpr:
+      return .oldKeyPathExpr(OldKeyPathExprSyntax(self)!)
     case .keyPathBaseExpr:
       return .keyPathBaseExpr(KeyPathBaseExprSyntax(self)!)
     case .objcNamePiece:

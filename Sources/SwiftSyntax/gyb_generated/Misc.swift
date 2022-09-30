@@ -195,6 +195,18 @@ extension Syntax {
       return node
     case .keyPathExpr(let node):
       return node
+    case .keyPathComponentList(let node):
+      return node
+    case .keyPathComponent(let node):
+      return node
+    case .keyPathPropertyComponent(let node):
+      return node
+    case .keyPathSubscriptComponent(let node):
+      return node
+    case .keyPathOptionalComponent(let node):
+      return node
+    case .oldKeyPathExpr(let node):
+      return node
     case .keyPathBaseExpr(let node):
       return node
     case .objcNamePiece(let node):
@@ -748,6 +760,18 @@ extension Syntax {
       return node.childNameForDiagnostics(index)
     case .keyPathExpr(let node):
       return node.childNameForDiagnostics(index)
+    case .keyPathComponentList(let node):
+      return node.childNameForDiagnostics(index)
+    case .keyPathComponent(let node):
+      return node.childNameForDiagnostics(index)
+    case .keyPathPropertyComponent(let node):
+      return node.childNameForDiagnostics(index)
+    case .keyPathSubscriptComponent(let node):
+      return node.childNameForDiagnostics(index)
+    case .keyPathOptionalComponent(let node):
+      return node.childNameForDiagnostics(index)
+    case .oldKeyPathExpr(let node):
+      return node.childNameForDiagnostics(index)
     case .keyPathBaseExpr(let node):
       return node.childNameForDiagnostics(index)
     case .objcNamePiece(let node):
@@ -1218,6 +1242,12 @@ extension SyntaxKind {
     case .stringLiteralExpr: return StringLiteralExprSyntax.self
     case .regexLiteralExpr: return RegexLiteralExprSyntax.self
     case .keyPathExpr: return KeyPathExprSyntax.self
+    case .keyPathComponentList: return KeyPathComponentListSyntax.self
+    case .keyPathComponent: return KeyPathComponentSyntax.self
+    case .keyPathPropertyComponent: return KeyPathPropertyComponentSyntax.self
+    case .keyPathSubscriptComponent: return KeyPathSubscriptComponentSyntax.self
+    case .keyPathOptionalComponent: return KeyPathOptionalComponentSyntax.self
+    case .oldKeyPathExpr: return OldKeyPathExprSyntax.self
     case .keyPathBaseExpr: return KeyPathBaseExprSyntax.self
     case .objcNamePiece: return ObjcNamePieceSyntax.self
     case .objcName: return ObjcNameSyntax.self

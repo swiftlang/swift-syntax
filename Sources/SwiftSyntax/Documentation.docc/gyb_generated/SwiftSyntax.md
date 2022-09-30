@@ -151,6 +151,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/StringLiteralExprSyntax>
 - <doc:SwiftSyntax/RegexLiteralExprSyntax>
 - <doc:SwiftSyntax/KeyPathExprSyntax>
+- <doc:SwiftSyntax/OldKeyPathExprSyntax>
 - <doc:SwiftSyntax/KeyPathBaseExprSyntax>
 - <doc:SwiftSyntax/ObjcKeyPathExprSyntax>
 - <doc:SwiftSyntax/ObjcSelectorExprSyntax>
@@ -215,6 +216,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ClosureParamSyntax>
 - <doc:SwiftSyntax/MultipleTrailingClosureElementListSyntax>
 - <doc:SwiftSyntax/MultipleTrailingClosureElementSyntax>
+- <doc:SwiftSyntax/KeyPathComponentListSyntax>
+- <doc:SwiftSyntax/KeyPathComponentSyntax>
 - <doc:SwiftSyntax/ObjcNameSyntax>
 - <doc:SwiftSyntax/ObjcNamePieceSyntax>
 - <doc:SwiftSyntax/YieldExprListSyntax>
@@ -301,6 +304,11 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MultipleTrailingClosureElementListSyntax>
 - <doc:SwiftSyntax/StringSegmentSyntax>
 - <doc:SwiftSyntax/ExpressionSegmentSyntax>
+- <doc:SwiftSyntax/KeyPathComponentListSyntax>
+- <doc:SwiftSyntax/KeyPathComponentSyntax>
+- <doc:SwiftSyntax/KeyPathPropertyComponentSyntax>
+- <doc:SwiftSyntax/KeyPathSubscriptComponentSyntax>
+- <doc:SwiftSyntax/KeyPathOptionalComponentSyntax>
 - <doc:SwiftSyntax/ObjcNamePieceSyntax>
 - <doc:SwiftSyntax/ObjcNameSyntax>
 - <doc:SwiftSyntax/YieldExprListSyntax>

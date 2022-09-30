@@ -352,6 +352,30 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathExprSyntax) -> ResultType
+  /// Visiting `KeyPathComponentListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: KeyPathComponentListSyntax) -> ResultType
+  /// Visiting `KeyPathComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: KeyPathComponentSyntax) -> ResultType
+  /// Visiting `KeyPathPropertyComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: KeyPathPropertyComponentSyntax) -> ResultType
+  /// Visiting `KeyPathSubscriptComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType
+  /// Visiting `KeyPathOptionalComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType
+  /// Visiting `OldKeyPathExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: OldKeyPathExprSyntax) -> ResultType
   /// Visiting `KeyPathBaseExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1615,6 +1639,42 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `KeyPathComponentListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: KeyPathComponentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `KeyPathComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: KeyPathComponentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `KeyPathPropertyComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: KeyPathPropertyComponentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `KeyPathSubscriptComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `KeyPathOptionalComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `OldKeyPathExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: OldKeyPathExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `KeyPathBaseExprSyntax` specifically.
@@ -2923,6 +2983,18 @@ extension SyntaxTransformVisitor {
     case .regexLiteralExpr(let derived):
       return visit(derived)
     case .keyPathExpr(let derived):
+      return visit(derived)
+    case .keyPathComponentList(let derived):
+      return visit(derived)
+    case .keyPathComponent(let derived):
+      return visit(derived)
+    case .keyPathPropertyComponent(let derived):
+      return visit(derived)
+    case .keyPathSubscriptComponent(let derived):
+      return visit(derived)
+    case .keyPathOptionalComponent(let derived):
+      return visit(derived)
+    case .oldKeyPathExpr(let derived):
       return visit(derived)
     case .keyPathBaseExpr(let derived):
       return visit(derived)

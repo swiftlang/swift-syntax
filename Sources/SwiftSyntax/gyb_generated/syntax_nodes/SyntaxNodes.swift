@@ -3221,6 +3221,666 @@ extension ExpressionSegmentSyntax: CustomReflectable {
   }
 }
 
+// MARK: - KeyPathComponentSyntax
+
+public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `KeyPathComponentSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .keyPathComponent else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `KeyPathComponentSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .keyPathComponent)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforePeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax?,
+    _ unexpectedBetweenPeriodAndComponent: UnexpectedNodesSyntax? = nil,
+    component: Syntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforePeriod?.raw,
+      period?.raw,
+      unexpectedBetweenPeriodAndComponent?.raw,
+      component.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforePeriod: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforePeriod(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforePeriod` replaced.
+  /// - param newChild: The new `unexpectedBeforePeriod` to replace the node's
+  ///                   current `unexpectedBeforePeriod`, if present.
+  public func withUnexpectedBeforePeriod(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return KeyPathComponentSyntax(newData)
+  }
+
+  public var period: TokenSyntax? {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPeriod(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `period` replaced.
+  /// - param newChild: The new `period` to replace the node's
+  ///                   current `period`, if present.
+  public func withPeriod(
+    _ newChild: TokenSyntax?) -> KeyPathComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 1)
+    return KeyPathComponentSyntax(newData)
+  }
+
+  public var unexpectedBetweenPeriodAndComponent: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenPeriodAndComponent(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenPeriodAndComponent` replaced.
+  /// - param newChild: The new `unexpectedBetweenPeriodAndComponent` to replace the node's
+  ///                   current `unexpectedBetweenPeriodAndComponent`, if present.
+  public func withUnexpectedBetweenPeriodAndComponent(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return KeyPathComponentSyntax(newData)
+  }
+
+  public var component: Syntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withComponent(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `component` replaced.
+  /// - param newChild: The new `component` to replace the node's
+  ///                   current `component`, if present.
+  public func withComponent(
+    _ newChild: Syntax?) -> KeyPathComponentSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return KeyPathComponentSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension KeyPathComponentSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforePeriod": unexpectedBeforePeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "period": period.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPeriodAndComponent": unexpectedBetweenPeriodAndComponent.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "component": Syntax(component).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
+// MARK: - KeyPathPropertyComponentSyntax
+
+public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `KeyPathPropertyComponentSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .keyPathPropertyComponent else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `KeyPathPropertyComponentSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .keyPathPropertyComponent)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+    identifier: TokenSyntax,
+    _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+    declNameArguments: DeclNameArgumentsSyntax?,
+    _ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    genericArgumentClause: GenericArgumentClauseSyntax?
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeIdentifier?.raw,
+      identifier.raw,
+      unexpectedBetweenIdentifierAndDeclNameArguments?.raw,
+      declNameArguments?.raw,
+      unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause?.raw,
+      genericArgumentClause?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathPropertyComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeIdentifier` to replace the node's
+  ///                   current `unexpectedBeforeIdentifier`, if present.
+  public func withUnexpectedBeforeIdentifier(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathPropertyComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return KeyPathPropertyComponentSyntax(newData)
+  }
+
+  public var identifier: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `identifier` replaced.
+  /// - param newChild: The new `identifier` to replace the node's
+  ///                   current `identifier`, if present.
+  public func withIdentifier(
+    _ newChild: TokenSyntax?) -> KeyPathPropertyComponentSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return KeyPathPropertyComponentSyntax(newData)
+  }
+
+  public var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenIdentifierAndDeclNameArguments(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndDeclNameArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenIdentifierAndDeclNameArguments` to replace the node's
+  ///                   current `unexpectedBetweenIdentifierAndDeclNameArguments`, if present.
+  public func withUnexpectedBetweenIdentifierAndDeclNameArguments(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathPropertyComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return KeyPathPropertyComponentSyntax(newData)
+  }
+
+  public var declNameArguments: DeclNameArgumentsSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclNameArgumentsSyntax(childData!)
+    }
+    set(value) {
+      self = withDeclNameArguments(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `declNameArguments` replaced.
+  /// - param newChild: The new `declNameArguments` to replace the node's
+  ///                   current `declNameArguments`, if present.
+  public func withDeclNameArguments(
+    _ newChild: DeclNameArgumentsSyntax?) -> KeyPathPropertyComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 3)
+    return KeyPathPropertyComponentSyntax(newData)
+  }
+
+  public var unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenDeclNameArgumentsAndGenericArgumentClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause` to replace the node's
+  ///                   current `unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause`, if present.
+  public func withUnexpectedBetweenDeclNameArgumentsAndGenericArgumentClause(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathPropertyComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return KeyPathPropertyComponentSyntax(newData)
+  }
+
+  public var genericArgumentClause: GenericArgumentClauseSyntax? {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericArgumentClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericArgumentClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
+  /// - param newChild: The new `genericArgumentClause` to replace the node's
+  ///                   current `genericArgumentClause`, if present.
+  public func withGenericArgumentClause(
+    _ newChild: GenericArgumentClauseSyntax?) -> KeyPathPropertyComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 5)
+    return KeyPathPropertyComponentSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension KeyPathPropertyComponentSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenIdentifierAndDeclNameArguments": unexpectedBetweenIdentifierAndDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "declNameArguments": declNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause": unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - KeyPathSubscriptComponentSyntax
+
+public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `KeyPathSubscriptComponentSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .keyPathSubscriptComponent else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `KeyPathSubscriptComponentSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .keyPathSubscriptComponent)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil,
+    leftBracket: TokenSyntax,
+    _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil,
+    argumentList: TupleExprElementListSyntax,
+    _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil,
+    rightBracket: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLeftBracket?.raw,
+      leftBracket.raw,
+      unexpectedBetweenLeftBracketAndArgumentList?.raw,
+      argumentList.raw,
+      unexpectedBetweenArgumentListAndRightBracket?.raw,
+      rightBracket.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathSubscriptComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeLeftBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftBracket` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftBracket` to replace the node's
+  ///                   current `unexpectedBeforeLeftBracket`, if present.
+  public func withUnexpectedBeforeLeftBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathSubscriptComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return KeyPathSubscriptComponentSyntax(newData)
+  }
+
+  public var leftBracket: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftBracket` replaced.
+  /// - param newChild: The new `leftBracket` to replace the node's
+  ///                   current `leftBracket`, if present.
+  public func withLeftBracket(
+    _ newChild: TokenSyntax?) -> KeyPathSubscriptComponentSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return KeyPathSubscriptComponentSyntax(newData)
+  }
+
+  public var unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenLeftBracketAndArgumentList(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftBracketAndArgumentList` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftBracketAndArgumentList` to replace the node's
+  ///                   current `unexpectedBetweenLeftBracketAndArgumentList`, if present.
+  public func withUnexpectedBetweenLeftBracketAndArgumentList(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathSubscriptComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return KeyPathSubscriptComponentSyntax(newData)
+  }
+
+  public var argumentList: TupleExprElementListSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withArgumentList(value)
+    }
+  }
+
+  /// Adds the provided `Argument` to the node's `argumentList`
+  /// collection.
+  /// - param element: The new `Argument` to add to the node's
+  ///                  `argumentList` collection.
+  /// - returns: A copy of the receiver with the provided `Argument`
+  ///            appended to its `argumentList` collection.
+  public func addArgument(_ element: TupleExprElementSyntax) -> KeyPathSubscriptComponentSyntax {
+    var collection: RawSyntax
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
+    }
+    let newData = data.replacingChild(collection, at: 3)
+    return KeyPathSubscriptComponentSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `argumentList` replaced.
+  /// - param newChild: The new `argumentList` to replace the node's
+  ///                   current `argumentList`, if present.
+  public func withArgumentList(
+    _ newChild: TupleExprElementListSyntax?) -> KeyPathSubscriptComponentSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return KeyPathSubscriptComponentSyntax(newData)
+  }
+
+  public var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenArgumentListAndRightBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentListAndRightBracket` replaced.
+  /// - param newChild: The new `unexpectedBetweenArgumentListAndRightBracket` to replace the node's
+  ///                   current `unexpectedBetweenArgumentListAndRightBracket`, if present.
+  public func withUnexpectedBetweenArgumentListAndRightBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathSubscriptComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return KeyPathSubscriptComponentSyntax(newData)
+  }
+
+  public var rightBracket: TokenSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightBracket` replaced.
+  /// - param newChild: The new `rightBracket` to replace the node's
+  ///                   current `rightBracket`, if present.
+  public func withRightBracket(
+    _ newChild: TokenSyntax?) -> KeyPathSubscriptComponentSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default)
+    let newData = data.replacingChild(raw, at: 5)
+    return KeyPathSubscriptComponentSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "arguments"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension KeyPathSubscriptComponentSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeLeftBracket": unexpectedBeforeLeftBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "leftBracket": Syntax(leftBracket).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLeftBracketAndArgumentList": unexpectedBetweenLeftBracketAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenArgumentListAndRightBracket": unexpectedBetweenArgumentListAndRightBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightBracket": Syntax(rightBracket).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
+// MARK: - KeyPathOptionalComponentSyntax
+
+public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `KeyPathOptionalComponentSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .keyPathOptionalComponent else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `KeyPathOptionalComponentSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .keyPathOptionalComponent)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
+    questionOrExclamationMark: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeQuestionOrExclamationMark?.raw,
+      questionOrExclamationMark.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathOptionalComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeQuestionOrExclamationMark: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeQuestionOrExclamationMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeQuestionOrExclamationMark` replaced.
+  /// - param newChild: The new `unexpectedBeforeQuestionOrExclamationMark` to replace the node's
+  ///                   current `unexpectedBeforeQuestionOrExclamationMark`, if present.
+  public func withUnexpectedBeforeQuestionOrExclamationMark(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathOptionalComponentSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return KeyPathOptionalComponentSyntax(newData)
+  }
+
+  public var questionOrExclamationMark: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionOrExclamationMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `questionOrExclamationMark` replaced.
+  /// - param newChild: The new `questionOrExclamationMark` to replace the node's
+  ///                   current `questionOrExclamationMark`, if present.
+  public func withQuestionOrExclamationMark(
+    _ newChild: TokenSyntax?) -> KeyPathOptionalComponentSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.postfixQuestionMark, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return KeyPathOptionalComponentSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension KeyPathOptionalComponentSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeQuestionOrExclamationMark": unexpectedBeforeQuestionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "questionOrExclamationMark": Syntax(questionOrExclamationMark).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - ObjcNamePieceSyntax
 
 public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {

@@ -100,6 +100,12 @@ public enum SyntaxKind {
   case stringLiteralExpr
   case regexLiteralExpr
   case keyPathExpr
+  case keyPathComponentList
+  case keyPathComponent
+  case keyPathPropertyComponent
+  case keyPathSubscriptComponent
+  case keyPathOptionalComponent
+  case oldKeyPathExpr
   case keyPathBaseExpr
   case objcNamePiece
   case objcName
@@ -303,6 +309,7 @@ public enum SyntaxKind {
     case .closureCaptureItemList: return true
     case .closureParamList: return true
     case .multipleTrailingClosureElementList: return true
+    case .keyPathComponentList: return true
     case .objcName: return true
     case .yieldExprList: return true
     case .functionParameterList: return true

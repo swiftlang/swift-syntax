@@ -681,6 +681,53 @@ public extension ExpressibleAsKeyPathExpr {
     return createKeyPathExpr()
   }
 }
+public protocol ExpressibleAsKeyPathComponentList {
+  func createKeyPathComponentList() -> KeyPathComponentList
+}
+public protocol ExpressibleAsKeyPathComponent: ExpressibleAsKeyPathComponentList, ExpressibleAsSyntaxBuildable {
+  func createKeyPathComponent() -> KeyPathComponent
+}
+public extension ExpressibleAsKeyPathComponent {
+  /// Conformance to `ExpressibleAsKeyPathComponentList`
+  func createKeyPathComponentList() -> KeyPathComponentList {
+    return KeyPathComponentList([self])
+  }
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createKeyPathComponent()
+  }
+}
+public protocol ExpressibleAsKeyPathPropertyComponent: ExpressibleAsSyntaxBuildable {
+  func createKeyPathPropertyComponent() -> KeyPathPropertyComponent
+}
+public extension ExpressibleAsKeyPathPropertyComponent {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createKeyPathPropertyComponent()
+  }
+}
+public protocol ExpressibleAsKeyPathSubscriptComponent: ExpressibleAsSyntaxBuildable {
+  func createKeyPathSubscriptComponent() -> KeyPathSubscriptComponent
+}
+public extension ExpressibleAsKeyPathSubscriptComponent {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createKeyPathSubscriptComponent()
+  }
+}
+public protocol ExpressibleAsKeyPathOptionalComponent: ExpressibleAsSyntaxBuildable {
+  func createKeyPathOptionalComponent() -> KeyPathOptionalComponent
+}
+public extension ExpressibleAsKeyPathOptionalComponent {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createKeyPathOptionalComponent()
+  }
+}
+public protocol ExpressibleAsOldKeyPathExpr: ExpressibleAsExprBuildable {
+  func createOldKeyPathExpr() -> OldKeyPathExpr
+}
+public extension ExpressibleAsOldKeyPathExpr {
+  func createExprBuildable() -> ExprBuildable {
+    return createOldKeyPathExpr()
+  }
+}
 public protocol ExpressibleAsKeyPathBaseExpr: ExpressibleAsExprBuildable {
   func createKeyPathBaseExpr() -> KeyPathBaseExpr
 }

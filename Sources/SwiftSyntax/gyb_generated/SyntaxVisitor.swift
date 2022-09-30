@@ -871,6 +871,66 @@ open class SyntaxVisitor {
   /// The function called after visiting `KeyPathExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathExprSyntax) {}
+  /// Visiting `KeyPathComponentListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: KeyPathComponentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `KeyPathComponentListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: KeyPathComponentListSyntax) {}
+  /// Visiting `KeyPathComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: KeyPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `KeyPathComponentSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: KeyPathComponentSyntax) {}
+  /// Visiting `KeyPathPropertyComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: KeyPathPropertyComponentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `KeyPathPropertyComponentSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: KeyPathPropertyComponentSyntax) {}
+  /// Visiting `KeyPathSubscriptComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: KeyPathSubscriptComponentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `KeyPathSubscriptComponentSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: KeyPathSubscriptComponentSyntax) {}
+  /// Visiting `KeyPathOptionalComponentSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: KeyPathOptionalComponentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `KeyPathOptionalComponentSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: KeyPathOptionalComponentSyntax) {}
+  /// Visiting `OldKeyPathExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: OldKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `OldKeyPathExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: OldKeyPathExprSyntax) {}
   /// Visiting `KeyPathBaseExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3753,6 +3813,72 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplKeyPathComponentListSyntax(_ data: SyntaxData) {
+      let node = KeyPathComponentListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplKeyPathComponentSyntax(_ data: SyntaxData) {
+      let node = KeyPathComponentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplKeyPathPropertyComponentSyntax(_ data: SyntaxData) {
+      let node = KeyPathPropertyComponentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplKeyPathSubscriptComponentSyntax(_ data: SyntaxData) {
+      let node = KeyPathSubscriptComponentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplKeyPathOptionalComponentSyntax(_ data: SyntaxData) {
+      let node = KeyPathOptionalComponentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOldKeyPathExprSyntax(_ data: SyntaxData) {
+      let node = OldKeyPathExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplKeyPathBaseExprSyntax(_ data: SyntaxData) {
       let node = KeyPathBaseExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6017,6 +6143,18 @@ open class SyntaxVisitor {
       visitImplRegexLiteralExprSyntax(data)
     case .keyPathExpr:
       visitImplKeyPathExprSyntax(data)
+    case .keyPathComponentList:
+      visitImplKeyPathComponentListSyntax(data)
+    case .keyPathComponent:
+      visitImplKeyPathComponentSyntax(data)
+    case .keyPathPropertyComponent:
+      visitImplKeyPathPropertyComponentSyntax(data)
+    case .keyPathSubscriptComponent:
+      visitImplKeyPathSubscriptComponentSyntax(data)
+    case .keyPathOptionalComponent:
+      visitImplKeyPathOptionalComponentSyntax(data)
+    case .oldKeyPathExpr:
+      visitImplOldKeyPathExprSyntax(data)
     case .keyPathBaseExpr:
       visitImplKeyPathBaseExprSyntax(data)
     case .objcNamePiece:

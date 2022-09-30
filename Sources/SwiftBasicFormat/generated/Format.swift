@@ -558,6 +558,49 @@ extension Format {
     }
     return result
   }
+  public func format(syntax: KeyPathComponentListSyntax) -> KeyPathComponentListSyntax {
+    syntax
+  }
+  public func format(syntax: KeyPathComponentSyntax) -> KeyPathComponentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia)
+    }
+    return result
+  }
+  public func format(syntax: KeyPathPropertyComponentSyntax) -> KeyPathPropertyComponentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia)
+    }
+    return result
+  }
+  public func format(syntax: KeyPathSubscriptComponentSyntax) -> KeyPathSubscriptComponentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia)
+    }
+    return result
+  }
+  public func format(syntax: KeyPathOptionalComponentSyntax) -> KeyPathOptionalComponentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia)
+    }
+    return result
+  }
+  public func format(syntax: OldKeyPathExprSyntax) -> OldKeyPathExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia)
+    }
+    return result
+  }
   public func format(syntax: KeyPathBaseExprSyntax) -> KeyPathBaseExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []

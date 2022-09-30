@@ -694,6 +694,69 @@ extension Array: ExpressibleAsMultipleTrailingClosureElementList where Element =
     return MultipleTrailingClosureElementList(self)
   }
 }
+/// `KeyPathComponentList` represents a collection of `KeyPathComponent`
+public struct KeyPathComponentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsKeyPathComponentList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
+  let elements: [KeyPathComponent]
+  /// Creates a `KeyPathComponentList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsKeyPathComponent`
+  public init(_ elements: [ExpressibleAsKeyPathComponent]) {
+    self.elements = elements.map { $0.createKeyPathComponent() }
+  }
+  /// Creates a new `KeyPathComponentList` by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsKeyPathComponentList]) {
+    elements = lists.flatMap { $0.createKeyPathComponentList().elements }
+  }
+  public init(arrayLiteral elements: ExpressibleAsKeyPathComponent...) {
+    self.init(elements)
+  }
+  public func buildKeyPathComponentList(format: Format) -> KeyPathComponentListSyntax {
+    
+    var result = KeyPathComponentListSyntax(elements.map { $0.buildKeyPathComponent(format: format) })
+    if !leadingTrivia.isEmpty {
+      let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withLeadingTrivia(trivia)
+    }
+    if !trailingTrivia.isEmpty {
+      let trivia = (trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+      result = result.withTrailingTrivia(trivia)
+    }
+    return format.format(syntax: result)
+  }
+  public func buildSyntax(format: Format) -> Syntax {
+    return Syntax(buildKeyPathComponentList(format: format))
+  }
+  /// Conformance to `ExpressibleAsKeyPathComponentList`.
+  public func createKeyPathComponentList() -> KeyPathComponentList {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `KeyPathComponentList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
+extension Array: ExpressibleAsKeyPathComponentList where Element == ExpressibleAsKeyPathComponent {
+  public func createKeyPathComponentList() -> KeyPathComponentList {
+    return KeyPathComponentList(self)
+  }
+}
 /// `ObjcName` represents a collection of `ObjcNamePiece`
 public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsObjcName {
   /// The leading trivia attached to this syntax node once built.
@@ -767,24 +830,19 @@ public struct YieldExprList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   /// Creates a `YieldExprList` with the provided list of elements.
   /// - Parameters:
   ///   - elements: A list of `ExpressibleAsYieldExprListElement`
-  public init (_ elements: [ExpressibleAsYieldExprListElement]) {
-    self.elements = elements.map {
-      $0.createYieldExprListElement()
-    }
+  public init(_ elements: [ExpressibleAsYieldExprListElement]) {
+    self.elements = elements.map { $0.createYieldExprListElement() }
   }
   /// Creates a new `YieldExprList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsYieldExprList]) {
-    elements = lists.flatMap {
-      $0.createYieldExprList().elements
-    }
+  public init(combining lists: [ExpressibleAsYieldExprList]) {
+    elements = lists.flatMap { $0.createYieldExprList().elements }
   }
-  public init (arrayLiteral elements: ExpressibleAsYieldExprListElement...) {
+  public init(arrayLiteral elements: ExpressibleAsYieldExprListElement...) {
     self.init(elements)
   }
   public func buildYieldExprList(format: Format) -> YieldExprListSyntax {
-    var result = YieldExprListSyntax(elements.map {
-      $0.buildYieldExprListElement(format: format)
-    })
+    
+    var result = YieldExprListSyntax(elements.map { $0.buildYieldExprListElement(format: format) })
     if !leadingTrivia.isEmpty {
       let trivia = (leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
       result = result.withLeadingTrivia(trivia)

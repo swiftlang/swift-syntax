@@ -6430,10 +6430,10 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
     var trailingTrivia: Trivia
     var unexpectedBeforeBackslash: UnexpectedNodes?
     var backslash: Token
-    var unexpectedBetweenBackslashAndRootExpr: UnexpectedNodes?
-    var rootExpr: ExprBuildable?
-    var unexpectedBetweenRootExprAndExpression: UnexpectedNodes?
-    var expression: ExprBuildable
+    var unexpectedBetweenBackslashAndRoot: UnexpectedNodes?
+    var root: TypeBuildable?
+    var unexpectedBetweenRootAndComponents: UnexpectedNodes?
+    var components: KeyPathComponentList
   }
   enum Data {
     case buildable(BuildableData)
@@ -6444,13 +6444,13 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// - Parameters:
   ///   - unexpectedBeforeBackslash: 
   ///   - backslash: 
-  ///   - unexpectedBetweenBackslashAndRootExpr: 
-  ///   - rootExpr: 
-  ///   - unexpectedBetweenRootExprAndExpression: 
-  ///   - expression: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndRootExpr: ExpressibleAsUnexpectedNodes? = nil, rootExpr: ExpressibleAsExprBuildable? = nil, unexpectedBetweenRootExprAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+  ///   - unexpectedBetweenBackslashAndRoot: 
+  ///   - root: 
+  ///   - unexpectedBetweenRootAndComponents: 
+  ///   - components: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndRoot: ExpressibleAsUnexpectedNodes? = nil, root: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenRootAndComponents: ExpressibleAsUnexpectedNodes? = nil, components: ExpressibleAsKeyPathComponentList) {
     assert(backslash.text == #"\"#)
-    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash?.createUnexpectedNodes(), backslash: backslash, unexpectedBetweenBackslashAndRootExpr: unexpectedBetweenBackslashAndRootExpr?.createUnexpectedNodes(), rootExpr: rootExpr?.createExprBuildable(), unexpectedBetweenRootExprAndExpression: unexpectedBetweenRootExprAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash?.createUnexpectedNodes(), backslash: backslash, unexpectedBetweenBackslashAndRoot: unexpectedBetweenBackslashAndRoot?.createUnexpectedNodes(), root: root?.createTypeBuildable(), unexpectedBetweenRootAndComponents: unexpectedBetweenRootAndComponents?.createUnexpectedNodes(), components: components.createKeyPathComponentList()))
   }
   public init(_ constructedNode: KeyPathExprSyntax) {
     self.data = .constructed(constructedNode)
@@ -6462,7 +6462,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   func buildKeyPathExpr(format: Format) -> KeyPathExprSyntax {
     switch data {
     case .buildable(let buildableData): 
-      var result = KeyPathExprSyntax(buildableData.unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: buildableData.backslash.buildToken(format: format), buildableData.unexpectedBetweenBackslashAndRootExpr?.buildUnexpectedNodes(format: format), rootExpr: buildableData.rootExpr?.buildExpr(format: format), buildableData.unexpectedBetweenRootExprAndExpression?.buildUnexpectedNodes(format: format), expression: buildableData.expression.buildExpr(format: format))
+      var result = KeyPathExprSyntax(buildableData.unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: buildableData.backslash.buildToken(format: format), buildableData.unexpectedBetweenBackslashAndRoot?.buildUnexpectedNodes(format: format), root: buildableData.root?.buildType(format: format), buildableData.unexpectedBetweenRootAndComponents?.buildUnexpectedNodes(format: format), components: buildableData.components.buildKeyPathComponentList(format: format))
       if !buildableData.leadingTrivia.isEmpty {
         let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
         result = result.withLeadingTrivia(trivia)
@@ -6487,6 +6487,504 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   }
   /// Conformance to `ExpressibleAsExprBuildable`.
   /// `KeyPathExpr` may conform to `ExpressibleAsExprBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createExprBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createExprBuildable() -> ExprBuildable {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ExprBuildable` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.leadingTrivia = leadingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.trailingTrivia = trailingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+}
+public struct KeyPathComponent: SyntaxBuildable, ExpressibleAsKeyPathComponent {
+  struct BuildableData {
+    /// The leading trivia attached to this syntax node once built.
+    var leadingTrivia: Trivia
+    /// The trailing trivia attached to this syntax node once built.
+    var trailingTrivia: Trivia
+    var unexpectedBeforePeriod: UnexpectedNodes?
+    var period: Token?
+    var unexpectedBetweenPeriodAndComponent: UnexpectedNodes?
+    var component: SyntaxBuildable
+  }
+  enum Data {
+    case buildable(BuildableData)
+    case constructed(KeyPathComponentSyntax)
+  }
+  private var data: Data
+  /// Creates a `KeyPathComponent` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforePeriod: 
+  ///   - period: 
+  ///   - unexpectedBetweenPeriodAndComponent: 
+  ///   - component: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token? = nil, unexpectedBetweenPeriodAndComponent: ExpressibleAsUnexpectedNodes? = nil, component: ExpressibleAsSyntaxBuildable) {
+    assert(period == nil || period!.text == #"."# || period!.text == #"."#)
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePeriod: unexpectedBeforePeriod?.createUnexpectedNodes(), period: period, unexpectedBetweenPeriodAndComponent: unexpectedBetweenPeriodAndComponent?.createUnexpectedNodes(), component: component.createSyntaxBuildable()))
+  }
+  public init(_ constructedNode: KeyPathComponentSyntax) {
+    self.data = .constructed(constructedNode)
+  }
+  /// Builds a `KeyPathComponentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `KeyPathComponentSyntax`.
+  func buildKeyPathComponent(format: Format) -> KeyPathComponentSyntax {
+    switch data {
+    case .buildable(let buildableData): 
+      var result = KeyPathComponentSyntax(buildableData.unexpectedBeforePeriod?.buildUnexpectedNodes(format: format), period: buildableData.period?.buildToken(format: format), buildableData.unexpectedBetweenPeriodAndComponent?.buildUnexpectedNodes(format: format), component: buildableData.component.buildSyntax(format: format))
+      if !buildableData.leadingTrivia.isEmpty {
+        let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withLeadingTrivia(trivia)
+      }
+      if !buildableData.trailingTrivia.isEmpty {
+        let trivia = (buildableData.trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withTrailingTrivia(trivia)
+      }
+      return format.format(syntax: result)
+    case .constructed(let node): 
+      return Indenter.indent(node, indentation: format.indentTrivia)
+    }
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildKeyPathComponent(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsKeyPathComponent`.
+  public func createKeyPathComponent() -> KeyPathComponent {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `KeyPathComponent` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.leadingTrivia = leadingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.trailingTrivia = trailingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+}
+public struct KeyPathPropertyComponent: SyntaxBuildable, ExpressibleAsKeyPathPropertyComponent {
+  struct BuildableData {
+    /// The leading trivia attached to this syntax node once built.
+    var leadingTrivia: Trivia
+    /// The trailing trivia attached to this syntax node once built.
+    var trailingTrivia: Trivia
+    var unexpectedBeforeIdentifier: UnexpectedNodes?
+    var identifier: Token
+    var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodes?
+    var declNameArguments: DeclNameArguments?
+    var unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodes?
+    var genericArgumentClause: GenericArgumentClause?
+  }
+  enum Data {
+    case buildable(BuildableData)
+    case constructed(KeyPathPropertyComponentSyntax)
+  }
+  private var data: Data
+  /// Creates a `KeyPathPropertyComponent` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeIdentifier: 
+  ///   - identifier: 
+  ///   - unexpectedBetweenIdentifierAndDeclNameArguments: 
+  ///   - declNameArguments: 
+  ///   - unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: 
+  ///   - genericArgumentClause: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil, unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier?.createUnexpectedNodes(), identifier: identifier, unexpectedBetweenIdentifierAndDeclNameArguments: unexpectedBetweenIdentifierAndDeclNameArguments?.createUnexpectedNodes(), declNameArguments: declNameArguments?.createDeclNameArguments(), unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause?.createUnexpectedNodes(), genericArgumentClause: genericArgumentClause?.createGenericArgumentClause()))
+  }
+  public init(_ constructedNode: KeyPathPropertyComponentSyntax) {
+    self.data = .constructed(constructedNode)
+  }
+  /// Builds a `KeyPathPropertyComponentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `KeyPathPropertyComponentSyntax`.
+  func buildKeyPathPropertyComponent(format: Format) -> KeyPathPropertyComponentSyntax {
+    switch data {
+    case .buildable(let buildableData): 
+      var result = KeyPathPropertyComponentSyntax(buildableData.unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: buildableData.identifier.buildToken(format: format), buildableData.unexpectedBetweenIdentifierAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: buildableData.declNameArguments?.buildDeclNameArguments(format: format), buildableData.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: buildableData.genericArgumentClause?.buildGenericArgumentClause(format: format))
+      if !buildableData.leadingTrivia.isEmpty {
+        let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withLeadingTrivia(trivia)
+      }
+      if !buildableData.trailingTrivia.isEmpty {
+        let trivia = (buildableData.trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withTrailingTrivia(trivia)
+      }
+      return format.format(syntax: result)
+    case .constructed(let node): 
+      return Indenter.indent(node, indentation: format.indentTrivia)
+    }
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildKeyPathPropertyComponent(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsKeyPathPropertyComponent`.
+  public func createKeyPathPropertyComponent() -> KeyPathPropertyComponent {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `KeyPathPropertyComponent` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.leadingTrivia = leadingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.trailingTrivia = trailingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+}
+public struct KeyPathSubscriptComponent: SyntaxBuildable, ExpressibleAsKeyPathSubscriptComponent {
+  struct BuildableData {
+    /// The leading trivia attached to this syntax node once built.
+    var leadingTrivia: Trivia
+    /// The trailing trivia attached to this syntax node once built.
+    var trailingTrivia: Trivia
+    var unexpectedBeforeLeftBracket: UnexpectedNodes?
+    var leftBracket: Token
+    var unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodes?
+    var argumentList: TupleExprElementList
+    var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodes?
+    var rightBracket: Token
+  }
+  enum Data {
+    case buildable(BuildableData)
+    case constructed(KeyPathSubscriptComponentSyntax)
+  }
+  private var data: Data
+  /// Creates a `KeyPathSubscriptComponent` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeLeftBracket: 
+  ///   - leftBracket: 
+  ///   - unexpectedBetweenLeftBracketAndArgumentList: 
+  ///   - argumentList: 
+  ///   - unexpectedBetweenArgumentListAndRightBracket: 
+  ///   - rightBracket: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, argumentList: ExpressibleAsTupleExprElementList, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`) {
+    assert(leftBracket.text == #"["#)
+    assert(rightBracket.text == #"]"#)
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftBracket: unexpectedBeforeLeftBracket?.createUnexpectedNodes(), leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList: unexpectedBetweenLeftBracketAndArgumentList?.createUnexpectedNodes(), argumentList: argumentList.createTupleExprElementList(), unexpectedBetweenArgumentListAndRightBracket: unexpectedBetweenArgumentListAndRightBracket?.createUnexpectedNodes(), rightBracket: rightBracket))
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+    TupleExprElementList([])
+  }) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBracket: unexpectedBeforeLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList: unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket: unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket)
+  }
+  public init(_ constructedNode: KeyPathSubscriptComponentSyntax) {
+    self.data = .constructed(constructedNode)
+  }
+  /// Builds a `KeyPathSubscriptComponentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `KeyPathSubscriptComponentSyntax`.
+  func buildKeyPathSubscriptComponent(format: Format) -> KeyPathSubscriptComponentSyntax {
+    switch data {
+    case .buildable(let buildableData): 
+      var result = KeyPathSubscriptComponentSyntax(buildableData.unexpectedBeforeLeftBracket?.buildUnexpectedNodes(format: format), leftBracket: buildableData.leftBracket.buildToken(format: format), buildableData.unexpectedBetweenLeftBracketAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: buildableData.argumentList.buildTupleExprElementList(format: format), buildableData.unexpectedBetweenArgumentListAndRightBracket?.buildUnexpectedNodes(format: format), rightBracket: buildableData.rightBracket.buildToken(format: format))
+      if !buildableData.leadingTrivia.isEmpty {
+        let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withLeadingTrivia(trivia)
+      }
+      if !buildableData.trailingTrivia.isEmpty {
+        let trivia = (buildableData.trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withTrailingTrivia(trivia)
+      }
+      return format.format(syntax: result)
+    case .constructed(let node): 
+      return Indenter.indent(node, indentation: format.indentTrivia)
+    }
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildKeyPathSubscriptComponent(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsKeyPathSubscriptComponent`.
+  public func createKeyPathSubscriptComponent() -> KeyPathSubscriptComponent {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `KeyPathSubscriptComponent` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.leadingTrivia = leadingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.trailingTrivia = trailingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+}
+public struct KeyPathOptionalComponent: SyntaxBuildable, ExpressibleAsKeyPathOptionalComponent {
+  struct BuildableData {
+    /// The leading trivia attached to this syntax node once built.
+    var leadingTrivia: Trivia
+    /// The trailing trivia attached to this syntax node once built.
+    var trailingTrivia: Trivia
+    var unexpectedBeforeQuestionOrExclamationMark: UnexpectedNodes?
+    var questionOrExclamationMark: Token
+  }
+  enum Data {
+    case buildable(BuildableData)
+    case constructed(KeyPathOptionalComponentSyntax)
+  }
+  private var data: Data
+  /// Creates a `KeyPathOptionalComponent` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeQuestionOrExclamationMark: 
+  ///   - questionOrExclamationMark: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: Token) {
+    assert(questionOrExclamationMark.text == #"?"# || questionOrExclamationMark.text == #"!"#)
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeQuestionOrExclamationMark: unexpectedBeforeQuestionOrExclamationMark?.createUnexpectedNodes(), questionOrExclamationMark: questionOrExclamationMark))
+  }
+  public init(_ constructedNode: KeyPathOptionalComponentSyntax) {
+    self.data = .constructed(constructedNode)
+  }
+  /// Builds a `KeyPathOptionalComponentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `KeyPathOptionalComponentSyntax`.
+  func buildKeyPathOptionalComponent(format: Format) -> KeyPathOptionalComponentSyntax {
+    switch data {
+    case .buildable(let buildableData): 
+      var result = KeyPathOptionalComponentSyntax(buildableData.unexpectedBeforeQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: buildableData.questionOrExclamationMark.buildToken(format: format))
+      if !buildableData.leadingTrivia.isEmpty {
+        let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withLeadingTrivia(trivia)
+      }
+      if !buildableData.trailingTrivia.isEmpty {
+        let trivia = (buildableData.trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withTrailingTrivia(trivia)
+      }
+      return format.format(syntax: result)
+    case .constructed(let node): 
+      return Indenter.indent(node, indentation: format.indentTrivia)
+    }
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildKeyPathOptionalComponent(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsKeyPathOptionalComponent`.
+  public func createKeyPathOptionalComponent() -> KeyPathOptionalComponent {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `KeyPathOptionalComponent` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.leadingTrivia = leadingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    switch data {
+    case .buildable(var buildableData):
+      buildableData.trailingTrivia = trailingTrivia
+      var result = self
+      result.data = .buildable(buildableData)
+      return result
+    case .constructed(let node):
+      let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
+      var result = self
+      result.data = .constructed(withNewTrivia)
+      return result
+    }
+  }
+}
+public struct OldKeyPathExpr: ExprBuildable, ExpressibleAsOldKeyPathExpr {
+  struct BuildableData {
+    /// The leading trivia attached to this syntax node once built.
+    var leadingTrivia: Trivia
+    /// The trailing trivia attached to this syntax node once built.
+    var trailingTrivia: Trivia
+    var unexpectedBeforeBackslash: UnexpectedNodes?
+    var backslash: Token
+    var unexpectedBetweenBackslashAndRootExpr: UnexpectedNodes?
+    var rootExpr: ExprBuildable?
+    var unexpectedBetweenRootExprAndExpression: UnexpectedNodes?
+    var expression: ExprBuildable
+  }
+  enum Data {
+    case buildable(BuildableData)
+    case constructed(OldKeyPathExprSyntax)
+  }
+  private var data: Data
+  /// Creates a `OldKeyPathExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeBackslash: 
+  ///   - backslash: 
+  ///   - unexpectedBetweenBackslashAndRootExpr: 
+  ///   - rootExpr: 
+  ///   - unexpectedBetweenRootExprAndExpression: 
+  ///   - expression: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndRootExpr: ExpressibleAsUnexpectedNodes? = nil, rootExpr: ExpressibleAsExprBuildable? = nil, unexpectedBetweenRootExprAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+    assert(backslash.text == #"\"#)
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash?.createUnexpectedNodes(), backslash: backslash, unexpectedBetweenBackslashAndRootExpr: unexpectedBetweenBackslashAndRootExpr?.createUnexpectedNodes(), rootExpr: rootExpr?.createExprBuildable(), unexpectedBetweenRootExprAndExpression: unexpectedBetweenRootExprAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
+  }
+  public init(_ constructedNode: OldKeyPathExprSyntax) {
+    self.data = .constructed(constructedNode)
+  }
+  /// Builds a `OldKeyPathExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OldKeyPathExprSyntax`.
+  func buildOldKeyPathExpr(format: Format) -> OldKeyPathExprSyntax {
+    switch data {
+    case .buildable(let buildableData): 
+      var result = OldKeyPathExprSyntax(buildableData.unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: buildableData.backslash.buildToken(format: format), buildableData.unexpectedBetweenBackslashAndRootExpr?.buildUnexpectedNodes(format: format), rootExpr: buildableData.rootExpr?.buildExpr(format: format), buildableData.unexpectedBetweenRootExprAndExpression?.buildUnexpectedNodes(format: format), expression: buildableData.expression.buildExpr(format: format))
+      if !buildableData.leadingTrivia.isEmpty {
+        let trivia = (buildableData.leadingTrivia + (result.leadingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withLeadingTrivia(trivia)
+      }
+      if !buildableData.trailingTrivia.isEmpty {
+        let trivia = (buildableData.trailingTrivia + (result.trailingTrivia ?? [])).indented(indentation: format.indentTrivia)
+        result = result.withTrailingTrivia(trivia)
+      }
+      return format.format(syntax: result)
+    case .constructed(let node): 
+      return Indenter.indent(node, indentation: format.indentTrivia)
+    }
+  }
+  /// Conformance to `ExprBuildable`.
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildOldKeyPathExpr(format: format)
+    return ExprSyntax(result)
+  }
+  /// Conformance to `ExpressibleAsOldKeyPathExpr`.
+  public func createOldKeyPathExpr() -> OldKeyPathExpr {
+    return self
+  }
+  /// Conformance to `ExpressibleAsExprBuildable`.
+  /// `OldKeyPathExpr` may conform to `ExpressibleAsExprBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations of `createExprBuildable`, some of which perform conversions
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createExprBuildable() -> ExprBuildable {
@@ -7317,7 +7815,7 @@ public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListE
     assert(comma == nil || comma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndComma: unexpectedBetweenExpressionAndComma?.createUnexpectedNodes(), comma: comma))
   }
-  public init (_ constructedNode: YieldExprListElementSyntax) {
+  public init(_ constructedNode: YieldExprListElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `YieldExprListElementSyntax`.
@@ -7359,13 +7857,13 @@ public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListE
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData): 
+    case .buildable(var buildableData):
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node): 
-      let withNewTrivia = node.withTrailingTrivia(leadingTrivia)
+    case .constructed(let node):
+      let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
       return result
@@ -7373,12 +7871,12 @@ public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListE
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData): 
+    case .buildable(var buildableData):
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node): 
+    case .constructed(let node):
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)

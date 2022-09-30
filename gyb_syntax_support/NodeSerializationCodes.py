@@ -283,6 +283,12 @@ SYNTAX_NODE_SERIALIZATION_CODES = {
     'NamedOpaqueReturnType': 279,
     'YieldExprList': 280,
     'YieldExprListElement': 281,
+    'KeyPathPropertyComponent': 282,
+    'KeyPathSubscriptComponent': 283,
+    'KeyPathOptionalComponent': 284,
+    'KeyPathComponentList': 285,
+    'KeyPathComponent': 286,
+    'OldKeyPathExpr': 287,
 }
 
 

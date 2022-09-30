@@ -642,6 +642,48 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: KeyPathExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: KeyPathComponentListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: KeyPathComponentListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: KeyPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: KeyPathComponentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: KeyPathPropertyComponentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: KeyPathPropertyComponentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: KeyPathSubscriptComponentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: KeyPathSubscriptComponentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: KeyPathOptionalComponentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: KeyPathOptionalComponentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: OldKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: OldKeyPathExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

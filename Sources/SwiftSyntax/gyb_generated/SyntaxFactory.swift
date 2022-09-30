@@ -1938,14 +1938,14 @@ public enum SyntaxFactory {
     return RegexLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on KeyPathExprSyntax")
-  public static func makeKeyPathExpr(_ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, backslash: TokenSyntax, _ unexpectedBetweenBackslashAndRootExpr: UnexpectedNodesSyntax? = nil, rootExpr: ExprSyntax?, _ unexpectedBetweenRootExprAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> KeyPathExprSyntax {
+  public static func makeKeyPathExpr(_ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, backslash: TokenSyntax, _ unexpectedBetweenBackslashAndRoot: UnexpectedNodesSyntax? = nil, root: TypeSyntax?, _ unexpectedBetweenRootAndComponents: UnexpectedNodesSyntax? = nil, components: KeyPathComponentListSyntax) -> KeyPathExprSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeBackslash?.raw,
       backslash.raw,
-      unexpectedBetweenBackslashAndRootExpr?.raw,
-      rootExpr?.raw,
-      unexpectedBetweenRootExprAndExpression?.raw,
-      expression.raw,
+      unexpectedBetweenBackslashAndRoot?.raw,
+      root?.raw,
+      unexpectedBetweenRootAndComponents?.raw,
+      components.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathExpr,
       from: layout, arena: .default)
@@ -1962,9 +1962,158 @@ public enum SyntaxFactory {
       nil,
       nil,
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default),
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.keyPathComponentList, arena: .default),
     ], arena: .default))
     return KeyPathExprSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on KeyPathComponentListSyntax")
+  public static func makeKeyPathComponentList(
+    _ elements: [KeyPathComponentSyntax]) -> KeyPathComponentListSyntax {
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
+      from: elements.map { $0.raw }, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return KeyPathComponentListSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on KeyPathComponentListSyntax")
+  public static func makeBlankKeyPathComponentList(presence: SourcePresence = .present) -> KeyPathComponentListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .keyPathComponentList,
+      from: [
+    ], arena: .default))
+    return KeyPathComponentListSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on KeyPathComponentSyntax")
+  public static func makeKeyPathComponent(_ unexpectedBeforePeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax?, _ unexpectedBetweenPeriodAndComponent: UnexpectedNodesSyntax? = nil, component: Syntax) -> KeyPathComponentSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforePeriod?.raw,
+      period?.raw,
+      unexpectedBetweenPeriodAndComponent?.raw,
+      component.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return KeyPathComponentSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on KeyPathComponentSyntax")
+  public static func makeBlankKeyPathComponent(presence: SourcePresence = .present) -> KeyPathComponentSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .keyPathComponent,
+      from: [
+      nil,
+      nil,
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+    ], arena: .default))
+    return KeyPathComponentSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on KeyPathPropertyComponentSyntax")
+  public static func makeKeyPathPropertyComponent(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?, _ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> KeyPathPropertyComponentSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeIdentifier?.raw,
+      identifier.raw,
+      unexpectedBetweenIdentifierAndDeclNameArguments?.raw,
+      declNameArguments?.raw,
+      unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause?.raw,
+      genericArgumentClause?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathPropertyComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return KeyPathPropertyComponentSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on KeyPathPropertyComponentSyntax")
+  public static func makeBlankKeyPathPropertyComponent(presence: SourcePresence = .present) -> KeyPathPropertyComponentSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .keyPathPropertyComponent,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      nil,
+      nil,
+      nil,
+    ], arena: .default))
+    return KeyPathPropertyComponentSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on KeyPathSubscriptComponentSyntax")
+  public static func makeKeyPathSubscriptComponent(_ unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil, leftBracket: TokenSyntax, _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, rightBracket: TokenSyntax) -> KeyPathSubscriptComponentSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLeftBracket?.raw,
+      leftBracket.raw,
+      unexpectedBetweenLeftBracketAndArgumentList?.raw,
+      argumentList.raw,
+      unexpectedBetweenArgumentListAndRightBracket?.raw,
+      rightBracket.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathSubscriptComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return KeyPathSubscriptComponentSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on KeyPathSubscriptComponentSyntax")
+  public static func makeBlankKeyPathSubscriptComponent(presence: SourcePresence = .present) -> KeyPathSubscriptComponentSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .keyPathSubscriptComponent,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default),
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default),
+    ], arena: .default))
+    return KeyPathSubscriptComponentSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on KeyPathOptionalComponentSyntax")
+  public static func makeKeyPathOptionalComponent(_ unexpectedBeforeQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax) -> KeyPathOptionalComponentSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeQuestionOrExclamationMark?.raw,
+      questionOrExclamationMark.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathOptionalComponent,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return KeyPathOptionalComponentSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on KeyPathOptionalComponentSyntax")
+  public static func makeBlankKeyPathOptionalComponent(presence: SourcePresence = .present) -> KeyPathOptionalComponentSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .keyPathOptionalComponent,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.postfixQuestionMark, arena: .default),
+    ], arena: .default))
+    return KeyPathOptionalComponentSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on OldKeyPathExprSyntax")
+  public static func makeOldKeyPathExpr(_ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, backslash: TokenSyntax, _ unexpectedBetweenBackslashAndRootExpr: UnexpectedNodesSyntax? = nil, rootExpr: ExprSyntax?, _ unexpectedBetweenRootExprAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> OldKeyPathExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeBackslash?.raw,
+      backslash.raw,
+      unexpectedBetweenBackslashAndRootExpr?.raw,
+      rootExpr?.raw,
+      unexpectedBetweenRootExprAndExpression?.raw,
+      expression.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.oldKeyPathExpr,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return OldKeyPathExprSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on OldKeyPathExprSyntax")
+  public static func makeBlankOldKeyPathExpr(presence: SourcePresence = .present) -> OldKeyPathExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .oldKeyPathExpr,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.backslash, arena: .default),
+      nil,
+      nil,
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default),
+    ], arena: .default))
+    return OldKeyPathExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on KeyPathBaseExprSyntax")
   public static func makeKeyPathBaseExpr(_ unexpectedBeforePeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax) -> KeyPathBaseExprSyntax {

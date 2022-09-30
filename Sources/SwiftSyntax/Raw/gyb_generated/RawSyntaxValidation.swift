@@ -597,6 +597,50 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawTokenSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTypeSyntax?.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawKeyPathComponentListSyntax.self)
+    break
+  case .keyPathComponentList:
+    for element in layout {
+      _verify(element, as: RawKeyPathComponentSyntax.self)
+    }
+    break
+  case .keyPathComponent:
+    assert(layout.count == 4)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax?.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawSyntax.self)
+    break
+  case .keyPathPropertyComponent:
+    assert(layout.count == 6)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawDeclNameArgumentsSyntax?.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawGenericArgumentClauseSyntax?.self)
+    break
+  case .keyPathSubscriptComponent:
+    assert(layout.count == 6)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTupleExprElementListSyntax.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawTokenSyntax.self)
+    break
+  case .keyPathOptionalComponent:
+    assert(layout.count == 2)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    break
+  case .oldKeyPathExpr:
+    assert(layout.count == 6)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawExprSyntax?.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[5], as: RawExprSyntax.self)

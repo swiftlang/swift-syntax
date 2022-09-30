@@ -7477,18 +7477,18 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
     _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil,
     backslash: TokenSyntax,
-    _ unexpectedBetweenBackslashAndRootExpr: UnexpectedNodesSyntax? = nil,
-    rootExpr: ExprSyntax?,
-    _ unexpectedBetweenRootExprAndExpression: UnexpectedNodesSyntax? = nil,
-    expression: ExprSyntax
+    _ unexpectedBetweenBackslashAndRoot: UnexpectedNodesSyntax? = nil,
+    root: TypeSyntax?,
+    _ unexpectedBetweenRootAndComponents: UnexpectedNodesSyntax? = nil,
+    components: KeyPathComponentListSyntax
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeBackslash?.raw,
       backslash.raw,
-      unexpectedBetweenBackslashAndRootExpr?.raw,
-      rootExpr?.raw,
-      unexpectedBetweenRootExprAndExpression?.raw,
-      expression.raw,
+      unexpectedBetweenBackslashAndRoot?.raw,
+      root?.raw,
+      unexpectedBetweenRootAndComponents?.raw,
+      components.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathExpr,
       from: layout, arena: .default)
@@ -7537,6 +7537,223 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return KeyPathExprSyntax(newData)
   }
 
+  public var unexpectedBetweenBackslashAndRoot: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenBackslashAndRoot(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenBackslashAndRoot` replaced.
+  /// - param newChild: The new `unexpectedBetweenBackslashAndRoot` to replace the node's
+  ///                   current `unexpectedBetweenBackslashAndRoot`, if present.
+  public func withUnexpectedBetweenBackslashAndRoot(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return KeyPathExprSyntax(newData)
+  }
+
+  public var root: TypeSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withRoot(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `root` replaced.
+  /// - param newChild: The new `root` to replace the node's
+  ///                   current `root`, if present.
+  public func withRoot(
+    _ newChild: TypeSyntax?) -> KeyPathExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 3)
+    return KeyPathExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenRootAndComponents: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenRootAndComponents(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenRootAndComponents` replaced.
+  /// - param newChild: The new `unexpectedBetweenRootAndComponents` to replace the node's
+  ///                   current `unexpectedBetweenRootAndComponents`, if present.
+  public func withUnexpectedBetweenRootAndComponents(
+    _ newChild: UnexpectedNodesSyntax?) -> KeyPathExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return KeyPathExprSyntax(newData)
+  }
+
+  public var components: KeyPathComponentListSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return KeyPathComponentListSyntax(childData!)
+    }
+    set(value) {
+      self = withComponents(value)
+    }
+  }
+
+  /// Adds the provided `KeyPathComponent` to the node's `components`
+  /// collection.
+  /// - param element: The new `KeyPathComponent` to add to the node's
+  ///                  `components` collection.
+  /// - returns: A copy of the receiver with the provided `KeyPathComponent`
+  ///            appended to its `components` collection.
+  public func addKeyPathComponent(_ element: KeyPathComponentSyntax) -> KeyPathExprSyntax {
+    var collection: RawSyntax
+    if let col = raw.layoutView!.children[5] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
+        from: [element.raw], arena: .default)
+    }
+    let newData = data.replacingChild(collection, at: 5)
+    return KeyPathExprSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `components` replaced.
+  /// - param newChild: The new `components` to replace the node's
+  ///                   current `components`, if present.
+  public func withComponents(
+    _ newChild: KeyPathComponentListSyntax?) -> KeyPathExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.keyPathComponentList, arena: .default)
+    let newData = data.replacingChild(raw, at: 5)
+    return KeyPathExprSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return "root"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension KeyPathExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeBackslash": unexpectedBeforeBackslash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "backslash": Syntax(backslash).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenBackslashAndRoot": unexpectedBetweenBackslashAndRoot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "root": root.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenRootAndComponents": unexpectedBetweenRootAndComponents.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "components": Syntax(components).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
+// MARK: - OldKeyPathExprSyntax
+
+public struct OldKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `OldKeyPathExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .oldKeyPathExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OldKeyPathExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .oldKeyPathExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil,
+    backslash: TokenSyntax,
+    _ unexpectedBetweenBackslashAndRootExpr: UnexpectedNodesSyntax? = nil,
+    rootExpr: ExprSyntax?,
+    _ unexpectedBetweenRootExprAndExpression: UnexpectedNodesSyntax? = nil,
+    expression: ExprSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeBackslash?.raw,
+      backslash.raw,
+      unexpectedBetweenBackslashAndRootExpr?.raw,
+      rootExpr?.raw,
+      unexpectedBetweenRootExprAndExpression?.raw,
+      expression.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.oldKeyPathExpr,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeBackslash: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeBackslash(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeBackslash` replaced.
+  /// - param newChild: The new `unexpectedBeforeBackslash` to replace the node's
+  ///                   current `unexpectedBeforeBackslash`, if present.
+  public func withUnexpectedBeforeBackslash(
+    _ newChild: UnexpectedNodesSyntax?) -> OldKeyPathExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return OldKeyPathExprSyntax(newData)
+  }
+
+  public var backslash: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withBackslash(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `backslash` replaced.
+  /// - param newChild: The new `backslash` to replace the node's
+  ///                   current `backslash`, if present.
+  public func withBackslash(
+    _ newChild: TokenSyntax?) -> OldKeyPathExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.backslash, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return OldKeyPathExprSyntax(newData)
+  }
+
   public var unexpectedBetweenBackslashAndRootExpr: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 2, parent: Syntax(self))
@@ -7552,10 +7769,10 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `unexpectedBetweenBackslashAndRootExpr` to replace the node's
   ///                   current `unexpectedBetweenBackslashAndRootExpr`, if present.
   public func withUnexpectedBetweenBackslashAndRootExpr(
-    _ newChild: UnexpectedNodesSyntax?) -> KeyPathExprSyntax {
+    _ newChild: UnexpectedNodesSyntax?) -> OldKeyPathExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
-    return KeyPathExprSyntax(newData)
+    return OldKeyPathExprSyntax(newData)
   }
 
   public var rootExpr: ExprSyntax? {
@@ -7573,10 +7790,10 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `rootExpr` to replace the node's
   ///                   current `rootExpr`, if present.
   public func withRootExpr(
-    _ newChild: ExprSyntax?) -> KeyPathExprSyntax {
+    _ newChild: ExprSyntax?) -> OldKeyPathExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 3)
-    return KeyPathExprSyntax(newData)
+    return OldKeyPathExprSyntax(newData)
   }
 
   public var unexpectedBetweenRootExprAndExpression: UnexpectedNodesSyntax? {
@@ -7594,10 +7811,10 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `unexpectedBetweenRootExprAndExpression` to replace the node's
   ///                   current `unexpectedBetweenRootExprAndExpression`, if present.
   public func withUnexpectedBetweenRootExprAndExpression(
-    _ newChild: UnexpectedNodesSyntax?) -> KeyPathExprSyntax {
+    _ newChild: UnexpectedNodesSyntax?) -> OldKeyPathExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
-    return KeyPathExprSyntax(newData)
+    return OldKeyPathExprSyntax(newData)
   }
 
   public var expression: ExprSyntax {
@@ -7614,10 +7831,10 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `expression` to replace the node's
   ///                   current `expression`, if present.
   public func withExpression(
-    _ newChild: ExprSyntax?) -> KeyPathExprSyntax {
+    _ newChild: ExprSyntax?) -> OldKeyPathExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
-    return KeyPathExprSyntax(newData)
+    return OldKeyPathExprSyntax(newData)
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -7640,7 +7857,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension KeyPathExprSyntax: CustomReflectable {
+extension OldKeyPathExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "unexpectedBeforeBackslash": unexpectedBeforeBackslash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

@@ -783,14 +783,14 @@ extension Lexer.Cursor {
       }
 
       // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(start) {
+      if let token = self.tryLexRegexLiteral(start, ContentStart) {
         return (token, [])
       }
       // Otherwise try lex a magic pound literal.
       return self.lexMagicPoundLiteral()
     case UInt8(ascii: "/"):
       // Try lex a regex literal.
-      if let token = self.tryLexRegexLiteral(start) {
+      if let token = self.tryLexRegexLiteral(start, ContentStart) {
         return (token, [])
       }
 
@@ -2027,8 +2027,13 @@ extension Lexer.Cursor {
 
 extension Lexer.Cursor {
   mutating func tryLexRegexLiteral(
-    _ TokStart: Lexer.Cursor
+    _ TokStart: Lexer.Cursor,
+    _ ContentStart: Lexer.Cursor
   ) -> RawTokenKind? {
+    guard !TokStart.isLeftBound(ContentStart) else {
+      return nil
+    }
+
     var Tmp = TokStart
     var poundCount = 0
     var parenCount = 0

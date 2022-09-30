@@ -352,11 +352,6 @@ public class LexerTests: XCTestCase {
         lexeme(.regexLiteral, "#/abc|#def/#"),
         lexeme(.eof, ""),
       ]),
-      ("#/abc|#def/", [
-        lexeme(.pound, "#"),
-        lexeme(.regexLiteral, "/abc|#def/"),
-        lexeme(.eof, ""),
-      ]),
       ("#/abc\n/#", [
         lexeme(.pound, "#"),
         lexeme(.unspacedBinaryOperator, "/"),
@@ -567,7 +562,7 @@ public class LexerTests: XCTestCase {
       """
       n /= 2 // foo
       """
-      let lexemes = data.withUTF8 { buf in
+      data.withUTF8 { buf in
         let lexemes = Lexer.lex(buf)
         AssertEqualTokens(lexemes, [
           lexeme(.identifier, "n ", trailing: 1),
@@ -575,7 +570,53 @@ public class LexerTests: XCTestCase {
           lexeme(.integerLiteral, "2 ", trailing: 1),
           lexeme(.eof, "// foo", leading: 6),
         ])
-        return lexemes
+      }
+    }
+
+    do {
+      var data =
+      """
+      UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
+      """
+      data.withUTF8 { buf in
+        let lexemes = Lexer.lex(buf)
+        AssertEqualTokens(lexemes, [
+          lexeme(.identifier, "UIColor"),
+          lexeme(.leftParen, "("),
+          lexeme(.identifier, "white"),
+          lexeme(.colon, ": ", trailing: 1),
+          lexeme(.floatingLiteral, "216.0"),
+          lexeme(.unspacedBinaryOperator, "/"),
+          lexeme(.floatingLiteral, "255.0"),
+          lexeme(.comma, ", ", trailing: 1),
+          lexeme(.identifier, "alpha"),
+          lexeme(.colon, ": ", trailing: 1),
+          lexeme(.floatingLiteral, "44.0"),
+          lexeme(.unspacedBinaryOperator, "/"),
+          lexeme(.floatingLiteral, "255.0"),
+          lexeme(.rightParen, ")"),
+          lexeme(.eof, ""),
+        ])
+      }
+    }
+
+    do {
+      var data =
+      """
+      #/abc|#def/
+      """
+      data.withUTF8 { buf in
+        let lexemes = Lexer.lex(buf)
+        AssertEqualTokens(lexemes, [
+          lexeme(.pound, "#"),
+          lexeme(.unspacedBinaryOperator, "/"),
+          lexeme(.identifier, "abc"),
+          lexeme(.unspacedBinaryOperator, "|"),
+          lexeme(.pound, "#"),
+          lexeme(.identifier, "def"),
+          lexeme(.postfixOperator, "/"),
+          lexeme(.eof, ""),
+        ])
       }
     }
   }

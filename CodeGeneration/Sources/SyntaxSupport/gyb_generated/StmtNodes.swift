@@ -310,14 +310,8 @@ public let STMT_NODES: [Node] = [
                  "LeftParen"
                ]),
          Child(name: "ElementList",
-               kind: "ExprList",
+               kind: "YieldExprList",
                collectionElementName: "Element"),
-         Child(name: "TrailingComma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
          Child(name: "RightParen",
                kind: "RightParenToken",
                tokenChoices: [

@@ -107,6 +107,8 @@ public enum SyntaxEnum {
   case postfixIfConfigExpr(PostfixIfConfigExprSyntax)
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
   case objectLiteralExpr(ObjectLiteralExprSyntax)
+  case yieldExprList(YieldExprListSyntax)
+  case yieldExprListElement(YieldExprListElementSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
   case typealiasDecl(TypealiasDeclSyntax)
   case associatedtypeDecl(AssociatedtypeDeclSyntax)
@@ -475,6 +477,10 @@ public enum SyntaxEnum {
       return "editor placeholder"
     case .objectLiteralExpr:
       return "object literal"
+    case .yieldExprList:
+      return "yield list"
+    case .yieldExprListElement:
+      return nil
     case .typeInitializerClause:
       return nil
     case .typealiasDecl:
@@ -1027,6 +1033,10 @@ public extension Syntax {
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
     case .objectLiteralExpr:
       return .objectLiteralExpr(ObjectLiteralExprSyntax(self)!)
+    case .yieldExprList:
+      return .yieldExprList(YieldExprListSyntax(self)!)
+    case .yieldExprListElement:
+      return .yieldExprListElement(YieldExprListElementSyntax(self)!)
     case .typeInitializerClause:
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
     case .typealiasDecl:

@@ -660,6 +660,20 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `YieldExprListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: YieldExprListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `YieldExprListElementSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: YieldExprListElementSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `TypeInitializerClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2915,6 +2929,26 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplYieldExprListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = YieldExprListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplYieldExprListElementSyntax(_ data: SyntaxData) -> Syntax {
+      let node = YieldExprListElementSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = TypeInitializerClauseSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4938,6 +4972,10 @@ open class SyntaxRewriter {
       return visitImplEditorPlaceholderExprSyntax
     case .objectLiteralExpr:
       return visitImplObjectLiteralExprSyntax
+    case .yieldExprList:
+      return visitImplYieldExprListSyntax
+    case .yieldExprListElement:
+      return visitImplYieldExprListElementSyntax
     case .typeInitializerClause:
       return visitImplTypeInitializerClauseSyntax
     case .typealiasDecl:
@@ -5493,6 +5531,10 @@ open class SyntaxRewriter {
       return visitImplEditorPlaceholderExprSyntax(data)
     case .objectLiteralExpr:
       return visitImplObjectLiteralExprSyntax(data)
+    case .yieldExprList:
+      return visitImplYieldExprListSyntax(data)
+    case .yieldExprListElement:
+      return visitImplYieldExprListElementSyntax(data)
     case .typeInitializerClause:
       return visitImplTypeInitializerClauseSyntax(data)
     case .typealiasDecl:

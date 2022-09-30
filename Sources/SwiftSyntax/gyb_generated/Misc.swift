@@ -211,6 +211,10 @@ extension Syntax {
       return node
     case .objectLiteralExpr(let node):
       return node
+    case .yieldExprList(let node):
+      return node
+    case .yieldExprListElement(let node):
+      return node
     case .typeInitializerClause(let node):
       return node
     case .typealiasDecl(let node):
@@ -760,6 +764,10 @@ extension Syntax {
       return node.childNameForDiagnostics(index)
     case .objectLiteralExpr(let node):
       return node.childNameForDiagnostics(index)
+    case .yieldExprList(let node):
+      return node.childNameForDiagnostics(index)
+    case .yieldExprListElement(let node):
+      return node.childNameForDiagnostics(index)
     case .typeInitializerClause(let node):
       return node.childNameForDiagnostics(index)
     case .typealiasDecl(let node):
@@ -1218,6 +1226,8 @@ extension SyntaxKind {
     case .postfixIfConfigExpr: return PostfixIfConfigExprSyntax.self
     case .editorPlaceholderExpr: return EditorPlaceholderExprSyntax.self
     case .objectLiteralExpr: return ObjectLiteralExprSyntax.self
+    case .yieldExprList: return YieldExprListSyntax.self
+    case .yieldExprListElement: return YieldExprListElementSyntax.self
     case .typeInitializerClause: return TypeInitializerClauseSyntax.self
     case .typealiasDecl: return TypealiasDeclSyntax.self
     case .associatedtypeDecl: return AssociatedtypeDeclSyntax.self

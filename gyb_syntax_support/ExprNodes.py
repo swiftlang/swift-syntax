@@ -618,22 +618,75 @@ EXPR_NODES = [
     Node('KeyPathExpr', name_for_diagnostics='key path', kind='Expr',
          children=[
              Child('Backslash', kind='BackslashToken'),
-             Child('RootExpr', kind='Expr', name_for_diagnostics='root', is_optional=True,
-                   node_choices=[
-                       Child('IdentifierExpr', kind='IdentifierExpr'),
-                       Child('SpecializeExpr', kind='SpecializeExpr'),
-                       Child('OptionalChainingExpr', kind='OptionalChainingExpr'),
-                   ]),
-             Child('Expression', kind='Expr', name_for_diagnostics='expression'),
+             Child('Root', kind='Type', name_for_diagnostics='root', is_optional=True),
+             Child('Components', kind='KeyPathComponentList',
+                   collection_element_name='KeyPathComponent'),
          ]),
 
-    # The period in the key path serves as the base on which the
-    # right-hand-side of the key path is evaluated
+    # The components of a key path
+    Node('KeyPathComponentList', name_for_diagnostics=None,
+         kind='SyntaxCollection', element='KeyPathComponent'),
+
+    # A single key path component.
+    Node('KeyPathComponent', name_for_diagnostics='key path component',
+         kind='Syntax',
+         children=[
+             Child('Period', kind='Token',
+                   is_optional=True,
+                   token_choices=[
+                       'PeriodToken', 'PrefixPeriodToken',
+                   ]),
+
+             Child('Component', kind='Syntax', node_choices=[
+               Child('Property', kind='KeyPathPropertyComponent'),
+               Child('Subscript', kind='KeyPathSubscriptComponent'),
+               Child('Optional', kind='KeyPathOptionalComponent'),
+             ])
+         ]),
+
+    # A key path component like .property or .1.
+    Node('KeyPathPropertyComponent', name_for_diagnostics='key path property component', kind='Syntax',
+         children=[
+             Child('Identifier', kind='Token',
+                   token_choices=[
+                       'IdentifierToken',
+                       'SelfToken',
+                       'CapitalSelfToken',
+                       'DollarIdentifierToken',
+                       'SpacedBinaryOperatorToken',
+                       'IntegerLiteralToken',
+                   ]),
+             Child('DeclNameArguments', kind='DeclNameArguments',
+                   is_optional=True),
+             Child('GenericArgumentClause', kind='GenericArgumentClause',
+                   is_optional=True),
+
+         ]),
+
+    # A key path component like .[17]
+    Node('KeyPathSubscriptComponent', name_for_diagnostics='key path subscript component', kind='Syntax',
+         children=[
+             Child('LeftBracket', kind='LeftSquareBracketToken'),
+             Child('ArgumentList', kind='TupleExprElementList', name_for_diagnostics='arguments',
+                   collection_element_name='Argument'),
+             Child('RightBracket', kind='RightSquareBracketToken'),
+         ]),
+
+    # A key path component like '?' or '!'.
+    Node('KeyPathOptionalComponent', name_for_diagnostics='key path optional component', kind='Syntax',
+         children=[
+             Child("QuestionOrExclamationMark", kind='Token',
+                   token_choices=[
+                       'PostfixQuestionMarkToken',
+                       'ExclamationMarkToken',
+                   ]),
+         ]),
+
+    # TODO: Remove this. It is only used by the C++ parser.
     Node('KeyPathBaseExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('Period', kind='PeriodToken'),
+             Child('Period', kind='PeriodToken')
          ]),
-
     # e.g. "a." or "a"
     Node('ObjcNamePiece', name_for_diagnostics=None, kind='Syntax',
          children=[

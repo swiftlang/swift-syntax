@@ -25,10 +25,10 @@
 % for base_kind in STRING_INTERPOLATION_BASE_KINDS:
 %   node = NODE_MAP[base_kind]
 extension ${base_kind}SyntaxProtocol {
-  public static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) throws -> Self {
     let node = parser.${node.parser_function}().syntax
     guard let result = node.as(Self.self) else {
-      fatalError("Parsing was expected to produce a \(Self.self) but produced \(type(of: node.asProtocol(${base_kind}SyntaxProtocol.self)))")
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: type(of: node.asProtocol(${base_kind}SyntaxProtocol.self)))
     }
     return result
   }

@@ -66,13 +66,9 @@ public struct Diagnostic: CustomDebugStringConvertible {
   }
 
   public var debugDescription: String {
-    if let root = node.root.as(SourceFileSyntax.self) {
-      let locationConverter = SourceLocationConverter(file: "", tree: root)
-      let location = location(converter: locationConverter)
-      return "\(location): \(message)"
-    } else {
-      return "<unknown>: \(message)"
-    }
+    let locationConverter = SourceLocationConverter(file: "", tree: node.root)
+    let location = location(converter: locationConverter)
+    return "\(location): \(message)"
   }
 }
 

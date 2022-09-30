@@ -49,7 +49,7 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testPatternInterpolation() throws {
-    let letPattern: PatternSyntax = "let x: Int"
+    let letPattern: PatternSyntax = "let x"
     XCTAssertTrue(letPattern.is(ValueBindingPatternSyntax.self))
   }
 

@@ -16,50 +16,50 @@
 @_spi(RawSyntax) import SwiftParser
 
 extension DeclSyntaxProtocol {
-  public static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) throws -> Self {
     let node = parser.parseDeclaration().syntax
     guard let result = node.as(Self.self) else {
-      fatalError("Parsing was expected to produce a \(Self.self) but produced \(type(of: node.asProtocol(DeclSyntaxProtocol.self)))")
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: type(of: node.asProtocol(DeclSyntaxProtocol.self)))
     }
     return result
   }
 }
 
 extension ExprSyntaxProtocol {
-  public static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) throws -> Self {
     let node = parser.parseExpression().syntax
     guard let result = node.as(Self.self) else {
-      fatalError("Parsing was expected to produce a \(Self.self) but produced \(type(of: node.asProtocol(ExprSyntaxProtocol.self)))")
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: type(of: node.asProtocol(ExprSyntaxProtocol.self)))
     }
     return result
   }
 }
 
 extension PatternSyntaxProtocol {
-  public static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) throws -> Self {
     let node = parser.parsePattern().syntax
     guard let result = node.as(Self.self) else {
-      fatalError("Parsing was expected to produce a \(Self.self) but produced \(type(of: node.asProtocol(PatternSyntaxProtocol.self)))")
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: type(of: node.asProtocol(PatternSyntaxProtocol.self)))
     }
     return result
   }
 }
 
 extension StmtSyntaxProtocol {
-  public static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) throws -> Self {
     let node = parser.parseStatement().syntax
     guard let result = node.as(Self.self) else {
-      fatalError("Parsing was expected to produce a \(Self.self) but produced \(type(of: node.asProtocol(StmtSyntaxProtocol.self)))")
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: type(of: node.asProtocol(StmtSyntaxProtocol.self)))
     }
     return result
   }
 }
 
 extension TypeSyntaxProtocol {
-  public static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) throws -> Self {
     let node = parser.parseType().syntax
     guard let result = node.as(Self.self) else {
-      fatalError("Parsing was expected to produce a \(Self.self) but produced \(type(of: node.asProtocol(TypeSyntaxProtocol.self)))")
+      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: type(of: node.asProtocol(TypeSyntaxProtocol.self)))
     }
     return result
   }

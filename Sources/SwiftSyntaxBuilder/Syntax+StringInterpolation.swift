@@ -1,5 +1,6 @@
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
+import SwiftDiagnostics
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -90,26 +91,78 @@ public protocol SyntaxExpressibleByStringInterpolation:
     where Self.StringInterpolation == SyntaxStringInterpolation {
   /// Create an instance of this syntax node by parsing it from the given
   /// parser.
-  static func parse(from parser: inout Parser) -> Self
+  static func parse(from parser: inout Parser) throws -> Self
+}
+
+enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
+  case didNotConsumeAllTokens(remainingTokens: [TokenSyntax])
+  case producedInvalidNodeType(expectedType: SyntaxProtocol.Type, actualType: SyntaxProtocol.Type)
+  case diagnostics([Diagnostic])
+
+  var description: String {
+    switch self {
+    case .didNotConsumeAllTokens(remainingTokens: let tokens):
+      return "Extraneous text in snippet: '\(tokens.map(\.description).joined())'"
+    case .producedInvalidNodeType(expectedType: let expectedType, actualType: let actualType):
+      return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"
+    case .diagnostics(let diagnostics):
+      return diagnostics.map(\.debugDescription).joined(separator: "\n")
+    }
+  }
 }
 
 extension SyntaxExpressibleByStringInterpolation {
   /// Initialize a syntax node by parsing the contents of the interpolation.
+  /// This function is marked `@_transparent` so that fatalErrors raised here
+  /// are reported at the string literal itself.
+  /// This makes debugging easier because Xcode will jump to the string literal
+  /// that had a parsing error instead of the initializer that raised the `fatalError`
+  @_transparent
   public init(stringInterpolation: SyntaxStringInterpolation) {
-    self = stringInterpolation.sourceText.withUnsafeBufferPointer { buffer in
+    do {
+      try self.init(stringInterpolationOrThrow: stringInterpolation)
+    } catch {
+      fatalError(String(describing: error))
+    }
+  }
+
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try stringInterpolation.sourceText.withUnsafeBufferPointer { buffer in
       var parser = Parser(buffer)
       // FIXME: When the parser supports incremental parsing, put the
       // interpolatedSyntaxNodes in so we don't have to parse them again.
-      return parser.arena.assumingSingleThread {
-        return Self.parse(from: &parser)
+      return try parser.arena.assumingSingleThread {
+        let result = try Self.parse(from: &parser)
+        if !parser.at(.eof) {
+          var remainingTokens: [TokenSyntax] = []
+          while !parser.at(.eof) {
+            remainingTokens.append(parser.consumeAnyToken().syntax)
+          }
+          throw SyntaxStringInterpolationError.didNotConsumeAllTokens(remainingTokens: remainingTokens)
+        }
+        if result.hasError {
+          let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
+          assert(!diagnostics.isEmpty)
+          throw SyntaxStringInterpolationError.diagnostics(diagnostics)
+        }
+        return result
       }
     }
   }
 
-  /// Initialize a syntax node from a string literal.
+  @_transparent
   public init(stringLiteral value: String) {
+    do {
+      try self.init(stringLiteralOrThrow: value)
+    } catch {
+      fatalError(String(describing: error))
+    }
+  }
+
+  /// Initialize a syntax node from a string literal.
+  public init(stringLiteralOrThrow value: String) throws {
     var interpolation = SyntaxStringInterpolation()
     interpolation.appendLiteral(value)
-    self.init(stringInterpolation: interpolation)
+    try self.init(stringInterpolationOrThrow: interpolation)
   }
 }

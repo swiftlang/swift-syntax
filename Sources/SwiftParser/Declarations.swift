@@ -1406,6 +1406,29 @@ extension Parser {
 }
 
 extension Parser {
+  /// Are we at a regular expression literal that could act as an operator?
+  private func atRegexLiteralThatCouldBeAnOperator() -> Bool {
+    guard self.at(.regexLiteral) else {
+      return false
+    }
+
+    /// Try to re-lex at regex literal as an operator. If it succeeds and
+    /// consumes the entire regex literal, we're done.
+    return self.currentToken.tokenText.withBuffer {
+        (buffer: UnsafeBufferPointer<UInt8>) -> Bool in
+      var cursor = Lexer.Cursor(input: buffer, previous: 0)
+      guard buffer[0] == UInt8(ascii: "/") else { return false }
+
+      switch (cursor.lexOperatorIdentifier(cursor, cursor)) {
+      case (.unknown, _):
+        return false
+
+      default:
+        return cursor.input.isEmpty
+      }
+    }
+  }
+
   @_spi(RawSyntax)
   public mutating func parseFuncDeclaration(
     _ attrs: DeclAttributes,
@@ -1414,7 +1437,10 @@ extension Parser {
     let (unexpectedBeforeFuncKeyword, funcKeyword) = self.eat(handle)
     let unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?
     let identifier: RawTokenSyntax
-    if self.at(anyIn: Operator.self) != nil || self.at(any: [.exclamationMark, .prefixAmpersand]) {
+    if self.at(anyIn: Operator.self) != nil ||
+        self.at(any: [.exclamationMark, .prefixAmpersand]) ||
+        self.atRegexLiteralThatCouldBeAnOperator()
+    {
       var name = self.currentToken.tokenText
       if name.count > 1 && name.hasSuffix("<") && self.peek().tokenKind == .identifier {
         name = SyntaxText(rebasing: name.dropLast())

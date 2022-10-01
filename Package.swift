@@ -172,7 +172,7 @@ let package = Package(
     .testTarget(
       name: "SwiftParserTest",
       dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser",
-                     "_SwiftSyntaxTestSupport"]
+                     "_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder"]
     ),
     .testTarget(
       name: "SwiftOperatorsTest",

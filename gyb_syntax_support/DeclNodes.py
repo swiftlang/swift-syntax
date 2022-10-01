@@ -379,10 +379,8 @@ DECL_NODES = [
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
-             Child('IsolatedToken', kind='Token',
-                   is_optional=True),
-             Child('ConstToken', kind='Token',
-                   is_optional=True),
+             Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
+                   collection_element_name='Modifier', is_optional=True),
              Child('FirstName', kind='Token', name_for_diagnostics='name',
                    token_choices=[
                        'IdentifierToken',

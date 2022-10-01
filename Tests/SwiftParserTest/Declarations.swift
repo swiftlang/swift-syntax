@@ -1,5 +1,7 @@
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(RawSyntax) import SwiftParser
+@_spi(Testing) @_spi(RawSyntax) import SwiftParser
+import SwiftSyntaxBuilder
+import SwiftBasicFormat
 import XCTest
 
 final class DeclarationTests: XCTestCase {
@@ -750,8 +752,7 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolatedToken: nil,
-        constToken: nil,
+        modifiers: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third"))]),
@@ -773,8 +774,7 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolatedToken: nil,
-        constToken: nil,
+        modifiers: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third")), Syntax(TokenSyntax.identifier("fourth"))]),
@@ -795,8 +795,7 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^MISSING_COLON^#third #^MISSING_RPAREN^#struct#^MISSING_IDENTIFIER^##^BRACES^#: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolatedToken: nil,
-        constToken: nil,
+        modifiers: nil,
         firstName: .identifier("first"),
         secondName: .identifier("second"),
         colon: .colonToken(presence: .missing),
@@ -821,8 +820,7 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolatedToken: nil,
-        constToken: nil,
+        modifiers: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([
@@ -848,8 +846,7 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^COLON^#[third #^END_ARRAY^#fourth: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolatedToken: nil,
-        constToken: nil,
+        modifiers: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),
@@ -878,8 +875,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
-        isolatedToken: nil,
-        constToken: nil,
+        modifiers: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),
@@ -1024,26 +1020,70 @@ final class DeclarationTests: XCTestCase {
 
   func testModifiedParameter() {
     AssertParse(
-      #"""
+      """
       func const(_const _ map: String) {}
-      func isolated(isolated _ map: String) {}
-      func isolatedConst(isolated _const _ map: String) {}
-      func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ map: String) {}
-      """#)
+      """
+    )
 
     AssertParse(
-      #"""
+      """
+      func isolated(isolated _ #^DIAG^#map: String) {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
+        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
+      ]
+    )
+
+    AssertParse(
+      """
+      func isolatedConst(isolated _const _ #^DIAG^#map: String) {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
+        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
+      ]
+    )
+
+    AssertParse(
+      """
+      func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ #^DIAG^#map: String) {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
+        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
+      ]
+    )
+
+    AssertParse(
+      """
       func const(_const map: String) {}
-      func isolated(isolated map: String) {}
-      func isolatedConst(isolated _const map: String) {}
-      """#)
+      """
+    )
 
     AssertParse(
-      #"""
+      """
+      func isolated(isolated map: String) {}
+      """
+    )
+
+    AssertParse(
+      """
+      func isolatedConst(isolated _const map#^DIAG^#: String) {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
+        DiagnosticSpec(message: "unexpected text ': String' in parameter clause"),
+      ]
+    )
+
+    AssertParse(
+      """
       func const(_const x: String) {}
       func isolated(isolated: String) {}
       func isolatedConst(isolated _const: String) {}
-      """#)
+      """
+    )
   }
 
   func testReasyncFunctions() throws {

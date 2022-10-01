@@ -1787,6 +1787,13 @@ extension Parser {
           }
         }
 
+        // If we saw a comma, that's a strong indicator we have more elements
+        // to process. If that's not the case, we have to do some legwork to
+        // determine if we should bail out.
+        guard comma == nil || self.at(any: [.rightSquareBracket, .eof]) else {
+          continue
+        }
+
         // If we found EOF or the closing square bracket, bailout.
         if self.at(any: [.rightSquareBracket, .eof]) {
           break

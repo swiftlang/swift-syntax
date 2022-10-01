@@ -2078,6 +2078,7 @@ extension Lexer.Cursor {
     DELIMITLOOP: while true {
       defer { escaped = false }
 
+      let previousByte = Tmp.previous
       switch Tmp.advance() {
       case nil:
         return nil
@@ -2095,6 +2096,14 @@ extension Lexer.Cursor {
             continue DELIMITLOOP
           }
         }
+
+        // A regex literal may not end in a space or tab.
+        if !isMultiline && poundCount == 0 &&
+          (previousByte == UInt8(ascii: " ") ||
+           previousByte == UInt8(ascii: "\t")) {
+          return nil
+        }
+
         Tmp = EndLex
         break DELIMITLOOP
       case let .some(next) where !Unicode.Scalar(next).isASCII:

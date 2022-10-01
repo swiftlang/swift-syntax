@@ -42,6 +42,18 @@ final class DeclarationTests: XCTestCase {
                   DiagnosticSpec(locationMarker: "DIAG1", message: "expected argument list in function declaration"),
                   DiagnosticSpec(locationMarker: "DIAG2", message: "expected '=' and right-hand type in same type requirement"),
                 ])
+
+    AssertParse("func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
+
+    AssertParse(
+      "func #^DIAG^#/^notoperator^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }",
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in function"),
+        DiagnosticSpec(message: "unexpected text '/^notoperator^/' before parameter clause")
+      ]
+    )
+
+    AssertParse("func /^ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
   }
 
   func testFuncAfterUnbalancedClosingBrace() {

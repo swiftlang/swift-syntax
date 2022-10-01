@@ -89,6 +89,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   /// Whether the node should be skipped for diagnostic emission.
   /// Every visit method must check this at the beginning.
   func shouldSkip<T: SyntaxProtocol>(_ node: T) -> Bool {
+    if !node.hasError {
+      return true
+    }
     return handledNodes.contains(node.id)
   }
 

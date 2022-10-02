@@ -152,6 +152,10 @@ let package = Package(
       dependencies: ["SwiftBasicFormat"]
     ),
     .testTarget(
+      name: "SwiftDiagnosticsTest",
+      dependencies: ["SwiftDiagnostics", "SwiftParser"]
+    ),
+    .testTarget(
       name: "SwiftSyntaxTest",
       dependencies: ["SwiftSyntax", "_SwiftSyntaxTestSupport"]
     ),

@@ -124,28 +124,27 @@ extension Parser {
     let pattern = self.parsePattern()
 
     // Now parse an optional type annotation.
-    guard let colon = self.consume(if: .colon) else {
-      
+    let colon = self.consume(if: .colon)
+    var lookahead = self.lookahead()
+    var type: RawTypeAnnotationSyntax?
+    if let colon = colon {
       let result = self.parseResultType()
-      if result.syntax.isMissingAllTokens {
-        return (pattern, nil)
-      }
-      
-      let type = RawTypeAnnotationSyntax(
-        colon: .init(missing: .colon, arena: self.arena),
+      type = RawTypeAnnotationSyntax(
+        colon: colon,
         type: result,
         arena: self.arena
       )
-       
-      return (pattern, type)
+    } else if lookahead.canParseType() && !self.currentToken.isAtStartOfLine {
+      // Recovery if the user forgot to add ':'
+      let result = self.parseResultType()
+      type = RawTypeAnnotationSyntax(
+        colon: self.missingToken(.colon, text: nil),
+        type: result,
+        arena: self.arena
+      )
     }
 
-    let result = self.parseResultType()
-    let type = RawTypeAnnotationSyntax(
-      colon: colon,
-      type: result,
-      arena: self.arena
-    )
+    
     return (pattern, type)
   }
 

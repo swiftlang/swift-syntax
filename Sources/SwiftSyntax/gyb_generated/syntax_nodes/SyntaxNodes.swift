@@ -6904,11 +6904,9 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax?,
-    _ unexpectedBetweenAttributesAndIsolatedToken: UnexpectedNodesSyntax? = nil,
-    isolatedToken: TokenSyntax?,
-    _ unexpectedBetweenIsolatedTokenAndConstToken: UnexpectedNodesSyntax? = nil,
-    constToken: TokenSyntax?,
-    _ unexpectedBetweenConstTokenAndFirstName: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: ModifierListSyntax?,
+    _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
     firstName: TokenSyntax?,
     _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
     secondName: TokenSyntax?,
@@ -6926,11 +6924,9 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      unexpectedBetweenAttributesAndIsolatedToken?.raw,
-      isolatedToken?.raw,
-      unexpectedBetweenIsolatedTokenAndConstToken?.raw,
-      constToken?.raw,
-      unexpectedBetweenConstTokenAndFirstName?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
+      modifiers?.raw,
+      unexpectedBetweenModifiersAndFirstName?.raw,
       firstName?.raw,
       unexpectedBetweenFirstNameAndSecondName?.raw,
       secondName?.raw,
@@ -7011,114 +7007,90 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var unexpectedBetweenAttributesAndIsolatedToken: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenAttributesAndIsolatedToken(value)
+      self = withUnexpectedBetweenAttributesAndModifiers(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndIsolatedToken` replaced.
-  /// - param newChild: The new `unexpectedBetweenAttributesAndIsolatedToken` to replace the node's
-  ///                   current `unexpectedBetweenAttributesAndIsolatedToken`, if present.
-  public func withUnexpectedBetweenAttributesAndIsolatedToken(
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
+  public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
     return FunctionParameterSyntax(newData)
   }
 
-  public var isolatedToken: TokenSyntax? {
+  public var modifiers: ModifierListSyntax? {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return ModifierListSyntax(childData!)
     }
     set(value) {
-      self = withIsolatedToken(value)
+      self = withModifiers(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `isolatedToken` replaced.
-  /// - param newChild: The new `isolatedToken` to replace the node's
-  ///                   current `isolatedToken`, if present.
-  public func withIsolatedToken(
-    _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
+  /// Adds the provided `Modifier` to the node's `modifiers`
+  /// collection.
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  public func addModifier(_ element: DeclModifierSyntax) -> FunctionParameterSyntax {
+    var collection: RawSyntax
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+        from: [element.raw], arena: .default)
+    }
+    let newData = data.replacingChild(collection, at: 3)
+    return FunctionParameterSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `modifiers` replaced.
+  /// - param newChild: The new `modifiers` to replace the node's
+  ///                   current `modifiers`, if present.
+  public func withModifiers(
+    _ newChild: ModifierListSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 3)
     return FunctionParameterSyntax(newData)
   }
 
-  public var unexpectedBetweenIsolatedTokenAndConstToken: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenIsolatedTokenAndConstToken(value)
+      self = withUnexpectedBetweenModifiersAndFirstName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenIsolatedTokenAndConstToken` replaced.
-  /// - param newChild: The new `unexpectedBetweenIsolatedTokenAndConstToken` to replace the node's
-  ///                   current `unexpectedBetweenIsolatedTokenAndConstToken`, if present.
-  public func withUnexpectedBetweenIsolatedTokenAndConstToken(
+  /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndFirstName` replaced.
+  /// - param newChild: The new `unexpectedBetweenModifiersAndFirstName` to replace the node's
+  ///                   current `unexpectedBetweenModifiersAndFirstName`, if present.
+  public func withUnexpectedBetweenModifiersAndFirstName(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return FunctionParameterSyntax(newData)
   }
 
-  public var constToken: TokenSyntax? {
-    get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withConstToken(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `constToken` replaced.
-  /// - param newChild: The new `constToken` to replace the node's
-  ///                   current `constToken`, if present.
-  public func withConstToken(
-    _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 5)
-    return FunctionParameterSyntax(newData)
-  }
-
-  public var unexpectedBetweenConstTokenAndFirstName: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenConstTokenAndFirstName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenConstTokenAndFirstName` replaced.
-  /// - param newChild: The new `unexpectedBetweenConstTokenAndFirstName` to replace the node's
-  ///                   current `unexpectedBetweenConstTokenAndFirstName`, if present.
-  public func withUnexpectedBetweenConstTokenAndFirstName(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
-    return FunctionParameterSyntax(newData)
-  }
-
   public var firstName: TokenSyntax? {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -7133,13 +7105,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withFirstName(
     _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 5)
     return FunctionParameterSyntax(newData)
   }
 
   public var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7154,13 +7126,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenFirstNameAndSecondName(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 6)
     return FunctionParameterSyntax(newData)
   }
 
   public var secondName: TokenSyntax? {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -7175,13 +7147,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withSecondName(
     _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 7)
     return FunctionParameterSyntax(newData)
   }
 
   public var unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7196,13 +7168,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSecondNameAndColon(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 8)
     return FunctionParameterSyntax(newData)
   }
 
   public var colon: TokenSyntax? {
     get {
-      let childData = data.child(at: 11, parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -7217,13 +7189,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withColon(
     _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 9)
     return FunctionParameterSyntax(newData)
   }
 
   public var unexpectedBetweenColonAndType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 12, parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7238,13 +7210,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenColonAndType(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 10)
     return FunctionParameterSyntax(newData)
   }
 
   public var type: TypeSyntax? {
     get {
-      let childData = data.child(at: 13, parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeSyntax(childData!)
     }
@@ -7259,13 +7231,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withType(
     _ newChild: TypeSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 11)
     return FunctionParameterSyntax(newData)
   }
 
   public var unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 14, parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7280,13 +7252,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenTypeAndEllipsis(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 12)
     return FunctionParameterSyntax(newData)
   }
 
   public var ellipsis: TokenSyntax? {
     get {
-      let childData = data.child(at: 15, parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -7301,13 +7273,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withEllipsis(
     _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 15)
+    let newData = data.replacingChild(raw, at: 13)
     return FunctionParameterSyntax(newData)
   }
 
   public var unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 16, parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7322,13 +7294,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenEllipsisAndDefaultArgument(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 14)
     return FunctionParameterSyntax(newData)
   }
 
   public var defaultArgument: InitializerClauseSyntax? {
     get {
-      let childData = data.child(at: 17, parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       if childData == nil { return nil }
       return InitializerClauseSyntax(childData!)
     }
@@ -7343,13 +7315,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withDefaultArgument(
     _ newChild: InitializerClauseSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 17)
+    let newData = data.replacingChild(raw, at: 15)
     return FunctionParameterSyntax(newData)
   }
 
   public var unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 18, parent: Syntax(self))
+      let childData = data.child(at: 16, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7364,13 +7336,13 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenDefaultArgumentAndTrailingComma(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 18)
+    let newData = data.replacingChild(raw, at: 16)
     return FunctionParameterSyntax(newData)
   }
 
   public var trailingComma: TokenSyntax? {
     get {
-      let childData = data.child(at: 19, parent: Syntax(self))
+      let childData = data.child(at: 17, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -7385,7 +7357,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withTrailingComma(
     _ newChild: TokenSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 19)
+    let newData = data.replacingChild(raw, at: 17)
     return FunctionParameterSyntax(newData)
   }
 
@@ -7398,38 +7370,34 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
-      return nil
+      return "modifiers"
     case 4:
       return nil
     case 5:
-      return nil
+      return "name"
     case 6:
       return nil
     case 7:
-      return "name"
+      return "internal name"
     case 8:
       return nil
     case 9:
-      return "internal name"
+      return nil
     case 10:
       return nil
     case 11:
-      return nil
+      return "type"
     case 12:
       return nil
     case 13:
-      return "type"
+      return nil
     case 14:
       return nil
     case 15:
-      return nil
+      return "default argument"
     case 16:
       return nil
     case 17:
-      return "default argument"
-    case 18:
-      return nil
-    case 19:
       return nil
     default:
       fatalError("Invalid index")
@@ -7442,11 +7410,9 @@ extension FunctionParameterSyntax: CustomReflectable {
     return Mirror(self, children: [
       "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenAttributesAndIsolatedToken": unexpectedBetweenAttributesAndIsolatedToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "isolatedToken": isolatedToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenIsolatedTokenAndConstToken": unexpectedBetweenIsolatedTokenAndConstToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "constToken": constToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenConstTokenAndFirstName": unexpectedBetweenConstTokenAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenModifiersAndFirstName": unexpectedBetweenModifiersAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "firstName": firstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenFirstNameAndSecondName": unexpectedBetweenFirstNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "secondName": secondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

@@ -631,6 +631,30 @@ enum MatchingPatternStart: RawTokenKindSubset {
   }
 }
 
+enum ParameterModifier: RawTokenKindSubset {
+  case _const
+  case isolated
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch (lexeme.tokenKind, lexeme.tokenText) {
+    case (.identifier, "_const"): self = ._const
+    case (.identifier, "isolate"): self = .isolated
+    default: return nil
+    }
+  }
+
+  var rawTokenKind: RawTokenKind {
+    return .identifier
+  }
+
+  var contextualKeyword: SyntaxText? {
+    switch self {
+    case ._const: return "_const"
+    case .isolated: return "isolated"
+    }
+  }
+}
+
 enum PrimaryExpressionStart: RawTokenKindSubset {
   case __column__Keyword
   case __dso_handle__Keyword

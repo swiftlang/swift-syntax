@@ -1031,11 +1031,11 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[3], as: RawExprSyntax.self)
     break
   case .functionParameter:
-    assert(layout.count == 20)
+    assert(layout.count == 18)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawAttributeListSyntax?.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[3], as: RawTokenSyntax?.self)
+    _verify(layout[3], as: RawModifierListSyntax?.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[5], as: RawTokenSyntax?.self)
     _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
@@ -1043,15 +1043,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[8], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[9], as: RawTokenSyntax?.self)
     _verify(layout[10], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[11], as: RawTokenSyntax?.self)
+    _verify(layout[11], as: RawTypeSyntax?.self)
     _verify(layout[12], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[13], as: RawTypeSyntax?.self)
+    _verify(layout[13], as: RawTokenSyntax?.self)
     _verify(layout[14], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[15], as: RawTokenSyntax?.self)
+    _verify(layout[15], as: RawInitializerClauseSyntax?.self)
     _verify(layout[16], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[17], as: RawInitializerClauseSyntax?.self)
-    _verify(layout[18], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[19], as: RawTokenSyntax?.self)
+    _verify(layout[17], as: RawTokenSyntax?.self)
     break
   case .modifierList:
     for element in layout {

@@ -1257,6 +1257,26 @@ extension Parser {
     }
   }
 
+  mutating func parseParameterModifiers(for subject: ParameterSubject) -> RawModifierListSyntax? {
+    var elements = [RawDeclModifierSyntax]()
+    var loopCondition = LoopProgressCondition()
+    MODIFIER_LOOP: while loopCondition.evaluate(currentToken) {
+      switch self.at(anyIn: ParameterModifier.self) {
+      case (._const, let handle)?:
+        elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
+      case (.isolated, let handle)? where !self.lookahead().startsParameterName(subject.isClosure):
+        elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
+      default:
+        break MODIFIER_LOOP
+      }
+    }
+    if elements.isEmpty {
+      return nil
+    } else {
+      return RawModifierListSyntax(elements: elements, arena: self.arena)
+    }
+  }
+
   @_spi(RawSyntax)
   public mutating func parseParameterClause(for subject: ParameterSubject) -> RawParameterClauseSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
@@ -1280,16 +1300,7 @@ extension Parser {
           attrs = self.parseAttributeList()
         }
 
-        let unexpectedBeforeIsolated: RawUnexpectedNodesSyntax?
-        let isolated: RawTokenSyntax?
-        if self.currentToken.isContextualKeyword("isolated") &&
-            !self.lookahead().startsParameterName(subject.isClosure) {
-          (unexpectedBeforeIsolated, isolated) = self.expectContextualKeyword("isolated")
-        } else {
-          unexpectedBeforeIsolated = nil
-          isolated = nil
-        }
-        let const = self.consumeIfContextualKeyword("_const")
+        let modifiers = parseParameterModifiers(for: subject)
 
         let firstName: RawTokenSyntax?
         let secondName: RawTokenSyntax?
@@ -1350,9 +1361,7 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(RawFunctionParameterSyntax(
           attributes: attrs,
-          unexpectedBeforeIsolated,
-          isolatedToken: isolated,
-          constToken: const,
+          modifiers: modifiers,
           firstName: firstName,
           secondName: secondName,
           unexpectedBeforeColon,

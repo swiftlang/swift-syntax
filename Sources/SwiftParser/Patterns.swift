@@ -125,7 +125,19 @@ extension Parser {
 
     // Now parse an optional type annotation.
     guard let colon = self.consume(if: .colon) else {
-      return (pattern, nil)
+      
+      let result = self.parseResultType()
+      if result.syntax.isMissingAllTokens {
+        return (pattern, nil)
+      }
+      
+      let type = RawTypeAnnotationSyntax(
+        colon: .init(missing: .colon, arena: self.arena),
+        type: result,
+        arena: self.arena
+      )
+       
+      return (pattern, type)
     }
 
     let result = self.parseResultType()

@@ -135,6 +135,8 @@ extension Parser {
         arena: self.arena
       )
     } else if lookahead.canParseType() && !self.currentToken.isAtStartOfLine {
+      // TODO: If we are in a for loop, dont do this. normally there an "in" is expected. Siehe failing tests
+        
       // Recovery if the user forgot to add ':'
       let result = self.parseResultType()
       type = RawTypeAnnotationSyntax(

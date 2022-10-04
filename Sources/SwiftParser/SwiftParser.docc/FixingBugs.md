@@ -44,7 +44,7 @@ Unhelpful diagnostics can result from two reasons:
 
 To distinguish these cases run the following command and look at the dumped syntax tree. Use your own judgment to decide whether this models the intended meaning of the source code reasonably well.
 ```
-swift-parser-test print-tree /path/to/file/with/unhelpful/diagnostic.swift
+swift-parser-cli print-tree /path/to/file/with/unhelpful/diagnostic.swift
 ``` 
 
 Fixing the first case where the parser does not recover according to the user’s intent is similar to [Parse of Valid Source Code Produced an Invalid Syntax Tree](#Parse-of-Valid-Source-Code-Produced-an-Invalid-Syntax-Tree). See <doc:SwiftParser/ParserRecovery> for documentation how parser recovery works and determine how to recover better from the invalid source code.

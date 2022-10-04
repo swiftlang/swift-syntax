@@ -2,7 +2,7 @@
 
 Guide to provide steps for filing actionable bug reports for parser failures.
 
-Reducing a test case requires the `swift-parser-test` utility that you can build by checking out `swift-syntax` and running `swift build --product swift-parser-test` or building the `swift-parser-test` target in Xcode.
+Reducing a test case requires the `swift-parser-cli` utility that you can build by checking out `swift-syntax` and running `swift build --product swift-parser-cli` or building the `swift-parser-cli` target in Xcode.
 
 ## Round-Trip Failure or Parser Crash
 
@@ -10,7 +10,7 @@ If you encounter a case where printing the parsed syntax tree does not reproduce
 
 1. Reduce the failure by running 
     ```
-    swift-parser-test reduce /pth/to/file/that/does/not/roundtrip.swift
+    swift-parser-cli reduce /pth/to/file/that/does/not/roundtrip.swift
     ```
 2. File a bug report on <https://github.com/apple/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>. 
 
@@ -20,7 +20,7 @@ If you have source code that is parsed correctly by the current Swift compiler (
 
 1. Run the following command to see the diagnostics produced by the parser
     ```
-    swift-parser-test print-diags /path/to/file.swift
+    swift-parser-cli print-diags /path/to/file.swift
     ``` 
 2. Remove as much code as possible from your test file and check if it still produces the same diagnostic. 
 3. File a bug report on <https://github.com/apple/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>.
@@ -31,7 +31,7 @@ If you have valid source code that produced a syntax tree which doesn’t repres
 
 1. Run the following command to print the parsed syntax tree
     ```
-    swift-parser-test dump-tree /path/to/file.swift
+    swift-parser-cli print-tree /path/to/file.swift
     ``` 
 2. Remove as much code as possible from your test file and check if it still produces the same invalid tree
 3. File a bug report on <https://github.com/apple/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>.

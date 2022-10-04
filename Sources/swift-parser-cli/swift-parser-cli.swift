@@ -1,4 +1,4 @@
-//===------------ main.swift - Entry point for swift-parser-test ----------===//
+//===--- swift-parser-cli.swift - Entry point for swift-parser-cli --------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -28,7 +28,7 @@ func printerr(_ message: String, terminator: String = "\n") {
 
 private func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T) throws -> T {
   var tempFileURL = FileManager.default.temporaryDirectory
-  tempFileURL.appendPathComponent("swift-parser-test-\(UUID().uuidString).swift")
+  tempFileURL.appendPathComponent("swift-parser-cli-\(UUID().uuidString).swift")
   try Data(contents).write(to: tempFileURL)
   defer {
     try? FileManager.default.removeItem(at: tempFileURL)
@@ -47,16 +47,6 @@ private func getContentsOfSourceFile(at path: String?) throws -> [UInt8] {
   return [UInt8](source)
 }
 
-@main
-class SwiftParserTest: ParsableCommand {
-  required init() {}
-
-  static var configuration = CommandConfiguration(
-    abstract: "Utility to test SwiftSyntax syntax tree creation.",
-    subcommands: [VerifyRoundTrip.self, DumpTree.self, PrintDiags.self, Reduce.self]
-  )
-}
-
 /// Fold all of the sequences in the given source file.
 func foldAllSequences(_ tree: SourceFileSyntax) -> (Syntax, [Diagnostic]) {
   var diags: [Diagnostic] = []
@@ -70,8 +60,28 @@ func foldAllSequences(_ tree: SourceFileSyntax) -> (Syntax, [Diagnostic]) {
   return (resultTree, diags)
 }
 
+@main
+class SwiftParserCli: ParsableCommand {
+  required init() {}
+
+  static var configuration = CommandConfiguration(
+    abstract: "Utility to test SwiftSyntax syntax tree creation.",
+    subcommands: [
+      PrintDiags.self,
+      PrintTree.self,
+      Reduce.self,
+      VerifyRoundTrip.self,
+    ]
+  )
+}
+
 class VerifyRoundTrip: ParsableCommand {
   required init() {}
+
+  static var configuration = CommandConfiguration(
+    commandName: "verify-round-trip",
+    abstract: "Verify that printing the parsed syntax tree produces the original source"
+  )
 
   init(sourceFile: String?, swiftVersion: String?, enableBareSlashRegex: Bool?) {
     self.sourceFile = sourceFile
@@ -139,6 +149,11 @@ class VerifyRoundTrip: ParsableCommand {
 }
 
 class PrintDiags: ParsableCommand {
+  static var configuration = CommandConfiguration(
+    commandName: "print-diags",
+    abstract: "Print the diagnostics produced by parsing a soruce file"
+  )
+
   required init() {}
 
   @Argument(help: "The source file that should be parsed; if omitted, use stdin")
@@ -178,7 +193,12 @@ class PrintDiags: ParsableCommand {
   }
 }
 
-class DumpTree: ParsableCommand {
+class PrintTree: ParsableCommand {
+  static var configuration = CommandConfiguration(
+    commandName: "print-tree",
+    abstract: "Print the syntax tree produced by parsing a source file"
+  )
+
   required init() {}
 
   @Argument(help: "The source file that should be parsed; if omitted, use stdin")
@@ -217,6 +237,11 @@ class DumpTree: ParsableCommand {
 }
 
 class Reduce: ParsableCommand {
+  static var configuration = CommandConfiguration(
+    commandName: "reduce",
+    abstract: "Reduce a test case that crashes the parser or fails to round-trip to a smaller test case that still reproduces the issue"
+  )
+
   required init() {}
 
   @Argument(help: "The test case that should be reduced; if omitted, use stdin")
@@ -257,7 +282,7 @@ class Reduce: ParsableCommand {
     case potentialCrash
   }
 
-  /// Invoke `swift-parser-test verify-round-trip` with the same arguments as this `reduce` subcommand.
+  /// Invoke `swift-parser-cli verify-round-trip` with the same arguments as this `reduce` subcommand.
   /// Returns the exit code of the invocation.
   private func runVerifyRoundTripInSeparateProcess(source: [UInt8]) throws -> ProcessExit {
     return try withTemporaryFile(contents: source) { tempFileURL in

@@ -1474,7 +1474,6 @@ extension Parser {
       let segmentToken = RawTokenSyntax(
         kind: .stringSegment,
         text: SyntaxText(rebasing: text[stringLiteralSegmentStart..<slashIndex]),
-        leadingTriviaPieces: [], trailingTriviaPieces: [],
         presence: .present,
         arena: self.arena)
       segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken, arena: self.arena)))
@@ -1490,7 +1489,6 @@ extension Parser {
         let slashToken = RawTokenSyntax(
           kind: .backslash,
           text: SyntaxText(rebasing: text[slashIndex..<text.index(after: slashIndex)]),
-          leadingTriviaPieces: [], trailingTriviaPieces: [],
           presence: .present,
           arena: self.arena)
 
@@ -1500,7 +1498,6 @@ extension Parser {
           delim = RawTokenSyntax(
             kind: .rawStringDelimiter,
             text: SyntaxText(rebasing: text[delimiterStart..<contentStart]),
-            leadingTriviaPieces: [], trailingTriviaPieces: [],
             presence: .present,
             arena: self.arena)
         } else {
@@ -1567,7 +1564,6 @@ extension Parser {
     let segmentToken = RawTokenSyntax(
       kind: .stringSegment,
       text: SyntaxText(rebasing: segment),
-      leadingTriviaPieces: [], trailingTriviaPieces: [],
       presence: .present,
       arena: self.arena)
     segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken,

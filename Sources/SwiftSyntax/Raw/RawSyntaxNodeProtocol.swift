@@ -140,6 +140,37 @@ public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
   public init(
     kind: RawTokenKind,
     text: SyntaxText,
+    leadingTriviaPieces: [RawTriviaPiece] = [],
+    trailingTriviaPieces: [RawTriviaPiece] = [],
+    presence: SourcePresence,
+    arena: __shared SyntaxArena
+  ) {
+    if leadingTriviaPieces.isEmpty && trailingTriviaPieces.isEmpty {
+      // Create it via `RawSyntax.parsedToken()`.
+      self.init(
+        kind: kind,
+        wholeText: text,
+        textRange: 0 ..< text.count,
+        presence: presence,
+        arena: arena
+      )
+    } else {
+      // Create it via `RawSyntax.makeMaterializedToken()`.
+      self.init(
+        materialized: kind,
+        text: text,
+        leadingTriviaPieces: leadingTriviaPieces,
+        trailingTriviaPieces: trailingTriviaPieces,
+        presence: presence,
+        arena: arena
+      )
+    }
+  }
+
+  /// Creates a `MaterializedToken`. Trivia must be managed by the same `arena`.
+  fileprivate init(
+    materialized kind: RawTokenKind,
+    text: SyntaxText,
     leadingTriviaPieces: [RawTriviaPiece],
     trailingTriviaPieces: [RawTriviaPiece],
     presence: SourcePresence,
@@ -169,8 +200,11 @@ public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
     text: SyntaxText? = nil,
     arena: __shared SyntaxArena
   ) {
+    // FIXME: Allow creating a `RawSyntax.parsedToken()` with a string literal
+    // for text. Currently it asserts that the string buffer is not contained
+    // within the `arena`.
     self.init(
-      kind: kind,
+      materialized: kind,
       text: text ?? kind.defaultText ?? "",
       leadingTriviaPieces: [],
       trailingTriviaPieces: [],

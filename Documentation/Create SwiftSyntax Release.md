@@ -86,6 +86,7 @@ index 4c6db83a..7a953fc6 100644
 2. On apple/swift-syntax create a new release using the just-pushed tag and upload the parser library as `_InternalSwiftSyntaxParser.xcframework.zip`
 3. If this is a snapshot release, check “This is a pre-release”
 4. Publish 🎉
+5. Add the new release to README.md
 
 ## Integration test
 

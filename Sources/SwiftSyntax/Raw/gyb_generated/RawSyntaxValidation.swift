@@ -1874,18 +1874,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[8], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[9], as: RawSyntax?.self)
     break
-  case .elseIfContinuation:
-    assert(layout.count == 2)
-    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[1], as: RawIfStmtSyntax.self)
-    break
-  case .elseBlock:
-    assert(layout.count == 4)
-    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[1], as: RawTokenSyntax.self)
-    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[3], as: RawCodeBlockSyntax.self)
-    break
   case .switchCase:
     assert(layout.count == 6)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)

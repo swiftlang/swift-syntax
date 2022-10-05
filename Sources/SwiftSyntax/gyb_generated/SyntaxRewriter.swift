@@ -1549,20 +1549,6 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `ElseIfContinuationSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ElseIfContinuationSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
-  }
-
-  /// Visit a `ElseBlockSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ElseBlockSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
-  }
-
   /// Visit a `SwitchCaseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -4277,26 +4263,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplElseIfContinuationSyntax(_ data: SyntaxData) -> Syntax {
-      let node = ElseIfContinuationSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplElseBlockSyntax(_ data: SyntaxData) -> Syntax {
-      let node = ElseBlockSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSwitchCaseSyntax(_ data: SyntaxData) -> Syntax {
       let node = SwitchCaseSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5364,10 +5330,6 @@ open class SyntaxRewriter {
       return visitImplThrowStmtSyntax
     case .ifStmt:
       return visitImplIfStmtSyntax
-    case .elseIfContinuation:
-      return visitImplElseIfContinuationSyntax
-    case .elseBlock:
-      return visitImplElseBlockSyntax
     case .switchCase:
       return visitImplSwitchCaseSyntax
     case .switchDefaultLabel:
@@ -5935,10 +5897,6 @@ open class SyntaxRewriter {
       return visitImplThrowStmtSyntax(data)
     case .ifStmt:
       return visitImplIfStmtSyntax(data)
-    case .elseIfContinuation:
-      return visitImplElseIfContinuationSyntax(data)
-    case .elseBlock:
-      return visitImplElseBlockSyntax(data)
     case .switchCase:
       return visitImplSwitchCaseSyntax(data)
     case .switchDefaultLabel:

@@ -234,8 +234,6 @@ public enum SyntaxEnum {
   case declarationStmt(DeclarationStmtSyntax)
   case throwStmt(ThrowStmtSyntax)
   case ifStmt(IfStmtSyntax)
-  case elseIfContinuation(ElseIfContinuationSyntax)
-  case elseBlock(ElseBlockSyntax)
   case switchCase(SwitchCaseSyntax)
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
   case caseItem(CaseItemSyntax)
@@ -737,10 +735,6 @@ public enum SyntaxEnum {
       return "'throw' statement"
     case .ifStmt:
       return "'if' statement"
-    case .elseIfContinuation:
-      return nil
-    case .elseBlock:
-      return "else block"
     case .switchCase:
       return "switch case"
     case .switchDefaultLabel:
@@ -1305,10 +1299,6 @@ public extension Syntax {
       return .throwStmt(ThrowStmtSyntax(self)!)
     case .ifStmt:
       return .ifStmt(IfStmtSyntax(self)!)
-    case .elseIfContinuation:
-      return .elseIfContinuation(ElseIfContinuationSyntax(self)!)
-    case .elseBlock:
-      return .elseBlock(ElseBlockSyntax(self)!)
     case .switchCase:
       return .switchCase(SwitchCaseSyntax(self)!)
     case .switchDefaultLabel:

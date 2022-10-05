@@ -465,10 +465,6 @@ extension Syntax {
       return node
     case .ifStmt(let node):
       return node
-    case .elseIfContinuation(let node):
-      return node
-    case .elseBlock(let node):
-      return node
     case .switchCase(let node):
       return node
     case .switchDefaultLabel(let node):
@@ -1030,10 +1026,6 @@ extension Syntax {
       return node.childNameForDiagnostics(index)
     case .ifStmt(let node):
       return node.childNameForDiagnostics(index)
-    case .elseIfContinuation(let node):
-      return node.childNameForDiagnostics(index)
-    case .elseBlock(let node):
-      return node.childNameForDiagnostics(index)
     case .switchCase(let node):
       return node.childNameForDiagnostics(index)
     case .switchDefaultLabel(let node):
@@ -1377,8 +1369,6 @@ extension SyntaxKind {
     case .declarationStmt: return DeclarationStmtSyntax.self
     case .throwStmt: return ThrowStmtSyntax.self
     case .ifStmt: return IfStmtSyntax.self
-    case .elseIfContinuation: return ElseIfContinuationSyntax.self
-    case .elseBlock: return ElseBlockSyntax.self
     case .switchCase: return SwitchCaseSyntax.self
     case .switchDefaultLabel: return SwitchDefaultLabelSyntax.self
     case .caseItem: return CaseItemSyntax.self

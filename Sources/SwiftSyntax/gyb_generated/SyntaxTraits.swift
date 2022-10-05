@@ -231,7 +231,6 @@ extension SwitchStmtSyntax: BracedSyntax {}
 extension DoStmtSyntax: WithCodeBlockSyntax {}
 extension ConditionElementSyntax: WithTrailingCommaSyntax {}
 extension IfStmtSyntax: WithCodeBlockSyntax {}
-extension ElseBlockSyntax: WithCodeBlockSyntax {}
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 extension CaseItemSyntax: WithTrailingCommaSyntax {}
 extension CatchItemSyntax: WithTrailingCommaSyntax {}

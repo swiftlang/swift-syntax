@@ -237,8 +237,6 @@ extension SyntaxKind {
     case 84: self = .declarationStmt
     case 85: self = .throwStmt
     case 86: self = .ifStmt
-    case 141: self = .elseIfContinuation
-    case 142: self = .elseBlock
     case 143: self = .switchCase
     case 144: self = .switchDefaultLabel
     case 145: self = .caseItem

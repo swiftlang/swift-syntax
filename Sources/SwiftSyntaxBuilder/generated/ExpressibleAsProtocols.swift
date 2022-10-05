@@ -1718,22 +1718,6 @@ public extension ExpressibleAsIfStmt {
     return createIfStmt()
   }
 }
-public protocol ExpressibleAsElseIfContinuation: ExpressibleAsSyntaxBuildable {
-  func createElseIfContinuation() -> ElseIfContinuation
-}
-public extension ExpressibleAsElseIfContinuation {
-  func createSyntaxBuildable() -> SyntaxBuildable {
-    return createElseIfContinuation()
-  }
-}
-public protocol ExpressibleAsElseBlock: ExpressibleAsSyntaxBuildable {
-  func createElseBlock() -> ElseBlock
-}
-public extension ExpressibleAsElseBlock {
-  func createSyntaxBuildable() -> SyntaxBuildable {
-    return createElseBlock()
-  }
-}
 public protocol ExpressibleAsSwitchCase: ExpressibleAsSyntaxBuildable {
   func createSwitchCase() -> SwitchCase
 }

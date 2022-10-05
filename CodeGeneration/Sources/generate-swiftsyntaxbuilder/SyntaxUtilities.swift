@@ -93,7 +93,7 @@ func createTriviaAttachment(varName: ExprBuildable, triviaVarName: ExprBuildable
   IfStmt(
     """
     if !\(triviaVarName).isEmpty {
-      let trivia = (\(triviaVarName) + (\(varName).\(trivia) ?? [])).indented(indentation: format.indentTrivia)
+      let trivia = \(triviaVarName) + (\(varName).\(trivia) ?? [])
       \(varName) = \(varName).with\(trivia.withFirstCharacterUppercased)(trivia)
     }
     """

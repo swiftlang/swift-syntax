@@ -14,13 +14,7 @@ final class TypeAnnotationTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let typeAnnotation = builder.createTypeAnnotation()
-      let syntax = typeAnnotation.buildSyntax()
-
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createTypeAnnotation(), expected, line: line)
     }
   }
 }

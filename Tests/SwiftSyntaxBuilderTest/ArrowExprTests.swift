@@ -11,13 +11,7 @@ final class ArrowExprTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let arrowExpr = builder.createArrowExpr()
-      let syntax = arrowExpr.buildSyntax()
-
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createArrowExpr(), expected, line: line)
     }
   }
 }

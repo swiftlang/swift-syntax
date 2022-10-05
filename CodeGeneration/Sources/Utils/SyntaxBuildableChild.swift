@@ -35,20 +35,12 @@ public extension Child {
   /// Generate a Swift expression that creates a proper SwiftSyntax node of type
   /// `type.syntax` from a variable named `varName` of type `type.buildable` that
   /// represents this child node.
-  func generateExprBuildSyntaxNode(varName: ExpressibleAsExprBuildable, formatName: String) -> ExpressibleAsExprBuildable {
+  func generateExprBuildSyntaxNode(varName: ExpressibleAsExprBuildable) -> ExpressibleAsExprBuildable {
     if type.isToken {
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken")) {
-        TupleExprElement(label: "format", expression: "format")
-      }
+      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken"))
     } else {
-      var format: ExpressibleAsExprBuildable = formatName
-      if isIndented {
-        format = MemberAccessExpr(base: format, name: "_indented")
-      }
       let expr = type.optionalChained(expr: varName)
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: expr, name: "build\(type.baseName)")) {
-        TupleExprElement(label: "format", expression: format)
-      }
+      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: expr, name: "build\(type.baseName)"))
     }
   }
 

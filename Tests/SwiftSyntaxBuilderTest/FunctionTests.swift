@@ -45,9 +45,8 @@ final class FunctionTests: XCTestCase {
         }
       })
     }
-    let syntax = buildable.buildSyntax()
 
-    XCTAssertEqual(syntax.description, """
+    AssertBuildResult(buildable, """
       ␣func fibonacci(_ n: Int) -> Int {
           if n <= 1 {
               return n
@@ -63,22 +62,19 @@ final class FunctionTests: XCTestCase {
         TupleExprElement(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: "value\(param)")
       }
     }
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, "test(value1, p2: value2, value3, p4: value4, value5)")
+    AssertBuildResult(buildable, "test(value1, p2: value2, value3, p4: value4, value5)")
   }
 
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
     let buildable = FunctionCallExpr(calledExpression: "test")
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, "test()")
+    AssertBuildResult(buildable, "test()")
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
     let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: ClosureExpr()) {
       TupleExprElement(expression: "42")
     }
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, "test(42) {\n}")
+    AssertBuildResult(buildable, "test(42) {\n}")
   }
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
@@ -89,70 +85,11 @@ final class FunctionTests: XCTestCase {
     })
     let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: closure)
     let syntax = buildable.buildSyntax()
-    XCTAssertEqual(
-      syntax.description,
+    AssertBuildResult(
+      buildable,
       """
       test {
           f(a)
-      }
-      """)
-  }
-
-  func testParserBuilderInStringInterpolation() {
-    let cases = SwitchCaseList {
-      for i in 0..<2 {
-        SwitchCase("""
-        case \(i):
-          return \(i + 1)
-        """)
-      }
-      SwitchCase("""
-      default:
-        return -1
-      """)
-    }
-    let plusOne = FunctionDeclSyntax("""
-    func plusOne(base: Int) -> Int {
-      switch base {
-      \(cases)
-      }
-    }
-    """)
-    
-    XCTAssertEqual(plusOne.description.trimmingTrailingWhitespace(), """
-    func plusOne(base: Int) -> Int {
-      switch base {
-
-      case 0:
-        return 1
-      case 1:
-        return 2
-      default:
-        return -1
-      }
-    }
-    """)
-  }
-
-  func testStringInterpolationInBuilder() {
-    let ext = ExtensionDecl(extendedType: "MyType") {
-      FunctionDecl(
-      """
-      ///
-      /// Satisfies conformance to `SyntaxBuildable`.
-      func buildSyntax(format: Format) -> Syntax {
-        return Syntax(buildTest(format: format))
-      }
-      """
-      )
-    }
-    XCTAssertEqual(ext.buildSyntax().description, """
-      extension MyType {
-          ///
-          /// Satisfies conformance to `SyntaxBuildable`.
-          func buildSyntax(format: Format) -> Syntax {
-            return Syntax(buildTest(format: format))
-          }
       }
       """)
   }

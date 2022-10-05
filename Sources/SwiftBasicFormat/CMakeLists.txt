@@ -7,7 +7,9 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_library(SwiftBasicFormat STATIC
-  generated/Format.swift
+  generated/BasicFormat.swift
+  Trivia+Indented.swift
+  Utils.swift
 )
 
 target_link_libraries(SwiftBasicFormat PUBLIC

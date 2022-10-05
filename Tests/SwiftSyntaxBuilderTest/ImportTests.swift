@@ -12,11 +12,6 @@ final class ImportTests: XCTestCase {
       path: AccessPath([AccessPathComponent(name: identifier)])
     )
 
-    let syntax = importDecl.buildSyntax()
-
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, "␣import SwiftSyntax")
+    AssertBuildResult(importDecl, "␣import SwiftSyntax")
   }
 }

@@ -26,12 +26,7 @@ final class ExtensionDeclTests: XCTestCase {
                                   extendedType: "TokenSyntax",
                                   members: members)
 
-    let syntax = buildable.buildSyntax()
-
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
+    AssertBuildResult(buildable, """
     extension TokenSyntax {
         public var `associatedtype`: TokenSyntax {
             TokenSyntax.associatedtypeKeyword()

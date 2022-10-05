@@ -6,12 +6,8 @@ final class StructTests: XCTestCase {
   func testEmptyStruct() {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let buildable = StructDecl(leadingTrivia: leadingTrivia, identifier: "TestStruct") {}
-    let syntax = buildable.buildSyntax()
 
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
+    AssertBuildResult(buildable, """
     ␣struct TestStruct {
     }
     """)
@@ -67,12 +63,8 @@ final class StructTests: XCTestCase {
       carriateReturnsStruct
       carriageReturnFormFeedsStruct
     }
-    let syntax = testStruct.buildSyntax()
 
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
+    AssertBuildResult(testStruct, """
     public struct TestStruct {
         /// A nested struct
         /// with multi line comment
@@ -103,8 +95,7 @@ final class StructTests: XCTestCase {
         }
       }
     }
-    let syntax = myStruct.buildSyntax()
-    XCTAssertEqual(syntax.description, """
+    AssertBuildResult(myStruct, """
     struct MyStruct {
         let var0: String
         let var2: String

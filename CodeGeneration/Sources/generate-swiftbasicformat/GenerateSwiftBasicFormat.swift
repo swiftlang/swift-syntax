@@ -26,7 +26,7 @@ struct GenerateSwiftStaticFormat: ParsableCommand {
   func run() throws {
     try generateTemplates(
       templates: [
-        (formatFile, "Format.swift"),
+        (basicFormatFile, "BasicFormat.swift"),
       ],
       destination: URL(fileURLWithPath: generatedPath),
       verbose: verbose

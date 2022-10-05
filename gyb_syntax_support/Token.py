@@ -233,7 +233,7 @@ SYNTAX_TOKENS = [
     StmtKeyword('Fallthrough', 'fallthrough', serialization_code=35),
     StmtKeyword('Switch', 'switch', serialization_code=36),
     StmtKeyword('Case', 'case', serialization_code=37),
-    StmtKeyword('Default', 'default', serialization_code=38),
+    StmtKeyword('Default', 'default', serialization_code=38, requires_trailing_space=False),
     StmtKeyword('Where', 'where', requires_leading_space=True,
                 serialization_code=39),
     StmtKeyword('Catch', 'catch', requires_leading_space=True,

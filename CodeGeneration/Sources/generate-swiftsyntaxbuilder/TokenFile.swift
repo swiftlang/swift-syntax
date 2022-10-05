@@ -79,8 +79,8 @@ let tokenFile = SourceFile {
     FunctionDecl(
       """
 
-      public func buildToken(format: Format) -> TokenSyntax {
-        var result = format.format(syntax: tokenSyntax)
+      public func buildToken() -> TokenSyntax {
+        var result = tokenSyntax
         if let leadingTrivia = leadingTrivia {
           result = result.withLeadingTrivia(leadingTrivia)
         }
@@ -95,8 +95,8 @@ let tokenFile = SourceFile {
     FunctionDecl(
       """
 
-      public func buildSyntax(format: Format) -> Syntax {
-        Syntax(self.buildToken(format: format))
+      public func buildSyntax() -> Syntax {
+        Syntax(self.buildToken())
       }
       """
     )

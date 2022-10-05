@@ -12,12 +12,7 @@ final class SourceFileTests: XCTestCase {
       })
     }
 
-    let syntax = source.buildSyntax()
-
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
+    AssertBuildResult(source, """
 
       import Foundation
       import UIKit

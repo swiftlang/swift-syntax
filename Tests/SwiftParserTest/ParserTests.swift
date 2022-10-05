@@ -1,3 +1,4 @@
+import _SwiftSyntaxTestSupport
 import Dispatch
 import XCTest
 import SwiftSyntax

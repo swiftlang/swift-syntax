@@ -12,13 +12,7 @@ final class ReturnClauseTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let returnClause = builder.createReturnClause()
-      let syntax = returnClause.buildSyntax()
-
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createReturnClause(), expected, line: line)
     }
   }
 }

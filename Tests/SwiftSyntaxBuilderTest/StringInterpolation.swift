@@ -1,8 +1,16 @@
+import _SwiftSyntaxTestSupport
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftParser
+import SwiftBasicFormat
 
 import XCTest
+
+class TwoSpacesFormat: BasicFormat {
+  override var indentation: TriviaPiece {
+    .spaces(indentationLevel * 2)
+  }
+}
 
 final class StringInterpolationTests: XCTestCase {
   func testDeclInterpolation() throws {
@@ -92,6 +100,65 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertEqual(rewrittenSourceFile.description, """
       class Foo {
         func newName() {}
+      }
+      """)
+  }
+
+  func testParserBuilderInStringInterpolation() {
+    let cases = SwitchCaseList {
+      for i in 0..<2 {
+        SwitchCase("""
+        case \(i):
+          return \(i + 1)
+        """)
+      }
+      SwitchCase("""
+      default:
+        return -1
+      """)
+    }
+    let plusOne = FunctionDeclSyntax("""
+    func plusOne(base: Int) -> Int {
+      switch base {
+      \(cases, format: TwoSpacesFormat())
+      }
+    }
+    """)
+
+    AssertStringsEqualWithDiff(plusOne.description.trimmingTrailingWhitespace(), """
+    func plusOne(base: Int) -> Int {
+      switch base {
+
+      case 0:
+        return 1
+      case 1:
+        return 2
+      default:
+        return -1
+      }
+    }
+    """)
+  }
+
+  func testStringInterpolationInBuilder() {
+    let ext = ExtensionDecl(extendedType: "MyType") {
+      FunctionDecl(
+      """
+      ///
+      /// Satisfies conformance to `SyntaxBuildable`.
+      func buildSyntax(format: Format) -> Syntax {
+        return Syntax(buildTest(format: format))
+      }
+      """
+      )
+    }
+    AssertStringsEqualWithDiff(ext.build(format: TwoSpacesFormat()).description, """
+      extension MyType {
+        ///
+        /// Satisfies conformance to `SyntaxBuildable`.
+        func buildSyntax(format: Format) -> Syntax {
+          return Syntax(buildTest(format: format))
+        }
       }
       """)
   }

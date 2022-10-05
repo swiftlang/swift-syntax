@@ -153,16 +153,16 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
   let buildCall = elementType.isToken ? "buildToken" : "build\(elementType.baseName)"
 
   let body = CodeBlockItemList {
-    VariableDecl("var result = \(type.syntaxBaseName)(elements.map { $0.\(buildCall)(format: format) })")
+    VariableDecl("var result = \(type.syntaxBaseName)(elements.map { $0.\(buildCall)() })")
     for trivia in trivias {
       createTriviaAttachment(varName: IdentifierExpr("result"), triviaVarName: IdentifierExpr(trivia), trivia: trivia)
     }
-    ReturnStmt("return format.format(syntax: result)")
+    ReturnStmt("return result")
   }.buildSyntax(format: Format(indentWidth: 2))
 
   return FunctionDecl(
     """
-    public func build\(type.baseName)(format: Format) -> \(type.syntax) {
+    public func build\(type.baseName)() -> \(type.syntax) {
       \(body)
     }
     """)
@@ -173,8 +173,8 @@ private func createBuildSyntaxFunction(node: Node) -> FunctionDecl {
   let type = node.type
   return FunctionDecl(
     """
-    public func buildSyntax(format: Format) -> Syntax {
-      return Syntax(build\(type.baseName)(format: format))
+    public func buildSyntax() -> Syntax {
+      return Syntax(build\(type.baseName)())
     }
     """
   )

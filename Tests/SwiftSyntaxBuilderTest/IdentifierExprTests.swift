@@ -12,13 +12,7 @@ final class IdentifierExprTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let identifierExpr = builder.createIdentifierExpr()
-      let syntax = identifierExpr.buildSyntax()
-
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createIdentifierExpr(), expected, line: line)
     }
   }
 }

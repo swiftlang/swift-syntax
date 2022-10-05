@@ -18,12 +18,8 @@ final class StringLiteralTests: XCTestCase {
                                       openQuote: .stringQuote,
                                       segments: StringLiteralSegments([segment]),
                                       closeQuote: .stringQuote)
-      let syntax = builder.buildSyntax()
 
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -43,13 +39,7 @@ final class StringLiteralTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let stringLiteralExpr = builder.createStringLiteralExpr()
-      let syntax = stringLiteralExpr.buildSyntax()
-
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createStringLiteralExpr(), expected, line: line)
     }
   }
 }

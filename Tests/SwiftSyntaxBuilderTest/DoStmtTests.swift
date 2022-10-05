@@ -29,9 +29,8 @@ final class DoStmtTests: XCTestCase {
         }
       ])
 
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(
-      syntax.description,
+    AssertBuildResult(
+      buildable,
       """
       do {
           try a.b()

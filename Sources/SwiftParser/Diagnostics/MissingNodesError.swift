@@ -48,7 +48,7 @@ private func missingNodesDescription(missingNodes: [Syntax], commonParent: Synta
     var description: String {
       switch self {
       case .tokensWithDefaultText(let tokens):
-        let tokenContents = tokens.map({ Format().format(syntax: $0).description }).joined()
+        let tokenContents = tokens.map({ BasicFormat().visit($0).description }).joined()
         return "'\(tokenContents.trimmingSpaces())'"
       case .tokenWithoutDefaultText(let tokenKind):
         return tokenKind.nameForDiagnostics

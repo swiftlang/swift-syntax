@@ -302,23 +302,44 @@ final class OperatorsTests: XCTestCase {
     AssertParse(
       """
       func !!(x: Man, y: Man) {}
-      let foo = Man()
-      let bar = TheDevil()
-      foo!!foo
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: consecutive statements, Fix-It replacements: 6 - 6 = ';'
-      ]
+      """
     )
   }
 
   func testOperators32() {
     AssertParse(
       """
-      foo??bar
+      let foo = Man()
+      """
+    )
+  }
+
+  func testOperators33() {
+    AssertParse(
+      """
+      let bar = TheDevil()
+      """
+    )
+  }
+
+  func testOperators34() {
+    AssertParse(
+      """
+      foo!!#^DIAG^#foo
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: consecutive statements, Fix-It replacements: 6 - 6 = ';'
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
+
+  func testOperators35() {
+    AssertParse(
+      """
+      foo??#^DIAG^#bar
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }

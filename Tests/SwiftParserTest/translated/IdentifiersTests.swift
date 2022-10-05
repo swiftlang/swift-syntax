@@ -79,34 +79,64 @@ final class IdentifiersTests: XCTestCase {
     )
   }
 
-  func testIdentifiers8() {
+  func testIdentifiers8a() {
     AssertParse(
       """
       // Keywords as identifiers
-      class #^DIAG_1^#switch {} #^DIAG_2^#
-      struct Self {} 
-      protocol #^DIAG_3^#enum #^DIAG_4^#{} 
-      protocol test {
-        associatedtype #^DIAG_5^#public 
-      #^DIAG_6^#}
-      func #^DIAG_7^#_(_ x: Int) {}#^DIAG_8^#
+      class#^DIAG_1^# #^DIAG_2^#switch {} #^DIAG_3^#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: keyword 'switch' cannot be used as an identifier here
         // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 7 - 13 = '`switch`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected member block in class"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '{}' in 'switch' statement"),
-        // TODO: Old parser expected error on line 3: keyword 'Self' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 3: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
-        // TODO: Old parser expected error on line 4: keyword 'enum' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 4: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 10 - 14 = '`enum`'
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected member block in protocol"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in class"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected '{}' in 'switch' statement"),
+      ]
+    )
+  }
+
+  func testIdentifiers8b() {
+    AssertParse(
+      """
+      struct Self {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: keyword 'Self' cannot be used as an identifier here
+        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
+      ]
+    )
+  }
+
+  func testIdentifiers8c() {
+    AssertParse(
+      """
+      protocol#^DIAG_1^# #^DIAG_2^#enum#^DIAG_3^# #^DIAG_4^#{}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: keyword 'enum' cannot be used as an identifier here
+        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 10 - 14 = '`enum`'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in protocol"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "DIAG_4", message: "expected identifier in enum"),
         DiagnosticSpec(locationMarker: "DIAG_4", message: "expected member block in enum"),
-        // TODO: Old parser expected error on line 6: keyword 'public' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 6: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 18 - 24 = '`public`'
+      ]
+    )
+  }
+
+  func testIdentifiers8d() {
+    AssertParse(
+      """
+      protocol test {
+        associatedtype #^DIAG_5^#public
+      #^DIAG_6^#}
+      func #^DIAG_7^#_(_ x: Int) {}#^DIAG_8^#
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: keyword 'public' cannot be used as an identifier here
+        // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 18 - 24 = '`public`'
         DiagnosticSpec(locationMarker: "DIAG_5", message: "expected identifier in associatedtype declaration"),
         DiagnosticSpec(locationMarker: "DIAG_6", message: "unexpected text '}' in function"),
         // TODO: Old parser expected note on line 8: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 7 = '`_`'

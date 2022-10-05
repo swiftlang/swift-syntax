@@ -3,35 +3,78 @@
 import XCTest
 
 final class OperatorDeclTests: XCTestCase {
-  func testOperatorDecl1() {
+  func testOperatorDecl1a() {
     AssertParse(
       """
-      prefix operator +++ {} 
-      postfix operator +++ {} 
-      infix operator +++ {} 
-      infix operator +++* { //  {{none}}
-        associativity right
-      }
-      infix operator +++*+ : A { }
+      prefix operator +++#^DIAG^# {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 20 - 23 = ''
-        // TODO: Old parser expected error on line 2: operator should no longer be declared with body, Fix-It replacements: 21 - 24 = ''
-        // TODO: Old parser expected error on line 3: operator should no longer be declared with body, Fix-It replacements: 19 - 22 = ''
-        // TODO: Old parser expected error on line 4: operator should no longer be declared with body; use a precedence group instead
-        // TODO: Old parser expected error on line 7: operator should no longer be declared with body, Fix-It replacements: 25 - 29 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }
 
+  func testOperatorDecl1b() {
+    AssertParse(
+      """
+      postfix operator +++#^DIAG^# {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 21 - 24 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
+
+  func testOperatorDecl1c() {
+    AssertParse(
+      """
+      infix operator +++#^DIAG^# {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 19 - 22 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
+
+  func testOperatorDecl1d() {
+    AssertParse(
+      """
+      infix operator +++*#^DIAG^# { //  {{none}}
+        associativity right
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: operator should no longer be declared with body; use a precedence group instead
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
+
+  func testOperatorDecl1e() {
+    AssertParse(
+      """
+      infix operator +++*+ : A#^DIAG^# { }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 25 - 29 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
+
+
   func testOperatorDecl2() {
     AssertParse(
       """
-      prefix operator +++** : A { }
+      prefix operator +++** : A#^DIAG^# { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: only infix operators may declare a precedence, Fix-It replacements: 23 - 27 = ''
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 26 - 30 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }
@@ -50,11 +93,12 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl4() {
     AssertParse(
       """
-      postfix operator ++*+* : A { }
+      postfix operator ++*+* : A#^DIAG^# { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: only infix operators may declare a precedence, Fix-It replacements: 24 - 28 = ''
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 27 - 31 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }
@@ -84,11 +128,12 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl7() {
     AssertParse(
       """
-      operator +*+++ { }
+      operator +*+++#^DIAG^# { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 15 - 19 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }
@@ -96,11 +141,12 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl8() {
     AssertParse(
       """
-      operator +*++* : A { }
+      operator +*++* : A#^DIAG^# { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 19 - 23 = ''
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }
@@ -128,49 +174,142 @@ final class OperatorDeclTests: XCTestCase {
     )
   }
 
-  func testOperatorDecl11() {
+  func testOperatorDecl11a() {
     AssertParse(
       """
       prefix operator ??
-      postfix operator ?? 
-      prefix operator !!
-      postfix operator !! 
-      postfix operator ?$$
+      """
+    )
+  }
+
+  func testOperatorDecl11b() {
+    AssertParse(
+      """
+      postfix operator ??
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: postfix operator names starting with '?' or '!' are disallowed to avoid collisions with built-in unwrapping operators
-        // TODO: Old parser expected error on line 4: postfix operator names starting with '?' or '!' are disallowed to avoid collisions with built-in unwrapping operators
-        // TODO: Old parser expected error on line 5: postfix operator names starting with '?' or '!' are disallowed
-        // TODO: Old parser expected error on line 5: '$$' is considered an identifier
+        // TODO: Old parser expected error on line 1: postfix operator names starting with '?' or '!' are disallowed to avoid collisions with built-in unwrapping operators
       ]
     )
   }
 
-  func testOperatorDecl12() {
+  func testOperatorDecl11c() {
     AssertParse(
       """
-      infix operator --aa 
-      infix operator aa#^DIAG_1^#--: A 
-      infix operator <<$$@#^DIAG_2^#< 
-      infix operator !!@aa 
-      infix operator ##^DIAG_3^#++= 
-      infix operator ++=#^DIAG_4^## 
-      infix operator ->#^DIAG_5^##
+      prefix operator !!
+      """
+    )
+  }
+
+  func testOperatorDecl11d() {
+    AssertParse(
+      """
+      postfix operator !!
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: postfix operator names starting with '?' or '!' are disallowed to avoid collisions with built-in unwrapping operators
+      ]
+    )
+  }
+
+  func testOperatorDecl11e() {
+    AssertParse(
+      """
+      postfix operator ?#^DIAG^#$$
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: postfix operator names starting with '?' or '!' are disallowed
+        // TODO: Old parser expected error on line 1: '$$' is considered an identifier
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testOperatorDecl12a() {
+    AssertParse(
+      """
+      infix operator --#^DIAG^#aa
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
-        // TODO: Old parser expected error on line 2: 'aa' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text before operator"),
-        // TODO: Old parser expected error on line 3: '$$' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected name in attribute"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text in operator"),
-        // TODO: Old parser expected error on line 4: '@' is not allowed in operator names
-        // TODO: Old parser expected error on line 5: '#' is not allowed in operator names
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text before operator"),
-        // TODO: Old parser expected error on line 6: '#' is not allowed in operator names
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "unexpected text before operator"),
-        // TODO: Old parser expected error on line 7: '#' is not allowed in operator names
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "extraneous '#' at top level"),
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
+
+  func testOperatorDecl12b() {
+    AssertParse(
+      """
+      infix operator aa#^DIAG^#--: A
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
+        DiagnosticSpec(message: "extraneous '--: A' at top level"),
+      ]
+    )
+  }
+
+  func testOperatorDecl12c() {
+    AssertParse(
+      """
+      infix operator <<#^DIAG_1^#$$#^DIAG_2^#@#^DIAG_3^#<
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        // TODO: Old parser expected error on line 1: '$$' is considered an identifier and must not appear within an operator name
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected name in attribute"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration after attribute"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous '<' at top level"),
+      ]
+    )
+  }
+
+  func testOperatorDecl12d() {
+    AssertParse(
+      """
+      infix operator !!#^DIAG_1^#@aa#^DIAG_2^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        // TODO: Old parser expected error on line 1: '@' is not allowed in operator names
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration after attribute"),
+      ]
+    )
+  }
+
+  func testOperatorDecl12e() {
+    AssertParse(
+      """
+      infix operator ##^DIAG^#++=
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
+        DiagnosticSpec(message: "extraneous '++=' at top level"),
+      ]
+    )
+  }
+
+  func testOperatorDecl12f() {
+    AssertParse(
+      """
+      infix operator ++=#^DIAG^##
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
+        DiagnosticSpec(message: "extraneous '#' at top level"),
+      ]
+    )
+  }
+
+  func testOperatorDecl12g() {
+    AssertParse(
+      """
+      infix operator ->#^DIAG^##
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
+        DiagnosticSpec(message: "extraneous '#' at top level"),
       ]
     )
   }

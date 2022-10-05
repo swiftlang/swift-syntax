@@ -152,7 +152,7 @@ final class TrailingClosuresTests: XCTestCase {
         func fn(f: () -> Void, g: () -> Void) {}
         fn {} g: {} // Ok
         fn {} _: {} //  {{none}}
-        fn {} g#^DIAG^#: <#T##() -> Void#> 
+        fn {}#^DIAG_1^# g#^DIAG_2^#: <#T##() -> Void#>
         func multiple(_: () -> Void, _: () -> Void) {}
         multiple {} _: { }
         func mixed_args_1(a: () -> Void, _: () -> Void) {}
@@ -166,7 +166,9 @@ final class TrailingClosuresTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 5: editor placeholder in source file
-        DiagnosticSpec(message: "unexpected text ': <#T##() -> Void#>' before function"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text ': <#T##() -> Void#>' before function"),
       ]
     )
   }

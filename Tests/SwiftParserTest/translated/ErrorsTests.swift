@@ -29,7 +29,7 @@ final class ErrorsTests: XCTestCase {
       """
       func one() {
         do {
-          true ? () : #^DIAG_1^#throw opaque_error() 
+          true ? () :#^DIAG_1^# #^DIAG_2^#throw opaque_error()
         } catch _ {
         }
         do {
@@ -37,7 +37,7 @@ final class ErrorsTests: XCTestCase {
           let error2 = error
         }
         do {
-        } catch #^DIAG_2^#where true { 
+        } catch #^DIAG_3^#where true {
           let error2 = error
         } catch {
         }
@@ -73,8 +73,9 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected expression after '? ... :' in ternary expression
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in 'do' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in pattern"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'do' statement"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected expression in pattern"),
       ]
     )
   }
@@ -272,8 +273,8 @@ final class ErrorsTests: XCTestCase {
     AssertParse(
       """
       // rdar://21328447
-      func fixitThrow0() throw {} 
-      func fixitThrow1() throw #^DIAG^#-> Int {} 
+      func fixitThrow0()#^DIAG_1^# throw {}
+      func fixitThrow1()#^DIAG_2^# throw#^DIAG_3^# #^DIAG_4^#-> Int {}
       func fixitThrow2() throws {
         var _: (Int)
         throw MSV.Foo
@@ -282,9 +283,12 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 25 = 'throws'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 3: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 25 = 'throws'
-        DiagnosticSpec(message: "expected expression in 'throw' statement"),
-        DiagnosticSpec(message: "unexpected text '-> Int {}' before function"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected expression in 'throw' statement"),
+        DiagnosticSpec(locationMarker: "DIAG_4", message: "unexpected text '-> Int {}' before function"),
         // TODO: Old parser expected error on line 7: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 16 - 21 = 'throws'
       ]
     )
@@ -314,18 +318,13 @@ final class ErrorsTests: XCTestCase {
   func testErrors20() {
     AssertParse(
       """
-      func fixitTry0<T>(a: T) try #^DIAG^#where T:ExpressibleByStringLiteral {} 
-      func fixitTry1<T>(a: T) try {} 
-      func fixitTry2() try {} 
-      let fixitTry3 : () try -> Int
+      func fixitTry0<T>(a: T)#^DIAG_1^# try #^DIAG_2^#where T:ExpressibleByStringLiteral {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 25 - 28 = 'throws'
-        DiagnosticSpec(message: "expected expression in 'try' expression"),
-        DiagnosticSpec(message: "unexpected text 'where T:ExpressibleByStringLiteral {}' before function"),
-        // TODO: Old parser expected error on line 2: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 25 - 28 = 'throws'
-        // TODO: Old parser expected error on line 3: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 18 - 21 = 'throws'
-        // TODO: Old parser expected error on line 4: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 23 = 'throws'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous 'where T:ExpressibleByStringLiteral {}' at top level"),
       ]
     )
   }
@@ -333,18 +332,73 @@ final class ErrorsTests: XCTestCase {
   func testErrors21() {
     AssertParse(
       """
-      func fixitAwait0() await { } 
-      func fixitAwait1() await #^DIAG_1^#-> Int { } 
-      func fixitAwait2() throws await #^DIAG_2^#-> Int { }
+      func fixitTry1<T>(a: T)#^DIAG^# try {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 25 - 28 = 'throws'
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ]
+    )
+  }
+
+  func testErrors22() {
+    AssertParse(
+      """
+      func fixitTry2()#^DIAG^# try {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 18 - 21 = 'throws'
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testErrors23() {
+    AssertParse(
+      """
+      let fixitTry3 : () try -> Int
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 23 = 'throws'
+      ]
+    )
+  }
+
+  func testErrors24() {
+    AssertParse(
+      """
+      func fixitAwait0()#^DIAG^# await { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected async specifier; did you mean 'async'?, Fix-It replacements: 20 - 25 = 'async'
-        // TODO: Old parser expected error on line 2: expected async specifier; did you mean 'async'?, Fix-It replacements: 20 - 25 = 'async'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in 'await' expression"),
-        // TODO: Old parser expected error on line 3: expected async specifier; did you mean 'async'?, Fix-It replacements: 27 - 32 = 'async'
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'"),
+      ]
+    )
+  }
+
+  func testErrors25() {
+    AssertParse(
+      """
+      func fixitAwait1()#^DIAG_1^# await #^DIAG_2^#-> Int { }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: expected async specifier; did you mean 'async'?, Fix-It replacements: 20 - 25 = 'async'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'await' expression"),
       ]
     )
   }
 
+  func testErrors26() {
+    AssertParse(
+      """
+      func fixitAwait2() throws#^DIAG_1^# await #^DIAG_2^#-> Int { }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: expected async specifier; did you mean 'async'?, Fix-It replacements: 27 - 32 = 'async'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'await' expression"),
+      ]
+    )
+  }
 }

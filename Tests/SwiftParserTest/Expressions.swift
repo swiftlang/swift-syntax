@@ -498,6 +498,7 @@ final class ExpressionTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "expected root in key path"),
+        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "expected ')' to end tuple type"),
       ]
     )
@@ -558,9 +559,10 @@ final class ExpressionTests: XCTestCase {
         \n    #^KEY_PATH_1^#
         if false != true {
           \n       #^KEY_PATH_2^#
-          print "\(i)\"\n#^END^#
+          print#^STMTS^# "\(i)\"\n#^END^#
       """#,
       diagnostics: [
+        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "END", message: #"expected '"' to end string literal"#),
         DiagnosticSpec(locationMarker: "END", message: "expected '}' to end 'if' statement"),
         DiagnosticSpec(locationMarker: "END", message: "expected '}' to end function"),
@@ -597,12 +599,13 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       """
       do {
-        true ? () : #^DIAG^#throw opaque_error()
+        true ? () :#^DIAG_1^# #^DIAG_2^#throw opaque_error()
       } catch _ {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement")
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'do' statement"),
       ]
     )
   }

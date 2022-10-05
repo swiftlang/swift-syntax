@@ -243,13 +243,18 @@ final class DeclarationTests: XCTestCase {
   func testAccessLevelModifier() {
     AssertParse(
       """
-      open open(set) var openProp = 0
+      open#^DIAG_1^# open(set)#^DIAG_2^# var openProp = 0
       public public(set) var publicProp = 0
       internal internal(set) var internalProp = 0
       fileprivate fileprivate(set) var fileprivateProp = 0
       private private(set) var privateProp = 0
       internal(set) var defaultProp = 0
-      """
+      """,
+      diagnostics: [
+        // TODO: This test case should not produce any errors
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+      ]
     )
 
     AssertParse(
@@ -738,10 +743,14 @@ final class DeclarationTests: XCTestCase {
   func testTextRecovery() {
     AssertParse(
       """
-      Lorem ipsum dolor sit amet#^DIAG^#, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      Lorem#^DIAG_1^# ipsum#^DIAG_2^# dolor#^DIAG_3^# sit#^DIAG_4^# amet#^DIAG_5^#, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_4", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_5", message: "extraneous code at top level"),
       ]
     )
   }
@@ -792,7 +801,7 @@ final class DeclarationTests: XCTestCase {
 
   func testDontRecoverFromDeclKeyword() {
     AssertParse(
-      "func foo(first second #^MISSING_COLON^#third #^MISSING_RPAREN^#struct#^MISSING_IDENTIFIER^##^BRACES^#: Int) {}",
+      "func foo(first second #^MISSING_COLON^#third#^STMTS^# #^MISSING_RPAREN^#struct#^MISSING_IDENTIFIER^##^BRACES^#: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         modifiers: nil,
@@ -806,6 +815,7 @@ final class DeclarationTests: XCTestCase {
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "MISSING_COLON", message: "expected ':' in function parameter"),
+        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "MISSING_RPAREN", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "expected identifier in struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "expected member block in struct"),

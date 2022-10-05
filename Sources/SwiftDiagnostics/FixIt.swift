@@ -29,6 +29,8 @@ public struct FixIt {
   public enum Change {
     /// Replace `oldNode` by `newNode`.
     case replace(oldNode: Syntax, newNode: Syntax)
+    /// Remove the trailing trivia of the given token
+    case removeTrailingTrivia(TokenSyntax)
   }
 
   /// A description of what this Fix-It performs.

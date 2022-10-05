@@ -3,6 +3,16 @@
 import XCTest
 
 final class ConsecutiveStatementsTests: XCTestCase {
+  func testSimple() {
+    AssertParse(
+      "let x = 2#^DIAG^# let y = 3",
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+      ],
+      fixedSource: "let x = 2; let y = 3"
+    )
+  }
+
   func testConsecutiveStatements1() {
     AssertParse(
       """
@@ -32,16 +42,16 @@ final class ConsecutiveStatementsTests: XCTestCase {
         let q : Int; i = j; j = i; _ = q
         if i != j { i = j }
         // Errors
-        i = j j = i 
-        let r : Int i = j 
-        let s : Int let t : Int 
+        i = j#^DIAG_1^# j = i
+        let r : Int#^DIAG_2^# i = j
+        let s : Int#^DIAG_3^# let t : Int
         _ = r; _ = s; _ = t
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 7: consecutive statements, Fix-It replacements: 8 - 8 = ';'
-        // TODO: Old parser expected error on line 8: consecutive statements, Fix-It replacements: 14 - 14 = ';'
-        // TODO: Old parser expected error on line 9: consecutive statements, Fix-It replacements: 14 - 14 = ';'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -57,21 +67,19 @@ final class ConsecutiveStatementsTests: XCTestCase {
         // Within property accessors
         subscript(i: Int) -> Float {
           get {
-            var x = i x = i + x return Float(x) 
+            var x = i#^DIAG_1^# x = i + x#^DIAG_2^# return Float(x)
           }
           set {
-            var x = i x = i + 1 
+            var x = i#^DIAG_3^# x = i + 1
             _ = x
           }
         }
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: consecutive declarations, Fix-It replacements: 17 - 17 = ';'
-        // TODO: Old parser expected error on line 5: consecutive declarations, Fix-It replacements: 4 - 4 = ';'
-        // TODO: Old parser expected error on line 9: consecutive statements, Fix-It replacements: 16 - 16 = ';'
-        // TODO: Old parser expected error on line 9: consecutive statements, Fix-It replacements: 26 - 26 = ';'
-        // TODO: Old parser expected error on line 12: consecutive statements, Fix-It replacements: 16 - 16 = ';'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -126,13 +134,12 @@ final class ConsecutiveStatementsTests: XCTestCase {
     AssertParse(
       """
       // At the top level
-      var i, j : Int i = j j = i
+      var i, j : Int#^DIAG_1^# i = j#^DIAG_2^# j = i
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive statements, Fix-It replacements: 15 - 15 = ';'
-        // TODO: Old parser expected error on line 2: consecutive statements, Fix-It replacements: 21 - 21 = ';'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
-
 }

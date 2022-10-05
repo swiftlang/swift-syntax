@@ -174,26 +174,37 @@ final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere12() {
     AssertParse(
       """
-      func testCombinedConstraintsOld<T: #^DIAG_1^#protocol#^DIAG_2^#<ProtoA, ProtoB> where T: ProtoC>(x: T) {} 
-      func testCombinedConstraintsOld<T: #^DIAG_3^#protocol#^DIAG_4^#<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}
+      func testCombinedConstraintsOld<T:#^STMTS^# #^DIAG_1^#protocol#^DIAG_2^#<ProtoA, ProtoB> where T: ProtoC>(x: T) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 83 - 83 = ' where T: ProtoC'
         // TODO: Old parser expected error on line 1: 'protocol<...>' composition syntax has been removed
+        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected inherited type in generic parameter"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected argument list in function declaration"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in protocol"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in protocol"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '<ProtoA, ProtoB> where T: ProtoC>(x: T) {}' before function"),
-        // TODO: Old parser expected error on line 2: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 84 - 89 = 'where T: ProtoC,'
-        // TODO: Old parser expected error on line 2: 'protocol<...>' composition syntax has been removed
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected inherited type in generic parameter"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected argument list in function declaration"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected member block in protocol"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "extraneous '<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}' at top level"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous '<ProtoA, ProtoB> where T: ProtoC>(x: T) {}' at top level"),
+      ]
+    )
+  }
+
+  func testDeprecatedWhere13() {
+    AssertParse(
+      """
+      func testCombinedConstraintsOld<T:#^STMTS^# #^DIAG_1^#protocol#^DIAG_2^#<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 84 - 89 = 'where T: ProtoC,'
+        // TODO: Old parser expected error on line 1: 'protocol<...>' composition syntax has been removed
+        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected inherited type in generic parameter"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '>' to end generic parameter clause"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in protocol"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous '<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}' at top level"),
       ]
     )
   }

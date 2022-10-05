@@ -66,6 +66,7 @@ public extension ParserFixIt {
 
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticParserError: String, DiagnosticMessage {
+  case consecutiveStatementsOnSameLine = "consecutive statements on a line must be separated by ';'"
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
   case missingFunctionParameterClause = "expected argument list in function declaration"
@@ -138,6 +139,7 @@ public struct UnexpectedNodesError: ParserError {
 // MARK: - Fix-Its (please sort alphabetically)
 
 public enum StaticParserFixIt: String, FixItMessage {
+  case insertSemicolon = "insert ';'"
   case insertAttributeArguments = "insert attribute argument"
   case moveThrowBeforeArrow = "move 'throws' before '->'"
 

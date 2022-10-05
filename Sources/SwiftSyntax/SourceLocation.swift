@@ -114,6 +114,8 @@ public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
 /// part of the same tree that was used to initialize this class.
 public final class SourceLocationConverter {
   let file: String
+  /// The source of the file, modelled as data so it can contain invalid UTF-8.
+  let source: [UInt8]
   /// Array of lines and the position at the start of the line.
   let lines: [AbsolutePosition]
   /// Position at end of file.
@@ -125,6 +127,7 @@ public final class SourceLocationConverter {
   public init<SyntaxType: SyntaxProtocol>(file: String, tree: SyntaxType) {
     assert(tree.parent == nil, "SourceLocationConverter must be passed the root of the syntax tree")
     self.file = file
+    self.source = tree.syntaxTextBytes
     (self.lines, endOfFile) = computeLines(tree: Syntax(tree))
     assert(tree.byteSize == endOfFile.utf8Offset)
   }
@@ -134,8 +137,34 @@ public final class SourceLocationConverter {
   ///   - source: The source code to convert positions to line/columns for.
   public init(file: String, source: String) {
     self.file = file
+    self.source = Array(source.utf8)
     (self.lines, endOfFile) = computeLines(source)
     assert(source.utf8.count == endOfFile.utf8Offset)
+  }
+  
+  /// Execute the body with an array that contains each source line.
+  func withSourceLines<T>(_ body: ([SyntaxText]) throws -> T) rethrows -> T {
+    return try source.withUnsafeBufferPointer { (sourcePointer: UnsafeBufferPointer<UInt8>) in
+      var result: [SyntaxText] = []
+      var previousLoc = AbsolutePosition.startOfFile
+      assert(lines.first == AbsolutePosition.startOfFile)
+      for lineStartLoc in lines.dropFirst() + [endOfFile] {
+        result.append(SyntaxText(
+          baseAddress: sourcePointer.baseAddress?.advanced(by: previousLoc.utf8Offset),
+          count: lineStartLoc.utf8Offset - previousLoc.utf8Offset
+        ))
+        previousLoc = lineStartLoc
+      }
+      return try body(result)
+    }
+  }
+
+  /// Return the source lines of the file as `String`s.
+  /// Because `String` cannot model invalid UTF-8, the concatenation of these source lines might not be source-accurate in case there are Unicode errors in the source file, but for most practical purposes, this should not pose an issue.
+  public var sourceLines: [String] {
+    return withSourceLines { syntaxTextLines in
+      return syntaxTextLines.map { String(syntaxText: $0) }
+    }
   }
 
   /// Convert a `AbsolutePosition` to a `SourceLocation`. If the position is

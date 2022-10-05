@@ -163,17 +163,16 @@ class PrintDiags: ParsableCommand {
         languageVersion: swiftVersion,
         enableBareSlashRegexLiteral: enableBareSlashRegex
       )
+      
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-
+      print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))
+      
       if foldSequences {
         diags += foldAllSequences(tree).1
       }
 
       if diags.isEmpty {
         print("No diagnostics produced")
-      }
-      for diag in diags {
-        print("\(diag.debugDescription)")
       }
     }
   }

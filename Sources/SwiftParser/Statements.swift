@@ -572,7 +572,7 @@ extension Parser {
         type = nil
       }
     } else {
-      (pattern, type) = self.parseTypedPattern()
+      (pattern, type) = self.parseTypedPattern(allowRecover: false)
     }
 
     let (unexpectedBeforeInKeyword, inKeyword) = self.expect(.inKeyword)

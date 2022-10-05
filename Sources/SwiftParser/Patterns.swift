@@ -120,7 +120,7 @@ extension Parser {
   /// =======
   ///
   ///     typed-pattern → pattern ':' attributes? inout? type
-  mutating func parseTypedPattern() -> (RawPatternSyntax, RawTypeAnnotationSyntax?) {
+  mutating func parseTypedPattern(allowRecover: Bool = true) -> (RawPatternSyntax, RawTypeAnnotationSyntax?) {
     let pattern = self.parsePattern()
 
     // Now parse an optional type annotation.
@@ -134,9 +134,7 @@ extension Parser {
         type: result,
         arena: self.arena
       )
-    } else if lookahead.canParseType() && !self.currentToken.isAtStartOfLine {
-      // TODO: If we are in a for loop, dont do this. normally there an "in" is expected. Siehe failing tests
-        
+    } else if allowRecover && lookahead.canParseType() && !self.currentToken.isAtStartOfLine {
       // Recovery if the user forgot to add ':'
       let result = self.parseResultType()
       type = RawTypeAnnotationSyntax(

@@ -20,8 +20,9 @@
 
 /// A protocol that platform-specific mutual exclusion primitives should conform to.
 final class PlatformMutex {
-  // FIXME: Use os_unfair_lock when we bump to macOS 12.0 on Darwin
-#if canImport(Darwin) || canImport(Glibc)
+#if canImport(Darwin)
+  typealias Primitive = os_unfair_lock
+#elseif canImport(Glibc)
   typealias Primitive = pthread_mutex_t
 #elseif canImport(WinSDK)
   typealias Primitive = SRWLOCK
@@ -45,7 +46,9 @@ final class PlatformMutex {
   /// - Warning: Do not call `.deallocate()` on  any pointers allocated by the
   ///            `BumpPtrAllocator` here.
   func deinitialize() {
-#if canImport(Darwin) || canImport(Glibc)
+#if canImport(Darwin)
+    self.lock.deinitialize(count: 1)
+#elseif canImport(Glibc)
     pthread_mutex_destroy(self.lock)
 #endif
     self.lock.deinitialize(count: 1)
@@ -62,16 +65,7 @@ final class PlatformMutex {
 extension PlatformMutex {
   private static func initialize(_ platformLock: PlatformLock) {
 #if canImport(Darwin)
-    // HACK: On Darwin, the value of PTHREAD_MUTEX_INITIALIZER installs
-    // signature bits into the mutex that are later checked by other aspects
-    // of the mutex API. This is a completely optional POSIX-ism that most
-    // Linuxes don't implement - often so that (global) lock variables can be
-    // stuck in .bss. Swift doesn't know how to import
-    // PTHREAD_MUTEX_INITIALIZER, so we'll replicate its signature-installing
-    // magic with the bit it can import.
-    platformLock.pointee.__sig = Int(_PTHREAD_MUTEX_SIG_init)
-    let result = pthread_mutex_init(platformLock, nil)
-    precondition(result == 0)
+    // Platform specific initialization is not needed.
 #elseif canImport(Glibc)
     let result = pthread_mutex_init(platformLock, nil)
     precondition(result == 0)
@@ -81,7 +75,9 @@ extension PlatformMutex {
   }
 
   private static func lock(_ platformLock: PlatformLock) {
-#if canImport(Darwin) || canImport(Glibc)
+#if canImport(Darwin)
+    os_unfair_lock_lock(platformLock)
+#elseif canImport(Glibc)
     let result = pthread_mutex_lock(platformLock)
     assert(result == 0)
 #elseif canImport(WinSDK)
@@ -90,7 +86,9 @@ extension PlatformMutex {
   }
 
   private static func unlock(_ platformLock: PlatformLock) {
-#if canImport(Darwin) || canImport(Glibc)
+#if canImport(Darwin)
+    os_unfair_lock_unlock(platformLock)
+#elseif canImport(Glibc)
     let result = pthread_mutex_unlock(platformLock)
     assert(result == 0)
 #elseif canImport(WinSDK)

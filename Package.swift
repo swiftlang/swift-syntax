@@ -35,6 +35,21 @@ if let parserLibSearchPath = ProcessInfo.processInfo.environment["SWIFT_SYNTAX_P
   swiftSyntaxParserLinkerSettings = []
 }
 
+// Include the parser library as a binary dependency if both the host and the target are macOS.
+//  - We need to require that the host is macOS (checked by `#if os(macOS)`) because package resolve will download and unzip the referenced framework, which requires `unzip` to be installed. Only macOS guarantees that `unzip` is installed, the Swift Docker images don’t have unzip installed, so package resolve would fail.
+//  - We need to require that the target is macOS (checked by `.when`) because binary dependencies are only supported by SwiftPM on macOS.
+#if os(macOS)
+let parserLibraryTarget: [Target] = [.binaryTarget(
+  name: "_InternalSwiftSyntaxParser",
+  url: "https://github.com/apple/swift-syntax/releases/download/0.50700.1/_InternalSwiftSyntaxParser.xcframework.zip",
+  checksum: "956b7acf0ad7177e1a0d250d4938412f1bebf95327e184849872d3cdf2c1e9f4"
+)]
+let parserLibraryDependency: [Target.Dependency] = [.target(name: "_InternalSwiftSyntaxParser", condition: .when(platforms: [.macOS]))]
+#else
+let parserLibraryTarget: [Target] = []
+let parserLibraryDependency: [Target.Dependency] = []
+#endif
+
 let package = Package(
   name: "SwiftSyntax",
   products: [
@@ -87,7 +102,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntaxParser",
-      dependencies: ["SwiftSyntax"],
+      dependencies: ["SwiftSyntax"] + parserLibraryDependency,
       exclude: [
         "NodeDeclarationHash.swift.gyb"
       ],
@@ -115,5 +130,5 @@ let package = Package(
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"],
       exclude: ["Inputs"]
     ),
-  ]
+  ] + parserLibraryTarget
 )

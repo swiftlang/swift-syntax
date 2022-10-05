@@ -24,12 +24,8 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       buildOuterCodeBlockItemList()
     }
 
-    let test = codeBlock.buildSyntax()
-
-    var result = ""
-    test.write(to: &result)
-    XCTAssertEqual(result, """
-      ␣ {
+    AssertBuildResult(codeBlock, """
+      ␣{
           outsideBuilder()
           outerBuilder()
           innerBuilder()
@@ -63,12 +59,8 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       )
     )
     
-    let test = codeBlock.buildSyntax()
-    
-    var result = ""
-    test.write(to: &result)
-    XCTAssertEqual(result, """
-        ␣ {
+    AssertBuildResult(codeBlock, """
+        ␣{
             outsideBuilder()
             outerBuilder()
             innerBuilder()

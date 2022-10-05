@@ -148,10 +148,6 @@ let package = Package(
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .testTarget(
-      name: "SwiftBasicFormatTest",
-      dependencies: ["SwiftBasicFormat"]
-    ),
-    .testTarget(
       name: "SwiftDiagnosticsTest",
       dependencies: ["SwiftDiagnostics", "SwiftParser"]
     ),

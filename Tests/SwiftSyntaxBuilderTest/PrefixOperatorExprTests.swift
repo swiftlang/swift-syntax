@@ -12,13 +12,7 @@ final class PrefixOperatorExprTests: XCTestCase {
     
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let expr = builder.createPrefixOperatorExpr()
-      let syntax = expr.buildSyntax()
-
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createPrefixOperatorExpr(), expected, line: line)
     }
   }
 }

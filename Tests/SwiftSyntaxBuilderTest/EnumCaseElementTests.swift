@@ -26,7 +26,7 @@ final class EnumCaseElementTests: XCTestCase {
     }
     let syntax = buildable.buildSyntax()
 
-    XCTAssertEqual(syntax.description,
+    AssertBuildResult(buildable,
       """
       ␣enum Greeting: String, Codable, Equatable {
           case goodMorning = "Good Morning", helloWorld = "Hello World", hi

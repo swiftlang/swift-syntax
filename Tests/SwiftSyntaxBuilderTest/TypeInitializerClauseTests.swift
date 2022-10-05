@@ -11,13 +11,7 @@ final class TypeInitializerClauseTests: XCTestCase {
     
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let typeInitializerClause = builder.createTypeInitializerClause()
-      let syntax = typeInitializerClause.buildSyntax()
-      
-      var text = ""
-      syntax.write(to: &text)
-      
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createTypeInitializerClause(), expected, line: line)
     }
   }
 }

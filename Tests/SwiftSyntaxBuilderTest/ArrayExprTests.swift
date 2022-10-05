@@ -12,13 +12,7 @@ final class ArrayExprTests: XCTestCase {
     
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let arrowExpr = builder.createArrayExpr()
-      let syntax = arrowExpr.buildSyntax()
-      
-      var text = ""
-      syntax.write(to: &text)
-      
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder.createArrayExpr(), expected, line: line)
     }
   }
 }

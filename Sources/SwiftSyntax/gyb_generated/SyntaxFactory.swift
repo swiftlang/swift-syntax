@@ -7818,7 +7818,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.defaultKeywordKeyword instead")
   public static func makeDefaultKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.defaultKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,

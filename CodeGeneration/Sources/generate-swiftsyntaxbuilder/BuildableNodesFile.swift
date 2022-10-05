@@ -280,13 +280,12 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
   return FunctionDecl(
     leadingTrivia: [
       "/// Builds a `\(type.syntaxBaseName)`.",
-      "/// - Parameter format: The `Format` to use.",
       "/// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.",
       "/// - Returns: The built `\(type.syntaxBaseName)`.",
     ].map { .docLineComment($0) + .newline }.reduce([], +),
     identifier: .identifier("build\(type.baseName)"),
     signature: FunctionSignature(
-      input: createFormatParameters(),
+      input: ParameterClause(),
       output: type.syntax
     )
   ) {
@@ -317,17 +316,15 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
               TupleExprElement(
                 label: child.isUnexpectedNodes ? nil : child.swiftName,
                 expression: child.generateExprBuildSyntaxNode(
-                  varName: MemberAccessExpr(base: "buildableData", name: child.swiftName),
-                  formatName: "format"
+                  varName: MemberAccessExpr(base: "buildableData", name: child.swiftName)
                 )
               )
             }
           }
         )
-        for trivia in trivias {
-          createTriviaAttachment(varName: IdentifierExpr("result"), triviaVarName: MemberAccessExpr(base: "buildableData", name: trivia), trivia: trivia)
-        }
-        ReturnStmt("return format.format(syntax: result)")
+        SequenceExpr("result.leadingTrivia = buildableData.leadingTrivia + (result.leadingTrivia ?? [])")
+        SequenceExpr("result.trailingTrivia = buildableData.trailingTrivia + (result.trailingTrivia ?? [])")
+        ReturnStmt("return result")
       }
       SwitchCase(
         label: SwitchCaseLabel(
@@ -347,7 +344,7 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
           )
         )
       ) {
-        ReturnStmt("return Indenter.indent(node, indentation: format.indentTrivia)")
+        ReturnStmt("return node")
       }
     }
   }
@@ -360,8 +357,8 @@ private func createBuildBaseTypeFunction(node: Node) -> FunctionDecl {
   return FunctionDecl(
     """
     /// Conformance to `\(baseType.buildableBaseName)`.
-    public func build\(baseType.baseName)(format: Format) -> \(baseType.syntax) {
-      let result = build\(type.baseName)(format: format)
+    public func build\(baseType.baseName)() -> \(baseType.syntax) {
+      let result = build\(type.baseName)()
       return \(baseType.syntaxBaseName)(result)
     }
     """

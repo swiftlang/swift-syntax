@@ -10,8 +10,7 @@ final class VariableTests: XCTestCase {
       PatternBinding(pattern: "a", typeAnnotation: ArrayType(elementType: "Int"))
     }
 
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, "␣let a: [Int]")
+    AssertBuildResult(buildable, "␣let a: [Int]")
   }
 
   func testVariableDeclWithValue() {
@@ -24,22 +23,29 @@ final class VariableTests: XCTestCase {
         initializer: DictionaryExpr())
     }
 
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, "␣var d: [String: Int] = [:]")
+    AssertBuildResult(buildable, "␣var d: [String: Int] = [: ]")
   }
 
   func testVariableDeclWithExplicitTrailingCommas() {
     let buildable = VariableDecl(letOrVarKeyword: .let, bindings: [
-      PatternBinding(pattern: "a", initializer: ArrayExpr(leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)) {
-        for i in 1...3 {
-          ArrayElement(
-            expression: IntegerLiteralExpr(i),
-            trailingComma: .comma.withTrailingTrivia(.newline))
+      PatternBinding(pattern: "a", initializer: ArrayExpr(
+        leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)) {
+          for i in 1...3 {
+            ArrayElement(
+              expression: IntegerLiteralExpr(i),
+              trailingComma: .comma.withTrailingTrivia(.newline)
+            )
+          }
         }
-      })
+      )
     ])
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, "let a = [\n1,\n2,\n3,\n]")
+    AssertBuildResult(buildable, """
+    let a = [
+    1,
+    2,
+    3,
+    ]
+    """)
   }
 
   func testMultiPatternVariableDecl() {
@@ -57,8 +63,7 @@ final class VariableTests: XCTestCase {
       PatternBinding(pattern: "i", typeAnnotation: "Int")
       PatternBinding(pattern: "s", typeAnnotation: "String")
     }
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
+    AssertBuildResult(buildable, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
   }
 
   func testClosureTypeVariableDecl() {
@@ -66,8 +71,7 @@ final class VariableTests: XCTestCase {
     let buildable = VariableDecl(letOrVarKeyword: .let) {
       return PatternBinding(pattern: "c", typeAnnotation: TypeAnnotation(type: type))
     }
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, "let c: (Int) -> Bool")
+    AssertBuildResult(buildable, "let c: (Int) -> Bool")
   }
 
   func testConvenienceInitializer() {
@@ -83,9 +87,7 @@ final class VariableTests: XCTestCase {
     for (line, testCase) in testCases {
       let (keyword, name, type, initializer, expected) = testCase
       let builder = VariableDecl(leadingTrivia: leadingTrivia, keyword, name: name, type: type, initializer: initializer)
-      let syntax = builder.buildSyntax()
-
-      XCTAssertEqual(syntax.description, expected, line: line)
+      AssertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -98,8 +100,7 @@ final class VariableTests: XCTestCase {
       }
     }
 
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, """
+    AssertBuildResult(buildable, """
       var test: Int {
           4 + 5
       }
@@ -168,9 +169,7 @@ final class VariableTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let syntax = builder.buildSyntax()
-
-      XCTAssertEqual(syntax.description, expected, line: line)
+      AssertBuildResult(builder, expected, line: line)
     }
   }
 }

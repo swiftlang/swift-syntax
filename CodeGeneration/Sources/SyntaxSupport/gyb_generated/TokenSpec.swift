@@ -253,7 +253,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   StmtKeywordSpec(name: "Fallthrough", serializationCode: 35, text: "fallthrough", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Switch", serializationCode: 36, text: "switch", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Case", serializationCode: 37, text: "case", requiresTrailingSpace: true),
-  StmtKeywordSpec(name: "Default", serializationCode: 38, text: "default", requiresTrailingSpace: true),
+  StmtKeywordSpec(name: "Default", serializationCode: 38, text: "default"),
   StmtKeywordSpec(name: "Where", serializationCode: 39, text: "where", requiresLeadingSpace: true, requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Catch", serializationCode: 40, text: "catch", requiresLeadingSpace: true),
   StmtKeywordSpec(name: "Throw", serializationCode: 50, text: "throw", requiresTrailingSpace: true),

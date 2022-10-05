@@ -11,12 +11,7 @@ final class ExprListTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-      let syntax = builder.buildSyntax()
-
-      var text = ""
-      syntax.write(to: &text)
-
-      XCTAssertEqual(text, expected, line: line)
+      AssertBuildResult(builder, expected, line: line)
     }
   }
 }

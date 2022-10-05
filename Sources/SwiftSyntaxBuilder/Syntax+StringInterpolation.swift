@@ -1,6 +1,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
 import SwiftDiagnostics
+import SwiftBasicFormat
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -78,9 +79,10 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   }
 
   public mutating func appendInterpolation<Buildable: SyntaxBuildable>(
-    _ buildable: Buildable
+    _ buildable: Buildable,
+    format: BasicFormat = BasicFormat()
   ) {
-    self.appendInterpolation(buildable.buildSyntax())
+    self.appendInterpolation(buildable.build(format: format))
   }
 }
 

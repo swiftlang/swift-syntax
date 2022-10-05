@@ -15,12 +15,7 @@ final class ProtocolDeclTests: XCTestCase {
       FunctionDecl(identifier: .identifier("buildDeclList"), signature: functionSignature, body: nil)
     }
 
-    let syntax = buildable.buildSyntax()
-
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
+    AssertBuildResult(buildable, """
     public protocol DeclListBuildable {
         func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
     }

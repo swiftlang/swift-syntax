@@ -15,11 +15,7 @@ final class TriviaTests: XCTestCase {
       )
     }
 
-    let syntax = decl.buildSyntax()
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
+    AssertBuildResult(decl, """
       /// A doc comment
       /* An inline comment */ static var test: String
       """)
@@ -45,9 +41,8 @@ final class TriviaTests: XCTestCase {
       ),
     ]
     for (line, testCase) in testCases {
-      let (decl, expected) = testCase
-      let syntax = decl.buildSyntax()
-      XCTAssertEqual(syntax.description, expected, line: line)
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
     }
   }
 
@@ -63,9 +58,8 @@ final class TriviaTests: XCTestCase {
       ),
     ]
     for (line, testCase) in testCases {
-      let (decl, expected) = testCase
-      let syntax = decl.buildSyntax()
-      XCTAssertEqual(syntax.description, expected, line: line)
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
     }
   }
 }

@@ -73,12 +73,22 @@ open class SyntaxRewriter {
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: Syntax) {}
 
-  /// Visit any Syntax node. 
+  /// Visit any Syntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   public func visit(_ node: Syntax) -> Syntax {
     return visit(node.data)
   }
+
+% for base_kind in [base_kind for base_kind in SYNTAX_BASE_KINDS if base_kind not in ['Syntax', 'SyntaxCollection']]:
+  /// Visit any ${base_kind}Syntax node.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  public func visit(_ node: ${base_kind}Syntax) -> Syntax {
+    return visit(node.data)
+  }
+
+% end
 
 % for node in SYNTAX_NODES:
   /// Implementation detail of visit(_:). Do not call directly.

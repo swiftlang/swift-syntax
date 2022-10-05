@@ -8,8 +8,7 @@ final class IfStmtTests: XCTestCase {
     // disambiguated by the absence of a labelName parameter and the use of a
     // trailing closure.
     let buildable = IfStmt(conditions: ExprList([BooleanLiteralExpr(false)])) {}
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, """
+    AssertBuildResult(buildable, """
       if false {
       }
       """)
@@ -27,8 +26,7 @@ final class IfStmtTests: XCTestCase {
         TupleExprElement(expression: StringLiteralExpr("Hello from the else-branch!"))
       }
     }
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, """
+    AssertBuildResult(buildable, """
       if true {
           print("Hello from the if-branch!")
       } else {
@@ -45,8 +43,7 @@ final class IfStmtTests: XCTestCase {
         initializer: InitializerClause(value: "y")
       )
     ) {}
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, """
+    AssertBuildResult(buildable, """
       if let x = y {
       }
       """)
@@ -59,8 +56,7 @@ final class IfStmtTests: XCTestCase {
         initializer: InitializerClause(value: "y")
       )
     ) {}
-    let syntax = buildable.buildSyntax()
-    XCTAssertEqual(syntax.description, """
+    AssertBuildResult(buildable, """
       if case .x = y {
       }
       """)

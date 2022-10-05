@@ -1,31 +1,23 @@
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SwiftBasicFormat
 
 final class ArrayExpressibleAsTests: XCTestCase {
   func testSimpleModifierList() {
     let modifiers: ExpressibleAsModifierList = [Token.public, Token.static]
-
-    var result = ""
-    modifiers.createModifierList().buildSyntax().write(to: &result)
-    XCTAssertEqual(result, "public static ")
+    AssertBuildResult(modifiers.createModifierList(), "public static ")
   }
 
   func testHeterogeneousList() {
     let modifiers: ExpressibleAsModifierList = [Token.open, DeclModifier(name: Token.internal)]
-
-    var result = ""
-    modifiers.createModifierList().buildSyntax().write(to: &result)
-    XCTAssertEqual(result, "open internal ")
+    AssertBuildResult(modifiers.createModifierList(), "open internal ")
   }
 
   func testExplicitlyTypeErasedList() {
     let modifiers: [DeclModifier] = [DeclModifier(name: Token.private)]
     let expressible: ExpressibleAsModifierList = modifiers as [ExpressibleAsDeclModifier]
-
-    var result = ""
-    expressible.createModifierList().buildSyntax().write(to: &result)
-    XCTAssertEqual(result, "private ")
+    AssertBuildResult(expressible.createModifierList(), "private ")
   }
 
   func testFunctionParameters() {
@@ -41,9 +33,6 @@ final class ArrayExpressibleAsTests: XCTestCase {
       },
       output: "Int"
     )
-
-    var result = ""
-    signature.buildSyntax().write(to: &result)
-    XCTAssertEqual(result, "(_ args: [String]) -> Int")
+    AssertBuildResult(signature, "(_ args: [String]) -> Int")
   }
 }

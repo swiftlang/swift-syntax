@@ -47,8 +47,7 @@ let buildableBaseProtocolsFile = SourceFile {
       FunctionDecl(
         """
         /// Builds list of `\(type.syntaxBaseName)`s.
-        /// - Parameter format: The `Format` to use.
-        func build\(type.baseName)List(format: Format) -> \(ArrayType(elementType: type.syntaxBaseName))
+        func build\(type.baseName)List() -> \(ArrayType(elementType: type.syntaxBaseName))
         """
       )
     }
@@ -62,8 +61,7 @@ let buildableBaseProtocolsFile = SourceFile {
       FunctionDecl(
         """
         /// Builds list of `\(type.syntaxBaseName)`s.
-        /// - Parameter format: The `Format` to use.
-        func build\(type.baseName)(format: Format) -> \(type.syntaxBaseName)
+        func build\(type.baseName)() -> \(type.syntaxBaseName)
         """
       )
     }
@@ -84,11 +82,10 @@ let buildableBaseProtocolsFile = SourceFile {
       FunctionDecl(
         """
         /// Builds list of `\(type.syntaxBaseName)`s.
-        /// - Parameter format: The `Format` to use.
         ///
         /// Satisfies conformance to `\(type.listBuildable)`
-        func build\(type.baseName)List(format: Format) -> \(ArrayType(elementType: type.syntaxBaseName)) {
-          return [build\(type.baseName)(format: format)]
+        func build\(type.baseName)List() -> \(ArrayType(elementType: type.syntaxBaseName)) {
+          return [build\(type.baseName)()]
         }
         """
       )
@@ -97,25 +94,15 @@ let buildableBaseProtocolsFile = SourceFile {
         FunctionDecl(
           """
           /// Builds a `\(type.syntaxBaseName)`.
-          /// - Parameter format: The `Format` to use.
           /// - Returns: A new `Syntax` with the built `\(type.syntaxBaseName)`.
           ///
           /// Satisfies conformance to `SyntaxBuildable`.
-          func buildSyntax(format: Format) -> Syntax {
-            return Syntax(build\(type.baseName)(format: format))
+          func buildSyntax() -> Syntax {
+            return Syntax(build\(type.baseName)())
           }
           """
         )
       }
     }
-  }
-  ExtensionDecl(modifiers: [Token.public], extendedType: "SyntaxBuildable") {
-    FunctionDecl(
-      """
-      func buildSyntax() -> Syntax {
-        return buildSyntax(format: Format())
-      }
-      """
-    )
   }
 }

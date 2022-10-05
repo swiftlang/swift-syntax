@@ -55,7 +55,7 @@ class PresentMaker: SyntaxRewriter {
         let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(rawKind.nameForDiagnostics)#>")
         presentToken = TokenSyntax(newKind, presence: .present)
       }
-      return Syntax(Format().format(syntax: presentToken))
+      return BasicFormat().visit(presentToken)
     } else {
       return Syntax(token)
     }

@@ -2003,12 +2003,48 @@ open class SyntaxRewriter {
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: Syntax) {}
 
-  /// Visit any Syntax node. 
+  /// Visit any Syntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   public func visit(_ node: Syntax) -> Syntax {
     return visit(node.data)
   }
+
+  /// Visit any DeclSyntax node.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  public func visit(_ node: DeclSyntax) -> Syntax {
+    return visit(node.data)
+  }
+
+  /// Visit any ExprSyntax node.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  public func visit(_ node: ExprSyntax) -> Syntax {
+    return visit(node.data)
+  }
+
+  /// Visit any PatternSyntax node.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  public func visit(_ node: PatternSyntax) -> Syntax {
+    return visit(node.data)
+  }
+
+  /// Visit any StmtSyntax node.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  public func visit(_ node: StmtSyntax) -> Syntax {
+    return visit(node.data)
+  }
+
+  /// Visit any TypeSyntax node.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  public func visit(_ node: TypeSyntax) -> Syntax {
+    return visit(node.data)
+  }
+
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclSyntax(_ data: SyntaxData) -> Syntax {

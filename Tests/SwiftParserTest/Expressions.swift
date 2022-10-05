@@ -450,7 +450,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       ##"""
-      #^NOTE^##"#^DIAG^#
+      #"#^DIAG^#
       """##,
       diagnostics: [
         DiagnosticSpec(message: ##"expected '"#' to end string literal"##, notes: []),

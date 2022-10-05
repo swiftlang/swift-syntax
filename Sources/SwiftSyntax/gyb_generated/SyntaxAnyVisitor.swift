@@ -1587,20 +1587,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: IfStmtSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ElseIfContinuationSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ElseBlockSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
   override open func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

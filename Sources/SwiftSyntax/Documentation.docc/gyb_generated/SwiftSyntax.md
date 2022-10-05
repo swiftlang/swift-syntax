@@ -393,8 +393,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/UnavailabilityConditionSyntax>
 - <doc:SwiftSyntax/HasSymbolConditionSyntax>
 - <doc:SwiftSyntax/ConditionElementListSyntax>
-- <doc:SwiftSyntax/ElseIfContinuationSyntax>
-- <doc:SwiftSyntax/ElseBlockSyntax>
 - <doc:SwiftSyntax/SwitchCaseSyntax>
 - <doc:SwiftSyntax/SwitchDefaultLabelSyntax>
 - <doc:SwiftSyntax/CaseItemSyntax>

@@ -5862,52 +5862,6 @@ public enum SyntaxFactory {
     ], arena: .default))
     return IfStmtSyntax(data)
   }
-  @available(*, deprecated, message: "Use initializer on ElseIfContinuationSyntax")
-  public static func makeElseIfContinuation(_ unexpectedBeforeIfStatement: UnexpectedNodesSyntax? = nil, ifStatement: IfStmtSyntax) -> ElseIfContinuationSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeIfStatement?.raw,
-      ifStatement.raw,
-    ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.elseIfContinuation,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
-    return ElseIfContinuationSyntax(data)
-  }
-
-  @available(*, deprecated, message: "Use initializer on ElseIfContinuationSyntax")
-  public static func makeBlankElseIfContinuation(presence: SourcePresence = .present) -> ElseIfContinuationSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .elseIfContinuation,
-      from: [
-      nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.ifStmt, arena: .default),
-    ], arena: .default))
-    return ElseIfContinuationSyntax(data)
-  }
-  @available(*, deprecated, message: "Use initializer on ElseBlockSyntax")
-  public static func makeElseBlock(_ unexpectedBeforeElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax, _ unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax) -> ElseBlockSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeElseKeyword?.raw,
-      elseKeyword.raw,
-      unexpectedBetweenElseKeywordAndBody?.raw,
-      body.raw,
-    ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.elseBlock,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
-    return ElseBlockSyntax(data)
-  }
-
-  @available(*, deprecated, message: "Use initializer on ElseBlockSyntax")
-  public static func makeBlankElseBlock(presence: SourcePresence = .present) -> ElseBlockSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .elseBlock,
-      from: [
-      nil,
-      RawSyntax.makeMissingToken(kind: TokenKind.elseKeyword, arena: .default),
-      nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlock, arena: .default),
-    ], arena: .default))
-    return ElseBlockSyntax(data)
-  }
   @available(*, deprecated, message: "Use initializer on SwitchCaseSyntax")
   public static func makeSwitchCase(_ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, unknownAttr: AttributeSyntax?, _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, label: Syntax, _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, statements: CodeBlockItemListSyntax) -> SwitchCaseSyntax {
     let layout: [RawSyntax?] = [

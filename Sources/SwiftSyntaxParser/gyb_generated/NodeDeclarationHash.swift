@@ -17,6 +17,6 @@
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "7833dde6a3aefe03e10857eefc2c0f9b4b1a21a6"
+      "1af49f8e78efc75c6798cf6750b842dac14b8f5a"
   }
 }

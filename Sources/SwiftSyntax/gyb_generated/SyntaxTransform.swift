@@ -892,14 +892,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IfStmtSyntax) -> ResultType
-  /// Visiting `ElseIfContinuationSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ElseIfContinuationSyntax) -> ResultType
-  /// Visiting `ElseBlockSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ElseBlockSyntax) -> ResultType
   /// Visiting `SwitchCaseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2451,18 +2443,6 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: IfStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
-  /// Visiting `ElseIfContinuationSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ElseIfContinuationSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ElseBlockSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ElseBlockSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
   /// Visiting `SwitchCaseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3253,10 +3233,6 @@ extension SyntaxTransformVisitor {
     case .throwStmt(let derived):
       return visit(derived)
     case .ifStmt(let derived):
-      return visit(derived)
-    case .elseIfContinuation(let derived):
-      return visit(derived)
-    case .elseBlock(let derived):
       return visit(derived)
     case .switchCase(let derived):
       return visit(derived)

@@ -290,20 +290,6 @@ STMT_NODES = [
                    is_optional=True),
          ]),
 
-    # else-if-continuation -> label? ':'? 'while' condition-list code-block ';'
-    Node('ElseIfContinuation', name_for_diagnostics=None, kind='Syntax',
-         children=[
-             Child('IfStatement', kind='IfStmt'),
-         ]),
-
-    # else-clause -> 'else' code-block
-    Node('ElseBlock', name_for_diagnostics='else block', kind='Syntax',
-         traits=['WithCodeBlock'],
-         children=[
-             Child('ElseKeyword', kind='ElseToken'),
-             Child('Body', kind='CodeBlock'),
-         ]),
-
     # switch-case -> unknown-attr? switch-case-label stmt-list
     #              | unknown-attr? switch-default-label stmt-list
     Node('SwitchCase', name_for_diagnostics='switch case', kind='Syntax',

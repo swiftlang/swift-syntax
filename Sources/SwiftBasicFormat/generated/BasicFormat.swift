@@ -2163,20 +2163,6 @@ open class BasicFormat: SyntaxRewriter {
     return StmtSyntax(IfStmtSyntax(unexpectedBeforeIfKeyword, ifKeyword: ifKeyword, unexpectedBetweenIfKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody, body: body, unexpectedBetweenBodyAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndElseBody, elseBody: elseBody))
   }
   
-  open override func visit(_ node: ElseIfContinuationSyntax) -> Syntax {
-    let unexpectedBeforeIfStatement = node.unexpectedBeforeIfStatement.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ifStatement = self.visit(node.ifStatement).cast(IfStmtSyntax.self)
-    return Syntax(ElseIfContinuationSyntax(unexpectedBeforeIfStatement, ifStatement: ifStatement))
-  }
-  
-  open override func visit(_ node: ElseBlockSyntax) -> Syntax {
-    let unexpectedBeforeElseKeyword = node.unexpectedBeforeElseKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elseKeyword = self.visit(node.elseKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenElseKeywordAndBody = node.unexpectedBetweenElseKeywordAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
-    return Syntax(ElseBlockSyntax(unexpectedBeforeElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody, body: body))
-  }
-  
   open override func visit(_ node: SwitchCaseSyntax) -> Syntax {
     let unexpectedBeforeUnknownAttr = node.unexpectedBeforeUnknownAttr.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let unknownAttr = node.unknownAttr.map(self.visit)?.cast(AttributeSyntax.self)

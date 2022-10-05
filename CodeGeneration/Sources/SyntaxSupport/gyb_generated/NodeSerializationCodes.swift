@@ -152,8 +152,6 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "AvailabilityCondition": 138,
   "MatchingPatternCondition": 139,
   "OptionalBindingCondition": 140,
-  "ElseIfContinuation": 141,
-  "ElseBlock": 142,
   "SwitchCase": 143,
   "SwitchDefaultLabel": 144,
   "CaseItem": 145,

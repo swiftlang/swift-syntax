@@ -235,8 +235,6 @@ public enum SyntaxKind {
   case declarationStmt
   case throwStmt
   case ifStmt
-  case elseIfContinuation
-  case elseBlock
   case switchCase
   case switchDefaultLabel
   case caseItem

@@ -1507,22 +1507,6 @@ extension Format {
     }
     return result
   }
-  public func format(syntax: ElseIfContinuationSyntax) -> ElseIfContinuationSyntax {
-    var result = syntax
-    let leadingTrivia = result.leadingTrivia ?? []
-    if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia)
-    }
-    return result
-  }
-  public func format(syntax: ElseBlockSyntax) -> ElseBlockSyntax {
-    var result = syntax
-    let leadingTrivia = result.leadingTrivia ?? []
-    if !leadingTrivia.isEmpty {
-      result = result.withLeadingTrivia(leadingTrivia)
-    }
-    return result
-  }
   public func format(syntax: SwitchCaseSyntax) -> SwitchCaseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []

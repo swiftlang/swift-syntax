@@ -2221,26 +2221,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `IfStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfStmtSyntax) {}
-  /// Visiting `ElseIfContinuationSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `ElseIfContinuationSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ElseIfContinuationSyntax) {}
-  /// Visiting `ElseBlockSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `ElseBlockSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ElseBlockSyntax) {}
   /// Visiting `SwitchCaseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5298,28 +5278,6 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplElseIfContinuationSyntax(_ data: SyntaxData) {
-      let node = ElseIfContinuationSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplElseBlockSyntax(_ data: SyntaxData) {
-      let node = ElseBlockSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSwitchCaseSyntax(_ data: SyntaxData) {
       let node = SwitchCaseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6413,10 +6371,6 @@ open class SyntaxVisitor {
       visitImplThrowStmtSyntax(data)
     case .ifStmt:
       visitImplIfStmtSyntax(data)
-    case .elseIfContinuation:
-      visitImplElseIfContinuationSyntax(data)
-    case .elseBlock:
-      visitImplElseBlockSyntax(data)
     case .switchCase:
       visitImplSwitchCaseSyntax(data)
     case .switchDefaultLabel:

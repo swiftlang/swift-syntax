@@ -554,30 +554,6 @@ public let STMT_NODES: [Node] = [
                ])
        ]),
 
-  Node(name: "ElseIfContinuation",
-       nameForDiagnostics: nil,
-       kind: "Syntax",
-       children: [
-         Child(name: "IfStatement",
-               kind: "IfStmt")
-       ]),
-
-  Node(name: "ElseBlock",
-       nameForDiagnostics: "else block",
-       kind: "Syntax",
-       traits: [
-         "WithCodeBlock"
-       ],
-       children: [
-         Child(name: "ElseKeyword",
-               kind: "ElseToken",
-               tokenChoices: [
-                 "Else"
-               ]),
-         Child(name: "Body",
-               kind: "CodeBlock")
-       ]),
-
   Node(name: "SwitchCase",
        nameForDiagnostics: "switch case",
        kind: "Syntax",

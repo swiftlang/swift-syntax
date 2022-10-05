@@ -3,6 +3,16 @@
 import XCTest
 
 final class TypeTests: XCTestCase {
+  
+  func testMissingColonInType() {
+    AssertParse(
+      """
+      var foo #^DIAG^#Bar = 1
+      """, diagnostics: [
+        DiagnosticSpec(message: "expected ':' in type annotation")
+      ])
+  }
+    
   func testClosureParsing() throws {
     AssertParse(
       "(a, b) -> c",

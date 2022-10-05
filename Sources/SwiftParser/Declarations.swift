@@ -1357,7 +1357,13 @@ extension Parser {
           defaultArgument = nil
         }
 
-        let trailingComma = self.consume(if: .comma)
+        var trailingComma = self.consume(if: .comma)
+        if trailingComma == nil {
+          var lookahead = self.lookahead()
+          if lookahead.consume(if: { $0.canBeArgumentLabel }, followedBy: { $0.tokenKind == .colon }) != nil {
+            trailingComma = missingToken(.comma, text: nil)
+          }
+        }
         keepGoing = trailingComma != nil
         elements.append(RawFunctionParameterSyntax(
           attributes: attrs,

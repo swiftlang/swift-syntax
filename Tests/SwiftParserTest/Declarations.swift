@@ -799,27 +799,36 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
-  func testDontRecoverFromDeclKeyword() {
+  func testRecoverFromDeclKeyword() {
     AssertParse(
-      "func foo(first second #^MISSING_COLON^#third#^STMTS^# #^MISSING_RPAREN^#struct#^MISSING_IDENTIFIER^##^BRACES^#: Int) {}",
-      substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
-        firstName: .identifier("first"),
-        secondName: .identifier("second"),
-        colon: .colonToken(presence: .missing),
-        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("third"), genericArgumentClause: nil)),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
-      )),
+      "func foo(first second #^MISSING_COLON^#third #^MISSING_COMMA^#struct: Int) {}",
+      substructure: Syntax(FunctionParameterListSyntax([
+        FunctionParameterSyntax(
+          attributes: nil,
+          modifiers: nil,
+          firstName: .identifier("first"),
+          secondName: .identifier("second"),
+          colon: .colonToken(presence: .missing),
+          type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("third"), genericArgumentClause: nil)),
+          ellipsis: nil,
+          defaultArgument: nil,
+          trailingComma: .commaToken(presence: .missing)
+        ),
+        FunctionParameterSyntax(
+          attributes: nil,
+          modifiers: nil,
+          firstName: .structKeyword(),
+          secondName: nil,
+          colon: .colonToken(),
+          type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"), genericArgumentClause: nil)),
+          ellipsis: nil,
+          defaultArgument: nil,
+          trailingComma: nil
+        )
+        ])),
       diagnostics: [
         DiagnosticSpec(locationMarker: "MISSING_COLON", message: "expected ':' in function parameter"),
-        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "MISSING_RPAREN", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "BRACES", message: "expected member block in struct"),
-        DiagnosticSpec(locationMarker: "BRACES", message: "extraneous ': Int) {}' at top level"),
+        DiagnosticSpec(locationMarker: "MISSING_COMMA", message: "expected ',' in function parameter"),
       ]
     )
   }
@@ -851,28 +860,41 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
-  func testDontRecoverFromUnbalancedParens() {
+  func testRecoverFromUnbalancedParens() {
     AssertParse(
       "func foo(first second #^COLON^#[third #^END_ARRAY^#fourth: Int) {}",
-      substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
-        firstName: TokenSyntax.identifier("first"),
-        secondName: TokenSyntax.identifier("second"),
-        colon: TokenSyntax(.colon, presence: .missing),
-        type: TypeSyntax(ArrayTypeSyntax(
-          leftSquareBracket: TokenSyntax.leftSquareBracketToken(),
-          elementType: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("third"), genericArgumentClause: nil)),
-          rightSquareBracket: TokenSyntax(.rightSquareBracket, presence: .missing)
-        )),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
-      )),
+      substructure: Syntax(FunctionParameterListSyntax([
+        FunctionParameterSyntax(
+          attributes: nil,
+          modifiers: nil,
+          firstName: TokenSyntax.identifier("first"),
+          secondName: TokenSyntax.identifier("second"),
+          colon: TokenSyntax(.colon, presence: .missing),
+          type: TypeSyntax(ArrayTypeSyntax(
+            leftSquareBracket: TokenSyntax.leftSquareBracketToken(),
+            elementType: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("third"), genericArgumentClause: nil)),
+            rightSquareBracket: TokenSyntax(.rightSquareBracket, presence: .missing)
+          )),
+          ellipsis: nil,
+          defaultArgument: nil,
+          trailingComma: .commaToken(presence: .missing)
+        ),
+        FunctionParameterSyntax(
+          attributes: nil,
+          modifiers: nil,
+          firstName: TokenSyntax.identifier("fourth"),
+          secondName: nil,
+          colon: .colonToken(),
+          type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"), genericArgumentClause: nil)),
+          ellipsis: nil,
+          defaultArgument: nil,
+          trailingComma: nil
+        )
+      ])),
       diagnostics: [
         DiagnosticSpec(locationMarker: "COLON", message: "expected ':' in function parameter"),
-        DiagnosticSpec(locationMarker: "END_ARRAY" , message: "expected ']' to end array type"),
-        DiagnosticSpec(locationMarker: "END_ARRAY", message: "unexpected text 'fourth: Int' in parameter clause")
+        DiagnosticSpec(locationMarker: "END_ARRAY", message: "expected ']' to end array type"),
+        DiagnosticSpec(locationMarker: "END_ARRAY", message: "expected ',' in function parameter")
       ]
     )
   }
@@ -1041,7 +1063,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
-        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
+        DiagnosticSpec(message: "expected ',' in function parameter"),
       ]
     )
 
@@ -1051,7 +1073,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
-        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
+        DiagnosticSpec(message: "expected ',' in function parameter"),
       ]
     )
 
@@ -1061,7 +1083,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
-        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
+        DiagnosticSpec(message: "expected ',' in function parameter"),
       ]
     )
 

@@ -8,10 +8,7 @@ final class UnknownPlatformTests: XCTestCase {
       """
       #if hasGreeble(blah)
       #endif
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: unexpected platform condition
-      ]
+      """
     )
   }
 
@@ -41,10 +38,7 @@ final class UnknownPlatformTests: XCTestCase {
       // This compiler, don't short-circuit.
       #if compiler(>=5.7) && hasGreeble(blah)
       #endif
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: unexpected platform condition
-      ]
+      """
     )
   }
 
@@ -54,10 +48,7 @@ final class UnknownPlatformTests: XCTestCase {
       // This compiler, don't short-circuit.
       #if compiler(<5.8) || hasGreeble(blah)
       #endif
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: unexpected platform condition
-      ]
+      """
     )
   }
 
@@ -67,10 +58,7 @@ final class UnknownPlatformTests: XCTestCase {
       // Not a "version" check, so don't short-circuit.
       #if os(macOS) && hasGreeble(blah)
       #endif
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: unexpected platform condition
-      ]
+      """#
     )
   }
 

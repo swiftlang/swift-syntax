@@ -97,7 +97,6 @@ let package = Package(
       dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftParser"],
       exclude: [
         "gyb_helpers",
-        "ResultBuilders.swift.gyb",
       ]
     ),
     .target(

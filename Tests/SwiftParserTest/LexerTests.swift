@@ -703,6 +703,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
+<<<<<<< HEAD
   func testCommentAttribution() {
     var data =
     """
@@ -744,6 +745,16 @@ public class LexerTests: XCTestCase {
         lexeme(.eof, "")
       ])
     }
+=======
+  func testIntegerLiteralDiagnostics() {
+    AssertParse(
+      """
+      var fl_l: Float = 0x1.0#^DIAG^#
+      """,
+    diagnostics: [
+      DiagnosticSpec(message: "hexadecimal floating point literal must end with an exponent")
+    ])
+>>>>>>> e6459ae5 (Propagate an "Error" Bit Into the Lexemes)
   }
 }
 

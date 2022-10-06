@@ -1382,6 +1382,7 @@ extension Parser {
       wholeText: wholeText,
       textRange: textRange,
       presence: .present,
+      hasError: false,
       arena: self.arena
     )
   }

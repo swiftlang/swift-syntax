@@ -17,7 +17,7 @@ import SwiftSyntax
 open class BasicFormat: SyntaxRewriter {
   public var indentationLevel: Int = 0
   open var indentation: TriviaPiece { .spaces(indentationLevel * 4) }
-  private var indentedNewline: Trivia { Trivia(pieces: [.newlines(1), indentation]) }
+  public var indentedNewline: Trivia { Trivia(pieces: [.newlines(1), indentation]) }
   private var lastRewrittenToken: TokenSyntax?
   
   open override func visit(_ node: UnknownDeclSyntax) -> DeclSyntax {

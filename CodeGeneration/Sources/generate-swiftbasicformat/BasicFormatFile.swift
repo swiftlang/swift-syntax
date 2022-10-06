@@ -25,7 +25,7 @@ let basicFormatFile = SourceFile {
   ClassDecl(modifiers: [Token.open], identifier: "BasicFormat", inheritanceClause: TypeInheritanceClause { InheritedType(typeName: "SyntaxRewriter") }) {
     VariableDecl("public var indentationLevel: Int = 0")
     VariableDecl("open var indentation: TriviaPiece { .spaces(indentationLevel * 4) }")
-    VariableDecl("private var indentedNewline: Trivia { Trivia(pieces: [.newlines(1), indentation]) }")
+    VariableDecl("public var indentedNewline: Trivia { Trivia(pieces: [.newlines(1), indentation]) }")
     VariableDecl("private var lastRewrittenToken: TokenSyntax?")
 
     for node in SYNTAX_NODES where !node.isBase {

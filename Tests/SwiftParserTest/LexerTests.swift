@@ -749,10 +749,14 @@ public class LexerTests: XCTestCase {
   func testIntegerLiteralDiagnostics() {
     AssertParse(
       """
-      var fl_l: Float = 0x1.0#^DIAG^#
+      var fl_l: Float = 0x1.0#^MISSING_HEX_EXPONENT_END^#
+
+      var fl_bad_separator2: Double = 0x1p#^BAD_HEX_EXPONENT_START^#_
       """,
     diagnostics: [
-      DiagnosticSpec(message: "hexadecimal floating point literal must end with an exponent")
+      DiagnosticSpec(locationMarker: "MISSING_HEX_EXPONENT_END", message: "hexadecimal floating point literal must end with an exponent"),
+
+      DiagnosticSpec(locationMarker: "BAD_HEX_EXPONENT_START", message: "'_' is not a valid first character in floating point exponent"),
     ])
 >>>>>>> e6459ae5 (Propagate an "Error" Bit Into the Lexemes)
   }

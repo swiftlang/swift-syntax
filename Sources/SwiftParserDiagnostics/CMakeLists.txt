@@ -8,7 +8,6 @@
 
 add_library(SwiftParserDiagnostics STATIC
   DiagnosticExtensions.swift
-  LexerDiagnosticMessages.swift
   MissingNodesError.swift
   ParserDiagnosticMessages.swift
   ParseDiagnosticsGenerator.swift

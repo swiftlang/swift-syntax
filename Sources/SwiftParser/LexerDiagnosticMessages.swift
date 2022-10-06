@@ -34,40 +34,12 @@ public extension LexerError {
   }
 }
 
-public protocol LexerNote: NoteMessage {
-  var fixItID: MessageID { get }
-}
-
-public extension LexerNote {
-  static var fixItID: MessageID {
-    return MessageID(domain: diagnosticDomain, id: "\(self)")
-  }
-
-  var fixItID: MessageID {
-    return Self.fixItID
-  }
-}
-
-public protocol LexerFixIt: FixItMessage {
-  var fixItID: MessageID { get }
-}
-
-public extension LexerFixIt {
-  static var fixItID: MessageID {
-    return MessageID(domain: diagnosticDomain, id: "\(self)")
-  }
-
-  var fixItID: MessageID {
-    return Self.fixItID
-  }
-}
-
 // MARK: - Errors (please sort alphabetically)
 
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticLexerError: String, DiagnosticMessage {
-  case lex_expected_binary_exponent_in_hex_float_literal = "hexadecimal floating point literal must end with an exponent"
-  case lex_expected_digit_in_fp_exponent = "expected a digit in floating point exponent"
+  case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
+  case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
 
   public var message: String { self.rawValue }
 
@@ -95,11 +67,11 @@ public struct InvalidFloatingPointExponentDigit: LexerError {
   }
 }
 
-public struct InvalidDigitInIntegerliteral: LexerError {
+public struct InvalidDigitInIntegerLiteral: LexerError {
   public enum Kind {
     case binary(Unicode.Scalar)
     case octal(Unicode.Scalar)
-    case dectal(Unicode.Scalar)
+    case decimal(Unicode.Scalar)
     case hex(Unicode.Scalar)
   }
 
@@ -108,10 +80,10 @@ public struct InvalidDigitInIntegerliteral: LexerError {
   public var message: String {
     switch self.kind {
     case .binary(let digit):
-      return "'\(digit)' is not a validbinary digit (0 or 1) in integer literal"
+      return "'\(digit)' is not a valid binary digit (0 or 1) in integer literal"
     case .octal(let digit):
       return "'\(digit)' is not a valid octal digit (0-7) in integer literal"
-    case .dectal(let digit):
+    case .decimal(let digit):
       return "'\(digit)' is not a valid digit in integer literal"
     case .hex(let digit):
       return "'\(digit)' is not a valid hexadecimal digit (0-9, A-F) in integer literal"

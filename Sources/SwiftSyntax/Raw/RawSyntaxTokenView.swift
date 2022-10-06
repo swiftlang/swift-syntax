@@ -217,10 +217,10 @@ public struct RawSyntaxTokenView {
     }
   }
 
-  var hasError: Bool {
+  var hasLexerError: Bool {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      return dat.hasError
+      return dat.hasLexerError
     case .materializedToken(_):
       return false
     case .layout(_):

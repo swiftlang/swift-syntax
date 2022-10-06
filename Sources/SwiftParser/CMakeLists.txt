@@ -14,6 +14,7 @@ add_library(SwiftParser STATIC
   Directives.swift
   Expressions.swift
   Lexer.swift
+  LexerDiagnosticMessages.swift
   Lookahead.swift
   LoopProgressCondition.swift
   Modifiers.swift

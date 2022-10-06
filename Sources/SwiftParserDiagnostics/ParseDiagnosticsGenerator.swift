@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftParser
+@_spi(LexerDiagnostics) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
 public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {

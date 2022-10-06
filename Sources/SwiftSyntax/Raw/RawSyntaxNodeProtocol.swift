@@ -132,7 +132,7 @@ public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
     presence: SourcePresence,
-    hasError: Bool,
+    hasLexerError: Bool,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.parsedToken(
@@ -141,7 +141,7 @@ public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
       textRange: textRange,
       presence: presence,
       arena: arena,
-      hasError: hasError
+      hasLexerError: hasLexerError
     )
     self = RawTokenSyntax(raw: raw)
   }
@@ -163,7 +163,7 @@ public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
         wholeText: text,
         textRange: 0 ..< text.count,
         presence: presence,
-        hasError: false,
+        hasLexerError: false,
         arena: arena
       )
     } else {

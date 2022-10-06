@@ -37,8 +37,6 @@ final class RawStringErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: too many '#' characters in delimited escape
         // TODO: Old parser expected error on line 1: invalid escape sequence in literal
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: ###"extraneous code '#"\##("invalid")"#' at top level"###),
       ]
     )
   }

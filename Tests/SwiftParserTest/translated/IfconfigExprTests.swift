@@ -405,14 +405,12 @@ final class IfconfigExprTests: XCTestCase {
   func testIfconfigExpr29() {
     AssertParse(
       """
-      #if canImport(A, _version: 1️⃣20A301)
+      #if canImport(A, _version: 201️⃣A301)
         let a = 1
       #endif
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'A' is not a valid digit in integer literal
-        DiagnosticSpec(message: "expected value in function call"),
-        DiagnosticSpec(message: "unexpected code '20A301' in function call"),
+        DiagnosticSpec(message: "'A' is not a valid digit in integer literal"),
       ]
     )
   }

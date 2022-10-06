@@ -540,9 +540,9 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-      ###"1️⃣"\"###,
+      ###""\1️⃣"###,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '\"\\' at top level")
+        DiagnosticSpec(message: #"expected '"' to end string literal"#)
       ]
     )
   }

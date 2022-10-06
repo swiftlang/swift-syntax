@@ -143,7 +143,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         private(set) var prop4 : Double {
           set {} 
           get async throws { 1.1 }
-          _modify { yield &prop4 } 
+          _modify { yield &prop4 }
         }
       }
       """,
@@ -219,8 +219,8 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad3 : Int {
-        _read async { yield 0 } 
-        set(theValue) async { } 
+        _read async { yield 0 }
+        set(theValue) async { }
       }
       """,
       diagnostics: [

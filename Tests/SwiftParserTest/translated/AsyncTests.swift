@@ -16,10 +16,11 @@ final class AsyncTests: XCTestCase {
   func testAsync2() {
     AssertParse(
       """
-      func asyncGlobal3() throws async { }
+      func asyncGlobal3() throws#^DIAG^# async { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'async' must precede 'throws', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }
@@ -27,9 +28,10 @@ final class AsyncTests: XCTestCase {
   func testAsync3() {
     AssertParse(
       """
-      func asyncGlobal3(fn: () throws -> Int) rethrows async { }
+      func asyncGlobal3(fn: () throws -> Int) rethrows#^DIAG^# async { }
       """,
       diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
         // TODO: Old parser expected error on line 1: 'async' must precede 'rethrows', Fix-It replacements: 50 - 56 = '', 41 - 41 = 'async '
       ]
     )
@@ -38,9 +40,10 @@ final class AsyncTests: XCTestCase {
   func testAsync4() {
     AssertParse(
       """
-      func asyncGlobal4() -> Int async { }
+      func asyncGlobal4() -> Int#^DIAG^# async { }
       """,
       diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
         // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
       ]
     )
@@ -49,11 +52,12 @@ final class AsyncTests: XCTestCase {
   func testAsync5() {
     AssertParse(
       """
-      func asyncGlobal5() -> Int async throws #^DIAG^#{ }
+      func asyncGlobal5() -> Int#^STMTS^# async throws #^DIAG^#{ }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
         // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 34 - 41 = '', 21 - 21 = 'throws '
+        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(message: "expected '->'"),
       ]
     )
@@ -75,9 +79,10 @@ final class AsyncTests: XCTestCase {
   func testAsync7() {
     AssertParse(
       """
-      func asyncGlobal7() throws -> Int async { }
+      func asyncGlobal7() throws -> Int#^DIAG^# async { }
       """,
       diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
         // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 35 - 41 = '', 21 - 21 = 'async '
       ]
     )
@@ -86,9 +91,12 @@ final class AsyncTests: XCTestCase {
   func testAsync8() {
     AssertParse(
       """
-      func asyncGlobal8() async throws async -> async Int async {}
+      func asyncGlobal8() async throws#^DIAG_1^# async -> async#^DIAG_2^# Int#^DIAG_3^# async {}
       """,
       diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 34 - 40 = ''
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 43 - 49 = ''
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 53 - 59 = ''

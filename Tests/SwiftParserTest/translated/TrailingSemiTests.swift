@@ -22,9 +22,9 @@ final class TrailingSemiTests: XCTestCase {
         #^DIAG_1^#; 
         var a : Int ; #^DIAG_2^#; 
         func b () {};#^DIAG_3^#
-        ; #^DIAG_4^#static func c () {};  #^DIAG_5^#
-        ;#^DIAG_6^#;
-      #^DIAG_7^#}
+        ;#^DIAG_4^# #^DIAG_5^#static func c () {};  #^DIAG_6^#
+        ;#^DIAG_7^#;
+      #^DIAG_8^#}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unexpected ';' separator, Fix-It replacements: 3 - 5 = ''
@@ -33,12 +33,13 @@ final class TrailingSemiTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text ';' before function"),
         DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration in struct"),
         // TODO: Old parser expected error on line 5: unexpected ';' separator, Fix-It replacements: 3 - 5 = ''
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected expression"),
+        DiagnosticSpec(locationMarker: "DIAG_4", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "DIAG_6", message: "expected expression"),
         // TODO: Old parser expected error on line 6: unexpected ';' separator, Fix-It replacements: 3 - 4 = ''
         // TODO: Old parser expected error on line 6: unexpected ';' separator, Fix-It replacements: 4 - 5 = ''
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "expected expression"),
-        DiagnosticSpec(locationMarker: "DIAG_7", message: "extraneous '}' at top level"),
+        DiagnosticSpec(locationMarker: "DIAG_7", message: "expected expression"),
+        DiagnosticSpec(locationMarker: "DIAG_8", message: "extraneous '}' at top level"),
       ]
     )
   }

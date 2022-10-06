@@ -20,11 +20,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       if #unavailable(OSX 10.51, *) {} 
       // Disallow use as an expression.
       if (#^DIAG_1^##unavailable(OSX 10.51)) {}  
-      let x = #^DIAG_2^##unavailable(OSX 10.51)  
+      let x =#^DIAG_2A^# #^DIAG_2^##unavailable(OSX 10.51)
       (#unavailable(OSX 10.51) ? 1 : 0) 
       if !#unavailable(OSX 10.52) { 
       }
-      if let _ = Optional(5), #^DIAG_3^#!#^DIAG_4^##unavailable(OSX 10.52) { 
+      if let _ = Optional(5),#^DIAG_3A^# #^DIAG_3^#!#^DIAG_4^##unavailable(OSX 10.52) { 
       }
       """,
       diagnostics: [
@@ -33,11 +33,13 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_1", message: "expected value in tuple"),
         DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '#unavailable(OSX 10.51)' in tuple"),
         // TODO: Old parser expected error on line 5: #unavailable may only be used as condition of
+        DiagnosticSpec(locationMarker: "DIAG_2A", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text before variable"),
         // TODO: Old parser expected error on line 6: #unavailable may only be used as condition of an
         // TODO: Old parser expected error on line 7: #unavailable may only be used as condition of an
         // TODO: Old parser expected error on line 9: #unavailable may only be used as condition
+        DiagnosticSpec(locationMarker: "DIAG_3A", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "DIAG_3", message: "expected pattern in variable"),
         DiagnosticSpec(locationMarker: "DIAG_4", message: "expected expression in prefix operator expression"),
         DiagnosticSpec(locationMarker: "DIAG_4", message: "extraneous code at top level"),

@@ -13,49 +13,91 @@ final class DollarIdentifierTests: XCTestCase {
     )
   }
 
-  func testDollarIdentifier2() {
+  func testDollarIdentifier2a() {
     AssertParse(
       """
       func dollarVar() {
-        var #^DIAG_1^#$ #^DIAG_2^#: Int = 42 
-        $ += 1 
-        print($) 
-      }
-      func dollarLet() {
-        let #^DIAG_3^#$ = 42 
-        print($) 
-      }
-      func dollarClass() {
-        class #^DIAG_4^#$ {} 
-      }
-      func dollarEnum() {
-        enum #^DIAG_5^#$ {} 
-      }
-      func dollarStruct() {
-        struct #^DIAG_6^#$ {} 
+        var#^DIAG_1^# #^DIAG_2^#$ #^DIAG_3^#: Int = 42
+        $ += 1
+        print($)
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text in function"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text in function"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
         // TODO: Old parser expected error on line 4: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        // TODO: Old parser expected error on line 7: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected pattern in variable"),
-        // TODO: Old parser expected error on line 8: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        // TODO: Old parser expected error on line 11: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected member block in class"),
-        // TODO: Old parser expected error on line 14: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected member block in enum"),
-        // TODO: Old parser expected error on line 17: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "expected member block in struct"),
       ]
     )
   }
+
+  func testDollarIdentifier2b() {
+    AssertParse(
+      """
+      func dollarLet() {
+        let#^DIAG_1^# #^DIAG_2^#$ = 42
+        print($)
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
+        // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
+      ]
+    )
+  }
+
+  func testDollarIdentifier2c() {
+    AssertParse(
+      """
+      func dollarClass() {
+        class#^DIAG_1^# #^DIAG_2^#$ {}
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in class"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in class"),
+      ]
+    )
+  }
+
+  func testDollarIdentifier2d() {
+    AssertParse(
+      """
+      func dollarEnum() {
+        enum#^DIAG_1^# #^DIAG_2^#$ {}
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in enum"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in enum"),
+      ]
+    )
+  }
+
+  func testDollarIdentifier2e() {
+    AssertParse(
+      """
+      func dollarStruct() {
+        struct#^DIAG_1^# #^DIAG_2^#$ {}
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in struct"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in struct"),
+      ]
+    )
+  }
+
 
   func testDollarIdentifier3() {
     AssertParse(

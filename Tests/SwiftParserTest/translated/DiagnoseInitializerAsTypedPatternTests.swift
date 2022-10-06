@@ -23,16 +23,20 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   func testDiagnoseInitializerAsTypedPattern3() {
     AssertParse(
       """
-      let a:[X]()  
-      let b: [X]()  
-      let c :[X]()  
-      let d : [X]()
+      let a:[X]#^DIAG_1^#()
+      let b: [X]#^DIAG_2^#()
+      let c :[X]#^DIAG_3^#()
+      let d : [X]#^DIAG_4^#()
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' = '
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 2: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 3: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 7 - 8 = '= '
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 4: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 7 - 8 = '='
+        DiagnosticSpec(locationMarker: "DIAG_4", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -40,11 +44,12 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   func testDiagnoseInitializerAsTypedPattern4() {
     AssertParse(
       """
-      let e: X()#^DIAG^#, ee: Int
+      let e: X#^DIAG_1^#()#^DIAG_2^#, ee: Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(message: "extraneous ', ee: Int' at top level"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous ', ee: Int' at top level"),
       ]
     )
   }
@@ -52,10 +57,11 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   func testDiagnoseInitializerAsTypedPattern5() {
     AssertParse(
       """
-      let f:/*comment*/[X]()
+      let f:/*comment*/[X]#^DIAG^#()
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' = '
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
       ]
     )
   }
@@ -83,18 +89,23 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   func testDiagnoseInitializerAsTypedPattern8() {
     AssertParse(
       """
-      let g: X(x)  
-      let h: X(x, y)  
-      let i: X() { foo() }  
-      let j: X(x) { foo() }  
-      let k: X(x, y) { foo() }
+      let g: X#^DIAG_1^#(x)
+      let h: X#^DIAG_2^#(x, y)
+      let i: X#^DIAG_3^#() { foo() }
+      let j: X#^DIAG_4^#(x) { foo() }
+      let k: X#^DIAG_5^#(x, y) { foo() }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 2: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 3: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 4: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_4", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 5: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_5", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -103,18 +114,22 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
     AssertParse(
       """
       func nonTopLevel() {
-        let a:[X]()   
-        let i: X() { foo() }  
-        let j: X(x) { foo() }  
-        let k: X(x, y) { foo() }  
+        let a:[X]#^DIAG_1^#()
+        let i: X#^DIAG_2^#() { foo() }
+        let j: X#^DIAG_3^#(x) { foo() }
+        let k: X#^DIAG_4^#(x, y) { foo() }
         _ = (a, i, j, k)
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' = '
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 3: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 4: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 5: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' ='
+        DiagnosticSpec(locationMarker: "DIAG_4", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }

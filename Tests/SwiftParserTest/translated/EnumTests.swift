@@ -1110,14 +1110,15 @@ final class EnumTests: XCTestCase {
   func testEnum82() {
     AssertParse(
       """
-      enum #^DIAG_1^#switch {}#^DIAG_2^#
+      enum#^DIAG_1^# #^DIAG_2^#switch {}#^DIAG_3^#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'switch' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 12 = '`switch`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected member block in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '{}' in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in enum"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in enum"),
+        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected '{}' in 'switch' statement"),
       ]
     )
   }

@@ -135,6 +135,18 @@ class FixItApplier: SyntaxRewriter {
     return nil
   }
 
+  override func visit(_ node: TokenSyntax) -> Syntax {
+    for change in changes {
+      switch change {
+      case .removeTrailingTrivia(let changeNode) where changeNode.id == node.id:
+        return Syntax(node.withTrailingTrivia([]))
+      default:
+        break
+      }
+    }
+    return Syntax(node)
+  }
+
   /// Applies all Fix-Its in `diagnostics` to `tree` and returns the fixed syntax tree.
   public static func applyFixes<T: SyntaxProtocol>(in diagnostics: [Diagnostic], to tree: T) -> Syntax {
     let applier = FixItApplier(diagnostics: diagnostics)

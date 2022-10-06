@@ -37,6 +37,30 @@ extension Parser {
 }
 
 extension Parser {
+  mutating func parseCodeBlockItemList(context: ItemContext?, stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
+    var elements = [RawCodeBlockItemSyntax]()
+    var loopProgress = LoopProgressCondition()
+    while !stopCondition(&self), loopProgress.evaluate(currentToken) {
+      let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
+      guard let newElement = self.parseCodeBlockItem(context: context) else {
+        break
+      }
+      if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
+        elements[elements.count - 1] = RawCodeBlockItemSyntax(
+          lastItem.unexpectedBeforeItem,
+          item: lastItem.item,
+          lastItem.unexpectedBetweenItemAndSemicolon,
+          semicolon: missingToken(.semicolon, text: nil),
+          lastItem.unexpectedBetweenSemicolonAndErrorTokens,
+          errorTokens: lastItem.errorTokens,
+          arena: self.arena
+        )
+      }
+      elements.append(newElement)
+    }
+    return .init(elements: elements, arena: self.arena)
+  }
+
   /// Parse the top level items in a source file.
   ///
   /// Grammar
@@ -44,15 +68,7 @@ extension Parser {
   ///
   ///     top-level-declaration → statements?
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
-    var elements = [RawCodeBlockItemSyntax]()
-    var loopProgress = LoopProgressCondition()
-    while
-      let newElement = self.parseCodeBlockItem(context: .topLevel),
-      loopProgress.evaluate(currentToken)
-    {
-      elements.append(newElement)
-    }
-    return .init(elements: elements, arena: self.arena)
+    return parseCodeBlockItemList(context: .topLevel, stopCondition: { _ in false })
   }
 
   /// The optional form of `parseCodeBlock` that checks to see if the parser has
@@ -75,23 +91,9 @@ extension Parser {
   ///     code-block → '{' statements? '}'
   mutating func parseCodeBlock(context: ItemContext? = nil) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    var items = [RawCodeBlockItemSyntax]()
-    var loopProgress = LoopProgressCondition()
-    while
-      !self.at(.rightBrace),
-      let newItem = self.parseCodeBlockItem(context: context),
-      loopProgress.evaluate(currentToken)
-    {
-      items.append(newItem)
-    }
+    let itemList = parseCodeBlockItemList(context: context, stopCondition: { $0.at(.rightBrace) })
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
 
-    let itemList: RawCodeBlockItemListSyntax
-    if items.isEmpty && (lbrace.isMissing || rbrace.isMissing) {
-      itemList = .init(elements: [], arena: self.arena)
-    } else {
-      itemList = .init(elements: items, arena: self.arena)
-    }
     return .init(
       unexpectedBeforeLBrace,
       leftBrace: lbrace,

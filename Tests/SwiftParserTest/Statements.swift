@@ -58,7 +58,7 @@ final class StatementTests: XCTestCase {
     for index in (0...nest) {
         let indent = String(repeating: "    ", count: index + 1)
         source += indent + "if false != true {\n"
-        source += indent + "   print \"\\(i)\"\n"
+        source += indent + "   print(\"\\(i)\")\n"
     }
 
     for index in (0...nest).reversed() {
@@ -367,13 +367,15 @@ final class StatementTests: XCTestCase {
         }
       }
       """,
-    substructure: Syntax(YieldStmtSyntax(
-      yieldKeyword: .contextualKeyword("yield"),
-      yields: Syntax(YieldListSyntax(
-        leftParen: .leftParenToken(),
-        elementList: YieldExprListSyntax([]),
-        rightParen: .rightParenToken())))),
-    substructureAfterMarker: "YIELD")
+      substructure: Syntax(YieldStmtSyntax(
+        yieldKeyword: .contextualKeyword("yield"),
+        yields: Syntax(YieldListSyntax(
+          leftParen: .leftParenToken(),
+          elementList: YieldExprListSyntax([]),
+          rightParen: .rightParenToken())
+        ))
+      ),
+      substructureAfterMarker: "YIELD")
 
     // Make sure these are not.
     AssertParse(

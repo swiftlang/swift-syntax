@@ -91,19 +91,18 @@ final class AsyncTests: XCTestCase {
   func testAsync8() {
     AssertParse(
       """
-      func asyncGlobal8() async throws1️⃣ async -> 2️⃣async Int3️⃣ async {}
+      func asyncGlobal8() async throws1️⃣ async -> 2️⃣async Int async {}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'async' may only occur before '->'"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 34 - 40 = ''
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 43 - 49 = ''
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 53 - 59 = ''
       ],
       // TODO: This should not insert another 'async'
       fixedSource: """
-      func asyncGlobal8() async throws; async async -> Int; async {}
+      func asyncGlobal8() async throws; async async -> Int async {}
       """
     )
   }
@@ -115,7 +114,7 @@ final class AsyncTests: XCTestCase {
         init() async { }
         deinit1️⃣ async 2️⃣{ }
         func f() async { }
-        subscript(x: Int)3️⃣ 4️⃣async 5️⃣-> Int {
+        subscript(x: Int) 4️⃣async 5️⃣-> Int {
           get {
             return 0
           }
@@ -132,7 +131,6 @@ final class AsyncTests: XCTestCase {
         // TODO: Old parser expected error on line 5: single argument function types require parentheses
         // TODO: Old parser expected error on line 5: cannot find type 'async' in scope
         // TODO: Old parser expected note on line 5: cannot use module 'async' as a type
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive declarations on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected declaration after 'async' modifier in class"),
         DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected text in class"),

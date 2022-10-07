@@ -174,12 +174,11 @@ final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere12() {
     AssertParse(
       """
-      func testCombinedConstraintsOld<T:1️⃣ 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC>(x: T) {}
+      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC>(x: T) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 83 - 83 = ' where T: ProtoC'
         // TODO: Old parser expected error on line 1: 'protocol<...>' composition syntax has been removed
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
@@ -193,12 +192,11 @@ final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere13() {
     AssertParse(
       """
-      func testCombinedConstraintsOld<T:1️⃣ 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}
+      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 84 - 89 = 'where T: ProtoC,'
         // TODO: Old parser expected error on line 1: 'protocol<...>' composition syntax has been removed
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),

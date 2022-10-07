@@ -37,17 +37,16 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors3a() {
     AssertParse(
       """
-      protocol1️⃣ 2️⃣4 {
-        associatedtype 3️⃣5
+      protocol 1️⃣4 {
+        associatedtype 2️⃣5
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: protocol name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in protocol"),
         // TODO: Old parser expected error on line 2: associatedtype name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in associatedtype declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in associatedtype declaration"),
       ]
     )
   }
@@ -55,17 +54,16 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors3b() {
     AssertParse(
       """
-      protocol1️⃣ 2️⃣6.0 {
-        associatedtype 3️⃣7.0
+      protocol 1️⃣6.0 {
+        associatedtype 2️⃣7.0
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: protocol name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in protocol"),
         // TODO: Old parser expected error on line 2: associatedtype name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in associatedtype declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in associatedtype declaration"),
       ]
     )
   }
@@ -113,13 +111,12 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors5a() {
     AssertParse(
       """
-      struct1️⃣ 2️⃣13 {}
+      struct 1️⃣13 {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: struct name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
+        DiagnosticSpec(message: "expected identifier in struct"),
+        DiagnosticSpec(message: "expected member block in struct"),
       ]
     )
   }
@@ -127,13 +124,12 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors5b() {
     AssertParse(
       """
-      struct1️⃣ 2️⃣14.0 {}
+      struct 1️⃣14.0 {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: struct name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
+        DiagnosticSpec(message: "expected identifier in struct"),
+        DiagnosticSpec(message: "expected member block in struct"),
       ]
     )
   }
@@ -154,13 +150,12 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors6a() {
     AssertParse(
       """
-      enum1️⃣ 2️⃣16 {}
+      enum 1️⃣16 {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: enum name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
+        DiagnosticSpec(message: "expected identifier in enum"),
+        DiagnosticSpec(message: "expected member block in enum"),
       ]
     )
   }
@@ -168,13 +163,12 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors6b() {
     AssertParse(
       """
-      enum1️⃣ 2️⃣17.0 {}
+      enum 1️⃣17.0 {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: enum name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
+        DiagnosticSpec(message: "expected identifier in enum"),
+        DiagnosticSpec(message: "expected member block in enum"),
       ]
     )
   }
@@ -195,18 +189,17 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors7a() {
     AssertParse(
       """
-      class1️⃣ 2️⃣19 {
-        func 3️⃣20() {}
+      class 1️⃣19 {
+        func 2️⃣20() {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: class name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in class"),
         // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '20' before parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '20' before parameter clause"),
       ]
     )
   }
@@ -214,18 +207,17 @@ final class NumberIdentifierErrorsTests: XCTestCase {
   func testNumberIdentifierErrors7b() {
     AssertParse(
       """
-      class1️⃣ 2️⃣21.0 {
-        func 3️⃣22.0() {}
+      class 1️⃣21.0 {
+        func 2️⃣22.0() {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: class name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in class"),
         // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '22.0' before parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '22.0' before parameter clause"),
       ]
     )
   }

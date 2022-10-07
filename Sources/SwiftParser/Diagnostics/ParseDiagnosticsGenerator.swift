@@ -221,10 +221,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let semicolon = node.semicolon, semicolon.presence == .missing {
-      let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
-      addDiagnostic(semicolon, position: position, .consecutiveStatementsOnSameLine, fixIts: [
-        FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(token: semicolon))
-      ], handledNodes: [semicolon.id])
+      if !node.item.hasError {
+        // Only diagnose the missing semicolon if the item doesn't contain any errors.
+        // If the item contains errors, the root cause is most likely something different and not the missing semicolon.
+        let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
+        addDiagnostic(semicolon, position: position, .consecutiveStatementsOnSameLine, fixIts: [
+          FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(token: semicolon))
+        ], handledNodes: [semicolon.id])
+      } else {
+        handledNodes.append(semicolon.id)
+      }
     }
     return .visitChildren
   }
@@ -234,10 +240,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let semicolon = node.semicolon, semicolon.presence == .missing {
-      let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
-      addDiagnostic(semicolon, position: position, .consecutiveDeclarationsOnSameLine, fixIts: [
-        FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(token: semicolon))
-      ], handledNodes: [semicolon.id])
+      if !node.decl.hasError {
+        // Only diagnose the missing semicolon if the decl doesn't contain any errors.
+        // If the decl contains errors, the root cause is most likely something different and not the missing semicolon.
+        let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
+        addDiagnostic(semicolon, position: position, .consecutiveDeclarationsOnSameLine, fixIts: [
+          FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(token: semicolon))
+        ], handledNodes: [semicolon.id])
+      } else {
+        handledNodes.append(semicolon.id)
+      }
     }
     return .visitChildren
   }

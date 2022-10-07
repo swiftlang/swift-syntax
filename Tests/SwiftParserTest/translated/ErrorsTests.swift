@@ -29,7 +29,7 @@ final class ErrorsTests: XCTestCase {
       """
       func one() {
         do {
-          true ? () :1️⃣ 2️⃣throw opaque_error()
+          true ? () : 1️⃣throw opaque_error()
         } catch _ {
         }
         do {
@@ -37,7 +37,7 @@ final class ErrorsTests: XCTestCase {
           let error2 = error
         }
         do {
-        } catch 3️⃣where true {
+        } catch 2️⃣where true {
           let error2 = error
         } catch {
         }
@@ -73,9 +73,8 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected expression after '? ... :' in ternary expression
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'do' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in pattern"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'do' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in pattern"),
       ]
     )
   }
@@ -274,7 +273,7 @@ final class ErrorsTests: XCTestCase {
       """
       // rdar://21328447
       func fixitThrow0()1️⃣ throw {}
-      func fixitThrow1()2️⃣ throw3️⃣ 4️⃣-> Int {}
+      func fixitThrow1()2️⃣ throw 3️⃣-> Int {}
       func fixitThrow2() throws {
         var _: (Int)
         throw MSV.Foo
@@ -286,9 +285,8 @@ final class ErrorsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 3: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 25 = 'throws'
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected expression in 'throw' statement"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected text '-> Int {}' before function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in 'throw' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '-> Int {}' before function"),
         // TODO: Old parser expected error on line 7: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 16 - 21 = 'throws'
       ]
     )

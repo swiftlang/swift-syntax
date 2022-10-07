@@ -420,19 +420,18 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum Recovery5 {
-        case1️⃣ 2️⃣.UE3
-        case 3️⃣.UE4, .UE5
+        case 1️⃣.UE3
+        case 2️⃣.UE4, .UE5
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: extraneous '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '.UE3' before enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '.UE3' before enum case"),
         // TODO: Old parser expected error on line 3: extraneous '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
         // TODO: Old parser expected error on line 3: extraneous '.' in enum 'case' declaration, Fix-It replacements: 14 - 15 = ''
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '.UE4, .UE5' in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '.UE4, .UE5' in enum"),
       ]
     )
   }

@@ -20,11 +20,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       if #unavailable(OSX 10.51, *) {} 
       // Disallow use as an expression.
       if (1️⃣#unavailable(OSX 10.51)) {}  
-      let x =2️⃣ 3️⃣#unavailable(OSX 10.51)
+      let x = 3️⃣#unavailable(OSX 10.51)
       (#unavailable(OSX 10.51) ? 1 : 0) 
       if !#unavailable(OSX 10.52) { 
       }
-      if let _ = Optional(5),4️⃣ 5️⃣!6️⃣#unavailable(OSX 10.52) {
+      if let _ = Optional(5), 5️⃣!6️⃣#unavailable(OSX 10.52) {
       }
       """,
       diagnostics: [
@@ -33,13 +33,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '#unavailable(OSX 10.51)' in tuple"),
         // TODO: Old parser expected error on line 5: #unavailable may only be used as condition of
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text before variable"),
         // TODO: Old parser expected error on line 6: #unavailable may only be used as condition of an
         // TODO: Old parser expected error on line 7: #unavailable may only be used as condition of an
         // TODO: Old parser expected error on line 9: #unavailable may only be used as condition
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected pattern in variable"),
         DiagnosticSpec(locationMarker: "6️⃣", message: "expected expression in prefix operator expression"),
         DiagnosticSpec(locationMarker: "6️⃣", message: "extraneous code at top level"),

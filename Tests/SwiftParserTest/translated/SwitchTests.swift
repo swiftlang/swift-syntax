@@ -19,16 +19,15 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       func parseError1(x: Int) {
-        switch1️⃣ 2️⃣func 3️⃣{} 
+        switch 1️⃣func 2️⃣{}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected expression in 'switch' statement
         // TODO: Old parser expected error on line 2: expected identifier in function declaration
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected argument list in function declaration")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration")
       ]
     )
   }

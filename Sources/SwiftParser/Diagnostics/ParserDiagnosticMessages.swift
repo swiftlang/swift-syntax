@@ -169,3 +169,12 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   }
 }
 
+public struct ReplaceTokensFixIt: ParserFixIt {
+  public let replaceTokens: [TokenSyntax]
+
+  public let replacement: TokenSyntax
+
+  public var message: String {
+    "replace \(missingNodesDescription(missingNodes: replaceTokens.map(Syntax.init), commonParent: nil)) by '\(replacement.text)'"
+  }
+}

@@ -35,17 +35,15 @@ final class TypealiasTests: XCTestCase {
     )
   }
 
+  // <rdar://problem/13339798> QoI: poor diagnostic in malformed typealias
   func testTypealias3a() {
     AssertParse(
       """
-      // <rdar://problem/13339798> QoI: poor diagnostic in malformed typealias
       typealias Foo1 1️⃣: Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '=' in type alias declaration, Fix-It replacements: 16 - 17 = '='
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(message: "extraneous ': Int' at top level"),
-      ]
+        DiagnosticSpec(message: "expected '=' in typealias declaration"),
+      ], fixedSource: "typealias Foo1 = Int"
     )
   }
 
@@ -55,10 +53,8 @@ final class TypealiasTests: XCTestCase {
       typealias Foo21️⃣: Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '=' in type alias declaration, Fix-It replacements: 15 - 16 = ' ='
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(message: "extraneous ': Int' at top level"),
-      ]
+        DiagnosticSpec(message: "expected '=' in typealias declaration"),
+      ], fixedSource: "typealias Foo2= Int"
     )
   }
 
@@ -68,10 +64,8 @@ final class TypealiasTests: XCTestCase {
       typealias Foo3 1️⃣:Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '=' in type alias declaration, Fix-It replacements: 16 - 17 = '= '
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(message: "extraneous ':Int' at top level"),
-      ]
+        DiagnosticSpec(message: "expected '=' in typealias declaration"),
+      ], fixedSource: "typealias Foo3 =Int"
     )
   }
 
@@ -81,10 +75,8 @@ final class TypealiasTests: XCTestCase {
       typealias Foo41️⃣:/*comment*/Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '=' in type alias declaration, Fix-It replacements: 15 - 16 = ' = '
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(message: "extraneous ':/*comment*/Int' at top level"),
-      ]
+        DiagnosticSpec(message: "expected '=' in typealias declaration"),
+      ], fixedSource: "typealias Foo4=/*comment*/Int"
     )
   }
 
@@ -94,7 +86,6 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery11️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
         DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
       ]
     )
@@ -103,13 +94,11 @@ final class TypealiasTests: XCTestCase {
   func testTypealias6() {
     AssertParse(
       """
-      typealias Recovery2 1️⃣:
+      typealias Recovery2 1️⃣:2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
-        // TODO: Old parser expected error on line 1: expected type in type alias declaration
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(message: "extraneous ':' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected value in typealias declaration"),
       ]
     )
   }
@@ -120,7 +109,6 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery3 =1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected type in type alias declaration
         DiagnosticSpec(message: "expected value in typealias declaration"),
       ]
     )
@@ -132,9 +120,7 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery4 1️⃣: Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(message: "extraneous ': Int' at top level"),
+        DiagnosticSpec(message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"]),
       ]
     )
   }
@@ -142,14 +128,11 @@ final class TypealiasTests: XCTestCase {
   func testTypealias9() {
     AssertParse(
       """
-      typealias Recovery5 1️⃣: Int, Float
+      typealias Recovery5 1️⃣: Int2️⃣, Float
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
-        // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 1: expected expression
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(message: "extraneous ': Int, Float' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ', Float' at top level"),
       ]
     )
   }
@@ -160,7 +143,6 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery6 = 1️⃣=
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected type in type alias declaration
         DiagnosticSpec(message: "expected value in typealias declaration"),
         DiagnosticSpec(message: "extraneous '=' at top level"),
       ]

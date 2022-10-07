@@ -14,7 +14,7 @@
 
 extension TokenConsumer {
   func atStartOfDeclaration(
-    context: Parser.ItemContext? = nil,
+    isAtTopLevel: Bool = false,
     allowRecovery: Bool = false
   ) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
@@ -58,7 +58,7 @@ extension TokenConsumer {
     if allowRecovery {
       declStartKeyword = subparser.canRecoverTo(
         anyIn: DeclarationStart.self,
-        recoveryPrecedence: context == .topLevel ? nil : .closingBrace
+        recoveryPrecedence: isAtTopLevel ? nil : .closingBrace
       )?.0
     } else {
       declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
@@ -85,7 +85,7 @@ extension TokenConsumer {
       if subparser.at(anyIn: ContextualDeclKeyword.self)?.0 != nil {
         subparser.consumeAnyToken()
         return subparser.atStartOfDeclaration(
-          context: context, allowRecovery: allowRecovery)
+          isAtTopLevel: isAtTopLevel, allowRecovery: allowRecovery)
       }
       return false
     default: return true
@@ -1671,25 +1671,6 @@ extension Parser {
     case mutableAddressWithNativeOwner = "mutableAddressWithNativeOwner"
     case _read = "_read"
     case _modify = "_modify"
-
-    var isCoroutineAccessor: Bool {
-      switch self {
-      case ._read,
-           ._modify:
-        return true
-      case .`get`,
-          .`set`,
-          .`didSet`,
-          .`willSet`,
-          .unsafeAddress,
-          .addressWithOwner,
-          .addressWithNativeOwner,
-          .unsafeMutableAddress,
-          .mutableAddressWithOwner,
-          .mutableAddressWithNativeOwner:
-        return false
-      }
-    }
   }
 
   struct AccessorIntroducer {
@@ -1809,8 +1790,8 @@ extension Parser {
           var body = [RawCodeBlockItemSyntax]()
           var codeBlockProgress = LoopProgressCondition()
           while !self.at(.rightBrace),
-                let newItem = self.parseCodeBlockItem(),
-                codeBlockProgress.evaluate(currentToken) {
+                  let newItem = self.parseCodeBlockItem(),
+                  codeBlockProgress.evaluate(currentToken) {
             body.append(newItem)
           }
           let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -1855,10 +1836,7 @@ extension Parser {
           throwsKeyword = nil
         }
 
-        let context: ItemContext? = introducer.kind.isCoroutineAccessor
-                                  ? .coroutineAccessor
-                                  : nil
-        let body = self.parseOptionalCodeBlock(context: context)
+        let body = self.parseOptionalCodeBlock()
 
         elements.append(RawAccessorDeclSyntax(
           attributes: introducer.attributes,

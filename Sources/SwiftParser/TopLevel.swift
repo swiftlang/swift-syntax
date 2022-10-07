@@ -76,11 +76,11 @@ extension Parser {
   ///
   /// This function is used when parsing places where function bodies are
   /// optional - like the function requirements in protocol declarations.
-  mutating func parseOptionalCodeBlock(context: ItemContext? = nil) -> RawCodeBlockSyntax? {
+  mutating func parseOptionalCodeBlock() -> RawCodeBlockSyntax? {
     guard self.at(.leftBrace) else {
       return nil
     }
-    return self.parseCodeBlock(context: context)
+    return self.parseCodeBlock()
   }
 
   /// Parse a code block.
@@ -89,7 +89,7 @@ extension Parser {
   /// =======
   ///
   ///     code-block → '{' statements? '}'
-  mutating func parseCodeBlock(context: ItemContext? = nil) -> RawCodeBlockSyntax {
+  mutating func parseCodeBlock() -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     let itemList = parseCodeBlockItemList(context: context, stopCondition: { $0.at(.rightBrace) })
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -101,14 +101,6 @@ extension Parser {
       unexpectedBeforeRBrace,
       rightBrace: rbrace,
       arena: self.arena)
-  }
-}
-
-extension Parser {
-  public enum ItemContext {
-    case topLevel
-    // Enables the 'yield' contextual keyword in statement position.
-    case coroutineAccessor
   }
 
   /// Parse an individual item - either in a code block or at the top level.
@@ -130,10 +122,10 @@ extension Parser {
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
   @_spi(RawSyntax)
-  public mutating func parseCodeBlockItem(context: ItemContext? = nil) -> RawCodeBlockItemSyntax? {
+  public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false) -> RawCodeBlockItemSyntax? {
     // FIXME: It is unfortunate that the Swift book refers to these as
     // "statements" and not "items".
-    let item = self.parseItem(context: context)
+    let item = self.parseItem(isAtTopLevel: isAtTopLevel)
     let semi = self.consume(if: .semicolon)
 
     if item.isEmpty && semi == nil {
@@ -147,7 +139,7 @@ extension Parser {
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the
   /// wrapping declaration instead of being consumed by lookeahead.
-  private mutating func parseItem(context: ItemContext? = nil) -> RawSyntax {
+  private mutating func parseItem(isAtTopLevel: Bool = false) -> RawSyntax {
     if self.at(.poundIfKeyword) {
       return RawSyntax(self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
@@ -160,11 +152,11 @@ extension Parser {
       return RawSyntax(self.parsePoundSourceLocationDirective())
     } else if self.atStartOfDeclaration() {
       return RawSyntax(self.parseDeclaration())
-    } else if self.atStartOfStatement(context: context) {
+    } else if self.atStartOfStatement() {
       return RawSyntax(self.parseStatement())
     } else if self.atStartOfExpression() {
       return RawSyntax(self.parseExpression())
-    } else if self.atStartOfDeclaration(context: context, allowRecovery: true) {
+    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowRecovery: true) {
       return RawSyntax(self.parseDeclaration())
     } else {
       return RawSyntax(RawMissingExprSyntax(arena: self.arena))

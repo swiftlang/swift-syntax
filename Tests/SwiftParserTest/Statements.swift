@@ -332,6 +332,7 @@ final class StatementTests: XCTestCase {
       ]), rightAngleBracket: .rightAngleToken()))),
       substructureAfterMarker: "1️⃣")
   }
+<<<<<<< HEAD
 
   func testYield() {
     // Make sure these are always considered a yield statement
@@ -396,4 +397,6 @@ final class StatementTests: XCTestCase {
         trailingClosure: nil,
         additionalTrailingClosures: nil)))
   }
+=======
+>>>>>>> parent of a76e907 (Plumb Coroutine Accessor Context Through Item Parsing)
 }

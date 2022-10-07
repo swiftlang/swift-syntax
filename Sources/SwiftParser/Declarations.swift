@@ -1909,7 +1909,14 @@ extension Parser {
     }
 
     // Parse the binding alias.
-    let (unexpectedBeforeEqual, equal) = self.expect(.equal)
+    let unexpectedBeforeEqual: RawUnexpectedNodesSyntax?
+    let equal: RawTokenSyntax
+    if let colon = self.consume(if: .colon) {
+      unexpectedBeforeEqual = RawUnexpectedNodesSyntax(elements: [RawSyntax(colon)], arena: self.arena)
+      equal = missingToken(.equal, text: nil)
+    } else {
+      (unexpectedBeforeEqual, equal) = self.expect(.equal)
+    }
     let value = self.parseType()
     let initializer = RawTypeInitializerClauseSyntax(
       unexpectedBeforeEqual,

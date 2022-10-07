@@ -23,6 +23,7 @@ add_library(SwiftParser STATIC
   RawTokenKindSubset.swift
   Recovery.swift
   Statements.swift
+  SyntaxUtils.swift
   TokenConsumer.swift
   TokenPrecedence.swift
   TopLevel.swift

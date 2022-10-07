@@ -391,7 +391,16 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseThrowStatement() -> RawThrowStmtSyntax {
     let (unexpectedBeforeThrowKeyword, throwKeyword) = self.expect(.throwKeyword)
-    let expr = self.parseExpression()
+    let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
+    var expr = self.parseExpression()
+    if hasMisplacedTry {
+      expr = RawExprSyntax(RawTryExprSyntax(
+        tryKeyword: missingToken(.tryKeyword, text: nil),
+        questionOrExclamationMark: nil,
+        expression: expr,
+        arena: self.arena
+      ))
+    }
     return RawThrowStmtSyntax(
       unexpectedBeforeThrowKeyword,
       throwKeyword: throwKeyword,
@@ -854,6 +863,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseReturnStatement() -> RawReturnStmtSyntax {
     let (unexpectedBeforeRet, ret) = self.expect(.returnKeyword)
+    let hasMisplacedTry = unexpectedBeforeRet?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
 
     // Handle the ambiguity between consuming the expression and allowing the
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
@@ -866,7 +876,17 @@ extension Parser {
         .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword
       ])
         && !self.atStartOfStatement() && !self.atStartOfDeclaration() {
-      expr = self.parseExpression()
+      let parsedExpr = self.parseExpression()
+      if hasMisplacedTry {
+        expr = RawExprSyntax(RawTryExprSyntax(
+          tryKeyword: missingToken(.tryKeyword, text: nil),
+          questionOrExclamationMark: nil,
+          expression: parsedExpr,
+          arena: self.arena
+        ))
+      } else {
+        expr = parsedExpr
+      }
     } else {
       expr = nil
     }

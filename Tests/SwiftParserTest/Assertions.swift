@@ -254,11 +254,13 @@ func AssertDiagnostic<T: SyntaxProtocol>(
     }
   }
   if let fixIts = spec.fixIts {
-    XCTAssertEqual(
-      fixIts, diag.fixIts.map(\.message.message),
-      "Fix-Its for diagnostic did not match expected Fix-Its",
-      file: file, line: line
-    )
+    if fixIts != diag.fixIts.map(\.message.message) {
+      FailStringsEqualWithDiff(
+        diag.fixIts.map(\.message.message).joined(separator: "\n"),
+        fixIts.joined(separator: "\n"),
+        file: file, line: line
+      )
+    }
   }
 }
 

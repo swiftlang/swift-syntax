@@ -205,6 +205,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Specialized diagnostic generation
 
   public override func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
     if let semicolon = node.semicolon, semicolon.presence == .missing {
       let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
       addDiagnostic(semicolon, position: position, .consecutiveStatementsOnSameLine, fixIts: [

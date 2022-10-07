@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-
+import _SwiftSyntaxTestSupport
 import SwiftDiagnostics
 import SwiftSyntax
 import SwiftParser
@@ -98,8 +98,7 @@ class VerifyRoundTrip: ParsableCommand {
   @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
   var enableBareSlashRegex: Bool?
 
-  @Flag(name: .long,
-          help: "Perform sequence folding with the standard operators")
+  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
   enum Error: Swift.Error, CustomStringConvertible {
@@ -165,8 +164,7 @@ class PrintDiags: ParsableCommand {
   @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
   var enableBareSlashRegex: Bool?
 
-  @Flag(name: .long,
-          help: "Perform sequence folding with the standard operators")
+  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
   func run() throws {
@@ -193,6 +191,45 @@ class PrintDiags: ParsableCommand {
   }
 }
 
+class PrintInitCall: ParsableCommand {
+  static var configuration = CommandConfiguration(
+    commandName: "print-init",
+    abstract: "Print a Swift expression that creates this tree"
+  )
+
+  required init() {}
+
+  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
+  var sourceFile: String?
+
+  @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
+  var swiftVersion: String?
+
+  @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
+  var enableBareSlashRegex: Bool?
+
+  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
+  var foldSequences: Bool = false
+
+  func run() throws {
+    let source = try getContentsOfSourceFile(at: sourceFile)
+
+    try source.withUnsafeBufferPointer { sourceBuffer in
+      var tree = try Parser.parse(
+        source: sourceBuffer,
+        languageVersion: swiftVersion,
+        enableBareSlashRegexLiteral: enableBareSlashRegex
+      )
+
+      if foldSequences {
+        tree = foldAllSequences(tree).0.as(SourceFileSyntax.self)!
+      }
+
+      print(tree.debugInitCall)
+    }
+  }
+}
+
 class PrintTree: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "print-tree",
@@ -210,8 +247,7 @@ class PrintTree: ParsableCommand {
   @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
   var enableBareSlashRegex: Bool?
 
-  @Flag(name: .long,
-          help: "Perform sequence folding with the standard operators")
+  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
   func run() throws {
@@ -253,8 +289,7 @@ class Reduce: ParsableCommand {
   @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
   var enableBareSlashRegex: Bool?
 
-  @Flag(name: .long,
-          help: "Perform sequence folding with the standard operators")
+  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
   @Flag(help: "Print status updates while reducing the test case")

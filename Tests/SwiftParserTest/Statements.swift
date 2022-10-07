@@ -333,6 +333,16 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣")
   }
 
+  func testHangingYieldArgument() {
+    AssertParse(
+      """
+      1️⃣yield
+      print("huh")
+      """,
+      substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("yield"), declNameArguments: nil)),
+    substructureAfterMarker: "1️⃣")
+  }
+
   func testYield() {
     // Make sure these are always considered a yield statement
     AssertParse(

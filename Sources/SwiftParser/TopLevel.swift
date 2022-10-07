@@ -37,12 +37,12 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseCodeBlockItemList(stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
+  mutating func parseCodeBlockItemList(isAtTopLevel: Bool, stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
     while !stopCondition(&self), loopProgress.evaluate(currentToken) {
       let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
-      guard let newElement = self.parseCodeBlockItem() else {
+      guard let newElement = self.parseCodeBlockItem(isAtTopLevel: isAtTopLevel) else {
         break
       }
       if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
@@ -68,7 +68,7 @@ extension Parser {
   ///
   ///     top-level-declaration → statements?
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
-    return parseCodeBlockItemList(stopCondition: { _ in false })
+    return parseCodeBlockItemList(isAtTopLevel: true, stopCondition: { _ in false })
   }
 
   /// The optional form of `parseCodeBlock` that checks to see if the parser has
@@ -91,7 +91,7 @@ extension Parser {
   ///     code-block → '{' statements? '}'
   mutating func parseCodeBlock() -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let itemList = parseCodeBlockItemList(stopCondition: { $0.at(.rightBrace) })
+    let itemList = parseCodeBlockItemList(isAtTopLevel: false, stopCondition: { $0.at(.rightBrace) })
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
 
     return .init(

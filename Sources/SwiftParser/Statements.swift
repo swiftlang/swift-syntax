@@ -1117,9 +1117,9 @@ extension Parser.Lookahead {
             // called `yield` for the purposes of the parse.
             return false
           default:
-            // "yield" followed by any other token is likely a yield statement
-            // of some singular expression.
-            return true
+            // "yield" followed immediately by any other token is likely a
+            // yield statement of some singular expression.
+            return !self.peek().isAtStartOfLine
           }
         }
 

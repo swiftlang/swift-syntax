@@ -30,10 +30,10 @@ final class TypeTests: XCTestCase {
   }
 
   func testFunctionTypes() throws {
-    AssertParse("t as(#^DIAG^#..)->#^END^#", diagnostics: [
-      DiagnosticSpec(message: "expected type in function type"),
-      DiagnosticSpec(message: "unexpected text '..' in function type"),
-      DiagnosticSpec(locationMarker: "END", message: "expected type in function type"),
+    AssertParse("t as(1️⃣..)->2️⃣", diagnostics: [
+      DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type"),
+      DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '..' in function type"),
+      DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
     ])
   }
 
@@ -57,21 +57,21 @@ final class TypeTests: XCTestCase {
                 """,
                 { $0.parseClosureExpression() })
 
-    AssertParse("{[#^DIAG_1^#class]in#^DIAG_2^#",
+    AssertParse("{[1️⃣class]in2️⃣",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in closure capture item"),
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text 'class' in closure capture signature"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '}' to end closure"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'class' in closure capture signature"),
+                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end closure"),
                 ])
 
-    AssertParse("{[n#^DIAG^#`]in}",
+    AssertParse("{[n1️⃣`]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
                   DiagnosticSpec(message: "unexpected text '`' in closure capture signature")
                 ])
 
-    AssertParse("{[weak#^DIAG^#^]in}",
+    AssertParse("{[weak1️⃣^]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
                   DiagnosticSpec(message: "expected identifier in closure capture item"),
@@ -90,8 +90,8 @@ final class TypeTests: XCTestCase {
       #"""
       func takesVariadicFnWithGenericRet<T>(_ fn: (S...) -> T) {}
       let _: (S...) -> Int = \.i
-      let _: (S...) -> Int = \Array.i#^DIAG_1^#
-      let _: (S...) -> Int = \S.i#^DIAG_2^#
+      let _: (S...) -> Int = \Array.i1️⃣
+      let _: (S...) -> Int = \S.i2️⃣
       """#
     )
   }

@@ -14,7 +14,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation2() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"mid == \(pete"
+      _ = 1️⃣"mid == \(pete"
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
@@ -28,7 +28,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation3() {
     AssertParse(
       ##"""
-      let theGoat = #^DIAG^#"kanye \("
+      let theGoat = 1️⃣"kanye \("
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
@@ -42,7 +42,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation4() {
     AssertParse(
       ##"""
-      let equation1 = #^DIAG^#"2 + 2 = \(2 + 2"
+      let equation1 = 1️⃣"2 + 2 = \(2 + 2"
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
@@ -56,7 +56,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation5() {
     AssertParse(
       ##"""
-      let s = #^DIAG^#"\(x"; print(x)
+      let s = 1️⃣"\(x"; print(x)
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
@@ -70,7 +70,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation6() {
     AssertParse(
       ##"""
-      let zzz = #^DIAG^#"\(x; print(x)
+      let zzz = 1️⃣"\(x; print(x)
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
@@ -84,7 +84,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation7() {
     AssertParse(
       ##"""
-      let goatedAlbum = #^DIAG^#"The Life Of \("Pablo"
+      let goatedAlbum = 1️⃣"The Life Of \("Pablo"
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
@@ -98,7 +98,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation8() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"""
+      _ = 1️⃣"""
       \(
       """
       """##,

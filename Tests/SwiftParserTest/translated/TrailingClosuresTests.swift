@@ -152,7 +152,7 @@ final class TrailingClosuresTests: XCTestCase {
         func fn(f: () -> Void, g: () -> Void) {}
         fn {} g: {} // Ok
         fn {} _: {} //  {{none}}
-        fn {}#^DIAG_1^# g#^DIAG_2^#: <#T##() -> Void#>
+        fn {}1️⃣ g2️⃣: <#T##() -> Void#>
         func multiple(_: () -> Void, _: () -> Void) {}
         multiple {} _: { }
         func mixed_args_1(a: () -> Void, _: () -> Void) {}
@@ -166,9 +166,9 @@ final class TrailingClosuresTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 5: editor placeholder in source file
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text ': <#T##() -> Void#>' before function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text ': <#T##() -> Void#>' before function"),
       ]
     )
   }
@@ -180,7 +180,7 @@ final class TrailingClosuresTests: XCTestCase {
         return fn() ?? d()
       }
       // TODO: The diagnostics here are perhaps a little overboard.
-      _ = produce { 0 } #^DIAG^#default: { 1 } 
+      _ = produce { 0 } 1️⃣default: { 1 } 
       _ = produce { 2 } `default`: { 3 }
       """,
       diagnostics: [

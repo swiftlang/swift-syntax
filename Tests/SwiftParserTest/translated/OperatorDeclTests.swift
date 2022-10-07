@@ -6,7 +6,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl1a() {
     AssertParse(
       """
-      prefix operator +++#^DIAG^# {}
+      prefix operator +++1️⃣ {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 20 - 23 = ''
@@ -18,7 +18,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl1b() {
     AssertParse(
       """
-      postfix operator +++#^DIAG^# {}
+      postfix operator +++1️⃣ {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 21 - 24 = ''
@@ -30,7 +30,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl1c() {
     AssertParse(
       """
-      infix operator +++#^DIAG^# {}
+      infix operator +++1️⃣ {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 19 - 22 = ''
@@ -42,7 +42,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl1d() {
     AssertParse(
       """
-      infix operator +++*#^DIAG^# { //  {{none}}
+      infix operator +++*1️⃣ { //  {{none}}
         associativity right
       }
       """,
@@ -56,7 +56,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl1e() {
     AssertParse(
       """
-      infix operator +++*+ : A#^DIAG^# { }
+      infix operator +++*+ : A1️⃣ { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator should no longer be declared with body, Fix-It replacements: 25 - 29 = ''
@@ -69,7 +69,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl2() {
     AssertParse(
       """
-      prefix operator +++** : A#^DIAG^# { }
+      prefix operator +++** : A1️⃣ { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: only infix operators may declare a precedence, Fix-It replacements: 23 - 27 = ''
@@ -93,7 +93,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl4() {
     AssertParse(
       """
-      postfix operator ++*+* : A#^DIAG^# { }
+      postfix operator ++*+* : A1️⃣ { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: only infix operators may declare a precedence, Fix-It replacements: 24 - 28 = ''
@@ -128,7 +128,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl7() {
     AssertParse(
       """
-      operator +*+++#^DIAG^# { }
+      operator +*+++1️⃣ { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
@@ -141,7 +141,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl8() {
     AssertParse(
       """
-      operator +*++* : A#^DIAG^# { }
+      operator +*++* : A1️⃣ { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
@@ -165,7 +165,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl10() {
     AssertParse(
       """
-      #^DIAG^#;
+      1️⃣;
       prefix operator %%+
       """,
       diagnostics: [
@@ -215,7 +215,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl11e() {
     AssertParse(
       """
-      postfix operator ?#^DIAG^#$$
+      postfix operator ?1️⃣$$
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: postfix operator names starting with '?' or '!' are disallowed
@@ -228,7 +228,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12a() {
     AssertParse(
       """
-      infix operator --#^DIAG^#aa
+      infix operator --1️⃣aa
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
@@ -240,7 +240,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12b() {
     AssertParse(
       """
-      infix operator aa#^DIAG^#--: A
+      infix operator aa1️⃣--: A
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
@@ -252,15 +252,15 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12c() {
     AssertParse(
       """
-      infix operator <<#^DIAG_1^#$$#^DIAG_2^#@#^DIAG_3^#<
+      infix operator <<1️⃣$$2️⃣@3️⃣<
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 1: '$$' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected name in attribute"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration after attribute"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous '<' at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '<' at top level"),
       ]
     )
   }
@@ -268,12 +268,12 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12d() {
     AssertParse(
       """
-      infix operator !!#^DIAG_1^#@aa#^DIAG_2^#
+      infix operator !!1️⃣@aa2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 1: '@' is not allowed in operator names
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration after attribute"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration after attribute"),
       ]
     )
   }
@@ -281,7 +281,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12e() {
     AssertParse(
       """
-      infix operator ##^DIAG^#++=
+      infix operator #1️⃣++=
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
@@ -293,7 +293,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12f() {
     AssertParse(
       """
-      infix operator ++=#^DIAG^##
+      infix operator ++=1️⃣#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
@@ -305,7 +305,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12g() {
     AssertParse(
       """
-      infix operator ->#^DIAG^##
+      infix operator ->1️⃣#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
@@ -319,7 +319,7 @@ final class OperatorDeclTests: XCTestCase {
       """
       // FIXME: Ideally, we shouldn't emit the «consistent whitespace» diagnostic
       // where = cannot possibly mean an assignment.
-      infix operator =#^DIAG^##=
+      infix operator =1️⃣#=
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: '#' is not allowed in operator names
@@ -334,7 +334,7 @@ final class OperatorDeclTests: XCTestCase {
       """
       infix operator +++=
       infix operator *** : A
-      infix operator --- : #^DIAG^#;
+      infix operator --- : 1️⃣;
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected precedence group name after ':' in operator declaration
@@ -346,37 +346,37 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl15() {
     AssertParse(
       """
-      precedencegroup #^DIAG_1^#{ 
+      precedencegroup 1️⃣{ 
         associativity: right
       }
       precedencegroup A {
-        associativity #^DIAG_2^#right 
+        associativity 2️⃣right 
       }
       precedencegroup B {
-        #^DIAG_3^#precedence 123 
+        3️⃣precedence 123 
       }
       precedencegroup C {
         associativity: sinister 
       }
       precedencegroup D {
-        assignment: #^DIAG_4^#no 
+        assignment: 4️⃣no 
       }
       precedencegroup E {
-        higherThan:#^DIAG_5^#
+        higherThan:5️⃣
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected identifier after 'precedencegroup'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in precedencegroup"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in precedencegroup"),
         // TODO: Old parser expected error on line 5: expected colon after attribute name in precedence group
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ':' in 'associativity' property of precedencegroup"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in 'associativity' property of precedencegroup"),
         // TODO: Old parser expected error on line 8: 'precedence' is not a valid precedence group attribute
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text 'precedence 123' in precedencegroup"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'precedence 123' in precedencegroup"),
         // TODO: Old parser expected error on line 11: expected 'none', 'left', or 'right' after 'associativity'
         // TODO: Old parser expected error on line 14: expected 'true' or 'false' after 'assignment'
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected 'true' in 'assignment' property of precedencegroup"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "unexpected text 'no' in precedencegroup"),
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected identifier in 'relation' property of precedencegroup"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'true' in 'assignment' property of precedencegroup"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected text 'no' in precedencegroup"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected identifier in 'relation' property of precedencegroup"),
         // TODO: Old parser expected error on line 18: expected name of related precedence group after 'higherThan'
       ]
     )
@@ -468,7 +468,7 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl23() {
     AssertParse(
       """
-      postfix operator ++:#^DIAG^#
+      postfix operator ++:1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: only infix operators may declare a precedence, Fix-It replacements: 20 - 21 = ''

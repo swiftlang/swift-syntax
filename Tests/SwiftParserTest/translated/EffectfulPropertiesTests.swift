@@ -234,7 +234,7 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad4 : Int = 0 {
-        willSet(theValue) reasync rethrows #^DIAG^#async throws {}
+        willSet(theValue) reasync rethrows 1️⃣async throws {}
         didSet throws bogus {}
       }
       """,
@@ -254,7 +254,7 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad5 : Int {
-        get #^DIAG^#bogus rethrows {} 
+        get 1️⃣bogus rethrows {} 
       }
       """,
       diagnostics: [
@@ -268,7 +268,7 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       var bad6 : Int {
-        get rethrows #^DIAG^#-> Int { 0 }
+        get rethrows 1️⃣-> Int { 0 }
       }
       """,
       diagnostics: [
@@ -311,20 +311,20 @@ final class EffectfulPropertiesTests: XCTestCase {
     AssertParse(
       """
       protocol BadP {
-        var prop2 : Int { get #^DIAG_1^#bogus rethrows set } 
-        var prop3 : Int { get rethrows #^DIAG_2^#bogus set }
-        var prop4 : Int { get reasync #^DIAG_3^#bogus set }
+        var prop2 : Int { get 1️⃣bogus rethrows set } 
+        var prop3 : Int { get rethrows 2️⃣bogus set }
+        var prop4 : Int { get reasync 3️⃣bogus set }
         var prop5 : Int { get throws async } 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected get or set in a protocol property
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text 'bogus rethrows set' in variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'bogus rethrows set' in variable"),
         // TODO: Old parser expected error on line 3: only function declarations may be marked 'rethrows'; did you mean 'throws'?
         // TODO: Old parser expected error on line 3: expected get or set in a protocol property
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text 'bogus set' in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'bogus set' in variable"),
         // TODO: Old parser expected error on line 4: expected get or set in a protocol property
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text 'bogus set' in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'bogus set' in variable"),
         // TODO: Old parser expected error on line 5: 'async' must precede 'throws'
       ]
     )

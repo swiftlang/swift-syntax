@@ -6,7 +6,7 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors1() {
     AssertParse(
       ###"""
-      let _ = "foo\(#"bar"##^DIAG^##)baz"
+      let _ = "foo\(#"bar"#1️⃣#)baz"
       """###,
       diagnostics: [
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter
@@ -20,7 +20,7 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors2() {
     AssertParse(
       ###"""
-      let _ = #^DIAG^##"\##("invalid")"#
+      let _ = 1️⃣#"\##("invalid")"#
       """###,
       diagnostics: [
         // TODO: Old parser expected error on line 1: too many '#' characters in delimited escape
@@ -34,7 +34,7 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors3() {
     AssertParse(
       #####"""
-      let _ = ###"""invalid"####^DIAG^####
+      let _ = ###"""invalid"###1️⃣###
       """#####,
       diagnostics: [
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter, Fix-It replacements: 26 - 29 = ''
@@ -48,7 +48,7 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors4() {
     AssertParse(
       #####"""
-      let _ = ####"invalid"####^DIAG^#
+      let _ = ####"invalid"###1️⃣
       """#####,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unterminated string literal
@@ -60,7 +60,7 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors5() {
     AssertParse(
       #####"""
-      let _ = ###"invalid"####^DIAG^####
+      let _ = ###"invalid"###1️⃣###
       """#####,
       diagnostics: [
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter, Fix-It replacements: 24 - 27 = ''

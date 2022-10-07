@@ -17,7 +17,7 @@ final class OptionalTests: XCTestCase {
     AssertParse(
       """
       var a : A?
-      var b : A #^DIAG^#?
+      var b : A 1️⃣?
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: consecutive statements on a line, Fix-It replacements: 10 - 10 = ';'

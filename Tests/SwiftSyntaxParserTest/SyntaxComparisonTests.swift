@@ -41,7 +41,7 @@ public class SyntaxComparisonTests: XCTestCase {
     let actual = Syntax(makeFunc(identifier: .identifier("f")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
-    let matcher = try SubtreeMatcher("struct A { #^FUNC^#func f() { } }", parse: parse)
+    let matcher = try SubtreeMatcher("struct A { 1️⃣func f() { } }", parse: parse)
     try expectations(matcher.findFirstDifference(baseline: expected))
   }
 
@@ -57,8 +57,8 @@ public class SyntaxComparisonTests: XCTestCase {
     let actual = Syntax(makeFunc(identifier: .identifier("g")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
-    let matcher = try SubtreeMatcher("struct A { #^FUNC^#func g() { } }", parse: parse)
-    try expectations(matcher.findFirstDifference(afterMarker: "FUNC", baseline: expected))
+    let matcher = try SubtreeMatcher("struct A { 1️⃣func g() { } }", parse: parse)
+    try expectations(matcher.findFirstDifference(afterMarker: "1️⃣", baseline: expected))
   }
 
   public func testDifferentTrivia() throws {
@@ -139,18 +139,18 @@ public class SyntaxComparisonTests: XCTestCase {
 
     let matcher = try SubtreeMatcher("""
       struct A {
-        #^FUNC^#
+        1️⃣
         let member = 1
 
-        func f() #^BODY^#{
+        func f() 2️⃣{
           0
         }
       }
       """, parse: parse)
-    let funcDiff = try XCTUnwrap(matcher.findFirstDifference(afterMarker: "FUNC", baseline: expectedFunc))
+    let funcDiff = try XCTUnwrap(matcher.findFirstDifference(afterMarker: "1️⃣", baseline: expectedFunc))
     XCTAssertEqual(funcDiff.reason, .additionalNode)
 
-    let bodyDiff = try XCTUnwrap(matcher.findFirstDifference(afterMarker: "BODY", baseline: expectedBody))
+    let bodyDiff = try XCTUnwrap(matcher.findFirstDifference(afterMarker: "2️⃣", baseline: expectedBody))
     XCTAssertEqual(bodyDiff.reason, .additionalNode)
   }
 

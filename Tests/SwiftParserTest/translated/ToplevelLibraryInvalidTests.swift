@@ -25,7 +25,7 @@ final class ToplevelLibraryInvalidTests: XCTestCase {
   func testToplevelLibraryInvalid2() {
     AssertParse(
       """
-      for i#^DIAG^#
+      for i1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected 'in' after for-each pattern

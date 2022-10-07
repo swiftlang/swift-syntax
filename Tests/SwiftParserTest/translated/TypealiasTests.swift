@@ -39,7 +39,7 @@ final class TypealiasTests: XCTestCase {
     AssertParse(
       """
       // <rdar://problem/13339798> QoI: poor diagnostic in malformed typealias
-      typealias Foo1 #^DIAG^#: Int
+      typealias Foo1 1️⃣: Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '=' in type alias declaration, Fix-It replacements: 16 - 17 = '='
@@ -52,7 +52,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias3b() {
     AssertParse(
       """
-      typealias Foo2#^DIAG^#: Int
+      typealias Foo21️⃣: Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '=' in type alias declaration, Fix-It replacements: 15 - 16 = ' ='
@@ -65,7 +65,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias3c() {
     AssertParse(
       """
-      typealias Foo3 #^DIAG^#:Int
+      typealias Foo3 1️⃣:Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '=' in type alias declaration, Fix-It replacements: 16 - 17 = '= '
@@ -78,7 +78,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias3d() {
     AssertParse(
       """
-      typealias Foo4#^DIAG^#:/*comment*/Int
+      typealias Foo41️⃣:/*comment*/Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '=' in type alias declaration, Fix-It replacements: 15 - 16 = ' = '
@@ -91,7 +91,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias5() {
     AssertParse(
       """
-      typealias Recovery1#^DIAG^#
+      typealias Recovery11️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
@@ -103,7 +103,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias6() {
     AssertParse(
       """
-      typealias Recovery2 #^DIAG^#:
+      typealias Recovery2 1️⃣:
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
@@ -117,7 +117,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias7() {
     AssertParse(
       """
-      typealias Recovery3 =#^DIAG^#
+      typealias Recovery3 =1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected type in type alias declaration
@@ -129,7 +129,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias8() {
     AssertParse(
       """
-      typealias Recovery4 #^DIAG^#: Int
+      typealias Recovery4 1️⃣: Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
@@ -142,7 +142,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias9() {
     AssertParse(
       """
-      typealias Recovery5 #^DIAG^#: Int, Float
+      typealias Recovery5 1️⃣: Int, Float
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '=' in type alias declaration
@@ -157,7 +157,7 @@ final class TypealiasTests: XCTestCase {
   func testTypealias10() {
     AssertParse(
       """
-      typealias Recovery6 = #^DIAG^#=
+      typealias Recovery6 = 1️⃣=
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected type in type alias declaration
@@ -170,16 +170,16 @@ final class TypealiasTests: XCTestCase {
   func testTypealias11() {
     AssertParse(
       """
-      typealias#^DIAG_1^# #^DIAG_2^#switch #^DIAG_3^#= Int
+      typealias1️⃣ 2️⃣switch 3️⃣= Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'switch' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 11 - 17 = '`switch`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in typealias declaration"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '=' and value in typealias declaration"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous '= Int' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in typealias declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and value in typealias declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression and '{}' to end 'switch' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '= Int' at top level"),
       ]
     )
   }

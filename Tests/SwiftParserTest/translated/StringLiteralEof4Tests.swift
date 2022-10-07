@@ -8,7 +8,7 @@ final class StringLiteralEof4Tests: XCTestCase {
       #"""
       // NOTE: DO NOT add a newline at EOF.
       _ = """
-          foo#^DIAG^#
+          foo1️⃣
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unterminated string literal

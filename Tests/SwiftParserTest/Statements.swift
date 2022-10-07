@@ -40,7 +40,7 @@ final class StatementTests: XCTestCase {
 
     AssertParse(
       """
-      if case#^DIAG^#* ! = x {
+      if case1️⃣* ! = x {
         bar()
       }
       """,
@@ -94,11 +94,13 @@ final class StatementTests: XCTestCase {
   func testReturn() {
     AssertParse("return actor", { $0.parseReturnStatement() })
 
-    AssertParse("{ #^ASYNC^#return 0 }",
-                { $0.parseClosureExpression() },
-                substructure: Syntax(ReturnStmtSyntax(returnKeyword: .returnKeyword(),
-                                                      expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))))),
-                substructureAfterMarker: "ASYNC")
+    AssertParse(
+      "{ 1️⃣return 0 }",
+      { $0.parseClosureExpression() },
+      substructure: Syntax(ReturnStmtSyntax(returnKeyword: .returnKeyword(),
+                                            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))))),
+      substructureAfterMarker: "1️⃣"
+    )
 
     AssertParse("return")
 
@@ -165,7 +167,7 @@ final class StatementTests: XCTestCase {
   func testCStyleForLoop() {
     AssertParse(
       """
-      #^DIAG^#for let x = 0; x < 10; x += 1, y += 1 {
+      1️⃣for let x = 0; x < 10; x += 1, y += 1 {
       }
       """,
       diagnostics: [
@@ -176,21 +178,21 @@ final class StatementTests: XCTestCase {
 
   func testTopLevelCaseRecovery() {
     AssertParse(
-      "/*#-editable-code Swift Platground editable area*/#^DIAG^#default/*#-end-editable-code*/",
+      "/*#-editable-code Swift Platground editable area*/1️⃣default/*#-end-editable-code*/",
       diagnostics: [
         DiagnosticSpec(message: "extraneous 'default' at top level")
       ]
     )
 
     AssertParse(
-      "#^DIAG^#case:",
+      "1️⃣case:",
       diagnostics: [
         DiagnosticSpec(message: "extraneous 'case:' at top level")
       ])
 
     AssertParse(
       #"""
-      #^DIAG^#case: { ("Hello World") }
+      1️⃣case: { ("Hello World") }
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"extraneous 'case: { ("Hello World") }' at top level"#)
@@ -206,15 +208,15 @@ final class StatementTests: XCTestCase {
     AssertParse(
       """
       func test1() {
-        #^TEST_1^#@s return
+        1️⃣@s return
       }
       func test2() {
-        #^TEST_2^#@unknown return
+        2️⃣@unknown return
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "TEST_1", message: "unexpected text '@s return' in function"),
-        DiagnosticSpec(locationMarker: "TEST_2", message: "unexpected text '@unknown return' in function")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '@s return' in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '@unknown return' in function")
       ]
     )
   }
@@ -223,24 +225,24 @@ final class StatementTests: XCTestCase {
     AssertParse(
       """
       switch x {
-        #^FOO^#foo()
+        1️⃣foo()
       #if true
-        #^BAR^#bar()
+        2️⃣bar()
       #endif
         case .A, .B:
           break
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "FOO", message: "unexpected text 'foo()' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "BAR", message: "unexpected text 'bar()' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'foo()' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'bar()' in conditional compilation block"),
       ]
     )
 
     AssertParse(
       """
       switch x {
-      #^DIAG^#print()
+      1️⃣print()
       #if ENABLE_C
       case .NOT_EXIST:
         break
@@ -259,7 +261,7 @@ final class StatementTests: XCTestCase {
 
   func testBogusLineLabel() {
     AssertParse(
-      "LABEL#^DIAG^#:",
+      "LABEL1️⃣:",
       diagnostics: [
         DiagnosticSpec(message: "extraneous ':' at top level")
       ]
@@ -292,22 +294,8 @@ final class StatementTests: XCTestCase {
   func testCaseContext() {
     AssertParse(
       """
-      graphQLMap["clientMutationId"] as? #^SPECIALIZATION^#Swift.Optional<String?> ?? Swift.Optional<String?>.none
+      graphQLMap["clientMutationId"] as? 1️⃣Swift.Optional<String?> ?? Swift.Optional<String?>.none
       """,
-//      0: MemberTypeIdentifierSyntax children=4
-//        0: SimpleTypeIdentifierSyntax children=1
-//          0: identifier("Swift")
-//        1: period
-//        2: identifier("Optional")
-//        3: GenericArgumentClauseSyntax children=3
-//          0: leftAngle
-//          1: GenericArgumentListSyntax children=1
-//            0: GenericArgumentSyntax children=1
-//              0: OptionalTypeSyntax children=2
-//                0: SimpleTypeIdentifierSyntax children=1
-//                  0: identifier("String")
-//                1: postfixQuestionMark
-//          2: rightAngle
     substructure: Syntax(MemberTypeIdentifierSyntax(
       baseType: TypeSyntax(SimpleTypeIdentifierSyntax(
         name: .identifier("Swift"),
@@ -326,24 +314,12 @@ final class StatementTests: XCTestCase {
             trailingComma: nil)
         ]),
         rightAngleBracket: .rightAngleToken()))),
-    substructureAfterMarker: "SPECIALIZATION")
+    substructureAfterMarker: "1️⃣")
 
     AssertParse(
       """
-      if case #^SPECIALIZATION^#Optional<Any>.none = object["anyCol"] { }
+      if case 1️⃣Optional<Any>.none = object["anyCol"] { }
       """,
-//      0: SpecializeExprSyntax children=2
-//        0: IdentifierExprSyntax children=1
-//          0: identifier("Optional")
-//        1: GenericArgumentClauseSyntax children=3
-//          0: leftAngle
-//          1: GenericArgumentListSyntax children=1
-//            0: GenericArgumentSyntax children=1
-//              0: SimpleTypeIdentifierSyntax children=1
-//                0: anyKeyword
-//          2: rightAngle
-//      1: period
-//      2: identifier("none")
       substructure: Syntax(SpecializeExprSyntax(
         expression: ExprSyntax(IdentifierExprSyntax(
           identifier: .identifier("Optional"), declNameArguments: nil)),
@@ -354,7 +330,7 @@ final class StatementTests: XCTestCase {
             name: .anyKeyword(), genericArgumentClause: nil)),
           trailingComma: nil)
       ]), rightAngleBracket: .rightAngleToken()))),
-      substructureAfterMarker: "SPECIALIZATION")
+      substructureAfterMarker: "1️⃣")
   }
 
   func testYield() {
@@ -363,7 +339,7 @@ final class StatementTests: XCTestCase {
       """
       var x: Int {
         _read {
-          #^YIELD^#yield ()
+          1️⃣yield ()
         }
       }
       """,
@@ -375,14 +351,14 @@ final class StatementTests: XCTestCase {
           rightParen: .rightParenToken())
         ))
       ),
-      substructureAfterMarker: "YIELD")
+      substructureAfterMarker: "1️⃣")
 
     // Make sure these are not.
     AssertParse(
       """
       var x: Int {
         get {
-          #^YIELD^#yield ()
+          1️⃣yield ()
         }
       }
       """,
@@ -395,7 +371,7 @@ final class StatementTests: XCTestCase {
         rightParen: .rightParenToken(),
         trailingClosure: nil,
         additionalTrailingClosures: nil)),
-    substructureAfterMarker: "YIELD")
+    substructureAfterMarker: "1️⃣")
 
     AssertParse(
       """

@@ -62,10 +62,10 @@ final class ForeachAsyncTests: XCTestCase {
         }
         // Parse errors
         // FIXME: Bad diagnostics; should be just 'expected 'in' after for-each patter'.
-        for await i #^DIAG_1^#r { 
+        for await i 1️⃣r { 
         }         
-        for await i in r #^DIAG_2^#sum = sum + i; 
-      }#^DIAG_3^#
+        for await i in r 2️⃣sum = sum + i; 
+      }3️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 21: found an unexpected second identifier in constant declaration
@@ -73,10 +73,10 @@ final class ForeachAsyncTests: XCTestCase {
         // TODO: Old parser expected note on line 21: join the identifiers together with camel-case
         // TODO: Old parser expected error on line 21: expected 'in' after for-each pattern
         // TODO: Old parser expected error on line 21: expected Sequence expression for for-each loop
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected 'in' in 'for' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
         // TODO: Old parser expected error on line 23: expected '{' to start the body of for-each loop
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '{' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in 'for' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
       ]
     )
   }

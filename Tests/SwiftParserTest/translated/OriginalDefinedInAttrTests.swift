@@ -68,7 +68,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
     AssertParse(
       #"""
       @_originallyDefinedIn(module: "foo",
-      public class ToplevelClass3 {}#^DIAG^#
+      public class ToplevelClass3 {}1️⃣
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected platform in '@_originallyDefinedIn' attribute

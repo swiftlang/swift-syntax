@@ -8,8 +8,8 @@ final class SwitchIncompleteTests: XCTestCase {
       """
       // <rdar://problem/15971438> Incomplete switch was parsing to an AST that
       // triggered an assertion failure.
-      switch 1 #^NOTE^#{ 
-      case 1:#^DIAG^#
+      switch 1 ℹ️{ 
+      case 1:1️⃣
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '}' to end 'switch' statement", notes: [

@@ -52,7 +52,7 @@ final class SuperTests: XCTestCase {
             .bar()
         }
         func bad_super_1() {
-          super.#^DIAG^#$0 
+          super.1️⃣$0 
         }
         func bad_super_2() {
           super(0) 

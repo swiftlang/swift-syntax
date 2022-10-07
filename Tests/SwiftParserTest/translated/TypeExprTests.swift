@@ -516,7 +516,7 @@ final class TypeExprTests: XCTestCase {
   func testTypeExpr25x() {
     AssertParse(
       """
-      let _ = [(Int) -> #^DIAG^#throws Int]()
+      let _ = [(Int) -> 1️⃣throws Int]()
       """,
       diagnostics: [
         DiagnosticSpec(message: "'throws' may only occur before '->'"),
@@ -530,7 +530,7 @@ final class TypeExprTests: XCTestCase {
   func testTypeExpr25y() {
     AssertParse(
       """
-      let _ = [Int throws #^DIAG^#Int]();
+      let _ = [Int throws 1️⃣Int]();
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '->' in array element")
@@ -580,11 +580,11 @@ final class TypeExprTests: XCTestCase {
   func testTypeExpr28() {
     AssertParse(
       """
-      func takesVoid(f: #^DIAG_1^#Void #^DIAG_2^#-> ()) {}
+      func takesVoid(f: 1️⃣Void 2️⃣-> ()) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' in function type"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type"),
       ]
     )
   }

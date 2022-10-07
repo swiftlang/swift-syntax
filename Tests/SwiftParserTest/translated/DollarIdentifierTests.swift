@@ -17,16 +17,16 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarVar() {
-        var#^DIAG_1^# #^DIAG_2^#$ #^DIAG_3^#: Int = 42
+        var1️⃣ 2️⃣$ 3️⃣: Int = 42
         $ += 1
         print($)
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text in function"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
         // TODO: Old parser expected error on line 4: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
       ]
@@ -37,14 +37,14 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarLet() {
-        let#^DIAG_1^# #^DIAG_2^#$ = 42
+        let1️⃣ 2️⃣$ = 42
         print($)
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
       ]
     )
@@ -54,14 +54,14 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarClass() {
-        class#^DIAG_1^# #^DIAG_2^#$ {}
+        class1️⃣ 2️⃣$ {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
       ]
     )
   }
@@ -70,14 +70,14 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarEnum() {
-        enum#^DIAG_1^# #^DIAG_2^#$ {}
+        enum1️⃣ 2️⃣$ {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
       ]
     )
   }
@@ -86,14 +86,14 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarStruct() {
-        struct#^DIAG_1^# #^DIAG_2^#$ {}
+        struct1️⃣ 2️⃣$ {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
       ]
     )
   }
@@ -103,20 +103,20 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarFunc() {
-        func #^DIAG_1^#$(#^DIAG_2^#$ dollarParam: Int) {}
-        $($#^DIAG_3^#: 24)
+        func 1️⃣$(2️⃣$ dollarParam: Int) {}
+        $($3️⃣: 24)
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '$' before parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected type in function parameter"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '$ dollarParam: Int' in parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '$' before parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function parameter"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '$ dollarParam: Int' in parameter clause"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 5 - 6 = '`$`'
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text ': 24' in function call"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text ': 24' in function call"),
       ]
     )
   }
@@ -162,7 +162,7 @@ final class DollarIdentifierTests: XCTestCase {
       """
       func escapedDollarAnd() {
         // FIXME: Bad diagnostics.
-        #^DIAG^#`$0` = 1 
+        1️⃣`$0` = 1 
         `$$` = 2
         `$abc` = 3
       }
@@ -223,7 +223,7 @@ final class DollarIdentifierTests: XCTestCase {
         higherThan: $Precedence 
       }
       infix operator **: $Precedence
-      #^DIAG^##$UnknownDirective()
+      1️⃣#$UnknownDirective()
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: cannot declare entity named '$declareWithDollar'

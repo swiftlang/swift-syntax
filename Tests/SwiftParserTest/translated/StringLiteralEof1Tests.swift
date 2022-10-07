@@ -7,7 +7,7 @@ final class StringLiteralEof1Tests: XCTestCase {
     AssertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = #^DIAG^#"foo\(
+      _ = 1️⃣"foo\(
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unterminated string literal

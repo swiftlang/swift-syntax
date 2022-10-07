@@ -155,7 +155,7 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       meta(A<B>.C<D>.self)
       meta2(A<B>.C<D>.self, 0)
-       #^DIAG^#*/
+       1️⃣*/
       """,
       diagnostics: [
         DiagnosticSpec(message: "extraneous '*/' at top level"),

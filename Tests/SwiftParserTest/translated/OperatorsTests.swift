@@ -325,7 +325,7 @@ final class OperatorsTests: XCTestCase {
   func testOperators34() {
     AssertParse(
       """
-      foo!!#^DIAG^#foo
+      foo!!1️⃣foo
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
@@ -336,7 +336,7 @@ final class OperatorsTests: XCTestCase {
   func testOperators35() {
     AssertParse(
       """
-      foo??#^DIAG^#bar
+      foo??1️⃣bar
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")

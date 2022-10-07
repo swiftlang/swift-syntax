@@ -125,12 +125,12 @@ final class TryTests: XCTestCase {
   func testTry11a() {
     AssertParse(
       """
-      try#^DIAG_1^# #^DIAG_2^#let singleLet = foo()
+      try1️⃣ 2️⃣let singleLet = foo()
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'try' must be placed on the initial value expression, Fix-It replacements: 1 - 5 = '', 21 - 21 = 'try '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
       ]
     )
   }
@@ -138,12 +138,12 @@ final class TryTests: XCTestCase {
   func testTry11b() {
     AssertParse(
       """
-      try#^DIAG_1^# #^DIAG_2^#var singleVar = foo()
+      try1️⃣ 2️⃣var singleVar = foo()
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'try' must be placed on the initial value expression, Fix-It replacements: 1 - 5 = '', 21 - 21 = 'try '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
       ]
     )
   }
@@ -151,12 +151,12 @@ final class TryTests: XCTestCase {
   func testTry11c() {
     AssertParse(
       """
-      try#^DIAG_1^# #^DIAG_2^#let uninit: Int
+      try1️⃣ 2️⃣let uninit: Int
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'try' must be placed on the initial value expression
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
       ]
     )
   }
@@ -164,12 +164,12 @@ final class TryTests: XCTestCase {
   func testTry11d() {
     AssertParse(
       """
-      try#^DIAG_1^# #^DIAG_2^#let (destructure1, destructure2) = (foo(), bar())
+      try1️⃣ 2️⃣let (destructure1, destructure2) = (foo(), bar())
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'try' must be placed on the initial value expression, Fix-It replacements: 1 - 5 = '', 40 - 40 = 'try '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
       ]
     )
   }
@@ -177,7 +177,7 @@ final class TryTests: XCTestCase {
   func testTry11e() {
     AssertParse(
       """
-      try#^DIAG_1^# #^DIAG_2^#let multi1 = foo(), multi2 = bar() //  expected-error 2 {{call can throw but is not marked with 'try'}}
+      try1️⃣ 2️⃣let multi1 = foo(), multi2 = bar() //  expected-error 2 {{call can throw but is not marked with 'try'}}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'try' must be placed on the initial value expression
@@ -187,8 +187,8 @@ final class TryTests: XCTestCase {
         // TODO: Old parser expected note on line 1: did you mean to handle error as optional value?, Fix-It replacements: 34 - 34 = 'try? '
         // TODO: Old parser expected note on line 1: did you mean to disable error propagation?, Fix-It replacements: 18 - 18 = 'try! '
         // TODO: Old parser expected note on line 1: did you mean to disable error propagation?, Fix-It replacements: 34 - 34 = 'try! '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
       ]
     )
   }
@@ -197,9 +197,9 @@ final class TryTests: XCTestCase {
     AssertParse(
       """
       class TryDecl {
-        #^DIAG_1^#try let singleLet = foo()
-        #^DIAG_2^#try var singleVar = foo()
-        #^DIAG_3^#try
+        1️⃣try let singleLet = foo()
+        2️⃣try var singleVar = foo()
+        3️⃣try
         func method() {}
       }
       """,
@@ -207,52 +207,94 @@ final class TryTests: XCTestCase {
         // TODO: Old parser expected note on line 1: in declaration of 'TryDecl'
         // TODO: Old parser expected error on line 2: 'try' must be placed on the initial value expression, Fix-It replacements: 3 - 7 = '', 23 - 23 = 'try '
         // TODO: Old parser expected error on line 2: call can throw, but errors cannot be thrown out of a property initializer
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text 'try' before variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'try' before variable"),
         // TODO: Old parser expected error on line 3: 'try' must be placed on the initial value expression, Fix-It replacements: 3 - 7 = '', 23 - 23 = 'try '
         // TODO: Old parser expected error on line 3: call can throw, but errors cannot be thrown out of a property initializer
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text 'try' before variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'try' before variable"),
         // TODO: Old parser expected error on line 4: expected declaration
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text 'try' before function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'try' before function"),
       ]
     )
   }
 
-  func testTry12() {
+  func testTry12a() {
     AssertParse(
       """
       func test() throws -> Int {
-        try#^DIAG_1A^# #^DIAG_1^#while true {
-          try#^DIAG_2A^# #^DIAG_2^#break
+        try1️⃣ 2️⃣while true {
+          try3️⃣ 4️⃣break
         }
-        try#^DIAG_3A^# #^DIAG_3^#throw #^DIAG_4^#
-        ; // Reset parser.
-        try#^DIAG_5A^# #^DIAG_5^#return
-        ; // Reset parser.
-        try#^DIAG_6A^# #^DIAG_6^#throw foo()
-        try#^DIAG_7A^# #^DIAG_7^#return foo()
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: 'try' cannot be used with 'while'
-        DiagnosticSpec(locationMarker: "DIAG_1A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
         // TODO: Old parser expected error on line 3: 'try' cannot be used with 'break'
-        DiagnosticSpec(locationMarker: "DIAG_2A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected expression in 'try' expression"),
+      ]
+    )
+  }
+
+  func testTry12b() {
+    AssertParse(
+      """
+      func test() throws -> Int {
+        try1️⃣ 2️⃣throw 3️⃣
+      }
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 5: 'try' must be placed on the thrown expression, Fix-It replacements: 3 - 7 = '', 3 - 3 = 'try '
         // TODO: Old parser expected error on line 5: expected expression in 'throw' statement
-        DiagnosticSpec(locationMarker: "DIAG_3A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected expression in 'try' expression"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected expression in 'throw' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in 'throw' statement"),
+      ]
+    )
+  }
+
+  func testTry12c() {
+    AssertParse(
+      """
+      func test() throws -> Int {
+        try1️⃣ 2️⃣return
+      }
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 7: 'try' cannot be used with 'return'
-        DiagnosticSpec(locationMarker: "DIAG_5A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
+      ]
+    )
+  }
+
+  func testTry12d() {
+    AssertParse(
+      """
+      func test() throws -> Int {
+        try1️⃣ 2️⃣throw foo()
+      }
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 9: 'try' must be placed on the thrown expression, Fix-It replacements: 3 - 7 = '', 13 - 13 = 'try '
-        DiagnosticSpec(locationMarker: "DIAG_6A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
+      ]
+    )
+  }
+
+  func testTry12e() {
+    AssertParse(
+      """
+      func test() throws -> Int {
+        try1️⃣ 2️⃣return foo()
+      }
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 10: 'try' must be placed on the returned expression, Fix-It replacements: 3 - 7 = '', 14 - 14 = 'try '
-        DiagnosticSpec(locationMarker: "DIAG_7A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_7", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
       ]
     )
   }

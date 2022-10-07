@@ -7,7 +7,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructConstructorA {
-        init #^DIAG^#
+        init 1️⃣
       }
       """,
       diagnostics: [
@@ -35,18 +35,18 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructConstructorC {
-        init #^DIAG_1^#{} 
-        init<T> #^DIAG_2^#{} 
-        init? #^DIAG_3^#{ self.init() } 
+        init 1️⃣{} 
+        init<T> 2️⃣{} 
+        init? 3️⃣{ self.init() } 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '(', Fix-It replacements: 7 - 7 = '()'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected argument list in function declaration"),
         // TODO: Old parser expected error on line 3: expected '(', Fix-It replacements: 10 - 10 = '()'
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
         // TODO: Old parser expected error on line 4: expected '(', Fix-It replacements: 8 - 8 = '()'
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected argument list in function declaration"),
       ]
     )
   }
@@ -69,20 +69,20 @@ final class InitDeinitTests: XCTestCase {
       """
       struct FooStructDeinitializerA {
         deinit 
-        deinit #^DIAG_1^#x 
-        deinit #^DIAG_2^#x() 
+        deinit 1️⃣x 
+        deinit 2️⃣x() 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' for deinitializer
         // TODO: Old parser expected error on line 3: deinitializers cannot have a name, Fix-It replacements: 10 - 12 = ''
         // TODO: Old parser expected error on line 3: expected '{' for deinitializer
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text 'x' before deinitializer"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'x' before deinitializer"),
         // TODO: Old parser expected error on line 4: deinitializers cannot have a name, Fix-It replacements: 10 - 11 = ''
         // TODO: Old parser expected error on line 4: no parameter clause allowed on deinitializer, Fix-It replacements: 11 - 13 = ''
         // TODO: Old parser expected error on line 4: expected '{' for deinitializer
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration in struct"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text 'x()' in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'x()' in struct"),
       ]
     )
   }
@@ -117,7 +117,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       class FooClassDeinitializerA {
-        deinit#^DIAG^#(a : Int) {} 
+        deinit1️⃣(a : Int) {} 
       }
       """,
       diagnostics: [
@@ -142,7 +142,7 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       class FooClassDeinitializerC {
-        deinit #^DIAG^#x (a : Int) {} 
+        deinit 1️⃣x (a : Int) {} 
       }
       """,
       diagnostics: [
@@ -157,7 +157,7 @@ final class InitDeinitTests: XCTestCase {
   func testInitDeinit11() {
     AssertParse(
       """
-      init #^DIAG^#{} 
+      init 1️⃣{} 
       init() 
       init() {}
       """,
@@ -346,7 +346,7 @@ final class InitDeinitTests: XCTestCase {
       """
       class Aaron {
         init(x: Int) {}
-        convenience init() { init(x: #^DIAG^#1) } 
+        convenience init() { init(x: 1️⃣1) } 
       }
       """,
       diagnostics: [
@@ -362,7 +362,7 @@ final class InitDeinitTests: XCTestCase {
       """
       class Theodosia: Aaron {
         init() {
-          init(x: #^DIAG^#2) 
+          init(x: 1️⃣2) 
         }
       }
       """,
@@ -379,7 +379,7 @@ final class InitDeinitTests: XCTestCase {
       """
       struct AaronStruct {
         init(x: Int) {}
-        init() { init(x: #^DIAG^#1) } 
+        init() { init(x: 1️⃣1) } 
       }
       """,
       diagnostics: [
@@ -395,7 +395,7 @@ final class InitDeinitTests: XCTestCase {
       """
       enum AaronEnum: Int {
         case A = 1
-        init(x: Int) { init(rawValue: x)#^DIAG^#! } 
+        init(x: Int) { init(rawValue: x)1️⃣! } 
       }
       """,
       diagnostics: [

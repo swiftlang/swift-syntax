@@ -16,7 +16,7 @@ final class AvailabilityQueryTests: XCTestCase {
     AssertParse(
       """
       // Disallow use as an expression.
-      if (#^DIAG^##available(OSX 10.51, *)) {}
+      if (1️⃣#available(OSX 10.51, *)) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: #available may only be used as condition of an 'if', 'guard'
@@ -29,7 +29,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery3() {
     AssertParse(
       """
-      let x = #^DIAG^##available(OSX 10.51, *)
+      let x = 1️⃣#available(OSX 10.51, *)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: #available may only be used as condition of
@@ -42,7 +42,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery4() {
     AssertParse(
       """
-      (#^DIAG^##available(OSX 10.51, *) ? 1 : 0)
+      (1️⃣#available(OSX 10.51, *) ? 1 : 0)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: #available may only be used as condition of an
@@ -55,18 +55,18 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery5() {
     AssertParse(
       """
-      if !#^DIAG_1^##available(OSX 10.52, *) { 
+      if !1️⃣#available(OSX 10.52, *) { 
       }
-      if let _ = Optional(5), !#^DIAG_2^##available(OSX 10.52, *) { 
+      if let _ = Optional(5), !2️⃣#available(OSX 10.52, *) { 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 15 = '#unavailable'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '#available(OSX 10.52, *)' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in prefix operator expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '#available(OSX 10.52, *)' in 'if' statement"),
         // TODO: Old parser expected error on line 3: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 25 - 36 = '#unavailable'
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '#available(OSX 10.52, *)' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in prefix operator expression"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '#available(OSX 10.52, *)' in 'if' statement"),
       ]
     )
   }
@@ -74,7 +74,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery6() {
     AssertParse(
       """
-      if #available(OSX 10.51, *) #^DIAG^#&& #available(OSX 10.52, *) { 
+      if #available(OSX 10.51, *) 1️⃣&& #available(OSX 10.52, *) { 
       }
       """,
       diagnostics: [
@@ -87,14 +87,14 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery7() {
     AssertParse(
       """
-      if #available #^DIAG_1^#{ 
-      }#^DIAG_2^#
+      if #available 1️⃣{ 
+      }2️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected availability condition
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' in '#availabile' condition"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end '#availabile' condition"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected code block in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' in '#availabile' condition"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end '#availabile' condition"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'if' statement"),
       ]
     )
   }
@@ -102,8 +102,8 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery8() {
     AssertParse(
       """
-      if #available#^NOTE^#( {
-      }#^DIAG^#
+      if #availableℹ️( {
+      }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
@@ -118,7 +118,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery9() {
     AssertParse(
       """
-      if #available() { #^DIAG^#
+      if #available() { 1️⃣
       }
       """,
       diagnostics: [
@@ -132,7 +132,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery10() {
     AssertParse(
       """
-      if #available#^NOTE^#(OSX #^DIAG^#{
+      if #availableℹ️(OSX 1️⃣{
       }
       """,
       diagnostics: [
@@ -159,7 +159,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery12() {
     AssertParse(
       """
-      if #available#^NOTE^#(OSX 10.51 #^DIAG^#{
+      if #availableℹ️(OSX 10.51 1️⃣{
       }
       """,
       diagnostics: [
@@ -281,7 +281,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery25() {
     AssertParse(
       """
-      if #available#^NOTE^#(* #^DIAG^#{
+      if #availableℹ️(* 1️⃣{
       }
       """,
       diagnostics: [
@@ -305,8 +305,8 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery27() {
     AssertParse(
       """
-      if #available#^NOTE^#(OSX 10.51, {
-      }#^DIAG^#
+      if #availableℹ️(OSX 10.51, {
+      }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
@@ -321,7 +321,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery28() {
     AssertParse(
       """
-      if #available(OSX 10.51,) { #^DIAG^#
+      if #available(OSX 10.51,) { 1️⃣
       }
       """,
       diagnostics: [
@@ -335,7 +335,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery29() {
     AssertParse(
       """
-      if #available#^NOTE^#(OSX 10.51, iOS #^DIAG^#{
+      if #availableℹ️(OSX 10.51, iOS 1️⃣{
       }
       """,
       diagnostics: [
@@ -368,7 +368,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery32() {
     AssertParse(
       """
-      if #available(OSX 10.51 #^DIAG^#|| iOS 8.0) {
+      if #available(OSX 10.51 1️⃣|| iOS 8.0) {
       }
       """,
       diagnostics: [
@@ -389,7 +389,7 @@ final class AvailabilityQueryTests: XCTestCase {
   func testAvailabilityQuery34() {
     AssertParse(
       """
-      if #available(OSX #^DIAG^#>= 10.51, *) { 
+      if #available(OSX 1️⃣>= 10.51, *) { 
       }
       """,
       diagnostics: [

@@ -17,9 +17,11 @@ import SwiftBasicFormat
 // MARK: - Shared code
 
 /// Returns a string that describes `missingNodes`.
-/// `missingNodes` are expected to all be children of `commonParent`.
-private func missingNodesDescription(missingNodes: [Syntax], commonParent: Syntax?) -> String {
-  assert(missingNodes.allSatisfy({ $0.parent == commonParent }))
+/// If `commonParent` is not `nil`, `missingNodes` are expected to all be children of `commonParent`.
+func missingNodesDescription(missingNodes: [Syntax], commonParent: Syntax?) -> String {
+  if commonParent != nil {
+    assert(missingNodes.allSatisfy({ $0.parent == commonParent }))
+  }
 
   // If all tokens in the parent are missing, return the parent type name.
   if let commonParent = commonParent,

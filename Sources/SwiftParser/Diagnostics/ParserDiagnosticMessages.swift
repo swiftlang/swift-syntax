@@ -83,6 +83,14 @@ public enum StaticParserError: String, DiagnosticMessage {
 
 // MARK: - Diagnostics (please sort alphabetically)
 
+public struct EffectsSpecifierAfterArrow: ParserError {
+  public let effectsSpecifiersAfterArrow: [TokenSyntax]
+
+  public var message: String {
+    "\(missingNodesDescription(missingNodes: effectsSpecifiersAfterArrow.map(Syntax.init), commonParent: nil)) may only occur before '->'"
+  }
+}
+
 public struct ExtaneousCodeAtTopLevel: ParserError {
   public let extraneousCode: UnexpectedNodesSyntax
 
@@ -141,7 +149,6 @@ public struct UnexpectedNodesError: ParserError {
 public enum StaticParserFixIt: String, FixItMessage {
   case insertSemicolon = "insert ';'"
   case insertAttributeArguments = "insert attribute argument"
-  case moveThrowBeforeArrow = "move 'throws' before '->'"
 
   public var message: String { self.rawValue }
 
@@ -149,3 +156,16 @@ public enum StaticParserFixIt: String, FixItMessage {
     MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
   }
 }
+
+public struct MoveTokensInFrontOfFixIt: ParserFixIt {
+  /// The token that should be moved
+  public let movedTokens: [TokenSyntax]
+
+  /// The token after which 'try' should be moved
+  public let inFrontOf: RawTokenKind
+
+  public var message: String {
+    "move \(missingNodesDescription(missingNodes: movedTokens.map(Syntax.init), commonParent: nil)) in front of '\(inFrontOf.nameForDiagnostics)'"
+  }
+}
+

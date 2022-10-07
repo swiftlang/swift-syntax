@@ -581,10 +581,17 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "[(Int) -> #^DIAG^#throws Int]()",
       diagnostics: [
-        // FIXME: We should suggest to move 'throws' in front of '->'
-        DiagnosticSpec(message: "expected expression in array element"),
-        DiagnosticSpec(message: "unexpected text 'throws Int' in array"),
-      ]
+        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"]),
+      ],
+      fixedSource: "[(Int) throws -> Int]()"
+    )
+
+    AssertParse(
+      "[(Int) -> #^DIAG^#async throws Int]()",
+      diagnostics: [
+        DiagnosticSpec(message: "'async throws' may only occur before '->'", fixIts: ["move 'async throws' in front of '->'"]),
+      ],
+      fixedSource: "[(Int) async throws -> Int]()"
     )
 
     AssertParse(

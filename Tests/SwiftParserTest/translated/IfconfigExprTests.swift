@@ -1,6 +1,7 @@
 // This test file has been translated from swift/test/Parse/ifconfig_expr.swift
 
 import XCTest
+import SwiftSyntax
 
 final class IfconfigExprTests: XCTestCase {
   func testIfconfigExpr1() {
@@ -288,4 +289,111 @@ final class IfconfigExprTests: XCTestCase {
     )
   }
 
+  func testUnknownPlatform1() {
+    AssertParse(
+      """
+      #if hasGreeble(blah)
+      #endif
+      """
+    )
+  }
+
+  func testUnknownPlatform2() {
+    AssertParse(
+      """
+      // Future compiler, short-circuit right-hand side
+      #if compiler(>=10.0) && hasGreeble(blah)
+      #endif
+      """
+    )
+  }
+
+  func testUnknownPlatform3() {
+    AssertParse(
+      """
+      // Current compiler, short-circuit right-hand side
+      #if compiler(<10.0) || hasGreeble(blah)
+      #endif
+      """,
+      substructure: Syntax(FunctionCallExprSyntax(
+        calledExpression: ExprSyntax(IdentifierExprSyntax(
+          identifier: .identifier("compiler"),
+          declNameArguments: nil
+        )),
+        leftParen: .leftParenToken(),
+        argumentList: TupleExprElementListSyntax([
+          TupleExprElementSyntax(
+            label: nil,
+            colon: nil,
+            expression: ExprSyntax(PrefixOperatorExprSyntax(
+              operatorToken: .prefixOperator("<"),
+              postfixExpression: ExprSyntax(FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("10.0")))
+            )),
+            trailingComma: nil
+          )
+        ]),
+        rightParen: .rightParenToken(trailingTrivia: .space),
+        trailingClosure: nil,
+        additionalTrailingClosures: nil
+      ))
+    )
+  }
+
+  func testUnknownPlatform4() {
+    AssertParse(
+      """
+      // This compiler, don't short-circuit.
+      #if compiler(>=5.7) && hasGreeble(blah)
+      #endif
+      """
+    )
+  }
+
+  func testUnknownPlatform5() {
+    AssertParse(
+      """
+      // This compiler, don't short-circuit.
+      #if compiler(<5.8) || hasGreeble(blah)
+      #endif
+      """
+    )
+  }
+
+  func testUnknownPlatform6() {
+    AssertParse(
+      #"""
+      // Not a "version" check, so don't short-circuit.
+      #if os(macOS) && hasGreeble(blah)
+      #endif
+      """#
+    )
+  }
+
+  func testUpcomingFeature1() {
+    AssertParse(
+      """
+      #if hasFeature(17)
+      #endif
+      """,
+      substructure: Syntax(IfConfigClauseSyntax(
+        poundKeyword: .poundIfKeyword(),
+        condition: ExprSyntax(FunctionCallExprSyntax(
+          calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("hasFeature"), declNameArguments: nil)),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([
+            TupleExprElementSyntax(
+              label: nil,
+              colon: nil,
+              expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("17"))),
+              trailingComma: nil
+            )
+          ]),
+          rightParen: .rightParenToken(),
+          trailingClosure: nil,
+          additionalTrailingClosures: nil
+        )),
+        elements: Syntax(CodeBlockItemListSyntax([]))
+      ))
+    )
+  }
 }

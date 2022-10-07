@@ -168,7 +168,7 @@ private func createTokenFormatFunction() -> FunctionDecl {
   ) {
     VariableDecl("var node = node")
     SwitchStmt(expression: MemberAccessExpr(base: "node", name: "tokenKind")) {
-      for token in SYNTAX_TOKENS {
+      for token in SYNTAX_TOKENS where token.name != "ContextualKeyword" {
         SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: token.swiftKind))))) {
           if token.requiresLeadingSpace {
             IfStmt(
@@ -195,6 +195,20 @@ private func createTokenFormatFunction() -> FunctionDecl {
       }
       SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "eof"))))) {
         BreakStmt("break")
+      }
+      SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "contextualKeyword"))))) {
+        SwitchStmt(
+          """
+          switch node.text {
+            case "async":
+              if node.trailingTrivia.isEmpty {
+                node.trailingTrivia += .space
+              }
+            default:
+              break
+          }
+          """
+        )
       }
     }
     SequenceExpr("node.leadingTrivia = node.leadingTrivia.indented(indentation: indentation)")

@@ -256,7 +256,7 @@ extension ParseDiagnosticsGenerator {
 
     let fixIt = FixIt(
       message: InsertTokenFixIt(missingNodes: missingNodes),
-      changes: missingNodes.map(FixIt.Change.makePresent)
+      changes: missingNodes.map(FixIt.Changes.makePresent)
     )
 
     var notes: [Note] = []

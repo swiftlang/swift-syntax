@@ -16,11 +16,35 @@ import SwiftBasicFormat
 
 // MARK: - Shared code
 
+fileprivate enum MissingNodesDescriptionPart {
+  case tokensWithDefaultText([TokenSyntax])
+  case tokenWithoutDefaultText(RawTokenKind)
+  case node(Syntax)
+
+  var description: String {
+    switch self {
+    case .tokensWithDefaultText(let tokens):
+      let tokenContents = tokens.map({ BasicFormat().visit($0).description }).joined()
+      return "'\(tokenContents.trimmingSpaces())'"
+    case .tokenWithoutDefaultText(let tokenKind):
+      return tokenKind.nameForDiagnostics
+    case .node(let node):
+      if let parent = node.parent,
+         let childName = parent.childNameForDiagnostics(node.index) {
+        return "\(childName)"
+      } else {
+        return "\(node.nodeTypeNameForDiagnostics ?? "syntax")"
+      }
+    }
+  }
+}
+
 /// Returns a string that describes `missingNodes`.
 /// If `commonParent` is not `nil`, `missingNodes` are expected to all be children of `commonParent`.
-func missingNodesDescription(missingNodes: [Syntax], commonParent: Syntax?) -> String {
+func missingNodesDescription<SyntaxType: SyntaxProtocol>(_ missingNodes: [SyntaxType], commonParent: Syntax? = nil) -> String {
+  let missingSyntaxNodes = missingNodes.map(Syntax.init)
   if commonParent != nil {
-    assert(missingNodes.allSatisfy({ $0.parent == commonParent }))
+    assert(missingSyntaxNodes.allSatisfy({ $0.parent == commonParent }))
   }
 
   // If all tokens in the parent are missing, return the parent type name.
@@ -28,8 +52,8 @@ func missingNodesDescription(missingNodes: [Syntax], commonParent: Syntax?) -> S
      commonParent.isMissingAllTokens,
      let firstToken = commonParent.firstToken(viewMode: .all),
      let lastToken = commonParent.lastToken(viewMode: .all),
-     missingNodes.contains(Syntax(firstToken)),
-     missingNodes.contains(Syntax(lastToken)) {
+     missingSyntaxNodes.contains(Syntax(firstToken)),
+     missingSyntaxNodes.contains(Syntax(lastToken)) {
     switch commonParent.as(SyntaxEnum.self) {
     case .codeBlock:
       return "code block"
@@ -42,33 +66,10 @@ func missingNodesDescription(missingNodes: [Syntax], commonParent: Syntax?) -> S
     }
   }
 
-  enum DescriptionPart {
-    case tokensWithDefaultText([TokenSyntax])
-    case tokenWithoutDefaultText(RawTokenKind)
-    case node(Syntax)
-
-    var description: String {
-      switch self {
-      case .tokensWithDefaultText(let tokens):
-        let tokenContents = tokens.map({ BasicFormat().visit($0).description }).joined()
-        return "'\(tokenContents.trimmingSpaces())'"
-      case .tokenWithoutDefaultText(let tokenKind):
-        return tokenKind.nameForDiagnostics
-      case .node(let node):
-        if let parent = node.parent,
-           let childName = parent.childNameForDiagnostics(node.index) {
-          return "\(childName)"
-        } else {
-          return "\(node.nodeTypeNameForDiagnostics ?? "syntax")"
-        }
-      }
-    }
-  }
-
-  var parts: [DescriptionPart] = []
-  for missingNode in missingNodes {
+  var parts: [MissingNodesDescriptionPart] = []
+  for missingNode in missingSyntaxNodes {
     if let missingToken = missingNode.as(TokenSyntax.self) {
-      let newPart: DescriptionPart
+      let newPart: MissingNodesDescriptionPart
       let (rawKind, text) = missingToken.tokenKind.decomposeToRaw()
       if let text = text, !text.isEmpty {
         let presentToken = TokenSyntax(missingToken.tokenKind, presence: .present)
@@ -189,7 +190,7 @@ public struct MissingNodesError: ParserError {
   }
 
   public var message: String {
-    var message = "expected \(missingNodesDescription(missingNodes: missingNodes, commonParent: commonParent))"
+    var message = "expected \(missingNodesDescription(missingNodes, commonParent: commonParent))"
     if let afterClause = afterClause {
       message += " \(afterClause)"
     }
@@ -221,7 +222,7 @@ public struct InsertTokenFixIt: ParserFixIt {
     assert(missingNodes.allSatisfy({ $0.parent == self.commonParent }))
   }
 
-  public var message: String { "Insert \(missingNodesDescription(missingNodes: missingNodes, commonParent: commonParent))" }
+  public var message: String { "Insert \(missingNodesDescription(missingNodes, commonParent: commonParent))" }
 }
 
 // MARK: - Generate Error

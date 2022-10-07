@@ -87,7 +87,7 @@ public struct EffectsSpecifierAfterArrow: ParserError {
   public let effectsSpecifiersAfterArrow: [TokenSyntax]
 
   public var message: String {
-    "\(missingNodesDescription(missingNodes: effectsSpecifiersAfterArrow.map(Syntax.init), commonParent: nil)) may only occur before '->'"
+    "\(missingNodesDescription(effectsSpecifiersAfterArrow)) may only occur before '->'"
   }
 }
 
@@ -165,7 +165,7 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   public let inFrontOf: RawTokenKind
 
   public var message: String {
-    "move \(missingNodesDescription(missingNodes: movedTokens.map(Syntax.init), commonParent: nil)) in front of '\(inFrontOf.nameForDiagnostics)'"
+    "move \(missingNodesDescription(movedTokens)) in front of '\(inFrontOf.nameForDiagnostics)'"
   }
 }
 
@@ -175,6 +175,6 @@ public struct ReplaceTokensFixIt: ParserFixIt {
   public let replacement: TokenSyntax
 
   public var message: String {
-    "replace \(missingNodesDescription(missingNodes: replaceTokens.map(Syntax.init), commonParent: nil)) by '\(replacement.text)'"
+    "replace \(missingNodesDescription(replaceTokens)) by '\(replacement.text)'"
   }
 }

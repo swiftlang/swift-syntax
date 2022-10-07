@@ -6,8 +6,6 @@ final class SwitchTests: XCTestCase {
   func testSwitch1() {
     AssertParse(
       """
-      // TODO: Implement tuple equality in the library.
-      // BLOCKED: <rdar://problem/13822406>
       func ~= (x: (Int,Int), y: (Int,Int)) -> Bool {
         return true
       }
@@ -316,8 +314,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'default' cannot be used with a 'where' guard expression
-        DiagnosticSpec(message: "unexpected text 'where x == 0' in switch case"),
+        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression"),
       ]
     )
   }
@@ -737,8 +734,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'default' cannot be used with a 'where' guard expression
-        DiagnosticSpec(message: "unexpected text 'where x == 0' in switch case"),
+        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression"),
       ]
     )
   }
@@ -877,8 +873,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'default' cannot be used with a 'where' guard expression
-        DiagnosticSpec(message: "unexpected text 'where x == 0' in switch case"),
+        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression"),
       ]
     )
   }

@@ -274,19 +274,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let output = node.output,
-       let missingThrowsKeyword = node.throwsOrRethrowsKeyword,
-       missingThrowsKeyword.presence == .missing,
-       let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType,
-       let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
-      addDiagnostic(throwsInReturnPosition, .throwsInReturnPosition, fixIts: [
-        FixIt(message: MoveTokensInFrontOfFixIt(movedTokens: [missingThrowsKeyword], inFrontOf: .arrow), changes: [
-          .makeMissing(node: throwsInReturnPosition),
-          .makePresent(node: missingThrowsKeyword),
-        ])
-      ], handledNodes: [unexpectedBeforeReturnType.id, missingThrowsKeyword.id, throwsInReturnPosition.id])
-      return .visitChildren
-    }
+    exchangeTokens(
+      unexpected: node.output?.unexpectedBetweenArrowAndReturnType,
+      unexpectedTokenCondition: { $0.tokenKind == .throwsKeyword },
+      correctTokens: [node.throwsOrRethrowsKeyword],
+      message: { _ in StaticParserError.throwsInReturnPosition },
+      fixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
+    )
     return .visitChildren
   }
 

@@ -52,8 +52,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected pattern
-        // TODO: Old parser expected error on line 3: expected ':' after 'case'
         DiagnosticSpec(message: "expected expression and ':' in switch case"),
       ]
     )
@@ -69,8 +67,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected expression for 'where' guard of 'case'
-        // TODO: Old parser expected error on line 3: expected ':' after 'case'
         DiagnosticSpec(message: "expected expression in 'where' clause"),
         DiagnosticSpec(message: "expected ':' in switch case"),
       ]
@@ -87,7 +83,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected ':' after 'case'
         DiagnosticSpec(message: "expected ':' in switch case"),
       ]
     )
@@ -103,7 +98,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected ':' after 'default'
         DiagnosticSpec(message: "expected ':' in switch case"),
       ]
     )
@@ -121,10 +115,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch x {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-      ]
+      """
     )
   }
 
@@ -171,10 +162,7 @@ final class SwitchTests: XCTestCase {
       case 1:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
-      ]
+      """
     )
   }
 
@@ -186,10 +174,7 @@ final class SwitchTests: XCTestCase {
       default:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
-      ]
+      """
     )
   }
 
@@ -201,10 +186,7 @@ final class SwitchTests: XCTestCase {
         x = 0
       case 1: 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
-      ]
+      """
     )
   }
 
@@ -216,10 +198,7 @@ final class SwitchTests: XCTestCase {
         x = 0
       default: 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'default' label in a 'switch' must have at least one executable statement, Fix-It replacements: 9 - 9 = ' break'
-      ]
+      """
     )
   }
 
@@ -259,9 +238,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: all statements inside a switch must be covered by a 'case' or 'default'
         DiagnosticSpec(message: "unexpected text 'x = 1' in switch case"),
-        // TODO: Old parser expected error on line 5: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
       ]
     )
   }
@@ -275,10 +252,7 @@ final class SwitchTests: XCTestCase {
       default: 
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -290,8 +264,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        // TODO: Old parser expected error on line 2: all statements inside a switch must be covered by a 'case' or 'default'
         DiagnosticSpec(message: "unexpected text 'x = 1' in 'switch' statement"),
       ]
     )
@@ -306,8 +278,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        // TODO: Old parser expected error on line 2: all statements inside a switch must be covered by a 'case' or 'default'
         DiagnosticSpec(message: "unexpected text in 'switch' statement"),
       ]
     )
@@ -321,11 +291,7 @@ final class SwitchTests: XCTestCase {
       case 0: 
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'default' label in a 'switch' must have at least one executable statement, Fix-It replacements: 9 - 9 = ' break'
-        // TODO: Old parser expected error on line 3: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -337,11 +303,7 @@ final class SwitchTests: XCTestCase {
       default: 
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'default' label in a 'switch' must have at least one executable statement, Fix-It replacements: 9 - 9 = ' break'
-        // TODO: Old parser expected error on line 3: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -366,10 +328,7 @@ final class SwitchTests: XCTestCase {
       switch x { 
       case 0: 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
-      ]
+      """
     )
   }
 
@@ -381,10 +340,7 @@ final class SwitchTests: XCTestCase {
       case 1:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
-      ]
+      """
     )
   }
 
@@ -396,10 +352,7 @@ final class SwitchTests: XCTestCase {
         x = 0
       case 1: 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 8 - 8 = ' break'
-      ]
+      """
     )
   }
 
@@ -441,10 +394,7 @@ final class SwitchTests: XCTestCase {
       default:
         fallthrough 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 7: 'fallthrough' without a following 'case' or 'default' block
-      ]
+      """
     )
   }
 
@@ -516,13 +466,7 @@ final class SwitchTests: XCTestCase {
       case (1, _):
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 8: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 17 - 17 = ' break'
-        // TODO: Old parser expected error on line 11: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 13 - 13 = ' break'
-        // TODO: Old parser expected error on line 14: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 17 - 17 = ' break'
-        // TODO: Old parser expected error on line 28: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 13 - 13 = ' break'
-      ]
+      """
     )
   }
 
@@ -550,13 +494,7 @@ final class SwitchTests: XCTestCase {
       case (var a, var b): 
         t = (b, a)
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'fallthrough' from a case which doesn't bind variable 'a'
-        // TODO: Old parser expected error on line 4: 'fallthrough' from a case which doesn't bind variable 'b'
-        // TODO: Old parser expected warning on line 5: variable 'a' was never mutated; consider changing to 'let' constant
-        // TODO: Old parser expected warning on line 5: variable 'b' was never mutated; consider changing to 'let' constant
-      ]
+      """
     )
   }
 
@@ -570,10 +508,7 @@ final class SwitchTests: XCTestCase {
       case (2, let a):
         t = (a, a)
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: variable 'a' was never mutated; consider changing to 'let' constant
-      ]
+      """
     )
   }
 
@@ -588,10 +523,7 @@ final class SwitchTests: XCTestCase {
           break
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: pattern variable bound to type 'Double', fallthrough case bound to type 'Int'
-      ]
+      """
     )
   }
 
@@ -617,13 +549,7 @@ final class SwitchTests: XCTestCase {
           break
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'var' pattern binding must match previous 'let' pattern binding, Fix-It replacements: 27 - 30 = 'let'
-        // TODO: Old parser expected error on line 12: 'let' pattern binding must match previous 'var' pattern binding, Fix-It replacements: 44 - 47 = 'var'
-        // TODO: Old parser expected error on line 14: 'var' pattern binding must match previous 'let' pattern binding, Fix-It replacements: 37 - 40 = 'let'
-        // TODO: Old parser expected error on line 14: 'var' pattern binding must match previous 'let' pattern binding, Fix-It replacements: 73 - 76 = 'let'
-      ]
+      """
     )
   }
 
@@ -636,11 +562,7 @@ final class SwitchTests: XCTestCase {
         case 42: return
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: switch must be exhaustive
-        // TODO: Old parser expected note on line 2: do you want to add a default clause?
-      ]
+      """
     )
   }
 
@@ -655,10 +577,7 @@ final class SwitchTests: XCTestCase {
           break
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: value of tuple type '(Int, Int)' has no member 'Bar'
-      ]
+      """
     )
   }
 
@@ -673,11 +592,7 @@ final class SwitchTests: XCTestCase {
               break
           }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 3: 'values' declared here
-        // TODO: Old parser expected error on line 4: cannot find 'value' in scope; did you mean 'values'?
-      ]
+      """
     )
   }
 
@@ -716,14 +631,7 @@ final class SwitchTests: XCTestCase {
             break
         }
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 12: type 'Whichever' has no member 'buzz'
-        // TODO: Old parser expected error on line 14: expression pattern of type 'Whichever' cannot match values of type 'String'
-        // TODO: Old parser expected note on line 14: overloads for '~=' exist
-        // TODO: Old parser expected error on line 14: 'case' label in a 'switch' must have at least one executable statement
-        // TODO: Old parser expected error on line 23: expression pattern of type 'String' cannot match values of type 'Whichever'
-      ]
+      """#
     )
   }
 
@@ -735,10 +643,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 13 - 13 = ' break'
-      ]
+      """
     )
   }
 
@@ -750,10 +655,7 @@ final class SwitchTests: XCTestCase {
       @unknown default:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 13 - 13 = ' break'
-      ]
+      """
     )
   }
 
@@ -765,10 +667,7 @@ final class SwitchTests: XCTestCase {
         x = 0
       @unknown case _: 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'case' label in a 'switch' must have at least one executable statement, Fix-It replacements: 17 - 17 = ' break'
-      ]
+      """
     )
   }
 
@@ -780,10 +679,7 @@ final class SwitchTests: XCTestCase {
         x = 0
       @unknown default: 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: 'default' label in a 'switch' must have at least one executable statement, Fix-It replacements: 18 - 18 = ' break'
-      ]
+      """
     )
   }
 
@@ -798,10 +694,7 @@ final class SwitchTests: XCTestCase {
       case .Thing:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -816,11 +709,7 @@ final class SwitchTests: XCTestCase {
       case .Thing:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-        // TODO: Old parser expected error on line 4: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -835,10 +724,7 @@ final class SwitchTests: XCTestCase {
       case .Thing:
         x = 0
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -851,8 +737,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
         // TODO: Old parser expected error on line 2: 'default' cannot be used with a 'where' guard expression
         DiagnosticSpec(message: "unexpected text 'where x == 0' in switch case"),
       ]
@@ -866,12 +750,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _:
         fallthrough 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
-        // TODO: Old parser expected error on line 3: 'fallthrough' without a following 'case' or 'default' block
-      ]
+      """
     )
   }
 
@@ -884,10 +763,7 @@ final class SwitchTests: XCTestCase {
       case .Thing:
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -900,10 +776,7 @@ final class SwitchTests: XCTestCase {
       case .Thing: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -914,10 +787,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _, _: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@unknown' cannot be applied to multiple patterns
-      ]
+      """
     )
   }
 
@@ -928,10 +798,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _, _, _: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@unknown' cannot be applied to multiple patterns
-      ]
+      """
     )
   }
 
@@ -942,12 +809,7 @@ final class SwitchTests: XCTestCase {
       @unknown case let value: 
         _ = value
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
-        // TODO: Old parser expected error on line 2: '@unknown' is only supported for catch-all cases ("case _")
-      ]
+      """
     )
   }
 
@@ -958,12 +820,7 @@ final class SwitchTests: XCTestCase {
       @unknown case (_, _): 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '(_, _)'
-        // TODO: Old parser expected error on line 2: '@unknown' is only supported for catch-all cases ("case _")
-      ]
+      """
     )
   }
 
@@ -974,13 +831,7 @@ final class SwitchTests: XCTestCase {
       @unknown case is Whatever: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
-        // TODO: Old parser expected error on line 2: '@unknown' is only supported for catch-all cases ("case _")
-        // TODO: Old parser expected warning on line 2: 'is' test is always true
-      ]
+      """
     )
   }
 
@@ -991,12 +842,7 @@ final class SwitchTests: XCTestCase {
       @unknown case .Thing: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
-        // TODO: Old parser expected error on line 2: '@unknown' is only supported for catch-all cases ("case _")
-      ]
+      """
     )
   }
 
@@ -1007,11 +853,7 @@ final class SwitchTests: XCTestCase {
       @unknown case (_): // okay
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
-      ]
+      """
     )
   }
 
@@ -1022,12 +864,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _ where x == 0: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
-        // TODO: Old parser expected error on line 2: 'where' cannot be used with '@unknown'
-      ]
+      """
     )
   }
 
@@ -1040,8 +877,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected warning on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 1: add missing case: '.Thing'
         // TODO: Old parser expected error on line 2: 'default' cannot be used with a 'where' guard expression
         DiagnosticSpec(message: "unexpected text 'where x == 0' in switch case"),
       ]
@@ -1072,10 +907,7 @@ final class SwitchTests: XCTestCase {
       @garbage case _: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: unknown attribute 'garbage'
-      ]
+      """
     )
   }
 
@@ -1088,11 +920,7 @@ final class SwitchTests: XCTestCase {
       @garbage @moreGarbage default: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: unknown attribute 'garbage'
-        // TODO: Old parser expected error on line 4: unknown attribute 'moreGarbage'
-      ]
+      """
     )
   }
 
@@ -1100,10 +928,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       @unknown let _ = 1
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: unknown attribute 'unknown'
-      ]
+      """
     )
   }
 
@@ -1114,10 +939,7 @@ final class SwitchTests: XCTestCase {
       case _:
         @unknown let _ = 1 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: unknown attribute 'unknown'
-      ]
+      """
     )
   }
 
@@ -1145,13 +967,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected '(' in attribute 'unknown'
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '(garbage)' in switch case"),
-        // TODO: Old parser expected note on line 10: attribute already specified here
-        // TODO: Old parser expected error on line 11: duplicate attribute
-        // TODO: Old parser expected warning on line 15: switch must be exhaustive
-        // TODO: Old parser expected note on line 15: add missing case: '.Thing'
-        // TODO: Old parser expected error on line 16: unknown attribute 'garbage'
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '(foobar)' in switch case"),
       ]
     )
@@ -1166,11 +982,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 4: remove '@unknown' to handle remaining values, Fix-It replacements: 1 - 10 = ''
-      ]
+      """
     )
   }
 
@@ -1181,11 +993,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 2: remove '@unknown' to handle remaining values, Fix-It replacements: 1 - 10 = ''
-      ]
+      """
     )
   }
 
@@ -1196,11 +1004,7 @@ final class SwitchTests: XCTestCase {
       @unknown default: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: switch must be exhaustive
-        // TODO: Old parser expected note on line 2: remove '@unknown' to handle remaining values, Fix-It replacements: 1 - 10 = ''
-      ]
+      """
     )
   }
 
@@ -1215,10 +1019,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _:
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -1233,10 +1034,7 @@ final class SwitchTests: XCTestCase {
       @unknown default:
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -1251,10 +1049,7 @@ final class SwitchTests: XCTestCase {
       @unknown default: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 6: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -1267,10 +1062,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _:
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -1283,10 +1075,7 @@ final class SwitchTests: XCTestCase {
       @unknown default:
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -1299,10 +1088,7 @@ final class SwitchTests: XCTestCase {
       @unknown default: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -1315,10 +1101,7 @@ final class SwitchTests: XCTestCase {
       @unknown case _:
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -1331,10 +1114,7 @@ final class SwitchTests: XCTestCase {
       @unknown default:
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@unknown' can only be applied to the last case in a switch
-      ]
+      """
     )
   }
 
@@ -1347,10 +1127,7 @@ final class SwitchTests: XCTestCase {
       @unknown default: 
         break
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: additional 'case' blocks cannot appear after the 'default' block of a 'switch'
-      ]
+      """
     )
   }
 
@@ -1402,11 +1179,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: switch must be exhaustive
-        // TODO: Old parser expected note on line 2: do you want to add a default clause?
-        // TODO: Old parser expected error on line 5: unknown attribute 'unknown'
         DiagnosticSpec(message: "expected declaration after attribute in switch case"),
-        // TODO: Old parser expected error on line 6: expected declaration
       ]
     )
   }
@@ -1424,12 +1197,9 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: switch must be exhaustive
-        // TODO: Old parser expected error on line 4: expected ']' in container literal expression
         DiagnosticSpec(message: "expected ']' to end array", notes: [
           NoteSpec(message: "to match this opening '['")
         ]),
-        // TODO: Old parser expected note on line 5: remove '@unknown' to handle remaining values
       ]
     )
   }

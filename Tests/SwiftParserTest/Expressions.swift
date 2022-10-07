@@ -5,7 +5,7 @@ import XCTest
 final class ExpressionTests: XCTestCase {
   func testTernary() {
     AssertParse(
-      "let a =#^DIAG^#",
+      "let a =1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected expression in variable")
       ]
@@ -13,7 +13,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse("a ? b : c ? d : e")
     AssertParse(
-      "a ? b :#^DIAG^#",
+      "a ? b :1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected expression")
       ]
@@ -99,7 +99,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       #"""
       \a
-      c#^NOTE^#[#^DIAG^#
+      cℹ️[1️⃣
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected value in subscript"),
@@ -231,18 +231,18 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       """
-      [#^EXPECTED_EXPR^#
-        ,#^END_ARRAY^#
+      [1️⃣
+        ,2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "EXPECTED_EXPR", message: "expected value in array element"),
-        DiagnosticSpec(locationMarker: "END_ARRAY", message: "expected ']' to end array"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in array element"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
       ]
     )
 
     AssertParse(
       """
-      ([1:#^DIAG^#)
+      ([1:1️⃣)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected value in dictionary element"),
@@ -254,7 +254,7 @@ final class ExpressionTests: XCTestCase {
       """
       [
         #line : Calendar(identifier: .gregorian),
-        #^STRUCTURE^##line : Calendar(identifier: .buddhist),
+        1️⃣#line : Calendar(identifier: .buddhist),
       ]
       """,
       substructure: Syntax(DictionaryElementSyntax.init(
@@ -278,7 +278,7 @@ final class ExpressionTests: XCTestCase {
           trailingClosure: nil,
           additionalTrailingClosures: nil)),
         trailingComma: .commaToken())),
-    substructureAfterMarker: "STRUCTURE")
+    substructureAfterMarker: "1️⃣")
   }
 
   func testInterpolatedStringLiterals() {
@@ -308,7 +308,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       #"""
-      #^DIAG^#"\(()
+      1️⃣"\(()
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"extraneous '"\(()' at top level"#)
@@ -332,7 +332,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       #"""
-      " >> \( abc #^DIAG^#} ) << "
+      " >> \( abc 1️⃣} ) << "
       """#,
       diagnostics: [
         DiagnosticSpec(message: "unexpected text '}' in string literal")
@@ -353,7 +353,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       #"""
-      #^NOTE^#"\",#^DIAG^#
+      ℹ️"\",1️⃣
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#, notes: [
@@ -422,7 +422,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
        ##"""
-       #^NOTE^#""""#^DIAG^#
+       ℹ️""""1️⃣
        """##,
        diagnostics: [
          DiagnosticSpec(message: #"expected '"""' to end string literal"#, notes: [
@@ -433,7 +433,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
        ##"""
-       """""#^DIAG^#
+       """""1️⃣
        """##,
        diagnostics: [
          DiagnosticSpec(message: #"expected '"""' to end string literal"#)
@@ -444,13 +444,13 @@ final class ExpressionTests: XCTestCase {
     // contents must start on a new line
     AssertParse(
        ##"""
-       """"""#^DIAG^#
+       """"""1️⃣
        """##
      )
 
     AssertParse(
       ##"""
-      #"#^DIAG^#
+      #"1️⃣
       """##,
       diagnostics: [
         DiagnosticSpec(message: ##"expected '"#' to end string literal"##, notes: []),
@@ -459,7 +459,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       ##"""
-      #"""#^DIAG^#
+      #"""1️⃣
       """##,
       diagnostics: [
         DiagnosticSpec(message: ##"expected '"""#' to end string literal"##),
@@ -468,7 +468,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       ##"""
-      #"""a#^DIAG^#
+      #"""a1️⃣
       """##,
       diagnostics: [
         DiagnosticSpec(message: ##"expected '"""#' to end string literal"##),
@@ -476,7 +476,7 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-      ###"#^DIAG^#"\"###,
+      ###"1️⃣"\"###,
       diagnostics: [
         DiagnosticSpec(message: "extraneous '\"\\' at top level")
       ]
@@ -494,12 +494,12 @@ final class ExpressionTests: XCTestCase {
   func testStringBogusClosingDelimiters() {
     AssertParse(
       ##"""
-      \#^AFTER_SLASH^#\(#^AFTER_PAREN^#
+      \1️⃣\(2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "expected root in key path"),
-        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "expected ')' to end tuple type"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end tuple type"),
       ]
     )
 
@@ -511,7 +511,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       #"""
-      "#^DIAG^#
+      "1️⃣
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#)
@@ -520,7 +520,7 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       #"""
-      "'#^DIAG^#
+      "'1️⃣
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"' to end string literal"#)
@@ -544,7 +544,7 @@ final class ExpressionTests: XCTestCase {
 
   func testMissingColonInTernary() {
     AssertParse(
-      "foo ? 1#^DIAG^#",
+      "foo ? 11️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' after '? ...' in ternary expression"),
         DiagnosticSpec(message: "expected expression"),
@@ -556,30 +556,30 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       #"""
       func nestThoseIfs() {
-        \n    #^KEY_PATH_1^#
+        \n
         if false != true {
-          \n       #^KEY_PATH_2^#
-          print#^STMTS^# "\(i)\"\n#^END^#
+          \n
+          print1️⃣ "\(i)\"\n2️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "END", message: #"expected '"' to end string literal"#),
-        DiagnosticSpec(locationMarker: "END", message: "expected '}' to end 'if' statement"),
-        DiagnosticSpec(locationMarker: "END", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'if' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
     )
 
-    AssertParse("#keyPath(#^DIAG^#(b:#^MISSING_VALUE^#)",
+    AssertParse("#keyPath(1️⃣(b:2️⃣)",
                 diagnostics: [
-                  DiagnosticSpec(message: "expected identifier in '#keyPath' expression"),
-                  DiagnosticSpec(message: "expected ')' to end '#keyPath' expression"),
-                  DiagnosticSpec(locationMarker: "MISSING_VALUE", message: "expected value in function call"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in '#keyPath' expression"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end '#keyPath' expression"),
+                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected value in function call"),
                 ])
   }
 
   func testMissingArrowInArrowExpr() {
     AssertParse(
-      "[(Int) -> #^DIAG^#throws Int]()",
+      "[(Int) -> 1️⃣throws Int]()",
       diagnostics: [
         DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"]),
       ],
@@ -587,7 +587,7 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-      "[(Int) -> #^DIAG^#async throws Int]()",
+      "[(Int) -> 1️⃣async throws Int]()",
       diagnostics: [
         DiagnosticSpec(message: "'async throws' may only occur before '->'", fixIts: ["move 'async throws' in front of '->'"]),
       ],
@@ -595,7 +595,7 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-      "let _ = [Int throws #^DIAG^#Int]()",
+      "let _ = [Int throws 1️⃣Int]()",
       diagnostics: [
         DiagnosticSpec(message: "expected '->' in array element")
       ]
@@ -606,13 +606,13 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       """
       do {
-        true ? () :#^DIAG_1^# #^DIAG_2^#throw opaque_error()
+        true ? () :1️⃣ 2️⃣throw opaque_error()
       } catch _ {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'do' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'do' statement"),
       ]
     )
   }
@@ -620,25 +620,25 @@ final class ExpressionTests: XCTestCase {
   func testClosureExpression() {
     AssertParse(
       """
-      let #^VAR_NAME^#:(#^DIAG_1^#..)->#^END^#
+      let 1️⃣:(2️⃣..)->3️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "VAR_NAME", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected type in function type"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '..' in function type"),
-        DiagnosticSpec(locationMarker: "END", message: "expected type in function type"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '..' in function type"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function type"),
       ]
     )
   }
 
   func testParseArrowExpr() {
     AssertParse(
-      "Foo #^ASYNC^#async ->#^END^#",
+      "Foo 1️⃣async ->2️⃣",
       { $0.parseSequenceExpression(.basic, forDirective: false) },
       substructure: Syntax(TokenSyntax.contextualKeyword("async")),
-      substructureAfterMarker: "ASYNC",
+      substructureAfterMarker: "1️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "END", message: "expected expression")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression")
       ]
     )
   }
@@ -690,9 +690,9 @@ final class ExpressionTests: XCTestCase {
 
   func testOperatorReference() {
     AssertParse(
-      "reduce(0, #^PLUS^#+)",
+      "reduce(0, 1️⃣+)",
       substructure: Syntax(TokenSyntax.unspacedBinaryOperator("+")),
-      substructureAfterMarker: "PLUS"
+      substructureAfterMarker: "1️⃣"
     )
   }
 

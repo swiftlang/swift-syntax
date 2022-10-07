@@ -19,17 +19,27 @@ fileprivate func findMarkedRanges(text: String) -> [Marker] {
   return markers
 }
 
+extension Character {
+  var isMarkerEmoji: Bool {
+    switch self {
+    case "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "ℹ️":
+      return true
+    default: return false
+    }
+  }
+}
+
 fileprivate func nextMarkedRange(text: String, from: String.Index) -> Marker? {
-  guard let start = text.range(of: "#^", range: from ..< text.endIndex),
-        let end = text.range(of: "^#", range: start.upperBound ..< text.endIndex) else {
+  guard let start = text[from...].firstIndex(where: { $0.isMarkerEmoji }) else {
     return nil
   }
+  let end = text.index(after: start)
 
-  let markerRange = start.lowerBound ..< end.upperBound
-  let name = text[start.upperBound ..< end.lowerBound]
+  let markerRange = start ..< end
+  let name = text[start ..< end]
 
   // Expand to the whole line if the line only contains the marker
-  let lineRange = text.lineRange(for: start)
+  let lineRange = text.lineRange(for: start..<start)
   if text[lineRange].trimmingCharacters(in: .whitespacesAndNewlines) == text[markerRange] {
     return Marker(name: name, range: lineRange)
   }
@@ -37,13 +47,13 @@ fileprivate func nextMarkedRange(text: String, from: String.Index) -> Marker? {
 }
 
 fileprivate struct Marker {
-  /// The name of the marker without the `#^` and `^#` markup.
+  /// The name of the marker.
   let name: Substring
   /// The range of the marker.
   ///
   /// If the marker contains all the the non-whitepace characters on the line,
   /// this is the range of the entire line. Otherwise it's the range of the
-  /// marker itself, including the `#^` and `^#` markup.
+  /// marker itself.
   let range: Range<String.Index>
 }
 

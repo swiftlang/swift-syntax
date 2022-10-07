@@ -58,21 +58,21 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers7() {
     AssertParse(
       #"""
-      #^DIAG_1^#<<<<<<< HEAD:conflict_markers.swift 
+      1️⃣<<<<<<< HEAD:conflict_markers.swift 
       var a : String = "A"
       var b : String = "b"
-      =======#^DIAG_2^#
+      =======2️⃣
       var a : String = "a"
       var b : String = "B"
-      >>>>>>> #^DIAG_3^#18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+      >>>>>>> 3️⃣18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
       print(a + b)
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '<<<<<<< HEAD:conflict_markers.swift' before variable"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected expression in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '<<<<<<< HEAD:conflict_markers.swift' before variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
       ]
     )
   }
@@ -80,17 +80,17 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers8() {
     AssertParse(
       #"""
-      #^DIAG_1^#<<<<<<< HEAD:conflict_markers.swift 
+      1️⃣<<<<<<< HEAD:conflict_markers.swift 
       ======= 
       var d : String = "D"
-      >>>>>>> #^DIAG_2^#18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+      >>>>>>> 2️⃣18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
       print(d)
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text before variable"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text before variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
       ]
     )
   }
@@ -107,7 +107,7 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers10() {
     AssertParse(
       #"""
-      #^DIAG_1^#<<<<<<< HEAD:conflict_markers.swift 
+      1️⃣<<<<<<< HEAD:conflict_markers.swift 
       <<<<<<<"HEAD:fake_conflict_markers.swift"
       var fake_b : String = "a"
       >>>>>>>"18844bc65229786b96b89a9fc7739c0fc897905e:fake_conflict_markers.swift"
@@ -115,14 +115,14 @@ final class ConflictMarkersTests: XCTestCase {
       <<<<<<<"HEAD:fake_conflict_markers.swift"
       var fake_c : String = "a"
       >>>>>>>"18844bc65229786b96b89a9fc7739c0fc897905e:fake_conflict_markers.swift"
-      >>>>>>> #^DIAG_2^#18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+      >>>>>>> 2️⃣18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
       print(fake_b + fake_c)
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text before variable"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text before variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
       ]
     )
   }
@@ -169,7 +169,7 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers14() {
     AssertParse(
       #"""
-      #^DIAG^#>>>> ORIGINAL 
+      1️⃣>>>> ORIGINAL 
       var a : String = "A"
       var b : String = "B"
       ==== THEIRS
@@ -191,7 +191,7 @@ final class ConflictMarkersTests: XCTestCase {
   func testConflictMarkers15() {
     AssertParse(
       #"""
-      #^DIAG^#>>>> ORIGINAL 
+      1️⃣>>>> ORIGINAL 
       ==== THEIRS
       ==== YOURS
       var d : String = "D"

@@ -6,7 +6,7 @@ final class ActorTests: XCTestCase {
   func testActor1() {
     AssertParse(
       """
-      actor MyActor1#^DIAG^#
+      actor MyActor11️⃣
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected member block in actor"),
@@ -17,10 +17,10 @@ final class ActorTests: XCTestCase {
   func testActor2() {
     AssertParse(
       """
-      actor MyActor2 #^NOTE^#{
+      actor MyActor2 ℹ️{
           init() {
           }
-      func hello() { }#^DIAG^#
+      func hello() { }1️⃣
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '}' to end actor", notes: [

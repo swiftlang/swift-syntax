@@ -19,30 +19,30 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       // Disallow explicit wildcards.
       if #unavailable(OSX 10.51, *) {} 
       // Disallow use as an expression.
-      if (#^DIAG_1^##unavailable(OSX 10.51)) {}  
-      let x =#^DIAG_2A^# #^DIAG_2^##unavailable(OSX 10.51)
+      if (1️⃣#unavailable(OSX 10.51)) {}  
+      let x =2️⃣ 3️⃣#unavailable(OSX 10.51)
       (#unavailable(OSX 10.51) ? 1 : 0) 
       if !#unavailable(OSX 10.52) { 
       }
-      if let _ = Optional(5),#^DIAG_3A^# #^DIAG_3^#!#^DIAG_4^##unavailable(OSX 10.52) { 
+      if let _ = Optional(5),4️⃣ 5️⃣!6️⃣#unavailable(OSX 10.52) {
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: platform wildcard '*' is always implicit in #unavailable, Fix-It replacements: 28 - 29 = ''
         // TODO: Old parser expected error on line 4: #unavailable may only be used as condition of an 'if', 'guard'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected value in tuple"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '#unavailable(OSX 10.51)' in tuple"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '#unavailable(OSX 10.51)' in tuple"),
         // TODO: Old parser expected error on line 5: #unavailable may only be used as condition of
-        DiagnosticSpec(locationMarker: "DIAG_2A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text before variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text before variable"),
         // TODO: Old parser expected error on line 6: #unavailable may only be used as condition of an
         // TODO: Old parser expected error on line 7: #unavailable may only be used as condition of an
         // TODO: Old parser expected error on line 9: #unavailable may only be used as condition
-        DiagnosticSpec(locationMarker: "DIAG_3A", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "6️⃣", message: "expected expression in prefix operator expression"),
+        DiagnosticSpec(locationMarker: "6️⃣", message: "extraneous code at top level"),
       ]
     )
   }
@@ -50,7 +50,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability3() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51) #^DIAG^#&& #unavailable(OSX 10.52) { 
+      if #unavailable(OSX 10.51) 1️⃣&& #unavailable(OSX 10.52) { 
       }
       """,
       diagnostics: [
@@ -63,14 +63,14 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability4() {
     AssertParse(
       """
-      if #unavailable #^DIAG_1^#{ 
-      }#^DIAG_2^#
+      if #unavailable 1️⃣{ 
+      }2️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected availability condition
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' in '#unavailable' condition"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end '#unavailable' condition"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected code block in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' in '#unavailable' condition"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end '#unavailable' condition"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'if' statement"),
       ]
     )
   }
@@ -78,8 +78,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability5() {
     AssertParse(
       """
-      if #unavailable#^NOTE^#( { 
-      }#^DIAG^#
+      if #unavailableℹ️( { 
+      }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
@@ -94,7 +94,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability6() {
     AssertParse(
       """
-      if #unavailable() { #^DIAG^#
+      if #unavailable() { 1️⃣
       }
       """,
       diagnostics: [
@@ -108,7 +108,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability7() {
     AssertParse(
       """
-      if #unavailable#^NOTE^#(OSX #^DIAG^#{
+      if #unavailableℹ️(OSX 1️⃣{
       }
       """,
       diagnostics: [
@@ -135,7 +135,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability9() {
     AssertParse(
       """
-      if #unavailable#^NOTE^#(OSX 10.51 #^DIAG^#{
+      if #unavailableℹ️(OSX 10.51 1️⃣{
       }
       """,
       diagnostics: [
@@ -232,7 +232,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
     AssertParse(
       """
       // Should this be a valid spelling since `#unvailable(*)` cannot be written?
-      if #unavailable() { #^DIAG^#
+      if #unavailable() { 1️⃣
       }
       """,
       diagnostics: [
@@ -246,7 +246,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability20() {
     AssertParse(
       """
-      if #unavailable#^NOTE^#(OSX 10 #^DIAG^#{
+      if #unavailableℹ️(OSX 10 1️⃣{
       }
       """,
       diagnostics: [
@@ -270,8 +270,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability22() {
     AssertParse(
       """
-      if #unavailable#^NOTE^#(OSX 10.51, {
-      }#^DIAG^#
+      if #unavailableℹ️(OSX 10.51, {
+      }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
@@ -286,7 +286,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability23() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51,) { #^DIAG^#
+      if #unavailable(OSX 10.51,) { 1️⃣
       }
       """,
       diagnostics: [
@@ -300,7 +300,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability24() {
     AssertParse(
       """
-      if #unavailable#^NOTE^#(OSX 10.51, iOS #^DIAG^#{
+      if #unavailableℹ️(OSX 10.51, iOS 1️⃣{
       }
       """,
       diagnostics: [
@@ -336,7 +336,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability27() {
     AssertParse(
       """
-      if #unavailable(OSX 10.51 #^DIAG^#|| iOS 8.0) {
+      if #unavailable(OSX 10.51 1️⃣|| iOS 8.0) {
       }
       """,
       diagnostics: [
@@ -350,7 +350,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
     AssertParse(
       """
       // Emit Fix-It removing un-needed >=, for the moment.
-      if #unavailable(OSX #^DIAG^#>= 10.51) { 
+      if #unavailable(OSX 1️⃣>= 10.51) { 
       }
       """,
       diagnostics: [
@@ -435,17 +435,17 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
     AssertParse(
       """
       // Diagnose wrong spellings of unavailability
-      if #available(*) #^DIAG_1^#== false { 
+      if #available(*) 1️⃣== false { 
       }
-      if !#^DIAG_2^##available(*) { 
+      if !2️⃣#available(*) { 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 14 = '#unavailable', 18 - 27 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '== false' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '== false' in 'if' statement"),
         // TODO: Old parser expected error on line 4: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 15 = '#unavailable'
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '#available(*)' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in prefix operator expression"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '#available(*)' in 'if' statement"),
       ]
     )
   }

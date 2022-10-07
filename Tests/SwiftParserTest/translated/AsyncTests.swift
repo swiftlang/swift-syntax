@@ -16,7 +16,7 @@ final class AsyncTests: XCTestCase {
   func testAsync2() {
     AssertParse(
       """
-      func asyncGlobal3() throws#^DIAG^# async { }
+      func asyncGlobal3() throws1️⃣ async { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'async' must precede 'throws', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
@@ -28,7 +28,7 @@ final class AsyncTests: XCTestCase {
   func testAsync3() {
     AssertParse(
       """
-      func asyncGlobal3(fn: () throws -> Int) rethrows#^DIAG^# async { }
+      func asyncGlobal3(fn: () throws -> Int) rethrows1️⃣ async { }
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
@@ -40,7 +40,7 @@ final class AsyncTests: XCTestCase {
   func testAsync4() {
     AssertParse(
       """
-      func asyncGlobal4() -> Int#^DIAG^# async { }
+      func asyncGlobal4() -> Int1️⃣ async { }
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
@@ -52,13 +52,13 @@ final class AsyncTests: XCTestCase {
   func testAsync5() {
     AssertParse(
       """
-      func asyncGlobal5() -> Int#^STMTS^# async throws #^DIAG^#{ }
+      func asyncGlobal5() -> Int1️⃣ async throws 2️⃣{ }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 28 - 34 = '', 21 - 21 = 'async '
         // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 34 - 41 = '', 21 - 21 = 'throws '
-        DiagnosticSpec(locationMarker: "STMTS", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(message: "expected '->'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->'"),
       ]
     )
   }
@@ -66,7 +66,7 @@ final class AsyncTests: XCTestCase {
   func testAsync6() {
     AssertParse(
       """
-      func asyncGlobal6() -> Int #^DIAG^#throws async { }
+      func asyncGlobal6() -> Int 1️⃣throws async { }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 28 - 35 = '', 21 - 21 = 'throws '
@@ -79,7 +79,7 @@ final class AsyncTests: XCTestCase {
   func testAsync7() {
     AssertParse(
       """
-      func asyncGlobal7() throws -> Int#^DIAG^# async { }
+      func asyncGlobal7() throws -> Int1️⃣ async { }
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
@@ -91,12 +91,12 @@ final class AsyncTests: XCTestCase {
   func testAsync8() {
     AssertParse(
       """
-      func asyncGlobal8() async throws#^DIAG_1^# async -> #^DIAG_2^#async Int#^DIAG_3^# async {}
+      func asyncGlobal8() async throws1️⃣ async -> 2️⃣async Int3️⃣ async {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "'async' may only occur before '->'"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'async' may only occur before '->'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 34 - 40 = ''
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 43 - 49 = ''
         // TODO: Old parser expected error on line 1: 'async' has already been specified, Fix-It replacements: 53 - 59 = ''
@@ -113,9 +113,9 @@ final class AsyncTests: XCTestCase {
       """
       class X {
         init() async { }
-        deinit async #^DIAG_1^#{ } 
+        deinit async 1️⃣{ } 
         func f() async { }
-        subscript(x: Int) #^DIAG_2^#async #^DIAG_3^#-> Int { 
+        subscript(x: Int) 2️⃣async 3️⃣-> Int { 
           get {
             return 0
           }
@@ -126,14 +126,14 @@ final class AsyncTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: deinitializers cannot have a name
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '{ }' in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '{ }' in function"),
         // TODO: Old parser expected error on line 5: expected '->' for subscript element type
         // TODO: Old parser expected error on line 5: single argument function types require parentheses
         // TODO: Old parser expected error on line 5: cannot find type 'async' in scope
         // TODO: Old parser expected note on line 5: cannot use module 'async' as a type
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration after 'async' modifier in class"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text in class"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after 'async' modifier in class"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text in class"),
         // TODO: Old parser expected error on line 9: 'set' accessor cannot have specifier 'async'
       ]
     )
@@ -173,14 +173,14 @@ final class AsyncTests: XCTestCase {
       func testTypeExprs() {
         let _ = [() async -> ()]()
         let _ = [() async throws -> ()]()
-        let _ = [() throws #^DIAG_1^#async -> ()]()
-        let _ = [() -> #^DIAG_2^#async ()]()
+        let _ = [() throws 1️⃣async -> ()]()
+        let _ = [() -> 2️⃣async ()]()
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 5: 'async' must precede 'throws', Fix-It replacements: 22 - 28 = '', 15 - 15 = 'async '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text 'async' in array element"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "'async' may only occur before '->'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'async' in array element"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'async' may only occur before '->'"),
       ]
     )
   }

@@ -86,7 +86,7 @@ final class DirectiveTests: XCTestCase {
 
   public func testUnterminatedPoundIf() {
     AssertParse(
-      "#if test#^DIAG^#",
+      "#if test1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected '#endif' in conditional compilation block")
       ]
@@ -98,15 +98,15 @@ final class DirectiveTests: XCTestCase {
       """
       #if os(iOS)
         func foo() {}
-      #^DIAG_1^#}
+      1️⃣}
       #else
         func baz() {}
-      #^DIAG_2^#}
+      2️⃣}
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '}' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '}' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '}' in conditional compilation block"),
       ]
     )
   }
@@ -133,24 +133,24 @@ final class DirectiveTests: XCTestCase {
         public struct S2 { }
 
       #if hasAttribute(foo)
-        @foo#^DIAG_1^#
+        @foo1️⃣
       #endif
         @inlinable
         func f1() { }
 
       #if hasAttribute(foo)
-        @foo#^DIAG_2^#
+        @foo2️⃣
       #else
         @available(*, deprecated, message: "nope")
-        @frozen#^DIAG_3^#
+        @frozen3️⃣
       #endif
         public struct S3 { }
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected declaration after attribute in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration after attribute in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration after attribute in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute in conditional compilation clause"),
       ]
     )
   }

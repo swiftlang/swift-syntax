@@ -7,8 +7,8 @@ final class BraceRecoveryEofTests: XCTestCase {
     AssertParse(
       """
       // Make sure source ranges satisfy the verifier.
-      for foo in [1, 2] #^NOTE^#{
-        _ = foo#^DIAG^#
+      for foo in [1, 2] ℹ️{
+        _ = foo1️⃣
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected '}' to end 'for' statement", notes: [

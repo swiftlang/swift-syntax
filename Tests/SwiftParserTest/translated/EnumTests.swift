@@ -101,7 +101,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       // Cases are excluded from non-enums.
-      #^DIAG^#case FloatingCase
+      1️⃣case FloatingCase
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: enum 'case' is not allowed outside of an enum
@@ -170,48 +170,144 @@ final class EnumTests: XCTestCase {
     )
   }
 
-  func testEnum17() {
+  // Recover when a switch 'case' label is spelled inside an enum (or outside).
+  func testEnum17a() {
     AssertParse(
       """
-      // Recover when a switch 'case' label is spelled inside an enum (or outside).
       enum SwitchEnvy {
-        case X#^DIAG_1^#: 
-        case X(Y)#^DIAG_2^#: 
-        case X, Y#^DIAG_3^#: 
-        case X #^DIAG_4^#where true: 
-        case X(Y), Z(W)#^DIAG_5^#: 
-        case X(Y) #^DIAG_6^#where true: 
-        case #^DIAG_7^#0: 
-        case #^DIAG_8^#_: 
-        case #^DIAG_9^#(_, var x#^DIAG_10^#, #^DIAG_11^#0)#^DIAG_12^#: 
+        case X1️⃣:
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text ':' before enum case"),
-        // TODO: Old parser expected error on line 4: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text ':' before enum case"),
-        // TODO: Old parser expected error on line 5: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text ':' before enum case"),
-        // TODO: Old parser expected error on line 6: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "unexpected text 'where true:' before enum case"),
-        // TODO: Old parser expected error on line 7: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "unexpected text ':' before enum case"),
-        // TODO: Old parser expected error on line 8: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "unexpected text 'where true:' before enum case"),
-        // TODO: Old parser expected error on line 9: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_7", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_7", message: "unexpected text '0:' before enum case"),
-        // TODO: Old parser expected error on line 10: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_8", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_8", message: "unexpected text '_:' before enum case"),
-        // TODO: Old parser expected error on line 11: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_9", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_10", message: "expected ':' and type in function parameter"),
-        DiagnosticSpec(locationMarker: "DIAG_11", message: "expected type in function parameter"),
-        DiagnosticSpec(locationMarker: "DIAG_11", message: "unexpected text '0' in parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_12", message: "expected declaration in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_12", message: "unexpected text ':' in enum"),
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text ':' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17b() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case X(Y)1️⃣:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text ':' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17c() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case X, Y1️⃣:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text ':' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17d() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case X 1️⃣where true:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text 'where true:' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17e() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case X(Y), Z(W)1️⃣:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text ':' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17f() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case X(Y) 1️⃣where true:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text 'where true:' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17g() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case 1️⃣0:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected identifier in enum case"),
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text '0:' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17h() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case 1️⃣_:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected identifier in enum case"),
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text '_:' in enum"),
+      ]
+    )
+  }
+
+  func testEnum17i() {
+    AssertParse(
+      """
+      enum SwitchEnvy {
+        case 1️⃣(_, var x2️⃣, 3️⃣0)4️⃣:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in function parameter"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function parameter"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '0' in parameter clause"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected declaration in enum"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected text ':' in enum"),
       ]
     )
   }
@@ -256,7 +352,7 @@ final class EnumTests: XCTestCase {
       """
       // We used to crash on this.  rdar://14678675
       enum rdar14678675 {
-        case U1, #^DIAG^#
+        case U1, 1️⃣
         case U2 
         case U3
       }
@@ -268,70 +364,115 @@ final class EnumTests: XCTestCase {
     )
   }
 
-  func testEnum21() {
+  func testEnum21a() {
     AssertParse(
       """
       enum Recovery1 {
-        case#^DIAG_1^#: 
+        case1️⃣: 
       }
-      enum Recovery2 {
-        case UE1#^DIAG_2^#: 
-      }
-      enum Recovery3 {
-        case UE2(Void)#^DIAG_3^#: 
-      }
-      enum Recovery4 { 
-        case Self #^DIAG_4^#Self 
-      }
-      enum Recovery5 {
-        case #^DIAG_5^#.UE3 
-        case #^DIAG_6^#.UE4, .UE5
-      }
-      enum Recovery6 {
-        case Snout, #^DIAG_7^#_; 
-        case #^DIAG_8^#_; 
-        case Tusk, #^DIAG_9^#
-      }#^DIAG_10^#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         // TODO: Old parser expected error on line 2: expected pattern
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text before enum"),
-        // TODO: Old parser expected error on line 5: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text before enum"),
-        // TODO: Old parser expected error on line 8: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text before enum"),
-        // TODO: Old parser expected note on line 10: in declaration of 'Recovery4'
-        // TODO: Old parser expected error on line 11: keyword 'Self' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 11: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
-        // TODO: Old parser expected error on line 11: consecutive declarations on a line must be separated by ';', Fix-It replacements: 12 - 12 = ';'
-        // TODO: Old parser expected error on line 11: expected declaration
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "unexpected text before enum"),
-        // TODO: Old parser expected error on line 14: extraneous '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "unexpected text '.UE3' before enum case"),
-        // TODO: Old parser expected error on line 15: extraneous '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
-        // TODO: Old parser expected error on line 15: extraneous '.' in enum 'case' declaration, Fix-It replacements: 14 - 15 = ''
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "unexpected text before enum"),
+        DiagnosticSpec(message: "expected identifier in enum case"),
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text ':' in enum"),
+      ]
+    )
+  }
+
+  func testEnum21b() {
+    AssertParse(
+      """
+      enum Recovery2 {
+        case UE11️⃣:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text ':' in enum"),
+      ]
+    )
+  }
+
+  func testEnum21c() {
+    AssertParse(
+      """
+      enum Recovery3 {
+        case UE2(Void)1️⃣:
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text ':' in enum"),
+      ]
+    )
+  }
+
+  func testEnum21d() {
+    AssertParse(
+      """
+      enum Recovery4 {
+        case Self 1️⃣Self
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected note on line 1: in declaration of 'Recovery4'
+        // TODO: Old parser expected error on line 2: keyword 'Self' cannot be used as an identifier here
+        // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
+        // TODO: Old parser expected error on line 2: consecutive declarations on a line must be separated by ';', Fix-It replacements: 12 - 12 = ';'
+        // TODO: Old parser expected error on line 2: expected declaration
+        DiagnosticSpec(message: "expected declaration in enum"),
+        DiagnosticSpec(message: "unexpected text 'Self' in enum"),
+      ]
+    )
+  }
+
+  func testEnum21e() {
+    AssertParse(
+      """
+      enum Recovery5 {
+        case 1️⃣.UE3
+        case 2️⃣.UE4, .UE5
+      }
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 2: extraneous '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '.UE3' before enum case"),
+        // TODO: Old parser expected error on line 3: extraneous '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
+        // TODO: Old parser expected error on line 3: extraneous '.' in enum 'case' declaration, Fix-It replacements: 14 - 15 = ''
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '.UE4, .UE5' in enum"),
+      ]
+    )
+  }
+
+  func testEnum21f() {
+    AssertParse(
+      """
+      enum Recovery6 {
+        case Snout, 1️⃣_;
+        case 2️⃣_;
+        case Tusk, 3️⃣
+      }
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 18: keyword '_' cannot be used as an identifier here
         // TODO: Old parser expected note on line 18: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 15 - 16 = '`_`'
         // TODO: Old parser expected note on line 18: '_' previously declared here
-        DiagnosticSpec(locationMarker: "DIAG_7", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_7", message: "unexpected text '_;' before enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '_;' before enum case"),
         // TODO: Old parser expected error on line 19: keyword '_' cannot be used as an identifier here
         // TODO: Old parser expected note on line 19: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 9 = '`_`'
         // TODO: Old parser expected error on line 19: invalid redeclaration of '_'
-        DiagnosticSpec(locationMarker: "DIAG_8", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_8", message: "unexpected text '_;' before enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '_;' before enum case"),
         // TODO: Old parser expected error on line 20: expected identifier after comma in enum 'case' declaration
-        DiagnosticSpec(locationMarker: "DIAG_9", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_10", message: "expected '}' to end enum"),
-        DiagnosticSpec(locationMarker: "DIAG_10", message: "expected '}' to end enum"),
-        DiagnosticSpec(locationMarker: "DIAG_10", message: "expected '}' to end enum"),
-        DiagnosticSpec(locationMarker: "DIAG_10", message: "expected '}' to end enum"),
-        DiagnosticSpec(locationMarker: "DIAG_10", message: "expected '}' to end enum"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in enum case"),
       ]
     )
   }
@@ -1110,15 +1251,15 @@ final class EnumTests: XCTestCase {
   func testEnum82() {
     AssertParse(
       """
-      enum#^DIAG_1^# #^DIAG_2^#switch {}#^DIAG_3^#
+      enum1️⃣ 2️⃣switch {}3️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'switch' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 12 = '`switch`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected '{}' in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{}' in 'switch' statement"),
       ]
     )
   }
@@ -1151,16 +1292,16 @@ final class EnumTests: XCTestCase {
       """
       enum E_53662 {
         case identifier
-        case #^DIAG_1^#operator 
-        case #^DIAG_2^#identifier2
+        case 1️⃣operator 
+        case 2️⃣identifier2
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: keyword 'operator' cannot be used as an identifier here
         // TODO: Old parser expected note on line 3: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 16 = '`operator`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text 'identifier2' in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'identifier2' in enum"),
       ]
     )
   }
@@ -1170,15 +1311,15 @@ final class EnumTests: XCTestCase {
       """
       enum E_53662_var {
         case identifier
-        case #^DIAG_1^#var #^DIAG_2^#
+        case 1️⃣var 2️⃣
         case identifier2
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: keyword 'var' cannot be used as an identifier here
         // TODO: Old parser expected note on line 3: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 11 = '`var`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
       ]
     )
   }
@@ -1188,7 +1329,7 @@ final class EnumTests: XCTestCase {
       """
       enum E_53662_underscore {
         case identifier
-        case #^DIAG^#_ 
+        case 1️⃣_ 
         case identifier2
       }
       """,
@@ -1205,17 +1346,17 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum E_53662_Comma {
-        case a, b, c, #^DIAG_1^#func#^DIAG_2^#, d 
+        case a, b, c, 1️⃣func2️⃣, d 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: keyword 'func' cannot be used as an identifier here
         // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 17 - 21 = '`func`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected argument list in function declaration"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text ', d' in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text ', d' in enum"),
       ]
     )
   }
@@ -1226,7 +1367,7 @@ final class EnumTests: XCTestCase {
       enum E_53662_Newline {
         case identifier1
         case identifier2
-        case #^DIAG^#
+        case 1️⃣
         case identifier 
       }
       """,
@@ -1242,7 +1383,7 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum E_53662_Newline2 {
-        case #^DIAG^#
+        case 1️⃣
         func foo() {} 
       }
       """,
@@ -1258,15 +1399,15 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum E_53662_PatternMatching {
-        case #^DIAG_1^#let #^DIAG_2^#.foo(x, y): 
+        case 1️⃣let 2️⃣.foo(x, y): 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration in enum"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '.foo(x, y):' in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '.foo(x, y):' in enum"),
       ]
     )
   }
@@ -1275,15 +1416,15 @@ final class EnumTests: XCTestCase {
     AssertParse(
       #"""
       enum CasesWithMissingElement: Int {
-        case a = "hello", #^DIAG_1^#
-        case b = "hello", #^DIAG_2^#
+        case a = "hello", 1️⃣
+        case b = "hello", 2️⃣
       }
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected identifier after comma in enum 'case' declaration
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
         // TODO: Old parser expected error on line 3: expected identifier after comma in enum 'case' declaration
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
       ]
     )
   }

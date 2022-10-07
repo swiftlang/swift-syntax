@@ -19,27 +19,27 @@ final class TrailingSemiTests: XCTestCase {
     AssertParse(
       """
       struct SpuriousSemi {
-        #^DIAG_1^#; 
-        var a : Int ; #^DIAG_2^#; 
-        func b () {};#^DIAG_3^#
-        ;#^DIAG_4^# #^DIAG_5^#static func c () {};  #^DIAG_6^#
-        ;#^DIAG_7^#;
-      #^DIAG_8^#}
+        1️⃣; 
+        var a : Int ; 2️⃣; 
+        func b () {};3️⃣
+        ;4️⃣ 5️⃣static func c () {};  6️⃣
+        ;7️⃣;
+      8️⃣}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unexpected ';' separator, Fix-It replacements: 3 - 5 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text ';' before variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text ';' before variable"),
         // TODO: Old parser expected error on line 3: unexpected ';' separator, Fix-It replacements: 17 - 19 = ''
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text ';' before function"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text ';' before function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration in struct"),
         // TODO: Old parser expected error on line 5: unexpected ';' separator, Fix-It replacements: 3 - 5 = ''
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "DIAG_6", message: "expected expression"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "6️⃣", message: "expected expression"),
         // TODO: Old parser expected error on line 6: unexpected ';' separator, Fix-It replacements: 3 - 4 = ''
         // TODO: Old parser expected error on line 6: unexpected ';' separator, Fix-It replacements: 4 - 5 = ''
-        DiagnosticSpec(locationMarker: "DIAG_7", message: "expected expression"),
-        DiagnosticSpec(locationMarker: "DIAG_8", message: "extraneous '}' at top level"),
+        DiagnosticSpec(locationMarker: "7️⃣", message: "expected expression"),
+        DiagnosticSpec(locationMarker: "8️⃣", message: "extraneous '}' at top level"),
       ]
     )
   }

@@ -7,7 +7,7 @@ final class StringLiteralEof6Tests: XCTestCase {
     AssertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = #^DIAG^#"""
+      _ = 1️⃣"""
           foo
           \("bar
       """##,

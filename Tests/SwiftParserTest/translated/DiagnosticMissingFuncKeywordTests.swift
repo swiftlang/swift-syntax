@@ -14,9 +14,9 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   func testDiagnosticMissingFuncKeyword2() {
     AssertParse(
       """
-      protocol Brew { #^DIAG_1^#
+      protocol Brew { 1️⃣
         tripel() -> Int 
-        quadrupel#^DIAG_2^#: Int { get } 
+        quadrupel2️⃣: Int { get } 
         static + (lhs: Self, rhs: Self) -> Self 
         * (lhs: Self, rhs: Self) -> Self 
         ipa: Int { get }; apa: Float { get }
@@ -25,11 +25,11 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected note on line 1: in declaration of 'Brew'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected declaration in protocol"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '}' to end protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end protocol"),
         // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration, Fix-It replacements: 3 - 3 = 'func '
         // TODO: Old parser expected error on line 3: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 4: expected 'func' keyword in operator function declaration, Fix-It replacements: 10 - 10 = 'func '
         // TODO: Old parser expected error on line 5: expected 'func' keyword in operator function declaration, Fix-It replacements: 3 - 3 = 'func '
         // TODO: Old parser expected error on line 5: operator '*' declared in protocol must be 'static', Fix-It replacements: 3 - 3 = 'static '
@@ -53,8 +53,8 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   func testDiagnosticMissingFuncKeyword4() {
     AssertParse(
       """
-      struct Bar {#^DIAG_1^#
-        #^DIAG_2^#fisr = 0x5F3759DF 
+      struct Bar {1️⃣
+        2️⃣fisr = 0x5F3759DF 
         %%<T: Brew> (lhs: T, rhs: T) -> T { 
           lhs + lhs + rhs + rhs
         }
@@ -64,9 +64,9 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected declaration in struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in struct"),
         // TODO: Old parser expected error on line 2: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
         // TODO: Old parser expected error on line 3: expected 'func' keyword in operator function declaration, Fix-It replacements: 3 - 3 = 'func '
         // TODO: Old parser expected error on line 6: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
         // TODO: Old parser expected error on line 7: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
@@ -78,19 +78,19 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
   func testDiagnosticMissingFuncKeyword5() {
     AssertParse(
       """
-      class Baz {#^DIAG_1^#
+      class Baz {1️⃣
         instanceMethod() {} 
-        #^DIAG_2^#static staticMethod() {} 
+        2️⃣static staticMethod() {} 
         instanceProperty: Int { 0 } 
         static staticProperty: Int { 0 } 
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected declaration in class"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '}' to end class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end class"),
         // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration, Fix-It replacements: 3 - 3 = 'func '
         // TODO: Old parser expected error on line 3: expected 'func' keyword in static method declaration, Fix-It replacements: 10 - 10 = 'func '
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 4: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
         // TODO: Old parser expected error on line 5: expected 'var' keyword in static property declaration, Fix-It replacements: 10 - 10 = 'var '
       ]
@@ -101,7 +101,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
     AssertParse(
       """
       class C1 {
-        class classMethod#^DIAG^#() {} 
+        class classMethod1️⃣() {} 
       }
       """,
       diagnostics: [
@@ -115,7 +115,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
     AssertParse(
       """
       class C2 {
-        class classProperty: Int { #^DIAG^#0 } 
+        class classProperty: Int { 1️⃣0 } 
       }
       """,
       diagnostics: [

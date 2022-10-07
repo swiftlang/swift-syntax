@@ -63,7 +63,7 @@ struct NoteSpec {
   let line: UInt
 
   init(
-    locationMarker: String = "NOTE",
+    locationMarker: String = "ℹ️",
     message: String,
     file: StaticString = #file,
     line: UInt = #line
@@ -77,7 +77,7 @@ struct NoteSpec {
 
 /// An abstract data structure to describe how a diagnostic produced by the parser should look like.
 struct DiagnosticSpec {
-  /// The name of a maker (of the form `#^DIAG^#`) in the source code that marks the location where the diagnostis should be produced.
+  /// The name of a maker (of the form `1️⃣`) in the source code that marks the location where the diagnostis should be produced.
   let locationMarker: String
   /// If not `nil`, assert that the diagnostic has the given ID.
   let id: MessageID?
@@ -96,7 +96,7 @@ struct DiagnosticSpec {
   let line: UInt
 
   init(
-    locationMarker: String = "DIAG",
+    locationMarker: String = "1️⃣",
     id: MessageID? = nil,
     message: String?,
     highlight: String? = nil,
@@ -181,7 +181,7 @@ func AssertLocation<T: SyntaxProtocol>(
       XCTFail("Failed to resolve diagnostic location to line/column", file: file, line: line)
     }
   } else {
-    XCTFail("Did not find marker #^\(locationMarker)^# in the source code", file: file, line: line)
+    XCTFail("Did not find marker \(locationMarker) in the source code", file: file, line: line)
   }
 }
 
@@ -266,9 +266,9 @@ func AssertDiagnostic<T: SyntaxProtocol>(
 ///  - The parsed syntax tree should be printable back to the original source code (round-tripping)
 ///  - Parsing produced the given `diagnostics` (`diagnostics = []` asserts that the parse was successful)
 ///  - If `fixedSource` is not `nil`, assert that applying all fixes from the diagnostics produces `fixedSource`
-/// The source file can be marked with markers of the form `#^DIAG^#` to mark source locations that can be referred to by `diagnostics`.
+/// The source file can be marked with markers of the form `1️⃣` to mark source locations that can be referred to by `diagnostics`.
 /// These markers are removed before parsing the source file.
-/// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `#^DIAG^#`.
+/// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `1️⃣`.
 /// `parseSyntax` can be used to adjust the production that should be used as the entry point to parse the source code.
 /// If `substructure` is not `nil`, asserts that the parsed syntax tree contains this substructure.
 func AssertParse(
@@ -294,9 +294,9 @@ func AssertParse(
 ///  - The parsed syntax tree should be printable back to the original source code (round-tripping)
 ///  - Parsing produced the given `diagnostics` (`diagnostics = []` asserts that the parse was successful)
 ///  - If `fixedSource` is not `nil`, assert that applying all fixes from the diagnostics produces `fixedSource`
-/// The source file can be marked with markers of the form `#^DIAG^#` to mark source locations that can be referred to by `diagnostics`.
+/// The source file can be marked with markers of the form `1️⃣` to mark source locations that can be referred to by `diagnostics`.
 /// These markers are removed before parsing the source file.
-/// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `#^DIAG^#`.
+/// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `1️⃣`.
 /// `parseSyntax` can be used to adjust the production that should be used as the entry point to parse the source code.
 /// If `substructure` is not `nil`, asserts that the parsed syntax tree contains this substructure.
 func AssertParse<Node: RawSyntaxNodeProtocol>(

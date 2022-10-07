@@ -516,7 +516,7 @@ final class MatchingPatternsTests: XCTestCase {
     AssertParse(
       #"""
       // <rdar://problem/20365753> Bogus diagnostic "refutable pattern match can fail"
-      let (responseObject: Int#^DIAG^#?) = op1
+      let (responseObject: Int1️⃣?) = op1
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected ',' separator, Fix-It replacements: 25 - 25 = ','

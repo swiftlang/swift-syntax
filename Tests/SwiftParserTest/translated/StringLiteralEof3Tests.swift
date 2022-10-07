@@ -6,7 +6,7 @@ final class StringLiteralEof3Tests: XCTestCase {
   func testStringLiteralEof31() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"foo \
+      _ = 1️⃣"foo \
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unterminated string literal
@@ -21,7 +21,7 @@ final class StringLiteralEof3Tests: XCTestCase {
     AssertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = #^DIAG^#"foo \
+      _ = 1️⃣"foo \
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unterminated string literal

@@ -275,7 +275,7 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors18() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"hello\("""
+      _ = 1️⃣"hello\("""
                   world
                   """
                   )!"
@@ -293,7 +293,7 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors19() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"hello\(
+      _ = 1️⃣"hello\(
                   """
                   world
                   """)!"
@@ -311,7 +311,7 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors20() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"""
+      _ = 1️⃣"""
         line one \ non-whitespace
         line two
         """
@@ -393,7 +393,7 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors26() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"""
+      _ = 1️⃣"""
         foo\
       """##,
       diagnostics: [
@@ -406,7 +406,7 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors27() {
     AssertParse(
       #"""
-      """ // OK because LF + CR is two new lines.#^DIAG^#
+      """ // OK because LF + CR is two new lines.1️⃣
       """#,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"""' to end string literal"#),
@@ -447,7 +447,7 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors30() {
     AssertParse(
       ##"""
-      let _ = #^DIAG^#"""
+      let _ = 1️⃣"""
         foo
         \("bar
         baz

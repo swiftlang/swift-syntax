@@ -19,16 +19,16 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       func parseError1(x: Int) {
-        switch#^DIAG_1^# #^DIAG_2^#func #^DIAG_3^#{} 
+        switch1️⃣ 2️⃣func 3️⃣{} 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected expression in 'switch' statement
         // TODO: Old parser expected error on line 2: expected identifier in function declaration
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected argument list in function declaration")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression and '{}' to end 'switch' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected argument list in function declaration")
       ]
     )
   }
@@ -37,13 +37,13 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       func parseError2(x: Int) {
-        switch x #^DIAG_1^#
-      }#^DIAG_2^#
+        switch x 1️⃣
+      }2️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' after 'switch' subject expression
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '{' in 'switch' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
     )
   }
@@ -53,7 +53,7 @@ final class SwitchTests: XCTestCase {
       """
       func parseError3(x: Int) {
         switch x {
-          case #^DIAG^#
+          case 1️⃣
         }
       }
       """,
@@ -71,7 +71,7 @@ final class SwitchTests: XCTestCase {
       """
       func parseError4(x: Int) {
         switch x {
-        case var z where #^DIAG^#
+        case var z where 1️⃣
         }
       }
       """,
@@ -89,7 +89,7 @@ final class SwitchTests: XCTestCase {
       """
       func parseError5(x: Int) {
         switch x {
-        case let z #^DIAG^#
+        case let z 1️⃣
         }
       }
       """,
@@ -105,7 +105,7 @@ final class SwitchTests: XCTestCase {
       """
       func parseError6(x: Int) {
         switch x {
-        default #^DIAG^#
+        default 1️⃣
         }
       }
       """,
@@ -234,7 +234,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch x { 
-      case 0:#^DIAG^#
+      case 0:1️⃣
         ; 
       case 1:
         x = 0
@@ -251,7 +251,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch x {
-        #^DIAG^#x = 1 
+        1️⃣x = 1 
       default:
         x = 0
       case 0: 
@@ -288,7 +288,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch x { 
-        #^DIAG^#x = 1 
+        1️⃣x = 1 
       }
       """,
       diagnostics: [
@@ -303,7 +303,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch x { 
-        #^DIAG^#x = 1 
+        1️⃣x = 1 
         x = 2
       }
       """,
@@ -351,7 +351,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch x { 
-      default #^DIAG^#where x == 0: 
+      default 1️⃣where x == 0: 
         x = 0
       }
       """,
@@ -408,7 +408,7 @@ final class SwitchTests: XCTestCase {
   func testSwitch26() {
     AssertParse(
       """
-      #^DIAG^#case 0: 
+      1️⃣case 0: 
       var y = 0
       default: 
       var z = 1
@@ -848,7 +848,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch Whatever.Thing { 
-      @unknown default #^DIAG^#where x == 0: 
+      @unknown default 1️⃣where x == 0: 
         x = 0
       }
       """,
@@ -1037,7 +1037,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       switch Whatever.Thing { 
-      @unknown default #^DIAG^#where x == 0: 
+      @unknown default 1️⃣where x == 0: 
         break
       }
       """,
@@ -1129,7 +1129,7 @@ final class SwitchTests: XCTestCase {
       switch Whatever.Thing {
       case .Thing:
         break
-      @unknown#^DIAG_1^#(garbage) case _: 
+      @unknown1️⃣(garbage) case _: 
         break
       }
       switch Whatever.Thing {
@@ -1141,20 +1141,20 @@ final class SwitchTests: XCTestCase {
         break
       }
       switch Whatever.Thing { 
-      @unknown @garbage#^DIAG_2^#(foobar) 
+      @unknown @garbage2️⃣(foobar) 
       case _:
         break
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 4: unexpected '(' in attribute 'unknown'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '(garbage)' in switch case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '(garbage)' in switch case"),
         // TODO: Old parser expected note on line 10: attribute already specified here
         // TODO: Old parser expected error on line 11: duplicate attribute
         // TODO: Old parser expected warning on line 15: switch must be exhaustive
         // TODO: Old parser expected note on line 15: add missing case: '.Thing'
         // TODO: Old parser expected error on line 16: unknown attribute 'garbage'
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '(foobar)' in switch case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '(foobar)' in switch case"),
       ]
     )
   }
@@ -1362,7 +1362,7 @@ final class SwitchTests: XCTestCase {
       func testReturnBeforeUnknownDefault() {
         switch x { 
         case 1:
-          return#^DIAG^#
+          return1️⃣
         @unknown default: 
           break
         }
@@ -1381,8 +1381,8 @@ final class SwitchTests: XCTestCase {
       func testReturnBeforeIncompleteUnknownDefault() {
         switch x { 
         case 1:
-          return#^DIAG_1^#
-        @unknown default #^DIAG_2^#
+          return1️⃣
+        @unknown default 2️⃣
         }
       }
       """,
@@ -1390,7 +1390,7 @@ final class SwitchTests: XCTestCase {
         // TODO: Old parser expected error on line 2: switch must be exhaustive
         // TODO: Old parser expected error on line 5: expected ':' after 'default'
         // TODO: Old parser expected note on line 5: remove '@unknown' to handle remaining values
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ':' in switch case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in switch case"),
       ]
     )
   }
@@ -1402,7 +1402,7 @@ final class SwitchTests: XCTestCase {
         switch x { 
         case 1:
           return
-        @unknown #^DIAG^#
+        @unknown 1️⃣
         } 
       }
       """,
@@ -1422,7 +1422,7 @@ final class SwitchTests: XCTestCase {
       func testIncompleteArrayLiteral() {
         switch x { 
         case 1:
-          _ = #^NOTE^#[1 #^DIAG^#
+          _ = ℹ️[1 1️⃣
         @unknown default: 
           ()
         }

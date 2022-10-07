@@ -7,20 +7,20 @@ final class GuardTests: XCTestCase {
     AssertParse(
       """
       func noConditionNoElse() {
-        guard {} #^DIAG_1^#
+        guard {} 1️⃣
       }
       func noCondition() {
-        guard #^DIAG_2^#else {} 
-      }#^DIAG_3^#
+        guard 2️⃣else {} 
+      }3️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: missing condition in 'guard' statement
         // TODO: Old parser expected error on line 2: expected 'else' after 'guard' condition
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected 'else' in 'guard' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '{' in 'guard' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'guard' statement"),
         // TODO: Old parser expected error on line 5: missing condition in 'guard' statement
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected expression in 'guard' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'guard' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
       ]
     )
   }

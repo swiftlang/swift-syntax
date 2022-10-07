@@ -16,28 +16,28 @@ final class RecoveryLibraryTests: XCTestCase {
     AssertParse(
       """
       // Check that we handle multiple consecutive right braces.
-      #^DIAG_1^#} 
+      1️⃣} 
       } 
       func foo() {}
       // Check that we handle multiple consecutive right braces.
-      #^DIAG_2^#} 
+      2️⃣} 
       } 
       func bar() {}
       //===--- Recovery for extra braces at top level.
       //===--- Keep this test the last one in the file.
       // Check that we handle multiple consecutive right braces.
-      #^DIAG_3^#} 
+      3️⃣} 
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text before function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text before function"),
         // TODO: Old parser expected error on line 3: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
         // TODO: Old parser expected error on line 6: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text before function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text before function"),
         // TODO: Old parser expected error on line 7: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
         // TODO: Old parser expected error on line 12: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 13: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
       ]
     )

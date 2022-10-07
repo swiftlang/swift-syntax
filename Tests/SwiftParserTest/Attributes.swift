@@ -6,8 +6,8 @@ final class AttributeTests: XCTestCase {
   func testMissingArgumentToAttribute() {
     AssertParse(
       """
-      @_dynamicReplacement(#^DIAG^#
-      func #^DIAG_2^#test_dynamic_replacement_for2() {
+      @_dynamicReplacement(1️⃣
+      func 2️⃣test_dynamic_replacement_for2() {
       }
       """,
       diagnostics: [
@@ -25,14 +25,14 @@ final class AttributeTests: XCTestCase {
   func testMissingGenericTypeToAttribute() {
     AssertParse(
       """
-      @differentiable(reverse wrt#^DIAG_1^#,where T#^DIAG_2^#
+      @differentiable(reverse wrt1️⃣,where T2️⃣
       func podcastPlaybackSpeed() {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected ':' and parameters in '@differentiable' argument", fixIts: ["Insert ':' and parameters"]),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '=' and right-hand type in same type requirement", fixIts: ["Insert '=' and right-hand type"]),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end attribute", fixIts: ["Insert ')'"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' and parameters in '@differentiable' argument", fixIts: ["Insert ':' and parameters"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and right-hand type in same type requirement", fixIts: ["Insert '=' and right-hand type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end attribute", fixIts: ["Insert ')'"]),
       ],
       fixedSource: """
         @differentiable(reverse wrt: <#syntax#>,where T = <#type#>)
@@ -45,7 +45,7 @@ final class AttributeTests: XCTestCase {
   func testMissingClosingParenToAttribute() {
     AssertParse(
       """
-      @_specialize(e#^DIAG^#
+      @_specialize(e1️⃣
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in attribute argument"),
@@ -58,12 +58,12 @@ final class AttributeTests: XCTestCase {
   func testMultipleInvalidSpecializeParams() {
     AssertParse(
       """
-      @_specialize(e#^DIAG_1^#, exported#^DIAG_2^#)#^DIAG_3^#
+      @_specialize(e1️⃣, exported2️⃣)3️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected ':' in attribute argument"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ': false' in attribute argument"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected declaration after attribute"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in attribute argument"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ': false' in attribute argument"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute"),
       ]
     )
   }
@@ -83,12 +83,12 @@ final class AttributeTests: XCTestCase {
   func testRethrowsAttribute() {
     AssertParse(
       """
-      @#^NAME^#rethrows
+      @1️⃣rethrows
       protocol P { }
       """,
       { $0.parseDeclaration() },
       substructure: Syntax(TokenSyntax.identifier("rethrows")),
-      substructureAfterMarker: "NAME"
+      substructureAfterMarker: "1️⃣"
     )
   }
 
@@ -230,7 +230,7 @@ final class AttributeTests: XCTestCase {
 
   func testMissingDeclarationAfterAttributes() {
     AssertParse(
-      "@resultBuilder#^DIAG^#",
+      "@resultBuilder1️⃣",
       diagnostics: [DiagnosticSpec(message: "expected declaration after attribute")],
       fixedSource: """
         @resultBuilder

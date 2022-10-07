@@ -6,7 +6,7 @@ final class StringLiteralEof7Tests: XCTestCase {
   func testStringLiteralEof71() {
     AssertParse(
       ##"""
-      _ = #^DIAG^#"""
+      _ = 1️⃣"""
           foo
           \("bar
           baz

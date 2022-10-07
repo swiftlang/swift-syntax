@@ -26,7 +26,7 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
       func test2() { 
         var a : Int { 
           switch i { 
-      }#^DIAG^#
+      }1️⃣
       // expected-error@+1 2 {{expected '}'}}
       """#,
       diagnostics: [

@@ -6,17 +6,17 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals1() {
     AssertParse(
       """
-      let _ = [#^DIAG_1^##Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#] 
-      let _ = [#^DIAG_2^##Image(imageLiteral: localResourceNameAsString)#] 
-      let _ = [#^DIAG_3^##FileReference(fileReferenceLiteral: localResourceNameAsString)#]
+      let _ = [1️⃣#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#] 
+      let _ = [2️⃣#Image(imageLiteral: localResourceNameAsString)#] 
+      let _ = [3️⃣#FileReference(fileReferenceLiteral: localResourceNameAsString)#]
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...), Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 32 = 'red', 78 - 80 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#' in array"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#' in array"),
         // TODO: Old parser expected error on line 2: '[#Image(...)#]' has been renamed to '#imageLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'imageLiteral', 17 - 29 = 'resourceName', 57 - 59 = ''
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text '#Image(imageLiteral: localResourceNameAsString)#' in array"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '#Image(imageLiteral: localResourceNameAsString)#' in array"),
         // TODO: Old parser expected error on line 3: '[#FileReference(...)#]' has been renamed to '#fileLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 24 = 'fileLiteral', 25 - 45 = 'resourceName', 73 - 75 = ''
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text '#FileReference(fileReferenceLiteral: localResourceNameAsString)#' in array"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '#FileReference(fileReferenceLiteral: localResourceNameAsString)#' in array"),
       ]
     )
   }
@@ -24,7 +24,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals2a() {
     AssertParse(
       """
-      let _ = #^DIAG^##Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)
+      let _ = 1️⃣#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#Color(...)' has been renamed to '#colorLiteral(...), Fix-It replacements: 10 - 15 = 'colorLiteral', 16 - 31 = 'red'
@@ -37,7 +37,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals2b() {
     AssertParse(
       """
-      let _ = #^DIAG^##Image(imageLiteral: localResourceNameAsString)
+      let _ = 1️⃣#Image(imageLiteral: localResourceNameAsString)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#Image(...)' has been renamed to '#imageLiteral(...)', Fix-It replacements: 10 - 15 = 'imageLiteral', 16 - 28 = 'resourceName'
@@ -51,7 +51,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals2c() {
     AssertParse(
       """
-      let _ = #^DIAG^##FileReference(fileReferenceLiteral: localResourceNameAsString)
+      let _ = 1️⃣#FileReference(fileReferenceLiteral: localResourceNameAsString)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#FileReference(...)' has been renamed to '#fileLiteral(...)', Fix-It replacements: 10 - 23 = 'fileLiteral', 24 - 44 = 'resourceName'
@@ -65,7 +65,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals3a() {
     AssertParse(
       """
-      let _ = #^DIAG^##notAPound
+      let _ = 1️⃣#notAPound
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: use of unknown directive '#notAPound'
@@ -78,7 +78,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals3b() {
     AssertParse(
       """
-      let _ = #^DIAG^##notAPound(1, 2)
+      let _ = 1️⃣#notAPound(1, 2)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: use of unknown directive '#notAPound'
@@ -91,7 +91,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals3c() {
     AssertParse(
       """
-      let _ = #^DIAG^##Color //  {{none}}
+      let _ = 1️⃣#Color //  {{none}}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected argument list in object literal
@@ -104,7 +104,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals4() {
     AssertParse(
       """
-      let _ = [#^DIAG^###] //  {{none}}
+      let _ = [1️⃣##] //  {{none}}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in container literal
@@ -116,7 +116,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals5() {
     AssertParse(
       """
-      let _ = [#^DIAG^##Color(_: 1, green: 1, 2)
+      let _ = [1️⃣#Color(_: 1, green: 1, 2)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 18 = 'red'
@@ -129,7 +129,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals6() {
     AssertParse(
       """
-      let _ = [#^DIAG^##Color(red: 1, green: 1, blue: 1)#
+      let _ = [1️⃣#Color(red: 1, green: 1, blue: 1)#
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 20 = 'red', 43 - 44 = ''
@@ -142,7 +142,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals7() {
     AssertParse(
       """
-      let _ = [#^DIAG^##Color(withRed: 1, green: 1, whatever: 2)#]
+      let _ = [1️⃣#Color(withRed: 1, green: 1, whatever: 2)#]
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 24 = 'red', 51 - 53 = ''
@@ -154,7 +154,7 @@ final class ObjectLiteralsTests: XCTestCase {
   func testObjectLiterals8() {
     AssertParse(
       """
-      let _ = #^DIAG^##Color(_: 1, green: 1)
+      let _ = 1️⃣#Color(_: 1, green: 1)
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#Color(...)' has been renamed to '#colorLiteral(...)', Fix-It replacements: 10 - 15 = 'colorLiteral', 16 - 17 = 'red'

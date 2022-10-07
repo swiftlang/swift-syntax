@@ -7,7 +7,7 @@ final class StringLiteralEof2Tests: XCTestCase {
     AssertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = #^DIAG^#"foo\("bar
+      _ = 1️⃣"foo\("bar
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 2: cannot find ')' to match opening '(' in string interpolation

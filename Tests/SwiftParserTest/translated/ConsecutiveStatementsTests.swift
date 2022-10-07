@@ -5,7 +5,7 @@ import XCTest
 final class ConsecutiveStatementsTests: XCTestCase {
   func testSimple() {
     AssertParse(
-      "let x = 2#^DIAG^# let y = 3",
+      "let x = 21️⃣ let y = 3",
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
       ],
@@ -42,16 +42,16 @@ final class ConsecutiveStatementsTests: XCTestCase {
         let q : Int; i = j; j = i; _ = q
         if i != j { i = j }
         // Errors
-        i = j#^DIAG_1^# j = i
-        let r : Int#^DIAG_2^# i = j
-        let s : Int#^DIAG_3^# let t : Int
+        i = j1️⃣ j = i
+        let r : Int2️⃣ i = j
+        let s : Int3️⃣ let t : Int
         _ = r; _ = s; _ = t
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -67,19 +67,19 @@ final class ConsecutiveStatementsTests: XCTestCase {
         // Within property accessors
         subscript(i: Int) -> Float {
           get {
-            var x = i#^DIAG_1^# x = i + x#^DIAG_2^# return Float(x)
+            var x = i1️⃣ x = i + x2️⃣ return Float(x)
           }
           set {
-            var x = i#^DIAG_3^# x = i + 1
+            var x = i3️⃣ x = i + 1
             _ = x
           }
         }
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -134,11 +134,11 @@ final class ConsecutiveStatementsTests: XCTestCase {
     AssertParse(
       """
       // At the top level
-      var i, j : Int#^DIAG_1^# i = j#^DIAG_2^# j = i
+      var i, j : Int1️⃣ i = j2️⃣ j = i
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }

@@ -7,15 +7,15 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       // rdar://15946844
-      func test1(inout#^DIAG_1^# #^DIAG_2^#var x : Int#^DIAG_3^#) {}
+      func test1(inout1️⃣ 2️⃣var x : Int3️⃣) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 2: 'var' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`var`'
         // TODO: Old parser expected error on line 2: 'inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 12 - 17 = '', 26 - 26 = 'inout '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous ') {}' at top level"),
       ]
     )
   }
@@ -23,15 +23,15 @@ final class InvalidTests: XCTestCase {
   func testInvalid1b() {
     AssertParse(
       """
-      func test2(inout#^DIAG_1^# #^DIAG_2^#let x : Int#^DIAG_3^#) {}
+      func test2(inout1️⃣ 2️⃣let x : Int3️⃣) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`let`'
         // TODO: Old parser expected error on line 1: 'inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 12 - 17 = '', 26 - 26 = 'inout '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous ') {}' at top level"),
       ]
     )
   }
@@ -39,11 +39,11 @@ final class InvalidTests: XCTestCase {
   func testInvalid1c() {
     AssertParse(
       """
-      func test3(f : (inout _ #^DIAG_5^#x : Int) -> Void) {}
+      func test3(f : (inout _ 5️⃣x : Int) -> Void) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'inout' before a parameter name is not allowed, place it before the parameter type instead
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "unexpected text 'x : Int' in function type"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected text 'x : Int' in function type"),
       ]
     )
   }
@@ -51,15 +51,15 @@ final class InvalidTests: XCTestCase {
   func testInvalid2a() {
     AssertParse(
       """
-      func test1s(__shared#^DIAG_1^# #^DIAG_2^#var x : Int#^DIAG_3^#) {}
+      func test1s(__shared1️⃣ 2️⃣var x : Int3️⃣) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`var`'
         // TODO: Old parser expected error on line 1: '__shared' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 21 = '', 30 - 30 = '__shared '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous ') {}' at top level"),
       ]
     )
   }
@@ -67,15 +67,15 @@ final class InvalidTests: XCTestCase {
   func testInvalid2b() {
     AssertParse(
       """
-      func test2s(__shared#^DIAG_1^# #^DIAG_2^#let x : Int#^DIAG_3^#) {}
+      func test2s(__shared1️⃣ 2️⃣let x : Int3️⃣) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`let`'
         // TODO: Old parser expected error on line 1: '__shared' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 21 = '', 30 - 30 = '__shared '
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous ') {}' at top level"),
       ]
     )
   }
@@ -83,15 +83,15 @@ final class InvalidTests: XCTestCase {
   func testInvalid3a() {
     AssertParse(
       """
-      func test1o(__owned#^DIAG_1^# #^DIAG_2^#var x : Int#^DIAG_3^#) {}
+      func test1o(__owned1️⃣ 2️⃣var x : Int3️⃣) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`var`'
         // TODO: Old parser expected error on line 1: '__owned' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 20 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous ') {}' at top level"),
       ]
     )
   }
@@ -99,15 +99,15 @@ final class InvalidTests: XCTestCase {
   func testInvalid3b() {
     AssertParse(
       """
-      func test2o(__owned#^DIAG_1^# #^DIAG_2^#let x : Int#^DIAG_3^#) {}
+      func test2o(__owned1️⃣ 2️⃣let x : Int3️⃣) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 2: 'let' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`let`'
         // TODO: Old parser expected error on line 2: '__owned' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 20 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous ') {}' at top level"),
       ]
     )
   }
@@ -116,7 +116,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func test3() {
-        undeclared_func( #^DIAG^#
+        undeclared_func( 1️⃣
       }
       """,
       diagnostics: [
@@ -140,7 +140,7 @@ final class InvalidTests: XCTestCase {
       """
       // rdar://16601779
       func foo() {
-        runAction(SKAction.sequence()#^DIAG^#
+        runAction(SKAction.sequence()1️⃣
           skview!
       }
       """,
@@ -165,15 +165,15 @@ final class InvalidTests: XCTestCase {
   func testInvalid8() {
     AssertParse(
       """
-      switch state { #^DIAG_1^#
+      switch state { 1️⃣
         let duration : Int = 0
-        #^DIAG_2^#case 1:
+        2️⃣case 1:
           break
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
       ]
     )
   }
@@ -182,25 +182,25 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       #"""
       func testNotCoveredCase(x: Int) {
-        switch x {#^DIAG_1^#
+        switch x {1️⃣
           let y = "foo"
           switch y {
             case "bar":
               blah blah // ignored
           }
-        #^DIAG_2^#case "baz":
+        2️⃣case "baz":
           break
         case 1:
           break
         default:
           break
         }
-      #^DIAG_3^#}
+      3️⃣}
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text in function"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous '}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end 'switch' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '}' at top level"),
       ]
     )
   }
@@ -211,13 +211,13 @@ final class InvalidTests: XCTestCase {
       // rdar://18926814
       func test4() {
         let abc = 123
-        _ = " >> \( abc #^DIAG_1^#} ) << "#^DIAG_2^#
+        _ = " >> \( abc 1️⃣} ) << "2️⃣
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 4: expected ',' separator, Fix-It replacements: 18 - 18 = ','
         // TODO: Old parser expected error on line 4: expected expression in list of expressions
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text '}' in string literal"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' in string literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
     )
   }
@@ -226,16 +226,16 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       // rdar://problem/18507467
-      func d(_ b: #^DIAG_1^#String #^DIAG_2^#->#^DIAG_3^# #^DIAG_4^#<T>() -> T#^DIAG_5^#) {}
+      func d(_ b: 1️⃣String 2️⃣->3️⃣ 4️⃣<T>() -> T5️⃣) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected type for function result
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' in function type"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected type in function type"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected type in function type"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous ') {}' at top level"),
       ]
     )
   }
@@ -263,7 +263,7 @@ final class InvalidTests: XCTestCase {
       do {
         class Starfish {}
         struct Salmon {}
-        func f(s Starfish#^DIAG^#,
+        func f(s Starfish1️⃣,
                   _ ss: Salmon) -> [Int] {}
         func g() { f(Starfish(), Salmon()) }
       }
@@ -281,7 +281,7 @@ final class InvalidTests: XCTestCase {
       // https://github.com/apple/swift/issues/43313
       do {
         func f(_ a: Int, b: Int) {}
-        f(1, b: 2,#^DIAG^#)
+        f(1, b: 2,1️⃣)
       }
       """,
       diagnostics: [
@@ -304,25 +304,25 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func f1_43591(a : inout inout Int) {}
-      func f2_43591(inout inout b#^DIAG_1^#: Int) {}
-      func f3_43591(let let #^DIAG_2^#a: Int) {}
-      func f4_43591(inout x#^DIAG_3^#: inout String) {}
-      func f5_43591(inout i#^DIAG_4^#: inout Int) {}
+      func f2_43591(inout inout b1️⃣: Int) {}
+      func f3_43591(let let 2️⃣a: Int) {}
+      func f4_43591(inout x3️⃣: inout String) {}
+      func f5_43591(inout i4️⃣: inout Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 19 - 25 = ''
         // TODO: Old parser expected error on line 2: inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 15 - 20 = '', 30 - 30 = 'inout '
         // TODO: Old parser expected error on line 2: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 21 - 27 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text ': Int' in parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text ': Int' in parameter clause"),
         // TODO: Old parser expected warning on line 3: 'let' in this position is interpreted as an argument label, Fix-It replacements: 15 - 18 = '`let`'
         // TODO: Old parser expected error on line 3: expected ',' separator, Fix-It replacements: 22 - 22 = ','
         // TODO: Old parser expected error on line 3: expected ':' following argument label and parameter name
         // TODO: Old parser expected warning on line 3: extraneous duplicate parameter name; 'let' already has an argument label, Fix-It replacements: 15 - 19 = ''
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text 'a' in function parameter"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'a' in function parameter"),
         // TODO: Old parser expected error on line 4: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text ': inout String' in parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text ': inout String' in parameter clause"),
         // TODO: Old parser expected error on line 5: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "unexpected text ': inout Int' in parameter clause"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected text ': inout Int' in parameter clause"),
       ]
     )
   }
@@ -330,16 +330,16 @@ final class InvalidTests: XCTestCase {
   func testInvalid17() {
     AssertParse(
       """
-      func#^DIAG_1^# #^DIAG_2^#repeat#^DIAG_3^#() {}#^DIAG_4^#
+      func1️⃣ 2️⃣repeat3️⃣() {}4️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'repeat' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 12 = '`repeat`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected argument list in function declaration"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text '()' in 'repeat' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected 'while' and condition in 'repeat' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '()' in 'repeat' statement"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'while' and condition in 'repeat' statement"),
       ]
     )
   }
@@ -347,16 +347,16 @@ final class InvalidTests: XCTestCase {
   func testInvalid18() {
     AssertParse(
       """
-      let#^DIAG_1^# #^DIAG_2^#for #^DIAG_3^#= 2
+      let1️⃣ 2️⃣for 3️⃣= 2
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected pattern, 'in' and expression in 'for' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected code block in 'for' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous '= 2' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected pattern, 'in' and expression in 'for' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '= 2' at top level"),
       ]
     )
   }
@@ -364,7 +364,7 @@ final class InvalidTests: XCTestCase {
   func testInvalid19() {
     AssertParse(
       """
-      func f4_43591(inout x#^DIAG^#: inout String) {}
+      func f4_43591(inout x1️⃣: inout String) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
@@ -376,7 +376,7 @@ final class InvalidTests: XCTestCase {
   func testInvalid20() {
     AssertParse(
       """
-      func f5_43591(inout i#^DIAG^#: inout Int) {}
+      func f5_43591(inout i1️⃣: inout Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
@@ -388,16 +388,16 @@ final class InvalidTests: XCTestCase {
   func testInvalid21() {
     AssertParse(
       """
-      func#^DIAG_1^# #^DIAG_2^#repeat#^DIAG_3^#() {}#^DIAG_4^#
+      func1️⃣ 2️⃣repeat3️⃣() {}4️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'repeat' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 12 = '`repeat`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected argument list in function declaration"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "unexpected text '()' in 'repeat' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected 'while' and condition in 'repeat' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '()' in 'repeat' statement"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'while' and condition in 'repeat' statement"),
       ]
     )
   }
@@ -405,16 +405,16 @@ final class InvalidTests: XCTestCase {
   func testInvalid22() {
     AssertParse(
       """
-      let#^DIAG_1^# #^DIAG_2^#for #^DIAG_3^#= 2
+      let1️⃣ 2️⃣for 3️⃣= 2
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected pattern, 'in' and expression in 'for' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected code block in 'for' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "extraneous '= 2' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected pattern, 'in' and expression in 'for' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '= 2' at top level"),
       ]
     )
   }
@@ -422,7 +422,7 @@ final class InvalidTests: XCTestCase {
   func testInvalid23() {
     AssertParse(
       """
-      func dog #^DIAG^#cow() {}
+      func dog 1️⃣cow() {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
@@ -436,7 +436,7 @@ final class InvalidTests: XCTestCase {
   func testInvalid24() {
     AssertParse(
       """
-      func cat #^DIAG^#Mouse() {}
+      func cat 1️⃣Mouse() {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
@@ -449,7 +449,7 @@ final class InvalidTests: XCTestCase {
   func testInvalid25() {
     AssertParse(
       """
-      func friend #^DIAG^#ship<T>(x: T) {}
+      func friend 1️⃣ship<T>(x: T) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
@@ -463,16 +463,16 @@ final class InvalidTests: XCTestCase {
   func testInvalid26() {
     AssertParse(
       """
-      func were#^DIAG_1^#
-      wolf#^DIAG_2^#() {}
+      func were1️⃣
+      wolf2️⃣() {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' to start parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
         // TODO: Old parser expected error on line 2: found an unexpected second identifier in function declaration; is there an accidental break?
         // TODO: Old parser expected note on line 2: join the identifiers together, Fix-It replacements: 6 - 5 = 'werewolf'
         // TODO: Old parser expected note on line 2: join the identifiers together with camel-case, Fix-It replacements: 6 - 5 = 'wereWolf'
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -480,16 +480,16 @@ final class InvalidTests: XCTestCase {
   func testInvalid27() {
     AssertParse(
       """
-      func hammer#^DIAG_1^#
-      leavings<T>#^DIAG_2^#(x: T) {}
+      func hammer1️⃣
+      leavings<T>2️⃣(x: T) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' to start parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
         // TODO: Old parser expected error on line 2: found an unexpected second identifier in function declaration; is there an accidental break?
         // TODO: Old parser expected note on line 2: join the identifiers together, Fix-It replacements: 6 - 9 = 'hammerleavings'
         // TODO: Old parser expected note on line 2: join the identifiers together with camel-case, Fix-It replacements: 6 - 9 = 'hammerLeavings'
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -506,20 +506,20 @@ final class InvalidTests: XCTestCase {
   func testInvalid29() {
     AssertParse(
       """
-      struct Weak<T: #^DIAG_1^#class#^DIAG_2^#> {
+      struct Weak<T: 1️⃣class2️⃣> {
         weak let value: T
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'class' constraint can only appear on protocol declarations
         // TODO: Old parser expected note on line 1: did you mean to write an 'AnyObject' constraint?, Fix-It replacements: 16 - 21 = 'AnyObject'
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '{' in struct"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected member block in class"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected declaration in struct"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 2: 'weak' must be a mutable variable, because it may change at runtime
         // TODO: Old parser expected error on line 2: 'weak' variable should have optional type 'T?'
         // TODO: Old parser expected error on line 2: 'weak' must not be applied to non-class-bound 'T'; consider adding a protocol conformance that has a class bound

@@ -41,25 +41,25 @@ public func XCTAssertNextIsNil<Iterator: IteratorProtocol>(_ iterator: inout Ite
 /// As an example, given some source with markers to parse:
 /// ```
 /// let subtreeMatcher = SubtreeMatcher("""
-///   func foo(#^FIRST^#x y: Double,
-///   #^SECOND^#first second third: Int) {}
+///   func foo(1️⃣x y: Double,
+///   2️⃣first second third: Int) {}
 ///   """
 /// ```
 ///
 /// And then some asserts:
 /// ```
 /// let firstExpectedParam = ... // make the first expected parameter
-/// subtreeMatcher.assertSameStructure(from: "FIRST", firstExpectedParam)
+/// subtreeMatcher.assertSameStructure(from: "1️⃣", firstExpectedParam)
 ///
 /// let secondExpectedParam = ... // make the second expected parameter
-/// subtreeMatcher.assertSameStructure(from: "SECOND", secondExpectedParam)
+/// subtreeMatcher.assertSameStructure(from: "2️⃣", secondExpectedParam)
 /// ```
 ///
-/// Before parsing, `#^FIRST^#` and `#^SECOND^#` will first be removed from the
+/// Before parsing, `1️⃣` and `2️⃣` will first be removed from the
 /// source test.
 ///
-/// The subtree matched in `FIRST` will start at the first node after
-/// `#^FIRST^#` that matches the root type of `firstExpectedParam`.
+/// The subtree matched in `1️⃣` will start at the first node after
+/// `1️⃣` that matches the root type of `firstExpectedParam`.
 ///
 /// There's no *need* to specify a marker, eg. if we want to match on the first
 /// parameter only we could instead write:

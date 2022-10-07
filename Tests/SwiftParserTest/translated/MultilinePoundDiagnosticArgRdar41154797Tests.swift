@@ -6,7 +6,7 @@ final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
   func testMultilinePoundDiagnosticArgRdar411547971() {
     AssertParse(
       ##"""
-      #error("""#^DIAG^#
+      #error("""1️⃣
       """##,
       diagnostics: [
         DiagnosticSpec(message: #"expected '"""' to end string literal"#),

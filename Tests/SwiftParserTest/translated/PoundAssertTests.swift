@@ -28,7 +28,7 @@ final class PoundAssertTests: XCTestCase {
   func testPoundAssert3() {
     AssertParse(
       #"""
-      #assert #^DIAG^#true, "error message")
+      #assert 1️⃣true, "error message")
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected '(' in '#assert' directive"),
@@ -39,7 +39,7 @@ final class PoundAssertTests: XCTestCase {
   func testPoundAssert4() {
     AssertParse(
       #"""
-      #assert(#^DIAG^#, "error message")
+      #assert(1️⃣, "error message")
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected a condition expression
@@ -52,7 +52,7 @@ final class PoundAssertTests: XCTestCase {
     AssertParse(
       """
       func unbalanced1() {
-        #assert#^NOTE^#(true #^DIAG^#
+        #assertℹ️(true 1️⃣
       }
       """,
       diagnostics: [
@@ -67,7 +67,7 @@ final class PoundAssertTests: XCTestCase {
     AssertParse(
       #"""
       func unbalanced2() {
-        #assert#^NOTE^#(true, "hello world" #^DIAG^#
+        #assertℹ️(true, "hello world" 1️⃣
       }
       """#,
       diagnostics: [

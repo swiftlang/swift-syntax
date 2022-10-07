@@ -176,9 +176,9 @@ final class SubscriptingTests: XCTestCase {
       """
       // Parsing errors
       struct A0 {
-        subscript #^DIAG_1^#
-          i : #^DIAG_2^#Int#^DIAG_3^#
-           -> Int #^DIAG_4^#{
+        subscript 1️⃣
+          i : 2️⃣Int3️⃣
+           -> Int 4️⃣{
           get {
             return stored
           }
@@ -186,20 +186,20 @@ final class SubscriptingTests: XCTestCase {
             stored = value
           }
         }
-        subscript #^DIAG_5^#-> Int { 
+        subscript 5️⃣-> Int { 
           return 1
         }
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected '(' for subscript parameters
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected ')' in function type"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
         // TODO: Old parser expected error on line 13: expected '(' for subscript parameters, Fix-It replacements: 12 - 12 = '()'
-        DiagnosticSpec(locationMarker: "DIAG_5", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected argument list in function declaration"),
       ]
     )
   }
@@ -208,8 +208,8 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A1 {
-        subscript (i : Int) #^DIAG_1^#
-           #^DIAG_2^#Int {
+        subscript (i : Int) 1️⃣
+           2️⃣Int {
           get {
             return stored 
           }
@@ -221,9 +221,9 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '->' for subscript element type
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected declaration in struct"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text in struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
         // TODO: Old parser expected error on line 5: cannot find 'stored' in scope
         // TODO: Old parser expected error on line 8: cannot find 'stored' in scope
       ]
@@ -234,7 +234,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A2 {
-        subscript (i : Int) -> #^DIAG^#
+        subscript (i : Int) -> 1️⃣
            {
           get {
             return stored
@@ -257,7 +257,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A3 {
-        subscript(i : Int) #^DIAG^#
+        subscript(i : Int) 1️⃣
         {
           get {
             return i
@@ -277,7 +277,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A4 {
-        subscript(i : Int) #^DIAG^#{ 
+        subscript(i : Int) 1️⃣{ 
           get {
             return i
           }
@@ -309,7 +309,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A6 {
-        subscript(i: Int)#^DIAG^#(j: Int) -> Int { 
+        subscript(i: Int)1️⃣(j: Int) -> Int { 
           get {
             return i + j 
           }
@@ -364,8 +364,8 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A8 {
-        subscript(i : Int) -> Int #^DIAG_1^#
-          #^DIAG_2^#get {
+        subscript(i : Int) -> Int 1️⃣
+          2️⃣get {
             return stored
           }
           set {
@@ -375,8 +375,8 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' in subscript to specify getter and setter implementation
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected declaration in struct"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text in struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
       ]
     )
   }
@@ -385,7 +385,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A9 {
-        subscript #^DIAG^#x() -> Int { 
+        subscript 1️⃣x() -> Int { 
           return 0
         }
       }
@@ -401,19 +401,19 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A10 {
-        subscript #^DIAG_1^#x(i: Int) -> Int { 
+        subscript 1️⃣x(i: Int) -> Int { 
           return 0
         }
-        subscript #^DIAG_2^#x<T>(i: T) -> Int { 
+        subscript 2️⃣x<T>(i: T) -> Int { 
           return 0
         }
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: subscripts cannot have a name, Fix-It replacements: 13 - 14 = ''
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "unexpected text 'x' before parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'x' before parameter clause"),
         // TODO: Old parser expected error on line 5: subscripts cannot have a name, Fix-It replacements: 13 - 14 = ''
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "unexpected text 'x<T>' before parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'x<T>' before parameter clause"),
       ]
     )
   }
@@ -422,18 +422,18 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A11 {
-        subscript #^DIAG_1^#x y : #^DIAG_2^#Int #^DIAG_3^#-> Int #^DIAG_4^#{ 
+        subscript 1️⃣x y : 2️⃣Int 3️⃣-> Int 4️⃣{ 
           return 0
         }
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '(' for subscript parameters
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "expected '(' to start function type"),
-        DiagnosticSpec(locationMarker: "DIAG_3", message: "expected ')' in function type"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "DIAG_4", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
       ]
     )
   }
@@ -441,7 +441,7 @@ final class SubscriptingTests: XCTestCase {
   func testSubscripting25() {
     AssertParse(
       """
-      #^DIAG^#}
+      1️⃣}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''

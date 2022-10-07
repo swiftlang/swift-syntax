@@ -26,21 +26,39 @@ public protocol FixItMessage {
 
 /// A Fix-It that can be applied to resolve a diagnostic.
 public struct FixIt {
+  public struct Changes: ExpressibleByArrayLiteral {
+    public var changes: [Change]
+
+    public init(changes: [Change]) {
+      self.changes = changes
+    }
+
+    public init(arrayLiteral elements: FixIt.Change...) {
+      self.init(changes: elements)
+    }
+
+    public init(combining: [Changes]) {
+      self.init(changes: combining.flatMap(\.changes))
+    }
+  }
+
   public enum Change {
     /// Replace `oldNode` by `newNode`.
     case replace(oldNode: Syntax, newNode: Syntax)
-    /// Remove the trailing trivia of the given token
-    case removeTrailingTrivia(TokenSyntax)
+    /// Replace the leading trivia on the given token
+    case replaceLeadingTrivia(token: TokenSyntax, newTrivia: Trivia)
+    /// Replace the trailing trivia on the given token
+    case replaceTrailingTrivia(token: TokenSyntax, newTrivia: Trivia)
   }
 
   /// A description of what this Fix-It performs.
   public let message: FixItMessage
 
   /// The changes that need to be performed when the Fix-It is applied.
-  public let changes: [Change]
+  public let changes: Changes
 
-  public init(message: FixItMessage, changes: [Change]) {
-    assert(!changes.isEmpty, "A Fix-It must have at least one change associated with it")
+  public init(message: FixItMessage, changes: Changes) {
+    assert(!changes.changes.isEmpty, "A Fix-It must have at least one change associated with it")
     self.message = message
     self.changes = changes
   }

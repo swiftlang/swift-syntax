@@ -20,6 +20,30 @@ extension UnexpectedNodesSyntax {
   func tokens(withKind kind: TokenKind) -> [TokenSyntax] {
     return self.tokens(satisfying: { $0.tokenKind == kind })
   }
+
+  /// If this only contains a single item that is a token, return that token, otherwise return `nil`.
+  var onlyToken: TokenSyntax? {
+    return onlyToken(where: { _ in true })
+  }
+
+  /// If this only contains a single item, which is a token satisfying `condition`, return that token, otherwise return `nil`.
+  func onlyToken(where condition: (TokenSyntax) -> Bool) -> TokenSyntax? {
+    if self.count == 1, let token = self.first?.as(TokenSyntax.self), condition(token) {
+      return token
+    } else {
+      return nil
+    }
+  }
+
+  /// If this only contains tokens satisfying `condition`, return an array containing those tokens, otherwise return `nil`.
+  func onlyTokens(satisfying condition: (TokenSyntax) -> Bool) -> [TokenSyntax]? {
+    let tokens = tokens(satisfying: condition)
+    if tokens.count == self.count {
+      return tokens
+    } else {
+      return nil
+    }
+  }
 }
 
 extension Syntax {

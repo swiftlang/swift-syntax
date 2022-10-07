@@ -648,7 +648,7 @@ final class DeclarationTests: XCTestCase {
       "() -> #^DIAG^#throws Int",
       { $0.parseFunctionSignature() },
       diagnostics: [
-        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' before '->'"])
+        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: "() throws -> Int"
     )

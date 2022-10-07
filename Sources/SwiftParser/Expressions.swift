@@ -319,17 +319,42 @@ extension Parser {
         return nil
       }
     case (.arrow, _)?, (.throwsKeyword, _)?:
-      let asyncKeyword = self.consumeIfContextualKeyword("async")
+      var asyncKeyword = self.consumeIfContextualKeyword("async")
 
-      let throwsKeyword = self.consume(if: .throwsKeyword)
+      var throwsKeyword = self.consume(if: .throwsKeyword)
+
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
+
+      // Recover if effect modifiers are specified after '->' by eating them into
+      // unexpectedAfterArrow and inserting the corresponding effects modifier as
+      // missing into the ArrowExprSyntax. This reflect the semantics the user
+      // originally intended.
+      var effectModifiersAfterArrow: [RawTokenSyntax] = []
+      if let asyncAfterArrow = self.consumeIfContextualKeyword("async") {
+        effectModifiersAfterArrow.append(asyncAfterArrow)
+        if asyncKeyword == nil {
+          asyncKeyword = missingToken(.contextualKeyword, text: "async")
+        }
+      }
+      if let throwsAfterArrow = self.consume(if: .throwsKeyword) {
+        effectModifiersAfterArrow.append(throwsAfterArrow)
+        if throwsKeyword == nil {
+          throwsKeyword = missingToken(.throwsKeyword, text: nil)
+        }
+      }
+      let unexpectedAfterArrow = effectModifiersAfterArrow.isEmpty ? nil : RawUnexpectedNodesSyntax(
+        elements: effectModifiersAfterArrow.map { RawSyntax($0) },
+        arena: self.arena
+      )
 
       let op = RawArrowExprSyntax(
         asyncKeyword: asyncKeyword,
         throwsToken: throwsKeyword,
         unexpectedBeforeArrow,
         arrowToken: arrow,
-        arena: self.arena)
+        unexpectedAfterArrow,
+        arena: self.arena
+      )
 
       return (RawExprSyntax(op), nil)
 

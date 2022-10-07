@@ -120,7 +120,7 @@ class FixItApplier: SyntaxRewriter {
   var changes: [FixIt.Change]
 
   init(diagnostics: [Diagnostic]) {
-    self.changes = diagnostics.flatMap({ $0.fixIts }).flatMap({ $0.changes })
+    self.changes = diagnostics.flatMap({ $0.fixIts }).flatMap({ $0.changes.changes })
   }
 
   public override func visitAny(_ node: Syntax) -> Syntax? {
@@ -136,15 +136,18 @@ class FixItApplier: SyntaxRewriter {
   }
 
   override func visit(_ node: TokenSyntax) -> Syntax {
+    var modifiedNode = node
     for change in changes {
       switch change {
-      case .removeTrailingTrivia(let changeNode) where changeNode.id == node.id:
-        return Syntax(node.withTrailingTrivia([]))
+      case .replaceLeadingTrivia(token: let changedNode, newTrivia: let newTrivia) where changedNode.id == node.id:
+        modifiedNode = node.withLeadingTrivia(newTrivia)
+      case .replaceTrailingTrivia(token: let changedNode, newTrivia: let newTrivia) where changedNode.id == node.id:
+        modifiedNode = node.withTrailingTrivia(newTrivia)
       default:
         break
       }
     }
-    return Syntax(node)
+    return Syntax(modifiedNode)
   }
 
   /// Applies all Fix-Its in `diagnostics` to `tree` and returns the fixed syntax tree.

@@ -3147,8 +3147,6 @@ open class BasicFormat: SyntaxRewriter {
       break
     case .dollarIdentifier: 
       break
-    case .contextualKeyword: 
-      break
     case .rawStringDelimiter: 
       break
     case .stringSegment: 
@@ -3159,6 +3157,15 @@ open class BasicFormat: SyntaxRewriter {
       break
     case .eof: 
       break
+    case .contextualKeyword: 
+      switch node.text {
+        case "async":
+          if node.trailingTrivia.isEmpty {
+            node.trailingTrivia += .space
+          }
+        default:
+          break
+      }
     }
     node.leadingTrivia = node.leadingTrivia.indented(indentation: indentation)
     node.trailingTrivia = node.trailingTrivia.indented(indentation: indentation)

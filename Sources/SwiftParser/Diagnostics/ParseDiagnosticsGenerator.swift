@@ -95,6 +95,51 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handledNodes.contains(node.id)
   }
 
+  /// Utility function to emit a diagnostic that removes a misplaced token and instead inserts an equivalent token at the corrected location.
+  ///
+  /// If `incorrectContainer` contains only tokens that satisfy `unexpectedTokenCondition`, emit a diagnostic with message `message` that marks this token as misplaced.
+  /// If `correctTokens` contains missing tokens, also emit a Fix-It with message `fixIt` that marks the unexpected token as missing and instead inserts `correctTokens`.
+  public func exchangeTokens(
+    unexpected: UnexpectedNodesSyntax?,
+    unexpectedTokenCondition: (TokenSyntax) -> Bool,
+    correctTokens: [TokenSyntax?],
+    message: (_ misplacedTokens: [TokenSyntax]) -> DiagnosticMessage,
+    fixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage
+  ) {
+    guard let incorrectContainer = unexpected,
+          let misplacedTokens = incorrectContainer.onlyTokens(satisfying: unexpectedTokenCondition) else {
+      // If there are no unexpected nodes or the unexpected contain multiple tokens, don't emit a diagnostic.
+      return
+    }
+
+    // Ignore `correctTokens` that are already present.
+    let correctTokens = correctTokens.compactMap({ $0 }).filter({ $0.presence == .missing })
+    var changes = misplacedTokens.map(FixIt.Changes.makeMissing)
+    for correctToken in correctTokens {
+      if misplacedTokens.count == 1, let misplacedToken = misplacedTokens.first,
+         misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken {
+        changes.append(FixIt.Changes.makePresent(
+          node: correctToken,
+          leadingTrivia: misplacedToken.leadingTrivia,
+          trailingTrivia: misplacedToken.trailingTrivia
+        ))
+      } else {
+        changes.append(FixIt.Changes.makePresent(
+          node: correctToken,
+          leadingTrivia: nil,
+          trailingTrivia: nil
+        ))
+      }
+    }
+    var fixIts: [FixIt] = []
+    if changes.count > 1 {
+      // Only emit a Fix-It if we are moving a token, i.e. also making a token present.
+      fixIts.append(FixIt(message: fixIt(misplacedTokens), changes: changes))
+    }
+
+    addDiagnostic(incorrectContainer, message(misplacedTokens), fixIts: fixIts, handledNodes: [incorrectContainer.id] + correctTokens.map(\.id))
+  }
+
   // MARK: - Generic diagnostic generation
 
   public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
@@ -180,6 +225,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    exchangeTokens(
+      unexpected: node.unexpectedAfterArrowToken,
+      unexpectedTokenCondition: { $0.tokenKind == .contextualKeyword("async") || $0.tokenKind == .throwsKeyword },
+      correctTokens: [node.asyncKeyword, node.throwsToken],
+      message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
+      fixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
+    )
+    return .visitChildren
+  }
+
   public override func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -215,19 +274,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let output = node.output,
-       let missingThrowsKeyword = node.throwsOrRethrowsKeyword,
-       missingThrowsKeyword.presence == .missing,
-       let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType,
-       let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
-      addDiagnostic(throwsInReturnPosition, .throwsInReturnPosition, fixIts: [
-        FixIt(message: .moveThrowBeforeArrow, changes: [
-          .makeMissing(node: throwsInReturnPosition),
-          .makePresent(node: missingThrowsKeyword),
-        ])
-      ], handledNodes: [unexpectedBeforeReturnType.id, missingThrowsKeyword.id, throwsInReturnPosition.id])
-      return .visitChildren
-    }
+    exchangeTokens(
+      unexpected: node.output?.unexpectedBetweenArrowAndReturnType,
+      unexpectedTokenCondition: { $0.tokenKind == .throwsKeyword },
+      correctTokens: [node.throwsOrRethrowsKeyword],
+      message: { _ in StaticParserError.throwsInReturnPosition },
+      fixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
+    )
     return .visitChildren
   }
 

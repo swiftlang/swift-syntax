@@ -1,5 +1,6 @@
 // This test file has been translated from swift/test/Parse/super.swift
 
+import SwiftSyntax
 import XCTest
 
 final class SuperTests: XCTestCase {
@@ -20,7 +21,7 @@ final class SuperTests: XCTestCase {
     )
   }
 
-  func testSuper2() {
+  func testSuper2a() {
     AssertParse(
       #"""
       class D : B {
@@ -28,46 +29,132 @@ final class SuperTests: XCTestCase {
           super.init()
           super.init(42)
         }
+      }
+      """#
+    )
+  }
+
+  func testSuper2b() {
+    AssertParse(
+      #"""
+      class D : B {
         override init(x:Int) {
-          let _: () -> B = super.init 
+          let _: () -> B = super.init
         }
+      }
+      """#
+    )
+  }
+
+  func testSuper2c() {
+    AssertParse(
+      #"""
+      class D : B {
         convenience init(y:Int) {
-          let _: () -> D = self.init 
+          let _: () -> D = self.init
         }
+      }
+      """#
+    )
+  }
+
+  func testSuper2d() {
+    AssertParse(
+      #"""
+      class D : B {
         init(z: Int) {
           super
             .init(x: z)
         }
+      }
+      """#
+    )
+  }
+
+  func testSuper2e() {
+    AssertParse(
+      #"""
+      class D : B {
         func super_calls() {
-          super.foo        
-          super.foo.bar    
-          super.bar        
+          super.foo
+          super.foo.bar
+          super.bar
           super.bar()
           // FIXME: should also say "'super.init' cannot be referenced outside of an initializer"
-          super.init 
-          super.init() 
-          super.init(0) 
-          super[0]        
+          super.init
+          super.init()
+          super.init(0)
+          super[0]
           super
             .bar()
         }
+      }
+      """#
+    )
+  }
+
+  func testSuper2f() {
+    AssertParse(
+      #"""
+      class D : B {
         func bad_super_1() {
-          super.1️⃣$0 
-        }
-        func bad_super_2() {
-          super(0) 
-        }
-        func bad_super_3() {
-          super 
-            [1]
+          super.1️⃣$0
         }
       }
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in member access"),
-        // TODO: Old parser expected error on line 33: expected '.' or '[' after 'super'
-        // TODO: Old parser expected error on line 36: expected '.' or '[' after 'super'
       ]
+    )
+  }
+
+  func testSuper2g() {
+    AssertParse(
+      #"""
+      class D : B {
+        func bad_super_2() {
+          super(0)
+        }
+      }
+      """#,
+      substructure: Syntax(FunctionCallExprSyntax(
+        calledExpression: ExprSyntax(SuperRefExprSyntax(superKeyword: .superKeyword())),
+        leftParen: .leftParenToken(),
+        argumentList: TupleExprElementListSyntax([
+          TupleExprElementSyntax(
+            label: nil,
+            colon: nil,
+            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))),
+            trailingComma: nil
+          )
+        ]),
+        rightParen: .rightParenToken(),
+        trailingClosure: nil,
+        additionalTrailingClosures: nil
+      ))
+    )
+  }
+
+  func testSuper2h() {
+    AssertParse(
+      #"""
+      class D : B {
+        func bad_super_3() {
+          super
+            [1]
+        }
+      }
+      """#,
+      substructure: Syntax(ArrayExprSyntax(
+        leftSquare: .leftSquareBracketToken(),
+        elements: ArrayElementListSyntax([
+          ArrayElementSyntax(
+            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
+            trailingComma: nil
+          )
+        ]),
+        rightSquare: .rightSquareBracketToken()
+      ))
     )
   }
 

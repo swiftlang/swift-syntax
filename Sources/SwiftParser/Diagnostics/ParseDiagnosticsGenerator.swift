@@ -200,6 +200,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
   // MARK: - Specialized diagnostic generation
 
+  public override func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.statements.only?.item.is(EditorPlaceholderExprSyntax.self) == true {
+      // Only emit a single diagnostic about the editor placeholder and none for the missing '{' and '}'.
+      addDiagnostic(node, .editorPlaceholderInSourceFile, handledNodes: [node.id])
+      return .skipChildren
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
     if let semicolon = node.semicolon, semicolon.presence == .missing {
       let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia

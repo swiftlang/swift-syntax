@@ -2290,6 +2290,10 @@ extension Parser.Lookahead {
     if backtrack.peek().tokenKind == .leftBrace {
       return true
     }
+    if backtrack.peek().isEditorPlaceholder {
+      // Editor placeholder can represent entire closures
+      return true
+    }
 
     return false
   }

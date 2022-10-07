@@ -22,3 +22,14 @@ extension String {
     return String(result)
   }
 }
+
+extension Collection {
+  /// If the collection contains a single element, return it, otherwise `nil`.
+  var only: Element? {
+    if self.count == 1 {
+      return self.first!
+    } else {
+      return nil
+    }
+  }
+}

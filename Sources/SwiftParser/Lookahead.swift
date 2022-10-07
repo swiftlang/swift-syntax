@@ -51,6 +51,11 @@ extension Parser {
   public func lookahead() -> Lookahead {
     return Lookahead(cloning: self)
   }
+
+  public func lookahead<T>(_ body: (_: inout Lookahead) -> T) -> T {
+    var lookahead = lookahead()
+    return body(&lookahead)
+  }
 }
 
 extension Parser.Lookahead {

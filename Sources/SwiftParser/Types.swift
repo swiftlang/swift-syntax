@@ -50,11 +50,16 @@ extension Parser {
   mutating func parseTypeScalar() -> RawTypeSyntax {
     let (specifier, attrList) = self.parseTypeAttributeList()
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
-    if self.lookahead().isAtFunctionTypeArrow() {
-      let firstEffect = self.parseEffectsSpecifier()
-      let secondEffect = self.parseEffectsSpecifier()
-      let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
+    if lookahead({ $0.canParseFunctionTypeArrow() }) {
+      var (asyncTok, throwsTok, specifiersAfterThrows) = parseEffectsSpecifiers(atDecl: false)
+
+      // TODO: This should be a return clause
+      let (unexpectedBeforeArrow, arrow) = self.expectKeepUnexpected(.arrow)
+      let specifiersBeforeReturn = parseAllEffectsSpecifiers()
+      addMissingEffectsSpecifiers(atDecl: false, from: specifiersBeforeReturn, asyncOrReasync: &asyncTok, throwsOrRethrows: &throwsTok)
       let returnTy = self.parseType()
+      let specifiersAfterReturn = parseAllEffectsSpecifiers()
+      addMissingEffectsSpecifiers(atDecl: false, from: specifiersAfterReturn, asyncOrReasync: &asyncTok, throwsOrRethrows: &throwsTok)
 
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
       let leftParen: RawTokenSyntax
@@ -89,11 +94,13 @@ extension Parser {
         arguments: arguments,
         unexpectedBetweenElementsAndRightParen,
         rightParen: rightParen,
-        asyncKeyword: firstEffect,
-        throwsOrRethrowsKeyword: secondEffect,
-        unexpectedBeforeArrow,
+        asyncKeyword: asyncTok,
+        throwsOrRethrowsKeyword: throwsTok,
+        RawUnexpectedNodesSyntax(specifiersAfterThrows.map { $0.token } + unexpectedBeforeArrow, arena: self.arena),
         arrow: arrow,
+        RawUnexpectedNodesSyntax(specifiersBeforeReturn, arena: self.arena),
         returnType: returnTy,
+        RawUnexpectedNodesSyntax(specifiersAfterReturn, arena: self.arena),
         arena: self.arena))
     }
 
@@ -559,19 +566,8 @@ extension Parser.Lookahead {
       break
     }
 
-    guard self.isAtFunctionTypeArrow() else {
+    guard self.canParseFunctionTypeArrow() else {
       return true
-    }
-
-    // Handle type-function if we have an '->' with optional
-    // 'async' and/or 'throws'.
-    var loopProgress = LoopProgressCondition()
-    while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
-      self.eat(handle)
-    }
-
-    guard self.consume(if: .arrow) != nil else {
-      return false
     }
 
     return self.canParseType()
@@ -652,27 +648,9 @@ extension Parser.Lookahead {
     preconditionFailure("Should return from inside the loop")
   }
 
-  func isAtFunctionTypeArrow() -> Bool {
-    if self.at(.arrow) {
-      return true
-    }
-
-    if self.at(anyIn: EffectsSpecifier.self) != nil {
-      if self.peek().tokenKind == .arrow {
-        return true
-      }
-
-      if EffectsSpecifier(lexeme: self.peek()) != nil {
-        var backtrack = self.lookahead()
-        backtrack.consumeAnyToken()
-        backtrack.consumeAnyToken()
-        return backtrack.isAtFunctionTypeArrow()
-      }
-
-      return false
-    }
-
-    return false
+  mutating func canParseFunctionTypeArrow() -> Bool {
+    consumeEffectsSpecifiers()
+    return consume(if: .arrow) != nil
   }
 
   mutating func canParseIdentifierTypeOrCompositionType() -> Bool {

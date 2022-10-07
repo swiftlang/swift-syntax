@@ -1440,26 +1440,18 @@ extension Parser {
       arena: self.arena)
   }
 
-  /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
-  @_spi(RawSyntax)
-  public mutating func parseFunctionReturnClause() -> (returnClause: RawReturnClauseSyntax, misplacedThrowsKeyword: RawTokenSyntax?) {
-    let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
-    var misplacedThrowsKeyword: RawTokenSyntax? = nil
-    let unexpectedBeforeReturnType: RawUnexpectedNodesSyntax?
-    if let throwsKeyword = self.consume(ifAny: [.rethrowsKeyword, .throwsKeyword]) {
-      misplacedThrowsKeyword = throwsKeyword
-      unexpectedBeforeReturnType = RawUnexpectedNodesSyntax(elements: [RawSyntax(throwsKeyword)], arena: self.arena)
-    } else {
-      unexpectedBeforeReturnType = nil
-    }
+  /// If effect specifiers appear in front of the `arrow` or after the return type, they are returned so that they can be synthesized in front of the arrow.
+  mutating func parseReturnClause(_ handle: RecoveryConsumptionHandle) -> (returnClause: RawReturnClauseSyntax, misplacedSpecifiers: [SpecifierWithToken]) {
+    let (unexpectedBeforeArrow, arrow) = self.eat(handle)
+    let misplacedSpecifiers = parseAllEffectsSpecifiers()
     let result = self.parseResultType()
     let returnClause = RawReturnClauseSyntax(
       unexpectedBeforeArrow,
       arrow: arrow,
-      unexpectedBeforeReturnType,
+      RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
       returnType: result,
       arena: self.arena)
-    return (returnClause, misplacedThrowsKeyword)
+    return (returnClause, misplacedSpecifiers)
   }
 }
 
@@ -1544,33 +1536,27 @@ extension Parser {
   public mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
     let input = self.parseParameterClause(for: .functionParameters)
 
-    let async: RawTokenSyntax?
-    if let asyncTok = self.consumeIfContextualKeyword("async") {
-      async = asyncTok
-    } else if let reasync = self.consumeIfContextualKeyword("reasync") {
-      async = reasync
-    } else {
-      async = nil
-    }
-
-    var throwsKeyword = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword])
+    var (asyncOrReasync, throwsOrRethrows, specifiersAfterThrows) = parseEffectsSpecifiers(atDecl: true)
 
     let output: RawReturnClauseSyntax?
-    if self.at(.arrow) {
-      let result = self.parseFunctionReturnClause()
-      output = result.returnClause
-      if let misplacedThrowsKeyword = result.misplacedThrowsKeyword, throwsKeyword == nil {
-        throwsKeyword = RawTokenSyntax(missing: misplacedThrowsKeyword.tokenKind, arena: self.arena)
-      }
+    if let handle = self.canRecoverTo(.arrow) {
+      let (returnClause, misplacedSpecifiers) = parseReturnClause(handle)
+      addMissingEffectsSpecifiers(atDecl: true, from: misplacedSpecifiers, asyncOrReasync: &asyncOrReasync, throwsOrRethrows: &throwsOrRethrows)
+      output = returnClause
     } else {
       output = nil
     }
 
+    let specifiersAfterReturn = parseAllEffectsSpecifiers()
+    addMissingEffectsSpecifiers(atDecl: true, from: specifiersAfterReturn, asyncOrReasync: &asyncOrReasync, throwsOrRethrows: &throwsOrRethrows)
+
     return RawFunctionSignatureSyntax(
       input: input,
-      asyncOrReasyncKeyword: async,
-      throwsOrRethrowsKeyword: throwsKeyword,
+      asyncOrReasyncKeyword: asyncOrReasync,
+      throwsOrRethrowsKeyword: throwsOrRethrows,
+      RawUnexpectedNodesSyntax(specifiersAfterThrows, arena: self.arena),
       output: output,
+      RawUnexpectedNodesSyntax(specifiersAfterReturn, arena: self.arena),
       arena: self.arena)
   }
 }
@@ -1601,9 +1587,11 @@ extension Parser {
 
     let indices = self.parseParameterClause(for: .indices)
 
+    let unexpectedBeforeArrow = RawUnexpectedNodesSyntax(parseAllEffectsSpecifiers(), arena: self.arena)
+
     let result: RawReturnClauseSyntax
-    if self.at(.arrow) {
-      result = self.parseFunctionReturnClause().returnClause
+    if let handle = self.canRecoverTo(.arrow) {
+      result = self.parseReturnClause(handle).returnClause
     } else {
       result = RawReturnClauseSyntax(
         arrow: RawTokenSyntax(missing: .arrow, arena: self.arena),
@@ -1635,6 +1623,7 @@ extension Parser {
       subscriptKeyword: subscriptKeyword,
       genericParameterClause: genericParameterClause,
       indices: indices,
+      unexpectedBeforeArrow,
       result: result,
       genericWhereClause: genericWhereClause,
       accessor: accessor,
@@ -1767,41 +1756,6 @@ extension Parser {
       attributes: attrs, modifier: modifier, kind: kind, token: introducer)
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
-    // 'async'
-    if let async = self.consumeIfContextualKeyword("async") {
-      return async
-    }
-
-    // 'reasync'
-    if let reasync = self.consumeIfContextualKeyword("reasync") {
-      return reasync
-    }
-
-    // 'throws'/'rethrows'
-    if let throwsRethrows = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword]) {
-      return throwsRethrows
-    }
-
-    // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: [.throwKeyword, .tryKeyword], where: { !$0.isAtStartOfLine }) {
-      return throwTry
-    }
-
-    return nil
-  }
-
-  @_spi(RawSyntax)
-  public mutating func parseEffectsSpecifiers() -> [RawTokenSyntax] {
-    var specifiers = [RawTokenSyntax]()
-    var loopProgress = LoopProgressCondition()
-    while let specifier = self.parseEffectsSpecifier(), loopProgress.evaluate(currentToken) {
-      specifiers.append(specifier)
-    }
-    return specifiers
-  }
-
   /// Parse the body of a variable declaration. This can include explicit
   /// getters, setters, and observers, or the body of a computed property.
   ///
@@ -1884,14 +1838,15 @@ extension Parser {
 
         // Next, parse effects specifiers. While it's only valid to have them
         // on 'get' accessors, we also emit diagnostics if they show up on others.
-        let asyncKeyword: RawTokenSyntax?
-        let throwsKeyword: RawTokenSyntax?
-        if self.at(anyIn: EffectsSpecifier.self) != nil {
-          asyncKeyword = self.parseEffectsSpecifier()
-          throwsKeyword = self.parseEffectsSpecifier()
+        var asyncOrReasync: RawTokenSyntax? = nil
+        var throwsOrRethrows: RawTokenSyntax? = nil
+        let unexpectedAfterThrows: [SpecifierWithToken]
+        if introducer.kind == .get {
+          (asyncOrReasync, throwsOrRethrows, unexpectedAfterThrows) = parseEffectsSpecifiers(atDecl: true)
         } else {
-          asyncKeyword = nil
-          throwsKeyword = nil
+          asyncOrReasync = nil
+          throwsOrRethrows = nil
+          unexpectedAfterThrows = parseAllEffectsSpecifiers()
         }
 
         let body = self.parseOptionalCodeBlock()
@@ -1901,8 +1856,9 @@ extension Parser {
           modifier: introducer.modifier,
           accessorKind: introducer.token,
           parameter: parameter,
-          asyncKeyword: asyncKeyword,
-          throwsKeyword: throwsKeyword,
+          asyncKeyword: asyncOrReasync,
+          throwsKeyword: throwsOrRethrows,
+          RawUnexpectedNodesSyntax(unexpectedAfterThrows, arena: self.arena),
           body: body,
           arena: self.arena))
       }
@@ -2231,5 +2187,61 @@ extension Parser {
         rightParen: rightParen,
         arena: self.arena))
     }
+  }
+}
+
+extension Parser {
+  mutating func parseAllEffectsSpecifiers() -> [SpecifierWithToken] {
+    var specifiers = [SpecifierWithToken]()
+    var loopProgress = LoopProgressCondition()
+    while let (specifier, handle) = self.canRecoverTo(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
+      let (unexpected, token) = self.eatKeepUnexpected(handle)
+      specifiers.append(contentsOf: unexpected.map { SpecifierWithToken(specifier: nil, token: $0) })
+      specifiers.append(SpecifierWithToken(specifier: specifier, token: token))
+    }
+    return specifiers
+  }
+
+  func addMissingEffectsSpecifiers(atDecl: Bool, from unexpectedSpecifiers: [SpecifierWithToken], asyncOrReasync: inout RawTokenSyntax?, throwsOrRethrows: inout RawTokenSyntax?) {
+    for unexpected in unexpectedSpecifiers {
+      guard asyncOrReasync == nil || throwsOrRethrows == nil else {
+        break
+      }
+
+      if asyncOrReasync == nil, unexpected.specifier == .asyncContextualKeyword || (atDecl && unexpected.specifier == .reasyncContextualKeyword) {
+        asyncOrReasync = RawTokenSyntax(missing: unexpected.token.tokenKind, text: unexpected.token.tokenText, arena: self.arena)
+      }
+
+      if throwsOrRethrows == nil, unexpected.specifier == .throwKeyword || (atDecl && unexpected.specifier == .rethrowsKeyword) {
+        throwsOrRethrows = RawTokenSyntax(missing: unexpected.token.tokenKind, arena: self.arena)
+      }
+    }
+  }
+
+  mutating func parseEffectsSpecifiers(atDecl: Bool) -> (asyncOrReasync: RawTokenSyntax?,
+                                                         throwsOrRethrows: RawTokenSyntax?,
+                                                         specifiersAfterThrows: [SpecifierWithToken]){
+    var initialSpecifiers = parseAllEffectsSpecifiers()
+
+    var asyncOrReasync: RawTokenSyntax?
+    var throwsOrRethrows: RawTokenSyntax?
+    if !initialSpecifiers.isEmpty {
+      let first = initialSpecifiers.removeFirst()
+      if first.specifier == .asyncContextualKeyword || atDecl && first.specifier == .reasyncContextualKeyword {
+        asyncOrReasync = first.token
+
+        if !initialSpecifiers.isEmpty {
+          let second = initialSpecifiers.removeFirst()
+          if second.specifier == .throwsKeyword || atDecl && second.specifier == .rethrowsKeyword {
+            throwsOrRethrows = second.token
+          }
+        }
+      } else if first.specifier == .throwsKeyword || atDecl && first.specifier == .rethrowsKeyword {
+        throwsOrRethrows = first.token
+      }
+      addMissingEffectsSpecifiers(atDecl: atDecl, from: initialSpecifiers, asyncOrReasync: &asyncOrReasync, throwsOrRethrows: &throwsOrRethrows)
+    }
+
+    return (asyncOrReasync, throwsOrRethrows, initialSpecifiers)
   }
 }

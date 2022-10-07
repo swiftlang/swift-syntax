@@ -12,6 +12,11 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+struct SpecifierWithToken {
+  let specifier: EffectsSpecifier?
+  let token: RawTokenSyntax
+}
+
 extension RawUnexpectedNodesSyntax {
   /// Returns `true` if this contains a token that satisfies `condition`.
   func containsToken(where condition: (RawTokenSyntax) -> Bool) -> Bool {
@@ -31,6 +36,16 @@ extension RawUnexpectedNodesSyntax {
       return nil
     } else {
       self.init(elements: tokens.map(RawSyntax.init), arena: arena)
+    }
+  }
+
+  /// If `specifiers` is not empty, construct a `RawUnexpectedNodesSyntax`
+  /// containing those tokens, otherwise return `nil`.
+  init?(_ specifiers: [SpecifierWithToken], arena: SyntaxArena) {
+    if specifiers.isEmpty {
+      return nil
+    } else {
+      self.init(elements: specifiers.map { RawSyntax($0.token) }, arena: arena)
     }
   }
 }

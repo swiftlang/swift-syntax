@@ -281,19 +281,21 @@ extension Parser {
   }
 
   /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.
-  mutating func eat(_ handle: RecoveryConsumptionHandle) -> (RawUnexpectedNodesSyntax?, Token) {
-    let unexpectedNodes: RawUnexpectedNodesSyntax?
+  mutating func eatKeepUnexpected(_ handle: RecoveryConsumptionHandle) -> (unexpected: [RawTokenSyntax], token: Token) {
+    var unexpectedTokens = [RawTokenSyntax]()
     if handle.unexpectedTokens > 0 {
-      var unexpectedTokens = [RawSyntax]()
       for _ in 0..<handle.unexpectedTokens {
-        unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
+        unexpectedTokens.append(self.consumeAnyToken())
       }
-      unexpectedNodes = RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena)
-    } else {
-      unexpectedNodes = nil
     }
     let token = self.eat(handle.tokenConsumptionHandle)
-    return (unexpectedNodes, token)
+    return (unexpectedTokens, token)
+  }
+
+  /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.
+  mutating func eat(_ handle: RecoveryConsumptionHandle) -> (unexpected: RawUnexpectedNodesSyntax?, token: Token) {
+    let (unexpected, token) = eatKeepUnexpected(handle)
+    return (RawUnexpectedNodesSyntax(elements: unexpected.map(RawSyntax.init), arena: self.arena), token)
   }
 }
 
@@ -301,20 +303,54 @@ extension Parser {
 
 extension Parser {
   /// Implements the paradigm shared across all `expect` methods.
+  private mutating func expectImplKeepUnexpected(
+    consume: (inout Parser) -> RawTokenSyntax?,
+    canRecoverTo: (inout Lookahead) -> RecoveryConsumptionHandle?,
+    makeMissing: (inout Parser) -> RawTokenSyntax
+  ) -> (unexpected: [RawTokenSyntax], token: RawTokenSyntax) {
+    if let tok = consume(&self) {
+      return ([], tok)
+    }
+    var lookahead = self.lookahead()
+    if let handle = canRecoverTo(&lookahead) {
+      let (unexpectedTokens, token) = self.eatKeepUnexpected(handle)
+      return (unexpectedTokens, token)
+    }
+    return ([], makeMissing(&self))
+  }
+
+  /// Implements the paradigm shared across all `expect` methods.
   private mutating func expectImpl(
     consume: (inout Parser) -> RawTokenSyntax?,
     canRecoverTo: (inout Lookahead) -> RecoveryConsumptionHandle?,
     makeMissing: (inout Parser) -> RawTokenSyntax
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    if let tok = consume(&self) {
-      return (nil, tok)
-    }
-    var lookahead = self.lookahead()
-    if let handle = canRecoverTo(&lookahead) {
-      let (unexpectedTokens, token) = self.eat(handle)
-      return (unexpectedTokens, token)
-    }
-    return (nil, makeMissing(&self))
+    let (unexpected, token) = expectImplKeepUnexpected(consume: consume, canRecoverTo: canRecoverTo, makeMissing: makeMissing)
+    return (RawUnexpectedNodesSyntax(unexpected, arena: self.arena), token)
+  }
+
+  /// Attempts to consume a token of the given kind.
+  /// If it cannot be found, the parser tries
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///     expected token and see if the token occurs after that unexpected.
+  ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
+  ///     a missing token of the requested kind.
+  @_spi(RawSyntax)
+  public mutating func expectKeepUnexpected(
+    _ kind: RawTokenKind,
+    remapping: RawTokenKind? = nil
+  ) -> (unexpected: [RawTokenSyntax], token: RawTokenSyntax) {
+    return expectImplKeepUnexpected(
+      consume: { $0.consume(if: kind, remapping: remapping) },
+      canRecoverTo: { $0.canRecoverTo([kind]) },
+      makeMissing: {
+        if let remapping = remapping {
+          return $0.missingToken(remapping, text: kind.defaultText)
+        } else {
+          return $0.missingToken(kind, text: nil)
+        }
+      }
+    )
   }
 
   /// Attempts to consume a token of the given kind.

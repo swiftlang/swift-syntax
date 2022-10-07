@@ -2066,8 +2066,9 @@ extension Parser {
     }
 
     var input: RawSyntax?
-    var asyncKeyword: RawTokenSyntax? = nil
+    var asyncTok: RawTokenSyntax? = nil
     var throwsTok: RawTokenSyntax? = nil
+    var specifiersAfterThrows = [SpecifierWithToken]()
     var output: RawReturnClauseSyntax? = nil
     if !self.at(.inKeyword) {
       if self.at(.leftParen) {
@@ -2097,32 +2098,30 @@ extension Parser {
         input = RawSyntax(RawClosureParamListSyntax(elements: params, arena: self.arena))
       }
 
-      asyncKeyword = self.parseEffectsSpecifier()
-      throwsTok = self.parseEffectsSpecifier()
+      (asyncTok, throwsTok, specifiersAfterThrows) = parseEffectsSpecifiers(atDecl: false)
 
-      // Parse the optional explicit return type.
-      if let arrow = self.consume(if: .arrow) {
-        // Parse the type.
-        let returnTy = self.parseType()
-
-        output = RawReturnClauseSyntax(
-          arrow: arrow,
-          returnType: returnTy,
-          arena: self.arena
-        )
+      if let handle = self.canRecoverTo(.arrow) {
+        let (returnClause, misplacedSpecifiers) = parseReturnClause(handle)
+        addMissingEffectsSpecifiers(atDecl: false, from: misplacedSpecifiers, asyncOrReasync: &asyncTok, throwsOrRethrows: &throwsTok)
+        output = returnClause
       }
     }
 
+    var specifiersBeforeIn: [SpecifierWithToken] = parseAllEffectsSpecifiers()
+    addMissingEffectsSpecifiers(atDecl: false, from: specifiersBeforeIn, asyncOrReasync: &asyncTok, throwsOrRethrows: &throwsTok)
+
     // Parse the 'in'.
-    let (unexpectedBeforeInTok, inTok) = self.expect(.inKeyword)
+    let (unexpectedBeforeInTok, inTok) = self.expectKeepUnexpected(.inKeyword)
+
     return RawClosureSignatureSyntax(
       attributes: attrs,
       capture: captures,
       input: input,
-      asyncKeyword: asyncKeyword,
+      asyncKeyword: asyncTok,
       throwsTok: throwsTok,
+      RawUnexpectedNodesSyntax(specifiersAfterThrows, arena: self.arena),
       output: output,
-      unexpectedBeforeInTok,
+      RawUnexpectedNodesSyntax(specifiersBeforeIn.map { $0.token } + unexpectedBeforeInTok, arena: self.arena),
       inTok: inTok,
       arena: self.arena)
   }

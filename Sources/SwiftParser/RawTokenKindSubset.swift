@@ -425,6 +425,33 @@ enum EffectsSpecifier: RawTokenKindSubset {
     default: return nil
     }
   }
+
+  var remappedKind: RawTokenKind? {
+    switch self {
+    case .asyncContextualKeyword, .awaitContextualKeyword, .reasyncContextualKeyword:
+      return .contextualKeyword
+    default:
+      return nil
+    }
+  }
+
+  var isAsyncOrReasync: Bool {
+    switch self {
+    case .asyncContextualKeyword, .reasyncContextualKeyword:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var isThrowsOrRethrows: Bool {
+    switch self {
+    case .throwsKeyword, .rethrowsKeyword:
+      return true
+    default:
+      return false
+    }
+  }
 }
 
 enum IdentifierTokens: RawTokenKindSubset {

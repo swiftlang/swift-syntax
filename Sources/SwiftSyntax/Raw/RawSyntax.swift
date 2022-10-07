@@ -773,4 +773,3 @@ extension RawSyntax {
     }
   }
 }
-

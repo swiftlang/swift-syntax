@@ -127,8 +127,10 @@ public class CustomReflectableTests: XCTestCase {
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "1"
+                                           - unexpectedAfterDigits: nil
                                          - unexpectedBetweenExpressionAndTrailingComma: nil
                                          - trailingComma: nil
+                                         - unexpectedAfterTrailingComma: nil
                                        ▿ TupleExprElementSyntax
                                          - unexpectedBeforeLabel: nil
                                          - label: nil
@@ -145,8 +147,10 @@ public class CustomReflectableTests: XCTestCase {
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "2"
+                                           - unexpectedAfterDigits: nil
                                          - unexpectedBetweenExpressionAndTrailingComma: nil
                                          - trailingComma: nil
+                                         - unexpectedAfterTrailingComma: nil
 
                                      """)
       }(),
@@ -184,8 +188,10 @@ public class CustomReflectableTests: XCTestCase {
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "1"
+                                             - unexpectedAfterDigits: nil
                                            - unexpectedBetweenExpressionAndTrailingComma: nil
                                            - trailingComma: nil
+                                           - unexpectedAfterTrailingComma: nil
                                          ▿ TupleExprElementSyntax
                                            - unexpectedBeforeLabel: nil
                                            - label: nil
@@ -202,8 +208,10 @@ public class CustomReflectableTests: XCTestCase {
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "2"
+                                             - unexpectedAfterDigits: nil
                                            - unexpectedBetweenExpressionAndTrailingComma: nil
                                            - trailingComma: nil
+                                           - unexpectedAfterTrailingComma: nil
 
                                      """)
       }(),

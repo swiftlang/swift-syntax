@@ -28,11 +28,13 @@ class Node(object):
         self.children = []
         # Add implicitly generated UnexpectedNodes children in between any two
         # defined children
-        if kind != 'SyntaxCollection':
-            for i in range(2 * len(children)):
+        if kind != 'SyntaxCollection' and len(children) > 0:
+            for i in range(2 * len(children) + 1):
                 if i % 2 == 0:
                     if i == 0:
                         name = 'UnexpectedBefore' + children[0].name
+                    elif i == 2 * len(children):
+                        name = 'UnexpectedAfter' + children[-1].name
                     else:
                         name = 'UnexpectedBetween%sAnd%s' % \
                             (children[int(i / 2) - 1].name, children[int(i / 2)].name)

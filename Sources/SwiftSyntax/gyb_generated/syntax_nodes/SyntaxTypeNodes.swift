@@ -127,13 +127,15 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
     _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
-    genericArgumentClause: GenericArgumentClauseSyntax?
+    genericArgumentClause: GenericArgumentClauseSyntax?,
+    _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeName?.raw,
       name.raw,
       unexpectedBetweenNameAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
+      unexpectedAfterGenericArgumentClause?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.simpleTypeIdentifier,
       from: layout, arena: .default)
@@ -224,6 +226,27 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return SimpleTypeIdentifierSyntax(newData)
   }
 
+  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterGenericArgumentClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterGenericArgumentClause` replaced.
+  /// - param newChild: The new `unexpectedAfterGenericArgumentClause` to replace the node's
+  ///                   current `unexpectedAfterGenericArgumentClause`, if present.
+  public func withUnexpectedAfterGenericArgumentClause(
+    _ newChild: UnexpectedNodesSyntax?) -> SimpleTypeIdentifierSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return SimpleTypeIdentifierSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -233,6 +256,8 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -247,6 +272,7 @@ extension SimpleTypeIdentifierSyntax: CustomReflectable {
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenNameAndGenericArgumentClause": unexpectedBetweenNameAndGenericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericArgumentClause": genericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterGenericArgumentClause": unexpectedAfterGenericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -279,7 +305,8 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
     _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
-    genericArgumentClause: GenericArgumentClauseSyntax?
+    genericArgumentClause: GenericArgumentClauseSyntax?,
+    _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeBaseType?.raw,
@@ -290,6 +317,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       name.raw,
       unexpectedBetweenNameAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
+      unexpectedAfterGenericArgumentClause?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberTypeIdentifier,
       from: layout, arena: .default)
@@ -462,6 +490,27 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return MemberTypeIdentifierSyntax(newData)
   }
 
+  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterGenericArgumentClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterGenericArgumentClause` replaced.
+  /// - param newChild: The new `unexpectedAfterGenericArgumentClause` to replace the node's
+  ///                   current `unexpectedAfterGenericArgumentClause`, if present.
+  public func withUnexpectedAfterGenericArgumentClause(
+    _ newChild: UnexpectedNodesSyntax?) -> MemberTypeIdentifierSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return MemberTypeIdentifierSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -480,6 +529,8 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return nil
     case 7:
       return nil
+    case 8:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -497,6 +548,7 @@ extension MemberTypeIdentifierSyntax: CustomReflectable {
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenNameAndGenericArgumentClause": unexpectedBetweenNameAndGenericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericArgumentClause": genericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterGenericArgumentClause": unexpectedAfterGenericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -523,11 +575,13 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeClassKeyword: UnexpectedNodesSyntax? = nil,
-    classKeyword: TokenSyntax
+    classKeyword: TokenSyntax,
+    _ unexpectedAfterClassKeyword: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeClassKeyword?.raw,
       classKeyword.raw,
+      unexpectedAfterClassKeyword?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.classRestrictionType,
       from: layout, arena: .default)
@@ -576,11 +630,34 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return ClassRestrictionTypeSyntax(newData)
   }
 
+  public var unexpectedAfterClassKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterClassKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterClassKeyword` replaced.
+  /// - param newChild: The new `unexpectedAfterClassKeyword` to replace the node's
+  ///                   current `unexpectedAfterClassKeyword`, if present.
+  public func withUnexpectedAfterClassKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> ClassRestrictionTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return ClassRestrictionTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
       return nil
     case 1:
+      return nil
+    case 2:
       return nil
     default:
       fatalError("Invalid index")
@@ -593,6 +670,7 @@ extension ClassRestrictionTypeSyntax: CustomReflectable {
     return Mirror(self, children: [
       "unexpectedBeforeClassKeyword": unexpectedBeforeClassKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "classKeyword": Syntax(classKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterClassKeyword": unexpectedAfterClassKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -623,7 +701,8 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? = nil,
     elementType: TypeSyntax,
     _ unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
-    rightSquareBracket: TokenSyntax
+    rightSquareBracket: TokenSyntax,
+    _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftSquareBracket?.raw,
@@ -632,6 +711,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       elementType.raw,
       unexpectedBetweenElementTypeAndRightSquareBracket?.raw,
       rightSquareBracket.raw,
+      unexpectedAfterRightSquareBracket?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayType,
       from: layout, arena: .default)
@@ -762,6 +842,27 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return ArrayTypeSyntax(newData)
   }
 
+  public var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightSquareBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightSquareBracket` replaced.
+  /// - param newChild: The new `unexpectedAfterRightSquareBracket` to replace the node's
+  ///                   current `unexpectedAfterRightSquareBracket`, if present.
+  public func withUnexpectedAfterRightSquareBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> ArrayTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return ArrayTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -775,6 +876,8 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 4:
       return nil
     case 5:
+      return nil
+    case 6:
       return nil
     default:
       fatalError("Invalid index")
@@ -791,6 +894,7 @@ extension ArrayTypeSyntax: CustomReflectable {
       "elementType": Syntax(elementType).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenElementTypeAndRightSquareBracket": unexpectedBetweenElementTypeAndRightSquareBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightSquareBracket": Syntax(rightSquareBracket).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightSquareBracket": unexpectedAfterRightSquareBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -825,7 +929,8 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenColonAndValueType: UnexpectedNodesSyntax? = nil,
     valueType: TypeSyntax,
     _ unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
-    rightSquareBracket: TokenSyntax
+    rightSquareBracket: TokenSyntax,
+    _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftSquareBracket?.raw,
@@ -838,6 +943,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       valueType.raw,
       unexpectedBetweenValueTypeAndRightSquareBracket?.raw,
       rightSquareBracket.raw,
+      unexpectedAfterRightSquareBracket?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryType,
       from: layout, arena: .default)
@@ -1050,6 +1156,27 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return DictionaryTypeSyntax(newData)
   }
 
+  public var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 10, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightSquareBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightSquareBracket` replaced.
+  /// - param newChild: The new `unexpectedAfterRightSquareBracket` to replace the node's
+  ///                   current `unexpectedAfterRightSquareBracket`, if present.
+  public func withUnexpectedAfterRightSquareBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> DictionaryTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 10)
+    return DictionaryTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1072,6 +1199,8 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return nil
     case 9:
       return nil
+    case 10:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -1091,6 +1220,7 @@ extension DictionaryTypeSyntax: CustomReflectable {
       "valueType": Syntax(valueType).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenValueTypeAndRightSquareBracket": unexpectedBetweenValueTypeAndRightSquareBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightSquareBracket": Syntax(rightSquareBracket).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightSquareBracket": unexpectedAfterRightSquareBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1121,7 +1251,8 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
     period: TokenSyntax,
     _ unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodesSyntax? = nil,
-    typeOrProtocol: TokenSyntax
+    typeOrProtocol: TokenSyntax,
+    _ unexpectedAfterTypeOrProtocol: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeBaseType?.raw,
@@ -1130,6 +1261,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       period.raw,
       unexpectedBetweenPeriodAndTypeOrProtocol?.raw,
       typeOrProtocol.raw,
+      unexpectedAfterTypeOrProtocol?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.metatypeType,
       from: layout, arena: .default)
@@ -1260,6 +1392,27 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return MetatypeTypeSyntax(newData)
   }
 
+  public var unexpectedAfterTypeOrProtocol: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterTypeOrProtocol(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterTypeOrProtocol` replaced.
+  /// - param newChild: The new `unexpectedAfterTypeOrProtocol` to replace the node's
+  ///                   current `unexpectedAfterTypeOrProtocol`, if present.
+  public func withUnexpectedAfterTypeOrProtocol(
+    _ newChild: UnexpectedNodesSyntax?) -> MetatypeTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return MetatypeTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1273,6 +1426,8 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 4:
       return nil
     case 5:
+      return nil
+    case 6:
       return nil
     default:
       fatalError("Invalid index")
@@ -1289,6 +1444,7 @@ extension MetatypeTypeSyntax: CustomReflectable {
       "period": Syntax(period).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenPeriodAndTypeOrProtocol": unexpectedBetweenPeriodAndTypeOrProtocol.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typeOrProtocol": Syntax(typeOrProtocol).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterTypeOrProtocol": unexpectedAfterTypeOrProtocol.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1317,13 +1473,15 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeWrappedType: UnexpectedNodesSyntax? = nil,
     wrappedType: TypeSyntax,
     _ unexpectedBetweenWrappedTypeAndQuestionMark: UnexpectedNodesSyntax? = nil,
-    questionMark: TokenSyntax
+    questionMark: TokenSyntax,
+    _ unexpectedAfterQuestionMark: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeWrappedType?.raw,
       wrappedType.raw,
       unexpectedBetweenWrappedTypeAndQuestionMark?.raw,
       questionMark.raw,
+      unexpectedAfterQuestionMark?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.optionalType,
       from: layout, arena: .default)
@@ -1413,6 +1571,27 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return OptionalTypeSyntax(newData)
   }
 
+  public var unexpectedAfterQuestionMark: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterQuestionMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterQuestionMark` replaced.
+  /// - param newChild: The new `unexpectedAfterQuestionMark` to replace the node's
+  ///                   current `unexpectedAfterQuestionMark`, if present.
+  public func withUnexpectedAfterQuestionMark(
+    _ newChild: UnexpectedNodesSyntax?) -> OptionalTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return OptionalTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1422,6 +1601,8 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -1436,6 +1617,7 @@ extension OptionalTypeSyntax: CustomReflectable {
       "wrappedType": Syntax(wrappedType).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenWrappedTypeAndQuestionMark": unexpectedBetweenWrappedTypeAndQuestionMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterQuestionMark": unexpectedAfterQuestionMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1464,13 +1646,15 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? = nil,
     someOrAnySpecifier: TokenSyntax,
     _ unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? = nil,
-    baseType: TypeSyntax
+    baseType: TypeSyntax,
+    _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeSomeOrAnySpecifier?.raw,
       someOrAnySpecifier.raw,
       unexpectedBetweenSomeOrAnySpecifierAndBaseType?.raw,
       baseType.raw,
+      unexpectedAfterBaseType?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.constrainedSugarType,
       from: layout, arena: .default)
@@ -1560,6 +1744,27 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return ConstrainedSugarTypeSyntax(newData)
   }
 
+  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBaseType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBaseType` replaced.
+  /// - param newChild: The new `unexpectedAfterBaseType` to replace the node's
+  ///                   current `unexpectedAfterBaseType`, if present.
+  public func withUnexpectedAfterBaseType(
+    _ newChild: UnexpectedNodesSyntax?) -> ConstrainedSugarTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return ConstrainedSugarTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1569,6 +1774,8 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -1583,6 +1790,7 @@ extension ConstrainedSugarTypeSyntax: CustomReflectable {
       "someOrAnySpecifier": Syntax(someOrAnySpecifier).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenSomeOrAnySpecifierAndBaseType": unexpectedBetweenSomeOrAnySpecifierAndBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterBaseType": unexpectedAfterBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1611,13 +1819,15 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     _ unexpectedBeforeWrappedType: UnexpectedNodesSyntax? = nil,
     wrappedType: TypeSyntax,
     _ unexpectedBetweenWrappedTypeAndExclamationMark: UnexpectedNodesSyntax? = nil,
-    exclamationMark: TokenSyntax
+    exclamationMark: TokenSyntax,
+    _ unexpectedAfterExclamationMark: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeWrappedType?.raw,
       wrappedType.raw,
       unexpectedBetweenWrappedTypeAndExclamationMark?.raw,
       exclamationMark.raw,
+      unexpectedAfterExclamationMark?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.implicitlyUnwrappedOptionalType,
       from: layout, arena: .default)
@@ -1707,6 +1917,27 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
 
+  public var unexpectedAfterExclamationMark: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterExclamationMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterExclamationMark` replaced.
+  /// - param newChild: The new `unexpectedAfterExclamationMark` to replace the node's
+  ///                   current `unexpectedAfterExclamationMark`, if present.
+  public func withUnexpectedAfterExclamationMark(
+    _ newChild: UnexpectedNodesSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1716,6 +1947,8 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -1730,6 +1963,7 @@ extension ImplicitlyUnwrappedOptionalTypeSyntax: CustomReflectable {
       "wrappedType": Syntax(wrappedType).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenWrappedTypeAndExclamationMark": unexpectedBetweenWrappedTypeAndExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "exclamationMark": Syntax(exclamationMark).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterExclamationMark": unexpectedAfterExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1756,11 +1990,13 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil,
-    elements: CompositionTypeElementListSyntax
+    elements: CompositionTypeElementListSyntax,
+    _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeElements?.raw,
       elements.raw,
+      unexpectedAfterElements?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionType,
       from: layout, arena: .default)
@@ -1827,11 +2063,34 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return CompositionTypeSyntax(newData)
   }
 
+  public var unexpectedAfterElements: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterElements(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterElements` replaced.
+  /// - param newChild: The new `unexpectedAfterElements` to replace the node's
+  ///                   current `unexpectedAfterElements`, if present.
+  public func withUnexpectedAfterElements(
+    _ newChild: UnexpectedNodesSyntax?) -> CompositionTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return CompositionTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
       return nil
     case 1:
+      return nil
+    case 2:
       return nil
     default:
       fatalError("Invalid index")
@@ -1844,6 +2103,7 @@ extension CompositionTypeSyntax: CustomReflectable {
     return Mirror(self, children: [
       "unexpectedBeforeElements": unexpectedBeforeElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterElements": unexpectedAfterElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1872,13 +2132,15 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforePatternType: UnexpectedNodesSyntax? = nil,
     patternType: TypeSyntax,
     _ unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
-    ellipsis: TokenSyntax
+    ellipsis: TokenSyntax,
+    _ unexpectedAfterEllipsis: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePatternType?.raw,
       patternType.raw,
       unexpectedBetweenPatternTypeAndEllipsis?.raw,
       ellipsis.raw,
+      unexpectedAfterEllipsis?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.packExpansionType,
       from: layout, arena: .default)
@@ -1968,6 +2230,27 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return PackExpansionTypeSyntax(newData)
   }
 
+  public var unexpectedAfterEllipsis: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterEllipsis(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterEllipsis` replaced.
+  /// - param newChild: The new `unexpectedAfterEllipsis` to replace the node's
+  ///                   current `unexpectedAfterEllipsis`, if present.
+  public func withUnexpectedAfterEllipsis(
+    _ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return PackExpansionTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1977,6 +2260,8 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -1991,6 +2276,7 @@ extension PackExpansionTypeSyntax: CustomReflectable {
       "patternType": Syntax(patternType).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenPatternTypeAndEllipsis": unexpectedBetweenPatternTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "ellipsis": Syntax(ellipsis).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterEllipsis": unexpectedAfterEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2021,7 +2307,8 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil,
     elements: TupleTypeElementListSyntax,
     _ unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax
+    rightParen: TokenSyntax,
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftParen?.raw,
@@ -2030,6 +2317,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       elements.raw,
       unexpectedBetweenElementsAndRightParen?.raw,
       rightParen.raw,
+      unexpectedAfterRightParen?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleType,
       from: layout, arena: .default)
@@ -2178,6 +2466,27 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return TupleTypeSyntax(newData)
   }
 
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
+  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
+  ///                   current `unexpectedAfterRightParen`, if present.
+  public func withUnexpectedAfterRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return TupleTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2191,6 +2500,8 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 4:
       return nil
     case 5:
+      return nil
+    case 6:
       return nil
     default:
       fatalError("Invalid index")
@@ -2207,6 +2518,7 @@ extension TupleTypeSyntax: CustomReflectable {
       "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenElementsAndRightParen": unexpectedBetweenElementsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2245,7 +2557,8 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: UnexpectedNodesSyntax? = nil,
     arrow: TokenSyntax,
     _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil,
-    returnType: TypeSyntax
+    returnType: TypeSyntax,
+    _ unexpectedAfterReturnType: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftParen?.raw,
@@ -2262,6 +2575,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       arrow.raw,
       unexpectedBetweenArrowAndReturnType?.raw,
       returnType.raw,
+      unexpectedAfterReturnType?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionType,
       from: layout, arena: .default)
@@ -2576,6 +2890,27 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return FunctionTypeSyntax(newData)
   }
 
+  public var unexpectedAfterReturnType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterReturnType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterReturnType` replaced.
+  /// - param newChild: The new `unexpectedAfterReturnType` to replace the node's
+  ///                   current `unexpectedAfterReturnType`, if present.
+  public func withUnexpectedAfterReturnType(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 14)
+    return FunctionTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2606,6 +2941,8 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return nil
     case 13:
       return nil
+    case 14:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -2629,6 +2966,7 @@ extension FunctionTypeSyntax: CustomReflectable {
       "arrow": Syntax(arrow).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenArrowAndReturnType": unexpectedBetweenArrowAndReturnType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "returnType": Syntax(returnType).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterReturnType": unexpectedAfterReturnType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2659,7 +2997,8 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenSpecifierAndAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax?,
     _ unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? = nil,
-    baseType: TypeSyntax
+    baseType: TypeSyntax,
+    _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeSpecifier?.raw,
@@ -2668,6 +3007,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       attributes?.raw,
       unexpectedBetweenAttributesAndBaseType?.raw,
       baseType.raw,
+      unexpectedAfterBaseType?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributedType,
       from: layout, arena: .default)
@@ -2818,6 +3158,27 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return AttributedTypeSyntax(newData)
   }
 
+  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBaseType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBaseType` replaced.
+  /// - param newChild: The new `unexpectedAfterBaseType` to replace the node's
+  ///                   current `unexpectedAfterBaseType`, if present.
+  public func withUnexpectedAfterBaseType(
+    _ newChild: UnexpectedNodesSyntax?) -> AttributedTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return AttributedTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2831,6 +3192,8 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 4:
       return nil
     case 5:
+      return nil
+    case 6:
       return nil
     default:
       fatalError("Invalid index")
@@ -2847,6 +3210,7 @@ extension AttributedTypeSyntax: CustomReflectable {
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenAttributesAndBaseType": unexpectedBetweenAttributesAndBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterBaseType": unexpectedAfterBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2875,13 +3239,15 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? = nil,
     genericParameters: GenericParameterClauseSyntax,
     _ unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? = nil,
-    baseType: TypeSyntax
+    baseType: TypeSyntax,
+    _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeGenericParameters?.raw,
       genericParameters.raw,
       unexpectedBetweenGenericParametersAndBaseType?.raw,
       baseType.raw,
+      unexpectedAfterBaseType?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.namedOpaqueReturnType,
       from: layout, arena: .default)
@@ -2971,6 +3337,27 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return NamedOpaqueReturnTypeSyntax(newData)
   }
 
+  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBaseType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBaseType` replaced.
+  /// - param newChild: The new `unexpectedAfterBaseType` to replace the node's
+  ///                   current `unexpectedAfterBaseType`, if present.
+  public func withUnexpectedAfterBaseType(
+    _ newChild: UnexpectedNodesSyntax?) -> NamedOpaqueReturnTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return NamedOpaqueReturnTypeSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2980,6 +3367,8 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -2994,6 +3383,7 @@ extension NamedOpaqueReturnTypeSyntax: CustomReflectable {
       "genericParameters": Syntax(genericParameters).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenGenericParametersAndBaseType": unexpectedBetweenGenericParametersAndBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterBaseType": unexpectedAfterBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

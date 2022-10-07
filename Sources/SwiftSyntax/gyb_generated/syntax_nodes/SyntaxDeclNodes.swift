@@ -82,13 +82,15 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax?,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?
+    modifiers: ModifierListSyntax?,
+    _ unexpectedAfterModifiers: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
       unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
+      unexpectedAfterModifiers?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingDecl,
       from: layout, arena: .default)
@@ -216,6 +218,27 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return MissingDeclSyntax(newData)
   }
 
+  public var unexpectedAfterModifiers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterModifiers` replaced.
+  /// - param newChild: The new `unexpectedAfterModifiers` to replace the node's
+  ///                   current `unexpectedAfterModifiers`, if present.
+  public func withUnexpectedAfterModifiers(
+    _ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return MissingDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -225,6 +248,8 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -239,6 +264,7 @@ extension MissingDeclSyntax: CustomReflectable {
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterModifiers": unexpectedAfterModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -277,7 +303,8 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: TypeInitializerClauseSyntax,
     _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?
+    genericWhereClause: GenericWhereClauseSyntax?,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -294,6 +321,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       initializer.raw,
       unexpectedBetweenInitializerAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
+      unexpectedAfterGenericWhereClause?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.typealiasDecl,
       from: layout, arena: .default)
@@ -628,6 +656,27 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return TypealiasDeclSyntax(newData)
   }
 
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterGenericWhereClause` replaced.
+  /// - param newChild: The new `unexpectedAfterGenericWhereClause` to replace the node's
+  ///                   current `unexpectedAfterGenericWhereClause`, if present.
+  public func withUnexpectedAfterGenericWhereClause(
+    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 14)
+    return TypealiasDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -658,6 +707,8 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 13:
       return "generic where clause"
+    case 14:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -681,6 +732,7 @@ extension TypealiasDeclSyntax: CustomReflectable {
       "initializer": Syntax(initializer).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenInitializerAndGenericWhereClause": unexpectedBetweenInitializerAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterGenericWhereClause": unexpectedAfterGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -719,7 +771,8 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: TypeInitializerClauseSyntax?,
     _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?
+    genericWhereClause: GenericWhereClauseSyntax?,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -736,6 +789,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       initializer?.raw,
       unexpectedBetweenInitializerAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
+      unexpectedAfterGenericWhereClause?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.associatedtypeDecl,
       from: layout, arena: .default)
@@ -1071,6 +1125,27 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AssociatedtypeDeclSyntax(newData)
   }
 
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterGenericWhereClause` replaced.
+  /// - param newChild: The new `unexpectedAfterGenericWhereClause` to replace the node's
+  ///                   current `unexpectedAfterGenericWhereClause`, if present.
+  public func withUnexpectedAfterGenericWhereClause(
+    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 14)
+    return AssociatedtypeDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1101,6 +1176,8 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 13:
       return "generic where clause"
+    case 14:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -1124,6 +1201,7 @@ extension AssociatedtypeDeclSyntax: CustomReflectable {
       "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenInitializerAndGenericWhereClause": unexpectedBetweenInitializerAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterGenericWhereClause": unexpectedAfterGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1152,13 +1230,15 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeClauses: UnexpectedNodesSyntax? = nil,
     clauses: IfConfigClauseListSyntax,
     _ unexpectedBetweenClausesAndPoundEndif: UnexpectedNodesSyntax? = nil,
-    poundEndif: TokenSyntax
+    poundEndif: TokenSyntax,
+    _ unexpectedAfterPoundEndif: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeClauses?.raw,
       clauses.raw,
       unexpectedBetweenClausesAndPoundEndif?.raw,
       poundEndif.raw,
+      unexpectedAfterPoundEndif?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigDecl,
       from: layout, arena: .default)
@@ -1266,6 +1346,27 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return IfConfigDeclSyntax(newData)
   }
 
+  public var unexpectedAfterPoundEndif: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterPoundEndif(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterPoundEndif` replaced.
+  /// - param newChild: The new `unexpectedAfterPoundEndif` to replace the node's
+  ///                   current `unexpectedAfterPoundEndif`, if present.
+  public func withUnexpectedAfterPoundEndif(
+    _ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return IfConfigDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1275,6 +1376,8 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
+      return nil
+    case 4:
       return nil
     default:
       fatalError("Invalid index")
@@ -1289,6 +1392,7 @@ extension IfConfigDeclSyntax: CustomReflectable {
       "clauses": Syntax(clauses).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenClausesAndPoundEndif": unexpectedBetweenClausesAndPoundEndif.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundEndif": Syntax(poundEndif).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterPoundEndif": unexpectedAfterPoundEndif.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1321,7 +1425,8 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil,
     message: StringLiteralExprSyntax,
     _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax
+    rightParen: TokenSyntax,
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundError?.raw,
@@ -1332,6 +1437,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       message.raw,
       unexpectedBetweenMessageAndRightParen?.raw,
       rightParen.raw,
+      unexpectedAfterRightParen?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundErrorDecl,
       from: layout, arena: .default)
@@ -1503,6 +1609,27 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundErrorDeclSyntax(newData)
   }
 
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
+  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
+  ///                   current `unexpectedAfterRightParen`, if present.
+  public func withUnexpectedAfterRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return PoundErrorDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1521,6 +1648,8 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 7:
       return nil
+    case 8:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -1538,6 +1667,7 @@ extension PoundErrorDeclSyntax: CustomReflectable {
       "message": Syntax(message).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenMessageAndRightParen": unexpectedBetweenMessageAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1570,7 +1700,8 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil,
     message: StringLiteralExprSyntax,
     _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax
+    rightParen: TokenSyntax,
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundWarning?.raw,
@@ -1581,6 +1712,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       message.raw,
       unexpectedBetweenMessageAndRightParen?.raw,
       rightParen.raw,
+      unexpectedAfterRightParen?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundWarningDecl,
       from: layout, arena: .default)
@@ -1752,6 +1884,27 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundWarningDeclSyntax(newData)
   }
 
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
+  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
+  ///                   current `unexpectedAfterRightParen`, if present.
+  public func withUnexpectedAfterRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return PoundWarningDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1770,6 +1923,8 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 7:
       return nil
+    case 8:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -1787,6 +1942,7 @@ extension PoundWarningDeclSyntax: CustomReflectable {
       "message": Syntax(message).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenMessageAndRightParen": unexpectedBetweenMessageAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1819,7 +1975,8 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil,
     args: PoundSourceLocationArgsSyntax?,
     _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax
+    rightParen: TokenSyntax,
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundSourceLocation?.raw,
@@ -1830,6 +1987,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       args?.raw,
       unexpectedBetweenArgsAndRightParen?.raw,
       rightParen.raw,
+      unexpectedAfterRightParen?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundSourceLocation,
       from: layout, arena: .default)
@@ -2002,6 +2160,27 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationSyntax(newData)
   }
 
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
+  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
+  ///                   current `unexpectedAfterRightParen`, if present.
+  public func withUnexpectedAfterRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return PoundSourceLocationSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2020,6 +2199,8 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 7:
       return nil
+    case 8:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -2037,6 +2218,7 @@ extension PoundSourceLocationSyntax: CustomReflectable {
       "args": args.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenArgsAndRightParen": unexpectedBetweenArgsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2077,7 +2259,8 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
-    members: MemberDeclBlockSyntax
+    members: MemberDeclBlockSyntax,
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -2096,6 +2279,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
+      unexpectedAfterMembers?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.classDecl,
       from: layout, arena: .default)
@@ -2472,6 +2656,27 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ClassDeclSyntax(newData)
   }
 
+  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
+  /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
+  ///                   current `unexpectedAfterMembers`, if present.
+  public func withUnexpectedAfterMembers(
+    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return ClassDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2506,6 +2711,8 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -2531,6 +2738,7 @@ extension ClassDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2571,7 +2779,8 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
-    members: MemberDeclBlockSyntax
+    members: MemberDeclBlockSyntax,
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -2590,6 +2799,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
+      unexpectedAfterMembers?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.actorDecl,
       from: layout, arena: .default)
@@ -2966,6 +3176,27 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ActorDeclSyntax(newData)
   }
 
+  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
+  /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
+  ///                   current `unexpectedAfterMembers`, if present.
+  public func withUnexpectedAfterMembers(
+    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return ActorDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3000,6 +3231,8 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -3025,6 +3258,7 @@ extension ActorDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3065,7 +3299,8 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
-    members: MemberDeclBlockSyntax
+    members: MemberDeclBlockSyntax,
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -3084,6 +3319,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
+      unexpectedAfterMembers?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.structDecl,
       from: layout, arena: .default)
@@ -3460,6 +3696,27 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return StructDeclSyntax(newData)
   }
 
+  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
+  /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
+  ///                   current `unexpectedAfterMembers`, if present.
+  public func withUnexpectedAfterMembers(
+    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return StructDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3494,6 +3751,8 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -3519,6 +3778,7 @@ extension StructDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3559,7 +3819,8 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
-    members: MemberDeclBlockSyntax
+    members: MemberDeclBlockSyntax,
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -3578,6 +3839,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
+      unexpectedAfterMembers?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.protocolDecl,
       from: layout, arena: .default)
@@ -3954,6 +4216,27 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ProtocolDeclSyntax(newData)
   }
 
+  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
+  /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
+  ///                   current `unexpectedAfterMembers`, if present.
+  public func withUnexpectedAfterMembers(
+    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return ProtocolDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3988,6 +4271,8 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -4013,6 +4298,7 @@ extension ProtocolDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4051,7 +4337,8 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
-    members: MemberDeclBlockSyntax
+    members: MemberDeclBlockSyntax,
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -4068,6 +4355,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
+      unexpectedAfterMembers?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.extensionDecl,
       from: layout, arena: .default)
@@ -4402,6 +4690,27 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ExtensionDeclSyntax(newData)
   }
 
+  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
+  /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
+  ///                   current `unexpectedAfterMembers`, if present.
+  public func withUnexpectedAfterMembers(
+    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 14)
+    return ExtensionDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -4432,6 +4741,8 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 13:
       return nil
+    case 14:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -4455,6 +4766,7 @@ extension ExtensionDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4495,7 +4807,8 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?
+    body: CodeBlockSyntax?,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -4514,6 +4827,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndBody?.raw,
       body?.raw,
+      unexpectedAfterBody?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionDecl,
       from: layout, arena: .default)
@@ -4890,6 +5204,27 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return FunctionDeclSyntax(newData)
   }
 
+  public var unexpectedAfterBody: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
+  /// - param newChild: The new `unexpectedAfterBody` to replace the node's
+  ///                   current `unexpectedAfterBody`, if present.
+  public func withUnexpectedAfterBody(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return FunctionDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -4924,6 +5259,8 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -4949,6 +5286,7 @@ extension FunctionDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndBody": unexpectedBetweenGenericWhereClauseAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4989,7 +5327,8 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?
+    body: CodeBlockSyntax?,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -5008,6 +5347,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndBody?.raw,
       body?.raw,
+      unexpectedAfterBody?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.initializerDecl,
       from: layout, arena: .default)
@@ -5385,6 +5725,27 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return InitializerDeclSyntax(newData)
   }
 
+  public var unexpectedAfterBody: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
+  /// - param newChild: The new `unexpectedAfterBody` to replace the node's
+  ///                   current `unexpectedAfterBody`, if present.
+  public func withUnexpectedAfterBody(
+    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return InitializerDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -5419,6 +5780,8 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -5444,6 +5807,7 @@ extension InitializerDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndBody": unexpectedBetweenGenericWhereClauseAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -5476,7 +5840,8 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil,
     deinitKeyword: TokenSyntax,
     _ unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?
+    body: CodeBlockSyntax?,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -5487,6 +5852,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       deinitKeyword.raw,
       unexpectedBetweenDeinitKeywordAndBody?.raw,
       body?.raw,
+      unexpectedAfterBody?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.deinitializerDecl,
       from: layout, arena: .default)
@@ -5697,6 +6063,27 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return DeinitializerDeclSyntax(newData)
   }
 
+  public var unexpectedAfterBody: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
+  /// - param newChild: The new `unexpectedAfterBody` to replace the node's
+  ///                   current `unexpectedAfterBody`, if present.
+  public func withUnexpectedAfterBody(
+    _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return DeinitializerDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -5715,6 +6102,8 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 7:
       return nil
+    case 8:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -5732,6 +6121,7 @@ extension DeinitializerDeclSyntax: CustomReflectable {
       "deinitKeyword": Syntax(deinitKeyword).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenDeinitKeywordAndBody": unexpectedBetweenDeinitKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -5772,7 +6162,8 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
-    accessor: Syntax?
+    accessor: Syntax?,
+    _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -5791,6 +6182,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndAccessor?.raw,
       accessor?.raw,
+      unexpectedAfterAccessor?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.subscriptDecl,
       from: layout, arena: .default)
@@ -6167,6 +6559,27 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return SubscriptDeclSyntax(newData)
   }
 
+  public var unexpectedAfterAccessor: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterAccessor(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterAccessor` replaced.
+  /// - param newChild: The new `unexpectedAfterAccessor` to replace the node's
+  ///                   current `unexpectedAfterAccessor`, if present.
+  public func withUnexpectedAfterAccessor(
+    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return SubscriptDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -6201,6 +6614,8 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -6226,6 +6641,7 @@ extension SubscriptDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndAccessor": unexpectedBetweenGenericWhereClauseAndAccessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "accessor": accessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterAccessor": unexpectedAfterAccessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -6260,7 +6676,8 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
     importKind: TokenSyntax?,
     _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil,
-    path: AccessPathSyntax
+    path: AccessPathSyntax,
+    _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -6273,6 +6690,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       importKind?.raw,
       unexpectedBetweenImportKindAndPath?.raw,
       path.raw,
+      unexpectedAfterPath?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.importDecl,
       from: layout, arena: .default)
@@ -6542,6 +6960,27 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ImportDeclSyntax(newData)
   }
 
+  public var unexpectedAfterPath: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 10, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterPath(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterPath` replaced.
+  /// - param newChild: The new `unexpectedAfterPath` to replace the node's
+  ///                   current `unexpectedAfterPath`, if present.
+  public func withUnexpectedAfterPath(
+    _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 10)
+    return ImportDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -6564,6 +7003,8 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 9:
       return nil
+    case 10:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -6583,6 +7024,7 @@ extension ImportDeclSyntax: CustomReflectable {
       "importKind": importKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenImportKindAndPath": unexpectedBetweenImportKindAndPath.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "path": Syntax(path).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterPath": unexpectedAfterPath.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -6621,7 +7063,8 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodesSyntax? = nil,
     throwsKeyword: TokenSyntax?,
     _ unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?
+    body: CodeBlockSyntax?,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -6638,6 +7081,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       throwsKeyword?.raw,
       unexpectedBetweenThrowsKeywordAndBody?.raw,
       body?.raw,
+      unexpectedAfterBody?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorDecl,
       from: layout, arena: .default)
@@ -6956,6 +7400,27 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AccessorDeclSyntax(newData)
   }
 
+  public var unexpectedAfterBody: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
+  /// - param newChild: The new `unexpectedAfterBody` to replace the node's
+  ///                   current `unexpectedAfterBody`, if present.
+  public func withUnexpectedAfterBody(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 14)
+    return AccessorDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -6986,6 +7451,8 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 13:
       return nil
+    case 14:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -7009,6 +7476,7 @@ extension AccessorDeclSyntax: CustomReflectable {
       "throwsKeyword": throwsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenThrowsKeywordAndBody": unexpectedBetweenThrowsKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterBody": unexpectedAfterBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -7041,7 +7509,8 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? = nil,
     letOrVarKeyword: TokenSyntax,
     _ unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? = nil,
-    bindings: PatternBindingListSyntax
+    bindings: PatternBindingListSyntax,
+    _ unexpectedAfterBindings: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -7052,6 +7521,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       letOrVarKeyword.raw,
       unexpectedBetweenLetOrVarKeywordAndBindings?.raw,
       bindings.raw,
+      unexpectedAfterBindings?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.variableDecl,
       from: layout, arena: .default)
@@ -7279,6 +7749,27 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return VariableDeclSyntax(newData)
   }
 
+  public var unexpectedAfterBindings: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterBindings(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterBindings` replaced.
+  /// - param newChild: The new `unexpectedAfterBindings` to replace the node's
+  ///                   current `unexpectedAfterBindings`, if present.
+  public func withUnexpectedAfterBindings(
+    _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return VariableDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -7297,6 +7788,8 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 7:
       return nil
+    case 8:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -7314,6 +7807,7 @@ extension VariableDeclSyntax: CustomReflectable {
       "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenLetOrVarKeywordAndBindings": unexpectedBetweenLetOrVarKeywordAndBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "bindings": Syntax(bindings).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterBindings": unexpectedAfterBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -7351,7 +7845,8 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil,
     caseKeyword: TokenSyntax,
     _ unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? = nil,
-    elements: EnumCaseElementListSyntax
+    elements: EnumCaseElementListSyntax,
+    _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -7362,6 +7857,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       caseKeyword.raw,
       unexpectedBetweenCaseKeywordAndElements?.raw,
       elements.raw,
+      unexpectedAfterElements?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseDecl,
       from: layout, arena: .default)
@@ -7597,6 +8093,27 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return EnumCaseDeclSyntax(newData)
   }
 
+  public var unexpectedAfterElements: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterElements(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterElements` replaced.
+  /// - param newChild: The new `unexpectedAfterElements` to replace the node's
+  ///                   current `unexpectedAfterElements`, if present.
+  public func withUnexpectedAfterElements(
+    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return EnumCaseDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -7615,6 +8132,8 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 7:
       return "elements"
+    case 8:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -7632,6 +8151,7 @@ extension EnumCaseDeclSyntax: CustomReflectable {
       "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenCaseKeywordAndElements": unexpectedBetweenCaseKeywordAndElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterElements": unexpectedAfterElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -7673,7 +8193,8 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
-    members: MemberDeclBlockSyntax
+    members: MemberDeclBlockSyntax,
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -7692,6 +8213,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
+      unexpectedAfterMembers?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumDecl,
       from: layout, arena: .default)
@@ -8094,6 +8616,27 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return EnumDeclSyntax(newData)
   }
 
+  public var unexpectedAfterMembers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
+  /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
+  ///                   current `unexpectedAfterMembers`, if present.
+  public func withUnexpectedAfterMembers(
+    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 16)
+    return EnumDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -8128,6 +8671,8 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 15:
       return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -8153,6 +8698,7 @@ extension EnumDeclSyntax: CustomReflectable {
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericWhereClauseAndMembers": unexpectedBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMembers": unexpectedAfterMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -8188,7 +8734,8 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
-    operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?
+    operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?,
+    _ unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -8201,6 +8748,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       identifier.raw,
       unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw,
       operatorPrecedenceAndTypes?.raw,
+      unexpectedAfterOperatorPrecedenceAndTypes?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorDecl,
       from: layout, arena: .default)
@@ -8462,6 +9010,27 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return OperatorDeclSyntax(newData)
   }
 
+  public var unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 10, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterOperatorPrecedenceAndTypes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterOperatorPrecedenceAndTypes` replaced.
+  /// - param newChild: The new `unexpectedAfterOperatorPrecedenceAndTypes` to replace the node's
+  ///                   current `unexpectedAfterOperatorPrecedenceAndTypes`, if present.
+  public func withUnexpectedAfterOperatorPrecedenceAndTypes(
+    _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 10)
+    return OperatorDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -8484,6 +9053,8 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 9:
       return nil
+    case 10:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -8503,6 +9074,7 @@ extension OperatorDeclSyntax: CustomReflectable {
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes": unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "operatorPrecedenceAndTypes": operatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterOperatorPrecedenceAndTypes": unexpectedAfterOperatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -8542,7 +9114,8 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodesSyntax? = nil,
     groupAttributes: PrecedenceGroupAttributeListSyntax,
     _ unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodesSyntax? = nil,
-    rightBrace: TokenSyntax
+    rightBrace: TokenSyntax,
+    _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -8559,6 +9132,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       groupAttributes.raw,
       unexpectedBetweenGroupAttributesAndRightBrace?.raw,
       rightBrace.raw,
+      unexpectedAfterRightBrace?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupDecl,
       from: layout, arena: .default)
@@ -8922,6 +9496,27 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupDeclSyntax(newData)
   }
 
+  public var unexpectedAfterRightBrace: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightBrace(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightBrace` replaced.
+  /// - param newChild: The new `unexpectedAfterRightBrace` to replace the node's
+  ///                   current `unexpectedAfterRightBrace`, if present.
+  public func withUnexpectedAfterRightBrace(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 14)
+    return PrecedenceGroupDeclSyntax(newData)
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -8952,6 +9547,8 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       return nil
     case 13:
       return nil
+    case 14:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -8975,6 +9572,7 @@ extension PrecedenceGroupDeclSyntax: CustomReflectable {
       "groupAttributes": Syntax(groupAttributes).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenGroupAttributesAndRightBrace": unexpectedBetweenGroupAttributesAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterRightBrace": unexpectedAfterRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

@@ -167,7 +167,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         FixIt(message: RemoveTokensFixIt(tokensToRemove: semicolons), changes: semicolons.map(FixIt.Changes.makeMissing))
       ])
     } else {
-      addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node))
+      addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node), highlights: [Syntax(node)])
     }
     return .skipChildren
   }

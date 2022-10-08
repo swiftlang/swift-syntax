@@ -120,7 +120,7 @@ extension Parser {
   /// =======
   ///
   ///     typed-pattern → pattern ':' attributes? inout? type
-  mutating func parseTypedPattern(allowRecover: Bool = true) -> (RawPatternSyntax, RawTypeAnnotationSyntax?) {
+  mutating func parseTypedPattern(allowRecoveryFromMissingColon: Bool = true) -> (RawPatternSyntax, RawTypeAnnotationSyntax?) {
     let pattern = self.parsePattern()
 
     // Now parse an optional type annotation.
@@ -134,7 +134,9 @@ extension Parser {
         type: result,
         arena: self.arena
       )
-    } else if allowRecover && lookahead.canParseType() && !self.currentToken.isAtStartOfLine {
+    } else if allowRecoveryFromMissingColon
+                && !self.currentToken.isAtStartOfLine
+                && lookahead.canParseType() {
       // Recovery if the user forgot to add ':'
       let result = self.parseResultType()
       type = RawTypeAnnotationSyntax(

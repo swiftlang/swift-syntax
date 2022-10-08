@@ -1,22 +1,23 @@
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 import Foundation
 
 /// AddOneToIntegerLiterals will visit each token in the Syntax tree, and
 /// (if it is an integer literal token) add 1 to the integer and return the
 /// new integer literal token.
 ///
-/// For example will it turn:
+/// For example, it will turn
 /// ```
 /// let x = 2
 /// let y = 3_000
 /// ```
-/// into:
+/// into
 /// ```
 /// let x = 3
 /// let y = 3001
 /// ```
-class AddOneToIntegerLiterals: SyntaxRewriter {
+///
+private class AddOneToIntegerLiterals: SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> Syntax {
     // Only transform integer literals.
     guard case .integerLiteral(let text) = token.tokenKind else {
@@ -37,8 +38,14 @@ class AddOneToIntegerLiterals: SyntaxRewriter {
   }
 }
 
-let file = CommandLine.arguments[1]
-let url = URL(fileURLWithPath: file)
-let sourceFile = try SyntaxParser.parse(url)
-let incremented = AddOneToIntegerLiterals().visit(sourceFile)
-print(incremented)
+@main
+struct Main {
+  static func main() throws {
+    let file = CommandLine.arguments[1]
+    let url = URL(fileURLWithPath: file)
+    let source = try String(contentsOf: url, encoding: .utf8)
+    let sourceFile = try Parser.parse(source: source)
+    let incremented = AddOneToIntegerLiterals().visit(sourceFile)
+    print(incremented)
+  }
+}

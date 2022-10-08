@@ -333,8 +333,80 @@ final class StatementTests: XCTestCase {
       substructureAfterMarker: "1️⃣")
   }
 
+  func testHangingYieldArgument() {
+    AssertParse(
+      """
+      1️⃣yield
+      print("huh")
+      """,
+      substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("yield"), declNameArguments: nil)),
+    substructureAfterMarker: "1️⃣")
+  }
+
   func testYield() {
     // Make sure these are always considered a yield statement
+    AssertParse(
+      """
+      var x: Int {
+        _read {
+          1️⃣yield &x
+        }
+      }
+      """,
+      substructure: Syntax(YieldStmtSyntax(
+        yieldKeyword: .contextualKeyword("yield"),
+        yields: Syntax(InOutExprSyntax(
+          ampersand: .prefixAmpersandToken(),
+          expression: ExprSyntax(IdentifierExprSyntax(
+            identifier: .identifier("x"),
+            declNameArguments: nil)))))),
+      substructureAfterMarker: "1️⃣")
+
+    AssertParse(
+      """
+      @inlinable internal subscript(key: Key) -> Value? {
+        @inline(__always) get {
+          return lookup(key)
+        }
+        @inline(__always) _modify {
+          guard isNative else {
+            let cocoa = asCocoa
+            var native = _NativeDictionary<Key, Value>(
+              cocoa, capacity: cocoa.count + 1)
+            self = .init(native: native)
+            1️⃣yield &native[key, isUnique: true]
+            return
+          }
+          let isUnique = isUniquelyReferenced()
+          yield &asNative[key, isUnique: isUnique]
+        }
+      }
+      """,
+      substructure: Syntax(YieldStmtSyntax(
+        yieldKeyword: .contextualKeyword("yield"),
+        yields: Syntax(InOutExprSyntax(
+          ampersand: .prefixAmpersandToken(),
+          expression: ExprSyntax(SubscriptExprSyntax(
+            calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("native"), declNameArguments: nil)),
+            leftBracket: .leftSquareBracketToken(),
+            argumentList: TupleExprElementListSyntax([
+              TupleExprElementSyntax(
+                label: nil,
+                colon: nil,
+                expression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("key"), declNameArguments: nil)),
+                trailingComma: .commaToken()),
+              TupleExprElementSyntax(
+                label: .identifier("isUnique"),
+                colon: .colonToken(),
+                expression: ExprSyntax(BooleanLiteralExprSyntax(booleanLiteral: .trueKeyword())),
+                trailingComma: nil),
+            ]),
+            rightBracket: .rightSquareBracketToken(),
+            trailingClosure: nil,
+            additionalTrailingClosures: nil)))))),
+      substructureAfterMarker: "1️⃣")
+
+    // Make sure these are not.
     AssertParse(
       """
       var x: Int {
@@ -343,17 +415,17 @@ final class StatementTests: XCTestCase {
         }
       }
       """,
-      substructure: Syntax(YieldStmtSyntax(
-        yieldKeyword: .contextualKeyword("yield"),
-        yields: Syntax(YieldListSyntax(
-          leftParen: .leftParenToken(),
-          elementList: YieldExprListSyntax([]),
-          rightParen: .rightParenToken())
-        ))
-      ),
-      substructureAfterMarker: "1️⃣")
+      substructure: Syntax(FunctionCallExprSyntax(
+        calledExpression: ExprSyntax(IdentifierExprSyntax(
+          identifier: .identifier("yield"),
+          declNameArguments: nil)),
+        leftParen: .leftParenToken(),
+        argumentList: TupleExprElementListSyntax([]),
+        rightParen: .rightParenToken(),
+        trailingClosure: nil,
+        additionalTrailingClosures: nil)),
+    substructureAfterMarker: "1️⃣")
 
-    // Make sure these are not.
     AssertParse(
       """
       var x: Int {

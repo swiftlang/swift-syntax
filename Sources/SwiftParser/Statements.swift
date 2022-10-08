@@ -18,8 +18,8 @@ extension TokenConsumer {
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  func atStartOfStatement(context: Parser.ItemContext? = nil) -> Bool {
-    return self.lookahead().isStartOfStatement(context: context)
+  func atStartOfStatement() -> Bool {
+    return self.lookahead().isStartOfStatement()
   }
 }
 
@@ -1074,7 +1074,7 @@ extension Parser.Lookahead {
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  public func isStartOfStatement(context: Parser.ItemContext?) -> Bool {
+  public func isStartOfStatement() -> Bool {
     switch self.currentToken.tokenKind {
     case .returnKeyword,
         .throwKeyword,
@@ -1106,10 +1106,23 @@ extension Parser.Lookahead {
     case .identifier:
       // "identifier ':' for/while/do/switch" is a label on a loop/switch.
       guard self.peek().tokenKind == .colon else {
-        // "yield" in the right context begins a yield statement.
-        if context == .coroutineAccessor, self.atContextualKeyword("yield") {
-          return true
+        if self.atContextualKeyword("yield") {
+          switch self.peek().tokenKind {
+          case .prefixAmpersand:
+            // "yield &" always denotes a yield statement.
+            return true
+          case .leftParen:
+            // "yield (", by contrast, must be disambiguated with additional
+            // context. We always consider it an apply expression of a function
+            // called `yield` for the purposes of the parse.
+            return false
+          default:
+            // "yield" followed immediately by any other token is likely a
+            // yield statement of some singular expression.
+            return !self.peek().isAtStartOfLine
+          }
         }
+
         return false
       }
 
@@ -1127,7 +1140,7 @@ extension Parser.Lookahead {
       }
       // For better recovery, we just accept a label on any statement.  We reject
       // putting a label on something inappropriate in `parseStatement()`.
-      return backtrack.isStartOfStatement(context: context)
+      return backtrack.isStartOfStatement()
 
     case .atSign:
       // Might be a statement or case attribute. The only one of these we have
@@ -1139,7 +1152,7 @@ extension Parser.Lookahead {
       var backtrack = self.lookahead()
       backtrack.eat(.atSign)
       backtrack.expectIdentifierWithoutRecovery()
-      return backtrack.isStartOfStatement(context: context)
+      return backtrack.isStartOfStatement()
     default:
       return false
     }

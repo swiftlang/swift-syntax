@@ -20,8 +20,8 @@ final class SyntaxTransformVisitorTest: XCTestCase {
         visitChildren(node).reduce(1, +)
       }
     }
-    _ = try {
-      let parsed = try Parser.parse(source: """
+    _ = {
+      let parsed = Parser.parse(source: """
           func foo() {
             public func foo() {
               func foo() {
@@ -75,24 +75,24 @@ final class SyntaxTransformVisitorTest: XCTestCase {
           "[" + visit(node.elementType) + "]"
       }
     }
-    _ = try {
-      let parsed = try Parser.parse(source: """
+    _ = {
+      let parsed = Parser.parse(source: """
           func foo(a: Int, b: Foo, c: [Int]) -> Result {
           }
           """)
       let stringified = PrintFunctionType().visit(parsed)
       XCTAssertEqual(stringified, "(Int, Foo, [Int]) -> Result")
     }()
-    _ = try {
-      let parsed = try Parser.parse(source: """
+    _ = {
+      let parsed = Parser.parse(source: """
           func foo() {
           }
           """)
       let stringified = PrintFunctionType().visit(parsed)
       XCTAssertEqual(stringified, "() -> Void")
     }()
-    _ = try {
-      let parsed = try Parser.parse(source: """
+    _ = {
+      let parsed = Parser.parse(source: """
           func foo(a: Int) -> [Result] {
           }
           """)

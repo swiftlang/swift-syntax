@@ -8,7 +8,7 @@ DECL_NODES = [
     Node('TypeInitializerClause', name_for_diagnostics=None, kind='Syntax',
          children=[
              Child('Equal', kind='EqualToken'),
-             Child('Value', kind='Type', name_for_diagnostics='value'),
+             Child('Value', kind='Type', name_for_diagnostics='type'),
          ]),
 
     # typealias-declaration -> attributes? access-level-modifier? 'typealias'

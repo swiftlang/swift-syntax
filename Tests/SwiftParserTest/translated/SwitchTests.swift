@@ -1369,8 +1369,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: switch must be exhaustive
-        // TODO: Old parser expected note on line 5: remove '@unknown' to handle remaining values
+        DiagnosticSpec(message: "expected expression in 'return' statement")
       ]
     )
   }
@@ -1387,9 +1386,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: switch must be exhaustive
-        // TODO: Old parser expected error on line 5: expected ':' after 'default'
-        // TODO: Old parser expected note on line 5: remove '@unknown' to handle remaining values
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'return' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in switch case"),
       ]
     )

@@ -111,7 +111,7 @@ public enum TokenPrecedence: Comparable {
       // Legacy literals
         .__column__Keyword, .__dso_handle__Keyword, .__file__Keyword, .__function__Keyword, .__line__Keyword,
       // Pound literals
-        .poundAssertKeyword, .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
+        .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
       // Identifiers
         .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
@@ -168,8 +168,8 @@ public enum TokenPrecedence: Comparable {
         .caseKeyword, .catchKeyword, .defaultKeyword, .elseKeyword,
       // Return-like statements
         .breakKeyword, .continueKeyword, .fallthroughKeyword, .returnKeyword, .throwKeyword, .yield,
-      // #error and #warning are statement-like
-        .poundErrorKeyword, .poundWarningKeyword:
+      // #error, #warning and #assert are statement-like
+        .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
       self = .stmtKeyword
 
       // MARK: Strong bracketet

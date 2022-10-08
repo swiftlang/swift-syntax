@@ -1623,7 +1623,7 @@ extension Parser {
         let initializer: RawInitializerClauseSyntax?
         if let equal = self.consume(if: .equal) {
           var value = self.parseExpression()
-          if hasTryBeforeIntroducer {
+          if hasTryBeforeIntroducer && !value.is(RawTryExprSyntax.self) {
             value = RawExprSyntax(RawTryExprSyntax(
               tryKeyword: missingToken(.tryKeyword, text: nil),
               questionOrExclamationMark: nil,

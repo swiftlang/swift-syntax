@@ -192,6 +192,15 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   }
 }
 
+
+public struct RemoveRedundantFixIt: ParserFixIt {
+  public let removeTokens: [TokenSyntax]
+
+  public var message: String {
+    "remove redundant \(missingNodesDescription(removeTokens))"
+  }
+}
+
 public struct ReplaceTokensFixIt: ParserFixIt {
   public let replaceTokens: [TokenSyntax]
 

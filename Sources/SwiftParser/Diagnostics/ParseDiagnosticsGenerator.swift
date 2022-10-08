@@ -104,7 +104,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     unexpectedTokenCondition: (TokenSyntax) -> Bool,
     correctTokens: [TokenSyntax?],
     message: (_ misplacedTokens: [TokenSyntax]) -> DiagnosticMessage,
-    fixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage
+    moveFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage,
+    removeRedundantFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage? = { _ in nil }
   ) {
     guard let incorrectContainer = unexpected,
           let misplacedTokens = incorrectContainer.onlyTokens(satisfying: unexpectedTokenCondition) else {
@@ -112,10 +113,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return
     }
 
+    let correctTokens = correctTokens.compactMap({ $0 })
+
     // Ignore `correctTokens` that are already present.
-    let correctTokens = correctTokens.compactMap({ $0 }).filter({ $0.presence == .missing })
+    let correctAndMissingTokens = correctTokens.filter({ $0.presence == .missing })
     var changes = misplacedTokens.map(FixIt.Changes.makeMissing)
-    for correctToken in correctTokens {
+    for correctToken in correctAndMissingTokens {
       if misplacedTokens.count == 1, let misplacedToken = misplacedTokens.first,
          misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken {
         changes.append(FixIt.Changes.makePresent(
@@ -134,10 +137,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     var fixIts: [FixIt] = []
     if changes.count > 1 {
       // Only emit a Fix-It if we are moving a token, i.e. also making a token present.
-      fixIts.append(FixIt(message: fixIt(misplacedTokens), changes: changes))
+      fixIts.append(FixIt(message: moveFixIt(misplacedTokens), changes: changes))
+    } else if !correctTokens.isEmpty, let removeFixIt = removeRedundantFixIt(misplacedTokens) {
+      fixIts.append(FixIt(message: removeFixIt, changes: changes))
     }
 
-    addDiagnostic(incorrectContainer, message(misplacedTokens), fixIts: fixIts, handledNodes: [incorrectContainer.id] + correctTokens.map(\.id))
+    addDiagnostic(incorrectContainer, message(misplacedTokens), fixIts: fixIts, handledNodes: [incorrectContainer.id] + correctAndMissingTokens.map(\.id))
   }
 
   // MARK: - Generic diagnostic generation
@@ -240,7 +245,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpectedTokenCondition: { $0.tokenKind == .contextualKeyword("async") || $0.tokenKind == .throwsKeyword },
       correctTokens: [node.asyncKeyword, node.throwsToken],
       message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
-      fixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
+      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
     )
     return .visitChildren
   }
@@ -285,7 +290,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpectedTokenCondition: { $0.tokenKind == .throwsKeyword },
       correctTokens: [node.throwsOrRethrowsKeyword],
       message: { _ in StaticParserError.throwsInReturnPosition },
-      fixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
+      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
     )
     return .visitChildren
   }
@@ -310,7 +315,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         unexpectedTokenCondition: { $0.tokenKind == .tryKeyword },
         correctTokens: [node.expression?.as(TryExprSyntax.self)?.tryKeyword],
         message: { _ in StaticParserError.tryMustBePlacedOnReturnedExpr },
-        fixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .returnKeyword) }
+        moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .returnKeyword) }
       )
     }
     return .visitChildren
@@ -335,7 +340,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpectedTokenCondition: { $0.tokenKind == .tryKeyword },
       correctTokens: [node.expression.as(TryExprSyntax.self)?.tryKeyword],
       message: { _ in StaticParserError.tryMustBePlacedOnThrownExpr },
-      fixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .throwKeyword) }
+      moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .throwKeyword) }
     )
     return .visitChildren
   }
@@ -350,7 +355,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         unexpectedTokenCondition: { $0.tokenKind == .colon },
         correctTokens: [node.equal],
         message: { _ in MissingNodesError(missingNodes: [Syntax(node.equal)]) },
-        fixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: node.equal) }
+        moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: node.equal) }
       )
     }
     return .visitChildren
@@ -371,18 +376,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     let missingTries = node.bindings.compactMap({
-      if let missingTry = $0.initializer?.value.as(TryExprSyntax.self)?.tryKeyword, missingTry.presence == .missing {
-        return missingTry
-      } else {
-        return nil
-      }
+      return $0.initializer?.value.as(TryExprSyntax.self)?.tryKeyword
     })
     exchangeTokens(
       unexpected: node.unexpectedBetweenModifiersAndLetOrVarKeyword,
       unexpectedTokenCondition: { $0.tokenKind == .tryKeyword },
       correctTokens: missingTries,
       message: { _ in StaticParserError.tryOnInitialValueExpression },
-      fixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .equal) }
+      moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .equal) },
+      removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
     return .visitChildren
   }

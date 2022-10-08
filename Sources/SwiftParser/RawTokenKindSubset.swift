@@ -261,6 +261,13 @@ enum CanBeStatementStart: RawTokenKindSubset {
     default: return nil
     }
   }
+
+  var precedence: TokenPrecedence? {
+    switch self {
+    case .yieldAsIdentifier: return .stmtKeyword
+    default: return nil
+    }
+  }
 }
 
 enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {

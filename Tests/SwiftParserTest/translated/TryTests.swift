@@ -122,6 +122,17 @@ final class TryTests: XCTestCase {
     )
   }
 
+  func testTry11() {
+    AssertParse(
+      """
+      1️⃣try let singleLet = try foo()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["remove redundant 'try'"]),
+      ], fixedSource: "let singleLet = try foo()"
+    )
+  }
+
   func testTry11a() {
     AssertParse(
       """

@@ -7,7 +7,7 @@ final class TypeTests: XCTestCase {
   func testMissingColonInType() {
     AssertParse(
       """
-      var foo #^DIAG^#Bar = 1
+      var foo 1️⃣Bar = 1
       """, diagnostics: [
         DiagnosticSpec(message: "expected ':' in type annotation")
       ])

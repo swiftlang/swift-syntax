@@ -638,7 +638,7 @@ enum ParameterModifier: RawTokenKindSubset {
   init?(lexeme: Lexer.Lexeme) {
     switch (lexeme.tokenKind, lexeme.tokenText) {
     case (.identifier, "_const"): self = ._const
-    case (.identifier, "isolate"): self = .isolated
+    case (.identifier, "isolated"): self = .isolated
     default: return nil
     }
   }

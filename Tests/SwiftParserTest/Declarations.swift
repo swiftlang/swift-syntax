@@ -1040,31 +1040,19 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       """
       func isolated(isolated _ 1️⃣map: String) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
-        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
-      ]
+      """
     )
 
     AssertParse(
       """
       func isolatedConst(isolated _const _ 1️⃣map: String) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
-        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
-      ]
+      """
     )
 
     AssertParse(
       """
       func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ 1️⃣map: String) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
-        DiagnosticSpec(message: "unexpected text 'map: String' in parameter clause"),
-      ]
+      """
     )
 
     AssertParse(
@@ -1082,11 +1070,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       """
       func isolatedConst(isolated _const map1️⃣: String) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'isolated' may only be used on parameters
-        DiagnosticSpec(message: "unexpected text ': String' in parameter clause"),
-      ]
+      """
     )
 
     AssertParse(

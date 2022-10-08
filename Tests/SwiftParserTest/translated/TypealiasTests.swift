@@ -86,7 +86,7 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery11️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '=' and value in typealias declaration"),
+        DiagnosticSpec(message: "expected '=' and type in typealias declaration"),
       ]
     )
   }
@@ -98,7 +98,7 @@ final class TypealiasTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected value in typealias declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in typealias declaration"),
       ]
     )
   }
@@ -109,7 +109,7 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery3 =1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in typealias declaration"),
+        DiagnosticSpec(message: "expected type in typealias declaration"),
       ]
     )
   }
@@ -143,7 +143,7 @@ final class TypealiasTests: XCTestCase {
       typealias Recovery6 = 1️⃣=
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in typealias declaration"),
+        DiagnosticSpec(message: "expected type in typealias declaration"),
         DiagnosticSpec(message: "extraneous '=' at top level"),
       ]
     )
@@ -159,7 +159,7 @@ final class TypealiasTests: XCTestCase {
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 11 - 17 = '`switch`'
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in typealias declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and value in typealias declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and type in typealias declaration"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression and '{}' to end 'switch' statement"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '= Int' at top level"),
       ]

@@ -4849,7 +4849,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
-      return "value"
+      return "type"
     case 4:
       return nil
     default:

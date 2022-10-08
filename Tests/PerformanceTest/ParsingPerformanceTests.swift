@@ -26,7 +26,7 @@ public class ParsingPerformanceTests: XCTestCase {
     measure {
       do {
         let source = try String(contentsOf: inputFile)
-        _ = try SwiftParser.Parser.parse(source: source)
+        _ = SwiftParser.Parser.parse(source: source)
       } catch {
         XCTFail(error.localizedDescription)
       }

@@ -16,7 +16,7 @@ import SwiftParser
 final class DiagnosticsFormatterTests: XCTestCase {
   
   func annotate(source: String) throws -> String {
-    let tree = try Parser.parse(source: source)
+    let tree = Parser.parse(source: source)
     let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
     return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags)
   }

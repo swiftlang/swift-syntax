@@ -45,7 +45,7 @@ import SwiftParser
 import SwiftOperators
 
 var opPrecedence = OperatorTable.standardOperators // Use the Swift standard library operators
-let parsed = try Parser.parse(source: "x + y * z")
+let parsed = Parser.parse(source: "x + y * z")
 dump(parsed) // contains SequenceExprSyntax(x, +, y, *, z)
 let folded = try opPrecedence.foldAll(parsed)
 dump(folded) // contains InfixOperatorExpr(x, +, InfixOperatorExpr(y, *, z))
@@ -65,12 +65,12 @@ let moreOperators =
 
   infix operator **: ExponentiationPrecedence
   """
-let parsedOperators = try Parser.parse(source: moreOperators)
+let parsedOperators = Parser.parse(source: moreOperators)
 
 // Adds **, ExponentiationPrecedence to the set of known operators and precedence groups.
 try opPrecedence.addSourceFile(parsedOperators) 
 
-let parsed2 = try Parser.parse(source: "b ** c ** d")
+let parsed2 = Parser.parse(source: "b ** c ** d")
 dump(parsed2) // contains SequenceExprSyntax(b, **, c, **, d)
 let folded2 = try opPrecedence.foldAll(parsed2)
 dump(folded2) // contains InfixOperatorExpr(b, **, InfixOperatorExpr(c, **, d))

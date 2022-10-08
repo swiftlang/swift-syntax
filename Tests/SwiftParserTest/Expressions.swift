@@ -179,6 +179,13 @@ final class ExpressionTests: XCTestCase {
       \Optional.?!?!?!?.??!
       """#
     )
+
+    AssertParse(
+      #"""
+      _ = distinctUntilChanged(\ .?.status)
+      _ = distinctUntilChanged(\.?.status)
+      """#
+    )
   }
 
   func testBasicLiterals() {

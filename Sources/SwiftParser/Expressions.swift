@@ -797,11 +797,6 @@ extension Parser {
       return nil
     }
 
-    // Make sure the end isn't a ".".
-    if lastWasDot {
-      return nil
-    }
-
     return numComponents
   }
 
@@ -908,7 +903,10 @@ extension Parser {
 
       // Check for a postfix operator starting with '.' that contains only
       // periods, '?'s, and '!'s. Expand that into key path components.
-      if self.at(any: [.postfixOperator,.postfixQuestionMark,.exclamationMark]),
+      if self.at(any: [
+            .postfixOperator, .postfixQuestionMark,
+            .exclamationMark, .prefixOperator]
+         ),
          let numComponents = getNumOptionalKeyPathPostfixComponents(
           self.currentToken.tokenText) {
         components.append(

@@ -413,7 +413,7 @@ extension Parser {
   }
 }
 
-// MARK: Spliting Tokens
+// MARK: Splitting Tokens
 
 extension Parser {
   /// Consumes a given token, or splits the current token into a leading token

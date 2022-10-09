@@ -177,6 +177,7 @@ final class DeclarationTests: XCTestCase {
     )
 
     AssertParse("private unowned(unsafe) var foo: Int")
+    AssertParse("unowned(unsafe) let unmanagedVar: Class = c")
 
     AssertParse("_ = foo?.description")
 
@@ -249,12 +250,7 @@ final class DeclarationTests: XCTestCase {
       fileprivate fileprivate(set) var fileprivateProp = 0
       private private(set) var privateProp = 0
       internal(set) var defaultProp = 0
-      """,
-      diagnostics: [
-        // TODO: This test case should not produce any errors
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-      ]
+      """
     )
 
     AssertParse(

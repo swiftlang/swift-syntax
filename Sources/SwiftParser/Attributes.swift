@@ -261,7 +261,7 @@ extension Parser {
   }
 
   mutating func parseDifferentiabilityParameters() -> RawDifferentiabilityParamsClauseSyntax {
-    let (unexpectedBeforeWrt, wrt) = self.expectIdentifier()
+    let (unexpectedBeforeWrt, wrt) = self.expectIdentifier(keywordRecovery: true)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
     guard let leftParen = self.consume(if: .leftParen) else {
@@ -654,7 +654,7 @@ extension Parser {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforePrivateToken, privateToken) = self.expectContextualKeyword("_private")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeLabel, label) = self.expectIdentifier()
+    let (unexpectedBeforeLabel, label) = self.expectIdentifier(keywordRecovery: true)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let filename = self.consumeAnyToken()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)

@@ -330,16 +330,10 @@ final class InvalidTests: XCTestCase {
   func testInvalid17() {
     AssertParse(
       """
-      func1️⃣ 2️⃣repeat3️⃣() {}4️⃣
+      func 1️⃣repeat() {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'repeat' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 12 = '`repeat`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '()' in 'repeat' statement"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'while' and condition in 'repeat' statement"),
+        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here"),
       ]
     )
   }
@@ -388,16 +382,10 @@ final class InvalidTests: XCTestCase {
   func testInvalid21() {
     AssertParse(
       """
-      func1️⃣ 2️⃣repeat3️⃣() {}4️⃣
+      func 1️⃣repeat() {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'repeat' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 12 = '`repeat`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '()' in 'repeat' statement"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'while' and condition in 'repeat' statement"),
+        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here"),
       ]
     )
   }

@@ -83,16 +83,14 @@ final class IdentifiersTests: XCTestCase {
     AssertParse(
       """
       // Keywords as identifiers
-      class1️⃣ 2️⃣switch {} 3️⃣
+      class 1️⃣switch {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: keyword 'switch' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 7 - 13 = '`switch`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{}' in 'switch' statement"),
-      ]
+        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+      ], fixedSource: """
+      // Keywords as identifiers
+      class `switch` {}
+      """
     )
   }
 
@@ -102,8 +100,8 @@ final class IdentifiersTests: XCTestCase {
       struct Self {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'Self' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
+        // TODO: Old parser expected error on line 3: keyword 'Self' cannot be used as an identifier here
+        // TODO: Old parser expected note on line 3: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
       ]
     )
   }
@@ -111,17 +109,10 @@ final class IdentifiersTests: XCTestCase {
   func testIdentifiers8c() {
     AssertParse(
       """
-      protocol1️⃣ 2️⃣enum3️⃣ 4️⃣{}
+      protocol 1️⃣enum {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'enum' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 10 - 14 = '`enum`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected member block in enum"),
+        DiagnosticSpec(message: "keyword 'enum' cannot be used as an identifier here"),
       ]
     )
   }
@@ -131,19 +122,12 @@ final class IdentifiersTests: XCTestCase {
       """
       protocol test {
         associatedtype 1️⃣public
-      2️⃣}
-      func 3️⃣_(_ x: Int) {}4️⃣
+      }
+      func 2️⃣_(_ x: Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: keyword 'public' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 18 - 24 = '`public`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in associatedtype declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '}' in function"),
-        // TODO: Old parser expected note on line 8: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 6 - 7 = '`_`'
-        // TODO: Old parser expected error on line 8: keyword '_' cannot be used as an identifier here
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '_' before parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'public' cannot be used as an identifier here"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'_' cannot be used as an identifier here"),
       ]
     )
   }

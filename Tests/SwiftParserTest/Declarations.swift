@@ -35,15 +35,20 @@ final class DeclarationTests: XCTestCase {
       """
     )
 
-    AssertParse("""
-                func 1️⃣where
-                r2️⃣
-                """,
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in function"),
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected argument list in function declaration"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and right-hand type in same type requirement"),
-                ])
+    AssertParse(
+      """
+      func 1️⃣where2️⃣
+      r3️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'where' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
+      ], fixedSource: """
+      func `where`(
+      r)
+      """
+    )
 
     AssertParse("func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
 

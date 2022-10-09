@@ -378,14 +378,27 @@ extension Parser {
     )
   }
 
+  /// If `keywordRecovery` is set to `true` and the parser is currently
+  /// positioned at a keyword instead of an identifier, this method recovers by
+  /// eating the keyword in place of an identifier, recovering if the developer
+  /// incorrectly used a keyword as an identifier.
+  /// This should be set if keywords aren't strong recovery marker at this
+  /// position, e.g. because the parser expects a punctuator next.
   @_spi(RawSyntax)
-  public mutating func expectIdentifier() -> (RawUnexpectedNodesSyntax?, Token) {
+  public mutating func expectIdentifier(keywordRecovery: Bool = false) -> (RawUnexpectedNodesSyntax?, Token) {
     if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
       return self.eat(handle)
     }
     if let unknown = self.consume(if: .unknown) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(unknown)], arena: self.arena),
+        self.missingToken(.identifier, text: nil)
+      )
+    }
+    if keywordRecovery, self.currentToken.tokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
+      let keyword = self.consumeAnyToken()
+      return (
+        RawUnexpectedNodesSyntax(elements: [RawSyntax(keyword)], arena: self.arena),
         self.missingToken(.identifier, text: nil)
       )
     }

@@ -62,7 +62,7 @@ public func AssertDataEqualWithDiff(
 }
 
 /// `XCTFail` with `diff`-style output.
-private func FailStringsEqualWithDiff(
+public func FailStringsEqualWithDiff(
   _ actual: String,
   _ expected: String,
   _ message: String = "",

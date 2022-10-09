@@ -41,8 +41,8 @@ final class ForeachTests: XCTestCase {
         // FIXME: Bad diagnostics; should be just 'expected 'in' after for-each patter'.
         for i 1️⃣r { 
         }         
-        for i in r 2️⃣sum = sum + i; 
-      }3️⃣
+        for i in r 2️⃣sum = sum + i;3️⃣
+      }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 21: found an unexpected second identifier in constant declaration
@@ -53,7 +53,7 @@ final class ForeachTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
         // TODO: Old parser expected error on line 23: expected '{' to start the body of for-each loop
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in 'for' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end 'for' statement"),
       ]
     )
   }

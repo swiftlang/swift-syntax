@@ -23,8 +23,6 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected expression in 'switch' statement
-        // TODO: Old parser expected error on line 2: expected identifier in function declaration
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration")
@@ -37,12 +35,10 @@ final class SwitchTests: XCTestCase {
       """
       func parseError2(x: Int) {
         switch x 1️⃣
-      }2️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' after 'switch' subject expression
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{}' in 'switch' statement"),
       ]
     )
   }

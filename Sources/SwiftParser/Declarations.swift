@@ -298,7 +298,7 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let members = self.parseMemberDeclList()
+    let members = self.parseMemberDeclList(introducer: extensionKeyword)
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -577,8 +577,11 @@ extension Parser {
     )
   }
 
+  /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
+  /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
+  /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   @_spi(RawSyntax)
-  public mutating func parseMemberDeclList() -> RawMemberDeclBlockSyntax {
+  public mutating func parseMemberDeclList(introducer: RawTokenSyntax? = nil) -> RawMemberDeclBlockSyntax {
     var elements = [RawMemberDeclListItemSyntax]()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
@@ -594,7 +597,7 @@ extension Parser {
         elements.append(newElement)
       }
     }
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
     let members: RawMemberDeclListSyntax
     if elements.isEmpty && (lbrace.isMissing || rbrace.isMissing) {
       members = RawMemberDeclListSyntax(elements: [], arena: self.arena)
@@ -676,7 +679,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let members = self.parseMemberDeclList()
+    let members = self.parseMemberDeclList(introducer: classKeyword)
     return RawClassDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -798,7 +801,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let members = self.parseMemberDeclList()
+    let members = self.parseMemberDeclList(introducer: enumKeyword)
     return RawEnumDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       unexpectedBeforeEnumKeyword,
@@ -943,7 +946,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let members = self.parseMemberDeclList()
+    let members = self.parseMemberDeclList(introducer: structKeyword)
     return RawStructDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       unexpectedBeforeStructKeyword,
@@ -1055,7 +1058,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let members = self.parseMemberDeclList()
+    let members = self.parseMemberDeclList(introducer: protocolKeyword)
 
     return RawProtocolDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
@@ -1183,7 +1186,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let members = self.parseMemberDeclList()
+    let members = self.parseMemberDeclList(introducer: actorKeyword)
     return RawActorDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,

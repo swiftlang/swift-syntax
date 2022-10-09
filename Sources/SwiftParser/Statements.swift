@@ -132,7 +132,7 @@ extension Parser {
     // A scope encloses the condition and true branch for any variables bound
     // by a conditional binding. The else branch does *not* see these variables.
     let conditions = self.parseConditionList()
-    let body = self.parseCodeBlock()
+    let body = self.parseCodeBlock(introducer: ifKeyword)
 
     // The else branch, if any, is outside of the scope of the condition.
     let elseKeyword = self.consume(if: .elseKeyword)
@@ -141,7 +141,7 @@ extension Parser {
       if self.at(.ifKeyword) {
         elseBody = RawSyntax(self.parseIfStatement(ifHandle: .constant(.ifKeyword)))
       } else {
-        elseBody = RawSyntax(self.parseCodeBlock())
+        elseBody = RawSyntax(self.parseCodeBlock(introducer: ifKeyword))
       }
     } else {
       elseBody = nil
@@ -169,7 +169,7 @@ extension Parser {
     let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(guardHandle)
     let conditions = self.parseConditionList()
     let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.elseKeyword)
-    let body = self.parseCodeBlock()
+    let body = self.parseCodeBlock(introducer: guardKeyword)
     return RawGuardStmtSyntax(
       unexpectedBeforeGuardKeyword,
       guardKeyword: guardKeyword,
@@ -421,7 +421,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseDeferStatement(deferHandle: RecoveryConsumptionHandle) -> RawDeferStmtSyntax {
     let (unexpectedBeforeDeferKeyword, deferKeyword) = self.eat(deferHandle)
-    let items = self.parseCodeBlock()
+    let items = self.parseCodeBlock(introducer: deferKeyword)
     return RawDeferStmtSyntax(
       unexpectedBeforeDeferKeyword,
       deferKeyword: deferKeyword,
@@ -443,7 +443,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawDoStmtSyntax {
     let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(doHandle)
-    let body = self.parseCodeBlock()
+    let body = self.parseCodeBlock(introducer: doKeyword)
 
     // If the next token is 'catch', this is a 'do'/'catch' statement.
     var elements = [RawCatchClauseSyntax]()
@@ -487,7 +487,7 @@ extension Parser {
           arena: self.arena))
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
-    let body = self.parseCodeBlock()
+    let body = self.parseCodeBlock(introducer: catchKeyword)
     return RawCatchClauseSyntax(
       unexpectedBeforeCatchKeyword,
       catchKeyword: catchKeyword,
@@ -510,7 +510,7 @@ extension Parser {
   public mutating func parseWhileStatement(whileHandle: RecoveryConsumptionHandle) -> RawWhileStmtSyntax {
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(whileHandle)
     let conditions = self.parseConditionList()
-    let body = self.parseCodeBlock()
+    let body = self.parseCodeBlock(introducer: whileKeyword)
     return RawWhileStmtSyntax(
       unexpectedBeforeWhileKeyword,
       whileKeyword: whileKeyword,
@@ -531,7 +531,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseRepeatWhileStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatWhileStmtSyntax {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
-    let body = self.parseCodeBlock()
+    let body = self.parseCodeBlock(introducer: repeatKeyword)
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.whileKeyword)
     let condition = self.parseExpression()
     return RawRepeatWhileStmtSyntax(
@@ -601,7 +601,7 @@ extension Parser {
     }
 
     // stmt-brace
-    let body = self.parseCodeBlock()
+    let body = self.parseCodeBlock(introducer: forKeyword)
     return RawForInStmtSyntax(
       unexpectedBeforeForKeyword,
       forKeyword: forKeyword,
@@ -639,7 +639,7 @@ extension Parser {
 
     let cases = self.parseSwitchCases()
 
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: switchKeyword)
     return RawSwitchStmtSyntax(
       unexpectedBeforeSwitchKeyword,
       switchKeyword: switchKeyword,

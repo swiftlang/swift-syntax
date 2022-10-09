@@ -12,6 +12,22 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+extension DeclarationModifier {
+  var canHaveParenthesizedArgument: Bool {
+    switch self {
+    case .__consuming, .__setter_access, ._const, ._local, .async,
+        .classKeyword, .convenience, .distributed, .dynamic, .final,
+        .indirect, .infix, .isolated, .lazy, .mutating, .nonisolated,
+        .nonmutating, .optional, .override, .postfix, .prefix, .reasync,
+        .required, .rethrows, .staticKeyword, .weak:
+      return false
+    case .fileprivateKeyword, .internalKeyword, .open, .privateKeyword,
+        .publicKeyword, .unowned:
+      return true
+    }
+  }
+}
+
 extension TokenConsumer {
   func atStartOfDeclaration(
     isAtTopLevel: Bool = false,
@@ -30,13 +46,15 @@ extension TokenConsumer {
       _ = subparser.consumeAttributeList()
     }
 
-    if subparser.currentToken.isKeyword {
+    if subparser.currentToken.isKeyword ||
+        subparser.currentToken.tokenKind == .identifier {
       var modifierProgress = LoopProgressCondition()
       while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
               modifierKind != .classKeyword,
               modifierProgress.evaluate(subparser.currentToken) {
         subparser.eat(handle)
-        if subparser.at(.leftParen) {
+        if subparser.at(.leftParen) &&
+            modifierKind.canHaveParenthesizedArgument {
           subparser.consumeAnyToken()
           subparser.consume(to: .rightParen)
         }

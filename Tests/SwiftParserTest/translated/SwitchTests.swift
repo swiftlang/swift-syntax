@@ -24,8 +24,7 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and function signature in function"),
       ]
     )
   }
@@ -55,8 +54,7 @@ final class SwitchTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected pattern
         // TODO: Old parser expected error on line 3: expected ':' after 'case'
-        DiagnosticSpec(message: "expected expression in pattern"),
-        DiagnosticSpec(message: "expected ':' in switch case"),
+        DiagnosticSpec(message: "expected expression and ':' in switch case"),
       ]
     )
   }

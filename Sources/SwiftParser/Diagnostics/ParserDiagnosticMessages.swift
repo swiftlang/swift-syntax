@@ -153,9 +153,9 @@ public struct UnexpectedNodesError: ParserError {
       message += " '\(shortContent)'"
     }
     if let parent = unexpectedNodes.parent {
-      if let parentTypeName = parent.nodeTypeNameForDiagnostics, parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id {
+      if let parentTypeName = parent.nodeTypeNameForDiagnostics(allowBlockNames: false), parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id {
         message += " before \(parentTypeName)"
-      } else if let parentTypeName = parent.ancestorOrSelf(where: { $0.nodeTypeNameForDiagnostics != nil })?.nodeTypeNameForDiagnostics {
+      } else if let parentTypeName = parent.ancestorOrSelf(where: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) != nil })?.nodeTypeNameForDiagnostics(allowBlockNames: false) {
         message += " in \(parentTypeName)"
       }
     }

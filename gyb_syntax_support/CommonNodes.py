@@ -60,7 +60,7 @@ COMMON_NODES = [
          elements_separated_by_newline=True),
 
     # code-block -> '{' stmt-list '}'
-    Node('CodeBlock', name_for_diagnostics=None, kind='Syntax',
+    Node('CodeBlock', name_for_diagnostics='code block', kind='Syntax',
          traits=['Braced', 'WithStatements'],
          children=[
              Child('LeftBrace', kind='LeftBraceToken'),

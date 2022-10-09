@@ -9,6 +9,8 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
+import _SwiftSyntaxTestSupport
 import XCTest
 import SwiftDiagnostics
 import SwiftParser
@@ -30,7 +32,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
       ∣                ╰─ expected expression in variable
     
     """
-    XCTAssertEqual(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
   }
   
   func testMultipleDiagnosticsInOneLine() throws {
@@ -44,7 +46,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
       ∣     ╰─ expected identifier in member access
     
     """
-    XCTAssertEqual(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
   }
   
   func testLineSkipping() throws {
@@ -72,10 +74,22 @@ final class DiagnosticsFormatterTests: XCTestCase {
      9 │ i = 9
     10 │ i = 10
     11 │ i = bar(
-       ∣         ├─ expected value in function call
-       ∣         ╰─ expected ')' to end function call
+       ∣         ╰─ expected value and ')' to end function call
 
     """
-    XCTAssertEqual(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
+  }
+
+  func testTwoDiagnosticsAtSameLocation() throws {
+    let source = "t as (..)"
+
+    let expectedOutput = """
+    1 │ t as (..)
+      ∣       ├─ expected type in tuple type
+      ∣       ╰─ unexpected text '..' in tuple type
+    
+    """
+
+    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
   }
 }

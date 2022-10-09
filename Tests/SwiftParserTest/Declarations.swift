@@ -816,8 +816,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected member block in struct"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier and member block in struct"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous ': Int) {}' at top level"),
       ]
     )
@@ -1119,6 +1118,15 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected member block in struct")
+      ]
+    )
+  }
+
+  func testFunctionWithoutNameOrArguments() {
+    AssertParse(
+      "func 1️⃣{}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier and function signature in function")
       ]
     )
   }

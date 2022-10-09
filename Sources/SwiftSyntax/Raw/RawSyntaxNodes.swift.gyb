@@ -118,6 +118,13 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
     layoutView.children[${idx}].map(Raw${child.type_name}.init(raw:))${iuo_mark}
 %       end
   }
+  public func with${child.name}(_ ${child.swift_name}: Raw${child.type_name + optional_mark}, arena: SyntaxArena) -> Raw${node.name} {
+%       if child.is_optional:
+    return layoutView.replacingChild(at: ${idx}, with: ${child.swift_name}.map(RawSyntax.init), arena: arena).as(Raw${node.name}.self)!
+%       else:
+    return layoutView.replacingChild(at: ${idx}, with: RawSyntax(${child.swift_name}), arena: arena).as(Raw${node.name}.self)!
+%       end
+  }
 %     end
 %   end
 }

@@ -68,21 +68,21 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       struct FooStructDeinitializerA {
-        deinit 
-        deinit 1️⃣x 
-        deinit 2️⃣x() 
+        deinit
+        deinit1️⃣ 2️⃣x
+        deinit 3️⃣x()
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' for deinitializer
         // TODO: Old parser expected error on line 3: deinitializers cannot have a name, Fix-It replacements: 10 - 12 = ''
         // TODO: Old parser expected error on line 3: expected '{' for deinitializer
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'x' before deinitializer"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'x' before deinitializer"),
         // TODO: Old parser expected error on line 4: deinitializers cannot have a name, Fix-It replacements: 10 - 11 = ''
         // TODO: Old parser expected error on line 4: no parameter clause allowed on deinitializer, Fix-It replacements: 11 - 13 = ''
         // TODO: Old parser expected error on line 4: expected '{' for deinitializer
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'x()' in struct"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'x()' in struct"),
       ]
     )
   }
@@ -122,7 +122,6 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: no parameter clause allowed on deinitializer, Fix-It replacements: 9 - 18 = ''
-        DiagnosticSpec(message: "expected declaration in class"),
         DiagnosticSpec(message: "unexpected text '(a : Int) {}' in class"),
       ]
     )
@@ -148,7 +147,6 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: deinitializers cannot have a name, Fix-It replacements: 10 - 12 = ''
         // TODO: Old parser expected error on line 2: no parameter clause allowed on deinitializer, Fix-It replacements: 12 - 22 = ''
-        DiagnosticSpec(message: "expected declaration in class"),
         DiagnosticSpec(message: "unexpected text 'x (a : Int) {}' in class"),
       ]
     )

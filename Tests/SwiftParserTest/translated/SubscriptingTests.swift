@@ -222,7 +222,6 @@ final class SubscriptingTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '->' for subscript element type
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
         // TODO: Old parser expected error on line 5: cannot find 'stored' in scope
         // TODO: Old parser expected error on line 8: cannot find 'stored' in scope
@@ -320,7 +319,6 @@ final class SubscriptingTests: XCTestCase {
         // TODO: Old parser expected error on line 2: expected '->' for subscript element type
         // TODO: Old parser expected error on line 2: function types cannot have argument labels
         DiagnosticSpec(message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(message: "expected declaration in struct"),
         DiagnosticSpec(message: "unexpected text in struct"),
       ]
     )
@@ -375,7 +373,6 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' in subscript to specify getter and setter implementation
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
       ]
     )

@@ -717,13 +717,12 @@ final class DeclarationTests: XCTestCase {
   func testExpressionMember() {
     AssertParse(
       """
-      struct S {1️⃣
-        2️⃣/ ###line 25 "line-directive.swift"
+      struct S {
+        1️⃣/ ###line 25 "line-directive.swift"
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected text '/ ###line 25 "line-directive.swift"' in struct"#)
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected text '/ ###line 25 "line-directive.swift"' in struct"#)
       ]
     )
   }

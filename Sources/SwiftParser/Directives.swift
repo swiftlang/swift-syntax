@@ -59,11 +59,15 @@ extension Parser {
   ///
   /// - Parameters:
   ///   - parseElement: Parse an element of the conditional compilation block.
+  ///   - addSemicolonIfNeeded: If elements need to be separated by a newline, this
+  ///                   allows the insertion of missing semicolons to the
+  ///                   previous element.
   ///   - syntax: A function that aggregates the parsed conditional elements
   ///             into a syntax collection.
   @_spi(RawSyntax)
   public mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (inout Parser) -> Element?,
+    addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element? = { _, _, _ in nil },
     syntax: (inout Parser, [Element]) -> RawSyntax
   ) -> RawIfConfigDeclSyntax {
     var clauses = [RawIfConfigClauseSyntax]()
@@ -89,8 +93,12 @@ extension Parser {
         do {
           var elementsProgress = LoopProgressCondition()
           while !self.at(any: [.eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword]) && elementsProgress.evaluate(currentToken) {
+            let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
             guard let element = parseElement(&self), !element.isEmpty else {
               break
+            }
+            if let lastElement = elements.last, let fixedUpLastItem = addSemicolonIfNeeded(lastElement, newItemAtStartOfLine, &self) {
+              elements[elements.count - 1] = fixedUpLastItem
             }
             elements.append(element)
           }

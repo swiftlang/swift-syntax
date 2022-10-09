@@ -23,4 +23,14 @@ extension RawUnexpectedNodesSyntax {
       }
     })
   }
+
+  /// If `tokens` is not empty, construct a `RawUnexpectedNodesSyntax`
+  /// containing those tokens, otherwise return `nil`.
+  init?(_ tokens: [RawTokenSyntax], arena: SyntaxArena) {
+    if tokens.isEmpty {
+      return nil
+    } else {
+      self.init(elements: tokens.map(RawSyntax.init), arena: arena)
+    }
+  }
 }

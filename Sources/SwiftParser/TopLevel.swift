@@ -46,15 +46,7 @@ extension Parser {
         break
       }
       if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
-        elements[elements.count - 1] = RawCodeBlockItemSyntax(
-          lastItem.unexpectedBeforeItem,
-          item: lastItem.item,
-          lastItem.unexpectedBetweenItemAndSemicolon,
-          semicolon: missingToken(.semicolon, text: nil),
-          lastItem.unexpectedBetweenSemicolonAndErrorTokens,
-          errorTokens: lastItem.errorTokens,
-          arena: self.arena
-        )
+        elements[elements.count - 1] = lastItem.withSemicolon(missingToken(.semicolon, text: nil), arena: self.arena)
       }
       elements.append(newElement)
     }
@@ -127,11 +119,21 @@ extension Parser {
     // "statements" and not "items".
     let item = self.parseItem(isAtTopLevel: isAtTopLevel)
     let semi = self.consume(if: .semicolon)
+    var trailingSemas: [RawTokenSyntax] = []
+    while let trailingSema = self.consume(if: .semicolon) {
+      trailingSemas.append(trailingSema)
+    }
 
-    if item.isEmpty && semi == nil {
+    if item.isEmpty && semi == nil && trailingSemas.isEmpty {
       return nil
     }
-    return .init(item: item, semicolon: semi, errorTokens: nil, arena: self.arena)
+    return RawCodeBlockItemSyntax(
+      item: item,
+      semicolon: semi,
+      RawUnexpectedNodesSyntax(trailingSemas, arena: self.arena),
+      errorTokens: nil,
+      arena: self.arena
+    )
   }
 
   /// `isAtTopLevel` determines whether this is trying to parse an item that's at
@@ -141,11 +143,18 @@ extension Parser {
   /// wrapping declaration instead of being consumed by lookeahead.
   private mutating func parseItem(isAtTopLevel: Bool = false) -> RawSyntax {
     if self.at(.poundIfKeyword) {
-      return RawSyntax(self.parsePoundIfDirective {
+      let directive = self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
+      } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
+        if lastElement.semicolon == nil && !newItemAtStartOfLine {
+          return lastElement.withSemicolon(parser.missingToken(.semicolon, text: nil), arena: parser.arena)
+        } else {
+          return nil
+        }
       } syntax: { parser, items  in
         return RawSyntax(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
-      })
+      }
+      return RawSyntax(directive)
     } else if self.at(.poundLineKeyword) {
       return RawSyntax(self.parsePoundLineDirective())
     } else if self.at(.poundSourceLocationKeyword) {

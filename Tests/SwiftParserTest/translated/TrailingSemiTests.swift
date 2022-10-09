@@ -19,27 +19,18 @@ final class TrailingSemiTests: XCTestCase {
     AssertParse(
       """
       struct SpuriousSemi {
-        1️⃣; 
-        var a : Int ; 2️⃣; 
-        func b () {};3️⃣
-        ;4️⃣ 5️⃣static func c () {};  6️⃣
-        ;7️⃣;
-      8️⃣}
+        1️⃣;
+        var a : Int ; 2️⃣;
+        func b () {};
+        3️⃣; static func c () {};
+        4️⃣;;
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unexpected ';' separator, Fix-It replacements: 3 - 5 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text ';' before variable"),
-        // TODO: Old parser expected error on line 3: unexpected ';' separator, Fix-It replacements: 17 - 19 = ''
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text ';' before function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration in struct"),
-        // TODO: Old parser expected error on line 5: unexpected ';' separator, Fix-It replacements: 3 - 5 = ''
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "6️⃣", message: "expected expression"),
-        // TODO: Old parser expected error on line 6: unexpected ';' separator, Fix-It replacements: 3 - 4 = ''
-        // TODO: Old parser expected error on line 6: unexpected ';' separator, Fix-It replacements: 4 - 5 = ''
-        DiagnosticSpec(locationMarker: "7️⃣", message: "expected expression"),
-        DiagnosticSpec(locationMarker: "8️⃣", message: "extraneous '}' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected ';' separator", fixIts: ["remove ';'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected ';' separator", fixIts: ["remove ';'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected ';' separator", fixIts: ["remove ';'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected ';' separator", fixIts: ["remove ';;'"]),
       ]
     )
   }
@@ -48,23 +39,23 @@ final class TrailingSemiTests: XCTestCase {
     AssertParse(
       """
       class C {
-        var a : Int = 10 func aa() {}; 
+        var a : Int = 101️⃣ func aa() {};
       #if FLAG1
-        var aaa: Int = 42 func aaaa() {}; 
+        var aaa: Int = 422️⃣ func aaaa() {};
       #elseif FLAG2
-        var aaa: Int = 42 func aaaa() {} 
+        var aaa: Int = 423️⃣ func aaaa() {}
       #else
-        var aaa: Int = 42 func aaaa() {} 
+        var aaa: Int = 424️⃣ func aaaa() {}
       #endif
         func b () {};
         class func c () {};
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive declarations on a line must be separated by ';', Fix-It replacements: 19 - 19 = ';'
-        // TODO: Old parser expected error on line 4: consecutive declarations on a line must be separated by ';', Fix-It replacements: 20 - 20 = ';'
-        // TODO: Old parser expected error on line 6: consecutive declarations on a line must be separated by ';', Fix-It replacements: 20 - 20 = ';'
-        // TODO: Old parser expected error on line 8: consecutive declarations on a line must be separated by ';', Fix-It replacements: 20 - 20 = ';'
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
       ]
     )
   }
@@ -76,11 +67,11 @@ final class TrailingSemiTests: XCTestCase {
         //var a : Int ;
         func bb () {};
         static func cc () {};
-        func dd() {} subscript(i: Int) -> Int { return 1 } 
+        func dd() {}1️⃣ subscript(i: Int) -> Int { return 1 }
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 5: consecutive declarations on a line must be separated by ';', Fix-It replacements: 15 - 15 = ';'
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'")
       ]
     )
   }
@@ -97,4 +88,84 @@ final class TrailingSemiTests: XCTestCase {
     )
   }
 
+  func testSingleTrailingSemaInStmt() {
+    AssertParse(
+      """
+      let x = 5;1️⃣;
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected ';' separator")
+      ], fixedSource: "let x = 5;"
+    )
+  }
+
+  func testDoubleTrailingSemaInStmt() {
+    AssertParse(
+      """
+      let x = 5;1️⃣;;
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';;'"])
+      ], fixedSource: "let x = 5;"
+    )
+  }
+
+  func testDoubleTrailingSemaInDecl() {
+    AssertParse(
+      """
+      struct X {
+        func foo() {};1️⃣;;
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';;'"])
+      ], fixedSource: """
+      struct X {
+        func foo() {};
+      }
+      """
+    )
+  }
+
+  func testMissingSemiInIfConfigOfDecls() {
+    AssertParse(
+      """
+      struct X {
+      #if FLAG1
+        func foo() {}1️⃣ func bar() {}
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'")
+      ], fixedSource: """
+      struct X {
+      #if FLAG1
+        func foo() {}; func bar() {}
+      #endif
+      }
+      """
+    )
+  }
+
+  func testMissingSemiInIfConfigOfStmts() {
+    AssertParse(
+      """
+      func foo() {
+      #if FLAG1
+        let a = 11️⃣ let b = 2
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
+      ], fixedSource: """
+      func foo() {
+      #if FLAG1
+        let a = 1; let b = 2
+      #endif
+      }
+      """
+    )
+  }
 }

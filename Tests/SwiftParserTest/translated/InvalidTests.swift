@@ -505,7 +505,6 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration in struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 2: 'weak' must be a mutable variable, because it may change at runtime

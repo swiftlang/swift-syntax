@@ -61,25 +61,27 @@ final class ConsecutiveStatementsTests: XCTestCase {
       """
       struct X {
         // In a sequence of declarations.
-        var a, b : Int func d() -> Int {} 
+        var a, b : Int1️⃣ func d() -> Int {}
         var prop : Int { return 4
-        } var other : Float 
+        }2️⃣ var other : Float
         // Within property accessors
         subscript(i: Int) -> Float {
           get {
-            var x = i1️⃣ x = i + x2️⃣ return Float(x)
+            var x = i3️⃣ x = i + x4️⃣ return Float(x)
           }
           set {
-            var x = i3️⃣ x = i + 1
+            var x = i5️⃣ x = i + 1
             _ = x
           }
         }
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -89,7 +91,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
       """
       class C {
         // In a sequence of declarations.
-        var a, b : Int func d() -> Int {} 
+        var a, b : Int1️⃣ func d() -> Int {}
         init() {
           a = 0
           b = 0
@@ -97,8 +99,17 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: consecutive declarations, Fix-It replacements: 17 - 17 = ';'
-      ]
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+      ], fixedSource: """
+      class C {
+        // In a sequence of declarations.
+        var a, b : Int; func d() -> Int {}
+        init() {
+          a = 0
+          b = 0
+        }
+      }
+      """
     )
   }
 
@@ -106,12 +117,16 @@ final class ConsecutiveStatementsTests: XCTestCase {
     AssertParse(
       """
       protocol P {
-        func a() func b() 
+        func a()1️⃣ func b()
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive declarations, Fix-It replacements: 11 - 11 = ';'
-      ]
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+      ], fixedSource: """
+      protocol P {
+        func a(); func b()
+      }
+      """
     )
   }
 
@@ -119,14 +134,19 @@ final class ConsecutiveStatementsTests: XCTestCase {
     AssertParse(
       """
       enum Color {
-        case Red case Blue 
-        func a() {} func b() {} 
+        case Red1️⃣ case Blue
+        func a() {}2️⃣ func b() {}
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive declarations, Fix-It replacements: 11 - 11 = ';'
-        // TODO: Old parser expected error on line 3: consecutive declarations, Fix-It replacements: 14 - 14 = ';'
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+      ], fixedSource: """
+      enum Color {
+        case Red; case Blue
+        func a() {}; func b() {}
+      }
+      """
     )
   }
 

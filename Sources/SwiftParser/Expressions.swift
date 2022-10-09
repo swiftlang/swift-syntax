@@ -14,8 +14,15 @@
 
 extension TokenConsumer {
   func atStartOfExpression() -> Bool {
-    if self.at(anyIn: ExpressionStart.self) != nil {
+    switch self.at(anyIn: ExpressionStart.self) {
+    case (.awaitTryMove, let handle)?:
+      var backtrack = self.lookahead()
+      backtrack.eat(handle)
+      return !backtrack.atStartOfDeclaration() && !backtrack.atStartOfStatement()
+    case (_, _)?:
       return true
+    case nil:
+      break
     }
     if self.at(.atSign) || self.at(.inoutKeyword) {
       var backtrack = self.lookahead()

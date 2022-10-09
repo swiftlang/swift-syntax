@@ -92,7 +92,7 @@ final class StatementTests: XCTestCase {
   }
 
   func testReturn() {
-    AssertParse("return actor", { $0.parseReturnStatement() })
+    AssertParse("return actor", { $0.parseReturnStatement(returnHandle: .constant(.returnKeyword)) })
 
     AssertParse(
       "{ 1️⃣return 0 }",

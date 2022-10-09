@@ -1627,6 +1627,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
+    let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
     
     var elements = [RawPatternBindingSyntax]()
     do {
@@ -1639,7 +1640,15 @@ extension Parser {
         // Parse an initializer if present.
         let initializer: RawInitializerClauseSyntax?
         if let equal = self.consume(if: .equal) {
-          let value = self.parseExpression()
+          var value = self.parseExpression()
+          if hasTryBeforeIntroducer && !value.is(RawTryExprSyntax.self) {
+            value = RawExprSyntax(RawTryExprSyntax(
+              tryKeyword: missingToken(.tryKeyword, text: nil),
+              questionOrExclamationMark: nil,
+              expression: value,
+              arena: self.arena
+            ))
+          }
           initializer = RawInitializerClauseSyntax(
             equal: equal,
             value: value,

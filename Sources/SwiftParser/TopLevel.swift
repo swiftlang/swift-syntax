@@ -158,6 +158,8 @@ extension Parser {
       return RawSyntax(self.parseExpression())
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowRecovery: true) {
       return RawSyntax(self.parseDeclaration())
+    } else if self.atStartOfStatement(allowRecovery: true) {
+      return RawSyntax(self.parseStatement())
     } else {
       return RawSyntax(RawMissingExprSyntax(arena: self.arena))
     }

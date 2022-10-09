@@ -71,6 +71,9 @@ public enum StaticParserError: String, DiagnosticMessage {
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
   case missingFunctionParameterClause = "expected argument list in function declaration"
   case throwsInReturnPosition = "'throws' may only occur before '->'"
+  case tryMustBePlacedOnReturnedExpr = "'try' must be placed on the returned expression"
+  case tryMustBePlacedOnThrownExpr = "'try' must be placed on the thrown expression"
+  case tryOnInitialValueExpression = "'try' must be placed on the initial value expression"
 
   public var message: String { self.rawValue }
 
@@ -87,7 +90,7 @@ public struct EffectsSpecifierAfterArrow: ParserError {
   public let effectsSpecifiersAfterArrow: [TokenSyntax]
 
   public var message: String {
-    "\(missingNodesDescription(missingNodes: effectsSpecifiersAfterArrow.map(Syntax.init), commonParent: nil)) may only occur before '->'"
+    "\(missingNodesDescription(effectsSpecifiersAfterArrow)) may only occur before '->'"
   }
 }
 
@@ -125,6 +128,14 @@ public struct MissingAttributeArgument: ParserError {
   }
 }
 
+public struct TryCannotBeUsed: ParserError {
+  public let nextToken: TokenSyntax
+
+  public var message: String {
+    return "'try' cannot be used with '\(nextToken.text)'"
+  }
+}
+
 public struct UnexpectedNodesError: ParserError {
   public let unexpectedNodes: UnexpectedNodesSyntax
 
@@ -157,6 +168,18 @@ public enum StaticParserFixIt: String, FixItMessage {
   }
 }
 
+public struct MoveTokensAfterFixIt: ParserFixIt {
+  /// The token that should be moved
+  public let movedTokens: [TokenSyntax]
+
+  /// The token after which `movedTokens` should be moved
+  public let after: RawTokenKind
+
+  public var message: String {
+    "move \(missingNodesDescription(movedTokens)) after '\(after.nameForDiagnostics)'"
+  }
+}
+
 public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   /// The token that should be moved
   public let movedTokens: [TokenSyntax]
@@ -165,7 +188,16 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   public let inFrontOf: RawTokenKind
 
   public var message: String {
-    "move \(missingNodesDescription(missingNodes: movedTokens.map(Syntax.init), commonParent: nil)) in front of '\(inFrontOf.nameForDiagnostics)'"
+    "move \(missingNodesDescription(movedTokens)) in front of '\(inFrontOf.nameForDiagnostics)'"
+  }
+}
+
+
+public struct RemoveRedundantFixIt: ParserFixIt {
+  public let removeTokens: [TokenSyntax]
+
+  public var message: String {
+    "remove redundant \(missingNodesDescription(removeTokens))"
   }
 }
 
@@ -175,6 +207,6 @@ public struct ReplaceTokensFixIt: ParserFixIt {
   public let replacement: TokenSyntax
 
   public var message: String {
-    "replace \(missingNodesDescription(missingNodes: replaceTokens.map(Syntax.init), commonParent: nil)) by '\(replacement.text)'"
+    "replace \(missingNodesDescription(replaceTokens)) by '\(replacement.text)'"
   }
 }

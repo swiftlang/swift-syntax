@@ -152,17 +152,12 @@ final class TypealiasTests: XCTestCase {
   func testTypealias11() {
     AssertParse(
       """
-      typealias1️⃣ 2️⃣switch 3️⃣= Int
+      typealias 1️⃣switch = Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'switch' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 11 - 17 = '`switch`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in typealias declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and type in typealias declaration"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '= Int' at top level"),
-      ]
+        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+      ],
+      fixedSource: "typealias `switch` = Int"
     )
   }
 

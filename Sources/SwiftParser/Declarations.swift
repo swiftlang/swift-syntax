@@ -605,7 +605,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawClassDeclSyntax {
     let (unexpectedBeforeClassKeyword, classKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
     if unexpectedBeforeName == nil && name.isMissing {
       return RawClassDeclSyntax(
         attributes: attrs.attributes,
@@ -727,7 +727,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawEnumDeclSyntax {
     let (unexpectedBeforeEnumKeyword, enumKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
     if unexpectedBeforeName == nil, name.isMissing {
       return RawEnumDeclSyntax(
         attributes: attrs.attributes,
@@ -809,7 +809,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let (unexpectedBeforeName, name) = self.expectIdentifier()
+        let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
         let associatedValue: RawParameterClauseSyntax?
         if self.at(.leftParen, where: { !$0.isAtStartOfLine }) {
@@ -872,7 +872,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawStructDeclSyntax {
     let (unexpectedBeforeStructKeyword, structKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
     if unexpectedBeforeName == nil && name.isMissing {
       return RawStructDeclSyntax(
         attributes: attrs.attributes,
@@ -982,7 +982,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawProtocolDeclSyntax {
     let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
     if unexpectedBeforeName == nil && name.isMissing {
       return RawProtocolDeclSyntax(
         attributes: attrs.attributes,
@@ -1056,7 +1056,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawAssociatedtypeDeclSyntax {
     let (unexpectedBeforeAssocKeyword, assocKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
     if unexpectedBeforeName == nil && name.isMissing {
       return RawAssociatedtypeDeclSyntax(
         attributes: attrs.attributes,
@@ -1130,7 +1130,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawActorDeclSyntax {
     let (unexpectedBeforeActorKeyword, actorKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
     let generics: RawGenericParameterClauseSyntax?
     if self.currentToken.starts(with: "<") {
@@ -1475,7 +1475,7 @@ extension Parser {
       unexpectedBeforeIdentifier = nil
       identifier = self.consumePrefix(name, as: .spacedBinaryOperator)
     } else {
-      (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
+      (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
     }
 
     let genericParams: RawGenericParameterClauseSyntax?
@@ -1903,7 +1903,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawTypealiasDeclSyntax {
     let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
     // Parse a generic parameter list if it is present.
     let generics: RawGenericParameterClauseSyntax?
@@ -1977,7 +1977,7 @@ extension Parser {
     // checking.
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
-      let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
+      let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
       var types = [RawDesignatedTypeElementSyntax]()
       while let comma = self.consume(if: .comma) {
         // FIXME: The compiler accepts... anything here. This is a bug.
@@ -2038,7 +2038,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawPrecedenceGroupDeclSyntax {
     let (unexpectedBeforeGroup, group) = self.eat(handle)
-    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
+    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
 

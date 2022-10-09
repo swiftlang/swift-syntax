@@ -113,6 +113,10 @@ public struct InvalidIdentifierError: ParserError {
     switch invalidIdentifier.tokenKind {
     case .unknown(let text) where text.first?.isNumber == true:
       return "identifier can only start with a letter or underscore, not a number"
+    case .wildcardKeyword:
+      return "'\(invalidIdentifier.text)' cannot be used as an identifier here"
+    case let tokenKind where tokenKind.isKeyword:
+      return "keyword '\(invalidIdentifier.text)' cannot be used as an identifier here"
     default:
       return "'\(invalidIdentifier.text)' is not a valid identifier"
     }
@@ -160,6 +164,7 @@ public struct UnexpectedNodesError: ParserError {
 public enum StaticParserFixIt: String, FixItMessage {
   case insertSemicolon = "insert ';'"
   case insertAttributeArguments = "insert attribute argument"
+  case wrapKeywordInBackticks = "if this name is unavoidable, use backticks to escape it"
 
   public var message: String { self.rawValue }
 

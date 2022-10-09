@@ -222,7 +222,7 @@ public struct InsertTokenFixIt: ParserFixIt {
     assert(missingNodes.allSatisfy({ $0.parent == self.commonParent }))
   }
 
-  public var message: String { "Insert \(missingNodesDescription(missingNodes, commonParent: commonParent))" }
+  public var message: String { "insert \(missingNodesDescription(missingNodes, commonParent: commonParent))" }
 }
 
 // MARK: - Generate Error

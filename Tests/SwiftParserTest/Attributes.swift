@@ -12,7 +12,7 @@ final class AttributeTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute", fixIts: ["insert attribute argument"]),
-        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["Insert ')'"]),
+        DiagnosticSpec(message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
         @_dynamicReplacement(for: <#identifier#>)
@@ -30,9 +30,9 @@ final class AttributeTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' and parameters in '@differentiable' argument", fixIts: ["Insert ':' and parameters"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and right-hand type in same type requirement", fixIts: ["Insert '=' and right-hand type"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end attribute", fixIts: ["Insert ')'"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' and parameters in '@differentiable' argument", fixIts: ["insert ':' and parameters"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '=' and right-hand type in same type requirement", fixIts: ["insert '=' and right-hand type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
         @differentiable(reverse wrt: <#syntax#>,where T = <#type#>)

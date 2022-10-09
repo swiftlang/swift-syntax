@@ -175,9 +175,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if node.presence == .missing {
       // If there is an unexpected token in front of the identifier, we assume
       // that this unexpected token was intended to be the identifier we are missing.
-      if let invalidIdentifier = node.previousToken(viewMode: .all),
+      if case .identifier = node.tokenKind,
+          let invalidIdentifier = node.previousToken(viewMode: .all),
           let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self) {
-        addDiagnostic(invalidIdentifier, InvalidIdentifierError(invalidIdentifier: invalidIdentifier), handledNodes: [previousParent.id])
+        let fixIts: [FixIt]
+        if invalidIdentifier.tokenKind.isKeyword {
+          fixIts = [FixIt(message: .wrapKeywordInBackticks, changes: [
+            .replace(
+              oldNode: Syntax(invalidIdentifier),
+              newNode: Syntax(TokenSyntax.identifier("`\(invalidIdentifier.text)`", leadingTrivia: invalidIdentifier.leadingTrivia, trailingTrivia: invalidIdentifier.trailingTrivia))
+            )
+          ])]
+        } else {
+          fixIts = []
+        }
+
+        addDiagnostic(invalidIdentifier, InvalidIdentifierError(invalidIdentifier: invalidIdentifier), fixIts: fixIts, handledNodes: [previousParent.id])
       } else {
         return handleMissingSyntax(node)
       }

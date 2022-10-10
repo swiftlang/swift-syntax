@@ -424,6 +424,58 @@ extension Parser {
       self.missingToken(.identifier, text: nil)
     )
   }
+
+  /// Expect a right brace but with a little smart recovery logic:
+  /// If `leftBrace` is missing, we only recover to a `}` whose indentation is greater or equal to that of `introducer`.
+  /// That way, if the developer forgot to to type `{`, we won't eat `}` that were most likely intended to close an outer scope.
+  ///
+  /// If `leftBrace` is present or `introducer` is `nil`, this is equivalent to `self.expect(.rightBrace)`.
+  mutating func expectRightBrace(leftBrace: RawTokenSyntax, introducer: RawTokenSyntax?) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    func indentation(_ pieces: [RawTriviaPiece]) -> RawTriviaPiece? {
+      if pieces.last?.isNewline == true {
+        return .spaces(0)
+      }
+      guard pieces.count >= 2 else {
+        return nil
+      }
+      guard pieces[pieces.count - 2].isNewline else {
+        return nil
+      }
+      switch pieces[pieces.count - 1] {
+      case .spaces, .tabs:
+        return pieces[pieces.count - 1]
+      default:
+        return nil
+      }
+    }
+
+    guard leftBrace.isMissing, let introducer = introducer else {
+      // Fast path for correct parses: If leftBrace is not missing, just `expect`.
+      return self.expect(.rightBrace)
+    }
+
+    var lookahead = self.lookahead()
+    guard let recoveryHandle = lookahead.canRecoverTo([.rightBrace]) else {
+      // We can't recover to '}'. Synthesize it.
+      return (nil, self.missingToken(.rightBrace, text: nil))
+    }
+
+    // We can recover to a '}'. Decide whether we want to eat it based on its indentation.
+    let rightBraceTrivia = self.arena.parseTrivia(source: lookahead.currentToken.leadingTriviaText, position: .leading)
+    switch (indentation(introducer.leadingTriviaPieces), indentation(rightBraceTrivia)) {
+    // Catch cases where the brace has known indentation that is less than that of `introducer`, in which case we don't want to consume it.
+    case (.spaces(let introducerSpaces), .spaces(let rightBraceSpaces)) where rightBraceSpaces < introducerSpaces:
+      return (nil, self.missingToken(.rightBrace, text: nil))
+    case (.tabs(let introducerTabs), .tabs(let rightBraceTabs)) where rightBraceTabs < introducerTabs:
+      return (nil, self.missingToken(.rightBrace, text: nil))
+    case (.spaces, .tabs(0)):
+      return (nil, self.missingToken(.rightBrace, text: nil))
+    case (.tabs, .spaces(0)):
+      return (nil, self.missingToken(.rightBrace, text: nil))
+    default:
+      return self.eat(recoveryHandle)
+    }
+  }
 }
 
 // MARK: Splitting Tokens

@@ -17,10 +17,9 @@ final class GuardTests: XCTestCase {
         // TODO: Old parser expected error on line 2: missing condition in 'guard' statement
         // TODO: Old parser expected error on line 2: expected 'else' after 'guard' condition
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'guard' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected code block in 'guard' statement"),
         // TODO: Old parser expected error on line 5: missing condition in 'guard' statement
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'guard' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
       ]
     )
   }

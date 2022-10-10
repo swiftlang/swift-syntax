@@ -81,10 +81,14 @@ extension Parser {
   /// =======
   ///
   ///     code-block → '{' statements? '}'
-  mutating func parseCodeBlock() -> RawCodeBlockSyntax {
+  ///
+  /// `introducer` is the `while`, `if`, ... keyword that is the cause that the code block is being parsed.
+  /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
+  /// indented to close this code block or a surrounding context. See `expectRightBrace`.
+  mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     let itemList = parseCodeBlockItemList(isAtTopLevel: false, stopCondition: { $0.at(.rightBrace) })
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return .init(
       unexpectedBeforeLBrace,

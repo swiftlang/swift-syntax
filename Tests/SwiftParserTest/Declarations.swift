@@ -1109,6 +1109,19 @@ final class DeclarationTests: XCTestCase {
       ]
     )
   }
+
+  func testMatchBracesBasedOnSpaces() {
+    AssertParse(
+      """
+      struct Foo {
+        struct Bar 1️⃣
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected member block in struct")
+      ]
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

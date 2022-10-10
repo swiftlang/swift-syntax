@@ -801,7 +801,7 @@ final class DeclarationTests: XCTestCase {
 
   func testDontRecoverFromDeclKeyword() {
     AssertParse(
-      "func foo(first second 1️⃣third2️⃣ 3️⃣struct4️⃣: Int) {}",
+      "func foo(first second 1️⃣third 3️⃣struct4️⃣: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         modifiers: nil,
@@ -815,7 +815,6 @@ final class DeclarationTests: XCTestCase {
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in struct"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected member block in struct"),

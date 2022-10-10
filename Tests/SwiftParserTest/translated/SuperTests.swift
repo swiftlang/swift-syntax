@@ -65,7 +65,6 @@ final class SuperTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in member access"),
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
         // TODO: Old parser expected error on line 33: expected '.' or '[' after 'super'
         // TODO: Old parser expected error on line 36: expected '.' or '[' after 'super'
       ]

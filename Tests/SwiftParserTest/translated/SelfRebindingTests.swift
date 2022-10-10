@@ -46,15 +46,14 @@ final class SelfRebindingTests: XCTestCase {
       struct T {
           var mutable: Int = 0
           func f() {
-              let1️⃣ 2️⃣self = self
+              let 1️⃣self = self
           }
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 4: keyword 'self' cannot be used as an identifier here
         // TODO: Old parser expected note on line 4: if this name is unavoidable, use backticks to escape it
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(message: "expected pattern in variable"),
       ]
     )
   }

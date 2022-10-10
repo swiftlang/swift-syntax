@@ -17,14 +17,13 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarVar() {
-        var1️⃣ 2️⃣$ 3️⃣: Int = 42
+        var 2️⃣$ 3️⃣: Int = 42
         $ += 1
         print($)
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text in function"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
@@ -37,14 +36,13 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarLet() {
-        let1️⃣ 2️⃣$ = 42
+        let 1️⃣$ = 42
         print($)
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
+        DiagnosticSpec(message: "expected pattern in variable"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
       ]
     )
@@ -54,14 +52,13 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarClass() {
-        class1️⃣ 2️⃣$ {}
+        class 1️⃣$ {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
+        DiagnosticSpec(message: "expected identifier in class"),
+        DiagnosticSpec(message: "expected member block in class"),
       ]
     )
   }
@@ -70,14 +67,13 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarEnum() {
-        enum1️⃣ 2️⃣$ {}
+        enum 1️⃣$ {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
+        DiagnosticSpec(message: "expected identifier in enum"),
+        DiagnosticSpec(message: "expected member block in enum"),
       ]
     )
   }
@@ -86,14 +82,13 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarStruct() {
-        struct1️⃣ 2️⃣$ {}
+        struct 1️⃣$ {}
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
+        DiagnosticSpec(message: "expected identifier in struct"),
+        DiagnosticSpec(message: "expected member block in struct"),
       ]
     )
   }

@@ -505,7 +505,6 @@ final class ExpressionTests: XCTestCase {
       """##,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end tuple type"),
       ]
     )
@@ -613,13 +612,12 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       """
       do {
-        true ? () :1️⃣ 2️⃣throw opaque_error()
+        true ? () : 1️⃣throw opaque_error()
       } catch _ {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'do' statement"),
+        DiagnosticSpec(message: "expected expression in 'do' statement"),
       ]
     )
   }

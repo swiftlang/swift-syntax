@@ -13,23 +13,31 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  /// Parse the source code in the given string as Swift source file.
   public static func parse(
     source: String,
-    parseTransition: IncrementalParseTransition? = nil
-  ) -> SourceFileSyntax {
+    parseTransition: IncrementalParseTransition? = nil,
+    filenameForDiagnostics: String = "",
+    languageVersion: String? = nil,
+    enableBareSlashRegexLiteral: Bool? = nil
+  ) throws -> SourceFileSyntax {
     var source = source
     source.makeContiguousUTF8()
-    return source.withUTF8 { buffer in
-      return parse(source: buffer, parseTransition: parseTransition)
+    return try source.withUTF8 { buffer in
+      return try parse(source: buffer,
+                       parseTransition: parseTransition,
+                       filenameForDiagnostics: filenameForDiagnostics,
+                       languageVersion: languageVersion,
+                       enableBareSlashRegexLiteral: enableBareSlashRegexLiteral)
     }
   }
 
-  /// Parse the source code in the given string as Swift source file.
   public static func parse(
     source: UnsafeBufferPointer<UInt8>,
-    parseTransition: IncrementalParseTransition? = nil
-  ) -> SourceFileSyntax {
+    parseTransition: IncrementalParseTransition? = nil,
+    filenameForDiagnostics: String = "",
+    languageVersion: String? = nil,
+    enableBareSlashRegexLiteral: Bool? = nil
+  ) throws -> SourceFileSyntax {
     var parser = Parser(source)
     // Extended lifetime is required because `SyntaxArena` in the parser must
     // be alive until `Syntax(raw:)` retains the arena.

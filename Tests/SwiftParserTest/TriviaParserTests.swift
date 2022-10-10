@@ -158,7 +158,7 @@ final class TriviaParserTests: XCTestCase {
       /* comment only */
 
       """
-    let sourceFileSyntax = Parser.parse(source: source)
+    let sourceFileSyntax = try Parser.parse(source: source)
     XCTAssertEqual(sourceFileSyntax.leadingTrivia, [
       .blockComment("/* comment only */"),
       .newlines(1)

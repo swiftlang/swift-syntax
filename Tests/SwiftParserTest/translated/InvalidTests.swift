@@ -480,7 +480,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected note on line 1: did you mean to write an 'AnyObject' constraint?, Fix-It replacements: 16 - 21 = 'AnyObject'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and member block in class"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name and member block in class"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 2: 'weak' must be a mutable variable, because it may change at runtime

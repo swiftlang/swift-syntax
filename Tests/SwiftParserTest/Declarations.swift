@@ -55,7 +55,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func 1️⃣/^notoperator^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }",
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in function"),
+        DiagnosticSpec(message: "expected name in function"),
         DiagnosticSpec(message: "unexpected code '/^notoperator^/' before parameter clause")
       ]
     )
@@ -159,7 +159,7 @@ final class DeclarationTests: XCTestCase {
       "protocol P{1️⃣{}case2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '{}' before enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end protocol"),
       ])
   }
@@ -816,7 +816,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier and member block in struct"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected name and member block in struct"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous code ': Int) {}' at top level"),
       ]
     )
@@ -1102,7 +1102,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected name in attribute"),
-        DiagnosticSpec(message: "expected identifier in generic parameter"),
+        DiagnosticSpec(message: "expected name in generic parameter"),
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(message: "expected member block in struct"),
       ]
@@ -1126,7 +1126,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func 1️⃣{}",
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier and function signature in function")
+        DiagnosticSpec(message: "expected name and function signature in function")
       ]
     )
   }

@@ -23,7 +23,7 @@ fileprivate func findCommonAncestor(_ nodes: [Syntax]) -> Syntax? {
 
 fileprivate enum MissingNodesDescriptionPart {
   case tokensWithDefaultText([TokenSyntax])
-  case tokenWithoutDefaultText(RawTokenKind)
+  case tokenWithoutDefaultText(TokenSyntax)
   case node(Syntax)
 
   var description: String? {
@@ -31,8 +31,12 @@ fileprivate enum MissingNodesDescriptionPart {
     case .tokensWithDefaultText(let tokens):
       let tokenContents = tokens.map({ BasicFormat().visit($0).description }).joined()
       return "'\(tokenContents.trimmingSpaces())'"
-    case .tokenWithoutDefaultText(let tokenKind):
-      return tokenKind.nameForDiagnostics
+    case .tokenWithoutDefaultText(let token):
+      if let parent = token.parent,
+         let childName = parent.childNameForDiagnostics(token.index) {
+        return childName
+      }
+      return token.tokenKind.decomposeToRaw().rawKind.nameForDiagnostics
     case .node(let node):
       if let parent = node.parent,
          let childName = parent.childNameForDiagnostics(node.index) {
@@ -57,7 +61,7 @@ fileprivate enum MissingNodesDescriptionPart {
           let presentToken = TokenSyntax(newKind, presence: .present)
           newPart = .tokensWithDefaultText([presentToken])
         } else {
-          newPart = .tokenWithoutDefaultText(rawKind)
+          newPart = .tokenWithoutDefaultText(missingToken)
         }
 
         switch (parts.last, newPart) {

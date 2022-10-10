@@ -45,8 +45,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in pattern"),
-        DiagnosticSpec(message: "expected '=' and expression in pattern matching"),
+        DiagnosticSpec(message: "expected expression, '=' and expression in pattern matching"),
         DiagnosticSpec(message: "unexpected text '* ! = x' in 'if' statement"),
       ]
     )

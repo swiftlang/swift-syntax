@@ -17,13 +17,13 @@
 public struct SyntaxChildrenIndexData: Comparable {
   /// The UTF-8 offset of the item at this index in the source file
   /// See `AbsoluteSyntaxPosition.offset`
-  fileprivate let offset: UInt32
+  let offset: UInt32
   /// The index of the node in the parent.
   /// See `AbsoluteSyntaxPosition.indexInParent`
   let indexInParent: UInt32
   /// Unique value for a node within its own tree.
   /// See `SyntaxIdentifier.indexIntree`
-  fileprivate let indexInTree: SyntaxIndexInTree
+  let indexInTree: SyntaxIndexInTree
 
   public static func <(lhs: SyntaxChildrenIndexData,
                        rhs: SyntaxChildrenIndexData) -> Bool {

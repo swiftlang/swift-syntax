@@ -637,7 +637,7 @@ public let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "MemberDeclBlock",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "member block",
        kind: "Syntax",
        traits: [
          "Braced"

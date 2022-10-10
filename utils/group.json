@@ -32,6 +32,7 @@
     "SyntaxTypeNodes.swift",
   ],
   "Utils": [
+    "CommonAncestor.swift",
     "SyntaxAnyVisitor.swift",
     "SyntaxBuilders.swift",
     "SyntaxClassifier.swift",

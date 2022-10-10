@@ -102,10 +102,7 @@ final class ExpressionTests: XCTestCase {
       cℹ️[1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in subscript"),
-        DiagnosticSpec(message: "expected ']' to end subscript", notes: [
-          NoteSpec(message: "to match this opening '['")
-        ]),
+        DiagnosticSpec(message: "expected value and ']' to end subscript"),
       ]
     )
 

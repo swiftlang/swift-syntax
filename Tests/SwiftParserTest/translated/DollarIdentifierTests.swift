@@ -57,8 +57,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        DiagnosticSpec(message: "expected identifier in class"),
-        DiagnosticSpec(message: "expected member block in class"),
+        DiagnosticSpec(message: "expected identifier and member block in class"),
       ]
     )
   }
@@ -72,8 +71,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
-        DiagnosticSpec(message: "expected identifier in enum"),
-        DiagnosticSpec(message: "expected member block in enum"),
+        DiagnosticSpec(message: "expected identifier and member block in enum"),
       ]
     )
   }
@@ -87,8 +85,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(message: "expected identifier in struct"),
-        DiagnosticSpec(message: "expected member block in struct"),
+        DiagnosticSpec(message: "expected identifier and member block in struct"),
       ]
     )
   }

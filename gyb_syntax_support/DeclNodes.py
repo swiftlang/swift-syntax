@@ -325,7 +325,7 @@ DECL_NODES = [
              Child('Members', kind='MemberDeclBlock'),
          ]),
 
-    Node('MemberDeclBlock', name_for_diagnostics=None, kind='Syntax',
+    Node('MemberDeclBlock', name_for_diagnostics='member block', kind='Syntax',
          traits=['Braced'],
          parser_function='parseMemberDeclList',
          children=[

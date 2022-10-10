@@ -326,7 +326,7 @@ public enum SyntaxEnum {
     case .codeBlockItemList:
       return nil
     case .codeBlock:
-      return nil
+      return "code block"
     case .unexpectedNodes:
       return nil
     case .inOutExpr:
@@ -546,7 +546,7 @@ public enum SyntaxEnum {
     case .extensionDecl:
       return "extension"
     case .memberDeclBlock:
-      return nil
+      return "member block"
     case .memberDeclList:
       return nil
     case .memberDeclListItem:

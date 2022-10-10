@@ -21,9 +21,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected '(' in '_dynamicReplacement' attribute
-        DiagnosticSpec(message: "expected '(' in attribute"),
-        DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute"),
-        DiagnosticSpec(message: "expected ')' to end attribute"),
+        DiagnosticSpec(message: "expected '(', attribute argument and ')' in attribute"),
       ]
     )
   }

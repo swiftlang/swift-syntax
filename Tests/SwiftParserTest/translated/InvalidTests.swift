@@ -114,8 +114,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in function call"),
-        DiagnosticSpec(message: "expected ')' to end function call"),
+        DiagnosticSpec(message: "expected value and ')' to end function call"),
         // TODO: Old parser expected error on line 3: expected expression in list of expressions
       ]
     )
@@ -340,8 +339,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in' and expression in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in', expression and body in 'for' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous '= 2' at top level"),
       ]
     )
@@ -391,8 +389,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in' and expression in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in', expression and body in 'for' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous '= 2' at top level"),
       ]
     )
@@ -492,8 +489,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected note on line 1: did you mean to write an 'AnyObject' constraint?, Fix-It replacements: 16 - 21 = 'AnyObject'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and member block in class"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 2: 'weak' must be a mutable variable, because it may change at runtime

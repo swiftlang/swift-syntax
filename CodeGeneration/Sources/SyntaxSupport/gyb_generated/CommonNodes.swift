@@ -127,7 +127,7 @@ public let COMMON_NODES: [Node] = [
        elementsSeparatedByNewline: true),
 
   Node(name: "CodeBlock",
-       nameForDiagnostics: nil,
+       nameForDiagnostics: "code block",
        kind: "Syntax",
        traits: [
          "Braced",

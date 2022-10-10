@@ -66,6 +66,7 @@ public extension ParserFixIt {
 
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticParserError: String, DiagnosticMessage {
+  case consecutiveDeclarationsOnSameLine = "consecutive declarations on a line must be separated by ';'"
   case consecutiveStatementsOnSameLine = "consecutive statements on a line must be separated by ';'"
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
@@ -74,6 +75,7 @@ public enum StaticParserError: String, DiagnosticMessage {
   case tryMustBePlacedOnReturnedExpr = "'try' must be placed on the returned expression"
   case tryMustBePlacedOnThrownExpr = "'try' must be placed on the thrown expression"
   case tryOnInitialValueExpression = "'try' must be placed on the initial value expression"
+  case unexpectedSemicolon = "unexpected ';' separator"
 
   public var message: String { self.rawValue }
 
@@ -197,12 +199,19 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   }
 }
 
-
 public struct RemoveRedundantFixIt: ParserFixIt {
   public let removeTokens: [TokenSyntax]
 
   public var message: String {
     "remove redundant \(missingNodesDescription(removeTokens))"
+  }
+}
+
+public struct RemoveTokensFixIt: ParserFixIt {
+  public let tokensToRemove: [TokenSyntax]
+
+  public var message: String {
+    "remove \(missingNodesDescription(tokensToRemove))"
   }
 }
 

@@ -162,6 +162,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
        let nextToken = tryKeyword.nextToken(viewMode: .sourceAccurate),
        nextToken.tokenKind.isKeyword {
       addDiagnostic(node, TryCannotBeUsed(nextToken: nextToken))
+    } else if let semicolons = node.onlyTokens(satisfying: { $0.tokenKind == .semicolon }) {
+      addDiagnostic(node, .unexpectedSemicolon, fixIts: [
+        FixIt(message: RemoveTokensFixIt(tokensToRemove: semicolons), changes: semicolons.map(FixIt.Changes.makeMissing))
+      ])
     } else {
       addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node))
     }
@@ -201,9 +205,25 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Specialized diagnostic generation
 
   public override func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
     if let semicolon = node.semicolon, semicolon.presence == .missing {
       let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
       addDiagnostic(semicolon, position: position, .consecutiveStatementsOnSameLine, fixIts: [
+        FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(token: semicolon))
+      ], handledNodes: [semicolon.id])
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let semicolon = node.semicolon, semicolon.presence == .missing {
+      let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
+      addDiagnostic(semicolon, position: position, .consecutiveDeclarationsOnSameLine, fixIts: [
         FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(token: semicolon))
       ], handledNodes: [semicolon.id])
     }

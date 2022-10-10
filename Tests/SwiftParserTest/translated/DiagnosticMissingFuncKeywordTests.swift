@@ -25,7 +25,6 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected note on line 1: in declaration of 'Brew'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in protocol"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end protocol"),
         // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration, Fix-It replacements: 3 - 3 = 'func '
         // TODO: Old parser expected error on line 3: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
@@ -64,7 +63,6 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in struct"),
         // TODO: Old parser expected error on line 2: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
         // TODO: Old parser expected error on line 3: expected 'func' keyword in operator function declaration, Fix-It replacements: 3 - 3 = 'func '
@@ -86,7 +84,6 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected declaration in class"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end class"),
         // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration, Fix-It replacements: 3 - 3 = 'func '
         // TODO: Old parser expected error on line 3: expected 'func' keyword in static method declaration, Fix-It replacements: 10 - 10 = 'func '
@@ -120,7 +117,6 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected declaration
-        DiagnosticSpec(message: "expected declaration in class"),
         DiagnosticSpec(message: "unexpected text '0' in class"),
       ]
     )

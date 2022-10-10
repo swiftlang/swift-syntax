@@ -150,17 +150,23 @@ extension Parser {
   public mutating func parseDeclaration() -> RawDeclSyntax {
     switch self.at(anyIn: PoundDeclarationStart.self) {
     case (.poundIfKeyword, _)?:
-      return RawDeclSyntax(self.parsePoundIfDirective { parser in
+      let directive = self.parsePoundIfDirective { parser in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
         return RawMemberDeclListItemSyntax(
           decl: parsedDecl,
           semicolon: semicolon,
           arena: parser.arena)
-      }
-                           syntax: { parser, elements in
+      } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
+        if lastElement.semicolon == nil && !newItemAtStartOfLine {
+          return lastElement.withSemicolon(parser.missingToken(.semicolon, text: nil), arena: parser.arena)
+        } else {
+          return nil
+        }
+      } syntax: { parser, elements in
         return RawSyntax(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
-      })
+      }
+      return RawDeclSyntax(directive)
     case (.poundWarningKeyword, _)?, (.poundErrorKeyword, _)?:
       return self.parsePoundDiagnosticDeclaration()
     case nil:
@@ -545,25 +551,47 @@ extension Parser {
 
 extension Parser {
   @_spi(RawSyntax)
+  public mutating func parseMemberDeclListItem() -> RawMemberDeclListItemSyntax? {
+    let decl: RawDeclSyntax
+    if self.at(.poundSourceLocationKeyword) {
+      decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
+    } else {
+      decl = self.parseDeclaration()
+    }
+
+    let semi = self.consume(if: .semicolon)
+    var trailingSemas: [RawTokenSyntax] = []
+    while let trailingSema = self.consume(if: .semicolon) {
+      trailingSemas.append(trailingSema)
+    }
+
+    if decl.isEmpty && semi == nil && trailingSemas.isEmpty {
+      return nil
+    }
+
+    return RawMemberDeclListItemSyntax(
+      decl: decl,
+      semicolon: semi,
+      RawUnexpectedNodesSyntax(trailingSemas, arena: self.arena),
+      arena: self.arena
+    )
+  }
+
+  @_spi(RawSyntax)
   public mutating func parseMemberDeclList() -> RawMemberDeclBlockSyntax {
     var elements = [RawMemberDeclListItemSyntax]()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightBrace]) && loopProgress.evaluate(currentToken) {
-        let decl: RawDeclSyntax
-        if self.at(.poundSourceLocationKeyword) {
-          decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
-        } else {
-          decl = self.parseDeclaration()
-        }
-
-        let semi = self.consume(if: .semicolon)
-        elements.append(RawMemberDeclListItemSyntax(
-          decl: decl, semicolon: semi, arena: self.arena))
-        if decl.is(RawMissingDeclSyntax.self) {
+        let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
+        guard let newElement = self.parseMemberDeclListItem() else {
           break
         }
+        if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
+          elements[elements.count - 1] = lastItem.withSemicolon(missingToken(.semicolon, text: nil), arena: self.arena)
+        }
+        elements.append(newElement)
       }
     }
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)

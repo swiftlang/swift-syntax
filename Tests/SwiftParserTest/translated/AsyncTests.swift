@@ -113,9 +113,9 @@ final class AsyncTests: XCTestCase {
       """
       class X {
         init() async { }
-        deinit async 1️⃣{ } 
+        deinit1️⃣ async 2️⃣{ }
         func f() async { }
-        subscript(x: Int) 2️⃣async 3️⃣-> Int { 
+        subscript(x: Int)3️⃣ 4️⃣async 5️⃣-> Int {
           get {
             return 0
           }
@@ -126,14 +126,16 @@ final class AsyncTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: deinitializers cannot have a name
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '{ }' in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '{ }' in function"),
         // TODO: Old parser expected error on line 5: expected '->' for subscript element type
         // TODO: Old parser expected error on line 5: single argument function types require parentheses
         // TODO: Old parser expected error on line 5: cannot find type 'async' in scope
         // TODO: Old parser expected note on line 5: cannot use module 'async' as a type
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after 'async' modifier in class"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text in class"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive declarations on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected declaration after 'async' modifier in class"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected text in class"),
         // TODO: Old parser expected error on line 9: 'set' accessor cannot have specifier 'async'
       ]
     )

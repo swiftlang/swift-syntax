@@ -37,7 +37,7 @@ extension FixIt.Changes {
         newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
       )
     ]
-    if !node.leadingTrivia.isEmpty, let nextToken = node.nextToken(viewMode: .sourceAccurate) {
+    if !node.leadingTrivia.isEmpty, let nextToken = node.nextToken(viewMode: .sourceAccurate), !nextToken.leadingTrivia.contains(where: { $0.isNewline }) {
       changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: node.leadingTrivia))
     }
     return FixIt.Changes(changes: changes)

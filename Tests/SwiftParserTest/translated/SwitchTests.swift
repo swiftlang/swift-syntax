@@ -228,17 +228,22 @@ final class SwitchTests: XCTestCase {
   func testSwitch15() {
     AssertParse(
       """
-      switch x { 
-      case 0:1️⃣
-        ; 
+      switch x {
+      case 0:
+        1️⃣;
       case 1:
         x = 0
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in switch case"),
-        // TODO: Old parser expected error on line 3: ';' statements are not allowed, Fix-It replacements: 3 - 5 = ''
-      ]
+        DiagnosticSpec(message: "';' statements are not allowed", fixIts: ["remove ';'"]),
+      ], fixedSource: """
+      switch x {
+      case 0:
+      case 1:
+        x = 0
+      }
+      """
     )
   }
 

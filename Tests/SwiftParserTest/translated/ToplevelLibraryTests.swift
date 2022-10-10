@@ -12,4 +12,28 @@ final class ToplevelLibraryTests: XCTestCase {
     )
   }
 
+  func testToplevelLibraryInvalid1() {
+    AssertParse(
+      """
+      let x = 42
+      x + x;
+      x + x;
+      // Make sure we don't crash on closures at the top level
+      ({ })
+      ({ 5 }())
+      """
+    )
+  }
+
+  func testToplevelLibraryInvalid2() {
+    AssertParse(
+      """
+      for i1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'in' and expression in 'for' statement"),
+        DiagnosticSpec(message: "expected code block in 'for' statement"),
+      ]
+    )
+  }
 }

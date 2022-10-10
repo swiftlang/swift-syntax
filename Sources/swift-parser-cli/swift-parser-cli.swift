@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
 import SwiftDiagnostics
 import SwiftSyntax
 import SwiftParser
@@ -187,45 +186,6 @@ class PrintDiags: ParsableCommand {
       if diags.isEmpty {
         print("No diagnostics produced")
       }
-    }
-  }
-}
-
-class PrintInitCall: ParsableCommand {
-  static var configuration = CommandConfiguration(
-    commandName: "print-init",
-    abstract: "Print a Swift expression that creates this tree"
-  )
-
-  required init() {}
-
-  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
-  var sourceFile: String?
-
-  @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
-  var swiftVersion: String?
-
-  @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
-  var enableBareSlashRegex: Bool?
-
-  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
-  var foldSequences: Bool = false
-
-  func run() throws {
-    let source = try getContentsOfSourceFile(at: sourceFile)
-
-    try source.withUnsafeBufferPointer { sourceBuffer in
-      var tree = try Parser.parse(
-        source: sourceBuffer,
-        languageVersion: swiftVersion,
-        enableBareSlashRegexLiteral: enableBareSlashRegex
-      )
-
-      if foldSequences {
-        tree = foldAllSequences(tree).0.as(SourceFileSyntax.self)!
-      }
-
-      print(tree.debugInitCall)
     }
   }
 }

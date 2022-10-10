@@ -142,8 +142,7 @@ let package = Package(
     ),
     .executableTarget(
       name: "swift-parser-cli",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics",
-                     "SwiftSyntax", "SwiftParser", "SwiftOperators",
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftOperators",
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .testTarget(

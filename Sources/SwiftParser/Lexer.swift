@@ -51,6 +51,12 @@ public struct Lexer {
       return self.flags.contains(.isMultilineStringLiteral)
     }
 
+    var isEditorPlaceholder: Bool {
+      return self.tokenKind == .identifier &&
+      self.tokenText.starts(with: SyntaxText("<#")) &&
+      self.tokenText.hasSuffix(SyntaxText("#>"))
+    }
+
     @_spi(RawSyntax)
     public init(
       tokenKind: RawTokenKind,

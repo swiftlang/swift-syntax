@@ -1,5 +1,6 @@
 // This test file has been translated from swift/test/Parse/trailing_closures.swift
 
+import SwiftSyntax
 import XCTest
 
 final class TrailingClosuresTests: XCTestCase {
@@ -145,30 +146,44 @@ final class TrailingClosuresTests: XCTestCase {
     )
   }
 
-  func testTrailingClosures13() {
+  func testTrailingClosures13a() {
     AssertParse(
       """
-      func test_multiple_trailing_syntax_without_labels() {
-        func fn(f: () -> Void, g: () -> Void) {}
-        fn {} g: {} // Ok
-        fn {} _: {} //  {{none}}
-        fn {}1️⃣ g2️⃣: <#T##() -> Void#>
-        func multiple(_: () -> Void, _: () -> Void) {}
-        multiple {} _: { }
-        func mixed_args_1(a: () -> Void, _: () -> Void) {}
-        func mixed_args_2(_: () -> Void, a: () -> Void, _: () -> Void) {} 
-        mixed_args_1 {} _: {}
-        mixed_args_1 {} a: {}  //  {{none}}
-        mixed_args_2 {} a: {} _: {}
-        mixed_args_2 {} _: {} //  {{none}}
-        mixed_args_2 {} _: {} _: {} //  {{none}}
-      }
+      fn {} g: {}
+      fn {} _: {}
+      multiple {} _: { }
+      mixed_args_1 {} _: {}
+      mixed_args_1 {} a: {}  //  {{none}}
+      mixed_args_2 {} a: {} _: {}
+      mixed_args_2 {} _: {} //  {{none}}
+      mixed_args_2 {} _: {} _: {} //  {{none}}
+      """
+    )
+  }
+
+  func testTrailingClosures13b() {
+    AssertParse(
+      """
+      fn {} g: 1️⃣<#T##() -> Void#>
       """,
+      substructure: Syntax(MultipleTrailingClosureElementSyntax(
+        label: .identifier("g"),
+        colon: .colonToken(trailingTrivia: .space),
+        closure: ClosureExprSyntax(
+          leftBrace: .leftBraceToken(presence: .missing),
+          signature: nil,
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: Syntax(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>"))),
+              semicolon: nil,
+              errorTokens: nil
+            )
+          ]),
+          rightBrace: .rightBraceToken(presence: .missing)
+        )
+      )),
       diagnostics: [
-        // TODO: Old parser expected error on line 5: editor placeholder in source file
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text ': <#T##() -> Void#>' before function"),
+        DiagnosticSpec(message: "editor placeholder in source file"),
       ]
     )
   }

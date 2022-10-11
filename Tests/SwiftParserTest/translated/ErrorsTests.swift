@@ -321,7 +321,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 25 - 28 = 'throws'
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous 'where T:ExpressibleByStringLiteral {}' at top level"),
       ]
     )

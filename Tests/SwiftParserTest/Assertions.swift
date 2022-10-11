@@ -354,7 +354,11 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
       // Applying Fix-Its
       if let expectedFixedSource = expectedFixedSource {
         let fixedTree = FixItApplier.applyFixes(in: diags, to: tree)
-        AssertStringsEqualWithDiff(fixedTree.description, expectedFixedSource, file: file, line: line)
+        AssertStringsEqualWithDiff(
+          fixedTree.description.trimmingTrailingWhitespace(),
+          expectedFixedSource.trimmingTrailingWhitespace(),
+          file: file, line: line
+        )
       }
     }
   }

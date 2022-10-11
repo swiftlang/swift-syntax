@@ -18,7 +18,15 @@ extension TokenConsumer {
     case (.awaitTryMove, let handle)?:
       var backtrack = self.lookahead()
       backtrack.eat(handle)
-      return !backtrack.atStartOfDeclaration() && !backtrack.atStartOfStatement()
+      if backtrack.atStartOfDeclaration() || backtrack.atStartOfStatement() {
+        // If after the 'try' we are at a declaration or statement, it can't be a valid expression.
+        // Decide how we want to consume the 'try':
+        // If the declaration or statement starts at a new line, the user probably just forgot to write the expression after 'try' -> parse it as a TryExpr
+        // If the declaration or statement starts at the same line, the user maybe tried to use 'try' as a modifier -> parse it as unexpected text in front of that decl or stmt.
+        return backtrack.currentToken.isAtStartOfLine
+      } else {
+        return true
+      }
     case (_, _)?:
       return true
     case nil:

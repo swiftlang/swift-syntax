@@ -243,7 +243,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'async'
         // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'rethrows'
         // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'reasync'
-        DiagnosticSpec(message: "unexpected text in variable"),
+        DiagnosticSpec(message: "unexpected code in variable"),
         // TODO: Old parser expected error on line 3: expected '{' to start 'didSet' definition
         // TODO: Old parser expected error on line 3: 'didSet' accessor cannot have specifier 'throws'
       ]
@@ -259,7 +259,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' to start getter definition
-        DiagnosticSpec(message: "unexpected text 'bogus rethrows {}' in variable"),
+        DiagnosticSpec(message: "unexpected code 'bogus rethrows {}' in variable"),
       ]
     )
   }
@@ -274,7 +274,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' to start getter definition
         // TODO: Old parser expected error on line 2: only function declarations may be marked 'rethrows'; did you mean 'throws'?
-        DiagnosticSpec(message: "unexpected text '-> Int { 0 }' in variable"),
+        DiagnosticSpec(message: "unexpected code '-> Int { 0 }' in variable"),
       ]
     )
   }
@@ -319,12 +319,12 @@ final class EffectfulPropertiesTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected get or set in a protocol property
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'bogus rethrows set' in variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'bogus rethrows set' in variable"),
         // TODO: Old parser expected error on line 3: only function declarations may be marked 'rethrows'; did you mean 'throws'?
         // TODO: Old parser expected error on line 3: expected get or set in a protocol property
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'bogus set' in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'bogus set' in variable"),
         // TODO: Old parser expected error on line 4: expected get or set in a protocol property
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'bogus set' in variable"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'bogus set' in variable"),
         // TODO: Old parser expected error on line 5: 'async' must precede 'throws'
       ]
     )

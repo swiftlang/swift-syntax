@@ -12,7 +12,7 @@ final class RawStringErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter
         // TODO: Old parser expected error on line 1: expected ',' separator
         // TODO: Old parser expected error on line 1: expected expression in list of expressions
-        DiagnosticSpec(message: "unexpected text '#' in string literal"),
+        DiagnosticSpec(message: "unexpected code '#' in string literal"),
       ]
     )
   }
@@ -26,7 +26,7 @@ final class RawStringErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: too many '#' characters in delimited escape
         // TODO: Old parser expected error on line 1: invalid escape sequence in literal
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: ###"extraneous '#"\##("invalid")"#' at top level"###),
+        DiagnosticSpec(message: ###"extraneous code '#"\##("invalid")"#' at top level"###),
       ]
     )
   }
@@ -40,7 +40,7 @@ final class RawStringErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter, Fix-It replacements: 26 - 29 = ''
         // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 1: expected expression
-        DiagnosticSpec(message: "extraneous '###' at top level"),
+        DiagnosticSpec(message: "extraneous code '###' at top level"),
       ]
     )
   }
@@ -66,7 +66,7 @@ final class RawStringErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter, Fix-It replacements: 24 - 27 = ''
         // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 1: expected expression
-        DiagnosticSpec(message: "extraneous '###' at top level"),
+        DiagnosticSpec(message: "extraneous code '###' at top level"),
       ]
     )
   }

@@ -105,8 +105,8 @@ final class DirectiveTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '}' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in conditional compilation block"),
       ]
     )
   }

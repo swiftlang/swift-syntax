@@ -980,8 +980,8 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '(garbage)' in switch case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '(foobar)' in switch case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '(garbage)' in switch case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(foobar)' in switch case"),
       ]
     )
   }

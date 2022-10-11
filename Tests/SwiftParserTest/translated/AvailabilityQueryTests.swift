@@ -21,7 +21,7 @@ final class AvailabilityQueryTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: #available may only be used as condition of an 'if', 'guard'
         DiagnosticSpec(message: "expected value in tuple"),
-        DiagnosticSpec(message: "unexpected text '#available(OSX 10.51, *)' in tuple"),
+        DiagnosticSpec(message: "unexpected code '#available(OSX 10.51, *)' in tuple"),
       ]
     )
   }
@@ -34,7 +34,7 @@ final class AvailabilityQueryTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: #available may only be used as condition of
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#available(OSX 10.51, *)' at top level"),
+        DiagnosticSpec(message: "extraneous code '#available(OSX 10.51, *)' at top level"),
       ]
     )
   }
@@ -47,7 +47,7 @@ final class AvailabilityQueryTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: #available may only be used as condition of an
         DiagnosticSpec(message: "expected value in tuple"),
-        DiagnosticSpec(message: "unexpected text '#available(OSX 10.51, *) ? 1 : 0' in tuple"),
+        DiagnosticSpec(message: "unexpected code '#available(OSX 10.51, *) ? 1 : 0' in tuple"),
       ]
     )
   }
@@ -63,10 +63,10 @@ final class AvailabilityQueryTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 15 = '#unavailable'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '#available(OSX 10.52, *)' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '#available(OSX 10.52, *)' in 'if' statement"),
         // TODO: Old parser expected error on line 3: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 25 - 36 = '#unavailable'
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '#available(OSX 10.52, *)' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '#available(OSX 10.52, *)' in 'if' statement"),
       ]
     )
   }
@@ -79,7 +79,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ',' joining parts of a multi-clause condition, Fix-It replacements: 28 - 31 = ','
-        DiagnosticSpec(message: "unexpected text '&& #available(OSX 10.52, *)' in 'if' statement"),
+        DiagnosticSpec(message: "unexpected code '&& #available(OSX 10.52, *)' in 'if' statement"),
       ]
     )
   }
@@ -373,7 +373,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '||' cannot be used in an availability condition
-        DiagnosticSpec(message: "unexpected text '|| iOS 8.0' in '#availabile' condition"),
+        DiagnosticSpec(message: "unexpected code '|| iOS 8.0' in '#availabile' condition"),
       ]
     )
   }
@@ -394,7 +394,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: version comparison not needed, Fix-It replacements: 19 - 22 = ''
-        DiagnosticSpec(message: "unexpected text '>= 10.51, *' in '#availabile' condition"),
+        DiagnosticSpec(message: "unexpected code '>= 10.51, *' in '#availabile' condition"),
       ]
     )
   }

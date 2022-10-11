@@ -14,7 +14,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 2: 'inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 12 - 17 = '', 26 - 26 = 'inout '
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
       ]
     )
   }
@@ -29,7 +29,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: 'inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 12 - 17 = '', 26 - 26 = 'inout '
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
       ]
     )
   }
@@ -41,7 +41,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'inout' before a parameter name is not allowed, place it before the parameter type instead
-        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected text 'x : Int' in function type"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected code 'x : Int' in function type"),
       ]
     )
   }
@@ -56,7 +56,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: '__shared' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 21 = '', 30 - 30 = '__shared '
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
       ]
     )
   }
@@ -71,7 +71,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: '__shared' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 21 = '', 30 - 30 = '__shared '
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
       ]
     )
   }
@@ -86,7 +86,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: '__owned' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 20 = ''
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
       ]
     )
   }
@@ -101,7 +101,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 2: '__owned' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 20 = ''
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
       ]
     )
   }
@@ -206,7 +206,7 @@ final class InvalidTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 4: expected ',' separator, Fix-It replacements: 18 - 18 = ','
         // TODO: Old parser expected error on line 4: expected expression in list of expressions
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' in string literal"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
     )
@@ -224,7 +224,7 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous ') {}' at top level"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous code ') {}' at top level"),
       ]
     )
   }
@@ -302,16 +302,16 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 19 - 25 = ''
         // TODO: Old parser expected error on line 2: inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 15 - 20 = '', 30 - 30 = 'inout '
         // TODO: Old parser expected error on line 2: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 21 - 27 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text ': Int' in parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int' in parameter clause"),
         // TODO: Old parser expected warning on line 3: 'let' in this position is interpreted as an argument label, Fix-It replacements: 15 - 18 = '`let`'
         // TODO: Old parser expected error on line 3: expected ',' separator, Fix-It replacements: 22 - 22 = ','
         // TODO: Old parser expected error on line 3: expected ':' following argument label and parameter name
         // TODO: Old parser expected warning on line 3: extraneous duplicate parameter name; 'let' already has an argument label, Fix-It replacements: 15 - 19 = ''
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'a' in function parameter"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'a' in function parameter"),
         // TODO: Old parser expected error on line 4: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text ': inout String' in parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ': inout String' in parameter clause"),
         // TODO: Old parser expected error on line 5: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected text ': inout Int' in parameter clause"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ': inout Int' in parameter clause"),
       ]
     )
   }
@@ -345,7 +345,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(message: "unexpected text ': inout String' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code ': inout String' in parameter clause"),
       ]
     )
   }
@@ -357,7 +357,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(message: "unexpected text ': inout Int' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code ': inout Int' in parameter clause"),
       ]
     )
   }
@@ -395,7 +395,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
         // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 13 = 'dogcow'
         // TODO: Old parser expected note on line 1: join the identifiers together with camel-case, Fix-It replacements: 6 - 13 = 'dogCow'
-        DiagnosticSpec(message: "unexpected text 'cow' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'cow' before parameter clause"),
       ]
     )
   }
@@ -408,7 +408,7 @@ final class InvalidTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
         // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 15 = 'catMouse'
-        DiagnosticSpec(message: "unexpected text 'Mouse' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'Mouse' before parameter clause"),
       ]
     )
   }
@@ -422,7 +422,7 @@ final class InvalidTests: XCTestCase {
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
         // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 17 = 'friendship'
         // TODO: Old parser expected note on line 1: join the identifiers together with camel-case, Fix-It replacements: 6 - 17 = 'friendShip'
-        DiagnosticSpec(message: "unexpected text 'ship<T>' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'ship<T>' before parameter clause"),
       ]
     )
   }

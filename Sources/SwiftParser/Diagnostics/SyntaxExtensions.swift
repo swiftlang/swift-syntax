@@ -70,15 +70,23 @@ extension SyntaxProtocol {
     return syntax.as(SyntaxEnum.self).nameForDiagnostics
   }
 
+  /// A short description of this node that can be displayed inline in a single line.
   /// If the syntax node (excluding leading and trailing trivia) only spans a
   /// single line and has less than 100 characters (and thus fits into a
-  /// diagnostic message), return that. Otherwise, return `nil`.
-  var contentForDiagnosticsIfShortSingleLine: String? {
+  /// diagnostic message), return that.
+  /// Otherwise, return a generic message that describes the tokens in this node.
+  var shortSingleLineContentDescription: String {
     let contentWithoutTrivia = self.withoutLeadingTrivia().withoutTrailingTrivia().description
-    if contentWithoutTrivia.contains("\n") || contentWithoutTrivia.count > 100 {
-      return nil
+    if self.children(viewMode: .sourceAccurate).allSatisfy({ $0.as(TokenSyntax.self)?.tokenKind == .rightBrace }) {
+      if self.children(viewMode: .sourceAccurate).count == 1 {
+        return "brace"
+      } else {
+        return "braces"
+      }
+    } else if contentWithoutTrivia.contains("\n") || contentWithoutTrivia.count > 100 {
+      return "code"
     } else {
-      return contentWithoutTrivia
+      return "code '\(contentWithoutTrivia)'"
     }
   }
 

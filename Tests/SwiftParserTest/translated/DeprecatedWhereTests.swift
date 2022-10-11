@@ -183,7 +183,7 @@ final class DeprecatedWhereTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier and member block in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '<ProtoA, ProtoB> where T: ProtoC>(x: T) {}' at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '<ProtoA, ProtoB> where T: ProtoC>(x: T) {}' at top level"),
       ]
     )
   }
@@ -200,7 +200,7 @@ final class DeprecatedWhereTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier and member block in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}' at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}' at top level"),
       ]
     )
   }

@@ -22,7 +22,7 @@ final class OptionalTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: consecutive statements on a line, Fix-It replacements: 10 - 10 = ';'
         // TODO: Old parser expected error on line 2: expected expression
-        DiagnosticSpec(message: "extraneous '?' at top level"),
+        DiagnosticSpec(message: "extraneous code '?' at top level"),
       ]
     )
   }

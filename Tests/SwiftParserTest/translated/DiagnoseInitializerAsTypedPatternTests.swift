@@ -49,7 +49,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ', ee: Int' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ', ee: Int' at top level"),
       ]
     )
   }

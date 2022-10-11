@@ -169,7 +169,7 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator %%+
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text before operator"),
+        DiagnosticSpec(message: "unexpected code before operator"),
       ]
     )
   }
@@ -244,7 +244,7 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(message: "extraneous '--: A' at top level"),
+        DiagnosticSpec(message: "extraneous code '--: A' at top level"),
       ]
     )
   }
@@ -260,7 +260,7 @@ final class OperatorDeclTests: XCTestCase {
         // TODO: Old parser expected error on line 1: '$$' is considered an identifier and must not appear within an operator name
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '<' at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '<' at top level"),
       ]
     )
   }
@@ -285,7 +285,7 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
-        DiagnosticSpec(message: "extraneous '++=' at top level"),
+        DiagnosticSpec(message: "extraneous code '++=' at top level"),
       ]
     )
   }
@@ -297,7 +297,7 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
-        DiagnosticSpec(message: "extraneous '#' at top level"),
+        DiagnosticSpec(message: "extraneous code '#' at top level"),
       ]
     )
   }
@@ -309,7 +309,7 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
-        DiagnosticSpec(message: "extraneous '#' at top level"),
+        DiagnosticSpec(message: "extraneous code '#' at top level"),
       ]
     )
   }
@@ -324,7 +324,7 @@ final class OperatorDeclTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: '#' is not allowed in operator names
         // TODO: Old parser expected error on line 3: '=' must have consistent whitespace on both sides
-        DiagnosticSpec(message: "extraneous '#=' at top level"),
+        DiagnosticSpec(message: "extraneous code '#=' at top level"),
       ]
     )
   }
@@ -371,11 +371,11 @@ final class OperatorDeclTests: XCTestCase {
         // TODO: Old parser expected error on line 5: expected colon after attribute name in precedence group
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in 'associativity' property of precedencegroup"),
         // TODO: Old parser expected error on line 8: 'precedence' is not a valid precedence group attribute
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'precedence 123' in precedencegroup"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'precedence 123' in precedencegroup"),
         // TODO: Old parser expected error on line 11: expected 'none', 'left', or 'right' after 'associativity'
         // TODO: Old parser expected error on line 14: expected 'true' or 'false' after 'assignment'
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'true' in 'assignment' property of precedencegroup"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected text 'no' in precedencegroup"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code 'no' in precedencegroup"),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected identifier in 'relation' property of precedencegroup"),
         // TODO: Old parser expected error on line 18: expected name of related precedence group after 'higherThan'
       ]

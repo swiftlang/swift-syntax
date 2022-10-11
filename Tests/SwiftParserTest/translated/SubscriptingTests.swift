@@ -325,7 +325,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text '(j: Int)' in subscript"),
+        DiagnosticSpec(message: "unexpected code '(j: Int)' in subscript"),
       ]
     )
   }
@@ -372,7 +372,7 @@ final class SubscriptingTests: XCTestCase {
         }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text in struct", highlight: """
+        DiagnosticSpec(message: "unexpected code in struct", highlight: """
 
               get {
                 return stored

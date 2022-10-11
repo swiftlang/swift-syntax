@@ -20,7 +20,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 1: unterminated string literal
         DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: #"extraneous '"mid == \(pete"' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"mid == \(pete"' at top level"#),
       ]
     )
   }
@@ -34,7 +34,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 1: unterminated string literal
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous '"kanye \("' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"kanye \("' at top level"#),
       ]
     )
   }
@@ -48,7 +48,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 1: unterminated string literal
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous '"2 + 2 = \(2 + 2"' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"2 + 2 = \(2 + 2"' at top level"#),
       ]
     )
   }
@@ -62,7 +62,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 1: unterminated string literal
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous '"\(x"; print(x)' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"\(x"; print(x)' at top level"#),
       ]
     )
   }
@@ -76,7 +76,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 1: unterminated string literal
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous '"\(x; print(x)' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"\(x; print(x)' at top level"#),
       ]
     )
   }
@@ -90,7 +90,7 @@ final class UnclosedStringInterpolationTests: XCTestCase {
         // TODO: Old parser expected error on line 1: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 1: unterminated string literal
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: #"extraneous '"The Life Of \("Pablo"' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"The Life Of \("Pablo"' at top level"#),
       ]
     )
   }

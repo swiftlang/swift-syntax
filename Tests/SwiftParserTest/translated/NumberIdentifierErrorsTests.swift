@@ -23,10 +23,10 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: function name can only start with a letter or underscore, not a number
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '1' before parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '1' before parameter clause"),
         // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '2.0' before parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '2.0' before parameter clause"),
         // TODO: Old parser expected error on line 3: function name can only start with a letter or underscore, not a number
         // TODO: Old parser expected error on line 3: 'f' is not a valid digit in integer literal
         DiagnosticSpec(locationMarker: "3️⃣", message: "identifier can only start with a letter or underscore, not a number"),
@@ -95,10 +95,10 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: typealias name can only start with a letter or underscore, not a number
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in typealias declaration"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '10' in typealias declaration"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '10' in typealias declaration"),
         // TODO: Old parser expected error on line 2: typealias name can only start with a letter or underscore, not a number
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in typealias declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '11.0' in typealias declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '11.0' in typealias declaration"),
         // TODO: Old parser expected error on line 3: typealias name can only start with a letter or underscore, not a number
         // TODO: Old parser expected error on line 3: 't' is not a valid digit in integer literal
         DiagnosticSpec(locationMarker: "3️⃣", message: "identifier can only start with a letter or underscore, not a number"),
@@ -192,7 +192,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier and member block in class"),
         // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '20' before parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '20' before parameter clause"),
       ]
     )
   }
@@ -209,7 +209,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier and member block in class"),
         // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '22.0' before parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '22.0' before parameter clause"),
       ]
     )
   }

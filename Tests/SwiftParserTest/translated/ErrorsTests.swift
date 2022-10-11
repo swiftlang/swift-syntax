@@ -130,7 +130,7 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 4: expected '{'
-        DiagnosticSpec(message: "unexpected text ')' in 'catch' clause"),
+        DiagnosticSpec(message: "unexpected code ')' in 'catch' clause"),
       ]
     )
   }
@@ -187,7 +187,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'rethrows' may only occur before '->', Fix-It replacements: 43 - 43 = 'rethrows ', 46 - 55 = ''
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'rethrows' in function signature"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'rethrows' in function signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'rethrows' in function signature"),
       ]
     )
   }
@@ -202,7 +202,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: 'throws' may only occur before '->', Fix-It replacements: 19 - 26 = '', 12 - 12 = 'throws '
         DiagnosticSpec(message: "expected 'in' in closure signature"),
-        DiagnosticSpec(message: "unexpected text 'throws in' in closure"),
+        DiagnosticSpec(message: "unexpected code 'throws in' in closure"),
       ]
     )
   }
@@ -216,7 +216,7 @@ final class ErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: 'rethrows' has already been specified, Fix-It replacements: 26 - 35 = ''
         // TODO: Old parser expected error on line 1: 'throws' has already been specified, Fix-It replacements: 38 - 45 = ''
         // TODO: Old parser expected error on line 1: 'throw' has already been specified, Fix-It replacements: 49 - 55 = ''
-        DiagnosticSpec(message: "extraneous 'rethrows -> throws Int throw {}' at top level"),
+        DiagnosticSpec(message: "extraneous code 'rethrows -> throws Int throw {}' at top level"),
       ]
     )
   }
@@ -229,7 +229,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'rethrows' has already been specified, Fix-It replacements: 35 - 44 = ''
         DiagnosticSpec(message: "expected type in function type"),
-        DiagnosticSpec(message: "unexpected text 'rethrows Int' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'rethrows Int' in parameter clause"),
       ]
     )
   }
@@ -247,7 +247,7 @@ final class ErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 2: 'throws' has already been specified, Fix-It replacements: 16 - 23 = ''
         // TODO: Old parser expected error on line 3: 'throws' has already been specified, Fix-It replacements: 26 - 33 = ''
         DiagnosticSpec(message: "expected 'in' in closure signature"),
-        DiagnosticSpec(message: "unexpected text 'throws in' in closure"),
+        DiagnosticSpec(message: "unexpected code 'throws in' in closure"),
       ]
     )
   }
@@ -263,7 +263,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 3: expected expression
-        DiagnosticSpec(message: "unexpected text 'throws' in function"),
+        DiagnosticSpec(message: "unexpected code 'throws' in function"),
       ]
     )
   }
@@ -286,7 +286,7 @@ final class ErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 3: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 20 - 25 = 'throws'
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in 'throw' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '-> Int {}' before function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '-> Int {}' before function"),
         // TODO: Old parser expected error on line 7: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 16 - 21 = 'throws'
       ]
     )
@@ -300,7 +300,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 12 - 12 = 'throws ', 15 - 22 = ''
         DiagnosticSpec(message: "expected type in function type"),
-        DiagnosticSpec(message: "extraneous 'throws Void' at top level"),
+        DiagnosticSpec(message: "extraneous code 'throws Void' at top level"),
       ]
     )
   }
@@ -322,7 +322,7 @@ final class ErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: expected throwing specifier; did you mean 'throws'?, Fix-It replacements: 25 - 28 = 'throws'
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous 'where T:ExpressibleByStringLiteral {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'where T:ExpressibleByStringLiteral {}' at top level"),
       ]
     )
   }

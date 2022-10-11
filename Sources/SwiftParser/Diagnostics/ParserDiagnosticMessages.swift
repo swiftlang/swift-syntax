@@ -107,11 +107,7 @@ public struct ExtaneousCodeAtTopLevel: ParserError {
   public let extraneousCode: UnexpectedNodesSyntax
 
   public var message: String {
-    if let shortContent = extraneousCode.contentForDiagnosticsIfShortSingleLine {
-      return "extraneous '\(shortContent)' at top level"
-    } else {
-      return "extraneous code at top level"
-    }
+    return "extraneous \(extraneousCode.shortSingleLineContentDescription) at top level"
   }
 }
 
@@ -153,10 +149,7 @@ public struct UnexpectedNodesError: ParserError {
   public let unexpectedNodes: UnexpectedNodesSyntax
 
   public var message: String {
-    var message = "unexpected text"
-    if let shortContent = unexpectedNodes.contentForDiagnosticsIfShortSingleLine {
-      message += " '\(shortContent)'"
-    }
+    var message = "unexpected \(unexpectedNodes.shortSingleLineContentDescription)"
     if let parent = unexpectedNodes.parent {
       if let parentTypeName = parent.nodeTypeNameForDiagnostics(allowBlockNames: false), parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id {
         message += " before \(parentTypeName)"

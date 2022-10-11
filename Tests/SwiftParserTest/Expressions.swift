@@ -315,7 +315,7 @@ final class ExpressionTests: XCTestCase {
       1️⃣"\(()
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"extraneous '"\(()' at top level"#)
+        DiagnosticSpec(message: #"extraneous code '"\(()' at top level"#)
       ]
     )
   }
@@ -339,7 +339,7 @@ final class ExpressionTests: XCTestCase {
       " >> \( abc 1️⃣} ) << "
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text '}' in string literal")
+        DiagnosticSpec(message: "unexpected brace in string literal")
       ]
     )
 
@@ -482,7 +482,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       ###"1️⃣"\"###,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous '\"\\' at top level")
+        DiagnosticSpec(message: "extraneous code '\"\\' at top level")
       ]
     )
   }
@@ -627,7 +627,7 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '..' in function type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '..' in function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function type"),
       ]
     )

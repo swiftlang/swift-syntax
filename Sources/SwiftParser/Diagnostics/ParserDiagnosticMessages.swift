@@ -69,6 +69,7 @@ public enum StaticParserError: String, DiagnosticMessage {
   case consecutiveDeclarationsOnSameLine = "consecutive declarations on a line must be separated by ';'"
   case consecutiveStatementsOnSameLine = "consecutive statements on a line must be separated by ';'"
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"
+  case defaultCannotBeUsedWithWhere = "'default' cannot be used with a 'where' guard expression"
   case editorPlaceholderInSourceFile = "editor placeholder in source file"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
   case missingFunctionParameterClause = "expected argument list in function declaration"

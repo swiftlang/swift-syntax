@@ -295,9 +295,16 @@ extension ParseDiagnosticsGenerator {
       missingNodes = []
     }
 
+    let changes = missingNodes.enumerated().map { (index, missingNode) -> FixIt.Changes in
+      if index == 0, let token = missingNode.as(TokenSyntax.self), token.tokenKind.isPunctuation == true, token.previousToken(viewMode: .sourceAccurate)?.tokenKind.isPunctuation == false {
+        return .makePresentBeforeTrivia(token: token)
+      } else {
+        return .makePresent(node: missingNode)
+      }
+    }
     let fixIt = FixIt(
       message: InsertTokenFixIt(missingNodes: missingNodes),
-      changes: missingNodes.map({ FixIt.Changes.makePresent(node: $0) })
+      changes: changes
     )
 
     var notes: [Note] = []

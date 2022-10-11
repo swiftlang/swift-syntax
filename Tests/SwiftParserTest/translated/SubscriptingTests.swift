@@ -171,10 +171,9 @@ final class SubscriptingTests: XCTestCase {
     )
   }
 
-  func testSubscripting12() {
+  func testSubscripting12a() {
     AssertParse(
       """
-      // Parsing errors
       struct A0 {
         subscript 1️⃣
           i : 2️⃣Int3️⃣
@@ -186,20 +185,43 @@ final class SubscriptingTests: XCTestCase {
             stored = value
           }
         }
-        subscript 5️⃣-> Int { 
-          return 1
-        }
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected '(' for subscript parameters
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
-        // TODO: Old parser expected error on line 13: expected '(' for subscript parameters, Fix-It replacements: 12 - 12 = '()'
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected argument list in function declaration"),
+      ], fixedSource: """
+      struct A0 {
+        subscript(
+          i : (Int)
+           -> Int)  -> <#type#>{
+          get {
+            return stored
+          }
+          set {
+            stored = value
+          }
+        }
+      }
+      """
+    )
+  }
+
+  func testSubscripting12b() {
+    AssertParse(
+      """
+      // Parsing errors
+      struct A0 {
+        subscript 1️⃣-> Int {
+          return 1
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected argument list in function declaration"),
       ]
     )
   }

@@ -1174,7 +1174,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected declaration after attribute in switch case"),
+        DiagnosticSpec(message: "expected label in switch case"),
       ]
     )
   }

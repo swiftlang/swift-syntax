@@ -1150,6 +1150,7 @@ extension Parser.Lookahead {
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
     var loopProgress = LoopProgressCondition()
+    var hasAttribute = false
     while lookahead.at(.atSign) && loopProgress.evaluate(lookahead.currentToken) {
       guard lookahead.peek().tokenKind == .identifier else {
         return false
@@ -1157,6 +1158,16 @@ extension Parser.Lookahead {
 
       lookahead.eat(.atSign)
       lookahead.eat(.identifier)
+      hasAttribute = true
+    }
+
+    if hasAttribute && lookahead.at(.rightBrace) {
+      // If we are at an attribute that's the last token in the SwitchCase, parse
+      // that as an attribut to a missing 'case'. That way, if the developer writes
+      // @unknown at the end of a switch but forgot to write 'default', we'll emit
+      // a diagnostic about a missing label instead of a missing declaration after
+      // the attribute.
+      return true
     }
 
     if allowRecovery {

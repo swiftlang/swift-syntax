@@ -38,11 +38,6 @@ fileprivate func nextMarkedRange(text: String, from: String.Index) -> Marker? {
   let markerRange = start ..< end
   let name = text[start ..< end]
 
-  // Expand to the whole line if the line only contains the marker
-  let lineRange = text.lineRange(for: start..<start)
-  if text[lineRange].trimmingCharacters(in: .whitespacesAndNewlines) == text[markerRange] {
-    return Marker(name: name, range: lineRange)
-  }
   return Marker(name: name, range: markerRange)
 }
 

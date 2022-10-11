@@ -88,7 +88,7 @@ final class TrailingSemiTests: XCTestCase {
     )
   }
 
-  func testSingleTrailingSemaInStmt() {
+  func testSingleTrailingSemiInStmt() {
     AssertParse(
       """
       let x = 5;1️⃣;
@@ -99,7 +99,7 @@ final class TrailingSemiTests: XCTestCase {
     )
   }
 
-  func testDoubleTrailingSemaInStmt() {
+  func testDoubleTrailingSemiInStmt() {
     AssertParse(
       """
       let x = 5;1️⃣;;
@@ -110,7 +110,7 @@ final class TrailingSemiTests: XCTestCase {
     )
   }
 
-  func testDoubleTrailingSemaInDecl() {
+  func testDoubleTrailingSemiInDecl() {
     AssertParse(
       """
       struct X {

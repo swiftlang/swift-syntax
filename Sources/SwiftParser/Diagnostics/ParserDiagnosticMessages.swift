@@ -66,14 +66,16 @@ public extension ParserFixIt {
 
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticParserError: String, DiagnosticMessage {
+  case allStatmentsInSwitchMustBeCoveredByCase = "all statements inside a switch must be covered by a 'case' or 'default' label"
   case consecutiveDeclarationsOnSameLine = "consecutive declarations on a line must be separated by ';'"
   case consecutiveStatementsOnSameLine = "consecutive statements on a line must be separated by ';'"
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"
   case defaultCannotBeUsedWithWhere = "'default' cannot be used with a 'where' guard expression"
   case editorPlaceholderInSourceFile = "editor placeholder in source file"
+  case expectedExpressionAfterTry = "expected expression after 'try'"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
   case missingFunctionParameterClause = "expected argument list in function declaration"
-  case stanaloneSemicolonStatement = "';' statements are not allowed"
+  case standaloneSemicolonStatement = "standalone ';' statements are not allowed"
   case throwsInReturnPosition = "'throws' may only occur before '->'"
   case tryMustBePlacedOnReturnedExpr = "'try' must be placed on the returned expression"
   case tryMustBePlacedOnThrownExpr = "'try' must be placed on the thrown expression"

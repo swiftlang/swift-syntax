@@ -193,23 +193,55 @@ final class TryTests: XCTestCase {
       """
       class TryDecl {
         1️⃣try let singleLet = foo()
-        2️⃣try var singleVar = foo()
-        3️⃣try
-        func method() {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "'try' cannot be used with 'func'"),
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
       ], fixedSource: """
       class TryDecl {
         let singleLet = try foo()
-        var singleVar = try foo()
-        try
-        func method() {}
       }
       """
+    )
+  }
+
+  func testTry11g() {
+    AssertParse(
+      """
+      class TryDecl {
+        1️⃣try var singleVar = foo()
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
+      ], fixedSource: """
+      class TryDecl {
+        var singleVar = try foo()
+      }
+      """
+    )
+  }
+
+  func testTry11h() {
+    AssertParse(
+      """
+      try1️⃣
+      func method() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected expression after 'try'"),
+      ]
+    )
+  }
+
+  func testTry11i() {
+    AssertParse(
+      """
+      1️⃣try func method() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'try' cannot be used with 'func'"),
+      ]
     )
   }
 
@@ -234,8 +266,8 @@ final class TryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'try' must be placed on the thrown expression", fixIts: ["move 'try' after 'throw'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in 'try' expression"),
-      ], fixedSource: "throw try <#expression#>"
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'"),
+      ], fixedSource: "throw try"
     )
   }
 

@@ -43,26 +43,19 @@ extension FixIt.Changes {
     return FixIt.Changes(changes: changes)
   }
 
-  static func makePresent<T: SyntaxProtocol>(node: T) -> Self {
-    return [.replace(
-      oldNode: Syntax(node),
-      newNode: PresentMaker().visit(Syntax(node))
-    )]
-  }
-
-  /// Make a token present. If `leadingTrivia` or `trailingTrivia` is specified,
+  /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
   /// override the default leading/trailing trivia inferred from `BasicFormat`.
-  static func makePresent(
-    node: TokenSyntax,
+  static func makePresent<T: SyntaxProtocol>(
+    node: T,
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil
   ) -> Self {
-    var presentNode = PresentMaker().visit(Syntax(node)).as(TokenSyntax.self)!
+    var presentNode = PresentMaker().visit(Syntax(node))
     if let leadingTrivia = leadingTrivia {
-      presentNode.leadingTrivia = leadingTrivia
+      presentNode = presentNode.withLeadingTrivia(leadingTrivia)
     }
     if let trailingTrivia = trailingTrivia {
-      presentNode.trailingTrivia = trailingTrivia
+      presentNode = presentNode.withTrailingTrivia(trailingTrivia)
     }
     return [.replace(
       oldNode: Syntax(node),

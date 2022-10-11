@@ -233,7 +233,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       }
     }
     if let semicolon = node.semicolon, semicolon.presence == .present, node.item.isMissingAllTokens {
-      addDiagnostic(node, .stanaloneSemicolonStatement, fixIts: [
+      addDiagnostic(node, .standaloneSemicolonStatement, fixIts: [
         FixIt(message: RemoveTokensFixIt(tokensToRemove: [semicolon]), changes: [
           .makeMissing(node: semicolon)
         ])
@@ -405,6 +405,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.unknownAttr?.isMissingAllTokens != false && node.label.isMissingAllTokens {
+      addDiagnostic(node.statements, .allStatmentsInSwitchMustBeCoveredByCase, fixIts: [
+        FixIt(message: InsertTokenFixIt(missingNodes: [node.label]), changes: [
+          .makePresent(node: node.label, leadingTrivia: .newline)
+        ])
+      ], handledNodes: [node.label.id])
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -416,6 +430,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       message: { _ in StaticParserError.tryMustBePlacedOnThrownExpr },
       moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .throwKeyword) }
     )
+    return .visitChildren
+  }
+
+  public override func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.expression.is(MissingExprSyntax.self) {
+      addDiagnostic(node.expression, .expectedExpressionAfterTry, handledNodes: [node.expression.id])
+    }
     return .visitChildren
   }
 

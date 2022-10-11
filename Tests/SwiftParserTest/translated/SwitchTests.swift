@@ -211,7 +211,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "';' statements are not allowed", fixIts: ["remove ';'"]),
+        DiagnosticSpec(message: "standalone ';' statements are not allowed", fixIts: ["remove ';'"]),
       ], fixedSource: """
       switch x {
       case 0:
@@ -222,11 +222,11 @@ final class SwitchTests: XCTestCase {
     )
   }
 
-  func testSwitch16() {
+  func testSwitch16a() {
     AssertParse(
       """
       switch x {
-        1️⃣x = 1 
+        1️⃣x = 1
       default:
         x = 0
       case 0: 
@@ -236,8 +236,30 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'x = 1' in switch case"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
       ]
+    )
+  }
+
+  func testSwitch16b() {
+    AssertParse(
+      """
+      switch x {
+        1️⃣let x = 1
+      case 1:
+        x = 0
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
+      ], fixedSource: """
+      switch x {
+      case <#identifier#>:
+        let x = 1
+      case 1:
+        x = 0
+      }
+      """
     )
   }
 
@@ -262,7 +284,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'x = 1' in 'switch' statement"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
       ]
     )
   }
@@ -276,7 +298,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text in 'switch' statement"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
       ]
     )
   }
@@ -1174,7 +1196,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected declaration after attribute in switch case"),
+        DiagnosticSpec(message: "expected label in switch case"),
       ]
     )
   }

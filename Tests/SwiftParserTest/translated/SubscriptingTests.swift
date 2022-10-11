@@ -396,8 +396,15 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: subscripts cannot have a name, Fix-It replacements: 13 - 14 = ''
-        DiagnosticSpec(message: "unexpected text 'x' before parameter clause"),
-      ]
+        DiagnosticSpec(message: "subscripts cannot have a name", fixIts: ["remove 'x'"]),
+      ],
+      fixedSource: """
+      struct A9 {
+        subscript () -> Int {
+          return 0
+        }
+      }
+      """
     )
   }
 
@@ -414,11 +421,18 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: subscripts cannot have a name, Fix-It replacements: 13 - 14 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'x' before parameter clause"),
-        // TODO: Old parser expected error on line 5: subscripts cannot have a name, Fix-It replacements: 13 - 14 = ''
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'x<T>' before parameter clause"),
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "subscripts cannot have a name", fixIts: ["remove 'x'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "subscripts cannot have a name", fixIts: ["remove 'x<T>'"]),
+      ], fixedSource: """
+      struct A10 {
+        subscript (i: Int) -> Int {
+          return 0
+        }
+        subscript (i: T) -> Int {
+          return 0
+        }
+      }
+      """
     )
   }
 
@@ -432,26 +446,18 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '(' for subscript parameters
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
-      ]
-    )
-  }
-
-  func testSubscripting25() {
-    AssertParse(
+      ], fixedSource: """
+      struct A11 {
+        subscript( x y : (Int) -> Int)  -> <#type#>{
+          return 0
+        }
+      }
       """
-      1️⃣}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
-        DiagnosticSpec(message: "extraneous '}' at top level"),
-      ]
     )
   }
-
 }

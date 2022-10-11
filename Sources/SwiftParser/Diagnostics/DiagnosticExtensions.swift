@@ -28,17 +28,26 @@ extension FixIt {
 }
 
 extension FixIt.Changes {
-  /// Replaced a present node with a missing node
-  static func makeMissing(node: TokenSyntax) -> Self {
-    assert(node.presence == .present)
-    var changes = [
+  /// Replaced a present token with a missing node
+  static func makeMissing(token: TokenSyntax) -> Self {
+    return makeMissing(tokens: [token])
+  }
+
+  /// Replace present tokens with missing tokens
+  static func makeMissing(tokens: [TokenSyntax]) -> Self {
+    assert(!tokens.isEmpty)
+    assert(tokens.allSatisfy({ $0.presence == .present }))
+    var changes = tokens.map {
       FixIt.Change.replace(
-        oldNode: Syntax(node),
-        newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
+        oldNode: Syntax($0),
+        newNode: Syntax(TokenSyntax($0.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
       )
-    ]
-    if !node.leadingTrivia.isEmpty, let nextToken = node.nextToken(viewMode: .sourceAccurate), !nextToken.leadingTrivia.contains(where: { $0.isNewline }) {
-      changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: node.leadingTrivia))
+    }
+    if let firstToken = tokens.first,
+       firstToken.leadingTrivia.isEmpty == false,
+       let nextToken = tokens.last?.nextToken(viewMode: .sourceAccurate),
+       !nextToken.leadingTrivia.contains(where: { $0.isNewline }) {
+      changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: firstToken.leadingTrivia))
     }
     return FixIt.Changes(changes: changes)
   }

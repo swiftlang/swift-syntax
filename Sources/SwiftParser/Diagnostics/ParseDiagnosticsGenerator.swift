@@ -235,7 +235,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let semicolon = node.semicolon, semicolon.presence == .present, node.item.isMissingAllTokens {
       addDiagnostic(node, .standaloneSemicolonStatement, fixIts: [
         FixIt(message: RemoveTokensFixIt(tokensToRemove: [semicolon]), changes: [
-          .makeMissing(node: semicolon)
+          .makeMissing(tokens: [semicolon])
         ])
       ], handledNodes: [node.item.id])
     }
@@ -246,6 +246,19 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         addDiagnostic(node, .caseOutsideOfSwitchOrEnum)
       }
       return .skipChildren
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.indices.unexpectedBeforeLeftParen,
+        let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
+      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
+        FixIt(message: RemoveTokensFixIt(tokensToRemove: nameTokens), changes: .makeMissing(tokens: nameTokens))
+      ], handledNodes: [unexpected.id])
     }
     return .visitChildren
   }

@@ -6,16 +6,17 @@ import Foundation
 /// (if it is an integer literal token) add 1 to the integer and return the
 /// new integer literal token.
 ///
-/// For example will it turn:
+/// For example, it will turn
 /// ```
 /// let x = 2
 /// let y = 3_000
 /// ```
-/// into:
+/// into
 /// ```
 /// let x = 3
 /// let y = 3001
 /// ```
+///
 class AddOneToIntegerLiterals: SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> Syntax {
     // Only transform integer literals.

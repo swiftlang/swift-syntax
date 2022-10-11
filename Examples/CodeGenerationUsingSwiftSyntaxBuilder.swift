@@ -1,14 +1,15 @@
 import SwiftSyntaxBuilder
 
-/// This example will print the following example:
+/// This example will print the following code:
 ///
-///```
+/// ```
 /// import Foundation
 /// import UIKit
 /// class SomeViewController{
 ///    let tableView: UITableView
 /// }
-///```
+/// ```
+///
 
 let source = SourceFile {
   ImportDecl(path: "Foundation")

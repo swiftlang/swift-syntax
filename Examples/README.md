@@ -1,9 +1,11 @@
-# Snippets (Examples)
+# Examples
 
-- Command line tool to add one to every integer literal in a source file [AddOneToIntegerLiterals.swift](AddOneToIntegerLiterals.swift).
-- Code-generate a simple source file using SwiftSyntaxBuilder [CodeGenerationUsingSwiftSyntaxBuilder.swift](CodeGenerationUsingSwiftSyntaxBuilder.swift)
+There is the following set of examples available:
 
-## Some Example Usages
+- [AddOneToIntegerLiterals](AddOneToIntegerLiterals.swift): Command line tool to add 1 to every integer literal in a source file
+- [CodeGenerationUsingSwiftSyntaxBuilder](CodeGenerationUsingSwiftSyntaxBuilder.swift): Code-generate a simple source file using SwiftSyntaxBuilder
+
+## Some Projects Using SwiftSyntax
 
 [**BartyCrouch**](https://github.com/Flinesoft/BartyCrouch): A tool to incrementally update strings files to help with localization.
 

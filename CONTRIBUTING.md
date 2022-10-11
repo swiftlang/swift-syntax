@@ -23,9 +23,9 @@ Alternatively you can also build it from the command line using `build-script.py
 
 Because of SwiftSyntax’s integration with the Swift compiler project, testing certain parts of the project is a little bit more involved than others. 
 
-The `SwiftParser` tests have no depdendencies, other `XCTests` require you to use a matching Swift Development Snapshot, `lit`-based test require a compiler build.
+The `SwiftParser` tests have no dependencies, other `XCTests` require you to use a matching Swift Development Snapshot, `lit`-based test require a compiler build.
 
-Run the tests that you belive are necessary locally. CI will always run all test before allowing the PR to be merged.
+Run the tests that you believe are necessary locally. CI will always run all test before allowing the PR to be merged.
 
 ### SwiftParser
 
@@ -39,7 +39,7 @@ The `SwiftSyntaxParser` module (the legacy parser) of this repository depends on
 The syntax node definitions of that parser library need to match those used by your SwiftSyntax checkout.
 Most of the time, the parser library included in the latest Swift Development Snapshot will fulfill this requirement. 
 
-To run the tests in Xcode, select the latest Swift Development Snapshot in Xcode -> Toolchains, select the SwiftSyntax-Package scheme and hit Prodcut -> Test.
+To run the tests in Xcode, select the latest Swift Development Snapshot in Xcode -> Toolchains, select the SwiftSyntax-Package scheme and hit Product -> Test.
 
 You can also run the tests from the command line using
 ```bash
@@ -51,7 +51,7 @@ If you are seeing issues regarding a mismatched parser library, try the followin
 2. Revert your swift-syntax checkout to the date of your Swift Development Snapshot
 3. Wait for a new Swift Development Snapshot
 4. If the above options are not possible, build your own Swift toolchain locally and use that toolchain as the `--toolchain` parameter for SwiftSyntax’s `build-script.py` invocations
-  - Note: Building your own toolchain will take more than 1 hour and even longer if you are running into any issues. We do not recomment building your own Swift toolchain unless you are familiar with Swift compiler development.
+  - Note: Building your own toolchain will take more than 1 hour and even longer if you are running into any issues. We do not recommend building your own Swift toolchain unless you are familiar with Swift compiler development.
 
 Tip: Running SwiftSyntax’s self-parse tests takes the majority of testing time. If you want to iterate quickly, you can skip these tests using the following steps:
 1. Product -> Scheme -> Edit Scheme…

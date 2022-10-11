@@ -380,13 +380,12 @@ final class SwitchTests: XCTestCase {
       """
       1️⃣case 0: 
       var y = 0
-      default: 
+      2️⃣default:
       var z = 1
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 3: 'default' label can only appear inside a 'switch' statement
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'default' label can only appear inside a 'switch' statement"),
       ]
     )
   }
@@ -395,10 +394,7 @@ final class SwitchTests: XCTestCase {
     AssertParse(
       """
       fallthrough
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'fallthrough' is only allowed inside a switch
-      ]
+      """
     )
   }
 

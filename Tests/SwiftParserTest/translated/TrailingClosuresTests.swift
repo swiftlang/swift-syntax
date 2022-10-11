@@ -195,14 +195,12 @@ final class TrailingClosuresTests: XCTestCase {
         return fn() ?? d()
       }
       // TODO: The diagnostics here are perhaps a little overboard.
-      _ = produce { 0 } 1️⃣default: { 1 } 
+      _ = produce { 0 }1️⃣ 2️⃣default: { 1 }
       _ = produce { 2 } `default`: { 3 }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 5: consecutive statements
-        // TODO: Old parser expected error on line 5: 'default' label can only appear inside a 'switch' statement
-        DiagnosticSpec(message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 6: labeled block needs 'do'
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'default' label can only appear inside a 'switch' statement"),
       ]
     )
   }

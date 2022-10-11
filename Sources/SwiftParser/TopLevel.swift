@@ -119,6 +119,19 @@ extension Parser {
   ///     statements → statement statements?
   @_spi(RawSyntax)
   public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false) -> RawCodeBlockItemSyntax? {
+    if self.at(any: [.caseKeyword, .defaultKeyword]) {
+      // 'case' and 'default' are invalid in code block items.
+      // Parse them and put them in their own CodeBlockItem but as an unexpected node.
+      let switchCase = self.parseSwitchCase()
+      return RawCodeBlockItemSyntax(
+        RawUnexpectedNodesSyntax(elements: [RawSyntax(switchCase)], arena: self.arena),
+        item: RawSyntax(RawMissingExprSyntax(arena: self.arena)),
+        semicolon: nil,
+        errorTokens: nil,
+        arena: self.arena
+      )
+    }
+
     // FIXME: It is unfortunate that the Swift book refers to these as
     // "statements" and not "items".
     let item = self.parseItem(isAtTopLevel: isAtTopLevel)

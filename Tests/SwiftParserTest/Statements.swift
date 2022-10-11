@@ -179,14 +179,14 @@ final class StatementTests: XCTestCase {
     AssertParse(
       "/*#-editable-code Swift Platground editable area*/1️⃣default/*#-end-editable-code*/",
       diagnostics: [
-        DiagnosticSpec(message: "extraneous 'default' at top level")
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
       ]
     )
 
     AssertParse(
       "1️⃣case:",
       diagnostics: [
-        DiagnosticSpec(message: "extraneous 'case:' at top level")
+        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
       ])
 
     AssertParse(
@@ -194,7 +194,7 @@ final class StatementTests: XCTestCase {
       1️⃣case: { ("Hello World") }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"extraneous 'case: { ("Hello World") }' at top level"#)
+        DiagnosticSpec(message: #"'case' can only appear inside a 'switch' statement or 'enum' declaration"#)
       ]
     )
   }

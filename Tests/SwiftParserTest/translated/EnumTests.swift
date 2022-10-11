@@ -105,7 +105,7 @@ final class EnumTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: enum 'case' is not allowed outside of an enum
-        DiagnosticSpec(message: "extraneous 'case FloatingCase' at top level"),
+        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
       ]
     )
   }

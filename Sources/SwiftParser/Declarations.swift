@@ -560,19 +560,19 @@ extension Parser {
     }
 
     let semi = self.consume(if: .semicolon)
-    var trailingSemas: [RawTokenSyntax] = []
-    while let trailingSema = self.consume(if: .semicolon) {
-      trailingSemas.append(trailingSema)
+    var trailingSemis: [RawTokenSyntax] = []
+    while let trailingSemi = self.consume(if: .semicolon) {
+      trailingSemis.append(trailingSemi)
     }
 
-    if decl.isEmpty && semi == nil && trailingSemas.isEmpty {
+    if decl.isEmpty && semi == nil && trailingSemis.isEmpty {
       return nil
     }
 
     return RawMemberDeclListItemSyntax(
       decl: decl,
       semicolon: semi,
-      RawUnexpectedNodesSyntax(trailingSemas, arena: self.arena),
+      RawUnexpectedNodesSyntax(trailingSemis, arena: self.arena),
       arena: self.arena
     )
   }

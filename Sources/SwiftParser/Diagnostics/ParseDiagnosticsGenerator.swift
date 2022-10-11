@@ -239,6 +239,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         ])
       ], handledNodes: [node.item.id])
     }
+    if let switchCase = node.unexpectedBeforeItem?.only?.as(SwitchCaseSyntax.self) {
+      if switchCase.label.is(SwitchDefaultLabelSyntax.self) {
+        addDiagnostic(node, .defaultOutsideOfSwitch)
+      } else {
+        addDiagnostic(node, .caseOutsideOfSwitchOrEnum)
+      }
+      return .skipChildren
+    }
     return .visitChildren
   }
 

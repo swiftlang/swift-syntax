@@ -250,6 +250,21 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.unexpectedAfterOperatorPrecedenceAndTypes,
+        unexpected.contains(where: { $0.is(PrecedenceGroupAttributeListSyntax.self) }) == true {
+      addDiagnostic(unexpected, .operatorShouldBeDeclaredWithoutBody, fixIts: [
+        FixIt(message: .removeOperatorBody, changes: [
+          .remove(unexpected: unexpected)
+        ])
+      ], handledNodes: [unexpected.id])
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -221,7 +221,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected argument list in function declaration"),
+        DiagnosticSpec(message: "expected parameter clause in subscript"),
       ]
     )
   }

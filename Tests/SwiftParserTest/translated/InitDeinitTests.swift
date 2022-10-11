@@ -13,7 +13,7 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '('
         // TODO: Old parser expected error on line 2: initializer requires a body
-        DiagnosticSpec(message: "expected argument list in function declaration"),
+        DiagnosticSpec(message: "expected parameter clause in function signature"),
       ]
     )
   }
@@ -42,11 +42,11 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '(', Fix-It replacements: 7 - 7 = '()'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature"),
         // TODO: Old parser expected error on line 3: expected '(', Fix-It replacements: 10 - 10 = '()'
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
         // TODO: Old parser expected error on line 4: expected '(', Fix-It replacements: 8 - 8 = '()'
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected argument list in function declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected parameter clause in function signature"),
       ]
     )
   }
@@ -162,7 +162,7 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: initializers may only be declared within a type
         // TODO: Old parser expected error on line 1: expected '(', Fix-It replacements: 5 - 5 = '()'
-        DiagnosticSpec(message: "expected argument list in function declaration"),
+        DiagnosticSpec(message: "expected parameter clause in function signature"),
         // TODO: Old parser expected error on line 2: initializers may only be declared within a type
         // TODO: Old parser expected error on line 3: initializers may only be declared within a type
       ]

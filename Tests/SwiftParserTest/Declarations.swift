@@ -639,7 +639,7 @@ final class DeclarationTests: XCTestCase {
         body: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "expected argument list in function declaration")
+        DiagnosticSpec(message: "expected parameter clause in function signature")
       ]
     )
   }
@@ -1004,17 +1004,17 @@ final class DeclarationTests: XCTestCase {
     AssertParse("1️⃣}func C2️⃣",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before function"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
+                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
                 ])
     AssertParse("1️⃣}init2️⃣",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before initializer"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
+                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
                 ])
     AssertParse("1️⃣}subscript2️⃣",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before subscript"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected argument list in function declaration"),
+                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in subscript"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript"),
                 ])
   }

@@ -158,15 +158,14 @@ final class InvalidTests: XCTestCase {
   func testInvalid8() {
     AssertParse(
       """
-      switch state { 1️⃣
-        let duration : Int = 0
-        2️⃣case 1:
+      switch state {
+        1️⃣let duration : Int = 0
+        case 1:
           break
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
       ]
     )
   }
@@ -175,25 +174,23 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       #"""
       func testNotCoveredCase(x: Int) {
-        switch x {1️⃣
-          let y = "foo"
+        switch x {
+          1️⃣let y = "foo"
           switch y {
             case "bar":
               blah blah // ignored
           }
-        2️⃣case "baz":
+        case "baz":
           break
         case 1:
           break
         default:
           break
         }
-      3️⃣}
+      }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in function"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous '}' at top level"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
       ]
     )
   }

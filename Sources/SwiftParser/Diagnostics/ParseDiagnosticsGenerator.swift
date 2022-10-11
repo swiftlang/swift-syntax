@@ -405,6 +405,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.unknownAttr?.isMissingAllTokens != false && node.label.isMissingAllTokens {
+      addDiagnostic(node.statements, .allStatmentsInSwitchMustBeCoveredByCase, fixIts: [
+        FixIt(message: InsertTokenFixIt(missingNodes: [node.label]), changes: [
+          .makePresent(node: node.label, leadingTrivia: .newline)
+        ])
+      ], handledNodes: [node.label.id])
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

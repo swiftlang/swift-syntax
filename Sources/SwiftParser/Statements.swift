@@ -637,7 +637,7 @@ extension Parser {
     let subject = self.parseExpression(.basic)
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
-    let cases = self.parseSwitchCases()
+    let cases = self.parseSwitchCases(allowStandaloneStmtRecovery: !lbrace.isMissing)
 
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: switchKeyword)
     return RawSwitchStmtSyntax(
@@ -658,19 +658,24 @@ extension Parser {
   /// =======
   ///
   ///     switch-cases → switch-case switch-cases?
+  ///
+  /// If `allowStandaloneStmtRecovery` is `true` and we discover a statement that
+  /// isn't covered by a case, we assume that the developer forgot to wrote the
+  /// `case` and synthesize it. If `allowStandaloneStmtOrDeclRecovery` is `false`,
+  /// this recovery is disabled.
   @_spi(RawSyntax)
-  public mutating func parseSwitchCases() -> RawSwitchCaseListSyntax {
+  public mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
     var elements = [RawSyntax]()
     var elementsProgress = LoopProgressCondition()
     while !self.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
             && elementsProgress.evaluate(currentToken) {
-      if self.lookahead().isAtStartOfSwitchCase(allowRecovery: true) {
+      if self.lookahead().isAtStartOfSwitchCase(allowRecovery: false) {
         elements.append(RawSyntax(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIfKeyword) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.
         elements.append(RawSyntax(self.parsePoundIfDirective(
-          { $0.parseSwitchCases() },
+          { $0.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
           syntax: { parser, cases in
             guard cases.count == 1, let firstCase = cases.first else {
               assert(cases.isEmpty)
@@ -678,11 +683,49 @@ extension Parser {
             }
             return RawSyntax(firstCase)
           })))
+      } else if allowStandaloneStmtRecovery && (self.atStartOfExpression() || self.atStartOfStatement() || self.atStartOfDeclaration()) {
+        // Synthesize a label for the stamenent or declaration that isn't coverd by a case right now.
+        let statements = parseSwitchCaseBody()
+        elements.append(RawSyntax(RawSwitchCaseSyntax(
+          unknownAttr: nil,
+          label: RawSyntax(RawSwitchCaseLabelSyntax(
+            caseKeyword: missingToken(.caseKeyword, text: nil),
+            caseItems: RawCaseItemListSyntax(elements: [
+              RawCaseItemSyntax(
+                pattern: RawPatternSyntax(RawIdentifierPatternSyntax(
+                  identifier: missingToken(.identifier, text: nil),
+                  arena: self.arena
+                )),
+                whereClause: nil,
+                trailingComma: nil,
+                arena: self.arena
+              )
+            ], arena: self.arena),
+            colon: missingToken(.colon, text: nil),
+            arena: self.arena
+          )),
+          statements: statements,
+          arena: self.arena
+        )))
+      } else if self.lookahead().isAtStartOfSwitchCase(allowRecovery: true) {
+        elements.append(RawSyntax(self.parseSwitchCase()))
       } else {
         break
       }
     }
     return RawSwitchCaseListSyntax(elements: elements, arena: self.arena)
+  }
+
+  mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
+    var items = [RawCodeBlockItemSyntax]()
+    var loopProgress = LoopProgressCondition()
+    while !self.at(any: [.rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
+            && !self.lookahead().isStartOfConditionalSwitchCases(),
+          let newItem = self.parseCodeBlockItem(),
+          loopProgress.evaluate(currentToken) {
+      items.append(newItem)
+    }
+    return RawCodeBlockItemListSyntax(elements: items, arena: self.arena)
   }
 
   /// Parse a single switch case clause.
@@ -732,18 +775,7 @@ extension Parser {
 
 
     // Parse the body.
-    let statements: RawCodeBlockItemListSyntax
-    do {
-      var items = [RawCodeBlockItemSyntax]()
-      var loopProgress = LoopProgressCondition()
-      while !self.at(any: [.rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
-              && !self.lookahead().isStartOfConditionalSwitchCases(),
-            let newItem = self.parseCodeBlockItem(),
-            loopProgress.evaluate(currentToken) {
-        items.append(newItem)
-      }
-      statements = RawCodeBlockItemListSyntax(elements: items, arena: self.arena)
-    }
+    let statements = parseSwitchCaseBody()
 
     return RawSwitchCaseSyntax(
       unknownAttr: unknownAttr, label: label, statements: statements,

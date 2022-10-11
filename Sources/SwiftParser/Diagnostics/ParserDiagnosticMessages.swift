@@ -66,6 +66,7 @@ public extension ParserFixIt {
 
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticParserError: String, DiagnosticMessage {
+  case allStatmentsInSwitchMustBeCoveredByCase = "all statements inside a switch must be covered by a 'case' or 'default' label"
   case consecutiveDeclarationsOnSameLine = "consecutive declarations on a line must be separated by ';'"
   case consecutiveStatementsOnSameLine = "consecutive statements on a line must be separated by ';'"
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"

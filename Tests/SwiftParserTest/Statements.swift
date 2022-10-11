@@ -234,7 +234,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'foo()' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'bar()' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
       ]
     )
 

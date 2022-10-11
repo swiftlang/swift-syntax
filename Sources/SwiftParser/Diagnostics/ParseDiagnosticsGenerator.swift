@@ -233,7 +233,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       }
     }
     if let semicolon = node.semicolon, semicolon.presence == .present, node.item.isMissingAllTokens {
-      addDiagnostic(node, .stanaloneSemicolonStatement, fixIts: [
+      addDiagnostic(node, .standaloneSemicolonStatement, fixIts: [
         FixIt(message: RemoveTokensFixIt(tokensToRemove: [semicolon]), changes: [
           .makeMissing(node: semicolon)
         ])

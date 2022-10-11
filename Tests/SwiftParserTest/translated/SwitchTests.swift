@@ -211,7 +211,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "';' statements are not allowed", fixIts: ["remove ';'"]),
+        DiagnosticSpec(message: "standalone ';' statements are not allowed", fixIts: ["remove ';'"]),
       ], fixedSource: """
       switch x {
       case 0:

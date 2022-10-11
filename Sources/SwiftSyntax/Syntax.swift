@@ -225,10 +225,12 @@ public extension SyntaxProtocol {
       return nil
     }
     let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
-    for absoluteRaw in siblings[..<self.index].reversed() {
-      let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
-      if let token = child.lastToken(viewMode: viewMode) {
-        return token
+    if self.index >= siblings.startIndex {
+      for absoluteRaw in siblings[..<self.index].reversed() {
+        let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
+        if let token = child.lastToken(viewMode: viewMode) {
+          return token
+        }
       }
     }
     return parent.previousToken(viewMode: viewMode)

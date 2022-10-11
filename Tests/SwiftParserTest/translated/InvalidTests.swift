@@ -330,14 +330,10 @@ final class InvalidTests: XCTestCase {
   func testInvalid18() {
     AssertParse(
       """
-      let 1️⃣for 2️⃣= 2
+      let 1️⃣for = 2
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in', expression and body in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous '= 2' at top level"),
+        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here"),
       ]
     )
   }
@@ -385,9 +381,7 @@ final class InvalidTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
         // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in', expression and body in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous '= 2' at top level"),
+        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here"),
       ]
     )
   }

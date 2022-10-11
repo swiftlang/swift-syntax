@@ -110,7 +110,17 @@ extension Parser {
         arena: self.arena
       ))
     case nil:
-      return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
+      if self.currentToken.tokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
+        // Recover if a keyword was used instead of an identifier
+        let keyword = self.consumeAnyToken()
+        return RawPatternSyntax(RawIdentifierPatternSyntax(
+          RawUnexpectedNodesSyntax([keyword], arena: self.arena),
+          identifier: missingToken(.identifier, text: nil),
+          arena: self.arena
+        ))
+      } else {
+        return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
+      }
     }
   }
 

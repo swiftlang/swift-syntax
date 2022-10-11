@@ -51,9 +51,7 @@ final class SelfRebindingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: keyword 'self' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 4: if this name is unavoidable, use backticks to escape it
-        DiagnosticSpec(message: "expected pattern in variable"),
+        DiagnosticSpec(message: "keyword 'self' cannot be used as an identifier here"),
       ]
     )
   }

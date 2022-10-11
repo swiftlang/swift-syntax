@@ -76,7 +76,6 @@ public enum StaticParserError: String, DiagnosticMessage {
   case editorPlaceholderInSourceFile = "editor placeholder in source file"
   case expectedExpressionAfterTry = "expected expression after 'try'"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
-  case missingFunctionParameterClause = "expected argument list in function declaration"
   case standaloneSemicolonStatement = "standalone ';' statements are not allowed"
   case throwsInReturnPosition = "'throws' may only occur before '->'"
   case tryMustBePlacedOnReturnedExpr = "'try' must be placed on the returned expression"

@@ -83,28 +83,33 @@ fileprivate enum MissingNodesDescriptionPart {
 /// Returns a string that describes `missingNodes`.
 /// If `commonParent` is not `nil`, `missingNodes` are expected to all be children of `commonParent`.
 func missingNodesDescription<SyntaxType: SyntaxProtocol>(_ missingNodes: [SyntaxType]) -> String {
+  return missingNodesDescriptionAndCommonParent(missingNodes).description
+}
+
+/// Same as `missingNodesDescription` but if a common ancestor was used to describe `missingNodes`, also return that `commonAncestor`
+func missingNodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ missingNodes: [SyntaxType]) -> (commonAncestor: Syntax?, description: String) {
   let missingSyntaxNodes = missingNodes.map(Syntax.init)
 
   // If all tokens in the parent are missing, return the parent type name.
-  if let commonParent = findCommonAncestor(missingSyntaxNodes),
-     commonParent.isMissingAllTokens,
-     let firstToken = commonParent.firstToken(viewMode: .all),
-     let lastToken = commonParent.lastToken(viewMode: .all),
+  if let commonAncestor = findCommonAncestor(missingSyntaxNodes),
+     commonAncestor.isMissingAllTokens,
+     let firstToken = commonAncestor.firstToken(viewMode: .all),
+     let lastToken = commonAncestor.lastToken(viewMode: .all),
      missingSyntaxNodes.contains(Syntax(firstToken)),
      missingSyntaxNodes.contains(Syntax(lastToken)) {
-    if let nodeTypeName = commonParent.nodeTypeNameForDiagnostics(allowBlockNames: true) {
-      return nodeTypeName
+    if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
+      return (commonAncestor, nodeTypeName)
     }
   }
 
   let partDescriptions = MissingNodesDescriptionPart.descriptionParts(for: missingSyntaxNodes).map({ $0.description ?? "syntax" })
   switch partDescriptions.count {
   case 0:
-    return "syntax"
+    return (nil, "syntax")
   case 1:
-    return "\(partDescriptions.first!)"
+    return (nil, "\(partDescriptions.first!)")
   default:
-    return "\(partDescriptions[0..<partDescriptions.count - 1].joined(separator: ", ")) and \(partDescriptions.last!)"
+    return (nil, "\(partDescriptions[0..<partDescriptions.count - 1].joined(separator: ", ")) and \(partDescriptions.last!)")
   }
 }
 
@@ -195,9 +200,9 @@ public struct MissingNodesError: ParserError {
   }
 
   /// If applicable, returns a string that describes the node in which the missing nodes are expected.
-  private var parentContextClause: String? {
+  private func parentContextClause(anchor: Syntax?) -> String? {
     // anchorParent is the first parent that has a type name for diagnostics.
-    guard let anchorParent = findCommonAncestor(missingNodes)?.ancestorOrSelf(where: {
+    guard let anchorParent = anchor?.ancestorOrSelf(where: {
       $0.nodeTypeNameForDiagnostics(allowBlockNames: false) != nil
     }) else {
       return nil
@@ -220,11 +225,12 @@ public struct MissingNodesError: ParserError {
   }
 
   public var message: String {
-    var message = "expected \(missingNodesDescription(missingNodes))"
+    let (anchor, description) = missingNodesDescriptionAndCommonParent(missingNodes)
+    var message = "expected \(description)"
     if let afterClause = afterClause {
       message += " \(afterClause)"
     }
-    if let parentContextClause = parentContextClause {
+    if let parentContextClause = parentContextClause(anchor: anchor?.parent ?? findCommonAncestor(missingNodes)) {
       message += " \(parentContextClause)"
     }
     return message

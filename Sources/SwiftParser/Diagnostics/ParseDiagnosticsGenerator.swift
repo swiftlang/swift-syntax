@@ -377,16 +377,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    if node.leftParen.presence == .missing && node.parameterList.isEmpty && node.rightParen.presence == .missing {
-      addDiagnostic(node, .missingFunctionParameterClause, handledNodes: [node.leftParen.id, node.parameterList.id, node.rightParen.id])
-    }
-    return .visitChildren
-  }
-
   public override func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

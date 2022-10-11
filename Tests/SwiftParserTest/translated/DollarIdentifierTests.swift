@@ -25,7 +25,7 @@ final class DollarIdentifierTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text in function"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code in function"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
         // TODO: Old parser expected error on line 4: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
       ]
@@ -103,12 +103,12 @@ final class DollarIdentifierTests: XCTestCase {
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '$' before parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '$' before parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '$ dollarParam: Int' in parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '$ dollarParam: Int' in parameter clause"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 5 - 6 = '`$`'
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text ': 24' in function call"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ': 24' in function call"),
       ]
     )
   }
@@ -161,7 +161,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected expression
-        DiagnosticSpec(message: "unexpected text in function"),
+        DiagnosticSpec(message: "unexpected code in function"),
       ]
     )
   }
@@ -236,7 +236,7 @@ final class DollarIdentifierTests: XCTestCase {
         // TODO: Old parser expected error on line 32: cannot declare entity named '$Protocol'; the '$' prefix is reserved
         // TODO: Old parser expected error on line 33: cannot declare entity named '$Precedence'; the '$' prefix is reserved
         // TODO: Old parser expected error on line 37: use of unknown directive '#$UnknownDirective'
-        DiagnosticSpec(message: "extraneous '#$UnknownDirective()' at top level"),
+        DiagnosticSpec(message: "extraneous code '#$UnknownDirective()' at top level"),
       ]
     )
   }

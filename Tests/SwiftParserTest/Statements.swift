@@ -46,7 +46,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected expression, '=' and expression in pattern matching"),
-        DiagnosticSpec(message: "unexpected text '* ! = x' in 'if' statement"),
+        DiagnosticSpec(message: "unexpected code '* ! = x' in 'if' statement"),
       ]
     )
   }
@@ -214,8 +214,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '@s return' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '@unknown return' in function")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@s return' in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '@unknown return' in function")
       ]
     )
   }
@@ -233,7 +233,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'foo()' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'foo()' before conditional compilation clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
       ]
     )
@@ -253,7 +253,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'print()' before conditional compilation clause")
+        DiagnosticSpec(message: "unexpected code 'print()' before conditional compilation clause")
       ]
     )
   }
@@ -262,7 +262,7 @@ final class StatementTests: XCTestCase {
     AssertParse(
       "LABEL1️⃣:",
       diagnostics: [
-        DiagnosticSpec(message: "extraneous ':' at top level")
+        DiagnosticSpec(message: "extraneous code ':' at top level")
       ]
     )
   }

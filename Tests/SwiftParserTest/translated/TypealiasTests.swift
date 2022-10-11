@@ -132,7 +132,7 @@ final class TypealiasTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' by '='"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous ', Float' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ', Float' at top level"),
       ]
     )
   }
@@ -144,7 +144,7 @@ final class TypealiasTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected type in typealias declaration"),
-        DiagnosticSpec(message: "extraneous '=' at top level"),
+        DiagnosticSpec(message: "extraneous code '=' at top level"),
       ]
     )
   }

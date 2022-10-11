@@ -42,7 +42,7 @@ final class TypeTests: XCTestCase {
   func testFunctionTypes() throws {
     AssertParse("t as(1️⃣..)->2️⃣", diagnostics: [
       DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type"),
-      DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '..' in function type"),
+      DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '..' in function type"),
       DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
     ])
   }
@@ -71,21 +71,21 @@ final class TypeTests: XCTestCase {
                 { $0.parseClosureExpression() },
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item"),
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'class' in closure capture signature"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'class' in closure capture signature"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end closure"),
                 ])
 
     AssertParse("{[n1️⃣`]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(message: "unexpected text '`' in closure capture signature")
+                  DiagnosticSpec(message: "unexpected code '`' in closure capture signature")
                 ])
 
     AssertParse("{[weak1️⃣^]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
                   DiagnosticSpec(message: "expected identifier in closure capture item"),
-                  DiagnosticSpec(message: "unexpected text '^' in closure capture signature"),
+                  DiagnosticSpec(message: "unexpected code '^' in closure capture signature"),
                 ])
   }
 

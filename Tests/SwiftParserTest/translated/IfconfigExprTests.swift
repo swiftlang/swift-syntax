@@ -94,9 +94,9 @@ final class IfconfigExprTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 8: unary operator cannot be separated from its operand
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '+ otherExpr' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '+ otherExpr' in conditional compilation block"),
         // TODO: Old parser expected error on line 13: unexpected tokens in '#if' expression body
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected text 'print("debug")' in conditional compilation block"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'print("debug")' in conditional compilation block"#),
       ]
     )
   }
@@ -121,7 +121,7 @@ final class IfconfigExprTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 12: unexpected tokens in '#if' expression body
-        DiagnosticSpec(message: "unexpected text '+ 12' in conditional compilation block"),
+        DiagnosticSpec(message: "unexpected code '+ 12' in conditional compilation block"),
       ]
     )
   }
@@ -148,7 +148,7 @@ final class IfconfigExprTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in conditional compilation clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in conditional compilation clause"),
         // TODO: Old parser expected error on line 12: unexpected tokens in '#if' expression body
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'return' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'return' in conditional compilation block"),
       ]
     )
   }
@@ -283,7 +283,7 @@ final class IfconfigExprTests: XCTestCase {
         // TODO: Old parser expected error on line 47: cannot parse module version '>=2.2'
         // TODO: Old parser expected error on line 50: 'A' is not a valid digit in integer literal
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected value in function call"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '20A301' in function call"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '20A301' in function call"),
         // TODO: Old parser expected error on line 53: cannot parse module version '20A301'
       ]
     )

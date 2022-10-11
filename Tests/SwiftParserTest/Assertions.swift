@@ -239,7 +239,11 @@ func AssertDiagnostic<T: SyntaxProtocol>(
       """)
   }
   if let highlight = spec.highlight {
-    AssertStringsEqualWithDiff(diag.highlights.map(\.description).joined(), highlight, file: file, line: line)
+    AssertStringsEqualWithDiff(
+      diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
+      highlight.trimmingTrailingWhitespace(),
+      file: file, line: line
+    )
   }
   if let notes = spec.notes {
     if diag.notes.count != notes.count {

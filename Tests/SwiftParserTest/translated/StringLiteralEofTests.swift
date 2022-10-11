@@ -13,7 +13,7 @@ final class StringLiteralEofTests: XCTestCase {
         // TODO: Old parser expected error on line 2: unterminated string literal
         // TODO: Old parser expected error on line 2: cannot find ')' to match opening '(' in string interpolation
         DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: #"extraneous '"foo\(' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"foo\(' at top level"#),
       ]
     )
   }
@@ -28,7 +28,7 @@ final class StringLiteralEofTests: XCTestCase {
         // TODO: Old parser expected error on line 2: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 2: unterminated string literal
         DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: #"extraneous '"foo\("bar' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"foo\("bar' at top level"#),
       ]
     )
   }
@@ -43,7 +43,7 @@ final class StringLiteralEofTests: XCTestCase {
         // TODO: Old parser expected error on line 1: unterminated string literal
         // TODO: Old parser expected error on line 1: invalid escape sequence in literal
         DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: #"extraneous '"foo \' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"foo \' at top level"#),
       ]
     )
   }
@@ -58,7 +58,7 @@ final class StringLiteralEofTests: XCTestCase {
         // TODO: Old parser expected error on line 2: unterminated string literal
         // TODO: Old parser expected error on line 2: invalid escape sequence in literal
         DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: #"extraneous '"foo \' at top level"#),
+        DiagnosticSpec(message: #"extraneous code '"foo \' at top level"#),
       ]
     )
   }

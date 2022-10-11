@@ -521,7 +521,7 @@ final class MatchingPatternsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected ',' separator, Fix-It replacements: 25 - 25 = ','
         // TODO: Old parser expected error on line 2: expected pattern
-        DiagnosticSpec(message: "unexpected text '?' in tuple pattern"),
+        DiagnosticSpec(message: "unexpected code '?' in tuple pattern"),
       ]
     )
   }

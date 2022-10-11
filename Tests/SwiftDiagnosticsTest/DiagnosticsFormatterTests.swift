@@ -86,7 +86,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
     let expectedOutput = """
     1 │ t as (..)
       ∣       ├─ expected type in tuple type
-      ∣       ╰─ unexpected text '..' in tuple type
+      ∣       ╰─ unexpected code '..' in tuple type
     
     """
 

@@ -64,7 +64,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in struct"),
         // TODO: Old parser expected error on line 3: expected 'func' keyword in operator function declaration, Fix-It replacements: 3 - 3 = 'func '
         // TODO: Old parser expected error on line 6: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
         // TODO: Old parser expected error on line 7: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
@@ -103,7 +103,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' in class
-        DiagnosticSpec(message: "unexpected text '()' in class"),
+        DiagnosticSpec(message: "unexpected code '()' in class"),
       ]
     )
   }
@@ -117,7 +117,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected declaration
-        DiagnosticSpec(message: "unexpected text '0' in class"),
+        DiagnosticSpec(message: "unexpected code '0' in class"),
       ]
     )
   }

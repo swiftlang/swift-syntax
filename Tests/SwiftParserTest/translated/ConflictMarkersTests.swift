@@ -69,7 +69,7 @@ final class ConflictMarkersTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '<<<<<<< HEAD:conflict_markers.swift' before variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '<<<<<<< HEAD:conflict_markers.swift' before variable"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
@@ -88,7 +88,7 @@ final class ConflictMarkersTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text before variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before variable"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in variable"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
       ]
@@ -120,7 +120,7 @@ final class ConflictMarkersTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text before variable"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before variable"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
       ]
@@ -183,7 +183,7 @@ final class ConflictMarkersTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(message: "unexpected text '>>>> ORIGINAL' before variable"),
+        DiagnosticSpec(message: "unexpected code '>>>> ORIGINAL' before variable"),
       ]
     )
   }
@@ -200,7 +200,7 @@ final class ConflictMarkersTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
-        DiagnosticSpec(message: "unexpected text before variable"),
+        DiagnosticSpec(message: "unexpected code before variable"),
       ]
     )
   }

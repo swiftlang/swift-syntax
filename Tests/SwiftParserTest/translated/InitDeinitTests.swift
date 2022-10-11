@@ -78,11 +78,11 @@ final class InitDeinitTests: XCTestCase {
         // TODO: Old parser expected error on line 3: deinitializers cannot have a name, Fix-It replacements: 10 - 12 = ''
         // TODO: Old parser expected error on line 3: expected '{' for deinitializer
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'x' before deinitializer"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'x' before deinitializer"),
         // TODO: Old parser expected error on line 4: deinitializers cannot have a name, Fix-It replacements: 10 - 11 = ''
         // TODO: Old parser expected error on line 4: no parameter clause allowed on deinitializer, Fix-It replacements: 11 - 13 = ''
         // TODO: Old parser expected error on line 4: expected '{' for deinitializer
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text 'x()' in struct"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'x()' in struct"),
       ]
     )
   }
@@ -122,7 +122,7 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: no parameter clause allowed on deinitializer, Fix-It replacements: 9 - 18 = ''
-        DiagnosticSpec(message: "unexpected text '(a : Int) {}' in class"),
+        DiagnosticSpec(message: "unexpected code '(a : Int) {}' in class"),
       ]
     )
   }
@@ -147,7 +147,7 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: deinitializers cannot have a name, Fix-It replacements: 10 - 12 = ''
         // TODO: Old parser expected error on line 2: no parameter clause allowed on deinitializer, Fix-It replacements: 12 - 22 = ''
-        DiagnosticSpec(message: "unexpected text 'x (a : Int) {}' in class"),
+        DiagnosticSpec(message: "unexpected code 'x (a : Int) {}' in class"),
       ]
     )
   }
@@ -350,7 +350,7 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 24 - 24 = 'self.'
         DiagnosticSpec(message: "expected type in function parameter"),
-        DiagnosticSpec(message: "unexpected text '1' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
       ]
     )
   }
@@ -367,7 +367,7 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing 'super.' at initializer invocation, Fix-It replacements: 5 - 5 = 'super.'
         DiagnosticSpec(message: "expected type in function parameter"),
-        DiagnosticSpec(message: "unexpected text '2' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code '2' in parameter clause"),
       ]
     )
   }
@@ -383,7 +383,7 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 12 - 12 = 'self.'
         DiagnosticSpec(message: "expected type in function parameter"),
-        DiagnosticSpec(message: "unexpected text '1' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
       ]
     )
   }
@@ -398,7 +398,7 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 18 - 18 = 'self.'
-        DiagnosticSpec(message: "unexpected text '!' in initializer"),
+        DiagnosticSpec(message: "unexpected code '!' in initializer"),
       ]
     )
   }

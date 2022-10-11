@@ -12,11 +12,11 @@ final class ObjectLiteralsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...), Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 32 = 'red', 78 - 80 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#' in array"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#' in array"),
         // TODO: Old parser expected error on line 2: '[#Image(...)#]' has been renamed to '#imageLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'imageLiteral', 17 - 29 = 'resourceName', 57 - 59 = ''
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text '#Image(imageLiteral: localResourceNameAsString)#' in array"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '#Image(imageLiteral: localResourceNameAsString)#' in array"),
         // TODO: Old parser expected error on line 3: '[#FileReference(...)#]' has been renamed to '#fileLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 24 = 'fileLiteral', 25 - 45 = 'resourceName', 73 - 75 = ''
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected text '#FileReference(fileReferenceLiteral: localResourceNameAsString)#' in array"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '#FileReference(fileReferenceLiteral: localResourceNameAsString)#' in array"),
       ]
     )
   }
@@ -29,7 +29,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#Color(...)' has been renamed to '#colorLiteral(...), Fix-It replacements: 10 - 15 = 'colorLiteral', 16 - 31 = 'red'
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)' at top level"),
+        DiagnosticSpec(message: "extraneous code '#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)' at top level"),
       ]
     )
   }
@@ -42,7 +42,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#Image(...)' has been renamed to '#imageLiteral(...)', Fix-It replacements: 10 - 15 = 'imageLiteral', 16 - 28 = 'resourceName'
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#Image(imageLiteral: localResourceNameAsString)' at top level"),
+        DiagnosticSpec(message: "extraneous code '#Image(imageLiteral: localResourceNameAsString)' at top level"),
       ]
     )
   }
@@ -56,7 +56,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#FileReference(...)' has been renamed to '#fileLiteral(...)', Fix-It replacements: 10 - 23 = 'fileLiteral', 24 - 44 = 'resourceName'
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#FileReference(fileReferenceLiteral: localResourceNameAsString)' at top level"),
+        DiagnosticSpec(message: "extraneous code '#FileReference(fileReferenceLiteral: localResourceNameAsString)' at top level"),
       ]
     )
   }
@@ -70,7 +70,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: use of unknown directive '#notAPound'
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#notAPound' at top level"),
+        DiagnosticSpec(message: "extraneous code '#notAPound' at top level"),
       ]
     )
   }
@@ -83,7 +83,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: use of unknown directive '#notAPound'
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#notAPound(1, 2)' at top level"),
+        DiagnosticSpec(message: "extraneous code '#notAPound(1, 2)' at top level"),
       ]
     )
   }
@@ -96,7 +96,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected argument list in object literal
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#Color' at top level"),
+        DiagnosticSpec(message: "extraneous code '#Color' at top level"),
       ]
     )
   }
@@ -108,7 +108,7 @@ final class ObjectLiteralsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in container literal
-        DiagnosticSpec(message: "unexpected text '##' in array"),
+        DiagnosticSpec(message: "unexpected code '##' in array"),
       ]
     )
   }
@@ -121,7 +121,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 18 = 'red'
         DiagnosticSpec(message: "expected ']' to end array"),
-        DiagnosticSpec(message: "extraneous '#Color(_: 1, green: 1, 2)' at top level"),
+        DiagnosticSpec(message: "extraneous code '#Color(_: 1, green: 1, 2)' at top level"),
       ]
     )
   }
@@ -134,7 +134,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 20 = 'red', 43 - 44 = ''
         DiagnosticSpec(message: "expected ']' to end array"),
-        DiagnosticSpec(message: "extraneous '#Color(red: 1, green: 1, blue: 1)#' at top level"),
+        DiagnosticSpec(message: "extraneous code '#Color(red: 1, green: 1, blue: 1)#' at top level"),
       ]
     )
   }
@@ -146,7 +146,7 @@ final class ObjectLiteralsTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '[#Color(...)#]' has been renamed to '#colorLiteral(...)', Fix-It replacements: 9 - 10 = '', 11 - 16 = 'colorLiteral', 17 - 24 = 'red', 51 - 53 = ''
-        DiagnosticSpec(message: "unexpected text '#Color(withRed: 1, green: 1, whatever: 2)#' in array"),
+        DiagnosticSpec(message: "unexpected code '#Color(withRed: 1, green: 1, whatever: 2)#' in array"),
       ]
     )
   }
@@ -159,7 +159,7 @@ final class ObjectLiteralsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: '#Color(...)' has been renamed to '#colorLiteral(...)', Fix-It replacements: 10 - 15 = 'colorLiteral', 16 - 17 = 'red'
         DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous '#Color(_: 1, green: 1)' at top level"),
+        DiagnosticSpec(message: "extraneous code '#Color(_: 1, green: 1)' at top level"),
       ]
     )
   }

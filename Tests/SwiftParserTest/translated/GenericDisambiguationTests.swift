@@ -158,7 +158,7 @@ final class GenericDisambiguationTests: XCTestCase {
        1️⃣*/
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous '*/' at top level"),
+        DiagnosticSpec(message: "extraneous code '*/' at top level"),
       ]
     )
   }

@@ -56,7 +56,7 @@ final class DeclarationTests: XCTestCase {
       "func 1️⃣/^notoperator^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }",
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in function"),
-        DiagnosticSpec(message: "unexpected text '/^notoperator^/' before parameter clause")
+        DiagnosticSpec(message: "unexpected code '/^notoperator^/' before parameter clause")
       ]
     )
 
@@ -70,7 +70,7 @@ final class DeclarationTests: XCTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text '}' before function")
+        DiagnosticSpec(message: "unexpected brace before function")
       ]
     )
   }
@@ -132,7 +132,7 @@ final class DeclarationTests: XCTestCase {
       actor Foo {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text '}' before actor")
+        DiagnosticSpec(message: "unexpected brace before actor")
       ]
     )
   }
@@ -158,7 +158,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "protocol P{1️⃣{}case2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '{}' before enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '{}' before enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end protocol"),
       ])
@@ -264,7 +264,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'set' in modifier"),
-        DiagnosticSpec(message: "unexpected text 'get' in modifier")
+        DiagnosticSpec(message: "unexpected code 'get' in modifier")
       ]
     )
 
@@ -277,7 +277,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected 'set)' to end modifier"),
         // FIXME: It should print `+` as detail of text.
-        DiagnosticSpec(message: "unexpected text in variable")
+        DiagnosticSpec(message: "unexpected code in variable")
       ]
     )
 
@@ -286,7 +286,7 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get, set) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'get,' in modifier")
+        DiagnosticSpec(message: "unexpected code 'get,' in modifier")
       ]
     )
 
@@ -295,7 +295,7 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get: set) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'get:' in modifier")
+        DiagnosticSpec(message: "unexpected code 'get:' in modifier")
       ]
     )
 
@@ -304,7 +304,7 @@ final class DeclarationTests: XCTestCase {
       1️⃣private(
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous 'private(' at top level")
+        DiagnosticSpec(message: "extraneous code 'private(' at top level")
       ]
     )
 
@@ -322,8 +322,8 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get, set2️⃣, didSet) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text 'get,' in modifier"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text ', didSet' in modifier")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'get,' in modifier"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ', didSet' in modifier")
       ]
     )
 
@@ -333,7 +333,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'set)' to end modifier"),
-        DiagnosticSpec(message: "unexpected text 'get, didSet' in variable")
+        DiagnosticSpec(message: "unexpected code 'get, didSet' in variable")
       ]
     )
   }
@@ -585,7 +585,7 @@ final class DeclarationTests: XCTestCase {
       "(first second 1️⃣third fourth: Int)",
       { $0.parseFunctionSignature() },
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'third fourth' in function parameter")
+        DiagnosticSpec(message: "unexpected code 'third fourth' in function parameter")
       ]
     )
   }
@@ -664,7 +664,7 @@ final class DeclarationTests: XCTestCase {
       1️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous '}' at top level")
+        DiagnosticSpec(message: "extraneous brace at top level")
       ]
     )
   }
@@ -722,7 +722,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected text '/ ###line 25 "line-directive.swift"' in struct"#)
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code '/ ###line 25 "line-directive.swift"' in struct"#)
       ]
     )
   }
@@ -735,7 +735,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'bogus rethrows set' in variable")
+        DiagnosticSpec(message: "unexpected code 'bogus rethrows set' in variable")
       ]
     )
   }
@@ -750,7 +750,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous ', consectetur adipiscing elit' at top level"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous code ', consectetur adipiscing elit' at top level"),
       ]
     )
   }
@@ -772,7 +772,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'third' in function parameter")
+        DiagnosticSpec(message: "unexpected code 'third' in function parameter")
       ]
     )
   }
@@ -794,7 +794,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text 'third fourth' in function parameter")
+        DiagnosticSpec(message: "unexpected code 'third fourth' in function parameter")
       ]
     )
   }
@@ -817,7 +817,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier and member block in struct"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous ': Int) {}' at top level"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous code ': Int) {}' at top level"),
       ]
     )
   }
@@ -844,7 +844,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected text '[third fourth]' in function parameter")
+        DiagnosticSpec(message: "unexpected code '[third fourth]' in function parameter")
       ]
     )
   }
@@ -870,7 +870,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "2️⃣" , message: "expected ']' to end array type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text 'fourth: Int' in parameter clause")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'fourth: Int' in parameter clause")
       ]
     )
   }
@@ -895,7 +895,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous ': Int) {}' at top level")
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ': Int) {}' at top level")
       ]
     )
   }
@@ -974,7 +974,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "1️⃣}class C2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before class"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
       ],
       fixedSource: """
@@ -983,37 +983,37 @@ final class DeclarationTests: XCTestCase {
     )
     AssertParse("1️⃣}enum C2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before enum"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before enum"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
                 ])
     AssertParse("1️⃣}protocol C2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before protocol"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before protocol"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
                 ])
     AssertParse("1️⃣}actor C2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before actor"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before actor"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in actor"),
                 ])
     AssertParse("1️⃣}struct C2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before struct"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
                 ])
     AssertParse("1️⃣}func C2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before function"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
                 ])
     AssertParse("1️⃣}init2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before initializer"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before initializer"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
                 ])
     AssertParse("1️⃣}subscript2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected text '}' before subscript"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before subscript"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in subscript"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript"),
                 ])
@@ -1051,7 +1051,7 @@ final class DeclarationTests: XCTestCase {
       """
       func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ 1️⃣map: String) {}
       """
-    )
+   )
 
     AssertParse(
       """
@@ -1069,7 +1069,7 @@ final class DeclarationTests: XCTestCase {
       """
       func isolatedConst(isolated _const map1️⃣: String) {}
       """
-    )
+   )
 
     AssertParse(
       """

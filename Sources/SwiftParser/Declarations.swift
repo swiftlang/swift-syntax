@@ -1601,16 +1601,7 @@ extension Parser {
 
     let indices = self.parseParameterClause(for: .indices)
 
-    let result: RawReturnClauseSyntax
-    if self.at(.arrow) {
-      result = self.parseFunctionReturnClause().returnClause
-    } else {
-      result = RawReturnClauseSyntax(
-        arrow: RawTokenSyntax(missing: .arrow, arena: self.arena),
-        returnType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-        arena: self.arena
-      )
-    }
+    let result = self.parseFunctionReturnClause().returnClause
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?

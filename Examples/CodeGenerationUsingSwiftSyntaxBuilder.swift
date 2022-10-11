@@ -18,7 +18,7 @@ let source = SourceFile {
   }
 }
 
-let syntax = source.buildSyntax(format: Format())
+let syntax = source.build()
 
 var text = ""
 syntax.write(to: &text)

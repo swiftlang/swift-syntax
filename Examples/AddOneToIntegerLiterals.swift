@@ -1,5 +1,5 @@
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 import Foundation
 
 /// AddOneToIntegerLiterals will visit each token in the Syntax tree, and
@@ -39,6 +39,7 @@ class AddOneToIntegerLiterals: SyntaxRewriter {
 
 let file = CommandLine.arguments[1]
 let url = URL(fileURLWithPath: file)
-let sourceFile = try SyntaxParser.parse(url)
+let source = try String(contentsOf: url, encoding: .utf8)
+let sourceFile = try Parser.parse(source: source)
 let incremented = AddOneToIntegerLiterals().visit(sourceFile)
 print(incremented)

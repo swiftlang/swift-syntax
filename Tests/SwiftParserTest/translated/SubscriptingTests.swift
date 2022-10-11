@@ -263,9 +263,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected subscripting element type
         DiagnosticSpec(message: "expected return type in subscript"),
-        // TODO: Old parser expected error on line 8: cannot find 'stored' in scope
       ]
     )
   }
@@ -283,8 +281,6 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '->' for subscript element type
-        // TODO: Old parser expected error on line 2: expected subscripting element type
         DiagnosticSpec(message: "expected '->' and return type in subscript"),
       ]
     )
@@ -302,8 +298,6 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '->' for subscript element type
-        // TODO: Old parser expected error on line 2: expected subscripting element type
         DiagnosticSpec(message: "expected '->' and return type in subscript"),
       ]
     )
@@ -315,10 +309,7 @@ final class SubscriptingTests: XCTestCase {
       struct A5 {
         subscript(i : Int) -> Int 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' in subscript to specify getter and setter implementation
-      ]
+      """
     )
   }
 
@@ -349,10 +340,7 @@ final class SubscriptingTests: XCTestCase {
           }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: class subscripts are only allowed within classes; use 'static' to declare a static subscript, Fix-It replacements: 3 - 8 = 'static'
-      ]
+      """
     )
   }
 
@@ -366,10 +354,7 @@ final class SubscriptingTests: XCTestCase {
           }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'static' cannot appear after another 'static' or 'class' keyword, Fix-It replacements: 9 - 16 = ''
-      ]
+      """
     )
   }
 
@@ -377,8 +362,8 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A8 {
-        subscript(i : Int) -> Int 1️⃣
-          2️⃣get {
+        subscript(i : Int) -> Int
+          1️⃣get {
             return stored
           }
           set {
@@ -387,8 +372,15 @@ final class SubscriptingTests: XCTestCase {
         }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' in subscript to specify getter and setter implementation
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
+        DiagnosticSpec(message: "unexpected text in struct", highlight: """
+
+              get {
+                return stored
+              }
+              set {
+                stored = value
+              }
+          """),
       ]
     )
   }

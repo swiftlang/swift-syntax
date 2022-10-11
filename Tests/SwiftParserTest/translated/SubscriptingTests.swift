@@ -231,7 +231,7 @@ final class SubscriptingTests: XCTestCase {
       """
       struct A1 {
         subscript (i : Int) 1️⃣
-           2️⃣Int {
+           Int {
           get {
             return stored 
           }
@@ -242,11 +242,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '->' for subscript element type
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected text in struct"),
-        // TODO: Old parser expected error on line 5: cannot find 'stored' in scope
-        // TODO: Old parser expected error on line 8: cannot find 'stored' in scope
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' in subscript"),
       ]
     )
   }
@@ -338,10 +334,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '->' for subscript element type
-        // TODO: Old parser expected error on line 2: function types cannot have argument labels
-        DiagnosticSpec(message: "expected '->' and return type in subscript"),
-        DiagnosticSpec(message: "unexpected text in struct"),
+        DiagnosticSpec(message: "unexpected text '(j: Int)' in subscript"),
       ]
     )
   }

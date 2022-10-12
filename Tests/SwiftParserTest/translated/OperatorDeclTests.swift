@@ -139,10 +139,10 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl9() {
     AssertParse(
       """
-      prefix operator
+      prefix operator1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected operator name in operator declaration
+        DiagnosticSpec(message: "expected name in operator")
       ]
     )
   }
@@ -171,10 +171,7 @@ final class OperatorDeclTests: XCTestCase {
     AssertParse(
       """
       postfix operator ??
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: postfix operator names starting with '?' or '!' are disallowed to avoid collisions with built-in unwrapping operators
-      ]
+      """
     )
   }
 
@@ -190,10 +187,7 @@ final class OperatorDeclTests: XCTestCase {
     AssertParse(
       """
       postfix operator !!
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: postfix operator names starting with '?' or '!' are disallowed to avoid collisions with built-in unwrapping operators
-      ]
+      """
     )
   }
 
@@ -203,10 +197,8 @@ final class OperatorDeclTests: XCTestCase {
       postfix operator ?1️⃣$$
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: postfix operator names starting with '?' or '!' are disallowed
-        // TODO: Old parser expected error on line 1: '$$' is considered an identifier
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'"),
-      ]
+        DiagnosticSpec(message: "'$$' is considered an identifier and must not appear within an operator name", fixIts: ["remove '$$'"]),
+      ], fixedSource: "postfix operator ?"
     )
   }
 
@@ -217,36 +209,31 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-      ]
+        DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", fixIts: ["remove 'aa'"])
+      ], fixedSource: "infix operator --"
     )
   }
 
   func testOperatorDecl12b() {
     AssertParse(
       """
-      infix operator aa1️⃣--: A
+      infix operator 1️⃣aa--: A
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(message: "extraneous code '--: A' at top level"),
-      ]
+        DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", highlight: "aa", fixIts: ["remove 'aa'"]),
+      ], fixedSource: "infix operator --: A"
     )
   }
 
   func testOperatorDecl12c() {
     AssertParse(
       """
-      infix operator <<1️⃣$$2️⃣@3️⃣<
+      infix operator <<1️⃣$$@<
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 1: '$$' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '<' at top level"),
-      ]
+        DiagnosticSpec(message: "'$$@<' is not allowed in operator names", fixIts: ["remove '$$@<'"]),
+      ], fixedSource: "infix operator <<"
     )
   }
 
@@ -256,9 +243,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator !!1️⃣@aa2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 1: '@' is not allowed in operator names
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected declaration after attribute"),
+        DiagnosticSpec(message: "'@aa' is not allowed in operator names"),
       ]
     )
   }
@@ -266,12 +251,11 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl12e() {
     AssertParse(
       """
-      infix operator #1️⃣++=
+      infix operator 1️⃣#++=
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
-        DiagnosticSpec(message: "extraneous code '++=' at top level"),
-      ]
+        DiagnosticSpec(message: "'#' is not allowed in operator names", highlight: "#", fixIts: ["remove '#'"]),
+      ], fixedSource: "infix operator ++="
     )
   }
 
@@ -281,8 +265,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator ++=1️⃣#
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
-        DiagnosticSpec(message: "extraneous code '#' at top level"),
+        DiagnosticSpec(message: "'#' is not allowed in operator names"),
       ]
     )
   }
@@ -293,8 +276,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator ->1️⃣#
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: '#' is not allowed in operator names
-        DiagnosticSpec(message: "extraneous code '#' at top level"),
+        DiagnosticSpec(message: "'#' is not allowed in operator names"),
       ]
     )
   }
@@ -307,9 +289,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator =1️⃣#=
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: '#' is not allowed in operator names
-        // TODO: Old parser expected error on line 3: '=' must have consistent whitespace on both sides
-        DiagnosticSpec(message: "extraneous code '#=' at top level"),
+        DiagnosticSpec(message: "'#=' is not allowed in operator names"),
       ]
     )
   }
@@ -459,6 +439,15 @@ final class OperatorDeclTests: XCTestCase {
         // TODO: Old parser expected error on line 1: only infix operators may declare a precedence, Fix-It replacements: 20 - 21 = ''
         DiagnosticSpec(message: "expected identifier in operator"),
         // TODO: Old parser expected error on line 2: expected precedence group name after ':' in operator declaration
+      ]
+    )
+  }
+
+  func testIdentifierAsOperatorName() {
+    AssertParse(
+      "postfix operator 1️⃣aa",
+      diagnostics: [
+        DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name")
       ]
     )
   }

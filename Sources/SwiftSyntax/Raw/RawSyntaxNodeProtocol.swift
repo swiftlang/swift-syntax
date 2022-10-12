@@ -108,8 +108,16 @@ public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
     presence == .missing
   }
 
+  public var leadingTriviaByteLength: Int {
+    return tokenView.leadingTriviaByteLength
+  }
+
   public var leadingTriviaPieces: [RawTriviaPiece] {
     tokenView.leadingRawTriviaPieces
+  }
+
+  public var trailingTriviaByteLength: Int {
+    return tokenView.trailingTriviaByteLength
   }
 
   public var trailingTriviaPieces: [RawTriviaPiece] {

@@ -164,7 +164,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(node, TryCannotBeUsed(nextToken: nextToken))
     } else if let semicolons = node.onlyTokens(satisfying: { $0.tokenKind == .semicolon }) {
       addDiagnostic(node, .unexpectedSemicolon, fixIts: [
-        FixIt(message: RemoveTokensFixIt(tokensToRemove: semicolons), changes: semicolons.map(FixIt.Changes.makeMissing))
+        FixIt(message: RemoveNodesFixIt(semicolons), changes: semicolons.map(FixIt.Changes.makeMissing))
       ])
     } else {
       addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node), highlights: [Syntax(node)])
@@ -234,7 +234,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if let semicolon = node.semicolon, semicolon.presence == .present, node.item.isMissingAllTokens {
       addDiagnostic(node, .standaloneSemicolonStatement, fixIts: [
-        FixIt(message: RemoveTokensFixIt(tokensToRemove: [semicolon]), changes: [
+        FixIt(message: RemoveNodesFixIt(semicolon), changes: [
           .makeMissing(tokens: [semicolon])
         ])
       ], handledNodes: [node.item.id])
@@ -262,6 +262,37 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         ])
       ], handledNodes: [unexpected.id])
     }
+
+    func diagnoseIdentifierInOperatorName(unexpected: UnexpectedNodesSyntax?, name: TokenSyntax) {
+      guard let unexpected = unexpected else {
+        return
+      }
+      let message: DiagnosticMessage?
+      if let identifier = unexpected.onlyToken(where: {
+        if case .identifier = $0.tokenKind { return true } else { return false }
+      }) {
+        message = IdentifierNotAllowedInOperatorName(identifier: identifier)
+      } else if let tokens = unexpected.onlyTokens(satisfying: { _ in true }) {
+        message = TokensNotAllowedInOperatorName(tokens: tokens)
+      } else {
+        message = nil
+      }
+      if let message = message {
+        let fixIts: [FixIt]
+        if node.identifier.presence == .present {
+          fixIts = [
+            FixIt(message: RemoveNodesFixIt(unexpected), changes: .remove(unexpected: unexpected))
+          ]
+        } else {
+          fixIts = []
+        }
+        addDiagnostic(unexpected, message, highlights: [Syntax(unexpected)], fixIts: fixIts, handledNodes: [unexpected.id, node.identifier.id])
+      }
+    }
+
+    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenOperatorKeywordAndIdentifier, name: node.identifier)
+    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, name: node.identifier)
+
     return .visitChildren
   }
 
@@ -272,7 +303,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let unexpected = node.indices.unexpectedBeforeLeftParen,
         let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
       addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
-        FixIt(message: RemoveTokensFixIt(tokensToRemove: nameTokens), changes: .makeMissing(tokens: nameTokens))
+        FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(tokens: nameTokens))
       ], handledNodes: [unexpected.id])
     }
     return .visitChildren

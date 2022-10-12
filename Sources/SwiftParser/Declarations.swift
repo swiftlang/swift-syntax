@@ -1991,7 +1991,31 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawOperatorDeclSyntax {
     let (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.eat(handle)
-    let identifier = self.consumeAnyToken()
+    let unexpectedBeforeName: RawUnexpectedNodesSyntax?
+    let name: RawTokenSyntax
+    switch self.canRecoverTo(anyIn: OperatorLike.self) {
+    case (_, let handle)?:
+      (unexpectedBeforeName, name) = self.eat(handle)
+    default:
+      if let identifier = self.consume(ifAny: [.identifier, .dollarIdentifier], where: { !$0.isAtStartOfLine }) {
+        // Recover if the developer tried to use an identifier as the operator name
+        unexpectedBeforeName = RawUnexpectedNodesSyntax([identifier], arena: self.arena)
+      } else {
+        unexpectedBeforeName = nil
+      }
+      name = missingToken(.spacedBinaryOperator, text: nil)
+    }
+
+    // Eat any subsequent tokens that are not separated to the operator by trivia.
+    // The developer most likely intended these to be part of the operator name.
+    var identifiersAfterOperatorName: [RawTokenSyntax] = []
+    var loopProgress = LoopProgressCondition()
+    while (identifiersAfterOperatorName.last ?? name).trailingTriviaByteLength == 0,
+          self.currentToken.leadingTriviaByteLength == 0,
+          !self.at(any: [.colon, .leftBrace, .eof]),
+          loopProgress.evaluate(self.currentToken) {
+      identifiersAfterOperatorName.append(consumeAnyToken())
+    }
 
     // Parse (or diagnose) a specified precedence group and/or
     // designated protocol. These both look like identifiers, so we
@@ -2040,7 +2064,9 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeOperatorKeyword,
       operatorKeyword: operatorKeyword,
-      identifier: identifier,
+      unexpectedBeforeName,
+      identifier: name,
+      RawUnexpectedNodesSyntax(identifiersAfterOperatorName, arena: self.arena),
       operatorPrecedenceAndTypes: precedenceAndTypes,
       unexpectedAtEnd,
       arena: self.arena

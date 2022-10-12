@@ -280,15 +280,25 @@ final class DollarIdentifierTests: XCTestCase {
   }
 
   func testDollarIdentifier13() {
+    // https://github.com/apple/swift/issues/55538
     AssertParse(
       """
-      // https://github.com/apple/swift/issues/55538
-      infix operator $ 
-      infix operator `$`
+      infix operator 1️⃣$
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '$' is considered an identifier and must not appear within an operator name
-        // TODO: Old parser expected error on line 3: '$' is considered an identifier and must not appear within an operator name
+        DiagnosticSpec(message: "'$' is not allowed in operator names")
+      ]
+    )
+  }
+
+  func testDollarIdentifier14() {
+    // https://github.com/apple/swift/issues/55538
+    AssertParse(
+      """
+      infix operator 1️⃣`$`
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'`$`' is considered an identifier and must not appear within an operator name")
       ]
     )
   }

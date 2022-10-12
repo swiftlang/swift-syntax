@@ -21,16 +21,21 @@ fileprivate func findCommonAncestor(_ nodes: [Syntax]) -> Syntax? {
   return findCommonAncestorOrSelf(nodes.compactMap({ $0.parent }))
 }
 
-fileprivate enum MissingNodesDescriptionPart {
+fileprivate enum NodesDescriptionPart {
   case tokensWithDefaultText([TokenSyntax])
   case tokenWithoutDefaultText(TokenSyntax)
   case node(Syntax)
 
-  var description: String? {
+  func description(format: Bool) -> String? {
     switch self {
     case .tokensWithDefaultText(let tokens):
-      let tokenContents = tokens.map({ BasicFormat().visit($0).description }).joined()
-      return "'\(tokenContents.trimmingSpaces())'"
+      let tokenContents: String
+      if format {
+        tokenContents = tokens.map({ BasicFormat().visit($0).description }).joined()
+      } else {
+        tokenContents = tokens.map(\.description).joined()
+      }
+      return "'\(tokenContents.trimmingWhitespace())'"
     case .tokenWithoutDefaultText(let token):
       if let parent = token.parent,
          let childName = parent.childNameForDiagnostics(token.index) {
@@ -47,21 +52,25 @@ fileprivate enum MissingNodesDescriptionPart {
     }
   }
 
-  static func descriptionParts<S: Sequence>(for nodes: S) -> [MissingNodesDescriptionPart] where S.Element == Syntax {
-    var parts: [MissingNodesDescriptionPart] = []
+  static func descriptionParts<S: Sequence>(for nodes: S) -> [NodesDescriptionPart] where S.Element == Syntax {
+    var parts: [NodesDescriptionPart] = []
     for missingNode in nodes {
-      if let missingToken = missingNode.as(TokenSyntax.self) {
-        let newPart: MissingNodesDescriptionPart
-        let (rawKind, text) = missingToken.tokenKind.decomposeToRaw()
-        if let text = text, !text.isEmpty {
-          let presentToken = TokenSyntax(missingToken.tokenKind, presence: .present)
-          newPart = .tokensWithDefaultText([presentToken])
-        } else if let defaultText = rawKind.defaultText {
-          let newKind = TokenKind.fromRaw(kind: rawKind, text: String(syntaxText: defaultText))
-          let presentToken = TokenSyntax(newKind, presence: .present)
-          newPart = .tokensWithDefaultText([presentToken])
+      if let token = missingNode.as(TokenSyntax.self) {
+        let newPart: NodesDescriptionPart
+        if token.presence == .present {
+          newPart = .tokensWithDefaultText([token])
         } else {
-          newPart = .tokenWithoutDefaultText(missingToken)
+          let (rawKind, text) = token.tokenKind.decomposeToRaw()
+          if let text = text, !text.isEmpty {
+            let presentToken = TokenSyntax(token.tokenKind, presence: .present)
+            newPart = .tokensWithDefaultText([presentToken])
+          } else if let defaultText = rawKind.defaultText {
+            let newKind = TokenKind.fromRaw(kind: rawKind, text: String(syntaxText: defaultText))
+            let presentToken = TokenSyntax(newKind, presence: .present)
+            newPart = .tokensWithDefaultText([presentToken])
+          } else {
+            newPart = .tokenWithoutDefaultText(token)
+          }
         }
 
         switch (parts.last, newPart) {
@@ -71,8 +80,8 @@ fileprivate enum MissingNodesDescriptionPart {
           parts.append(newPart)
         }
       } else {
-        let part = MissingNodesDescriptionPart.node(missingNode)
-        if part.description == nil {
+        let part = NodesDescriptionPart.node(missingNode)
+        if part.description(format: false) == nil {
           // If the new part doesn't have a good name, create one from all the tokens that are missing within it.
           parts += descriptionParts(for: missingNode.children(viewMode: .all))
         } else {
@@ -86,13 +95,14 @@ fileprivate enum MissingNodesDescriptionPart {
 
 /// Returns a string that describes `missingNodes`.
 /// If `commonParent` is not `nil`, `missingNodes` are expected to all be children of `commonParent`.
-func missingNodesDescription<SyntaxType: SyntaxProtocol>(_ missingNodes: [SyntaxType]) -> String {
-  return missingNodesDescriptionAndCommonParent(missingNodes).description
+/// If `format` is `true`, `BasicFormat` will be used to format the tokens prior to printing. This is useful if the nodes have been synthesized.
+func nodesDescription<SyntaxType: SyntaxProtocol>(_ nodes: [SyntaxType], format: Bool) -> String {
+  return nodesDescriptionAndCommonParent(nodes, format: format).description
 }
 
-/// Same as `missingNodesDescription` but if a common ancestor was used to describe `missingNodes`, also return that `commonAncestor`
-func missingNodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ missingNodes: [SyntaxType]) -> (commonAncestor: Syntax?, description: String) {
-  let missingSyntaxNodes = missingNodes.map(Syntax.init)
+/// Same as `nodesDescription` but if a common ancestor was used to describe `missingNodes`, also return that `commonAncestor`
+func nodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ nodes: [SyntaxType], format: Bool) -> (commonAncestor: Syntax?, description: String) {
+  let missingSyntaxNodes = nodes.map(Syntax.init)
 
   // If all tokens in the parent are missing, return the parent type name.
   if let commonAncestor = findCommonAncestor(missingSyntaxNodes),
@@ -106,7 +116,7 @@ func missingNodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ missin
     }
   }
 
-  let partDescriptions = MissingNodesDescriptionPart.descriptionParts(for: missingSyntaxNodes).map({ $0.description ?? "syntax" })
+  let partDescriptions = NodesDescriptionPart.descriptionParts(for: missingSyntaxNodes).map({ $0.description(format: format) ?? "syntax" })
   switch partDescriptions.count {
   case 0:
     return (nil, "syntax")
@@ -229,7 +239,7 @@ public struct MissingNodesError: ParserError {
   }
 
   public var message: String {
-    let (anchor, description) = missingNodesDescriptionAndCommonParent(missingNodes)
+    let (anchor, description) = nodesDescriptionAndCommonParent(missingNodes, format: true)
     var message = "expected \(description)"
     if let afterClause = afterClause {
       message += " \(afterClause)"
@@ -259,7 +269,7 @@ public struct InsertTokenFixIt: ParserFixIt {
     self.missingNodes = missingNodes
   }
 
-  public var message: String { "insert \(missingNodesDescription(missingNodes))" }
+  public var message: String { "insert \(nodesDescription(missingNodes, format: true))" }
 }
 
 // MARK: - Generate Error

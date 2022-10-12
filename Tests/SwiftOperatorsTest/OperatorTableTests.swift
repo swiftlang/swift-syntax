@@ -80,12 +80,12 @@ extension OperatorTable {
     _ fullyParenthesizedSource: String
   ) throws {
     // Parse and fold the source we're testing.
-    let parsed = try Parser.parse(source: source)
+    let parsed = Parser.parse(source: source)
     let foldedSyntax = try foldAll(parsed)
     XCTAssertFalse(foldedSyntax.containsExprSequence)
 
     // Parse and "fold" the parenthesized version.
-    let parenthesizedParsed = try Parser.parse(source: fullyParenthesizedSource)
+    let parenthesizedParsed = Parser.parse(source: fullyParenthesizedSource)
     let parenthesizedSyntax = ExplicitParenFolder().visit(parenthesizedParsed)
     XCTAssertFalse(parenthesizedSyntax.containsExprSequence)
 
@@ -102,7 +102,7 @@ extension OperatorTable {
 public class OperatorPrecedenceTests: XCTestCase {
   func testLogicalExprsSingle() throws {
     let opPrecedence = OperatorTable.logicalOperators
-    let parsed = try Parser.parse(source: "x && y || w && v || z")
+    let parsed = Parser.parse(source: "x && y || w && v || z")
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
     let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
@@ -118,7 +118,7 @@ public class OperatorPrecedenceTests: XCTestCase {
 
   func testSwiftExprs() throws {
     let opPrecedence = OperatorTable.standardOperators
-    let parsed = try Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
+    let parsed = Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
     let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
     let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
@@ -128,7 +128,7 @@ public class OperatorPrecedenceTests: XCTestCase {
 
   func testNestedSwiftExprs() throws {
     let opPrecedence = OperatorTable.standardOperators
-    let parsed = try Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
+    let parsed = Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
     let foldedAll = try opPrecedence.foldAll(parsed)
     XCTAssertEqual("\(foldedAll)", "(x + y > 17) && x && y || w && v || z")
     XCTAssertFalse(foldedAll.containsExprSequence)
@@ -175,11 +175,11 @@ public class OperatorPrecedenceTests: XCTestCase {
     infix operator ||: LogicalDisjunctionPrecedence
     """
 
-    let parsedOperatorPrecedence = try Parser.parse(source: logicalOperatorSources)
+    let parsedOperatorPrecedence = Parser.parse(source: logicalOperatorSources)
     var opPrecedence = OperatorTable()
     try opPrecedence.addSourceFile(parsedOperatorPrecedence)
 
-    let parsed = try Parser.parse(source: "x && y || w && v || z")
+    let parsed = Parser.parse(source: "x && y || w && v || z")
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
     let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
@@ -204,7 +204,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     }
     """
 
-    let parsedOperatorPrecedence = try Parser.parse(source: sources)
+    let parsedOperatorPrecedence = Parser.parse(source: sources)
 
     var opPrecedence = OperatorTable()
     var errors: [OperatorError] = []
@@ -244,7 +244,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       postfix operator*
       """
 
-    let parsedOperatorPrecedence = try Parser.parse(source: sources)
+    let parsedOperatorPrecedence = Parser.parse(source: sources)
 
     var opPrecedence = OperatorTable()
     var errors: [OperatorError] = []
@@ -266,7 +266,7 @@ public class OperatorPrecedenceTests: XCTestCase {
   }
 
   func testFoldErrors() throws {
-    let parsedOperatorPrecedence = try Parser.parse(source:
+    let parsedOperatorPrecedence = Parser.parse(source:
       """
       precedencegroup A {
         associativity: none
@@ -294,7 +294,7 @@ public class OperatorPrecedenceTests: XCTestCase {
 
     do {
       var errors: [OperatorError] = []
-      let parsed = try Parser.parse(source: "a + b * c")
+      let parsed = Parser.parse(source: "a + b * c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
       _ = opPrecedence.foldSingle(sequenceExpr) { error in
@@ -313,7 +313,7 @@ public class OperatorPrecedenceTests: XCTestCase {
 
     do {
       var errors: [OperatorError] = []
-      let parsed = try Parser.parse(source: "a / c")
+      let parsed = Parser.parse(source: "a / c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
       _ = opPrecedence.foldSingle(sequenceExpr) { error in
@@ -332,7 +332,7 @@ public class OperatorPrecedenceTests: XCTestCase {
 
     do {
       var errors: [OperatorError] = []
-      let parsed = try Parser.parse(source: "a + b - c")
+      let parsed = Parser.parse(source: "a + b - c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
       _ = opPrecedence.foldSingle(sequenceExpr) { error in
@@ -354,7 +354,7 @@ public class OperatorPrecedenceTests: XCTestCase {
 
     do {
       var errors: [OperatorError] = []
-      let parsed = try Parser.parse(source: "a ++ b - d")
+      let parsed = Parser.parse(source: "a ++ b - d")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
       _ = opPrecedence.foldSingle(sequenceExpr) { error in

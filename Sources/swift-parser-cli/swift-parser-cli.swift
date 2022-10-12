@@ -82,20 +82,12 @@ class VerifyRoundTrip: ParsableCommand {
     abstract: "Verify that printing the parsed syntax tree produces the original source"
   )
 
-  init(sourceFile: String?, swiftVersion: String?, enableBareSlashRegex: Bool?) {
+  init(sourceFile: String?) {
     self.sourceFile = sourceFile
-    self.swiftVersion = swiftVersion
-    self.enableBareSlashRegex = enableBareSlashRegex
   }
 
   @Argument(help: "The source file that should be parsed; if omitted, use stdin")
   var sourceFile: String?
-
-  @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
-  var swiftVersion: String?
-
-  @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
-  var enableBareSlashRegex: Bool?
 
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
@@ -116,22 +108,15 @@ class VerifyRoundTrip: ParsableCommand {
 
     try source.withUnsafeBufferPointer { sourceBuffer in
       try Self.run(
-        source: sourceBuffer, swiftVersion: swiftVersion,
-        enableBareSlashRegex: enableBareSlashRegex,
-        foldSequences: foldSequences
+        source: sourceBuffer, foldSequences: foldSequences
       )
     }
   }
 
   static func run(
-    source: UnsafeBufferPointer<UInt8>, swiftVersion: String?,
-    enableBareSlashRegex: Bool?, foldSequences: Bool
+    source: UnsafeBufferPointer<UInt8>, foldSequences: Bool
   ) throws {
-    let tree = try Parser.parse(
-      source: source,
-      languageVersion: swiftVersion,
-      enableBareSlashRegexLiteral: enableBareSlashRegex
-    )
+    let tree = Parser.parse(source: source)
 
     let resultTree: Syntax
     if foldSequences {
@@ -157,24 +142,14 @@ class PrintDiags: ParsableCommand {
   @Argument(help: "The source file that should be parsed; if omitted, use stdin")
   var sourceFile: String?
 
-  @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
-  var swiftVersion: String?
-
-  @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
-  var enableBareSlashRegex: Bool?
-
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    try source.withUnsafeBufferPointer { sourceBuffer in
-      let tree = try Parser.parse(
-        source: sourceBuffer,
-        languageVersion: swiftVersion,
-        enableBareSlashRegexLiteral: enableBareSlashRegex
-      )
+    source.withUnsafeBufferPointer { sourceBuffer in
+      let tree = Parser.parse(source: sourceBuffer)
       
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
       print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))
@@ -201,24 +176,14 @@ class PrintTree: ParsableCommand {
   @Argument(help: "The source file that should be parsed; if omitted, use stdin")
   var sourceFile: String?
 
-  @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
-  var swiftVersion: String?
-
-  @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
-  var enableBareSlashRegex: Bool?
-
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    try source.withUnsafeBufferPointer { sourceBuffer in
-      let tree = try Parser.parse(
-        source: sourceBuffer,
-        languageVersion: swiftVersion,
-        enableBareSlashRegexLiteral: enableBareSlashRegex
-      )
+    source.withUnsafeBufferPointer { sourceBuffer in
+      let tree = Parser.parse(source: sourceBuffer)
 
       let resultTree: Syntax
       if foldSequences {
@@ -242,12 +207,6 @@ class Reduce: ParsableCommand {
 
   @Argument(help: "The test case that should be reduced; if omitted, use stdin")
   var sourceFile: String?
-
-  @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
-  var swiftVersion: String?
-
-  @Option(name: .long, help: "Enable or disable the use of forward slash regular-expression literal syntax")
-  var enableBareSlashRegex: Bool?
 
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
@@ -286,16 +245,6 @@ class Reduce: ParsableCommand {
       process.arguments = [
         "verify-round-trip", tempFileURL.path,
       ]
-      if let enableBareSlashRegex = enableBareSlashRegex {
-        process.arguments! += [
-          "--enable-bare-slash-regex", enableBareSlashRegex ? "true" : "false"
-        ]
-      }
-      if let swiftVersion = swiftVersion {
-        process.arguments! += [
-          "--swift-version", swiftVersion
-        ]
-      }
       if foldSequences {
         process.arguments! += [ "--fold-sequences" ]
       }
@@ -332,8 +281,8 @@ class Reduce: ParsableCommand {
   private func runVerifyRoundTripInCurrentProcess(source: [UInt8]) throws -> Bool {
     do {
       try source.withUnsafeBufferPointer { sourceBuffer in
-        try VerifyRoundTrip.run(source: sourceBuffer, swiftVersion: self.swiftVersion, enableBareSlashRegex: self.enableBareSlashRegex,
-            foldSequences: foldSequences)
+        try VerifyRoundTrip.run(
+          source: sourceBuffer, foldSequences: foldSequences)
       }
     } catch {
       return false

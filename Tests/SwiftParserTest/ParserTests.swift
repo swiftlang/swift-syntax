@@ -8,8 +8,8 @@ public class ParserTests: XCTestCase {
   /// Run a single parse test.
   func runParseTest(fileURL: URL, checkDiagnostics: Bool) throws {
     let fileContents = try Data(contentsOf: fileURL)
-    let parsed = try fileContents.withUnsafeBytes({ buffer in
-      try Parser.parse(source: buffer.bindMemory(to: UInt8.self))
+    let parsed = fileContents.withUnsafeBytes({ buffer in
+      Parser.parse(source: buffer.bindMemory(to: UInt8.self))
     })
     AssertDataEqualWithDiff(Data(parsed.syntaxTextBytes), fileContents,
                             additionalInfo: "Failed in file \(fileURL)")

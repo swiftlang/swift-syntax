@@ -83,7 +83,7 @@ final class StringInterpolationTests: XCTestCase {
 
 
   func testRewriter() throws {
-    let sourceFile = try Parser.parse(source: """
+    let sourceFile = Parser.parse(source: """
       class Foo {
         func method() {}
       }

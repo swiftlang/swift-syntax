@@ -2217,11 +2217,10 @@ extension Unicode.Scalar {
   }
 
   var isValidIdentifierStartCodePoint: Bool {
-    guard self.isValidIdentifierContinuationCodePoint else {
-      return false
+    if (self.isASCII) {
+      return self.isAsciiIdentifierStart
     }
-
-    if self.isASCII && (self.isDigit || self == "$") {
+    guard self.isValidIdentifierContinuationCodePoint else {
       return false
     }
 

@@ -18,10 +18,11 @@ extension Character {
       self.rawValue = rawValue
     }
 
-    static let IDENT_CONT: Self = .init(rawValue: 0x01)
-    static let DECIMAL: Self    = .init(rawValue: 0x02)
-    static let HEX: Self        = .init(rawValue: 0x04)
-    static let LETTER: Self     = .init(rawValue: 0x08)
+    static let IDENT_START: Self = .init(rawValue: 0x01)
+    static let IDENT_CONT: Self  = .init(rawValue: 0x02)
+    static let DECIMAL: Self     = .init(rawValue: 0x04)
+    static let HEX: Self         = .init(rawValue: 0x08)
+    static let LETTER: Self      = .init(rawValue: 0x10)
   }
 }
 
@@ -34,7 +35,7 @@ extension Unicode.Scalar {
   /// to be allowed to appear in a starting position in a programming language
   /// identifier.
   var isAsciiIdentifierStart: Bool {
-    self.testCharacterInfo(.IDENT_CONT) && !self.isDigit && self != "$"
+    self.testCharacterInfo(.IDENT_START)
   }
 
   /// A Boolean value indicating whether this scalar is one which is recommended
@@ -70,11 +71,6 @@ extension Unicode.Scalar {
     let info: Character.Info
     switch self.value {
     case
-      // '$', '_'
-      36, 95:
-      info = [.IDENT_CONT]
-
-    case
       // '0'-'9'
       48, 49, 50, 51, 52, 53, 54, 55, 56, 57:
       info = [.IDENT_CONT, .DECIMAL, .HEX]
@@ -84,7 +80,7 @@ extension Unicode.Scalar {
       65, 66, 67, 68, 69, 70,
       // 'a'-'f'
       97, 98, 99, 100, 101, 102:
-      info = [.IDENT_CONT, .HEX, .LETTER]
+      info = [.IDENT_START, .IDENT_CONT, .HEX, .LETTER]
 
     case
       // 'G'-'Z'
@@ -93,7 +89,17 @@ extension Unicode.Scalar {
       // 'g'-'z'
       103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117,
       118, 119, 120, 121, 122:
-      info = [.IDENT_CONT, .LETTER]
+      info = [.IDENT_START, .IDENT_CONT, .LETTER]
+
+    case
+      // '_'
+      95:
+      info = [.IDENT_START, .IDENT_CONT]
+
+    case
+      // '$'
+      36:
+      info = [.IDENT_CONT]
 
     default:
       info = []

@@ -34,13 +34,16 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors3() {
     AssertParse(
       #####"""
-      let _ = ###"""invalid"###1️⃣###
+      let _ = ###"""invalid"###1️⃣#2️⃣#3️⃣#
       """#####,
       diagnostics: [
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter, Fix-It replacements: 26 - 29 = ''
         // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 1: expected expression
-        DiagnosticSpec(message: "extraneous code '###' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "use of unknown directive '#'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "use of unknown directive '#'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "use of unknown directive '#'"),
       ]
     )
   }
@@ -60,13 +63,16 @@ final class RawStringErrorsTests: XCTestCase {
   func testRawStringErrors5() {
     AssertParse(
       #####"""
-      let _ = ###"invalid"###1️⃣###
+      let _ = ###"invalid"###1️⃣#2️⃣#3️⃣#
       """#####,
       diagnostics: [
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter, Fix-It replacements: 24 - 27 = ''
         // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 1: expected expression
-        DiagnosticSpec(message: "extraneous code '###' at top level"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "use of unknown directive '#'"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "use of unknown directive '#'"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "use of unknown directive '#'"),
       ]
     )
   }

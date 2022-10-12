@@ -183,6 +183,14 @@ public struct UnexpectedNodesError: ParserError {
   }
 }
 
+public struct UnknownDirectiveError: ParserError {
+  public let unexpected: UnexpectedNodesSyntax
+
+  public var message: String {
+    return "use of unknown directive \(nodesDescription([unexpected], format: false))"
+  }
+}
+
 // MARK: - Fix-Its (please sort alphabetically)
 
 public enum StaticParserFixIt: String, FixItMessage {

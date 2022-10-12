@@ -1112,6 +1112,8 @@ extension Parser {
         wildcard: wild,
         arena: self.arena
       ))
+    case (.pound, let handle)?:
+      return RawExprSyntax(self.parseUnknownPoundLiteral(poundHandle: handle))
     case (.poundSelectorKeyword, _)?:
       return RawExprSyntax(self.parseObjectiveCSelectorLiteral())
     case (.poundKeyPathKeyword, _)?:
@@ -1206,6 +1208,32 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena)
+  }
+}
+
+extension Parser {
+  /// Parse an unknown pound literal, that starts with a `#` at `poundHandle`
+  /// into a `RawIdentifierExprSyntax` that is missing the identifier and
+  /// instead contains all the tokens of the pound literal as unexpected tokens.
+  mutating func parseUnknownPoundLiteral(poundHandle: TokenConsumptionHandle) -> RawIdentifierExprSyntax {
+    var unexpected: [RawSyntax] = []
+    unexpected.append(RawSyntax(self.eat(poundHandle)))
+    if let name = self.consume(if: .identifier) {
+      unexpected.append(RawSyntax(name))
+    }
+    // If there is a parenthesis, consume all tokens up to the closing parenthesis.
+    if let leftParen = self.consume(if: .leftParen) {
+      unexpected.append(RawSyntax(leftParen))
+      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+      unexpected += unexpectedBeforeRightParen?.elements ?? []
+      unexpected.append(RawSyntax(rightParen))
+    }
+    return RawIdentifierExprSyntax(
+      RawUnexpectedNodesSyntax(elements: unexpected, arena: self.arena),
+      identifier: missingToken(.identifier, text: nil),
+      declNameArguments: nil,
+      arena: self.arena
+    )
   }
 }
 

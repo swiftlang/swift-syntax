@@ -37,14 +37,12 @@ fileprivate enum NodesDescriptionPart {
       }
       return "'\(tokenContents.trimmingWhitespace())'"
     case .tokenWithoutDefaultText(let token):
-      if let parent = token.parent,
-         let childName = parent.childNameForDiagnostics(token.index) {
+      if let childName = token.childNameInParent {
         return childName
       }
       return token.tokenKind.decomposeToRaw().rawKind.nameForDiagnostics
     case .node(let node):
-      if let parent = node.parent,
-         let childName = parent.childNameForDiagnostics(node.index) {
+      if let childName = node.childNameInParent {
         return childName
       } else {
         return node.nodeTypeNameForDiagnostics(allowBlockNames: true)

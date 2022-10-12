@@ -122,11 +122,15 @@ public struct IdentifierNotAllowedInOperatorName: ParserError {
 
 public struct InvalidIdentifierError: ParserError {
   public let invalidIdentifier: TokenSyntax
+  public let missingIdentifier: TokenSyntax
 
   public var message: String {
     switch invalidIdentifier.tokenKind {
+    case .floatingLiteral(let text), .integerLiteral(let text):
+      fallthrough
     case .unknown(let text) where text.first?.isNumber == true:
-      return "identifier can only start with a letter or underscore, not a number"
+      let name = missingIdentifier.childNameInParent ?? "identifier"
+      return "\(name) can only start with a letter or underscore, not a number"
     case .wildcardKeyword:
       return "'\(invalidIdentifier.text)' cannot be used as an identifier here"
     case let tokenKind where tokenKind.isKeyword:

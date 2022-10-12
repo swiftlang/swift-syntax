@@ -690,8 +690,8 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -1023,7 +1023,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "associatedtype 1️⃣5s",
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }

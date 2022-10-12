@@ -259,13 +259,13 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum SwitchEnvy {
-        case 1️⃣0:
+        case 1️⃣02️⃣:
       }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
-        DiagnosticSpec(message: "expected name in enum case"),
-        DiagnosticSpec(message: "unexpected code '0:' in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ':' in enum"),
       ]
     )
   }

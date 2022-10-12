@@ -13,26 +13,39 @@ final class NumberIdentifierErrorsTests: XCTestCase {
     )
   }
 
-  func testNumberIdentifierErrors2() {
+  func testNumberIdentifierErrors2a() {
     AssertParse(
       """
       func 1️⃣1() {}
-      func 2️⃣2.0() {}
-      func 3️⃣3func() {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: function name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '1' before parameter clause"),
-        // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '2.0' before parameter clause"),
-        // TODO: Old parser expected error on line 3: function name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 3: 'f' is not a valid digit in integer literal
-        DiagnosticSpec(locationMarker: "3️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
+
+  func testNumberIdentifierErrors2b() {
+    AssertParse(
+      """
+      func 1️⃣2.0() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
+      ]
+    )
+  }
+
+  func testNumberIdentifierErrors2c() {
+    AssertParse(
+      """
+      func 1️⃣3func() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
+      ]
+    )
+  }
+
 
   func testNumberIdentifierErrors3a() {
     AssertParse(
@@ -42,10 +55,8 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: protocol name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name and member block in protocol"),
-        // TODO: Old parser expected error on line 2: associatedtype name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in associatedtype declaration"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -58,10 +69,8 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: protocol name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name and member block in protocol"),
-        // TODO: Old parser expected error on line 2: associatedtype name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in associatedtype declaration"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -74,34 +83,42 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: protocol name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 1: 'p' is not a valid digit in integer literal
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        // TODO: Old parser expected error on line 2: associatedtype name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 2: 'a' is not a valid digit in integer literal
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
 
 
-  func testNumberIdentifierErrors4() {
+  func testNumberIdentifierErrors4a() {
     AssertParse(
       """
       typealias 1️⃣10 = Int
-      typealias 2️⃣11.0 = Int
-      typealias 3️⃣12typealias = Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: typealias name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in typealias declaration"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '10' in typealias declaration"),
-        // TODO: Old parser expected error on line 2: typealias name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in typealias declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '11.0' in typealias declaration"),
-        // TODO: Old parser expected error on line 3: typealias name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 3: 't' is not a valid digit in integer literal
-        DiagnosticSpec(locationMarker: "3️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
+      ]
+    )
+  }
+
+  func testNumberIdentifierErrors4b() {
+    AssertParse(
+      """
+      typealias 1️⃣11.0 = Int
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
+      ]
+    )
+  }
+
+  func testNumberIdentifierErrors4c() {
+    AssertParse(
+      """
+      typealias 1️⃣12typealias = Int
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -112,8 +129,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       struct 1️⃣13 {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: struct name can only start with a letter or underscore, not a number
-        DiagnosticSpec(message: "expected name and member block in struct"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -124,8 +140,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       struct 1️⃣14.0 {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: struct name can only start with a letter or underscore, not a number
-        DiagnosticSpec(message: "expected name and member block in struct"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -136,9 +151,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       struct 1️⃣15struct {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: struct name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 1: 's' is not a valid digit in integer literal
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -149,8 +162,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       enum 1️⃣16 {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: enum name can only start with a letter or underscore, not a number
-        DiagnosticSpec(message: "expected name and member block in enum"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -161,8 +173,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       enum 1️⃣17.0 {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: enum name can only start with a letter or underscore, not a number
-        DiagnosticSpec(message: "expected name and member block in enum"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -173,9 +184,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       enum 1️⃣18enum {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: enum name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 1: 'n' is not a valid digit in floating point exponent
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -188,11 +197,8 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: class name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name and member block in class"),
-        // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '20' before parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -205,11 +211,8 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: class name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name and member block in class"),
-        // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '22.0' before parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }
@@ -223,12 +226,8 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: class name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 1: 'c' is not a valid digit in integer literal
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        // TODO: Old parser expected error on line 2: function name can only start with a letter or underscore, not a number
-        // TODO: Old parser expected error on line 2: 'm' is not a valid digit in integer literal
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "name can only start with a letter or underscore, not a number"),
       ]
     )
   }

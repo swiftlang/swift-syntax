@@ -134,7 +134,21 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 
   /// Return a name with which the child at the given `index` can be referred to
   /// in diagnostics.
+  /// Typically, you want to use `childNameInParent` on the child instead of
+  /// calling this method on the parent.
   func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?
+}
+
+public extension SyntaxProtocol {
+  /// If the parent has a dedicated "name for diagnostics" for this node, return it.
+  /// Otherwise, return `nil`.
+  var childNameInParent: String? {
+    if let parent = self.parent, let childName = parent.childNameForDiagnostics(self.index) {
+      return childName
+    } else {
+      return nil
+    }
+  }
 }
 
 extension SyntaxProtocol {

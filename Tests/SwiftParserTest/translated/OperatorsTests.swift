@@ -208,10 +208,7 @@ final class OperatorsTests: XCTestCase {
       var _ : Man = TheDevil() ^ God()
       var _ : Man = God()^ ^ ^TheDevil()
       let _ = God()^TheDevil()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: operator argument #2 must precede operator argument #1, Fix-It replacements: 9 - 9 = 'TheDevil()', 14 - 25 = ''
-      ]
+      """
     )
   }
 

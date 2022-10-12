@@ -1,5 +1,6 @@
 // This test file has been translated from swift/test/Parse/optional.swift
 
+import SwiftSyntax
 import XCTest
 
 final class OptionalTests: XCTestCase {
@@ -20,22 +21,31 @@ final class OptionalTests: XCTestCase {
       var b : A 1️⃣?
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive statements on a line, Fix-It replacements: 10 - 10 = ';'
-        // TODO: Old parser expected error on line 2: expected expression
         DiagnosticSpec(message: "extraneous code '?' at top level"),
       ]
     )
   }
 
-  func testOptional3() {
+  func testOptional3a() {
     AssertParse(
       """
       var c = a?  
-      var d : ()? = a?.foo()
       """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: '?' must be followed by a call, member lookup, or subscript
-      ]
+      substructure: Syntax(OptionalChainingExprSyntax(
+        expression: ExprSyntax(IdentifierExprSyntax(
+          identifier: .identifier("a"),
+          declNameArguments: nil
+        )),
+        questionMark: .postfixQuestionMarkToken()
+      ))
+    )
+  }
+
+  func testOptional3b() {
+    AssertParse(
+      """
+      var d : ()? = a?.foo()
+      """
     )
   }
 

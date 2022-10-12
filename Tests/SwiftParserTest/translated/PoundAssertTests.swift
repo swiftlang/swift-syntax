@@ -7,10 +7,7 @@ final class PoundAssertTests: XCTestCase {
     AssertParse(
       """
       #assert(true, 123)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected a string literal
-      ]
+      """
     )
   }
 
@@ -18,10 +15,7 @@ final class PoundAssertTests: XCTestCase {
     AssertParse(
       #"""
       #assert(true, "error \(1) message")
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: '#assert' message cannot be an interpolated string literal
-      ]
+      """#
     )
   }
 
@@ -42,7 +36,6 @@ final class PoundAssertTests: XCTestCase {
       #assert(1️⃣, "error message")
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected a condition expression
         DiagnosticSpec(message: "expected condition in '#assert' directive"),
       ]
     )

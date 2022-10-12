@@ -7,10 +7,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
     AssertParse(
       """
       let _ = 1
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: global variable declaration does not bind any variables
-      ]
+      """
     )
   }
 
@@ -34,11 +31,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
           let _ = 1 // OK
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: property declaration does not bind any variables
-        // TODO: Old parser expected error on line 3: property declaration does not bind any variables
-      ]
+      """
     )
   }
 
@@ -69,12 +62,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
         }
         if case let _ = "str" {}  
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 3: 'let' pattern has no effect; sub-pattern didn't bind any variables, Fix-It replacements: 8 - 12 = ''
-        // TODO: Old parser expected warning on line 9: 'let' pattern has no effect; sub-pattern didn't bind any variables, Fix-It replacements: 8 - 12 = ''
-        // TODO: Old parser expected warning on line 14: 'let' pattern has no effect; sub-pattern didn't bind any variables, Fix-It replacements: 11 - 15 = ''
-      ]
+      """#
     )
   }
 
@@ -85,10 +73,7 @@ final class PatternWithoutVariablesTests: XCTestCase {
       class C_53293 {
         static var _: Int { 0 } 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: getter/setter can only be defined for a single variable
-      ]
+      """
     )
   }
 

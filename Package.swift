@@ -97,6 +97,7 @@ let package = Package(
       dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftParser"],
       exclude: [
         "gyb_helpers",
+        "SyntaxExpressibleByStringInterpolationConformances.swift.gyb",
       ]
     ),
     .target(
@@ -125,7 +126,10 @@ let package = Package(
     ),
     .target(
       name: "SwiftOperators",
-      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"]
+      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"],
+      exclude: [
+        "CMakeLists.txt",
+      ]
     ),
     .target(
       name: "SwiftCompilerSupport",

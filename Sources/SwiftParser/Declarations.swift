@@ -1313,7 +1313,7 @@ extension Parser {
       switch self.at(anyIn: ParameterModifier.self) {
       case (._const, let handle)?:
         elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
-      case (.isolated, let handle)? where !self.lookahead().startsParameterName(subject.isClosure):
+      case (.isolated, let handle)? where self.withLookahead({ !$0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }):
         elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
       default:
         break MODIFIER_LOOP
@@ -1362,7 +1362,7 @@ extension Parser {
         let colon: RawTokenSyntax?
         let shouldParseType: Bool
 
-        if self.lookahead().startsParameterName(subject.isClosure) {
+        if self.withLookahead({ $0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
           if self.currentToken.canBeArgumentLabel {
             firstName = self.parseArgumentLabel()
           } else {

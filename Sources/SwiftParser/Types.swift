@@ -402,7 +402,11 @@ extension Parser {
         let second: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
         let colon: RawTokenSyntax?
-        if self.lookahead().startsParameterName(false) {
+        var misplacedSpecifiers: [RawTokenSyntax] = []
+        if self.withLookahead({ $0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: true) }) {
+          while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
+            misplacedSpecifiers.append(specifier)
+          }
           first = self.parseArgumentLabel()
           if let parsedColon = self.consume(if: .colon) {
             second = nil
@@ -423,12 +427,13 @@ extension Parser {
           colon = nil
         }
         // Parse the type annotation.
-        let type = self.parseType()
+        let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
         let ellipsis = self.currentToken.isEllipsis ? self.consumeAnyToken() : nil
         let trailingComma = self.consume(if: .comma)
         keepGoing = trailingComma != nil
         elements.append(RawTupleTypeElementSyntax(
             inOut: nil,
+            RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
             name: first,
             secondName: second,
             unexpectedBeforeColon,
@@ -593,7 +598,7 @@ extension Parser.Lookahead {
 
       // If the tuple element starts with "ident :", then it is followed
       // by a type annotation.
-      if self.startsParameterName(/*isClosure=*/false) {
+      if self.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) {
         self.consumeAnyToken()
         if self.currentToken.canBeArgumentLabel {
           self.consumeAnyToken()

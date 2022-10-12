@@ -11,7 +11,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 2: 'var' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`var`'
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' after type"]),
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"]),
       ], fixedSource: "func test1(var x : inout Int) {}"
     )
   }
@@ -31,12 +31,11 @@ final class InvalidTests: XCTestCase {
   func testInvalid1c() {
     AssertParse(
       """
-      func test3(f : (inout _ 1️⃣x : Int) -> Void) {}
+      func test3(f : (1️⃣inout _ x : Int) -> Void) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'inout' before a parameter name is not allowed
-        DiagnosticSpec(message: "unexpected code 'x : Int' in function type"),
-      ]
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"]),
+      ], fixedSource: "func test3(f : (_ x : inout Int) -> Void) {}"
     )
   }
 
@@ -97,7 +96,6 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected value and ')' to end function call"),
-        // TODO: Old parser expected error on line 3: expected expression in list of expressions
       ]
     )
   }
@@ -120,7 +118,6 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected ',' separator, Fix-It replacements: 32 - 32 = ','
         DiagnosticSpec(message: "expected ')' to end function call"),
       ]
     )
@@ -130,10 +127,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       super.init()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'super' cannot be used outside of class members
-      ]
+      """
     )
   }
 
@@ -186,8 +180,6 @@ final class InvalidTests: XCTestCase {
         _ = " >> \( abc 1️⃣} ) << "2️⃣
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: expected ',' separator, Fix-It replacements: 18 - 18 = ','
-        // TODO: Old parser expected error on line 4: expected expression in list of expressions
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
@@ -195,13 +187,12 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid11() {
+    // rdar://problem/18507467
     AssertParse(
       """
-      // rdar://problem/18507467
       func d(_ b: 1️⃣String 2️⃣-> 3️⃣<T>() -> T4️⃣) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type for function result
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function type"),
@@ -218,11 +209,7 @@ final class InvalidTests: XCTestCase {
       protocol Animal<Food> {
         func feed(_ food: Food)
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: an associated type named 'Food' must be declared in the protocol 'Animal' or a protocol it inherits
-        // TODO: Old parser expected error on line 3: cannot find type 'Food' in scope
-      ]
+      """
     )
   }
 
@@ -240,7 +227,6 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 6: expected ':' following argument label and parameter name
         DiagnosticSpec(message: "expected ':' and type in function parameter"),
       ]
     )
@@ -256,7 +242,6 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected ',' separator
         DiagnosticSpec(message: "expected value in function call"),
       ]
     )
@@ -275,10 +260,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func f1_43591(a : inout inout Int) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 19 - 25 = ''
-      ]
+      """
     )
   }
 
@@ -289,8 +271,7 @@ final class InvalidTests: XCTestCase {
       func f2_43591(1️⃣inout inout b: Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 21 - 27 = ''
-        DiagnosticSpec(message: "'inout inout' before a parameter name is not allowed", fixIts: ["move 'inout inout' after type"]),
+        DiagnosticSpec(message: "'inout inout' before a parameter name is not allowed", fixIts: ["move 'inout inout' in front of type"]),
       ], fixedSource: "func f2_43591(b: inout Int) {}"
     )
   }
@@ -302,9 +283,6 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 3: 'let' in this position is interpreted as an argument label, Fix-It replacements: 15 - 18 = '`let`'
-        // TODO: Old parser expected error on line 3: expected ',' separator, Fix-It replacements: 22 - 22 = ','
-        // TODO: Old parser expected error on line 3: expected ':' following argument label and parameter name
-        // TODO: Old parser expected warning on line 3: extraneous duplicate parameter name; 'let' already has an argument label, Fix-It replacements: 15 - 19 = ''
         DiagnosticSpec(message: "unexpected code 'a' in function parameter"),
       ]
     )
@@ -316,7 +294,6 @@ final class InvalidTests: XCTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
         DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
       ]
     )
@@ -391,11 +368,9 @@ final class InvalidTests: XCTestCase {
   func testInvalid22() {
     AssertParse(
       """
-      let 1️⃣for 2️⃣= 2
+      let 1️⃣for = 2
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
         DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here"),
       ]
     )

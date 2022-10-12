@@ -316,7 +316,13 @@ extension Parser.Lookahead {
 
   /// Determine whether we are at the start of a parameter name when
   /// parsing a parameter.
-  func startsParameterName(_ isClosure: Bool) -> Bool {
+  /// If `allowMisplacedSpecifierRecovery` is `true`, then this will skip over any type
+  /// specifiers before checking whether this lookahead starts a parameter name.
+  mutating func startsParameterName(isClosure: Bool, allowMisplacedSpecifierRecovery: Bool) -> Bool {
+    if allowMisplacedSpecifierRecovery {
+      while self.consume(ifAnyIn: TypeSpecifier.self) != nil {}
+    }
+
     // To have a parameter name here, we need a name.
     guard self.currentToken.canBeArgumentLabel else {
       return false
@@ -341,12 +347,11 @@ extension Parser.Lookahead {
       // so look ahead one more token (two total) see if we have a ':' that would
       // indicate that this is an argument label.
       do {
-        var backtrack = self.lookahead()
-        if backtrack.at(.colon) {
+        if self.at(.colon) {
           return true // isolated :
         }
-        backtrack.consumeAnyToken()
-        return backtrack.currentToken.canBeArgumentLabel && backtrack.peek().tokenKind == .colon
+        self.consumeAnyToken()
+        return self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon
       }
     }
 

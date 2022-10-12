@@ -466,7 +466,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpectedTokenCondition: { TypeSpecifier(token: $0) != nil },
       correctTokens: [node.type?.as(AttributedTypeSyntax.self)?.specifier],
       message: { SpecifierOnParameterName(misplacedSpecifiers: $0) },
-      moveFixIt: { MoveTokensAfterTypeFixIt(movedTokens: $0) },
+      moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
     return .visitChildren
@@ -547,6 +547,21 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         ])
       ], handledNodes: [node.expression.id])
     }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    exchangeTokens(
+      unexpected: node.unexpectedBetweenInOutAndName,
+      unexpectedTokenCondition: { TypeSpecifier(token: $0) != nil },
+      correctTokens: [node.type.as(AttributedTypeSyntax.self)?.specifier],
+      message: { SpecifierOnParameterName(misplacedSpecifiers: $0) },
+      moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
+      removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+    )
     return .visitChildren
   }
 

@@ -226,15 +226,6 @@ public struct MoveTokensAfterFixIt: ParserFixIt {
   }
 }
 
-public struct MoveTokensAfterTypeFixIt: ParserFixIt {
-  /// The token that should be moved
-  public let movedTokens: [TokenSyntax]
-
-  public var message: String {
-    "move \(nodesDescription(movedTokens, format: false)) after type"
-  }
-}
-
 public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   /// The token that should be moved
   public let movedTokens: [TokenSyntax]
@@ -244,6 +235,15 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
 
   public var message: String {
     "move \(nodesDescription(movedTokens, format: false)) in front of '\(inFrontOf.nameForDiagnostics)'"
+  }
+}
+
+public struct MoveTokensInFrontOfTypeFixIt: ParserFixIt {
+  /// The token that should be moved
+  public let movedTokens: [TokenSyntax]
+
+  public var message: String {
+    "move \(nodesDescription(movedTokens, format: false)) in front of type"
   }
 }
 

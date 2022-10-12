@@ -464,7 +464,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.expression.is(MissingExprSyntax.self) {
-      addDiagnostic(node.expression, .expectedExpressionAfterTry, handledNodes: [node.expression.id])
+      addDiagnostic(node.expression, .expectedExpressionAfterTry, fixIts: [
+        FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.expression)]), changes: [
+          .makePresent(node: node.expression)
+        ])
+      ], handledNodes: [node.expression.id])
     }
     return .visitChildren
   }

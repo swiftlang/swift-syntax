@@ -68,6 +68,7 @@ public extension ParserFixIt {
 public enum StaticParserError: String, DiagnosticMessage {
   case allStatmentsInSwitchMustBeCoveredByCase = "all statements inside a switch must be covered by a 'case' or 'default' label"
   case caseOutsideOfSwitchOrEnum = "'case' can only appear inside a 'switch' statement or 'enum' declaration"
+  case classConstraintCanOnlyBeUsedInProtocol = "'class' constraint can only appear on protocol declarations"
   case consecutiveDeclarationsOnSameLine = "consecutive declarations on a line must be separated by ';'"
   case consecutiveStatementsOnSameLine = "consecutive statements on a line must be separated by ';'"
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"

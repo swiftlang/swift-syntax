@@ -349,14 +349,25 @@ extension Parser {
 
         // Parse the ':' followed by a type.
         let colon = self.consume(if: .colon)
+        let unexpectedBeforeInherited: RawUnexpectedNodesSyntax?
         let inherited: RawTypeSyntax?
         if colon != nil {
           if self.at(any: [.identifier, .protocolKeyword, .anyKeyword]) {
+            unexpectedBeforeInherited = nil
             inherited = self.parseType()
+          } else if let classKeyword = self.consume(if: .classKeyword) {
+            unexpectedBeforeInherited = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
+            inherited = RawTypeSyntax(RawSimpleTypeIdentifierSyntax(
+              name: missingToken(.identifier, text: "AnyObject"),
+              genericArgumentClause: nil,
+              arena: self.arena
+            ))
           } else {
-            inherited = nil
+            unexpectedBeforeInherited = nil
+            inherited = RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
           }
         } else {
+          unexpectedBeforeInherited = nil
           inherited = nil
         }
         keepGoing = self.consume(if: .comma)
@@ -366,6 +377,7 @@ extension Parser {
           name: name,
           ellipsis: ellipsis,
           colon: colon,
+          unexpectedBeforeInherited,
           inheritedType: inherited,
           trailingComma: keepGoing,
           arena: self.arena))

@@ -491,6 +491,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let inheritedTypeName = node.inheritedType?.as(SimpleTypeIdentifierSyntax.self)?.name {
+      exchangeTokens(
+        unexpected: node.unexpectedBetweenColonAndInheritedType,
+        unexpectedTokenCondition: { $0.tokenKind == .classKeyword },
+        correctTokens: [inheritedTypeName],
+        message: { _ in StaticParserError.classConstraintCanOnlyBeUsedInProtocol },
+        moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: inheritedTypeName) }
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

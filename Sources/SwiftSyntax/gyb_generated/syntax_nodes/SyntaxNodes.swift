@@ -10172,7 +10172,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
-      return nil
+      return "precedence group"
     case 4:
       return nil
     case 5:

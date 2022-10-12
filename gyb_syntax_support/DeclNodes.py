@@ -726,7 +726,7 @@ DECL_NODES = [
          ]),
 
     # operator-decl -> attribute? modifiers? 'operator' operator
-    Node('OperatorDecl', name_for_diagnostics='operator', kind='Decl',
+    Node('OperatorDecl', name_for_diagnostics='operator declaration', kind='Decl',
          traits=['IdentifiedDecl'],
          description='A Swift `operator` declaration.',
          children=[
@@ -773,7 +773,7 @@ DECL_NODES = [
          ''',
          children=[
              Child('Colon', kind='ColonToken'),
-             Child('PrecedenceGroup', kind='IdentifierToken',
+             Child('PrecedenceGroup', name_for_diagnostics='precedence group', kind='IdentifierToken',
                    description='''
                    The precedence group for this operator
                    '''),

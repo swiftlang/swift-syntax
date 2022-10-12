@@ -75,6 +75,7 @@ public enum StaticParserError: String, DiagnosticMessage {
   case defaultOutsideOfSwitch = "'default' label can only appear inside a 'switch' statement"
   case editorPlaceholderInSourceFile = "editor placeholder in source file"
   case expectedExpressionAfterTry = "expected expression after 'try'"
+  case invalidFlagAfterPrecedenceGroupAssignment = "expected 'true' or 'false' after 'assignment'"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
   case operatorShouldBeDeclaredWithoutBody = "operator should no longer be declared with body"
   case standaloneSemicolonStatement = "standalone ';' statements are not allowed"

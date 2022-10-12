@@ -2153,12 +2153,19 @@ extension Parser {
           let assignmentKeyword = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let (unexpectedBeforeFlag, flag) = self.expectAny([.trueKeyword, .falseKeyword], default: .trueKeyword)
+          let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
+          if flag.isMissing, let unexpectedIdentifier = self.consume(if: .identifier, where: { !$0.isAtStartOfLine }) {
+            unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)
+          } else {
+            unexpectedAfterFlag = nil
+          }
           elements.append(RawSyntax(RawPrecedenceGroupAssignmentSyntax(
             assignmentKeyword: assignmentKeyword,
             unexpectedBeforeColon,
             colon: colon,
             unexpectedBeforeFlag,
             flag: flag,
+            unexpectedAfterFlag,
             arena: self.arena
           )))
         case (.higherThan, let handle)?,

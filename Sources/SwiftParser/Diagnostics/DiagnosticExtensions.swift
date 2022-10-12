@@ -52,6 +52,23 @@ extension FixIt.Changes {
     return FixIt.Changes(changes: changes)
   }
 
+  /// Remove the nodes in `unexpected`.
+  static func remove(unexpected: UnexpectedNodesSyntax) -> Self {
+    var changes: [FixIt.Change] = [
+      FixIt.Change.replace(
+        oldNode: Syntax(unexpected),
+        newNode: Syntax(UnexpectedNodesSyntax([]))
+      )
+    ]
+    if let firstToken = unexpected.firstToken(viewMode: .sourceAccurate),
+       firstToken.leadingTrivia.isEmpty == false,
+       let nextToken = unexpected.lastToken(viewMode: .sourceAccurate)?.nextToken(viewMode: .sourceAccurate),
+       !nextToken.leadingTrivia.contains(where: { $0.isNewline }) {
+      changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: firstToken.leadingTrivia))
+    }
+    return FixIt.Changes(changes: changes)
+  }
+
   /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
   /// override the default leading/trailing trivia inferred from `BasicFormat`.
   static func makePresent<T: SyntaxProtocol>(

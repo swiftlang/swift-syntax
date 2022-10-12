@@ -2020,6 +2020,21 @@ extension Parser {
     } else {
       precedenceAndTypes = nil
     }
+    let unexpectedAtEnd: RawUnexpectedNodesSyntax?
+    if let leftBrace = self.consume(if: .leftBrace) {
+      let attributeList = self.parsePrecedenceGroupAttributeListSyntax()
+      let rightBrace = self.consume(if: .rightBrace)
+      unexpectedAtEnd = RawUnexpectedNodesSyntax(
+        elements: [
+          RawSyntax(leftBrace),
+          RawSyntax(attributeList),
+          rightBrace.map(RawSyntax.init)
+        ].compactMap({ $0 }),
+        arena: self.arena
+      )
+    } else {
+      unexpectedAtEnd = nil
+    }
     return RawOperatorDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -2027,7 +2042,9 @@ extension Parser {
       operatorKeyword: operatorKeyword,
       identifier: identifier,
       operatorPrecedenceAndTypes: precedenceAndTypes,
-      arena: self.arena)
+      unexpectedAtEnd,
+      arena: self.arena
+    )
   }
 
 
@@ -2062,8 +2079,26 @@ extension Parser {
     let (unexpectedBeforeGroup, group) = self.eat(handle)
     let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    var elements = [RawSyntax]()
 
+    let groupAttributes = self.parsePrecedenceGroupAttributeListSyntax()
+
+    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    return RawPrecedenceGroupDeclSyntax(
+      attributes: attrs.attributes, modifiers: attrs.modifiers,
+      unexpectedBeforeGroup,
+      precedencegroupKeyword: group,
+      unexpectedBeforeIdentifier,
+      identifier: identifier,
+      unexpectedBeforeLBrace,
+      leftBrace: lbrace,
+      groupAttributes: groupAttributes,
+      unexpectedBeforeRBrace,
+      rightBrace: rbrace,
+      arena: self.arena)
+  }
+
+  @_spi(RawSyntax)
+  public mutating func parsePrecedenceGroupAttributeListSyntax() -> RawPrecedenceGroupAttributeListSyntax {
     enum LabelText: SyntaxText, ContextualKeywords {
       case associativity = "associativity"
       case assignment = "assignment"
@@ -2071,6 +2106,7 @@ extension Parser {
       case lowerThan = "lowerThan"
     }
 
+    var elements = [RawSyntax]()
     do {
       var attributesProgress = LoopProgressCondition()
       LOOP: while !self.at(any: [.eof, .rightBrace]) && attributesProgress.evaluate(currentToken) {
@@ -2130,19 +2166,7 @@ extension Parser {
         }
       }
     }
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-    return RawPrecedenceGroupDeclSyntax(
-      attributes: attrs.attributes, modifiers: attrs.modifiers,
-      unexpectedBeforeGroup,
-      precedencegroupKeyword: group,
-      unexpectedBeforeIdentifier,
-      identifier: identifier,
-      unexpectedBeforeLBrace,
-      leftBrace: lbrace,
-      groupAttributes: RawPrecedenceGroupAttributeListSyntax(elements: elements, arena: self.arena),
-      unexpectedBeforeRBrace,
-      rightBrace: rbrace,
-      arena: self.arena)
+    return RawPrecedenceGroupAttributeListSyntax(elements: elements, arena: self.arena)
   }
 }
 

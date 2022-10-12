@@ -76,6 +76,7 @@ public enum StaticParserError: String, DiagnosticMessage {
   case editorPlaceholderInSourceFile = "editor placeholder in source file"
   case expectedExpressionAfterTry = "expected expression after 'try'"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
+  case operatorShouldBeDeclaredWithoutBody = "operator should no longer be declared with body"
   case standaloneSemicolonStatement = "standalone ';' statements are not allowed"
   case subscriptsCannotHaveNames = "subscripts cannot have a name"
   case throwsInReturnPosition = "'throws' may only occur before '->'"
@@ -166,6 +167,7 @@ public struct UnexpectedNodesError: ParserError {
 public enum StaticParserFixIt: String, FixItMessage {
   case insertSemicolon = "insert ';'"
   case insertAttributeArguments = "insert attribute argument"
+  case removeOperatorBody = "remove operator body"
   case wrapKeywordInBackticks = "if this name is unavoidable, use backticks to escape it"
 
   public var message: String { self.rawValue }

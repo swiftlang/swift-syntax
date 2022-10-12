@@ -266,8 +266,8 @@ final class TryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'try' must be placed on the thrown expression", fixIts: ["move 'try' after 'throw'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'"),
-      ], fixedSource: "throw try"
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'", fixIts: ["insert expression"]),
+      ], fixedSource: "throw try <#expression#>"
     )
   }
 

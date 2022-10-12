@@ -103,7 +103,7 @@ final class SuperTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in member access"),
+        DiagnosticSpec(message: "expected name in member access"),
       ]
     )
   }

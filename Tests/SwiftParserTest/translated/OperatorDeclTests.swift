@@ -352,7 +352,7 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected identifier after 'precedencegroup'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in precedencegroup"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in precedencegroup"),
         // TODO: Old parser expected error on line 5: expected colon after attribute name in precedence group
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in 'associativity' property of precedencegroup"),
         // TODO: Old parser expected error on line 8: 'precedence' is not a valid precedence group attribute
@@ -361,7 +361,7 @@ final class OperatorDeclTests: XCTestCase {
         // TODO: Old parser expected error on line 14: expected 'true' or 'false' after 'assignment'
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'true' in 'assignment' property of precedencegroup"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code 'no' in precedencegroup"),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected identifier in 'relation' property of precedencegroup"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected name in 'relation' property of precedencegroup"),
         // TODO: Old parser expected error on line 18: expected name of related precedence group after 'higherThan'
       ]
     )

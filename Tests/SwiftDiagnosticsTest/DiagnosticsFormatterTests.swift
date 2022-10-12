@@ -41,9 +41,9 @@ final class DiagnosticsFormatterTests: XCTestCase {
     """
     let expectedOutput = """
     1 │ foo.[].[].[]
-      ∣     │  │  ╰─ expected identifier in member access
-      ∣     │  ╰─ expected identifier in member access
-      ∣     ╰─ expected identifier in member access
+      ∣     │  │  ╰─ expected name in member access
+      ∣     │  ╰─ expected name in member access
+      ∣     ╰─ expected name in member access
     
     """
     AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))

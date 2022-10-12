@@ -57,7 +57,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        DiagnosticSpec(message: "expected identifier and member block in class"),
+        DiagnosticSpec(message: "expected name and member block in class"),
       ]
     )
   }
@@ -71,7 +71,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
-        DiagnosticSpec(message: "expected identifier and member block in enum"),
+        DiagnosticSpec(message: "expected name and member block in enum"),
       ]
     )
   }
@@ -85,7 +85,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(message: "expected identifier and member block in struct"),
+        DiagnosticSpec(message: "expected name and member block in struct"),
       ]
     )
   }
@@ -102,7 +102,7 @@ final class DollarIdentifierTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in function"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '$' before parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '$ dollarParam: Int' in parameter clause"),

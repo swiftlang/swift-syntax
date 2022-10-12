@@ -189,6 +189,29 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(node, .unexpectedSemicolon, fixIts: [
         FixIt(message: RemoveNodesFixIt(semicolons), changes: semicolons.map(FixIt.Changes.makeMissing))
       ])
+    } else if node.first?.as(TokenSyntax.self)?.tokenKind.isIdentifier == true,
+              let previousToken = node.previousToken(viewMode: .sourceAccurate),
+              previousToken.tokenKind.isIdentifier,
+              previousToken.parent?.is(DeclSyntax.self) == true {
+      // If multiple identifiers are used for a declaration name, offer to join them together.
+      let tokens = node
+        .prefix(while: { $0.as(TokenSyntax.self)?.tokenKind.isIdentifier == true })
+        .map({ $0.as(TokenSyntax.self)! })
+      let joined = previousToken.text + tokens.map(\.text).joined()
+      var fixIts: [FixIt] = [
+        FixIt(message: .joinIdentifiers, changes: [
+          [.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joined), presence: .present)))],
+          .makeMissing(tokens: tokens)
+        ])
+      ]
+      if tokens.contains(where: { $0.text.first?.isUppercase == false }) {
+        let joinedUsingCamelCase = previousToken.text + tokens.map({ $0.text.withFirstLetterUppercased() }).joined()
+        fixIts.append(FixIt(message: .joinIdentifiersWithCamelCase, changes: [
+          [.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joinedUsingCamelCase), presence: .present)))],
+          .makeMissing(tokens: tokens)
+        ]))
+      }
+      addDiagnostic(node, SpaceSeparatedIdentifiersError(firstToken: previousToken, additionalTokens: tokens), fixIts: fixIts)
     } else {
       addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node), highlights: [Syntax(node)])
     }

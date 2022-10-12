@@ -119,8 +119,17 @@ struct DiagnosticSpec {
 class FixItApplier: SyntaxRewriter {
   var changes: [FixIt.Change]
 
-  init(diagnostics: [Diagnostic]) {
-    self.changes = diagnostics.flatMap({ $0.fixIts }).flatMap({ $0.changes.changes })
+  init(diagnostics: [Diagnostic], withMessages messages: [String]?) {
+    self.changes = diagnostics
+      .flatMap { $0.fixIts }
+      .filter {
+        if let messages = messages {
+          return messages.contains($0.message.message)
+        } else {
+          return true
+        }
+      }
+      .flatMap { $0.changes.changes }
   }
 
   public override func visitAny(_ node: Syntax) -> Syntax? {
@@ -150,9 +159,10 @@ class FixItApplier: SyntaxRewriter {
     return Syntax(modifiedNode)
   }
 
-  /// Applies all Fix-Its in `diagnostics` to `tree` and returns the fixed syntax tree.
-  public static func applyFixes<T: SyntaxProtocol>(in diagnostics: [Diagnostic], to tree: T) -> Syntax {
-    let applier = FixItApplier(diagnostics: diagnostics)
+  /// If `messages` is `nil`, applies all Fix-Its in `diagnostics` to `tree` and returns the fixed syntax tree.
+  /// If `messages` is not `nil`, applies only Fix-Its whose message is in `messages`.
+  public static func applyFixes<T: SyntaxProtocol>(in diagnostics: [Diagnostic], withMessages messages: [String]?, to tree: T) -> Syntax {
+    let applier = FixItApplier(diagnostics: diagnostics, withMessages: messages)
     return applier.visit(Syntax(tree))
   }
 }
@@ -282,6 +292,7 @@ func AssertParse(
   substructure expectedSubstructure: Syntax? = nil,
   substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+  applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
   file: StaticString = #file,
   line: UInt = #line
@@ -291,6 +302,7 @@ func AssertParse(
                      substructure: expectedSubstructure,
                      substructureAfterMarker: substructureAfterMarker,
                      diagnostics: expectedDiagnostics,
+                     applyFixIts: applyFixIts,
                      fixedSource: expectedFixedSource,
                      file: file,
                      line: line)
@@ -299,7 +311,10 @@ func AssertParse(
 /// Parse `markedSource` and perform the following assertions:
 ///  - The parsed syntax tree should be printable back to the original source code (round-tripping)
 ///  - Parsing produced the given `diagnostics` (`diagnostics = []` asserts that the parse was successful)
-///  - If `fixedSource` is not `nil`, assert that applying all fixes from the diagnostics produces `fixedSource`
+///  - If `fixedSource` is not `nil`, assert that applying the Fix-Its with the
+///    messages in `applyFixIts` (or all if `applyFixIts` is `nil`) all fixes
+///    from the diagnostics produces `fixedSource`
+///
 /// The source file can be marked with markers of the form `1️⃣` to mark source locations that can be referred to by `diagnostics`.
 /// These markers are removed before parsing the source file.
 /// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `1️⃣`.
@@ -311,6 +326,7 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
   substructure expectedSubstructure: Syntax? = nil,
   substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+  applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
   file: StaticString = #file,
   line: UInt = #line
@@ -357,7 +373,7 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
 
       // Applying Fix-Its
       if let expectedFixedSource = expectedFixedSource {
-        let fixedTree = FixItApplier.applyFixes(in: diags, to: tree)
+        let fixedTree = FixItApplier.applyFixes(in: diags, withMessages: applyFixIts, to: tree)
         AssertStringsEqualWithDiff(
           fixedTree.description.trimmingTrailingWhitespace(),
           expectedFixedSource.trimmingTrailingWhitespace(),

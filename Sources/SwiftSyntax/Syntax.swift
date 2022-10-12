@@ -225,6 +225,8 @@ public extension SyntaxProtocol {
       return nil
     }
     let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
+    // `self` could be a missing node at index 0 and `viewMode` be `.sourceAccurate`.
+    // In that case `siblings` skips over the missing `self` node and has a `startIndex > 0`.
     if self.index >= siblings.startIndex {
       for absoluteRaw in siblings[..<self.index].reversed() {
         let child = Syntax(SyntaxData(absoluteRaw, parent: parent))

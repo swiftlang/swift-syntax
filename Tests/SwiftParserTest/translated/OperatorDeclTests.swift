@@ -142,7 +142,7 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in operator")
+        DiagnosticSpec(message: "expected name in operator declaration")
       ]
     )
   }
@@ -154,7 +154,7 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator %%+
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code before operator"),
+        DiagnosticSpec(message: "unexpected code before operator declaration"),
       ]
     )
   }
@@ -208,7 +208,6 @@ final class OperatorDeclTests: XCTestCase {
       infix operator --1️⃣aa
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
         DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", fixIts: ["remove 'aa'"])
       ], fixedSource: "infix operator --"
     )
@@ -220,7 +219,6 @@ final class OperatorDeclTests: XCTestCase {
       infix operator 1️⃣aa--: A
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'aa' is considered an identifier and must not appear within an operator name
         DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", highlight: "aa", fixIts: ["remove 'aa'"]),
       ], fixedSource: "infix operator --: A"
     )
@@ -302,50 +300,90 @@ final class OperatorDeclTests: XCTestCase {
       infix operator --- : 1️⃣;
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected precedence group name after ':' in operator declaration
-        DiagnosticSpec(message: "expected identifier in operator"),
+        DiagnosticSpec(message: "expected precedence group in operator declaration"),
       ]
     )
   }
 
-  func testOperatorDecl15() {
+  func testOperatorDecl15a() {
     AssertParse(
       """
       precedencegroup 1️⃣{ 
         associativity: right
       }
-      precedencegroup A {
-        associativity 2️⃣right 
-      }
-      precedencegroup B {
-        3️⃣precedence 123 
-      }
-      precedencegroup C {
-        associativity: sinister 
-      }
-      precedencegroup D {
-        assignment: 4️⃣no 
-      }
-      precedencegroup E {
-        higherThan:5️⃣
-      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected identifier after 'precedencegroup'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in precedencegroup"),
-        // TODO: Old parser expected error on line 5: expected colon after attribute name in precedence group
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in 'associativity' property of precedencegroup"),
-        // TODO: Old parser expected error on line 8: 'precedence' is not a valid precedence group attribute
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'precedence 123' in precedencegroup"),
-        // TODO: Old parser expected error on line 11: expected 'none', 'left', or 'right' after 'associativity'
-        // TODO: Old parser expected error on line 14: expected 'true' or 'false' after 'assignment'
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected 'true' in 'assignment' property of precedencegroup"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code 'no' in precedencegroup"),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected name in 'relation' property of precedencegroup"),
-        // TODO: Old parser expected error on line 18: expected name of related precedence group after 'higherThan'
+        DiagnosticSpec(message: "expected name in precedencegroup"),
       ]
     )
   }
+
+  func testOperatorDecl15b() {
+    AssertParse(
+      """
+      precedencegroup A {
+        associativity 1️⃣right
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in 'associativity' property of precedencegroup"),
+      ]
+    )
+  }
+
+
+  func testOperatorDecl15c() {
+    AssertParse(
+      """
+      precedencegroup B {
+        1️⃣precedence 123
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'precedence 123' in precedencegroup"),
+      ]
+    )
+  }
+
+
+  func testOperatorDecl15d() {
+    AssertParse(
+      """
+      precedencegroup C {
+        associativity: sinister
+      }
+      """
+    )
+  }
+
+
+  func testOperatorDecl15e() {
+    AssertParse(
+      """
+      precedencegroup D {
+        assignment: 1️⃣no
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'true' or 'false' after 'assignment'"),
+      ]
+    )
+  }
+
+
+  func testOperatorDecl15() {
+    AssertParse(
+      """
+      precedencegroup E {
+        higherThan:1️⃣
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected name in 'relation' property of precedencegroup"),
+      ]
+    )
+  }
+
 
   func testOperatorDecl16() {
     AssertParse(
@@ -364,10 +402,7 @@ final class OperatorDeclTests: XCTestCase {
         associativity: none
         associativity: left 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'associativity' attribute for precedence group declared multiple times
-      ]
+      """
     )
   }
 
@@ -378,10 +413,7 @@ final class OperatorDeclTests: XCTestCase {
         assignment: true 
         assignment: false 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: 'assignment' attribute for precedence group declared multiple times
-      ]
+      """
     )
   }
 
@@ -391,10 +423,7 @@ final class OperatorDeclTests: XCTestCase {
       class Foo {
         infix operator ||| 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'operator' may only be declared at file scope
-      ]
+      """
     )
   }
 
@@ -402,23 +431,17 @@ final class OperatorDeclTests: XCTestCase {
     AssertParse(
       """
       infix operator **<< : UndeclaredPrecedenceGroup
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: unknown precedence group 'UndeclaredPrecedenceGroup'
-      ]
+      """
     )
   }
 
   func testOperatorDecl21() {
+    // TODO: We should not allow specification of multiple precedence groups
     AssertParse(
       """
       protocol Proto {}
       infix operator *<*< : F, Proto
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 2: expected expression
-      ]
+      """
     )
   }
 
@@ -436,9 +459,7 @@ final class OperatorDeclTests: XCTestCase {
       postfix operator ++:1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: only infix operators may declare a precedence, Fix-It replacements: 20 - 21 = ''
-        DiagnosticSpec(message: "expected identifier in operator"),
-        // TODO: Old parser expected error on line 2: expected precedence group name after ':' in operator declaration
+        DiagnosticSpec(message: "expected precedence group in operator declaration"),
       ]
     )
   }

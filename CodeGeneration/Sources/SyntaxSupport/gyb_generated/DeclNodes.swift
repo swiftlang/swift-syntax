@@ -1258,7 +1258,7 @@ public let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "OperatorDecl",
-       nameForDiagnostics: "operator",
+       nameForDiagnostics: "operator declaration",
        description: "A Swift `operator` declaration.",
        kind: "Decl",
        traits: [

@@ -598,7 +598,7 @@ public enum SyntaxEnum {
     case .enumDecl:
       return "enum"
     case .operatorDecl:
-      return "operator"
+      return "operator declaration"
     case .designatedTypeList:
       return nil
     case .designatedTypeElement:

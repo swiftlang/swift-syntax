@@ -52,9 +52,7 @@ public struct Lexer {
     }
 
     var isEditorPlaceholder: Bool {
-      return self.tokenKind == .identifier &&
-      self.tokenText.starts(with: SyntaxText("<#")) &&
-      self.tokenText.hasSuffix(SyntaxText("#>"))
+      return self.tokenKind == .identifier && self.tokenText.isEditorPlaceholder
     }
 
     @_spi(RawSyntax)

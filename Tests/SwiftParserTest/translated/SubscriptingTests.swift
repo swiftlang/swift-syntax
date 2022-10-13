@@ -422,13 +422,13 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "subscripts cannot have a name", fixIts: ["remove 'x'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "subscripts cannot have a name", fixIts: ["remove 'x<T>'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "subscripts cannot have a name", fixIts: ["remove 'x'"]),
       ], fixedSource: """
       struct A10 {
         subscript (i: Int) -> Int {
           return 0
         }
-        subscript (i: T) -> Int {
+        subscript <T>(i: T) -> Int {
           return 0
         }
       }
@@ -440,7 +440,7 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A11 {
-        subscript 1️⃣x y : 2️⃣Int 3️⃣-> Int 4️⃣{ 
+        subscript 1️⃣x y : 2️⃣Int 3️⃣-> Int 4️⃣{
           return 0
         }
       }

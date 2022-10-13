@@ -305,6 +305,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    if let unexpected = node.unexpectedBetweenSubscriptKeywordAndGenericParameterClause,
+        let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
+      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
+        FixIt(message: RemoveTokensFixIt(tokensToRemove: nameTokens), changes: .makeMissing(tokens: nameTokens))
+      ], handledNodes: [unexpected.id])
+    }
     if let unexpected = node.indices.unexpectedBeforeLeftParen,
         let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
       addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [

@@ -1,5 +1,7 @@
 // This test file has been translated from swift/test/Parse/generic_disambiguation.swift
 
+import SwiftSyntax
+
 import XCTest
 
 final class GenericDisambiguationTests: XCTestCase {
@@ -54,24 +56,85 @@ final class GenericDisambiguationTests: XCTestCase {
     )
   }
 
-  func testGenericDisambiguation6() {
+  func testGenericDisambiguation6a() {
     AssertParse(
       """
       _ = a < b
+      """
+    )
+  }
+
+  func testGenericDisambiguation6b() {
+    AssertParse(
+      """
       _ = (a < b, c > d)
-      // Parses as generic because of lparen after '>'
-      (a < b, c > (d)) 
-      // Parses as generic because of lparen after '>'
-      (a<b, c>(d)) 
-      _ = a>(b)
-      _ = a > (b)
+      """
+    )
+  }
+
+  func testGenericDisambiguation6c() {
+    // Parses as generic because of lparen after '>'
+    AssertParse(
+      """
+      (a < b, c > (d))
       """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: cannot specialize a non-generic definition
-        // TODO: Old parser expected note on line 4: while parsing this '<' as a type parameter bracket
-        // TODO: Old parser expected error on line 6: cannot specialize a non-generic definition
-        // TODO: Old parser expected note on line 6: while parsing this '<' as a type parameter bracket
-      ]
+      substructure: Syntax(GenericArgumentListSyntax([
+        GenericArgumentSyntax(
+          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
+            name: .identifier("b"),
+            genericArgumentClause: nil
+          )),
+          trailingComma: .commaToken()
+        ),
+        GenericArgumentSyntax(
+          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
+            name: .identifier("c"),
+            genericArgumentClause: nil
+          )),
+          trailingComma: nil
+        )
+      ]))
+    )
+  }
+
+  func testGenericDisambiguation6d() {
+    // Parses as generic because of lparen after '>'
+    AssertParse(
+      """
+      (a<b, c>(d))
+      """,
+      substructure: Syntax(GenericArgumentListSyntax([
+        GenericArgumentSyntax(
+          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
+            name: .identifier("b"),
+            genericArgumentClause: nil
+          )),
+          trailingComma: .commaToken()
+        ),
+        GenericArgumentSyntax(
+          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
+            name: .identifier("c"),
+            genericArgumentClause: nil
+          )),
+          trailingComma: nil
+        )
+      ]))
+    )
+  }
+
+  func testGenericDisambiguation6e() {
+    AssertParse(
+      """
+      _ = a>(b)
+      """
+    )
+  }
+
+  func testGenericDisambiguation6f() {
+    AssertParse(
+      """
+      _ = a > (b)
+      """
     )
   }
 
@@ -79,11 +142,7 @@ final class GenericDisambiguationTests: XCTestCase {
     AssertParse(
       """
       generic<Int>(0)
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot explicitly specialize a generic function
-        // TODO: Old parser expected note on line 1: while parsing this '<' as a type parameter bracket
-      ]
+      """
     )
   }
 

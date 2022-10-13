@@ -29,13 +29,7 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
           }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: cannot specialize a non-generic definition
-        // TODO: Old parser expected note on line 5: while parsing this '<' as a type parameter bracket
-        // TODO: Old parser expected error on line 7: cannot specialize a non-generic definition
-        // TODO: Old parser expected note on line 7: while parsing this '<' as a type parameter bracket
-      ]
+      """
     )
   }
 
@@ -61,13 +55,7 @@ final class EnumElementPatternSwift4Tests: XCTestCase {
           case .D(let payload) = e 
         else { return }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: cannot specialize a non-generic definition
-        // TODO: Old parser expected note on line 3: while parsing this '<' as a type parameter bracket
-        // TODO: Old parser expected error on line 5: cannot specialize a non-generic definition
-        // TODO: Old parser expected note on line 5: while parsing this '<' as a type parameter bracket
-      ]
+      """
     )
   }
 

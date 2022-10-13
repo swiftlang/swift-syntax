@@ -68,13 +68,7 @@ final class ForeachAsyncTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 21: found an unexpected second identifier in constant declaration
-        // TODO: Old parser expected note on line 21: join the identifiers together
-        // TODO: Old parser expected note on line 21: join the identifiers together with camel-case
-        // TODO: Old parser expected error on line 21: expected 'in' after for-each pattern
-        // TODO: Old parser expected error on line 21: expected Sequence expression for for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
-        // TODO: Old parser expected error on line 23: expected '{' to start the body of for-each loop
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in 'for' statement"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end 'for' statement"),
       ]

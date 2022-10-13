@@ -50,6 +50,7 @@ let package = Package(
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
+    .library(name: "SwiftSyntaxMacros", type: .static, targets: ["SwiftSyntaxMacros"]),
   ],
   targets: [
     .target(
@@ -140,6 +141,14 @@ let package = Package(
         "SwiftCompilerSupport.h"
       ]
     ),
+    .target(
+      name: "SwiftSyntaxMacros",
+      dependencies: [
+        "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftParser", "SwiftDiagnostics"
+      ],
+      exclude: [
+        "CMakeLists.txt",
+      ]),
     .executableTarget(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]

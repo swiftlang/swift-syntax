@@ -377,9 +377,15 @@ extension Parser {
   /// This should be set if keywords aren't strong recovery marker at this
   /// position, e.g. because the parser expects a punctuator next.
   @_spi(RawSyntax)
-  public mutating func expectIdentifier(keywordRecovery: Bool = false) -> (RawUnexpectedNodesSyntax?, Token) {
-    if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
-      return self.eat(handle)
+  public mutating func expectIdentifier(allowIdentifierLikeKeywords: Bool = true, keywordRecovery: Bool = false) -> (RawUnexpectedNodesSyntax?, Token) {
+    if allowIdentifierLikeKeywords {
+      if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
+        return self.eat(handle)
+      }
+    } else {
+      if let identifier = self.consume(if: .identifier) {
+        return (nil, identifier)
+      }
     }
     if let unknown = self.consume(if: .unknown) {
       return (

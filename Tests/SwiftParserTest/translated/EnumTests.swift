@@ -292,13 +292,16 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in function parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ':' in enum"),
-      ]
+      ], fixedSource: """
+      enum SwitchEnvy {
+        case <#identifier#>(_, var x: <#type#>, <#type#>0):
+      }
+      """
     )
   }
 
@@ -330,10 +333,7 @@ final class EnumTests: XCTestCase {
         case Mopsy
         var ivar : Int 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: enums must not contain stored properties
-      ]
+      """
     )
   }
 
@@ -348,7 +348,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected identifier after comma in enum 'case' declaration
         DiagnosticSpec(message: "expected name in enum case"),
       ]
     )
@@ -362,8 +361,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
-        // TODO: Old parser expected error on line 2: expected pattern
         DiagnosticSpec(message: "expected name in enum case"),
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
@@ -378,7 +375,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -392,7 +388,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -402,16 +397,12 @@ final class EnumTests: XCTestCase {
     AssertParse(
       """
       enum Recovery4 {
-        case Self 1️⃣Self
+        case 1️⃣Self 2️⃣Self
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: in declaration of 'Recovery4'
-        // TODO: Old parser expected error on line 2: keyword 'Self' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 8 - 12 = '`Self`'
-        // TODO: Old parser expected error on line 2: consecutive declarations on a line must be separated by ';', Fix-It replacements: 12 - 12 = ';'
-        // TODO: Old parser expected error on line 2: expected declaration
-        DiagnosticSpec(message: "unexpected code 'Self' in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'Self' cannot be used as an identifier here"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'Self' in enum"),
       ]
     )
   }
@@ -421,17 +412,13 @@ final class EnumTests: XCTestCase {
       """
       enum Recovery5 {
         case 1️⃣.UE3
-        case 2️⃣.UE4, .UE5
+        case 2️⃣.UE4, 3️⃣.UE5
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: extraneous code '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in enum case"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '.UE3' before enum case"),
-        // TODO: Old parser expected error on line 3: extraneous code '.' in enum 'case' declaration, Fix-It replacements: 8 - 9 = ''
-        // TODO: Old parser expected error on line 3: extraneous code '.' in enum 'case' declaration, Fix-It replacements: 14 - 15 = ''
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '.UE4, .UE5' in enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '.' in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '.' in enum case"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '.' in enum case"),
       ]
     )
   }
@@ -448,7 +435,6 @@ final class EnumTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'_' cannot be used as an identifier here"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'_' cannot be used as an identifier here"),
-        // TODO: Old parser expected error on line 20: expected identifier after comma in enum 'case' declaration
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in enum case"),
       ]
     )
@@ -478,10 +464,7 @@ final class EnumTests: XCTestCase {
       enum MultiRawType : Int64, Int32 { 
         case Couch, Davis
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: multiple enum raw types 'Int64' and 'Int32'
-      ]
+      """
     )
   }
 
@@ -834,10 +817,7 @@ final class EnumTests: XCTestCase {
       enum NonliteralRawValue : Int {
         case Yeon = 100 + 20 + 3 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: raw value for enum case must be a literal
-      ]
+      """
     )
   }
 
@@ -914,10 +894,7 @@ final class EnumTests: XCTestCase {
         case Foo = 1 
         case Foo = 1 + 1 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: raw value for enum case must be a literal
-      ]
+      """
     )
   }
 
@@ -1194,10 +1171,7 @@ final class EnumTests: XCTestCase {
           self = SE0036.B(SE0036_Auxiliary())
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 25: '_' can only appear in a pattern or on the left side of an assignment
-      ]
+      """
     )
   }
 
@@ -1218,10 +1192,17 @@ final class EnumTests: XCTestCase {
           }
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: '_' can only appear in a pattern or on the left side of an assignment
-      ]
+      """
+    )
+  }
+
+  func testEnum81b() {
+    AssertParse(
+      """
+      switch self {
+        case A(_): break
+      }
+      """
     )
   }
 
@@ -1242,12 +1223,7 @@ final class EnumTests: XCTestCase {
       enum SE0155 {
         case emptyArgs() 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 2: enum element with associated values must have at least one associated value
-        // TODO: Old parser expected note on line 2: did you mean to remove the empty associated value list?, Fix-It replacements: 17 - 19 = ''
-        // TODO: Old parser expected note on line 2: did you mean to explicitly add a 'Void' associated value?, Fix-It replacements: 18 - 18 = 'Void'
-      ]
+      """
     )
   }
 
@@ -1312,8 +1288,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: keyword 'func' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 2: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 17 - 21 = '`func`'
         DiagnosticSpec(message: "keyword 'func' cannot be used as an identifier here"),
       ]
     )
@@ -1331,8 +1305,6 @@ final class EnumTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected name in enum case"),
-        // TODO: Old parser expected error on line 5: keyword 'case' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 5: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 3 - 7 = '`case`'
       ]
     )
   }
@@ -1374,9 +1346,7 @@ final class EnumTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected identifier after comma in enum 'case' declaration
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in enum case"),
-        // TODO: Old parser expected error on line 3: expected identifier after comma in enum 'case' declaration
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in enum case"),
       ]
     )

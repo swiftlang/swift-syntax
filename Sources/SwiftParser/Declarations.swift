@@ -870,7 +870,8 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
+        let unexpectedPeriod = self.consume(ifAny: [.period, .prefixPeriod])
+        let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
 
         let associatedValue: RawParameterClauseSyntax?
         if self.at(.leftParen, where: { !$0.isAtStartOfLine }) {
@@ -895,7 +896,7 @@ extension Parser {
         // Continue through the comma-separated list.
         keepGoing = self.consume(if: .comma)
         elements.append(RawEnumCaseElementSyntax(
-          unexpectedBeforeName,
+          RawUnexpectedNodesSyntax([unexpectedPeriod.map(RawSyntax.init)] + (unexpectedBeforeName?.elements ?? []), arena: self.arena),
           identifier: name,
           associatedValue: associatedValue,
           rawValue: rawValue,

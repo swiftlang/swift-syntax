@@ -24,14 +24,20 @@ extension RawUnexpectedNodesSyntax {
     })
   }
 
-  /// If `tokens` is not empty, construct a `RawUnexpectedNodesSyntax`
+  /// If `nodes` is not empty, construct a `RawUnexpectedNodesSyntax`
   /// containing those tokens, otherwise return `nil`.
-  init?(_ tokens: [RawTokenSyntax], arena: SyntaxArena) {
-    if tokens.isEmpty {
+  init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType], arena: SyntaxArena) {
+    if nodes.isEmpty {
       return nil
     } else {
-      self.init(elements: tokens.map(RawSyntax.init), arena: arena)
+      self.init(elements: nodes.map(RawSyntax.init), arena: arena)
     }
+  }
+
+  /// If `nodes` contains non-`nil` values, construct a `RawUnexpectedNodesSyntax`
+  /// containing those tokens, otherwise return `nil`.
+  init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType?], arena: SyntaxArena) {
+    self.init(nodes.compactMap({ $0 }), arena: arena)
   }
 }
 

@@ -1592,6 +1592,14 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawSubscriptDeclSyntax {
     let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.eat(handle)
+
+    let unexpectedName: RawTokenSyntax?
+    if self.at(.identifier) && self.peek().starts(with: "<") || self.peek().tokenKind == .leftParen {
+      unexpectedName = self.consumeAnyToken()
+    } else {
+      unexpectedName = nil
+    }
+
     let genericParameterClause: RawGenericParameterClauseSyntax?
     if self.currentToken.starts(with: "<") {
       genericParameterClause = self.parseGenericParameters()
@@ -1624,6 +1632,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeSubscriptKeyword,
       subscriptKeyword: subscriptKeyword,
+      RawUnexpectedNodesSyntax([unexpectedName], arena: self.arena),
       genericParameterClause: genericParameterClause,
       indices: indices,
       result: result,

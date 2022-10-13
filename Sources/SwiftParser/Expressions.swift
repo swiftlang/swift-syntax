@@ -1162,7 +1162,7 @@ extension Parser {
   public mutating func parseIdentifierExpression() -> RawExprSyntax {
     let (name, args) = self.parseDeclNameRef(.compoundNames)
     guard self.lookahead().canParseAsGenericArgumentList() else {
-      if name.tokenText.hasPrefix("<#") && name.tokenText.hasSuffix("#>") && args == nil {
+      if name.tokenText.isEditorPlaceholder && args == nil {
         return RawExprSyntax(
           RawEditorPlaceholderExprSyntax(
             identifier: name,

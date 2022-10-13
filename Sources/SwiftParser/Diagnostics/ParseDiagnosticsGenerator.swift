@@ -194,7 +194,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           fixIts = []
         }
 
-        addDiagnostic(invalidIdentifier, InvalidIdentifierError(invalidIdentifier: invalidIdentifier), fixIts: fixIts, handledNodes: [previousParent.id])
+        addDiagnostic(
+          invalidIdentifier,
+          InvalidIdentifierError(invalidIdentifier: invalidIdentifier, missingIdentifier: node),
+          fixIts: fixIts,
+          handledNodes: [previousParent.id]
+        )
       } else {
         return handleMissingSyntax(node)
       }

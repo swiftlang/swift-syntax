@@ -2161,13 +2161,13 @@ extension Lexer.Cursor {
 
 extension Unicode.Scalar {
   var isValidIdentifierContinuationCodePoint: Bool {
-    let c = self.value
-    if c < 0x80 {
-      return self.isAsciiIdentifierContinue || c == UInt32(UInt8(ascii: "$"))
+    if self.isASCII {
+      return self.isAsciiIdentifierContinue
     }
 
     // N1518: Recommendations for extended identifier characters for C and C++
     // Proposed Annex X.1: Ranges of characters allowed
+    let c = self.value
     return c == 0x00A8 || c == 0x00AA || c == 0x00AD || c == 0x00AF
       || (c >= 0x00B2 && c <= 0x00B5) || (c >= 0x00B7 && c <= 0x00BA)
       || (c >= 0x00BC && c <= 0x00BE) || (c >= 0x00C0 && c <= 0x00D6)
@@ -2217,17 +2217,16 @@ extension Unicode.Scalar {
   }
 
   var isValidIdentifierStartCodePoint: Bool {
-    guard self.isValidIdentifierContinuationCodePoint else {
-      return false
+    if (self.isASCII) {
+      return self.isAsciiIdentifierStart
     }
-
-    let c = self.value
-    if c < 0x80 && (self.isDigit || c == UInt8(ascii: "$")) {
+    guard self.isValidIdentifierContinuationCodePoint else {
       return false
     }
 
     // N1518: Recommendations for extended identifier characters for C and C++
     // Proposed Annex X.2: Ranges of characters disallowed initially
+    let c = self.value
     if ((c >= 0x0300 && c <= 0x036F) ||
         (c >= 0x1DC0 && c <= 0x1DFF) ||
         (c >= 0x20D0 && c <= 0x20FF) ||

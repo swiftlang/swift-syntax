@@ -120,8 +120,10 @@ func nodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ nodes: [Synta
     return (nil, "syntax")
   case 1:
     return (nil, "\(partDescriptions.first!)")
+  case 2:
+    return (nil, "\(partDescriptions.first!) and \(partDescriptions.last!)")
   default:
-    return (nil, "\(partDescriptions[0..<partDescriptions.count - 1].joined(separator: ", ")) and \(partDescriptions.last!)")
+    return (nil, "\(partDescriptions[0..<partDescriptions.count - 1].joined(separator: ", ")), and \(partDescriptions.last!)")
   }
 }
 

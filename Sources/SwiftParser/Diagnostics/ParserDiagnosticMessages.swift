@@ -100,7 +100,7 @@ public struct EffectsSpecifierAfterArrow: ParserError {
   public let effectsSpecifiersAfterArrow: [TokenSyntax]
 
   public var message: String {
-    "\(missingNodesDescription(effectsSpecifiersAfterArrow)) may only occur before '->'"
+    "\(nodesDescription(effectsSpecifiersAfterArrow, format: false)) may only occur before '->'"
   }
 }
 
@@ -109,6 +109,14 @@ public struct ExtaneousCodeAtTopLevel: ParserError {
 
   public var message: String {
     return "extraneous \(extraneousCode.shortSingleLineContentDescription) at top level"
+  }
+}
+
+public struct IdentifierNotAllowedInOperatorName: ParserError {
+  public let identifier: TokenSyntax
+
+  public var message: String {
+    return "\(nodesDescription([identifier], format: false)) is considered an identifier and must not appear within an operator name"
   }
 }
 
@@ -135,6 +143,14 @@ public struct MissingAttributeArgument: ParserError {
 
   public var message: String {
     return "expected argument for '@\(attributeName)' attribute"
+  }
+}
+
+public struct TokensNotAllowedInOperatorName: ParserError {
+  public let tokens: [TokenSyntax]
+
+  public var message: String {
+    return "\(nodesDescription(tokens, format: false)) is not allowed in operator names"
   }
 }
 
@@ -185,7 +201,7 @@ public struct MoveTokensAfterFixIt: ParserFixIt {
   public let after: RawTokenKind
 
   public var message: String {
-    "move \(missingNodesDescription(movedTokens)) after '\(after.nameForDiagnostics)'"
+    "move \(nodesDescription(movedTokens, format: false)) after '\(after.nameForDiagnostics)'"
   }
 }
 
@@ -197,7 +213,7 @@ public struct MoveTokensInFrontOfFixIt: ParserFixIt {
   public let inFrontOf: RawTokenKind
 
   public var message: String {
-    "move \(missingNodesDescription(movedTokens)) in front of '\(inFrontOf.nameForDiagnostics)'"
+    "move \(nodesDescription(movedTokens, format: false)) in front of '\(inFrontOf.nameForDiagnostics)'"
   }
 }
 
@@ -205,15 +221,23 @@ public struct RemoveRedundantFixIt: ParserFixIt {
   public let removeTokens: [TokenSyntax]
 
   public var message: String {
-    "remove redundant \(missingNodesDescription(removeTokens))"
+    "remove redundant \(nodesDescription(removeTokens, format: false))"
   }
 }
 
-public struct RemoveTokensFixIt: ParserFixIt {
-  public let tokensToRemove: [TokenSyntax]
+public struct RemoveNodesFixIt: ParserFixIt {
+  public let nodesToRemove: [Syntax]
+
+  init<SyntaxType: SyntaxProtocol>(_ nodesToRemove: [SyntaxType]) {
+    self.nodesToRemove = nodesToRemove.map(Syntax.init)
+  }
+
+  init<SyntaxType: SyntaxProtocol>(_ nodeToRemove: SyntaxType) {
+    self.nodesToRemove = [Syntax(nodeToRemove)]
+  }
 
   public var message: String {
-    "remove \(missingNodesDescription(tokensToRemove))"
+    "remove \(nodesDescription(nodesToRemove, format: false))"
   }
 }
 
@@ -223,6 +247,6 @@ public struct ReplaceTokensFixIt: ParserFixIt {
   public let replacement: TokenSyntax
 
   public var message: String {
-    "replace \(missingNodesDescription(replaceTokens)) by '\(replacement.text)'"
+    "replace \(nodesDescription(replaceTokens, format: false)) by '\(replacement.text)'"
   }
 }

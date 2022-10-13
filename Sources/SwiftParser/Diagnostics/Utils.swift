@@ -13,10 +13,11 @@
 extension String {
   /// Remove any leading or trailing spaces.
   /// This is necessary to avoid depending SwiftParser on Foundation.
-  func trimmingSpaces() -> String {
+  func trimmingWhitespace() -> String {
+    let charactersToDrop: [Character] = [" ", "\t", "\n", "\r"]
     var result: Substring = Substring(self)
-    result = result.drop(while: { $0 == " " })
-    while result.last == " " {
+    result = result.drop(while: { charactersToDrop.contains($0) })
+    while let lastCharacter = result.last, charactersToDrop.contains(lastCharacter) {
       result = result.dropLast(1)
     }
     return String(result)

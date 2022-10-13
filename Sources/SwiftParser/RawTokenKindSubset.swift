@@ -516,6 +516,52 @@ enum Operator: RawTokenKindSubset {
   }
 }
 
+/// Tokens that can be used in operator declarations
+enum OperatorLike: RawTokenKindSubset {
+  case `operator`(Operator)
+  case exclamationMark
+  case infixQuestionMark
+  case postfixQuestionMark
+  case equal
+  case arrow
+
+  init?(lexeme: Lexer.Lexeme) {
+    if let op = Operator(lexeme: lexeme) {
+      self = .operator(op)
+      return
+    }
+    switch lexeme.tokenKind {
+    case .exclamationMark: self = .exclamationMark
+    case .infixQuestionMark: self = .infixQuestionMark
+    case .postfixQuestionMark: self = .postfixQuestionMark
+    case .equal: self = .equal
+    case .arrow: self = .arrow
+    default: return nil
+    }
+  }
+
+  static var allCases: [OperatorLike] {
+    return Operator.allCases.map(Self.operator) + [
+      .exclamationMark,
+      .infixQuestionMark,
+      .postfixQuestionMark,
+      .equal,
+      .arrow,
+    ]
+  }
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .operator(let op): return op.rawTokenKind
+    case .exclamationMark: return .exclamationMark
+    case .infixQuestionMark: return .infixQuestionMark
+    case .postfixQuestionMark: return .postfixQuestionMark
+    case .equal: return .equal
+    case .arrow: return .arrow
+    }
+  }
+}
+
 enum PoundDeclarationStart: RawTokenKindSubset {
   case poundIfKeyword
   case poundWarningKeyword

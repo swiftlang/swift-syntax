@@ -504,7 +504,7 @@ public enum SyntaxEnum {
     case .associatedtypeDecl:
       return "associatedtype declaration"
     case .functionParameterList:
-      return "function parameter list"
+      return "parameter list"
     case .parameterClause:
       return "parameter clause"
     case .returnClause:
@@ -556,7 +556,7 @@ public enum SyntaxEnum {
     case .initializerClause:
       return nil
     case .functionParameter:
-      return "function parameter"
+      return "parameter"
     case .modifierList:
       return nil
     case .functionDecl:

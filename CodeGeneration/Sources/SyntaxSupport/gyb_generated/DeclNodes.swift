@@ -98,7 +98,7 @@ public let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "FunctionParameterList",
-       nameForDiagnostics: "function parameter list",
+       nameForDiagnostics: "parameter list",
        kind: "SyntaxCollection",
        element: "FunctionParameter"),
 
@@ -712,7 +712,7 @@ public let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "FunctionParameter",
-       nameForDiagnostics: "function parameter",
+       nameForDiagnostics: "parameter",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"

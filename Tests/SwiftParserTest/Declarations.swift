@@ -574,7 +574,7 @@ final class DeclarationTests: XCTestCase {
       "(first second 1️⃣Int)",
       { $0.parseFunctionSignature() },
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in function parameter")
+        DiagnosticSpec(message: "expected ':' in parameter")
       ]
     )
   }
@@ -584,7 +584,7 @@ final class DeclarationTests: XCTestCase {
       "(first second 1️⃣third fourth: Int)",
       { $0.parseFunctionSignature() },
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'third fourth' in function parameter")
+        DiagnosticSpec(message: "unexpected code 'third fourth' in parameter")
       ]
     )
   }
@@ -771,7 +771,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'third' in function parameter")
+        DiagnosticSpec(message: "unexpected code 'third' in parameter")
       ]
     )
   }
@@ -793,7 +793,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'third fourth' in function parameter")
+        DiagnosticSpec(message: "unexpected code 'third fourth' in parameter")
       ]
     )
   }
@@ -813,7 +813,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected name and member block in struct"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous code ': Int) {}' at top level"),
@@ -843,7 +843,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '[third fourth]' in function parameter")
+        DiagnosticSpec(message: "unexpected code '[third fourth]' in parameter")
       ]
     )
   }
@@ -867,7 +867,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣" , message: "expected ']' to end array type"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'fourth: Int' in parameter clause")
       ]
@@ -892,7 +892,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in function parameter"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ': Int) {}' at top level")
       ]

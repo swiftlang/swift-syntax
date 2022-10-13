@@ -104,7 +104,6 @@ final class EnumTests: XCTestCase {
       1️⃣case FloatingCase
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: enum 'case' is not allowed outside of an enum
         DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
       ]
     )
@@ -116,10 +115,7 @@ final class EnumTests: XCTestCase {
       struct SomeStruct {
         case StructCase 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: enum 'case' is not allowed outside of an enum
-      ]
+      """
     )
   }
 
@@ -129,10 +125,7 @@ final class EnumTests: XCTestCase {
       class SomeClass {
         case ClassCase 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: enum 'case' is not allowed outside of an enum
-      ]
+      """
     )
   }
 
@@ -145,10 +138,7 @@ final class EnumTests: XCTestCase {
       extension EnumWithExtension1 {
         case A2 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 5: enum 'case' is not allowed outside of an enum
-      ]
+      """
     )
   }
 
@@ -179,7 +169,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -193,7 +182,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -207,7 +195,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -221,7 +208,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code 'where true:' in enum"),
       ]
     )
@@ -235,7 +221,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -249,7 +234,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(message: "unexpected code 'where true:' in enum"),
       ]
     )
@@ -263,7 +247,6 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ':' in enum"),
       ]
@@ -294,8 +277,8 @@ final class EnumTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in function parameter"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function parameter"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ':' in enum"),
       ]

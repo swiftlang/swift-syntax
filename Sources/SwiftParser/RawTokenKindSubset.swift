@@ -524,6 +524,7 @@ enum OperatorLike: RawTokenKindSubset {
   case postfixQuestionMark
   case equal
   case arrow
+  case regexLiteral // regex literals can look like operators, e.g. '/^/'
 
   init?(lexeme: Lexer.Lexeme) {
     if let op = Operator(lexeme: lexeme) {
@@ -536,6 +537,7 @@ enum OperatorLike: RawTokenKindSubset {
     case .postfixQuestionMark: self = .postfixQuestionMark
     case .equal: self = .equal
     case .arrow: self = .arrow
+    case .regexLiteral: self = .regexLiteral
     default: return nil
     }
   }
@@ -547,6 +549,7 @@ enum OperatorLike: RawTokenKindSubset {
       .postfixQuestionMark,
       .equal,
       .arrow,
+      .regexLiteral
     ]
   }
 
@@ -558,6 +561,14 @@ enum OperatorLike: RawTokenKindSubset {
     case .postfixQuestionMark: return .postfixQuestionMark
     case .equal: return .equal
     case .arrow: return .arrow
+    case .regexLiteral: return .regexLiteral
+    }
+  }
+
+  var precedence: TokenPrecedence? {
+    switch self {
+    case .regexLiteral: return TokenPrecedence(.spacedBinaryOperator)
+    default: return nil
     }
   }
 }

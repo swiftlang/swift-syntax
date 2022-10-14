@@ -473,4 +473,7 @@ final class OperatorDeclTests: XCTestCase {
     )
   }
 
+  func testRegexLikeOperator() {
+    AssertParse("prefix operator /^/")
+  }
 }

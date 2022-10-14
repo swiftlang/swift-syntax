@@ -313,6 +313,20 @@ extension Parser {
 }
 
 extension Parser {
+  /// Attempt to consume an ellipsis prefix, splitting the current token if
+  /// necessary.
+  mutating func tryConsumeEllipsisPrefix() -> RawTokenSyntax? {
+    // It is not sufficient to check currentToken.isEllipsis here, as we may
+    // have something like '...>'.
+    // TODO: Recovery for different numbers of dots (which also needs to be
+    // done for regular variadics).
+    guard self.at(anyIn: Operator.self) != nil else { return nil }
+    let text = self.currentToken.tokenText
+    guard text.hasPrefix("...") else { return nil }
+    return self.consumePrefix(
+      SyntaxText(rebasing: text.prefix(3)), as: .ellipsis)
+  }
+
   @_spi(RawSyntax)
   public mutating func parseGenericParameters() -> RawGenericParameterClauseSyntax {
     assert(self.currentToken.starts(with: "<"))
@@ -329,6 +343,9 @@ extension Parser {
         if attributes == nil && unexpectedBeforeName == nil && name.isMissing && elements.isEmpty {
           break
         }
+
+        // Parse the ellipsis for a type parameter pack  'T...'.
+        let ellipsis = tryConsumeEllipsisPrefix()
 
         // Parse the ':' followed by a type.
         let colon = self.consume(if: .colon)
@@ -347,6 +364,7 @@ extension Parser {
           attributes: attributes,
           unexpectedBeforeName,
           name: name,
+          ellipsis: ellipsis,
           colon: colon,
           inheritedType: inherited,
           trailingComma: keepGoing,
@@ -1102,6 +1120,13 @@ extension Parser {
         arena: self.arena)
     }
 
+    // Detect an attempt to use a type parameter pack.
+    var unexpectedAfterName: RawUnexpectedNodesSyntax?
+    if let ellipsis = tryConsumeEllipsisPrefix() {
+      unexpectedAfterName = RawUnexpectedNodesSyntax(
+        elements: [RawSyntax(ellipsis)], arena: self.arena)
+    }
+
     // Parse optional inheritance clause.
     let inheritance: RawTypeInheritanceClauseSyntax?
     if self.at(.colon) {
@@ -1137,6 +1162,7 @@ extension Parser {
       associatedtypeKeyword: assocKeyword,
       unexpectedBeforeName,
       identifier: name,
+      unexpectedAfterName,
       inheritanceClause: inheritance,
       initializer: defaultType,
       genericWhereClause: whereClause,

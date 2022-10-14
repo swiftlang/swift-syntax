@@ -145,6 +145,29 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     addDiagnostic(incorrectContainer, message(misplacedTokens), fixIts: fixIts, handledNodes: [incorrectContainer.id] + correctAndMissingTokens.map(\.id))
   }
 
+  /// Utility function to remove a misplaced token with a custom error message.
+  public func removeToken(
+    _ unexpected: UnexpectedNodesSyntax?,
+    where predicate: (TokenSyntax) -> Bool,
+    message: (TokenSyntax) -> DiagnosticMessage
+  ) {
+    guard let unexpected = unexpected,
+          let misplacedToken = unexpected.onlyToken(where: predicate)
+    else {
+      // If there is no unexpected node or the unexpected doesn't have the
+      // expected token, don't emit a diagnostic.
+      return
+    }
+    let fixit = FixIt(
+      message: RemoveNodesFixIt(unexpected),
+      changes: [.remove(unexpected: unexpected)]
+    )
+    addDiagnostic(
+      unexpected, message(misplacedToken), fixIts: [fixit],
+      handledNodes: [unexpected.id]
+    )
+  }
+
   // MARK: - Generic diagnostic generation
 
   public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
@@ -560,6 +583,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if node.colonMark.presence == .missing {
       addDiagnostic(node.colonMark, .missingColonInTernaryExprDiagnostic, handledNodes: [node.colonMark.id])
     }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // Emit a custom diagnostic for an unexpected '...' after an associatedtype
+    // name.
+    removeToken(
+      node.unexpectedBetweenIdentifierAndInheritanceClause,
+      where: { $0.tokenKind == .ellipsis },
+      message: { _ in StaticParserError.associatedTypeCannotUsePack }
+    )
     return .visitChildren
   }
 

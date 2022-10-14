@@ -169,24 +169,187 @@ final class TypeTests: XCTestCase {
       }
       """)
   }
+}
 
-  func testPackExpansion() throws {
+final class TypeParameterPackTests: XCTestCase {
+  func testParameterPacks1() throws {
     AssertParse(
       """
-      func f1<@_typeSequence T>() -> T... {}
-      func f2<@_typeSequence T>() -> (T...) {}
-      func f3<@_typeSequence T>() -> G<T... > {}
+      func f1<T...>() -> T... {}
       """)
-
+  }
+  func testParameterPacks2() throws {
     AssertParse(
       """
-      enum E<@_typeSequence T> {
+      func f2<T...>() -> (T...) {}
+      """)
+  }
+  func testParameterPacks3() throws {
+    AssertParse(
+      """
+      func f3<T...>() -> G<T... > {}
+      """)
+  }
+  func testParameterPacks4() throws {
+    AssertParse(
+      """
+      protocol P {
+        associatedtype T1️⃣...
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "associated types cannot be variadic",
+                       fixIts: ["remove '...'"])
+      ])
+  }
+  func testParameterPacks5() throws {
+    AssertParse(
+    """
+    typealias Alias<T...> = (T...)
+    """)
+  }
+  func testParameterPacks6() throws {
+    AssertParse(
+      """
+      struct S<T...> {}
+      """)
+  }
+  func testParameterPacks7() throws {
+    AssertParse(
+      """
+      struct S<T, U...> {}
+      """)
+  }
+  func testParameterPacks8() throws {
+    AssertParse(
+      """
+      struct S<T..., U> {}
+      """)
+  }
+  func testParameterPacks9() throws {
+    AssertParse(
+      """
+      struct S<T...:P, U> {}
+      """)
+  }
+  func testParameterPacks10() throws {
+    AssertParse(
+      """
+      struct S<T... :P, U> {}
+      """)
+  }
+  func testParameterPacks11() throws {
+    AssertParse(
+      """
+      struct S<T...: P> {}
+      """)
+  }
+  func testParameterPacks12() throws {
+    AssertParse(
+      """
+      struct S<T... : P> {}
+      """)
+  }
+  func testParameterPacks13() throws {
+    AssertParse(
+      """
+      func foo<T...>(_ x: T...) {}
+      """)
+  }
+  func testParameterPacks14() throws {
+    AssertParse(
+      """
+      func foo<T...:P>(_ x: T...) {}
+      """)
+  }
+  func testParameterPacks15() throws {
+    AssertParse(
+      """
+      func foo<T... :P>(_ x: T...) {}
+      """)
+  }
+  func testParameterPacks16() throws {
+    AssertParse(
+      """
+      func foo<T... : P>(_ x: T...) {}
+      """)
+  }
+  func testParameterPacks17() throws {
+    AssertParse(
+      """
+      func foo<T...: P>(_ x: T...) {}
+      """)
+  }
+  func testParameterPacks18() throws {
+    AssertParse(
+      """
+      func foo<T, U, V...>(x: T, y: U, z: V...) { }
+      """)
+  }
+  func testParameterPacks19() throws {
+    AssertParse(
+      """
+      func foo<T, U..., V>(x: T, y: U..., z: V) { }
+      """)
+  }
+  func testParameterPacks20() throws {
+    AssertParse(
+      """
+      func foo<T..., U..., V...>(x: T..., y: U..., z: V...) { }
+      """)
+  }
+  func testParameterPacks21() throws {
+    AssertParse(
+      """
+      enum E<T...> {
         case f1(_: T...)
+      }
+      """)
+  }
+  func testParameterPacks22() throws {
+    AssertParse(
+      """
+      enum E<T...> {
         case f2(_: G<T... >)
+      }
+      """)
+  }
+  func testParameterPacks23() throws {
+    AssertParse(
+      """
+      enum E<T...> {
         var x: T... { fatalError() }
+      }
+      """)
+  }
+  func testParameterPacks24() throws {
+    AssertParse(
+      """
+      enum E<T...> {
         var x: (T...) { fatalError() }
+      }
+      """)
+  }
+  func testParameterPacks25() throws {
+    AssertParse(
+      """
+      enum E<T...> {
         subscript(_: T...) -> Int { fatalError() }
+      }
+      """)
+  }
+  func testParameterPacks26() throws {
+    AssertParse(
+      """
+      enum E<T...> {
         subscript() -> T... { fatalError() }
+      }
+      """)
+  }
+  func testParameterPacks27() throws {
+    AssertParse(
+      """
+      enum E<T...> {
         subscript() -> (T...) { fatalError() }
       }
       """)

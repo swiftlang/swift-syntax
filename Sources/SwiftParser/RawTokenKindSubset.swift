@@ -737,6 +737,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case leftSquareBracket
   case nilKeyword
   case period
+  case pound // For recovery of unknown directives
   case poundColorLiteralKeyword
   case poundColumnKeyword
   case poundDsohandleKeyword
@@ -776,6 +777,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .leftSquareBracket: self = .leftSquareBracket
     case .nilKeyword: self = .nilKeyword
     case .period: self = .period
+    case .pound: self = .pound
     case .poundColorLiteralKeyword: self = .poundColorLiteralKeyword
     case .poundColumnKeyword: self = .poundColumnKeyword
     case .poundDsohandleKeyword: self = .poundDsohandleKeyword
@@ -818,6 +820,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .leftSquareBracket: return .leftSquareBracket
     case .nilKeyword: return .nilKeyword
     case .period: return .period
+    case .pound: return .pound
     case .poundColorLiteralKeyword: return .poundColorLiteralKeyword
     case .poundColumnKeyword: return .poundColumnKeyword
     case .poundDsohandleKeyword: return .poundDsohandleKeyword

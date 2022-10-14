@@ -2,11 +2,11 @@ import Foundation
 import SwiftSyntax
 import SwiftParser
 
-/// MigrateToNewIfLetSyntax will visit each if statement in the Syntax tree, and
-/// checks if the there is an if condition which is of the pre Swift 5.7 "if-let-style"
-/// and rewrites it to the new one
+/// MigrateToNewIfLetSyntax will visit each `if` statement in the syntax tree
+/// replacing all "old style" optional bindings by the new shorter syntax available
+/// since Swift 5.7.
 ///
-/// For example will it turn:
+/// For example, it will turn:
 /// ```
 /// if let foo = foo {
 ///   ...
@@ -18,20 +18,20 @@ import SwiftParser
 ///   ...
 /// }
 class MigrateToNewIfLetSyntax: SyntaxRewriter {
-  // Visit over all IfStmtSyntax nodes
+  // Visit all `if` statements.
   override func visit(_ node: IfStmtSyntax) -> StmtSyntax {
-    // For each node, visit all conditions in this node
+    // Visit all conditions in the node.
     let newConditions = node.conditions.enumerated().map { (index, condition) in
       var conditionCopy = condition
-      // check if the condition is a OptionalBindingConditionSyntax...
+      // Check if the condition is an optional binding ...
       if var binding = condition.condition.as(OptionalBindingConditionSyntax.self),
-         // ...and has an initializer
+         // ... and has an initializer ...
          let initializer = binding.initializer,
-         // and the name of the variable pattern and the initializer is the same, ignoring any whitespace
+         // ... and both sides of the assignment are the same identifiers.
          binding.pattern.withoutTrivia().description == initializer.value.withoutTrivia().description {
-        // Remove the initializer
+        // Remove the initializer ... 
         binding.initializer = nil
-        // And remove whitespace (the space before the comma) in if statements with multiple conditions
+        // ... and remove whitespace before the comma (in `if` statements with multiple conditions).
         if index != node.conditions.count - 1 {
           binding.pattern = binding.pattern.withoutTrailingTrivia()
         }

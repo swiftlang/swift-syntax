@@ -151,6 +151,14 @@ public struct MissingAttributeArgument: ParserError {
   }
 }
 
+public struct SpecifierOnParameterName: ParserError {
+  public let misplacedSpecifiers: [TokenSyntax]
+
+  public var message: String {
+    return "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed"
+  }
+}
+
 public struct TokensNotAllowedInOperatorName: ParserError {
   public let tokens: [TokenSyntax]
 
@@ -215,6 +223,15 @@ public struct MoveTokensAfterFixIt: ParserFixIt {
 
   public var message: String {
     "move \(nodesDescription(movedTokens, format: false)) after '\(after.nameForDiagnostics)'"
+  }
+}
+
+public struct MoveTokensAfterTypeFixIt: ParserFixIt {
+  /// The token that should be moved
+  public let movedTokens: [TokenSyntax]
+
+  public var message: String {
+    "move \(nodesDescription(movedTokens, format: false)) after type"
   }
 }
 

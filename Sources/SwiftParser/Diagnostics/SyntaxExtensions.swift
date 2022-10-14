@@ -102,3 +102,14 @@ extension SyntaxProtocol {
     return nil
   }
 }
+
+extension TokenKind {
+  var isIdentifier: Bool {
+    switch self {
+    case .identifier:
+      return true
+    default:
+      return false
+    }
+  }
+}

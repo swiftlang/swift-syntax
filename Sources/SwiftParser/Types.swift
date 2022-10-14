@@ -32,8 +32,8 @@ extension Parser {
   ///     type → self-type
   ///     type → '(' type ')'
   @_spi(RawSyntax)
-  public mutating func parseType() -> RawTypeSyntax {
-    let type = self.parseTypeScalar()
+  public mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+    let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
 
     // Parse pack expansion 'T...'.
     if self.currentToken.isEllipsis {
@@ -47,8 +47,8 @@ extension Parser {
     return type
   }
 
-  mutating func parseTypeScalar() -> RawTypeSyntax {
-    let (specifier, attrList) = self.parseTypeAttributeList()
+  mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+    let (specifier, attrList) = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
     if self.lookahead().isAtFunctionTypeArrow() {
       let firstEffect = self.parseEffectsSpecifier()
@@ -783,8 +783,12 @@ extension Parser.Lookahead {
 
 extension Parser {
   @_spi(RawSyntax)
-  public mutating func parseTypeAttributeList() -> (RawTokenSyntax?, RawAttributeListSyntax?) {
-    let specifier = self.consume(ifAny: [.inoutKeyword], contextualKeywords: ["__shared", "__owned"])
+  public mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (RawTokenSyntax?, RawAttributeListSyntax?) {
+    var specifier: RawTokenSyntax? = self.consume(ifAnyIn: TypeSpecifier.self)
+    // We can only stick one specifier on this type. Let's pick the first one
+    if specifier == nil, let misplacedSpecifier = misplacedSpecifiers.first {
+      specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
+    }
 
     if self.at(any: [.atSign, .inoutKeyword]) {
       return (specifier, self.parseTypeAttributeListPresent())

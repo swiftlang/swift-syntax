@@ -1351,6 +1351,11 @@ extension Parser {
 
         let modifiers = parseParameterModifiers(for: subject)
 
+        var misplacedSpecifiers: [RawTokenSyntax] = []
+        while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
+          misplacedSpecifiers.append(specifier)
+        }
+
         let firstName: RawTokenSyntax?
         let secondName: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
@@ -1387,7 +1392,7 @@ extension Parser {
 
         let type: RawTypeSyntax?
         if shouldParseType {
-          type = self.parseType()
+          type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
         } else {
           type = nil
         }
@@ -1411,6 +1416,7 @@ extension Parser {
         elements.append(RawFunctionParameterSyntax(
           attributes: attrs,
           modifiers: modifiers,
+          RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
           firstName: firstName,
           secondName: secondName,
           unexpectedBeforeColon,

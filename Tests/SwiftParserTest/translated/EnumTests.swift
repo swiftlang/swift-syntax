@@ -385,7 +385,7 @@ final class EnumTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'Self' cannot be used as an identifier here"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'Self' in enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'Self' keyword in enum"),
       ]
     )
   }

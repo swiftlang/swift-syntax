@@ -83,6 +83,10 @@ extension SyntaxProtocol {
       } else {
         return "braces"
       }
+    } else if let token = Syntax(self).as(UnexpectedNodesSyntax.self)?.onlyTokens(satisfying: { $0.tokenKind.isKeyword })?.only {
+      return "'\(token.text)' keyword"
+    } else if let token = Syntax(self).as(TokenSyntax.self) {
+      return "'\(token.text)' keyword"
     } else if contentWithoutTrivia.contains("\n") || contentWithoutTrivia.count > 100 {
       return "code"
     } else {

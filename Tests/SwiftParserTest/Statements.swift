@@ -467,4 +467,8 @@ final class StatementTests: XCTestCase {
         trailingClosure: nil,
         additionalTrailingClosures: nil)))
   }
+
+  func testDefaultIdentIdentifierInReturnStmt() {
+    AssertParse("return FileManager.default")
+  }
 }

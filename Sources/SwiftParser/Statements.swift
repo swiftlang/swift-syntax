@@ -24,6 +24,16 @@ extension TokenConsumer {
   }
 }
 
+extension Parser.Lookahead {
+  mutating func atStartOfSwitchCaseItem() -> Bool {
+    while self.consume(if: .atSign) != nil {
+      self.consume(if: .identifier)
+    }
+
+    return self.at(anyIn: SwitchCaseStart.self) != nil
+  }
+}
+
 extension Parser {
   /// Parse a statement.
   ///
@@ -1126,6 +1136,11 @@ extension Parser.Lookahead {
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
   public mutating func isStartOfStatement(allowRecovery: Bool = false) -> Bool {
+    if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign)) && withLookahead({ $0.atStartOfSwitchCaseItem() }) {
+      // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expresion.
+      return true
+    }
+
     _ = self.consume(if: .identifier, followedBy: .colon)
     let switchSubject: CanBeStatementStart?
     if allowRecovery {

@@ -21215,7 +21215,9 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     attributes: AttributeListSyntax?,
     _ unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndEllipsis: UnexpectedNodesSyntax? = nil,
+    ellipsis: TokenSyntax?,
+    _ unexpectedBetweenEllipsisAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax?,
     _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
     inheritedType: TypeSyntax?,
@@ -21228,7 +21230,9 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       attributes?.raw,
       unexpectedBetweenAttributesAndName?.raw,
       name.raw,
-      unexpectedBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndEllipsis?.raw,
+      ellipsis?.raw,
+      unexpectedBetweenEllipsisAndColon?.raw,
       colon?.raw,
       unexpectedBetweenColonAndInheritedType?.raw,
       inheritedType?.raw,
@@ -21343,30 +21347,72 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterSyntax(newData)
   }
 
-  public var unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndEllipsis: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenNameAndColon(value)
+      self = withUnexpectedBetweenNameAndEllipsis(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndColon` replaced.
-  /// - param newChild: The new `unexpectedBetweenNameAndColon` to replace the node's
-  ///                   current `unexpectedBetweenNameAndColon`, if present.
-  public func withUnexpectedBetweenNameAndColon(
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndEllipsis` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndEllipsis` to replace the node's
+  ///                   current `unexpectedBetweenNameAndEllipsis`, if present.
+  public func withUnexpectedBetweenNameAndEllipsis(
     _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return GenericParameterSyntax(newData)
   }
 
-  public var colon: TokenSyntax? {
+  public var ellipsis: TokenSyntax? {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEllipsis(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `ellipsis` replaced.
+  /// - param newChild: The new `ellipsis` to replace the node's
+  ///                   current `ellipsis`, if present.
+  public func withEllipsis(
+    _ newChild: TokenSyntax?) -> GenericParameterSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 5)
+    return GenericParameterSyntax(newData)
+  }
+
+  public var unexpectedBetweenEllipsisAndColon: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenEllipsisAndColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenEllipsisAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenEllipsisAndColon` to replace the node's
+  ///                   current `unexpectedBetweenEllipsisAndColon`, if present.
+  public func withUnexpectedBetweenEllipsisAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return GenericParameterSyntax(newData)
+  }
+
+  public var colon: TokenSyntax? {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -21381,13 +21427,13 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withColon(
     _ newChild: TokenSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 5)
+    let newData = data.replacingChild(raw, at: 7)
     return GenericParameterSyntax(newData)
   }
 
   public var unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -21402,13 +21448,13 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenColonAndInheritedType(
     _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 8)
     return GenericParameterSyntax(newData)
   }
 
   public var inheritedType: TypeSyntax? {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeSyntax(childData!)
     }
@@ -21423,13 +21469,13 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withInheritedType(
     _ newChild: TypeSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 9)
     return GenericParameterSyntax(newData)
   }
 
   public var unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -21444,13 +21490,13 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritedTypeAndTrailingComma(
     _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 10)
     return GenericParameterSyntax(newData)
   }
 
   public var trailingComma: TokenSyntax? {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -21465,13 +21511,13 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withTrailingComma(
     _ newChild: TokenSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 11)
     return GenericParameterSyntax(newData)
   }
 
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -21486,7 +21532,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterTrailingComma(
     _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 12)
     return GenericParameterSyntax(newData)
   }
 
@@ -21503,16 +21549,20 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     case 4:
       return nil
     case 5:
-      return nil
+      return "parameter pack specifier"
     case 6:
       return nil
     case 7:
-      return "inherited type"
+      return nil
     case 8:
       return nil
     case 9:
-      return nil
+      return "inherited type"
     case 10:
+      return nil
+    case 11:
+      return nil
+    case 12:
       return nil
     default:
       fatalError("Invalid index")
@@ -21527,7 +21577,9 @@ extension GenericParameterSyntax: CustomReflectable {
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenAttributesAndName": unexpectedBetweenAttributesAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenNameAndColon": unexpectedBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndEllipsis": unexpectedBetweenNameAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "ellipsis": ellipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEllipsisAndColon": unexpectedBetweenEllipsisAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenColonAndInheritedType": unexpectedBetweenColonAndInheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritedType": inheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

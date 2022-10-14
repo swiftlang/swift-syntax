@@ -19427,7 +19427,9 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
     attributes: RawAttributeListSyntax?,
     _ unexpectedBetweenAttributesAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndEllipsis: RawUnexpectedNodesSyntax? = nil,
+    ellipsis: RawTokenSyntax?,
+    _ unexpectedBetweenEllipsisAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax?,
     _ unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? = nil,
     inheritedType: RawTypeSyntax?,
@@ -19437,19 +19439,21 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericParameter, uninitializedCount: 11, arena: arena) { layout in
+      kind: .genericParameter, uninitializedCount: 13, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndName?.raw
       layout[3] = name.raw
-      layout[4] = unexpectedBetweenNameAndColon?.raw
-      layout[5] = colon?.raw
-      layout[6] = unexpectedBetweenColonAndInheritedType?.raw
-      layout[7] = inheritedType?.raw
-      layout[8] = unexpectedBetweenInheritedTypeAndTrailingComma?.raw
-      layout[9] = trailingComma?.raw
-      layout[10] = unexpectedAfterTrailingComma?.raw
+      layout[4] = unexpectedBetweenNameAndEllipsis?.raw
+      layout[5] = ellipsis?.raw
+      layout[6] = unexpectedBetweenEllipsisAndColon?.raw
+      layout[7] = colon?.raw
+      layout[8] = unexpectedBetweenColonAndInheritedType?.raw
+      layout[9] = inheritedType?.raw
+      layout[10] = unexpectedBetweenInheritedTypeAndTrailingComma?.raw
+      layout[11] = trailingComma?.raw
+      layout[12] = unexpectedAfterTrailingComma?.raw
     }
     self.init(raw: raw)
   }
@@ -19478,47 +19482,59 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawGenericParameterSyntax {
     return layoutView.replacingChild(at: 3, with: RawSyntax(name), arena: arena).as(RawGenericParameterSyntax.self)!
   }
-  public var unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndEllipsis: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndColon(_ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenNameAndColon.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  public func withUnexpectedBetweenNameAndEllipsis(_ unexpectedBetweenNameAndEllipsis: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 4, with: unexpectedBetweenNameAndEllipsis.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
-  public var colon: RawTokenSyntax? {
+  public var ellipsis: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 5, with: colon.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  public func withEllipsis(_ ellipsis: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 5, with: ellipsis.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
-  public var unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEllipsisAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndInheritedType(_ unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenColonAndInheritedType.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  public func withUnexpectedBetweenEllipsisAndColon(_ unexpectedBetweenEllipsisAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 6, with: unexpectedBetweenEllipsisAndColon.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
-  public var inheritedType: RawTypeSyntax? {
-    layoutView.children[7].map(RawTypeSyntax.init(raw:))
+  public var colon: RawTokenSyntax? {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public func withInheritedType(_ inheritedType: RawTypeSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 7, with: inheritedType.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 7, with: colon.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
-  public var unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritedTypeAndTrailingComma(_ unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenInheritedTypeAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  public func withUnexpectedBetweenColonAndInheritedType(_ unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 8, with: unexpectedBetweenColonAndInheritedType.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
-  public var trailingComma: RawTokenSyntax? {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+  public var inheritedType: RawTypeSyntax? {
+    layoutView.children[9].map(RawTypeSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 9, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  public func withInheritedType(_ inheritedType: RawTypeSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 9, with: inheritedType.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
-  public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
+  public func withUnexpectedBetweenInheritedTypeAndTrailingComma(_ unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 10, with: unexpectedBetweenInheritedTypeAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  }
+  public var trailingComma: RawTokenSyntax? {
+    layoutView.children[11].map(RawTokenSyntax.init(raw:))
+  }
+  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
+    return layoutView.replacingChild(at: 11, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+  }
+  public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
   public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
+    return layoutView.replacingChild(at: 12, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
 }
 

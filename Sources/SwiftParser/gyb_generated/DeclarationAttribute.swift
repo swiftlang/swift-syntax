@@ -63,7 +63,6 @@ extension Parser {
     case _objcRuntimeName = "_objcRuntimeName"
     case _staticInitializeObjCMetadata = "_staticInitializeObjCMetadata"
     case _restatedObjCConformance = "_restatedObjCConformance"
-    case _typeSequence = "_typeSequence"
     case _optimize = "_optimize"
     case _clangImporterSynthesizedType = "_clangImporterSynthesizedType"
     case _weakLinked = "_weakLinked"

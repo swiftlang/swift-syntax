@@ -2304,13 +2304,15 @@ open class BasicFormat: SyntaxRewriter {
     let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
     let unexpectedBetweenAttributesAndName = node.unexpectedBetweenAttributesAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndColon = node.unexpectedBetweenNameAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBetweenNameAndEllipsis = node.unexpectedBetweenNameAndEllipsis.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let ellipsis = node.ellipsis.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBetweenEllipsisAndColon = node.unexpectedBetweenEllipsisAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
     let unexpectedBetweenColonAndInheritedType = node.unexpectedBetweenColonAndInheritedType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let inheritedType = node.inheritedType.map(self.visit)?.cast(TypeSyntax.self)
     let unexpectedBetweenInheritedTypeAndTrailingComma = node.unexpectedBetweenInheritedTypeAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(GenericParameterSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName, name: name, unexpectedBetweenNameAndColon, colon: colon, unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma))
+    return Syntax(GenericParameterSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName, name: name, unexpectedBetweenNameAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndColon, colon: colon, unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma))
   }
   
   open override func visit(_ node: PrimaryAssociatedTypeListSyntax) -> Syntax {

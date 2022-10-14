@@ -6596,13 +6596,15 @@ public enum SyntaxFactory {
     return GenericParameterListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericParameterSyntax")
-  public static func makeGenericParameter(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, inheritedType: TypeSyntax?, _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> GenericParameterSyntax {
+  public static func makeGenericParameter(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax?, _ unexpectedBetweenEllipsisAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, inheritedType: TypeSyntax?, _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> GenericParameterSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
       unexpectedBetweenAttributesAndName?.raw,
       name.raw,
-      unexpectedBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndEllipsis?.raw,
+      ellipsis?.raw,
+      unexpectedBetweenEllipsisAndColon?.raw,
       colon?.raw,
       unexpectedBetweenColonAndInheritedType?.raw,
       inheritedType?.raw,
@@ -6624,6 +6626,8 @@ public enum SyntaxFactory {
       nil,
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      nil,
       nil,
       nil,
       nil,
@@ -9044,8 +9048,8 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use initializer on GenericParameterSyntax")
   public static func makeGenericParameter(name: TokenSyntax,
       trailingComma: TokenSyntax) -> GenericParameterSyntax {
-    return makeGenericParameter(attributes: nil, name: name, colon: nil,
-                                inheritedType: nil,
+    return makeGenericParameter(attributes: nil, name: name, ellipsis: nil,
+                                colon: nil, inheritedType: nil,
                                 trailingComma: trailingComma)
   }
 

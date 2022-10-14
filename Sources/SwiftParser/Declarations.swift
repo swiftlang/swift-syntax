@@ -1302,12 +1302,18 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawDeinitializerDeclSyntax {
     let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(handle)
+    var unexpectedNameAndSignature: [RawSyntax?] = []
+    unexpectedNameAndSignature.append(self.consume(if: .identifier, where: { !$0.isAtStartOfLine }).map(RawSyntax.init))
+    if self.at(.leftParen) && !self.currentToken.isAtStartOfLine {
+      unexpectedNameAndSignature.append(RawSyntax(parseFunctionSignature()))
+    }
     let items = self.parseOptionalCodeBlock()
     return RawDeinitializerDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforeDeinitKeyword,
       deinitKeyword: deinitKeyword,
+      RawUnexpectedNodesSyntax(unexpectedNameAndSignature, arena: self.arena),
       body: items,
       arena: self.arena
     )

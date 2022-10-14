@@ -124,3 +124,12 @@ class PresentMaker: SyntaxRewriter {
     ))
   }
 }
+
+class MissingMaker: SyntaxRewriter {
+  override func visit(_ node: TokenSyntax) -> Syntax {
+    guard node.presence == .present else {
+      return Syntax(node)
+    }
+    return Syntax(TokenSyntax(node.tokenKind, presence: .missing))
+  }
+}

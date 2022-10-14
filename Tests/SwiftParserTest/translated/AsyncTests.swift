@@ -112,9 +112,9 @@ final class AsyncTests: XCTestCase {
       """
       class X {
         init() async { }
-        deinit1️⃣ async 2️⃣{ }
+        deinit 1️⃣async { }
         func f() async { }
-        subscript(x: Int) 4️⃣async -> Int {
+        subscript(x: Int) 2️⃣async -> Int {
           get {
             return 0
           }
@@ -124,15 +124,8 @@ final class AsyncTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: deinitializers cannot have a name
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '{ }' in function"),
-        // TODO: Old parser expected error on line 5: expected '->' for subscript element type
-        // TODO: Old parser expected error on line 5: single argument function types require parentheses
-        // TODO: Old parser expected error on line 5: cannot find type 'async' in scope
-        // TODO: Old parser expected note on line 5: cannot use module 'async' as a type
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code 'async' in subscript"),
-        // TODO: Old parser expected error on line 9: 'set' accessor cannot have specifier 'async'
+        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'async' in subscript"),
       ]
     )
   }

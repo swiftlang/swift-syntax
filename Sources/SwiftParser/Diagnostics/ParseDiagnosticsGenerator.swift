@@ -447,18 +447,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    if node.identifier.presence == .missing,
-       let unexpected = node.unexpectedBeforeIdentifier,
-       unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound {
-      addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.identifier.id])
-    }
-    return .visitChildren
-  }
-
   public override func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

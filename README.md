@@ -1,21 +1,49 @@
 # SwiftSyntax
 
-SwiftSyntax is a set of Swift bindings for the
-[libSyntax](https://github.com/apple/swift/tree/main/lib/Syntax) library. It
-allows Swift tools to parse, inspect, generate, and transform Swift source
-code.
+SwiftSyntax is a set of Swift libraries for parsing, inspecting, generating, and transforming Swift source code.
 
-Its API is designed for performance-critical applications. It uses value types almost exclusively and aims to avoid existential conversions where possible.
+> Note: SwiftSyntax is still in development, and its API is not guaranteed to
+> be stable. It is subject to change without warning.
 
-> Note: SwiftSyntax is still in development, and the API is not guaranteed to
-> be stable. It's subject to change without warning.
+## Adding SwiftSyntax as a Dependency
 
-## Declare SwiftPM dependency with release tag
+### Trunk Development (main)
 
-Add this repository to the `Package.swift` manifest of your project:
+The mainline branch of SwiftSyntax tracks the latest developments. It is not
+an official release, and is subject to rapid changes in APIs and behaviors. To 
+use it, add this repository to the `Package.swift` manifest of your project:
 
 ```swift
-// swift-tools-version:5.6
+// swift-tools-version:5.7
+import PackageDescription
+
+let package = Package(
+  name: "MyTool",
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-syntax.git", branch: "main"),
+  ],
+  targets: [
+    .target(name: "MyTool", dependencies: [
+      .product(name: "SwiftSyntax", package: "swift-syntax"),
+    ]),
+  ]
+)
+```
+
+Mainline SwiftSyntax also includes 
+
+- `SwiftParser` for natively parsing source code
+- `SwiftOperators` for folding SwiftSyntax trees containing operators
+- `SwiftSyntaxBuilder` for generating Swift code with a result builder-style interface
+
+### Releases
+
+Releases of SwiftSyntax are aligned with corresponding language
+and tooling releases and are stable. To use them, 
+add this repository to the `Package.swift` manifest of your project:
+
+```swift
+// swift-tools-version:5.7
 import PackageDescription
 
 let package = Package(
@@ -42,8 +70,6 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 | Xcode 12.0   | swift-5.3-RELEASE   | 0.50300.0 |
 | Xcode 11.4   | swift-5.2-RELEASE   | 0.50200.0 |
 
-Then, import `SwiftSyntax` in your Swift code.
-
 ## Documentation
 
 Documentation can be found in the following places:
@@ -62,4 +88,4 @@ If you should hit any issues while using SwiftSyntax, we appreciate bug reports 
 
 ## License
 
- Please see [LICENSE](LICENSE.txt) for more information.
+Please see [LICENSE](LICENSE.txt) for more information.

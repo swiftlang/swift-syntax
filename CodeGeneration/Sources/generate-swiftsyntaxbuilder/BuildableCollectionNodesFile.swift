@@ -98,17 +98,11 @@ let buildableCollectionNodesFile = SourceFile {
   }
 }
 
-/// Generate an initializer taking an array of elements.
-private func createArrayInitializer(node: Node) -> InitializerDecl {
-  let type = node.type
-  let elementType = node.collectionElementType
-  var elementsInit: ExprBuildable = IdentifierExpr("elements")
-  if !elementType.isToken {
-    elementsInit = FunctionCallExpr(
-      calledExpression: MemberAccessExpr(base: elementsInit, name: "map"),
-      trailingClosure: ClosureExpr(" { $0.create\(elementType.buildableBaseName)() }")
-    )
-  }
+/// Helper for generating an initializer taking an array of elements.
+private func createArrayInitializer<ElementsInit: ExprBuildable>(
+  type: SyntaxBuildableType, elementType: SyntaxBuildableType,
+  elementsInit: ElementsInit
+) -> InitializerDecl {
   return InitializerDecl(
     """
     /// Creates a `\(type.buildableBaseName)` with the provided list of elements.
@@ -118,6 +112,26 @@ private func createArrayInitializer(node: Node) -> InitializerDecl {
       self.elements = \(elementsInit)
     }
     """
+  )
+}
+
+/// Generate an initializer taking an array of elements.
+private func createArrayInitializer(node: Node) -> InitializerDecl {
+  let type = node.type
+  let elementType = node.collectionElementType
+  let elementsInit = IdentifierExpr("elements")
+  if elementType.isToken {
+    return createArrayInitializer(
+      type: type, elementType: elementType, elementsInit: elementsInit
+    )
+  }
+
+  let elementsInitCall = FunctionCallExpr(
+    calledExpression: MemberAccessExpr(base: elementsInit, name: "map"),
+    trailingClosure: ClosureExpr(" { $0.create\(elementType.buildableBaseName)() }")
+  )
+  return createArrayInitializer(
+    type: type, elementType: elementType, elementsInit: elementsInitCall
   )
 }
 

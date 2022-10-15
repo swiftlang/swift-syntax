@@ -134,7 +134,6 @@ TYPE_ATTR_KINDS = [
     TypeAttribute('async'),
     TypeAttribute('Sendable'),
     TypeAttribute('unchecked'),
-    TypeAttribute('_typeSequence'),
     TypeAttribute('_local'),
     TypeAttribute('_noMetadata'),
 
@@ -393,12 +392,7 @@ DECL_ATTR_KINDS = [
                   NotSerialized,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=70),
-    DeclAttribute('_typeSequence', 'TypeSequence',
-                  OnGenericTypeParam,
-                  UserInaccessible,
-                  NotSerialized,
-                  ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
-                  code=71),
+  # NOTE: 71 is unused
   # NOTE: 72 is unused
     DeclAttribute('_optimize', 'Optimize',
                   OnAbstractFunction,  OnSubscript,  OnVar,

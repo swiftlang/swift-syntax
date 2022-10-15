@@ -145,6 +145,12 @@ public let GENERIC_NODES: [Node] = [
                tokenChoices: [
                  "Identifier"
                ]),
+         Child(name: "Ellipsis",
+               kind: "EllipsisToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Ellipsis"
+               ]),
          Child(name: "Colon",
                kind: "ColonToken",
                isOptional: true,

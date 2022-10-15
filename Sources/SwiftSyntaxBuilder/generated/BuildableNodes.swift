@@ -18550,7 +18550,9 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
     var attributes: AttributeList?
     var unexpectedBetweenAttributesAndName: UnexpectedNodes?
     var name: Token
-    var unexpectedBetweenNameAndColon: UnexpectedNodes?
+    var unexpectedBetweenNameAndEllipsis: UnexpectedNodes?
+    var ellipsis: Token?
+    var unexpectedBetweenEllipsisAndColon: UnexpectedNodes?
     var colon: Token?
     var unexpectedBetweenColonAndInheritedType: UnexpectedNodes?
     var inheritedType: TypeBuildable?
@@ -18576,22 +18578,25 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   ///   - attributes: 
   ///   - unexpectedBetweenAttributesAndName: 
   ///   - name: 
-  ///   - unexpectedBetweenNameAndColon: 
+  ///   - unexpectedBetweenNameAndEllipsis: 
+  ///   - ellipsis: 
+  ///   - unexpectedBetweenEllipsisAndColon: 
   ///   - colon: 
   ///   - unexpectedBetweenColonAndInheritedType: 
   ///   - inheritedType: 
   ///   - unexpectedBetweenInheritedTypeAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    assert(ellipsis == nil || ellipsis!.text == #"..."#)
     assert(colon == nil || colon!.text == #":"#)
     assert(trailingComma == nil || trailingComma!.text == #","#)
-    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes?.createUnexpectedNodes(), attributes: attributes?.createAttributeList(), unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType?.createUnexpectedNodes(), inheritedType: inheritedType?.createTypeBuildable(), unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes?.createUnexpectedNodes(), attributes: attributes?.createAttributeList(), unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndEllipsis: unexpectedBetweenNameAndEllipsis?.createUnexpectedNodes(), ellipsis: ellipsis, unexpectedBetweenEllipsisAndColon: unexpectedBetweenEllipsisAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType?.createUnexpectedNodes(), inheritedType: inheritedType?.createTypeBuildable(), unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName, name: Token.`identifier`(name), unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon, colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName, name: Token.`identifier`(name), unexpectedBetweenNameAndEllipsis: unexpectedBetweenNameAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndColon: unexpectedBetweenEllipsisAndColon, colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma)
   }
   public init(_ constructedNode: GenericParameterSyntax) {
     self.data = .constructed(constructedNode)
@@ -18602,7 +18607,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   func buildGenericParameter() -> GenericParameterSyntax {
     switch data {
     case .buildable(let buildableData): 
-      var result = GenericParameterSyntax(buildableData.unexpectedBeforeAttributes?.buildUnexpectedNodes(), attributes: buildableData.attributes?.buildAttributeList(), buildableData.unexpectedBetweenAttributesAndName?.buildUnexpectedNodes(), name: buildableData.name.buildToken(), buildableData.unexpectedBetweenNameAndColon?.buildUnexpectedNodes(), colon: buildableData.colon?.buildToken(), buildableData.unexpectedBetweenColonAndInheritedType?.buildUnexpectedNodes(), inheritedType: buildableData.inheritedType?.buildType(), buildableData.unexpectedBetweenInheritedTypeAndTrailingComma?.buildUnexpectedNodes(), trailingComma: buildableData.trailingComma?.buildToken())
+      var result = GenericParameterSyntax(buildableData.unexpectedBeforeAttributes?.buildUnexpectedNodes(), attributes: buildableData.attributes?.buildAttributeList(), buildableData.unexpectedBetweenAttributesAndName?.buildUnexpectedNodes(), name: buildableData.name.buildToken(), buildableData.unexpectedBetweenNameAndEllipsis?.buildUnexpectedNodes(), ellipsis: buildableData.ellipsis?.buildToken(), buildableData.unexpectedBetweenEllipsisAndColon?.buildUnexpectedNodes(), colon: buildableData.colon?.buildToken(), buildableData.unexpectedBetweenColonAndInheritedType?.buildUnexpectedNodes(), inheritedType: buildableData.inheritedType?.buildType(), buildableData.unexpectedBetweenInheritedTypeAndTrailingComma?.buildUnexpectedNodes(), trailingComma: buildableData.trailingComma?.buildToken())
       result.leadingTrivia = buildableData.leadingTrivia + (result.leadingTrivia ?? [])
       result.trailingTrivia = buildableData.trailingTrivia + (result.trailingTrivia ?? [])
       return result

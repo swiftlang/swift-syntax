@@ -2175,7 +2175,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     }
     break
   case .genericParameter:
-    assert(layout.count == 11)
+    assert(layout.count == 13)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawAttributeListSyntax?.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
@@ -2183,10 +2183,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[5], as: RawTokenSyntax?.self)
     _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[7], as: RawTypeSyntax?.self)
+    _verify(layout[7], as: RawTokenSyntax?.self)
     _verify(layout[8], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[9], as: RawTokenSyntax?.self)
+    _verify(layout[9], as: RawTypeSyntax?.self)
     _verify(layout[10], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[11], as: RawTokenSyntax?.self)
+    _verify(layout[12], as: RawUnexpectedNodesSyntax?.self)
     break
   case .primaryAssociatedTypeList:
     for element in layout {

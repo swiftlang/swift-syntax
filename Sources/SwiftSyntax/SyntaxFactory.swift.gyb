@@ -185,8 +185,8 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use initializer on GenericParameterSyntax")
   public static func makeGenericParameter(name: TokenSyntax,
       trailingComma: TokenSyntax) -> GenericParameterSyntax {
-    return makeGenericParameter(attributes: nil, name: name, colon: nil,
-                                inheritedType: nil,
+    return makeGenericParameter(attributes: nil, name: name, ellipsis: nil,
+                                colon: nil, inheritedType: nil,
                                 trailingComma: trailingComma)
   }
 

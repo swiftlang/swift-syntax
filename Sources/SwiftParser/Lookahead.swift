@@ -250,7 +250,6 @@ extension Parser.Lookahead {
     "async",
     "Sendable",
     "unchecked",
-    "_typeSequence",
     "_local",
     "block_storage",
     "box",

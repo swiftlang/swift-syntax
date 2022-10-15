@@ -85,6 +85,7 @@ public enum StaticParserError: String, DiagnosticMessage {
   case tryMustBePlacedOnThrownExpr = "'try' must be placed on the thrown expression"
   case tryOnInitialValueExpression = "'try' must be placed on the initial value expression"
   case unexpectedSemicolon = "unexpected ';' separator"
+  case associatedTypeCannotUsePack = "associated types cannot be variadic"
 
   public var message: String { self.rawValue }
 

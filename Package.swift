@@ -176,6 +176,12 @@ let package = Package(
       exclude: ["Inputs"]
     ),
     .testTarget(
+      name: "SwiftSyntaxMacrosTest",
+      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser",
+                     "_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder",
+                     "SwiftSyntaxMacros"]
+    ),
+    .testTarget(
       name: "PerformanceTest",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser", "SwiftParser"],
       exclude: ["Inputs"]

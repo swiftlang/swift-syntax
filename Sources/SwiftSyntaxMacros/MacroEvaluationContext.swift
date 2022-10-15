@@ -5,4 +5,9 @@ import SwiftSyntax
 public struct MacroEvaluationContext {
   /// Used to map the provided syntax nodes into source locations.
   public let sourceLocationConverter: SourceLocationConverter
+
+  @_spi(Testing)
+  public init(sourceLocationConverter: SourceLocationConverter) {
+    self.sourceLocationConverter = sourceLocationConverter
+  }
 }

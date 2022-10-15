@@ -218,6 +218,8 @@ extension ObjcKeyPathExprSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension ObjcSelectorExprSyntax: SyntaxExpressibleByStringInterpolation {}
 
+extension MacroExpansionExprSyntax: SyntaxExpressibleByStringInterpolation {}
+
 extension PostfixIfConfigExprSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension EditorPlaceholderExprSyntax: SyntaxExpressibleByStringInterpolation {}
@@ -279,6 +281,8 @@ extension EnumDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 extension OperatorDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension PrecedenceGroupDeclSyntax: SyntaxExpressibleByStringInterpolation {}
+
+extension MacroExpansionDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension LabeledStmtSyntax: SyntaxExpressibleByStringInterpolation {}
 

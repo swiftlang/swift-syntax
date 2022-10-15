@@ -217,6 +217,8 @@ extension Syntax {
       return node
     case .objcSelectorExpr(let node):
       return node
+    case .macroExpansionExpr(let node):
+      return node
     case .postfixIfConfigExpr(let node):
       return node
     case .editorPlaceholderExpr(let node):
@@ -348,6 +350,8 @@ extension Syntax {
     case .precedenceGroupAssignment(let node):
       return node
     case .precedenceGroupAssociativity(let node):
+      return node
+    case .macroExpansionDecl(let node):
       return node
     case .tokenList(let node):
       return node
@@ -778,6 +782,8 @@ extension Syntax {
       return node.childNameForDiagnostics(index)
     case .objcSelectorExpr(let node):
       return node.childNameForDiagnostics(index)
+    case .macroExpansionExpr(let node):
+      return node.childNameForDiagnostics(index)
     case .postfixIfConfigExpr(let node):
       return node.childNameForDiagnostics(index)
     case .editorPlaceholderExpr(let node):
@@ -909,6 +915,8 @@ extension Syntax {
     case .precedenceGroupAssignment(let node):
       return node.childNameForDiagnostics(index)
     case .precedenceGroupAssociativity(let node):
+      return node.childNameForDiagnostics(index)
+    case .macroExpansionDecl(let node):
       return node.childNameForDiagnostics(index)
     case .tokenList(let node):
       return node.childNameForDiagnostics(index)
@@ -1245,6 +1253,7 @@ extension SyntaxKind {
     case .objcName: return ObjcNameSyntax.self
     case .objcKeyPathExpr: return ObjcKeyPathExprSyntax.self
     case .objcSelectorExpr: return ObjcSelectorExprSyntax.self
+    case .macroExpansionExpr: return MacroExpansionExprSyntax.self
     case .postfixIfConfigExpr: return PostfixIfConfigExprSyntax.self
     case .editorPlaceholderExpr: return EditorPlaceholderExprSyntax.self
     case .objectLiteralExpr: return ObjectLiteralExprSyntax.self
@@ -1311,6 +1320,7 @@ extension SyntaxKind {
     case .precedenceGroupNameElement: return PrecedenceGroupNameElementSyntax.self
     case .precedenceGroupAssignment: return PrecedenceGroupAssignmentSyntax.self
     case .precedenceGroupAssociativity: return PrecedenceGroupAssociativitySyntax.self
+    case .macroExpansionDecl: return MacroExpansionDeclSyntax.self
     case .tokenList: return TokenListSyntax.self
     case .nonEmptyTokenList: return NonEmptyTokenListSyntax.self
     case .customAttribute: return CustomAttributeSyntax.self

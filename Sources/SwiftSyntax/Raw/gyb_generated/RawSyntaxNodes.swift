@@ -34,7 +34,7 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .unknownDecl, .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl: return true
+    case .unknownDecl, .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroExpansionDecl: return true
     default: return false
     }
   }
@@ -65,7 +65,7 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .unknownExpr, .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFileIDExpr, .poundFilePathExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .unresolvedIsExpr, .isExpr, .unresolvedAsExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .oldKeyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .postfixIfConfigExpr, .editorPlaceholderExpr, .objectLiteralExpr: return true
+    case .unknownExpr, .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFileIDExpr, .poundFilePathExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .unresolvedIsExpr, .isExpr, .unresolvedAsExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .oldKeyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .macroExpansionExpr, .postfixIfConfigExpr, .editorPlaceholderExpr, .objectLiteralExpr: return true
     default: return false
     }
   }
@@ -6870,6 +6870,161 @@ public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
+public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public typealias SyntaxType = MacroExpansionExprSyntax
+
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .macroExpansionExpr
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforePoundToken: RawUnexpectedNodesSyntax? = nil,
+    poundToken: RawTokenSyntax,
+    _ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? = nil,
+    macro: RawTokenSyntax,
+    _ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? = nil,
+    leftParen: RawTokenSyntax?,
+    _ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? = nil,
+    argumentList: RawTupleExprElementListSyntax,
+    _ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? = nil,
+    rightParen: RawTokenSyntax?,
+    _ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? = nil,
+    trailingClosure: RawClosureExprSyntax?,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?,
+    _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .macroExpansionExpr, uninitializedCount: 15, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforePoundToken?.raw
+      layout[1] = poundToken.raw
+      layout[2] = unexpectedBetweenPoundTokenAndMacro?.raw
+      layout[3] = macro.raw
+      layout[4] = unexpectedBetweenMacroAndLeftParen?.raw
+      layout[5] = leftParen?.raw
+      layout[6] = unexpectedBetweenLeftParenAndArgumentList?.raw
+      layout[7] = argumentList.raw
+      layout[8] = unexpectedBetweenArgumentListAndRightParen?.raw
+      layout[9] = rightParen?.raw
+      layout[10] = unexpectedBetweenRightParenAndTrailingClosure?.raw
+      layout[11] = trailingClosure?.raw
+      layout[12] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
+      layout[13] = additionalTrailingClosures?.raw
+      layout[14] = unexpectedAfterAdditionalTrailingClosures?.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforePoundToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBeforePoundToken(_ unexpectedBeforePoundToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundToken.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var poundToken: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  public func withPoundToken(_ poundToken: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 1, with: RawSyntax(poundToken), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenPoundTokenAndMacro(_ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundTokenAndMacro.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var macro: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  public func withMacro(_ macro: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 3, with: RawSyntax(macro), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenMacroAndLeftParen(_ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 4, with: unexpectedBetweenMacroAndLeftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var leftParen: RawTokenSyntax? {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  }
+  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 5, with: leftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenLeftParenAndArgumentList(_ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftParenAndArgumentList.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var argumentList: RawTupleExprElementListSyntax {
+    layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
+  }
+  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 7, with: RawSyntax(argumentList), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenArgumentListAndRightParen(_ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 8, with: unexpectedBetweenArgumentListAndRightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var rightParen: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+  }
+  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 9, with: rightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenRightParenAndTrailingClosure(_ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 10, with: unexpectedBetweenRightParenAndTrailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var trailingClosure: RawClosureExprSyntax? {
+    layoutView.children[11].map(RawClosureExprSyntax.init(raw:))
+  }
+  public func withTrailingClosure(_ trailingClosure: RawClosureExprSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 11, with: trailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 12, with: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
+    layoutView.children[13].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+  }
+  public func withAdditionalTrailingClosures(_ additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 13, with: additionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+  public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedAfterAdditionalTrailingClosures(_ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
+    return layoutView.replacingChild(at: 14, with: unexpectedAfterAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
+  }
+}
+
+@_spi(RawSyntax)
 public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public typealias SyntaxType = PostfixIfConfigExprSyntax
 
@@ -13297,6 +13452,161 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol, RawS
   }
   public func withUnexpectedAfterValue(_ unexpectedAfterValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
     return layoutView.replacingChild(at: 6, with: unexpectedAfterValue.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public typealias SyntaxType = MacroExpansionDeclSyntax
+
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .macroExpansionDecl
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforePoundToken: RawUnexpectedNodesSyntax? = nil,
+    poundToken: RawTokenSyntax,
+    _ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? = nil,
+    macro: RawTokenSyntax,
+    _ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? = nil,
+    leftParen: RawTokenSyntax?,
+    _ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? = nil,
+    argumentList: RawTupleExprElementListSyntax,
+    _ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? = nil,
+    rightParen: RawTokenSyntax?,
+    _ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? = nil,
+    trailingClosure: RawClosureExprSyntax?,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?,
+    _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .macroExpansionDecl, uninitializedCount: 15, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforePoundToken?.raw
+      layout[1] = poundToken.raw
+      layout[2] = unexpectedBetweenPoundTokenAndMacro?.raw
+      layout[3] = macro.raw
+      layout[4] = unexpectedBetweenMacroAndLeftParen?.raw
+      layout[5] = leftParen?.raw
+      layout[6] = unexpectedBetweenLeftParenAndArgumentList?.raw
+      layout[7] = argumentList.raw
+      layout[8] = unexpectedBetweenArgumentListAndRightParen?.raw
+      layout[9] = rightParen?.raw
+      layout[10] = unexpectedBetweenRightParenAndTrailingClosure?.raw
+      layout[11] = trailingClosure?.raw
+      layout[12] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
+      layout[13] = additionalTrailingClosures?.raw
+      layout[14] = unexpectedAfterAdditionalTrailingClosures?.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforePoundToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBeforePoundToken(_ unexpectedBeforePoundToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundToken.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var poundToken: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  public func withPoundToken(_ poundToken: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 1, with: RawSyntax(poundToken), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenPoundTokenAndMacro(_ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundTokenAndMacro.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var macro: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  public func withMacro(_ macro: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 3, with: RawSyntax(macro), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenMacroAndLeftParen(_ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 4, with: unexpectedBetweenMacroAndLeftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var leftParen: RawTokenSyntax? {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  }
+  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 5, with: leftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenLeftParenAndArgumentList(_ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftParenAndArgumentList.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var argumentList: RawTupleExprElementListSyntax {
+    layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
+  }
+  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 7, with: RawSyntax(argumentList), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenArgumentListAndRightParen(_ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 8, with: unexpectedBetweenArgumentListAndRightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var rightParen: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+  }
+  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 9, with: rightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenRightParenAndTrailingClosure(_ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 10, with: unexpectedBetweenRightParenAndTrailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var trailingClosure: RawClosureExprSyntax? {
+    layoutView.children[11].map(RawClosureExprSyntax.init(raw:))
+  }
+  public func withTrailingClosure(_ trailingClosure: RawClosureExprSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 11, with: trailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 12, with: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
+    layoutView.children[13].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+  }
+  public func withAdditionalTrailingClosures(_ additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 13, with: additionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
+  }
+  public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public func withUnexpectedAfterAdditionalTrailingClosures(_ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
+    return layoutView.replacingChild(at: 14, with: unexpectedAfterAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
 }
 

@@ -396,6 +396,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ObjcSelectorExprSyntax) -> ResultType
+  /// Visiting `MacroExpansionExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: MacroExpansionExprSyntax) -> ResultType
   /// Visiting `PostfixIfConfigExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -660,6 +664,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType
+  /// Visiting `MacroExpansionDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: MacroExpansionDeclSyntax) -> ResultType
   /// Visiting `TokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1699,6 +1707,12 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: ObjcSelectorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
+  /// Visiting `MacroExpansionExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: MacroExpansionExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
   /// Visiting `PostfixIfConfigExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2093,6 +2107,12 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `MacroExpansionDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: MacroExpansionDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `TokenListSyntax` specifically.
@@ -2986,6 +3006,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .objcSelectorExpr(let derived):
       return visit(derived)
+    case .macroExpansionExpr(let derived):
+      return visit(derived)
     case .postfixIfConfigExpr(let derived):
       return visit(derived)
     case .editorPlaceholderExpr(let derived):
@@ -3117,6 +3139,8 @@ extension SyntaxTransformVisitor {
     case .precedenceGroupAssignment(let derived):
       return visit(derived)
     case .precedenceGroupAssociativity(let derived):
+      return visit(derived)
+    case .macroExpansionDecl(let derived):
       return visit(derived)
     case .tokenList(let derived):
       return visit(derived)

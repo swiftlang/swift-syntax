@@ -74,6 +74,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/EnumDeclSyntax>
 - <doc:SwiftSyntax/OperatorDeclSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupDeclSyntax>
+- <doc:SwiftSyntax/MacroExpansionDeclSyntax>
 
 ### Statements
 
@@ -155,6 +156,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/KeyPathBaseExprSyntax>
 - <doc:SwiftSyntax/ObjcKeyPathExprSyntax>
 - <doc:SwiftSyntax/ObjcSelectorExprSyntax>
+- <doc:SwiftSyntax/MacroExpansionExprSyntax>
 - <doc:SwiftSyntax/PostfixIfConfigExprSyntax>
 - <doc:SwiftSyntax/EditorPlaceholderExprSyntax>
 - <doc:SwiftSyntax/ObjectLiteralExprSyntax>

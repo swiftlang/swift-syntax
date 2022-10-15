@@ -169,6 +169,8 @@ extension Parser {
       return RawDeclSyntax(directive)
     case (.poundWarningKeyword, _)?, (.poundErrorKeyword, _)?:
       return self.parsePoundDiagnosticDeclaration()
+    case (.pound, _)?:
+      return RawDeclSyntax(self.parseMacroExpansionDeclaration())
     case nil:
       break
     }
@@ -2335,5 +2337,58 @@ extension Parser {
         rightParen: rightParen,
         arena: self.arena))
     }
+  }
+
+  /// Parse a macro expansion as an declaration.
+  ///
+  ///
+  /// Grammar
+  /// =======
+  ///
+  /// macro-expansion-declaration → '#' identifier expr-call-suffix?
+  mutating func parseMacroExpansionDeclaration() -> RawMacroExpansionDeclSyntax {
+    let poundKeyword = self.consumeAnyToken()
+    let (unexpectedBeforeMacro, macro) = self.expectIdentifier()
+
+    // Parse the optional parenthesized argument list.
+    let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine })
+    let args: [RawTupleExprElementSyntax]
+    let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
+    let rightParen: RawTokenSyntax?
+    if leftParen != nil {
+      args = parseArgumentListElements(pattern: .none)
+      (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+    } else {
+      args = []
+      unexpectedBeforeRightParen = nil
+      rightParen = nil
+    }
+
+    // Parse the optional trailing closures.
+    let trailingClosure: RawClosureExprSyntax?
+    let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
+    if self.at(.leftBrace),
+       self.lookahead().isValidTrailingClosure(.trailingClosure) {
+      (trailingClosure, additionalTrailingClosures) =
+        self.parseTrailingClosures(.trailingClosure)
+    } else {
+      trailingClosure = nil
+      additionalTrailingClosures = nil
+    }
+
+    return RawMacroExpansionDeclSyntax(
+      poundToken: poundKeyword,
+      unexpectedBeforeMacro,
+      macro: macro,
+      leftParen: leftParen,
+      argumentList: RawTupleExprElementListSyntax(
+        elements: args, arena: self.arena
+      ),
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      trailingClosure: trailingClosure,
+      additionalTrailingClosures: additionalTrailingClosures,
+      arena: self.arena
+    )
   }
 }

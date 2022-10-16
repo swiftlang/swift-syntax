@@ -18,7 +18,7 @@ public enum MacroSystemError: Error {
   case requiresCodeItemMacro(macro: Macro.Type, node: Syntax)
 
   /// Indicates that a macro produced diagnostics during evaluation. The
-  /// diagnostics might not specifically included errors, but will be reported
+  /// diagnostics might not specifically include errors, but will be reported
   /// nonetheless.
   case evaluationDiagnostics(node: Syntax, diagnostics: [Diagnostic])
 }

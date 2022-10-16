@@ -12,6 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+@_spi(Testing) import SwiftSyntaxMacros
 import SwiftParser
 import SwiftOperators
 import Foundation
@@ -68,6 +69,7 @@ class SwiftParserCli: ParsableCommand {
     subcommands: [
       PrintDiags.self,
       PrintTree.self,
+      ExpandMacros.self,
       Reduce.self,
       VerifyRoundTrip.self,
     ]
@@ -193,6 +195,50 @@ class PrintTree: ParsableCommand {
       }
 
       print(resultTree.recursiveDescription)
+    }
+  }
+}
+
+class ExpandMacros: ParsableCommand {
+  static var configuration = CommandConfiguration(
+    commandName: "expand-macros",
+    abstract: "Expand example macros and print the result source code"
+  )
+
+  required init() {}
+
+  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
+  var sourceFile: String
+
+  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
+  var foldSequences: Bool = false
+
+  func run() throws {
+    let source = try getContentsOfSourceFile(at: sourceFile)
+
+    try source.withUnsafeBufferPointer { sourceBuffer in
+      let tree = try Parser.parse(source: sourceBuffer)
+
+      let resultTree: Syntax
+      if foldSequences {
+        resultTree = foldAllSequences(tree).0
+      } else {
+        resultTree = Syntax(tree)
+      }
+
+      let converter = SourceLocationConverter(file: self.sourceFile, tree: resultTree)
+      let context = MacroEvaluationContext(sourceLocationConverter: converter)
+      var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
+      let transformedTree = MacroSystem.exampleSystem.evaluateMacros(
+        node: resultTree, in: context
+      ) { error in
+        if case let .evaluationDiagnostics(_, diagnostics) = error {
+          diags.append(contentsOf: diagnostics)
+        }
+      }
+
+      print(transformedTree)
+      print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))
     }
   }
 }

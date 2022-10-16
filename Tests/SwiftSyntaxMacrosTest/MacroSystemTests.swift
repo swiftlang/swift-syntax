@@ -11,6 +11,7 @@ final class MacroSystemTests: XCTestCase {
       #myLine
       let a = (#myLine)
       let b = #stringify(x + y)
+      #myColorLiteral(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       """
     let converter = SourceLocationConverter(file: "test.swift", tree: sf)
     let context = MacroEvaluationContext(sourceLocationConverter: converter)
@@ -23,6 +24,7 @@ final class MacroSystemTests: XCTestCase {
       1
       let a = (2)
       let b = (x + y, #"x + y"#)
+      .init(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       """
     )
   }

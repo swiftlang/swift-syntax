@@ -30,11 +30,26 @@ struct Stringify: ExpressionMacro {
   }
 }
 
+struct ColorLiteral: ExpressionMacro {
+  static var name: String { "myColorLiteral" }
+
+  static func apply(
+    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+  ) -> MacroResult<ExprSyntax> {
+    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    if let leadingTrivia = macro.leadingTrivia {
+      return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
+    }
+    return MacroResult(initSyntax)
+  }
+}
+
 extension MacroSystem {
   public static var exampleSystem: MacroSystem {
     var macroSystem = MacroSystem()
     try! macroSystem.add(LineMacro.self)
     try! macroSystem.add(Stringify.self)
+    try! macroSystem.add(ColorLiteral.self)
     return macroSystem
   }
 }

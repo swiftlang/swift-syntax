@@ -92,6 +92,45 @@ final class ExpressionTests: XCTestCase {
   func testKeypathExpression() {
     AssertParse(
       #"""
+      \.?.foo
+      """#,
+      substructure: Syntax(
+        CodeBlockItemListSyntax([
+          CodeBlockItemSyntax(
+            item: Syntax(
+              KeyPathExprSyntax(
+              backslash: .backslashToken(),
+              root: nil,
+              components: KeyPathComponentListSyntax([
+                KeyPathComponentSyntax(
+                  period: .periodToken(),
+                  component: Syntax(
+                    KeyPathOptionalComponentSyntax(
+                      questionOrExclamationMark: .postfixQuestionMarkToken()
+                    )
+                  )
+                ),
+                KeyPathComponentSyntax(
+                  period: .periodToken(),
+                  component: Syntax(
+                    KeyPathPropertyComponentSyntax(
+                      identifier: .identifier("foo"),
+                      declNameArguments: nil,
+                      genericArgumentClause: nil
+                    )
+                  )
+                )
+              ])
+            )),
+            semicolon: nil,
+            errorTokens: nil
+          )
+        ])
+      )
+    )
+
+    AssertParse(
+      #"""
       children.filter(\.type.defaultInitialization.isEmpty)
       """#
     )

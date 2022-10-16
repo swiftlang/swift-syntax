@@ -42,25 +42,6 @@ public struct MacroSystem {
   }
 }
 
-extension MacroExpansionDeclSyntax {
-  /// Macro expansion declarations are parsed in some positions where an
-  /// expression is also warranted, so
-  func asMacroExpansionExpr() -> MacroExpansionExprSyntax {
-    MacroExpansionExprSyntax(
-      unexpectedBeforePoundToken, poundToken: poundToken,
-      unexpectedBetweenPoundTokenAndMacro, macro: macro,
-      unexpectedBetweenMacroAndLeftParen, leftParen: leftParen,
-      unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList,
-      unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen,
-      unexpectedBetweenRightParenAndTrailingClosure,
-      trailingClosure: trailingClosure,
-      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
-      additionalTrailingClosures: additionalTrailingClosures,
-      unexpectedAfterAdditionalTrailingClosures
-    )
-  }
-}
-
 /// Syntax rewriter that evaluates any macros encountered along the way.
 class MacroApplication : SyntaxRewriter {
   let macroSystem: MacroSystem
@@ -77,62 +58,28 @@ class MacroApplication : SyntaxRewriter {
     self.errorHandler = errorHandler
   }
 
-  private func evaluateExprMacro(exprMacro: ExpressionMacro.Type, node: MacroExpansionExprSyntax) -> ExprSyntax {
-    // Handle the rewrite.
-    let result = exprMacro.apply(node, in: context)
-
-    // Report diagnostics, if there were any.
-    if !result.diagnostics.isEmpty {
-      errorHandler(
-        .evaluationDiagnostics(
-          node: Syntax(node), diagnostics: result.diagnostics
-        )
-      )
-    }
-
-    // TODO: Do we want to recurse here?
-    return result.rewritten
-  }
-
   override func visit(_ node: MacroExpansionExprSyntax) -> ExprSyntax {
-    let name = node.macro.text
-    guard let macro = macroSystem.macros[name] else {
-      errorHandler(.unknownMacro(name: name, node: Syntax(node)))
-      return ExprSyntax(node)
-    }
-
-    guard let exprMacro = macro as? ExpressionMacro.Type else {
-      errorHandler(.requiresExpressionMacro(macro: macro, node: Syntax(node)))
-      return ExprSyntax(node)
-    }
-
-    return evaluateExprMacro(exprMacro: exprMacro, node: node)
+    // TODO: recurse
+    return ExprSyntax(
+      Syntax(node).evaluateMacro(
+        with: macroSystem, context: context, errorHandler: errorHandler))!
   }
 
   override func visit(_ node: CodeBlockItemListSyntax) -> Syntax {
     var newItems: [CodeBlockItemSyntax] = []
     for item in node {
       // Handle macro expansion declarations.
-      if let macroEvaluationDecl = item.item.as(MacroExpansionDeclSyntax.self) {
-        let name = macroEvaluationDecl.macro.text
-        guard let macro = macroSystem.macros[name] else {
-          errorHandler(.unknownMacro(name: name, node: Syntax(node)))
-          newItems.append(item)
-          continue
+      if item.item.is(MacroExpansionDeclSyntax.self) {
+        let result = item.item.evaluateMacro(
+          with: macroSystem, context: context, errorHandler: errorHandler
+        )
+
+        if let itemList = result.as(CodeBlockItemListSyntax.self) {
+          // TODO: recurse
+          newItems.append(contentsOf: itemList)
+        } else {
+          newItems.append(item.withItem(result))
         }
-
-        // TODO: declaration and statement macros can be applied here
-
-        if let exprMacro = macro as? ExpressionMacro.Type {
-          let result = evaluateExprMacro(
-            exprMacro: exprMacro,
-            node: macroEvaluationDecl.asMacroExpansionExpr()
-          )
-          newItems.append(item.withItem(Syntax(result)))
-          continue
-        }
-
-        errorHandler(.requiresCodeItemMacro(macro: macro, node: Syntax(item)))
         continue
       }
 

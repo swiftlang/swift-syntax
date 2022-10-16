@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>SwiftSyntaxMacros</string>
+	<key>CFBundleDisplayName</key>
+	<string>SwiftSyntaxMacros</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.swift-syntax-macros</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleIconFile</key>
+	<string>DocumentationIcon</string>
+	<key>CFBundleIconName</key>
+	<string>DocumentationIcon</string>
+	<key>CFBundlePackageType</key>
+	<string>DOCS</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.0</string>
+	<key>CDDefaultCodeListingLanguage</key>
+	<string>swift</string>
+	<key>CFBundleVersion</key>
+	<string>0.1.0</string>
+	<key>CDAppleDefaultAvailability</key>
+	<dict>
+		<key>SwiftSyntaxMacros</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>macOS</string>
+				<key>version</key>
+				<string>10.15</string>
+			</dict>
+		</array>
+	</dict>
+</dict>
+</plist>

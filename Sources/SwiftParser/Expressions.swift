@@ -916,12 +916,13 @@ extension Parser {
         continue
       }
 
-      // Check for a postfix operator starting with '.' that contains only
+      // Check for an operator starting with '.' that contains only
       // periods, '?'s, and '!'s. Expand that into key path components.
       if self.at(any: [
             .postfixOperator, .postfixQuestionMark,
-            .exclamationMark, .prefixOperator]
-         ),
+            .exclamationMark, .prefixOperator,
+            .unspacedBinaryOperator
+          ]),
          let numComponents = getNumOptionalKeyPathPostfixComponents(
           self.currentToken.tokenText) {
         components.append(

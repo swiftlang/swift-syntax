@@ -123,6 +123,11 @@ extension TokenConsumer {
       return consumeAnyToken()
     }
   }
+
+  public func withLookahead<T>(_ body: (_: inout Parser.Lookahead) -> T) -> T {
+    var lookahead = lookahead()
+    return body(&lookahead)
+  }
 }
 
 // MARK: Consuming tokens (`consume`)

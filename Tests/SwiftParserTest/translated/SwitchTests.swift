@@ -1150,15 +1150,12 @@ final class SwitchTests: XCTestCase {
       func testReturnBeforeUnknownDefault() {
         switch x { 
         case 1:
-          return1️⃣
+          return
         @unknown default: 
           break
         }
       }
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'return' statement")
-      ]
+      """
     )
   }
 
@@ -1168,14 +1165,13 @@ final class SwitchTests: XCTestCase {
       func testReturnBeforeIncompleteUnknownDefault() {
         switch x { 
         case 1:
-          return1️⃣
-        @unknown default 2️⃣
+          return
+        @unknown default 1️⃣
         }
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'return' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in switch case"),
+        DiagnosticSpec(message: "expected ':' in switch case")
       ]
     )
   }
@@ -1216,5 +1212,4 @@ final class SwitchTests: XCTestCase {
       ]
     )
   }
-
 }

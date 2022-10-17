@@ -588,8 +588,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "foo ? 11️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' after '? ...' in ternary expression"),
-        DiagnosticSpec(message: "expected expression"),
+        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression"),
       ]
     )
   }

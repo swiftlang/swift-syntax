@@ -189,8 +189,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "_ = foo/* */?.description1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' after '? ...' in ternary expression"),
-        DiagnosticSpec(message: "expected expression"),
+        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression"),
       ]
     )
     

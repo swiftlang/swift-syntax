@@ -52,6 +52,12 @@ extension FixIt.Changes {
     return FixIt.Changes(changes: changes)
   }
 
+  static func makeMissing<SyntaxType: SyntaxProtocol>(node: SyntaxType) -> Self {
+    return FixIt.Changes(changes: [
+      .replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))
+    ])
+  }
+
   /// Remove the nodes in `unexpected`.
   static func remove(unexpected: UnexpectedNodesSyntax) -> Self {
     var changes: [FixIt.Change] = [

@@ -182,6 +182,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    if node.allSatisfy({ handledNodes.contains($0.id) }) {
+      return .skipChildren
+    }
     if let tryKeyword = node.onlyToken(where: { $0.tokenKind == .tryKeyword }),
        let nextToken = tryKeyword.nextToken(viewMode: .sourceAccurate),
        nextToken.tokenKind.isKeyword {
@@ -444,6 +447,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
       moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
     )
+    return .visitChildren
+  }
+
+  public override func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.unexpectedBetweenDeinitKeywordAndBody,
+       let name = unexpected.filter({ $0.as(TokenSyntax.self)?.tokenKind.isIdentifier == true }).only?.as(TokenSyntax.self) {
+      addDiagnostic(name, .deinitCannotHaveName, fixIts: [
+        FixIt(message: RemoveNodesFixIt(name), changes: .makeMissing(token: name))
+      ], handledNodes: [name.id])
+    }
+    if let unexpected = node.unexpectedBetweenDeinitKeywordAndBody,
+       let signature = unexpected.compactMap({ $0.as(FunctionSignatureSyntax.self) }).only {
+      addDiagnostic(signature, .deinitCannotHaveParameters, fixIts: [
+        FixIt(message: RemoveNodesFixIt(signature), changes: .makeMissing(node: signature))
+      ], handledNodes: [signature.id])
+    }
+
     return .visitChildren
   }
 

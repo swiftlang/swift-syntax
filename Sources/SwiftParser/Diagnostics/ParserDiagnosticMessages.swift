@@ -74,6 +74,8 @@ public enum StaticParserError: String, DiagnosticMessage {
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"
   case defaultCannotBeUsedWithWhere = "'default' cannot be used with a 'where' guard expression"
   case defaultOutsideOfSwitch = "'default' label can only appear inside a 'switch' statement"
+  case deinitCannotHaveName = "deinitializers cannot have a name"
+  case deinitCannotHaveParameters = "deinitializers cannot have parameters"
   case editorPlaceholderInSourceFile = "editor placeholder in source file"
   case expectedExpressionAfterTry = "expected expression after 'try'"
   case invalidFlagAfterPrecedenceGroupAssignment = "expected 'true' or 'false' after 'assignment'"

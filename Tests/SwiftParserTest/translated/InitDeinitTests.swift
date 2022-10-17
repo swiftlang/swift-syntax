@@ -11,8 +11,6 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '('
-        // TODO: Old parser expected error on line 2: initializer requires a body
         DiagnosticSpec(message: "expected parameter clause in function signature"),
       ]
     )
@@ -24,29 +22,45 @@ final class InitDeinitTests: XCTestCase {
       struct FooStructConstructorB {
         init() 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: initializer requires a body
-      ]
+      """
     )
   }
 
-  func testInitDeinit3() {
+  func testInitDeinit3a() {
     AssertParse(
       """
       struct FooStructConstructorC {
         init 1️⃣{} 
-        init<T> 2️⃣{} 
-        init? 3️⃣{ self.init() } 
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '(', Fix-It replacements: 7 - 7 = '()'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature"),
-        // TODO: Old parser expected error on line 3: expected '(', Fix-It replacements: 10 - 10 = '()'
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        // TODO: Old parser expected error on line 4: expected '(', Fix-It replacements: 8 - 8 = '()'
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(message: "expected parameter clause in function signature"),
+      ]
+    )
+  }
+
+  func testInitDeinit3b() {
+    AssertParse(
+      """
+      struct FooStructConstructorC {
+        init<T> 1️⃣{}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected parameter clause in function signature"),
+      ]
+    )
+  }
+
+  func testInitDeinit3c() {
+    AssertParse(
+      """
+      struct FooStructConstructorC {
+        init? 1️⃣{ self.init() }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected parameter clause in function signature"),
       ]
     )
   }
@@ -64,26 +78,48 @@ final class InitDeinitTests: XCTestCase {
     )
   }
 
-  func testInitDeinit5() {
+  func testInitDeinit5a() {
     AssertParse(
       """
       struct FooStructDeinitializerA {
         deinit
-        deinit1️⃣ 2️⃣x
-        deinit 3️⃣x()
+      }
+      """
+    )
+  }
+
+  func testInitDeinit5b() {
+    AssertParse(
+      """
+      struct FooStructDeinitializerA {
+        deinit 1️⃣x
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' for deinitializer
-        // TODO: Old parser expected error on line 3: deinitializers cannot have a name, Fix-It replacements: 10 - 12 = ''
-        // TODO: Old parser expected error on line 3: expected '{' for deinitializer
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'x' before deinitializer"),
-        // TODO: Old parser expected error on line 4: deinitializers cannot have a name, Fix-It replacements: 10 - 11 = ''
-        // TODO: Old parser expected error on line 4: no parameter clause allowed on deinitializer, Fix-It replacements: 11 - 13 = ''
-        // TODO: Old parser expected error on line 4: expected '{' for deinitializer
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'x()' in struct"),
-      ]
+        DiagnosticSpec(message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
+      ], fixedSource: """
+      struct FooStructDeinitializerA {
+        deinit
+      }
+      """
+    )
+  }
+
+  func testInitDeinit5c() {
+    AssertParse(
+      """
+      struct FooStructDeinitializerA {
+        deinit 1️⃣x2️⃣()
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove function signature"]),
+      ], fixedSource: """
+      struct FooStructDeinitializerA {
+        deinit
+      }
+      """
     )
   }
 
@@ -93,10 +129,7 @@ final class InitDeinitTests: XCTestCase {
       struct FooStructDeinitializerB {
         deinit 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' for deinitializer
-      ]
+      """
     )
   }
 
@@ -106,10 +139,7 @@ final class InitDeinitTests: XCTestCase {
       struct FooStructDeinitializerC {
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -121,9 +151,12 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: no parameter clause allowed on deinitializer, Fix-It replacements: 9 - 18 = ''
-        DiagnosticSpec(message: "unexpected code '(a : Int) {}' in class"),
-      ]
+        DiagnosticSpec(message: "deinitializers cannot have parameters", fixIts: ["remove function signature"]),
+      ], fixedSource: """
+      class FooClassDeinitializerA {
+        deinit{}
+      }
+      """
     )
   }
 
@@ -141,14 +174,17 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       class FooClassDeinitializerC {
-        deinit 1️⃣x (a : Int) {} 
+        deinit 1️⃣x 2️⃣(a : Int) {}
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: deinitializers cannot have a name, Fix-It replacements: 10 - 12 = ''
-        // TODO: Old parser expected error on line 2: no parameter clause allowed on deinitializer, Fix-It replacements: 12 - 22 = ''
-        DiagnosticSpec(message: "unexpected code 'x (a : Int) {}' in class"),
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters")
+      ], fixedSource: """
+      class FooClassDeinitializerC {
+        deinit {}
+      }
+      """
     )
   }
 
@@ -160,11 +196,7 @@ final class InitDeinitTests: XCTestCase {
       init() {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: initializers may only be declared within a type
-        // TODO: Old parser expected error on line 1: expected '(', Fix-It replacements: 5 - 5 = '()'
         DiagnosticSpec(message: "expected parameter clause in function signature"),
-        // TODO: Old parser expected error on line 2: initializers may only be declared within a type
-        // TODO: Old parser expected error on line 3: initializers may only be declared within a type
       ]
     )
   }
@@ -175,12 +207,7 @@ final class InitDeinitTests: XCTestCase {
       deinit {} 
       deinit 
       deinit {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: deinitializers may only be declared within a class or actor
-        // TODO: Old parser expected error on line 2: expected '{' for deinitializer
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -191,10 +218,7 @@ final class InitDeinitTests: XCTestCase {
         init() {}
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -206,10 +230,7 @@ final class InitDeinitTests: XCTestCase {
         // When/if we allow 'var' in extensions, then we should also allow dtors
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -220,10 +241,7 @@ final class InitDeinitTests: XCTestCase {
         init() {}
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -234,10 +252,7 @@ final class InitDeinitTests: XCTestCase {
         init(x : Int) {}
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -259,10 +274,7 @@ final class InitDeinitTests: XCTestCase {
         convenience init(x : Int) { self.init() }
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -273,11 +285,7 @@ final class InitDeinitTests: XCTestCase {
         init() {} 
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: protocol initializers must not have bodies
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -288,10 +296,7 @@ final class InitDeinitTests: XCTestCase {
         init(x : Int) {}
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -302,11 +307,7 @@ final class InitDeinitTests: XCTestCase {
         init() {} 
         deinit {} 
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: initializers may only be declared within a type
-        // TODO: Old parser expected error on line 3: deinitializers may only be declared within a class or actor
-      ]
+      """
     )
   }
 
@@ -323,23 +324,12 @@ final class InitDeinitTests: XCTestCase {
           return
         } ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: initializers may only be declared within a type
-        // TODO: Old parser expected error on line 7: deinitializers may only be declared within a class or actor
-      ]
-    )
-  }
-
-  func testInitDeinit23() {
-    AssertParse(
-      """
-      // https://github.com/apple/swift/issues/43464
       """
     )
   }
 
   func testInitDeinit24() {
+    // https://github.com/apple/swift/issues/43464
     AssertParse(
       """
       class Aaron {
@@ -403,4 +393,14 @@ final class InitDeinitTests: XCTestCase {
     )
   }
 
+  func testDeinitInSwiftinterfaceIsFollowedByFinalFunc() {
+    AssertParse(
+      """
+      class Foo {
+        deinit
+        final func foo()
+      }
+      """
+    )
+  }
 }

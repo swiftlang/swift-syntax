@@ -237,15 +237,13 @@ extension Parser.Lookahead {
 
 extension Lexer.Lexeme {
   var canBeArgumentLabel: Bool {
-    switch self.tokenKind {
-    case .identifier where self.tokenText == "__shared" || self.tokenText == "__owned":
+    if TypeSpecifier(lexeme: self) != nil {
       return false
+    }
+    switch self.tokenKind {
     case .identifier, .wildcardKeyword:
       // Identifiers, escaped identifiers, and '_' can be argument labels.
       return true
-    case .inoutKeyword:
-      // inout cannot be used as an argument label.
-      return false
     default:
       // All other keywords can be argument labels.
       return self.isKeyword

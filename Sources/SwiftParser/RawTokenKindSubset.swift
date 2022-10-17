@@ -851,6 +851,46 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   }
 }
 
+enum TypeSpecifier: RawTokenKindSubset {
+  case inoutKeyword
+  case owned
+  case shared
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch (lexeme.tokenKind, lexeme.tokenText) {
+    case (.inoutKeyword, _): self = .inoutKeyword
+    case (.identifier, "__owned"): self = .owned
+    case (.identifier, "__shared"): self = .shared
+    default: return nil
+    }
+  }
+
+  init?(token: TokenSyntax) {
+    switch (token.tokenKind, token.text) {
+    case (.inoutKeyword, _): self = .inoutKeyword
+    case (.contextualKeyword, "__owned"): self = .owned
+    case (.contextualKeyword, "__shared"): self = .shared
+    default: return nil
+    }
+  }
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .inoutKeyword: return .inoutKeyword
+    case .owned: return .identifier
+    case .shared: return .identifier
+    }
+  }
+
+  var contextualKeyword: SyntaxText? {
+    switch self {
+    case .inoutKeyword: return nil
+    case .owned: return "__owned"
+    case .shared: return "__shared"
+    }
+  }
+}
+
 /// Union of the following token kind subsets:
 ///  - `AwaitTry`
 ///  - `ExpressionPrefixOperator`

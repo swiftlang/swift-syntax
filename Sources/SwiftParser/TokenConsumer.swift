@@ -221,6 +221,14 @@ extension TokenConsumer {
       return nil
     }
   }
+
+  mutating func consume<Subset: RawTokenKindSubset>(ifAnyIn subset: Subset.Type) -> Self.Token? {
+    if let (_, handle) = self.at(anyIn: subset) {
+      return self.eat(handle)
+    } else {
+      return nil
+    }
+  }
 }
 
 // MARK: Expecting Tokens (`expect`)

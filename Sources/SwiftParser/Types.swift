@@ -32,8 +32,8 @@ extension Parser {
   ///     type → self-type
   ///     type → '(' type ')'
   @_spi(RawSyntax)
-  public mutating func parseType() -> RawTypeSyntax {
-    let type = self.parseTypeScalar()
+  public mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+    let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
 
     // Parse pack expansion 'T...'.
     if self.currentToken.isEllipsis {
@@ -47,8 +47,8 @@ extension Parser {
     return type
   }
 
-  mutating func parseTypeScalar() -> RawTypeSyntax {
-    let (specifier, attrList) = self.parseTypeAttributeList()
+  mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+    let (specifier, attrList) = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
     if self.lookahead().isAtFunctionTypeArrow() {
       let firstEffect = self.parseEffectsSpecifier()
@@ -402,7 +402,11 @@ extension Parser {
         let second: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
         let colon: RawTokenSyntax?
-        if self.lookahead().startsParameterName(false) {
+        var misplacedSpecifiers: [RawTokenSyntax] = []
+        if self.withLookahead({ $0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: true) }) {
+          while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
+            misplacedSpecifiers.append(specifier)
+          }
           first = self.parseArgumentLabel()
           if let parsedColon = self.consume(if: .colon) {
             second = nil
@@ -423,12 +427,13 @@ extension Parser {
           colon = nil
         }
         // Parse the type annotation.
-        let type = self.parseType()
+        let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
         let ellipsis = self.currentToken.isEllipsis ? self.consumeAnyToken() : nil
         let trailingComma = self.consume(if: .comma)
         keepGoing = trailingComma != nil
         elements.append(RawTupleTypeElementSyntax(
             inOut: nil,
+            RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
             name: first,
             secondName: second,
             unexpectedBeforeColon,
@@ -593,7 +598,7 @@ extension Parser.Lookahead {
 
       // If the tuple element starts with "ident :", then it is followed
       // by a type annotation.
-      if self.startsParameterName(/*isClosure=*/false) {
+      if self.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) {
         self.consumeAnyToken()
         if self.currentToken.canBeArgumentLabel {
           self.consumeAnyToken()
@@ -783,8 +788,12 @@ extension Parser.Lookahead {
 
 extension Parser {
   @_spi(RawSyntax)
-  public mutating func parseTypeAttributeList() -> (RawTokenSyntax?, RawAttributeListSyntax?) {
-    let specifier = self.consume(ifAny: [.inoutKeyword], contextualKeywords: ["__shared", "__owned"])
+  public mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (RawTokenSyntax?, RawAttributeListSyntax?) {
+    var specifier: RawTokenSyntax? = self.consume(ifAnyIn: TypeSpecifier.self)
+    // We can only stick one specifier on this type. Let's pick the first one
+    if specifier == nil, let misplacedSpecifier = misplacedSpecifiers.first {
+      specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
+    }
 
     if self.at(any: [.atSign, .inoutKeyword]) {
       return (specifier, self.parseTypeAttributeListPresent())

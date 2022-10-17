@@ -202,9 +202,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if node.presence == .missing {
       // If there is an unexpected token in front of the identifier, we assume
       // that this unexpected token was intended to be the identifier we are missing.
-      if case .identifier = node.tokenKind,
-          let invalidIdentifier = node.previousToken(viewMode: .all),
-          let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self) {
+      if node.tokenKind.isIdentifier,
+         let invalidIdentifier = node.previousToken(viewMode: .all),
+         let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self) {
         let fixIts: [FixIt]
         if invalidIdentifier.tokenKind.isKeyword {
           fixIts = [FixIt(message: .wrapKeywordInBackticks, changes: [
@@ -296,9 +296,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         return
       }
       let message: DiagnosticMessage?
-      if let identifier = unexpected.onlyToken(where: {
-        if case .identifier = $0.tokenKind { return true } else { return false }
-      }) {
+      if let identifier = unexpected.onlyToken(where: { $0.tokenKind.isIdentifier }) {
         message = IdentifierNotAllowedInOperatorName(identifier: identifier)
       } else if let tokens = unexpected.onlyTokens(satisfying: { _ in true }) {
         message = TokensNotAllowedInOperatorName(tokens: tokens)
@@ -482,6 +480,21 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    exchangeTokens(
+      unexpected: node.unexpectedBetweenModifiersAndFirstName,
+      unexpectedTokenCondition: { TypeSpecifier(token: $0) != nil },
+      correctTokens: [node.type?.as(AttributedTypeSyntax.self)?.specifier],
+      message: { SpecifierOnParameterName(misplacedSpecifiers: $0) },
+      moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
+      removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+    )
+    return .visitChildren
+  }
+
   public override func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -557,6 +570,21 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         ])
       ], handledNodes: [node.expression.id])
     }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    exchangeTokens(
+      unexpected: node.unexpectedBetweenInOutAndName,
+      unexpectedTokenCondition: { TypeSpecifier(token: $0) != nil },
+      correctTokens: [node.type.as(AttributedTypeSyntax.self)?.specifier],
+      message: { SpecifierOnParameterName(misplacedSpecifiers: $0) },
+      moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
+      removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+    )
     return .visitChildren
   }
 

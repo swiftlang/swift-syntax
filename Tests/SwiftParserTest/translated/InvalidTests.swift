@@ -4,32 +4,26 @@ import XCTest
 
 final class InvalidTests: XCTestCase {
   func testInvalid1a() {
+    // rdar://15946844
     AssertParse(
       """
-      // rdar://15946844
-      func test1(inout 1️⃣var x : Int2️⃣) {}
+      func test1(1️⃣inout var x : Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 2: 'var' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`var`'
-        // TODO: Old parser expected error on line 2: 'inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 12 - 17 = '', 26 - 26 = 'inout '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
-      ]
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"]),
+      ], fixedSource: "func test1(var x : inout Int) {}"
     )
   }
 
   func testInvalid1b() {
     AssertParse(
       """
-      func test2(inout 1️⃣let x : Int2️⃣) {}
+      func test2(1️⃣inout let x : Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`let`'
-        // TODO: Old parser expected error on line 1: 'inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 12 - 17 = '', 26 - 26 = 'inout '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
       ]
     )
   }
@@ -37,26 +31,22 @@ final class InvalidTests: XCTestCase {
   func testInvalid1c() {
     AssertParse(
       """
-      func test3(f : (inout _ 5️⃣x : Int) -> Void) {}
+      func test3(f : (1️⃣inout _ x : Int) -> Void) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'inout' before a parameter name is not allowed, place it before the parameter type instead
-        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected code 'x : Int' in function type"),
-      ]
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"]),
+      ], fixedSource: "func test3(f : (_ x : inout Int) -> Void) {}"
     )
   }
 
   func testInvalid2a() {
     AssertParse(
       """
-      func test1s(__shared 1️⃣var x : Int2️⃣) {}
+      func test1s(1️⃣__shared var x : Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`var`'
-        // TODO: Old parser expected error on line 1: '__shared' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 21 = '', 30 - 30 = '__shared '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
+        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed"),
       ]
     )
   }
@@ -64,14 +54,11 @@ final class InvalidTests: XCTestCase {
   func testInvalid2b() {
     AssertParse(
       """
-      func test2s(__shared 1️⃣let x : Int2️⃣) {}
+      func test2s(1️⃣__shared let x : Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`let`'
-        // TODO: Old parser expected error on line 1: '__shared' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 21 = '', 30 - 30 = '__shared '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
+        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed"),
       ]
     )
   }
@@ -79,14 +66,11 @@ final class InvalidTests: XCTestCase {
   func testInvalid3a() {
     AssertParse(
       """
-      func test1o(__owned 1️⃣var x : Int2️⃣) {}
+      func test1o(1️⃣__owned var x : Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`var`'
-        // TODO: Old parser expected error on line 1: '__owned' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 20 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
+        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed"),
       ]
     )
   }
@@ -94,14 +78,11 @@ final class InvalidTests: XCTestCase {
   func testInvalid3b() {
     AssertParse(
       """
-      func test2o(__owned 1️⃣let x : Int2️⃣) {}
+      func test2o(1️⃣__owned let x : Int) {}
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 2: 'let' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`let`'
-        // TODO: Old parser expected error on line 2: '__owned' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 13 - 20 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ') {}' at top level"),
+        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed"),
       ]
     )
   }
@@ -115,7 +96,6 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected value and ')' to end function call"),
-        // TODO: Old parser expected error on line 3: expected expression in list of expressions
       ]
     )
   }
@@ -138,7 +118,6 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected ',' separator, Fix-It replacements: 32 - 32 = ','
         DiagnosticSpec(message: "expected ')' to end function call"),
       ]
     )
@@ -148,10 +127,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       super.init()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'super' cannot be used outside of class members
-      ]
+      """
     )
   }
 
@@ -204,8 +180,6 @@ final class InvalidTests: XCTestCase {
         _ = " >> \( abc 1️⃣} ) << "2️⃣
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: expected ',' separator, Fix-It replacements: 18 - 18 = ','
-        // TODO: Old parser expected error on line 4: expected expression in list of expressions
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in string literal"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
       ]
@@ -213,13 +187,12 @@ final class InvalidTests: XCTestCase {
   }
 
   func testInvalid11() {
+    // rdar://problem/18507467
     AssertParse(
       """
-      // rdar://problem/18507467
       func d(_ b: 1️⃣String 2️⃣-> 3️⃣<T>() -> T4️⃣) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type for function result
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in function type"),
@@ -236,11 +209,7 @@ final class InvalidTests: XCTestCase {
       protocol Animal<Food> {
         func feed(_ food: Food)
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: an associated type named 'Food' must be declared in the protocol 'Animal' or a protocol it inherits
-        // TODO: Old parser expected error on line 3: cannot find type 'Food' in scope
-      ]
+      """
     )
   }
 
@@ -258,7 +227,6 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 6: expected ':' following argument label and parameter name
         DiagnosticSpec(message: "expected ':' and type in function parameter"),
       ]
     )
@@ -274,7 +242,6 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: unexpected ',' separator
         DiagnosticSpec(message: "expected value in function call"),
       ]
     )
@@ -289,29 +256,56 @@ final class InvalidTests: XCTestCase {
     )
   }
 
-  func testInvalid16() {
+  func testInvalid16a() {
     AssertParse(
       """
       func f1_43591(a : inout inout Int) {}
-      func f2_43591(inout inout b1️⃣: Int) {}
-      func f3_43591(let let 2️⃣a: Int) {}
-      func f4_43591(inout x3️⃣: inout String) {}
-      func f5_43591(inout i4️⃣: inout Int) {}
+      """
+    )
+  }
+
+
+  func testInvalid16b() {
+    AssertParse(
+      """
+      func f2_43591(1️⃣inout inout b: Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 19 - 25 = ''
-        // TODO: Old parser expected error on line 2: inout' before a parameter name is not allowed, place it before the parameter type instead, Fix-It replacements: 15 - 20 = '', 30 - 30 = 'inout '
-        // TODO: Old parser expected error on line 2: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 21 - 27 = ''
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int' in parameter clause"),
+        DiagnosticSpec(message: "'inout inout' before a parameter name is not allowed", fixIts: ["move 'inout inout' in front of type"]),
+      ], fixedSource: "func f2_43591(b: inout Int) {}"
+    )
+  }
+
+  func testInvalid16c() {
+    AssertParse(
+      """
+      func f3_43591(let let 1️⃣a: Int) {}
+      """,
+      diagnostics: [
         // TODO: Old parser expected warning on line 3: 'let' in this position is interpreted as an argument label, Fix-It replacements: 15 - 18 = '`let`'
-        // TODO: Old parser expected error on line 3: expected ',' separator, Fix-It replacements: 22 - 22 = ','
-        // TODO: Old parser expected error on line 3: expected ':' following argument label and parameter name
-        // TODO: Old parser expected warning on line 3: extraneous duplicate parameter name; 'let' already has an argument label, Fix-It replacements: 15 - 19 = ''
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'a' in function parameter"),
-        // TODO: Old parser expected error on line 4: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ': inout String' in parameter clause"),
-        // TODO: Old parser expected error on line 5: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ': inout Int' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'a' in function parameter"),
+      ]
+    )
+  }
+
+  func testInvalid16d() {
+    AssertParse(
+      """
+      func f4_43591(1️⃣inout x: inout String) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
+      ]
+    )
+  }
+
+  func testInvalid16e() {
+    AssertParse(
+      """
+      func f5_43591(1️⃣inout i: inout Int) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
       ]
     )
   }
@@ -341,11 +335,10 @@ final class InvalidTests: XCTestCase {
   func testInvalid19() {
     AssertParse(
       """
-      func f4_43591(inout x1️⃣: inout String) {}
+      func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(message: "unexpected code ': inout String' in parameter clause"),
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
       ]
     )
   }
@@ -353,12 +346,11 @@ final class InvalidTests: XCTestCase {
   func testInvalid20() {
     AssertParse(
       """
-      func f5_43591(inout i1️⃣: inout Int) {}
+      func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: parameter must not have multiple '__owned', 'inout', or '__shared' specifiers, Fix-It replacements: 15 - 20 = ''
-        DiagnosticSpec(message: "unexpected code ': inout Int' in parameter clause"),
-      ]
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"]),
+      ], fixedSource: "func f5_43591(i: inout Int) {}"
     )
   }
 
@@ -376,11 +368,9 @@ final class InvalidTests: XCTestCase {
   func testInvalid22() {
     AssertParse(
       """
-      let 1️⃣for 2️⃣= 2
+      let 1️⃣for = 2
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: keyword 'for' cannot be used as an identifier here
-        // TODO: Old parser expected note on line 1: if this name is unavoidable, use backticks to escape it, Fix-It replacements: 5 - 8 = '`for`'
         DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here"),
       ]
     )

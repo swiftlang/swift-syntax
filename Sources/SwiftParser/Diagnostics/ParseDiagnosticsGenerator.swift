@@ -632,7 +632,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.colonMark.presence == .missing {
-      addDiagnostic(node.colonMark, .missingColonInTernaryExprDiagnostic, handledNodes: [node.colonMark.id])
+      if let siblings = node.parent?.children(viewMode: .all),
+         let nextSibling = siblings[siblings.index(after: node.index)...].first,
+         nextSibling.is(MissingExprSyntax.self) {
+        addDiagnostic(node.colonMark, .missingColonAndExprInTernaryExpr, fixIts: [
+          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark), Syntax(nextSibling)]), changes: [
+            .makePresent(node: node.colonMark),
+            .makePresent(node: nextSibling),
+          ])
+        ], handledNodes: [node.colonMark.id, nextSibling.id])
+      } else {
+        addDiagnostic(node.colonMark, .missingColonInTernaryExpr, fixIts: [
+          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark)]), changes: [
+            .makePresent(node: node.colonMark),
+          ])
+        ], handledNodes: [node.colonMark.id])
+      }
     }
     return .visitChildren
   }

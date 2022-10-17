@@ -42,11 +42,19 @@ fileprivate enum NodesDescriptionPart {
       }
       return token.tokenKind.decomposeToRaw().rawKind.nameForDiagnostics
     case .node(let node):
-      if let childName = node.childNameInParent {
-        return childName
-      } else {
-        return node.nodeTypeNameForDiagnostics(allowBlockNames: true)
+      var walk: Syntax = node
+      while true {
+        if let childName = walk.childNameInParent {
+          return childName
+        }
+        if let parent = walk.parent, parent.children(viewMode: .all).count == 1 {
+          // If walk is the only node in its parent, check if that parent has a childNameForDiagnostics
+          walk = parent
+        } else {
+          break
+        }
       }
+      return node.nodeTypeNameForDiagnostics(allowBlockNames: true)
     }
   }
 

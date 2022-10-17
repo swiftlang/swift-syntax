@@ -77,7 +77,7 @@ public enum StaticParserError: String, DiagnosticMessage {
   case expectedExpressionAfterTry = "expected expression after 'try'"
   case invalidFlagAfterPrecedenceGroupAssignment = "expected 'true' or 'false' after 'assignment'"
   case missingColonInTernaryExprDiagnostic = "expected ':' after '? ...' in ternary expression"
-  case operatorShouldBeDeclaredWithoutBody = "operator should no longer be declared with body"
+  case operatorShouldBeDeclaredWithoutBody = "operator should not be declared with body"
   case standaloneSemicolonStatement = "standalone ';' statements are not allowed"
   case subscriptsCannotHaveNames = "subscripts cannot have a name"
   case throwsInReturnPosition = "'throws' may only occur before '->'"

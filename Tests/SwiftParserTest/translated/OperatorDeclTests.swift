@@ -9,7 +9,7 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator +++ 1️⃣{}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator should no longer be declared with body", fixIts: ["remove operator body"])
+        DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
       ], fixedSource: "prefix operator +++"
     )
   }
@@ -20,7 +20,7 @@ final class OperatorDeclTests: XCTestCase {
       postfix operator +++ 1️⃣{}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator should no longer be declared with body")
+        DiagnosticSpec(message: "operator should not be declared with body")
       ]
     )
   }
@@ -31,7 +31,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator +++ 1️⃣{}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator should no longer be declared with body")
+        DiagnosticSpec(message: "operator should not be declared with body")
       ]
     )
   }
@@ -44,7 +44,7 @@ final class OperatorDeclTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator should no longer be declared with body", fixIts: ["remove operator body"])
+        DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
       ], fixedSource: """
       infix operator +++*
       """
@@ -57,7 +57,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator +++*+ : A 1️⃣{ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator should no longer be declared with body")
+        DiagnosticSpec(message: "operator should not be declared with body")
       ]
     )
   }
@@ -69,7 +69,7 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator +++** : A 1️⃣{ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator should no longer be declared with body")
+        DiagnosticSpec(message: "operator should not be declared with body")
       ]
     )
   }
@@ -88,7 +88,7 @@ final class OperatorDeclTests: XCTestCase {
       postfix operator ++*+* : A 1️⃣{ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator should no longer be declared with body")
+        DiagnosticSpec(message: "operator should not be declared with body")
       ]
     )
   }
@@ -119,7 +119,7 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
-        DiagnosticSpec(message: "operator should no longer be declared with body")
+        DiagnosticSpec(message: "operator should not be declared with body")
       ]
     )
   }
@@ -131,7 +131,7 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
-        DiagnosticSpec(message: "operator should no longer be declared with body")
+        DiagnosticSpec(message: "operator should not be declared with body")
       ]
     )
   }

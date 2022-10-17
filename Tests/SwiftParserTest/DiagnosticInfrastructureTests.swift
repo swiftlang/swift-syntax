@@ -15,5 +15,10 @@ public class DiagnosticInfrastructureTests: XCTestCase {
 
     XCTAssertEqual(StaticParserError.throwsInReturnPosition.diagnosticID, MessageID(domain: "SwiftParser", id: "StaticParserError.throwsInReturnPosition"))
     XCTAssertEqual(StaticParserError.throwsInReturnPosition.severity, .error)
+
+    XCTAssertEqual(
+      StaticParserFixIt.insertSemicolon.fixItID,
+      MessageID(domain: "SwiftParser", id: "StaticParserFixIt.insertSemicolon")
+    )
   }
 }

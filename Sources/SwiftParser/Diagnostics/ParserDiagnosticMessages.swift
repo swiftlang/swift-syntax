@@ -281,18 +281,43 @@ public struct UnknownDirectiveError: ParserError {
 
 // MARK: - Fix-Its (please sort alphabetically)
 
-public enum StaticParserFixIt: String, FixItMessage {
-  case insertSemicolon = "insert ';'"
-  case insertAttributeArguments = "insert attribute argument"
-  case joinIdentifiers = "join the identifiers together"
-  case joinIdentifiersWithCamelCase = "join the identifiers together with camel-case"
-  case removeOperatorBody = "remove operator body"
-  case wrapKeywordInBackticks = "if this name is unavoidable, use backticks to escape it"
+/// A parser fix-it with a static message.
+public struct StaticParserFixIt: FixItMessage {
+  public let message: String
+  private let messageID: String
 
-  public var message: String { self.rawValue }
+  /// This should only be called within a static var on FixItMessage, such
+  /// as the examples below. This allows us to pick up the messageID from the
+  /// var name.
+  fileprivate init(_ message: String, messageID: String = #function) {
+    self.message = message
+    self.messageID = messageID
+  }
 
   public var fixItID: MessageID {
-    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(messageID)")
+  }
+}
+
+extension FixItMessage where Self == StaticParserFixIt {
+  /// Please order alphabetically by property name.
+  public static var insertSemicolon: Self {
+    .init("insert ';'")
+  }
+  public static var insertAttributeArguments: Self {
+    .init("insert attribute argument")
+  }
+  public static var joinIdentifiers: Self {
+    .init("join the identifiers together")
+  }
+  public static var joinIdentifiersWithCamelCase: Self {
+    .init("join the identifiers together with camel-case")
+  }
+  public static var removeOperatorBody: Self {
+    .init("remove operator body")
+  }
+  public static var wrapKeywordInBackticks: Self {
+    .init("if this name is unavoidable, use backticks to escape it")
   }
 }
 

@@ -65,27 +65,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     self.handledNodes.append(contentsOf: handledNodes)
   }
 
-  /// Produce a diagnostic.
-  func addDiagnostic<T: SyntaxProtocol>(
-    _ node: T,
-    position: AbsolutePosition? = nil,
-    _ message: StaticParserError,
-    highlights: [Syntax] = [],
-    notes: [Note] = [],
-    fixIts: [FixIt] = [],
-    handledNodes: [SyntaxIdentifier] = []
-  ) {
-    addDiagnostic(
-      node,
-      position: position,
-      message as DiagnosticMessage,
-      highlights: highlights,
-      notes: notes,
-      fixIts: fixIts,
-      handledNodes: handledNodes
-    )
-  }
-
   /// Whether the node should be skipped for diagnostic emission.
   /// Every visit method must check this at the beginning.
   func shouldSkip<T: SyntaxProtocol>(_ node: T) -> Bool {
@@ -99,11 +78,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   ///
   /// If `incorrectContainer` contains only tokens that satisfy `unexpectedTokenCondition`, emit a diagnostic with message `message` that marks this token as misplaced.
   /// If `correctTokens` contains missing tokens, also emit a Fix-It with message `fixIt` that marks the unexpected token as missing and instead inserts `correctTokens`.
-  public func exchangeTokens(
+  public func exchangeTokens<Message: DiagnosticMessage>(
     unexpected: UnexpectedNodesSyntax?,
     unexpectedTokenCondition: (TokenSyntax) -> Bool,
     correctTokens: [TokenSyntax?],
-    message: (_ misplacedTokens: [TokenSyntax]) -> DiagnosticMessage,
+    message: (_ misplacedTokens: [TokenSyntax]) -> Message,
     moveFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage,
     removeRedundantFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage? = { _ in nil }
   ) {
@@ -147,10 +126,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
   /// If `unexpected` only contains a single token that satisfies `predicate`,
   /// emits a diagnostic with `message` that removes this token.
-  public func removeToken(
+  public func removeToken<Message: DiagnosticMessage>(
     _ unexpected: UnexpectedNodesSyntax?,
     where predicate: (TokenSyntax) -> Bool,
-    message: (TokenSyntax) -> DiagnosticMessage
+    message: (TokenSyntax) -> Message
   ) {
     guard let unexpected = unexpected,
           let misplacedToken = unexpected.onlyToken(where: predicate)
@@ -509,7 +488,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpected: node.output?.unexpectedBetweenArrowAndReturnType,
       unexpectedTokenCondition: { $0.tokenKind == .throwsKeyword },
       correctTokens: [node.throwsOrRethrowsKeyword],
-      message: { _ in StaticParserError.throwsInReturnPosition },
+      message: { _ in .throwsInReturnPosition },
       moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
     )
     return .visitChildren
@@ -577,7 +556,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         unexpected: node.unexpectedBeforeReturnKeyword,
         unexpectedTokenCondition: { $0.tokenKind == .tryKeyword },
         correctTokens: [node.expression?.as(TryExprSyntax.self)?.tryKeyword],
-        message: { _ in StaticParserError.tryMustBePlacedOnReturnedExpr },
+        message: { _ in .tryMustBePlacedOnReturnedExpr },
         moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .returnKeyword) }
       )
     }
@@ -616,7 +595,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpected: node.unexpectedBeforeThrowKeyword,
       unexpectedTokenCondition: { $0.tokenKind == .tryKeyword },
       correctTokens: [node.expression.as(TryExprSyntax.self)?.tryKeyword],
-      message: { _ in StaticParserError.tryMustBePlacedOnThrownExpr },
+      message: { _ in .tryMustBePlacedOnThrownExpr },
       moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .throwKeyword) }
     )
     return .visitChildren
@@ -701,7 +680,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     removeToken(
       node.unexpectedBetweenIdentifierAndInheritanceClause,
       where: { $0.tokenKind == .ellipsis },
-      message: { _ in StaticParserError.associatedTypeCannotUsePack }
+      message: { _ in .associatedTypeCannotUsePack }
     )
     return .visitChildren
   }
@@ -717,7 +696,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpected: node.unexpectedBetweenModifiersAndLetOrVarKeyword,
       unexpectedTokenCondition: { $0.tokenKind == .tryKeyword },
       correctTokens: missingTries,
-      message: { _ in StaticParserError.tryOnInitialValueExpression },
+      message: { _ in .tryOnInitialValueExpression },
       moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .equal) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )

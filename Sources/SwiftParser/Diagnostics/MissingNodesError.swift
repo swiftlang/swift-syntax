@@ -317,9 +317,9 @@ extension ParseDiagnosticsGenerator {
 
     let changes = missingNodes.enumerated().map { (index, missingNode) -> FixIt.Changes in
       if index == 0, let token = missingNode.as(TokenSyntax.self), token.tokenKind.isPunctuation == true, token.previousToken(viewMode: .sourceAccurate)?.tokenKind.isPunctuation == false {
-        return .makePresentBeforeTrivia(token: token)
+        return .makePresentBeforeTrivia(token)
       } else {
-        return .makePresent(node: missingNode)
+        return .makePresent(missingNode)
       }
     }
     let fixIt = FixIt(

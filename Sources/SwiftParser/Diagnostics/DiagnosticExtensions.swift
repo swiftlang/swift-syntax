@@ -33,12 +33,12 @@ extension FixIt {
 
 extension FixIt.Changes {
   /// Replaced a present token with a missing node
-  static func makeMissing(token: TokenSyntax) -> Self {
-    return makeMissing(tokens: [token])
+  static func makeMissing(_ token: TokenSyntax) -> Self {
+    return makeMissing([token])
   }
 
   /// Replace present tokens with missing tokens
-  static func makeMissing(tokens: [TokenSyntax]) -> Self {
+  static func makeMissing(_ tokens: [TokenSyntax]) -> Self {
     assert(!tokens.isEmpty)
     assert(tokens.allSatisfy({ $0.presence == .present }))
     var changes = tokens.map {
@@ -56,33 +56,16 @@ extension FixIt.Changes {
     return FixIt.Changes(changes: changes)
   }
 
-  static func makeMissing<SyntaxType: SyntaxProtocol>(node: SyntaxType) -> Self {
+  static func makeMissing<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> Self {
     return FixIt.Changes(changes: [
       .replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))
     ])
   }
 
-  /// Remove the nodes in `unexpected`.
-  static func remove(unexpected: UnexpectedNodesSyntax) -> Self {
-    var changes: [FixIt.Change] = [
-      FixIt.Change.replace(
-        oldNode: Syntax(unexpected),
-        newNode: Syntax(UnexpectedNodesSyntax([]))
-      )
-    ]
-    if let firstToken = unexpected.firstToken(viewMode: .sourceAccurate),
-       firstToken.leadingTrivia.isEmpty == false,
-       let nextToken = unexpected.lastToken(viewMode: .sourceAccurate)?.nextToken(viewMode: .sourceAccurate),
-       !nextToken.leadingTrivia.contains(where: { $0.isNewline }) {
-      changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: firstToken.leadingTrivia))
-    }
-    return FixIt.Changes(changes: changes)
-  }
-
   /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
   /// override the default leading/trailing trivia inferred from `BasicFormat`.
   static func makePresent<T: SyntaxProtocol>(
-    node: T,
+    _ node: T,
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil
   ) -> Self {
@@ -100,7 +83,7 @@ extension FixIt.Changes {
   }
 
   /// Makes the `token` present, moving it in front of the previous token's trivia.
-  static func makePresentBeforeTrivia(token: TokenSyntax) -> Self {
+  static func makePresentBeforeTrivia(_ token: TokenSyntax) -> Self {
     if let previousToken = token.previousToken(viewMode: .sourceAccurate) {
       var presentToken = PresentMaker().visit(token).as(TokenSyntax.self)!
       if !previousToken.trailingTrivia.isEmpty {
@@ -111,7 +94,7 @@ extension FixIt.Changes {
         .replace(oldNode: Syntax(token), newNode: Syntax(presentToken)),
       ]
     } else {
-      return .makePresent(node: token)
+      return .makePresent(token)
     }
   }
 }

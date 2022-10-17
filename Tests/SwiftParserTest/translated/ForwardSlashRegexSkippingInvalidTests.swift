@@ -57,10 +57,14 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       // Unterminated, and unbalanced `{}`.
       func e() {
         _ = 1️⃣/         }
+      2️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: "unexpected code '/' in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '/' in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous brace at top level"),
+        // TODO: Old parser expected error on line 0: unterminated regex literal
+        // TODO: Old parser expected error on line 0: regex literal may not start with space; add backslash to escape
       ]
     )
   }
@@ -68,20 +72,16 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   func testForwardSlashRegexSkippingInvalid5() {
     AssertParse(
       """
-      1️⃣}
       func f() {
-        _ = 2️⃣/         {
+        _ = 1️⃣/         {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 0: unterminated regex literal
-        // TODO: Old parser expected error on line 0: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
         // TODO: Old parser expected error on line 3: unterminated regex literal
         // TODO: Old parser expected error on line 3: regex literal may not start with space; add backslash to escape
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
+        DiagnosticSpec(message: "expected expression in function"),
+        DiagnosticSpec(message: "expected '}' to end function"),
+        DiagnosticSpec(message: "extraneous code at top level"),
       ]
     )
   }
@@ -91,37 +91,35 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       """
       func g() {
         _ = /x         }
-      """
+      1️⃣}
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: extraneous '}' at top level
+        DiagnosticSpec(message: "extraneous brace at top level"),
+      ]
     )
   }
 
   func testForwardSlashRegexSkippingInvalid7() {
     AssertParse(
       """
-      1️⃣} 
       func h() {
         _ = /x         {
-        } 2️⃣// The above cannot a regex literal so we skip; this `}` is to balance things out.
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: extraneous '}' at top level
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
-      ]
+        }
+      }
+      """
     )
   }
 
   func testForwardSlashRegexSkippingInvalid8() {
     AssertParse(
       #"""
-      1️⃣}
       func i() {
         _ = /x 2️⃣"[abc]     {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 3: unterminated string literal
+        // TODO: Old parser expected error on line 2: unterminated string literal
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"[abc]     {' in function"#),
       ]
     )
@@ -179,11 +177,15 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       func m() {
         _ = 1️⃣/ "
         }
+      2️⃣}
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unterminated string literal
-        DiagnosticSpec(message: "expected expression in function"),
-        DiagnosticSpec(message: #"unexpected code '/ "' in function"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code '/ "' in function"#),
+        // TODO: Old parser expected error on line 4: extraneous '}' at top level
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous brace at top level"),
+
       ]
     )
   }
@@ -191,13 +193,10 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
   func testForwardSlashRegexSkippingInvalid13() {
     AssertParse(
       #"""
-      1️⃣} 
       // Unbalanced `}`, make sure we don't consider the string literal `{`.
       func n() { 2️⃣/ "{"}3️⃣/ }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: extraneous '}' at top level
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
         // TODO: Old parser expected error on line 3: regex literal may not start with space; add backslash to escape
         DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '/ "{"' in function"#),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '/ }' at top level"),
@@ -235,25 +234,15 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       func p() {
         _ = 2
         /x} 1️⃣/
+        .bitWidth
+      }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '/' at top level"),
-      ]
-    )
-  }
-
-  func testForwardSlashRegexSkippingInvalid16() {
-    AssertParse(
-      """
-      .bitWidth
-      1️⃣}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 0: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 0: unterminated regex literal
-        // TODO: Old parser expected error on line 1: value of type 'Regex<Substring>' has no member 'bitWidth'
-        // TODO: Old parser expected error on line 2: extraneous '}' at top level
-        DiagnosticSpec(message: "extraneous brace at top level"),
+        // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';'
+        // TODO: Old parser expected error on line 3: unterminated regex literal
+        // TODO: Old parser expected error on line 4: value of type 'Regex<Substring>' has no member 'bitWidth'
+        // TODO: Old parser expected error on line 5: extraneous '}' at top level
+        DiagnosticSpec(message: "extraneous code at top level"),
       ]
     )
   }

@@ -354,5 +354,13 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
+  func testParameterPacks28() throws {
+    // We allow whitespace between the generic parameter and the '...', this is
+    // consistent with regular variadic parameters.
+    AssertParse(
+      """
+      func f1<T ...>(_ x: T ...) -> (T ...) {}
+      """)
+  }
 }
 

@@ -14,14 +14,18 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 extension FixIt {
-  init(message: StaticParserFixIt, changes: Changes) {
-    self.init(message: message as FixItMessage, changes: changes)
-  }
-
   public init(message: FixItMessage, changes: [Changes]) {
     self.init(message: message, changes: FixIt.Changes(combining: changes))
   }
 
+  // These overloads shouldn't be needed, but are currently required for the
+  // Swift 5.5 compiler to handle non-trivial FixIt initializations using
+  // leading-dot syntax.
+  // TODO: These can be dropped once we require a minimum of Swift 5.6 to
+  // compile the library.
+  init(message: StaticParserFixIt, changes: Changes) {
+    self.init(message: message as FixItMessage, changes: changes)
+  }
   init(message: StaticParserFixIt, changes: [Changes]) {
     self.init(message: message as FixItMessage, changes: FixIt.Changes(combining: changes))
   }

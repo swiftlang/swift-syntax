@@ -22,6 +22,14 @@ extension String {
     }
     return String(result)
   }
+
+  func withFirstLetterUppercased() -> String {
+    if let firstLetter = self.first {
+      return firstLetter.uppercased() + self.dropFirst()
+    } else {
+      return self
+    }
+  }
 }
 
 extension Collection {

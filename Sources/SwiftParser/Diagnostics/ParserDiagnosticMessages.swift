@@ -152,6 +152,21 @@ public struct MissingAttributeArgument: ParserError {
   }
 }
 
+public struct SpaceSeparatedIdentifiersError: ParserError {
+  public let firstToken: TokenSyntax
+  public let additionalTokens: [TokenSyntax]
+
+  public var message: String {
+    if let anchorParent = firstToken.parent?.ancestorOrSelf(where: {
+      $0.nodeTypeNameForDiagnostics(allowBlockNames: false) != nil
+    }) {
+      return "found an unexpected second identifier in \(anchorParent.nodeTypeNameForDiagnostics(allowBlockNames: false)!)"
+    } else {
+      return "found an unexpected second identifier"
+    }
+  }
+}
+
 public struct SpecifierOnParameterName: ParserError {
   public let misplacedSpecifiers: [TokenSyntax]
 
@@ -205,6 +220,8 @@ public struct UnknownDirectiveError: ParserError {
 public enum StaticParserFixIt: String, FixItMessage {
   case insertSemicolon = "insert ';'"
   case insertAttributeArguments = "insert attribute argument"
+  case joinIdentifiers = "join the identifiers together"
+  case joinIdentifiersWithCamelCase = "join the identifiers together with camel-case"
   case removeOperatorBody = "remove operator body"
   case wrapKeywordInBackticks = "if this name is unavoidable, use backticks to escape it"
 

@@ -376,17 +376,51 @@ final class InvalidTests: XCTestCase {
     )
   }
 
-  func testInvalid23() {
+  func testInvalid23a() {
     AssertParse(
       """
       func dog 1️⃣cow() {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 13 = 'dogcow'
-        // TODO: Old parser expected note on line 1: join the identifiers together with camel-case, Fix-It replacements: 6 - 13 = 'dogCow'
-        DiagnosticSpec(message: "unexpected code 'cow' before parameter clause"),
-      ]
+        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
+          "join the identifiers together",
+          "join the identifiers together with camel-case"
+        ]),
+      ],
+      applyFixIts: ["join the identifiers together"],
+      fixedSource: "func dogcow() {}"
+    )
+  }
+
+  func testInvalid23b() {
+    AssertParse(
+      """
+      func dog 1️⃣cow() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
+          "join the identifiers together",
+          "join the identifiers together with camel-case"
+        ]),
+      ],
+      applyFixIts: ["join the identifiers together with camel-case"],
+      fixedSource: "func dogCow() {}"
+    )
+  }
+
+  func testThreeIdentifersForFunctionName() {
+    AssertParse(
+      """
+      func dog 1️⃣cow sheep() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
+          "join the identifiers together",
+          "join the identifiers together with camel-case"
+        ]),
+      ],
+      applyFixIts: ["join the identifiers together with camel-case"],
+      fixedSource: "func dogCowSheep() {}"
     )
   }
 
@@ -396,10 +430,8 @@ final class InvalidTests: XCTestCase {
       func cat 1️⃣Mouse() {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 15 = 'catMouse'
-        DiagnosticSpec(message: "unexpected code 'Mouse' before parameter clause"),
-      ]
+        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: ["join the identifiers together"]),
+      ], fixedSource: "func catMouse() {}"
     )
   }
 
@@ -409,11 +441,13 @@ final class InvalidTests: XCTestCase {
       func friend 1️⃣ship<T>(x: T) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: found an unexpected second identifier in function declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 17 = 'friendship'
-        // TODO: Old parser expected note on line 1: join the identifiers together with camel-case, Fix-It replacements: 6 - 17 = 'friendShip'
-        DiagnosticSpec(message: "unexpected code 'ship<T>' before parameter clause"),
-      ]
+        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
+          "join the identifiers together",
+          "join the identifiers together with camel-case"
+        ]),
+      ],
+      applyFixIts: ["join the identifiers together with camel-case"],
+      fixedSource: "func friendShip<T>(x: T) {}"
     )
   }
 
@@ -425,9 +459,6 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
-        // TODO: Old parser expected error on line 2: found an unexpected second identifier in function declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 2: join the identifiers together, Fix-It replacements: 6 - 5 = 'werewolf'
-        // TODO: Old parser expected note on line 2: join the identifiers together with camel-case, Fix-It replacements: 6 - 5 = 'wereWolf'
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
       ]
     )
@@ -441,9 +472,6 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
-        // TODO: Old parser expected error on line 2: found an unexpected second identifier in function declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 2: join the identifiers together, Fix-It replacements: 6 - 9 = 'hammerleavings'
-        // TODO: Old parser expected note on line 2: join the identifiers together with camel-case, Fix-It replacements: 6 - 9 = 'hammerLeavings'
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
       ]
     )

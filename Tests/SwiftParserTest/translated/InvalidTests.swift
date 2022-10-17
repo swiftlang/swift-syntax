@@ -473,9 +473,6 @@ final class InvalidTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected name and member block in class"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 2: 'weak' must be a mutable variable, because it may change at runtime
-        // TODO: Old parser expected error on line 2: 'weak' variable should have optional type 'T?'
-        // TODO: Old parser expected error on line 2: 'weak' must not be applied to non-class-bound 'T'; consider adding a protocol conformance that has a class bound
       ]
     )
   }
@@ -488,32 +485,16 @@ final class InvalidTests: XCTestCase {
       !(())
       !(x)
       !x
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type '()' to expected argument type 'Bool'
-        // TODO: Old parser expected error on line 3: cannot convert value of type '()' to expected argument type 'Bool'
-        // TODO: Old parser expected error on line 4: cannot convert value of type '()' to expected argument type 'Bool'
-        // TODO: Old parser expected error on line 5: cannot convert value of type '()' to expected argument type 'Bool'
-      ]
-    )
-  }
-
-  func testInvalid31() {
-    AssertParse(
-      """
-      // https://github.com/apple/swift/issues/50734
       """
     )
   }
 
   func testInvalid32() {
+    // https://github.com/apple/swift/issues/50734
     AssertParse(
       """
       func f1_50734(@NSApplicationMain x: Int) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: @NSApplicationMain may only be used on 'class' declarations
-      ]
+      """
     )
   }
 
@@ -521,10 +502,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func f2_50734(@available(iOS, deprecated: 0) x: Int) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: '@available' attribute cannot be applied to this declaration
-      ]
+      """
     )
   }
 
@@ -532,10 +510,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func f3_50734(@discardableResult x: Int) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: '@discardableResult' attribute cannot be applied to this declaration
-      ]
+      """
     )
   }
 
@@ -543,10 +518,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func f4_50734(@objcMembers x: String) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: @objcMembers may only be used on 'class' declarations
-      ]
+      """
     )
   }
 
@@ -554,11 +526,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func f5_50734(@weak x: String) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'weak' is a declaration modifier, not an attribute
-        // TODO: Old parser expected error on line 1: 'weak' may only be used on 'var' declarations
-      ]
+      """
     )
   }
 
@@ -566,10 +534,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       class C_50734<@NSApplicationMain T: AnyObject> {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: @NSApplicationMain may only be used on 'class' declarations
-      ]
+      """
     )
   }
 
@@ -577,10 +542,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       func f6_50734<@discardableResult T>(x: T) {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: '@discardableResult' attribute cannot be applied to this declaration
-      ]
+      """
     )
   }
 
@@ -588,11 +550,7 @@ final class InvalidTests: XCTestCase {
     AssertParse(
       """
       enum E_50734<@indirect T> {}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'indirect' is a declaration modifier, not an attribute
-        // TODO: Old parser expected error on line 1: 'indirect' modifier cannot be applied to this declaration
-      ]
+      """
     )
   }
 
@@ -602,10 +560,7 @@ final class InvalidTests: XCTestCase {
       protocol P {
         @available(swift, introduced: 4.2) associatedtype Assoc
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: '@available' attribute cannot be applied to this declaration
-      ]
+      """
     )
   }
 

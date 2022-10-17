@@ -78,14 +78,7 @@ final class MatchingPatternsTests: XCTestCase {
       case 1 + (_): 
         ()
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 13: cannot assign
-        // TODO: Old parser expected error on line 14: 'var' cannot appear nested inside another 'var' or 'let' pattern
-        // TODO: Old parser expected error on line 16: 'let' cannot appear nested inside another 'var' or 'let' pattern
-        // TODO: Old parser expected error on line 18: 'var' cannot appear nested inside another 'var'
-        // TODO: Old parser expected error on line 24: '_' can only appear in a pattern or on the left side of an assignment
-      ]
+      """#
     )
   }
 
@@ -441,13 +434,7 @@ final class MatchingPatternsTests: XCTestCase {
       case (let (_, _, _)) + 1:
         ()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 6: 'var' cannot appear nested inside another 'var'
-        // TODO: Old parser expected error on line 11: '_' can only appear in a pattern or on the left side of an assignment
-        // TODO: Old parser expected error on line 13: '_' can only appear in a pattern or on the left side of an assignment
-        // TODO: Old parser expected error on line 15: '_' can only appear in a pattern or on the left side of an assignment
-      ]
+      """
     )
   }
 
@@ -519,8 +506,6 @@ final class MatchingPatternsTests: XCTestCase {
       let (responseObject: Int1️⃣?) = op1
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected ',' separator, Fix-It replacements: 25 - 25 = ','
-        // TODO: Old parser expected error on line 2: expected pattern
         DiagnosticSpec(message: "unexpected code '?' in tuple pattern"),
       ]
     )

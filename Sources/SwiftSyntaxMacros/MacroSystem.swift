@@ -58,33 +58,28 @@ class MacroApplication : SyntaxRewriter {
     self.errorHandler = errorHandler
   }
 
-  override func visit(_ node: MacroExpansionExprSyntax) -> ExprSyntax {
-    // TODO: recurse
-    return ExprSyntax(
-      Syntax(node).evaluateMacro(
-        with: macroSystem, context: context, errorHandler: errorHandler))!
+  override func visitAny(_ node: Syntax) -> Syntax? {
+    guard node.evaluatedMacroName != nil else {
+      return nil
+    }
+
+    return node.evaluateMacro(
+      with: macroSystem, context: context, errorHandler: errorHandler
+    )
   }
 
   override func visit(_ node: CodeBlockItemListSyntax) -> Syntax {
     var newItems: [CodeBlockItemSyntax] = []
     for item in node {
-      // Handle macro expansion declarations.
-      if item.item.is(MacroExpansionDeclSyntax.self) {
-        let result = item.item.evaluateMacro(
-          with: macroSystem, context: context, errorHandler: errorHandler
-        )
-
-        if let itemList = result.as(CodeBlockItemListSyntax.self) {
-          // TODO: recurse
-          newItems.append(contentsOf: itemList)
-        } else {
-          newItems.append(item.withItem(result))
-        }
-        continue
-      }
-
       // Recurse on the child node.
-      newItems.append(item.withItem(visit(item.item)))
+      let newItem = visit(item.item)
+
+      // Flatten if we get code block item list syntax back.
+      if let itemList = newItem.as(CodeBlockItemListSyntax.self) {
+        newItems.append(contentsOf: itemList)
+      } else {
+        newItems.append(item.withItem(newItem))
+      }
     }
 
     return Syntax(CodeBlockItemListSyntax(newItems))

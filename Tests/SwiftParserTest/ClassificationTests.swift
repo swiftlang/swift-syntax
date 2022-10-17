@@ -1,12 +1,12 @@
 import XCTest
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 
 public class ClassificationTests: XCTestCase {
 
   public func testClassification() {
     let source = "// blah.\nlet x/*yo*/ = 0"
-    let tree = try! SyntaxParser.parse(source: source)
+    let tree = Parser.parse(source: source)
     do {
       let classif = Array(tree.classifications)
       XCTAssertEqual(classif.count, 8)
@@ -84,7 +84,7 @@ public class ClassificationTests: XCTestCase {
 
     do {
       let source = "func foo() {}"
-      let tree = try! SyntaxParser.parse(source: source)
+      let tree = Parser.parse(source: source)
       // For `classification(at:)` there's an initial walk to find the token that
       // the offset is contained in and the classified ranges are processed from that
       // token. That means that a `none` classified range would be restricted inside
@@ -97,7 +97,7 @@ public class ClassificationTests: XCTestCase {
 
   public func testTokenClassification() {
     let source = "let x: Int"
-    let tree = try! SyntaxParser.parse(source: source)
+    let tree = Parser.parse(source: source)
     do {
       let tokens = Array(tree.tokens(viewMode: .sourceAccurate))
       XCTAssertEqual(tokens.count, 4)

@@ -27,10 +27,8 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
         var a : Int { 
           switch i { 
       }1️⃣
-      // expected-error@+1 2 {{expected '}'}}
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: 'switch' statement body must have at least one 'case'
         DiagnosticSpec(message: "expected '}' to end variable"),
         DiagnosticSpec(message: "expected '}' to end function"),
       ]

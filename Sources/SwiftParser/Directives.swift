@@ -68,7 +68,7 @@ extension Parser {
   public mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (inout Parser) -> Element?,
     addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element? = { _, _, _ in nil },
-    syntax: (inout Parser, [Element]) -> RawSyntax
+    syntax: (inout Parser, [Element]) -> RawSyntax?
   ) -> RawIfConfigDeclSyntax {
     var clauses = [RawIfConfigClauseSyntax]()
     do {

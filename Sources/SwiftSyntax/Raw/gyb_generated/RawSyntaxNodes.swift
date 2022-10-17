@@ -7952,7 +7952,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
     _ unexpectedBetweenPoundKeywordAndCondition: RawUnexpectedNodesSyntax? = nil,
     condition: RawExprSyntax?,
     _ unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax? = nil,
-    elements: RawSyntax,
+    elements: RawSyntax?,
     _ unexpectedAfterElements: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -7964,7 +7964,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
       layout[2] = unexpectedBetweenPoundKeywordAndCondition?.raw
       layout[3] = condition?.raw
       layout[4] = unexpectedBetweenConditionAndElements?.raw
-      layout[5] = elements.raw
+      layout[5] = elements?.raw
       layout[6] = unexpectedAfterElements?.raw
     }
     self.init(raw: raw)
@@ -8000,11 +8000,11 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
   public func withUnexpectedBetweenConditionAndElements(_ unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
     return layoutView.replacingChild(at: 4, with: unexpectedBetweenConditionAndElements.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
   }
-  public var elements: RawSyntax {
-    layoutView.children[5]!
+  public var elements: RawSyntax? {
+    layoutView.children[5]
   }
-  public func withElements(_ elements: RawSyntax, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(elements), arena: arena).as(RawIfConfigClauseSyntax.self)!
+  public func withElements(_ elements: RawSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
+    return layoutView.replacingChild(at: 5, with: elements.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
   }
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))

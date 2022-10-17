@@ -2752,14 +2752,14 @@ public enum SyntaxFactory {
     return FunctionSignatureSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IfConfigClauseSyntax")
-  public static func makeIfConfigClause(_ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil, poundKeyword: TokenSyntax, _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax?, _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil, elements: Syntax, _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil) -> IfConfigClauseSyntax {
+  public static func makeIfConfigClause(_ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil, poundKeyword: TokenSyntax, _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax?, _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil, elements: Syntax?, _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil) -> IfConfigClauseSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundKeyword?.raw,
       poundKeyword.raw,
       unexpectedBetweenPoundKeywordAndCondition?.raw,
       condition?.raw,
       unexpectedBetweenConditionAndElements?.raw,
-      elements.raw,
+      elements?.raw,
       unexpectedAfterElements?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClause,
@@ -2777,7 +2777,7 @@ public enum SyntaxFactory {
       nil,
       nil,
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+      nil,
       nil,
     ], arena: .default))
     return IfConfigClauseSyntax(data)

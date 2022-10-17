@@ -22,8 +22,7 @@ final class AvailabilityTests: XCTestCase {
         @available(*, deprecated, message: "Use the initializer taking 'ConcurrentEdits' instead")
         public convenience init() {}
       }
-      """,
-      { $0.parseClassDeclaration(.empty, .constant(.classKeyword)) }
+      """
     )
 
     AssertParse(

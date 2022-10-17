@@ -174,7 +174,7 @@ final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere12() {
     AssertParse(
       """
-      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC>(x: T) {}
+      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 83 - 83 = ' where T: ProtoC'
@@ -182,8 +182,8 @@ final class DeprecatedWhereTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier and member block in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '<ProtoA, ProtoB> where T: ProtoC>(x: T) {}' at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T)' in protocol"),
       ]
     )
   }
@@ -191,7 +191,7 @@ final class DeprecatedWhereTests: XCTestCase {
   func testDeprecatedWhere13() {
     AssertParse(
       """
-      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}
+      func testCombinedConstraintsOld<T: 2️⃣protocol3️⃣<ProtoA, ProtoB> where T: ProtoC4️⃣>(x: T) where T: ProtoD {}
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'where' clause next to generic parameters is obsolete, Fix-It replacements: 60 - 76 = '', 84 - 89 = 'where T: ProtoC,'
@@ -199,8 +199,8 @@ final class DeprecatedWhereTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected inherited type in generic parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier and member block in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code '<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}' at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in protocol"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '>(x: T) where T: ProtoD' in protocol"),
       ]
     )
   }

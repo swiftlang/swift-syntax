@@ -804,7 +804,7 @@ final class DeclarationTests: XCTestCase {
 
   func testDontRecoverFromDeclKeyword() {
     AssertParse(
-      "func foo(first second 1️⃣third 3️⃣struct4️⃣: Int) {}",
+      "func foo(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         modifiers: nil,
@@ -818,9 +818,9 @@ final class DeclarationTests: XCTestCase {
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier and member block in struct"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous code ': Int) {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in struct"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ')' in struct"),
       ]
     )
   }
@@ -1193,6 +1193,15 @@ final class DeclarationTests: XCTestCase {
       }
       """
     )
+  }
+
+  func testNominalDeclarationRecovery() {
+    AssertParse("protocol 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in protocol")])
+    AssertParse("class 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in class")])
+    AssertParse("struct 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in struct")])
+    AssertParse("enum 1️⃣{}", diagnostics: [DiagnosticSpec(message: "expected identifier in enum")])
+    // `actor` cannot recover from a missing identifier since it's contextual
+    // based on the presence of the identifier.
   }
 }
 

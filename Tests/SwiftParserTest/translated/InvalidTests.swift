@@ -489,19 +489,17 @@ final class InvalidTests: XCTestCase {
   func testInvalid29() {
     AssertParse(
       """
-      struct Weak<T: 1️⃣class2️⃣> {
+      struct Weak<T: 1️⃣class> {
         weak let value: T
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'class' constraint can only appear on protocol declarations
-        // TODO: Old parser expected note on line 1: did you mean to write an 'AnyObject' constraint?, Fix-It replacements: 16 - 21 = 'AnyObject'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name and member block in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
-      ]
+        DiagnosticSpec(message: "'class' constraint can only appear on protocol declarations", fixIts: ["replace 'class' by 'AnyObject'"]),
+      ], fixedSource: """
+      struct Weak<T: AnyObject> {
+        weak let value: T
+      }
+      """
     )
   }
 

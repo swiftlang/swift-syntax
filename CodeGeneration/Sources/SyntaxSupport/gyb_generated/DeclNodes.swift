@@ -1288,7 +1288,8 @@ public let DECL_NODES: [Node] = [
                  "SpacedBinaryOperator",
                  "PrefixOperator",
                  "PostfixOperator"
-               ]),
+               ],
+               classification: "OperatorIdentifier"),
          Child(name: "OperatorPrecedenceAndTypes",
                kind: "OperatorPrecedenceAndTypes",
                description: "Optionally specify a precedence group and designated types.",

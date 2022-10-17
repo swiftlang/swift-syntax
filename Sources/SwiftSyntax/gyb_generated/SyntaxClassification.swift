@@ -21,6 +21,8 @@ public enum SyntaxClassification {
   case identifier
   /// An identifier referring to a type. 
   case typeIdentifier
+  /// An identifier referring to an operator. 
+  case operatorIdentifier
   /// An identifier starting with `$` like `$0`. 
   case dollarIdentifier
   /// An integer literal. 
@@ -75,6 +77,8 @@ extension SyntaxClassification {
         return (.buildConfigId, false)
       case (.declModifier, 1):
         return (.attribute, false)
+      case (.operatorDecl, 7):
+        return (.operatorIdentifier, false)
       case (.precedenceGroupRelation, 1):
         return (.keyword, false)
       case (.precedenceGroupAssociativity, 1):
@@ -343,13 +347,13 @@ extension RawTokenKind {
     case .identifier:
       return .identifier
     case .unspacedBinaryOperator:
-      return .none
+      return .operatorIdentifier
     case .spacedBinaryOperator:
-      return .none
+      return .operatorIdentifier
     case .postfixOperator:
-      return .none
+      return .operatorIdentifier
     case .prefixOperator:
-      return .none
+      return .operatorIdentifier
     case .dollarIdentifier:
       return .dollarIdentifier
     case .contextualKeyword:

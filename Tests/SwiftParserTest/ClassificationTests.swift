@@ -121,4 +121,56 @@ public class ClassificationTests: XCTestCase {
       XCTAssertEqual(classif.kind, .typeIdentifier)
     }
   }
+
+  public func testOperatorTokenClassification() {
+    do {
+      let source = "let x: Int = 4 + 5 / 6"
+      let tree = Parser.parse(source: source)
+
+      let tokens = Array(tree.tokens(viewMode: .sourceAccurate))
+      XCTAssertEqual(tokens.count, 10)
+      guard tokens.count == 10 else {
+        return
+      }
+      let classif = tokens.map { $0.tokenClassification }
+      XCTAssertEqual(classif[0].kind, .keyword)
+      XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 0, length: 3))
+      XCTAssertEqual(classif[1].kind, .identifier)
+      XCTAssertEqual(classif[1].range, ByteSourceRange(offset: 4, length: 1))
+      XCTAssertEqual(classif[2].kind, .none)
+      XCTAssertEqual(classif[2].range, ByteSourceRange(offset: 5, length: 1))
+      XCTAssertEqual(classif[3].kind, .typeIdentifier)
+      XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 7, length: 3))
+      XCTAssertEqual(classif[4].kind, .none)
+      XCTAssertEqual(classif[4].range, ByteSourceRange(offset: 11, length: 1))
+      XCTAssertEqual(classif[5].kind, .integerLiteral)
+      XCTAssertEqual(classif[5].range, ByteSourceRange(offset: 13, length: 1))
+      XCTAssertEqual(classif[6].kind, .operatorIdentifier)
+      XCTAssertEqual(classif[6].range, ByteSourceRange(offset: 15, length: 1))
+      XCTAssertEqual(classif[7].kind, .integerLiteral)
+      XCTAssertEqual(classif[7].range, ByteSourceRange(offset: 17, length: 1))
+      XCTAssertEqual(classif[8].kind, .operatorIdentifier)
+      XCTAssertEqual(classif[8].range, ByteSourceRange(offset: 19, length: 1))
+      XCTAssertEqual(classif[9].kind, .integerLiteral)
+      XCTAssertEqual(classif[9].range, ByteSourceRange(offset: 21, length: 1))
+    }
+
+    do {
+      let source = "infix operator *--*"
+      let tree = Parser.parse(source: source)
+
+      let tokens = Array(tree.tokens(viewMode: .sourceAccurate))
+      XCTAssertEqual(tokens.count, 3)
+      guard tokens.count == 3 else {
+        return
+      }
+      let classif = tokens.map { $0.tokenClassification }
+      XCTAssertEqual(classif[0].kind, .keyword)
+      XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 0, length: 5))
+      XCTAssertEqual(classif[1].kind, .keyword)
+      XCTAssertEqual(classif[1].range, ByteSourceRange(offset: 6, length: 8))
+      XCTAssertEqual(classif[2].kind, .operatorIdentifier)
+      XCTAssertEqual(classif[2].range, ByteSourceRange(offset: 15, length: 4))
+    }
+  }
 }

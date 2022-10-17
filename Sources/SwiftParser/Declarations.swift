@@ -1121,11 +1121,7 @@ extension Parser {
     }
 
     // Detect an attempt to use a type parameter pack.
-    var unexpectedAfterName: RawUnexpectedNodesSyntax?
-    if let ellipsis = tryConsumeEllipsisPrefix() {
-      unexpectedAfterName = RawUnexpectedNodesSyntax(
-        elements: [RawSyntax(ellipsis)], arena: self.arena)
-    }
+    let ellipsis = tryConsumeEllipsisPrefix()
 
     // Parse optional inheritance clause.
     let inheritance: RawTypeInheritanceClauseSyntax?
@@ -1162,7 +1158,7 @@ extension Parser {
       associatedtypeKeyword: assocKeyword,
       unexpectedBeforeName,
       identifier: name,
-      unexpectedAfterName,
+      RawUnexpectedNodesSyntax([ellipsis], arena: self.arena),
       inheritanceClause: inheritance,
       initializer: defaultType,
       genericWhereClause: whereClause,

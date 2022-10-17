@@ -145,7 +145,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     addDiagnostic(incorrectContainer, message(misplacedTokens), fixIts: fixIts, handledNodes: [incorrectContainer.id] + correctAndMissingTokens.map(\.id))
   }
 
-  /// Utility function to remove a misplaced token with a custom error message.
+  /// If `unexpected` only contains a single token that satisfies `predicate`,
+  /// emits a diagnostic with `message` that removes this token.
   public func removeToken(
     _ unexpected: UnexpectedNodesSyntax?,
     where predicate: (TokenSyntax) -> Bool,

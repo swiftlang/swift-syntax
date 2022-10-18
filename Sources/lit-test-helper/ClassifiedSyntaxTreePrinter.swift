@@ -21,6 +21,7 @@ extension SyntaxClassification {
     case .identifier: return "id"
     case .typeIdentifier: return "type"
     case .dollarIdentifier: return "dollar"
+    case .operatorIdentifier: return "op"
     case .integerLiteral: return "int"
     case .floatingLiteral: return "float"
     case .stringLiteral: return "str"

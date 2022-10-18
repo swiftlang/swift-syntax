@@ -26,6 +26,9 @@ SYNTAX_CLASSIFICATIONS = [
     SyntaxClassification('TypeIdentifier', description='''
     An identifier referring to a type.
     '''),
+    SyntaxClassification('OperatorIdentifier', description='''
+    An identifier referring to an operator.
+    '''),
     SyntaxClassification('DollarIdentifier', description='''
     An identifier starting with `$` like `$0`.
     '''),

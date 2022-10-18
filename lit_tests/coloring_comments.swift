@@ -121,7 +121,7 @@ func foo(x: Int, y: Int) -> Int { return x + y }
 // CHECK: <doc-comment-line>/// - seealso : nope</doc-comment-line>
 // CHECK: <doc-comment-line>/// - seealso nope</doc-comment-line>
 // CHECK: <doc-comment-line>/// - returns: `x + y`</doc-comment-line>
-// CHECK: <kw>func</kw> <id>foo</id>(<id>x</id>: <type>Int</type>, <id>y</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>x</id> + <id>y</id> }
+// CHECK: <kw>func</kw> <id>foo</id>(<id>x</id>: <type>Int</type>, <id>y</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>x</id> <op>+</op> <id>y</id> }
 
 
 /// Brief.
@@ -151,7 +151,7 @@ func bar(x: Int, y: Int) -> Int { return x + y }
 // CHECK: <doc-comment-line>/// - NOTE: NOTE2</doc-comment-line>
 // CHECK: <doc-comment-line>///   - note: Not a Note field (not at top level)</doc-comment-line>
 // CHECK: <doc-comment-line>/// - returns: `x + y`</doc-comment-line>
-// CHECK: <kw>func</kw> <id>bar</id>(<id>x</id>: <type>Int</type>, <id>y</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>x</id> + <id>y</id> }
+// CHECK: <kw>func</kw> <id>bar</id>(<id>x</id>: <type>Int</type>, <id>y</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>x</id> <op>+</op> <id>y</id> }
 
 /**
   Does pretty much nothing.

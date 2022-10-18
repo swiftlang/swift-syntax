@@ -60,12 +60,12 @@ class MyCls {
     subscript (i : Int, j : Int) -> Int {
       // CHECK: <kw>get</kw> {
       get {
-        // CHECK: <kw>return</kw> <id>i</id> + <id>j</id>
+        // CHECK: <kw>return</kw> <id>i</id> <op>+</op> <id>j</id>
         return i + j
       }
       // CHECK: <kw>set</kw>(<id>v</id>) {
       set(v) {
-        // CHECK: <id>v</id> + <id>i</id> - <id>j</id>
+        // CHECK: <id>v</id> <op>+</op> <id>i</id> <op>-</op> <id>j</id>
         v + i - j
       }
     }
@@ -88,13 +88,13 @@ class Attributes {
 // CHECK: <attr-builtin>@IBOutlet</attr-builtin> <attr-builtin>@objc</attr-builtin> <kw>var</kw> <id>v3</id>: <type>String</type>
   @IBOutlet @objc var v3: String
 
-// CHECK: <attr-builtin>@available</attr-builtin>(*, <id>unavailable</id>) <kw>func</kw> <id>f1</id>() {}
+// CHECK: <attr-builtin>@available</attr-builtin>(<op>*</op>, <id>unavailable</id>) <kw>func</kw> <id>f1</id>() {}
   @available(*, unavailable) func f1() {}
 
-// CHECK: <attr-builtin>@available</attr-builtin>(*, <id>unavailable</id>) <attr-builtin>@IBAction</attr-builtin> <kw>func</kw> <id>f2</id>() {}
+// CHECK: <attr-builtin>@available</attr-builtin>(<op>*</op>, <id>unavailable</id>) <attr-builtin>@IBAction</attr-builtin> <kw>func</kw> <id>f2</id>() {}
   @available(*, unavailable) @IBAction func f2() {}
 
-// CHECK: <attr-builtin>@IBAction</attr-builtin> <attr-builtin>@available</attr-builtin>(*, <id>unavailable</id>) <kw>func</kw> <id>f3</id>() {}
+// CHECK: <attr-builtin>@IBAction</attr-builtin> <attr-builtin>@available</attr-builtin>(<op>*</op>, <id>unavailable</id>) <kw>func</kw> <id>f3</id>() {}
   @IBAction @available(*, unavailable) func f3() {}
 
 // CHECK: <kw>mutating</kw> <kw>func</kw> <id>func_mutating_1</id>() {}
@@ -160,7 +160,7 @@ protocol Prot {
   var protocolProperty2: Int { get set }
 }
 
-// CHECK: <kw>infix</kw> <kw>operator</kw> *-* : <id>FunnyPrecedence</id>{{$}}
+// CHECK: <kw>infix</kw> <kw>operator</kw> <op>*-*</op> : <id>FunnyPrecedence</id>{{$}}
 infix operator *-* : FunnyPrecedence
 
 // CHECK: <kw>precedencegroup</kw> <id>FunnyPrecedence</id>
@@ -171,19 +171,19 @@ precedencegroup FunnyPrecedence {
   higherThan: MultiplicationPrecedence
 }
 
-// CHECK: <kw>func</kw> *-*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
+// CHECK: <kw>func</kw> <op>*-*</op>(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *-*(l: Int, r: Int) -> Int { return l }
 
-// CHECK: <kw>infix</kw> <kw>operator</kw> *-+* : <id>FunnyPrecedence</id>
+// CHECK: <kw>infix</kw> <kw>operator</kw> <op>*-+*</op> : <id>FunnyPrecedence</id>
 infix operator *-+* : FunnyPrecedence
 
-// CHECK: <kw>func</kw> *-+*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
+// CHECK: <kw>func</kw> <op>*-+*</op>(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *-+*(l: Int, r: Int) -> Int { return l }
 
-// CHECK: <kw>infix</kw> <kw>operator</kw> *--*{{$}}
+// CHECK: <kw>infix</kw> <kw>operator</kw> <op>*--*</op>{{$}}
 infix operator *--*
 
-// CHECK: <kw>func</kw> *--*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
+// CHECK: <kw>func</kw> <op>*--*</op>(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *--*(l: Int, r: Int) -> Int { return l }
 
 // CHECK: <kw>protocol</kw> <id>Prot2</id> : <type>Prot</type> {}
@@ -277,7 +277,7 @@ class Observers {
 
 // CHECK: <kw>func</kw> <id>test3</id>(<id>o</id>: <type>AnyObject</type>) {
 func test3(o: AnyObject) {
-  // CHECK: <kw>_</kw> = <id>o</id> <kw>is</kw> <type>MyCls</type> ? <id>o</id> <kw>as</kw> <type>MyCls</type> : <id>o</id> <kw>as</kw>! <type>MyCls</type> <kw>as</kw> <type>MyCls</type> + <int>1</int>
+  // CHECK: <kw>_</kw> = <id>o</id> <kw>is</kw> <type>MyCls</type> ? <id>o</id> <kw>as</kw> <type>MyCls</type> : <id>o</id> <kw>as</kw>! <type>MyCls</type> <kw>as</kw> <type>MyCls</type> <op>+</op> <int>1</int>
   _ = o is MyCls ? o as MyCls : o as! MyCls as MyCls + 1
 }
 
@@ -293,11 +293,11 @@ class MySubClass : MyCls {
 // CHECK: <kw>var</kw> <id>g1</id> = { (<id>x</id>: <type>Int</type>) -> <type>Int</type> <kw>in</kw> <kw>return</kw> <int>0</int> }
 var g1 = { (x: Int) -> Int in return 0 }
 
-// CHECK: <kw>infix</kw> <kw>operator</kw> ~~ {
+// CHECK: <kw>infix</kw> <kw>operator</kw> <op>~~</op> {
 infix operator ~~ {}
-// CHECK: <kw>prefix</kw> <kw>operator</kw> *~~ {
+// CHECK: <kw>prefix</kw> <kw>operator</kw> <op>*~~</op> {
 prefix operator *~~ {}
-// CHECK: <kw>postfix</kw> <kw>operator</kw> ~~* {
+// CHECK: <kw>postfix</kw> <kw>operator</kw> <op>~~*</op> {
 postfix operator ~~* {}
 
 func test_defer() {
@@ -322,13 +322,13 @@ func funcTakingIn(in internalName: Int) {}
 _ = 123
 // CHECK: <int>123</int>
 _ = -123
-// CHECK: -<int>123</int>
+// CHECK: <op>-</op><int>123</int>
 _ = -1
-// CHECK: -<int>1</int>
+// CHECK: <op>-</op><int>1</int>
 _ = -0x123
-// CHECK: -<int>0x123</int>
+// CHECK: <op>-</op><int>0x123</int>
 _ = -3.1e-5
-// CHECK: <float>3.1e-5</float>
+// CHECK: <op>-</op><float>3.1e-5</float>
 
 "--\"\(x) --"
 // CHECK: <str>"--\"</str>\<anchor>(</anchor><id>x</id><anchor>)</anchor><str> --"</str>
@@ -397,5 +397,5 @@ protocol FakeClassRestrictedProtocol : `class` {}
 // CHECK: <kw>func</kw> <id>foo</id>() -> <kw>some</kw> <type>P</type> {}
 func foo() -> some P {}
 
-// CHECK: <kw>func</kw> <id>foo</id>() -> <kw>some</kw> <type>P</type> & <type>Q</type> {}
+// CHECK: <kw>func</kw> <id>foo</id>() -> <kw>some</kw> <type>P</type> <op>&</op> <type>Q</type> {}
 func foo() -> some P & Q {}

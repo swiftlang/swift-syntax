@@ -744,6 +744,7 @@ DECL_NODES = [
                    '''),
              Child('OperatorKeyword', kind='OperatorToken'),
              Child('Identifier', kind='Token', name_for_diagnostics='name',
+                   classification='OperatorIdentifier',
                    token_choices=[
                        'UnspacedBinaryOperatorToken',
                        'SpacedBinaryOperatorToken',

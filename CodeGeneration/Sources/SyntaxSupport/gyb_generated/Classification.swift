@@ -32,6 +32,7 @@ public let SYNTAX_CLASSIFICATIONS: [SyntaxClassification] = [
   SyntaxClassification(name: "Keyword", description: "A Swift keyword, including contextual keywords."),
   SyntaxClassification(name: "Identifier", description: "A generic identifier."),
   SyntaxClassification(name: "TypeIdentifier", description: "An identifier referring to a type."),
+  SyntaxClassification(name: "OperatorIdentifier", description: "An identifier referring to an operator."),
   SyntaxClassification(name: "DollarIdentifier", description: "An identifier starting with `$` like `$0`."),
   SyntaxClassification(name: "IntegerLiteral", description: "An integer literal."),
   SyntaxClassification(name: "FloatingLiteral", description: "A floating point literal."),

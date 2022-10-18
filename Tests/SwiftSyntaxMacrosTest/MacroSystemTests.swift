@@ -8,8 +8,8 @@ final class MacroSystemTests: XCTestCase {
   func testExpressionExpansion() {
     let sf: SourceFileSyntax =
       """
-      #myLine
-      let a = (#myLine)
+      #line
+      let a = (#line)
       let b = #stringify(x + y)
       #myColorLiteral(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       """

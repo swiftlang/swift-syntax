@@ -24,7 +24,7 @@ Use `swift-parser-cli` to test out your macros and see what kind of syntactic tr
 
 A number of example macros have been implemented in the file `MacroSytem+Examples.swift`. They include:
 
-* `#myLine`: behaves like the `#line` expression.
+* `#line`: Implements the `#line` expression.
 * `#stringify(x)`: returns both the value `x` and the string form of its expression, as a tuple.
 * `#myColorLiteral(red: <value>, green: <value>, blue: <value>, alpha: <value>)`: behaves like the `#colorLiteral` expression.
 

@@ -3,7 +3,7 @@ import SwiftSyntaxBuilder
 
 // Macros used for testing purposes
 struct LineMacro: ExpressionMacro {
-  static var name: String { "myLine" }
+  static var name: String { "line" }
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext

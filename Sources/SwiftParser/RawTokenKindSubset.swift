@@ -743,7 +743,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case poundFileKeyword
   case poundFileLiteralKeyword
   case poundFilePathKeyword
-  case poundFunctionKeyword
   case poundImageLiteralKeyword
   case poundKeyPathKeyword
   case poundSelectorKeyword
@@ -780,7 +779,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .poundFileKeyword: self = .poundFileKeyword
     case .poundFileLiteralKeyword: self = .poundFileLiteralKeyword
     case .poundFilePathKeyword: self = .poundFilePathKeyword
-    case .poundFunctionKeyword: self = .poundFunctionKeyword
     case .poundImageLiteralKeyword: self = .poundImageLiteralKeyword
     case .poundKeyPathKeyword: self = .poundKeyPathKeyword
     case .poundSelectorKeyword: self = .poundSelectorKeyword
@@ -820,7 +818,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .poundFileKeyword: return .poundFileKeyword
     case .poundFileLiteralKeyword: return .poundFileLiteralKeyword
     case .poundFilePathKeyword: return .poundFilePathKeyword
-    case .poundFunctionKeyword: return .poundFunctionKeyword
     case .poundImageLiteralKeyword: return .poundImageLiteralKeyword
     case .poundKeyPathKeyword: return .poundKeyPathKeyword
     case .poundSelectorKeyword: return .poundSelectorKeyword

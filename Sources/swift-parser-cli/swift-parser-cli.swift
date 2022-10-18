@@ -227,7 +227,9 @@ class ExpandMacros: ParsableCommand {
       }
 
       let converter = SourceLocationConverter(file: self.sourceFile, tree: resultTree)
-      let context = MacroEvaluationContext(sourceLocationConverter: converter)
+      let context = MacroEvaluationContext(
+        moduleName: "MyModule", sourceLocationConverter: converter
+      )
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
       let transformedTree = MacroSystem.exampleSystem.evaluateMacros(
         node: resultTree, in: context

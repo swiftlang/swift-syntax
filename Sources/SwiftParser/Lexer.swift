@@ -1543,7 +1543,6 @@ extension Lexer.Cursor {
     case "file": kind = .poundFileKeyword
     case "fileID": kind = .poundFileIDKeyword
     case "filePath": kind = .poundFilePathKeyword
-    case "function": kind = .poundFunctionKeyword
     case "assert": kind = .poundAssertKeyword
     case "sourceLocation": kind = .poundSourceLocationKeyword
     case "warning": kind = .poundWarningKeyword

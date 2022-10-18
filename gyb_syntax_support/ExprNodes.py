@@ -739,7 +739,7 @@ EXPR_NODES = [
 
     # e.g., "#embed("filename.txt")"
     Node('MacroExpansionExpr',
-         name_for_diagnostics="macro expansion expression", kind='Expr',
+         name_for_diagnostics="pound literal expression", kind='Expr',
          children=[
              Child('PoundToken', kind='PoundToken',
                    description='The `#` sign.'),

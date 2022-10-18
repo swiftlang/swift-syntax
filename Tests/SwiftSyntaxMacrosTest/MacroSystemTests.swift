@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
-@_spi(Testing) import SwiftSyntaxMacros
+@_spi(Testing) import _SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
 
 final class MacroSystemTests: XCTestCase {

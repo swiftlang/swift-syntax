@@ -12,7 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
-@_spi(Testing) import SwiftSyntaxMacros
+@_spi(Testing) import _SwiftSyntaxMacros
 import SwiftParser
 import SwiftOperators
 import Foundation

@@ -123,22 +123,6 @@ extension Parser {
 }
 
 extension Parser {
-  /// Parse a #line literal.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     literal-expression → '#line'
-  @_spi(RawSyntax)
-  public mutating func parsePoundLineDirective() -> RawPoundLineExprSyntax {
-    let (unexpectedBeforeToken, token) = self.expect(.poundLineKeyword)
-    return RawPoundLineExprSyntax(
-      unexpectedBeforeToken,
-      poundLine: token,
-      arena: self.arena
-    )
-  }
-
   /// Parse a line control directive.
   ///
   /// Grammar

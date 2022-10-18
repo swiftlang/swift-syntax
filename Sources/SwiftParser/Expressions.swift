@@ -1047,12 +1047,6 @@ extension Parser {
         poundFunction: tok,
         arena: self.arena
       ))
-    case (.poundLineKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundLineExprSyntax(
-        poundLine: tok,
-        arena: self.arena
-      ))
     case (.__line__Keyword, let handle)?:
       let tok = self.eat(handle)
       return RawExprSyntax(RawPoundLineExprSyntax(

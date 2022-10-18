@@ -301,7 +301,12 @@ final class ExpressionTests: XCTestCase {
       ]
       """,
       substructure: Syntax(DictionaryElementSyntax.init(
-        keyExpression: ExprSyntax(PoundLineExprSyntax(poundLine: .poundLineKeyword())),
+        keyExpression: ExprSyntax(
+          MacroExpansionExprSyntax(
+            poundToken: .poundToken(), macro: .identifier("line"),
+            leftParen: nil, argumentList: TupleExprElementListSyntax([]),
+            rightParen: nil, trailingClosure: nil,
+            additionalTrailingClosures: nil)),
         colon: .colonToken(),
         valueExpression: ExprSyntax(FunctionCallExprSyntax(
           calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("Calendar"), declNameArguments: nil)),

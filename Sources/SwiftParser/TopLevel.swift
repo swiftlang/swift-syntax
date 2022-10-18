@@ -172,8 +172,6 @@ extension Parser {
         return RawSyntax(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
       }
       return RawSyntax(directive)
-    } else if self.at(.poundLineKeyword) {
-      return RawSyntax(self.parsePoundLineDirective())
     } else if self.at(.poundSourceLocationKeyword) {
       return RawSyntax(self.parsePoundSourceLocationDirective())
     } else if self.atStartOfDeclaration() {

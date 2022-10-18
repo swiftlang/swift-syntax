@@ -1539,7 +1539,6 @@ extension Lexer.Cursor {
     let kind: RawTokenKind
     switch literal {
     case "keyPath": kind = .poundKeyPathKeyword
-    case "line": kind = .poundLineKeyword
     case "selector": kind = .poundSelectorKeyword
     case "file": kind = .poundFileKeyword
     case "fileID": kind = .poundFileIDKeyword

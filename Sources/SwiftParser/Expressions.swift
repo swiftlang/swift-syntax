@@ -1017,24 +1017,6 @@ extension Parser {
         poundFile: tok,
         arena: self.arena
       ))
-    case (.poundFileIDKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFileIDExprSyntax(
-        poundFileID: tok,
-        arena: self.arena
-      ))
-    case (.poundFileKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFileExprSyntax(
-        poundFile: tok,
-        arena: self.arena
-      ))
-    case (.poundFilePathKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFilePathExprSyntax(
-        poundFilePath: tok,
-        arena: self.arena
-      ))
     case (.__function__Keyword, let handle)?:
       let tok = self.eat(handle)
       return RawExprSyntax(RawPoundFunctionExprSyntax(

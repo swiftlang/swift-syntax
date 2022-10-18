@@ -1540,9 +1540,6 @@ extension Lexer.Cursor {
     switch literal {
     case "keyPath": kind = .poundKeyPathKeyword
     case "selector": kind = .poundSelectorKeyword
-    case "file": kind = .poundFileKeyword
-    case "fileID": kind = .poundFileIDKeyword
-    case "filePath": kind = .poundFilePathKeyword
     case "assert": kind = .poundAssertKeyword
     case "sourceLocation": kind = .poundSourceLocationKeyword
     case "warning": kind = .poundWarningKeyword

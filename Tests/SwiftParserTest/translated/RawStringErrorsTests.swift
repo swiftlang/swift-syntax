@@ -41,9 +41,9 @@ final class RawStringErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 1: expected expression
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion expression"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion expression"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in macro expansion expression"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion declaration"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in macro expansion declaration"),
       ]
     )
   }
@@ -70,9 +70,9 @@ final class RawStringErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 1: expected expression
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion expression"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion expression"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in macro expansion expression"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion declaration"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion declaration"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in macro expansion declaration"),
       ]
     )
   }

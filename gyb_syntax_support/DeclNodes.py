@@ -53,7 +53,7 @@ DECL_NODES = [
                    is_optional=True),
          ]),
 
-    Node('FunctionParameterList', name_for_diagnostics='function parameter list',
+    Node('FunctionParameterList', name_for_diagnostics='parameter list',
          kind='SyntaxCollection', element='FunctionParameter'),
 
     Node('ParameterClause', name_for_diagnostics='parameter clause', kind='Syntax',
@@ -374,7 +374,7 @@ DECL_NODES = [
     # parameter ->
     # external-parameter-name? local-parameter-name ':'
     #   type '...'? '='? expression? ','?
-    Node('FunctionParameter', name_for_diagnostics='function parameter', kind='Syntax',
+    Node('FunctionParameter', name_for_diagnostics='parameter', kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',

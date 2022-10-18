@@ -104,7 +104,7 @@ final class DollarIdentifierTests: XCTestCase {
         // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in function"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '$' before parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function parameter"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '$ dollarParam: Int' in parameter clause"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 5 - 6 = '`$`'

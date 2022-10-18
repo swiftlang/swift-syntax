@@ -339,7 +339,7 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 24 - 24 = 'self.'
-        DiagnosticSpec(message: "expected type in function parameter"),
+        DiagnosticSpec(message: "expected type in parameter"),
         DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
       ]
     )
@@ -356,7 +356,7 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing 'super.' at initializer invocation, Fix-It replacements: 5 - 5 = 'super.'
-        DiagnosticSpec(message: "expected type in function parameter"),
+        DiagnosticSpec(message: "expected type in parameter"),
         DiagnosticSpec(message: "unexpected code '2' in parameter clause"),
       ]
     )
@@ -372,7 +372,7 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 12 - 12 = 'self.'
-        DiagnosticSpec(message: "expected type in function parameter"),
+        DiagnosticSpec(message: "expected type in parameter"),
         DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
       ]
     )

@@ -227,7 +227,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and type in function parameter"),
+        DiagnosticSpec(message: "expected ':' and type in parameter"),
       ]
     )
   }
@@ -283,7 +283,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 3: 'let' in this position is interpreted as an argument label, Fix-It replacements: 15 - 18 = '`let`'
-        DiagnosticSpec(message: "unexpected code 'a' in function parameter"),
+        DiagnosticSpec(message: "unexpected code 'a' in parameter"),
       ]
     )
   }

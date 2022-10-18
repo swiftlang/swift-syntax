@@ -2,67 +2,72 @@
 
 import XCTest
 
+// https://github.com/apple/swift/issues/44070
 final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
-  func testDiagnoseInitializerAsTypedPattern1() {
+  func testDiagnoseInitializerAsTypedPattern3a() {
     AssertParse(
       """
-      // https://github.com/apple/swift/issues/44070
-      """
-    )
-  }
-
-  func testDiagnoseInitializerAsTypedPattern2() {
-    AssertParse(
-      """
-      class X {}
-      func foo() {}
-      """
-    )
-  }
-
-  func testDiagnoseInitializerAsTypedPattern3() {
-    AssertParse(
-      """
-      let a:[X]1️⃣()
-      let b: [X]2️⃣()
-      let c :[X]3️⃣()
-      let d : [X]4️⃣()
+      let a1️⃣:[X]()
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' = '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 2: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 3: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 7 - 8 = '= '
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 4: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 7 - 8 = '='
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
-      ]
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ], fixedSource: "let a=[X]()"
     )
   }
+
+  func testDiagnoseInitializerAsTypedPattern3b() {
+    AssertParse(
+      """
+      let b1️⃣: [X]()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ], fixedSource: "let b= [X]()"
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern3c() {
+    AssertParse(
+      """
+      let c 1️⃣:[X]()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ], fixedSource: "let c =[X]()"
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern3d() {
+    AssertParse(
+      """
+      let d 1️⃣: [X]()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ], fixedSource: "let d = [X]()"
+    )
+  }
+
 
   func testDiagnoseInitializerAsTypedPattern4() {
     AssertParse(
       """
-      let e: X1️⃣()2️⃣, ee: Int
+      let e1️⃣: X(), ee: Int
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ', ee: Int' at top level"),
-      ]
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?"),
+      ], fixedSource: "let e= X(), ee: Int"
     )
   }
 
   func testDiagnoseInitializerAsTypedPattern5() {
     AssertParse(
       """
-      let f:/*comment*/[X]1️⃣()
+      let f1️⃣:/*comment*/[X]()
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' = '
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-      ]
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ], fixedSource: "let f=/*comment*/[X]()"
     )
   }
 
@@ -75,9 +80,9 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
   }
 
   func testDiagnoseInitializerAsTypedPattern7() {
+    // paren follows the type, but it's part of a separate (valid) expression
     AssertParse(
       """
-      // paren follows the type, but it's part of a separate (valid) expression
       let ff: X
       (_1, _2) = (_2, _1)
       let fff: X
@@ -86,51 +91,120 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
     )
   }
 
-  func testDiagnoseInitializerAsTypedPattern8() {
+  func testDiagnoseInitializerAsTypedPattern8a() {
     AssertParse(
       """
-      let g: X1️⃣(x)
-      let h: X2️⃣(x, y)
-      let i: X3️⃣() { foo() }
-      let j: X4️⃣(x) { foo() }
-      let k: X5️⃣(x, y) { foo() }
+      let g1️⃣: X(x)
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 2: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 3: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 4: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 5: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 6 - 7 = ' ='
-        DiagnosticSpec(locationMarker: "5️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
       ]
     )
   }
 
-  func testDiagnoseInitializerAsTypedPattern9() {
+  func testDiagnoseInitializerAsTypedPattern8b() {
+    AssertParse(
+      """
+      let h1️⃣: X(x, y)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern8c() {
+    AssertParse(
+      """
+      let i1️⃣: X() { foo() }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern8d() {
+    AssertParse(
+      """
+      let j1️⃣: X(x) { foo() }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern8e() {
+    AssertParse(
+      """
+      let k1️⃣: X(x, y) { foo() }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern9a() {
     AssertParse(
       """
       func nonTopLevel() {
-        let a:[X]1️⃣()
-        let i: X2️⃣() { foo() }
-        let j: X3️⃣(x) { foo() }
-        let k: X4️⃣(x, y) { foo() }
-        _ = (a, i, j, k)
+        let a1️⃣:[X]()
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' = '
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 3: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' ='
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 4: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' ='
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
-        // TODO: Old parser expected error on line 5: unexpected initializer in pattern; did you mean to use '='?, Fix-It replacements: 8 - 9 = ' ='
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'"),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
       ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern9b() {
+    AssertParse(
+      """
+      func nonTopLevel() {
+        let i1️⃣: X() { foo() }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern9c() {
+    AssertParse(
+      """
+      func nonTopLevel() {
+        let j1️⃣: X(x) { foo() }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern9d() {
+    AssertParse(
+      """
+      func nonTopLevel() {
+        let k1️⃣: X(x, y) { foo() }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ]
+    )
+  }
+
+  func testDiagnoseInitializerAsTypedPattern9e() {
+    AssertParse(
+      """
+      func nonTopLevel() {
+        _ = (a, i, j, k)
+      }
+      """
     )
   }
 

@@ -529,6 +529,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.equal.presence == .missing {
+      exchangeTokens(
+        unexpected: node.unexpectedBeforeEqual,
+        unexpectedTokenCondition: { $0.tokenKind == .colon },
+        correctTokens: [node.equal],
+        message: { _ in StaticParserError.initializerInPattern },
+        moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: node.equal) }
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

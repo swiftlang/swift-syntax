@@ -1713,7 +1713,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       repeat {
 
-        let (pattern, type) = self.parseTypedPattern()
+        var (pattern, typeAnnotation) = self.parseTypedPattern()
 
         // Parse an initializer if present.
         let initializer: RawInitializerClauseSyntax?
@@ -1732,6 +1732,33 @@ extension Parser {
             value: value,
             arena: self.arena
           )
+        } else if self.at(.leftParen), !self.currentToken.isAtStartOfLine,
+                  let typeAnnotationUnwrapped = typeAnnotation {
+          // If we have a '(' after the type in the annotation, the type annotation
+          // is probably a constructor call. Rewrite the nodes to remove the type
+          // annotation and form an initializer clause from it instead.
+          typeAnnotation = nil
+          let initExpr = parsePostfixExpressionSuffix(
+            RawExprSyntax(RawTypeExprSyntax(
+              type: typeAnnotationUnwrapped.type,
+              typeAnnotation?.unexpectedAfterType,
+              arena: self.arena
+            )),
+            .basic,
+            forDirective: false,
+            pattern: .none
+          )
+          initializer = RawInitializerClauseSyntax(
+            RawUnexpectedNodesSyntax(
+              (typeAnnotationUnwrapped.unexpectedBeforeColon?.elements ?? []) +
+              [RawSyntax(typeAnnotationUnwrapped.colon)] +
+              (typeAnnotationUnwrapped.unexpectedBetweenColonAndType?.elements ?? []),
+              arena: self.arena
+            ),
+            equal: missingToken(.equal, text: nil),
+            value: initExpr,
+            arena: self.arena
+          )
         } else {
           initializer = nil
         }
@@ -1746,7 +1773,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         elements.append(RawPatternBindingSyntax(
           pattern: pattern,
-          typeAnnotation: type,
+          typeAnnotation: typeAnnotation,
           initializer: initializer,
           accessor: accessor,
           trailingComma: keepGoing,

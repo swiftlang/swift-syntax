@@ -1053,12 +1053,6 @@ extension Parser {
         poundLine: tok,
         arena: self.arena
       ))
-    case (.poundColumnKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundColumnExprSyntax(
-        poundColumn: tok,
-        arena: self.arena
-      ))
     case (.__column__Keyword, let handle)?:
       let tok = self.eat(handle)
       return RawExprSyntax(RawPoundColumnExprSyntax(

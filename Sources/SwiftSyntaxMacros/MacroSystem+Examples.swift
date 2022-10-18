@@ -2,6 +2,19 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 // Macros used for testing purposes
+struct ColumnMacro: ExpressionMacro {
+  static var name: String { "column" }
+
+  static func apply(
+    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+  ) -> MacroResult<ExprSyntax> {
+    let line = macro.startLocation(
+      converter: context.sourceLocationConverter
+    ).column ?? 0
+    return .init("\(line)")
+  }
+}
+
 struct LineMacro: ExpressionMacro {
   static var name: String { "line" }
 
@@ -47,6 +60,7 @@ struct ColorLiteral: ExpressionMacro {
 extension MacroSystem {
   public static var exampleSystem: MacroSystem {
     var macroSystem = MacroSystem()
+    try! macroSystem.add(ColumnMacro.self)
     try! macroSystem.add(LineMacro.self)
     try! macroSystem.add(Stringify.self)
     try! macroSystem.add(ColorLiteral.self)

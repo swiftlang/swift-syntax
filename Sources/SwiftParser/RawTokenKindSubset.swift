@@ -739,7 +739,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case period
   case pound
   case poundColorLiteralKeyword
-  case poundColumnKeyword
   case poundDsohandleKeyword
   case poundFileIDKeyword
   case poundFileKeyword
@@ -778,7 +777,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .period: self = .period
     case .pound: self = .pound
     case .poundColorLiteralKeyword: self = .poundColorLiteralKeyword
-    case .poundColumnKeyword: self = .poundColumnKeyword
     case .poundDsohandleKeyword: self = .poundDsohandleKeyword
     case .poundFileIDKeyword: self = .poundFileIDKeyword
     case .poundFileKeyword: self = .poundFileKeyword
@@ -820,7 +818,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .period: return .period
     case .pound: return .pound
     case .poundColorLiteralKeyword: return .poundColorLiteralKeyword
-    case .poundColumnKeyword: return .poundColumnKeyword
     case .poundDsohandleKeyword: return .poundDsohandleKeyword
     case .poundFileIDKeyword: return .poundFileIDKeyword
     case .poundFileKeyword: return .poundFileKeyword

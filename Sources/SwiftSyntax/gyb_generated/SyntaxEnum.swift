@@ -490,7 +490,7 @@ public enum SyntaxEnum {
     case .objcSelectorExpr:
       return "'#selector' expression"
     case .macroExpansionExpr:
-      return "macro expansion expression"
+      return "pound literal expression"
     case .postfixIfConfigExpr:
       return nil
     case .editorPlaceholderExpr:
@@ -624,7 +624,7 @@ public enum SyntaxEnum {
     case .precedenceGroupAssociativity:
       return "'associativity' property of precedencegroup"
     case .macroExpansionDecl:
-      return "macro expansion declaration"
+      return "pound literal declaration"
     case .tokenList:
       return "token list"
     case .nonEmptyTokenList:

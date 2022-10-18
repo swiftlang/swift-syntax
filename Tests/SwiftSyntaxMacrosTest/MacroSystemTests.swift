@@ -104,4 +104,28 @@ final class MacroSystemTests: XCTestCase {
       """
     )
   }
+
+  func testFileExpansions() {
+    let sf: SourceFileSyntax =
+      """
+      let a = #filePath
+      let b = #fileID
+      """
+    let converter = SourceLocationConverter(
+      file: "/tmp/src/taylor.swift", tree: sf
+    )
+    let context = MacroEvaluationContext(
+      moduleName: "MyModule", sourceLocationConverter: converter
+    )
+    let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
+      node: sf, in: context, errorHandler: { error in }
+    )
+    AssertStringsEqualWithDiff(
+      transformedSF.description,
+      """
+      let a = "/tmp/src/taylor.swift"
+      let b = "MyModule/taylor.swift"
+      """
+    )
+  }
 }

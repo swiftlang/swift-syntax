@@ -202,12 +202,66 @@ struct ImageLiteralMacro: ExpressionMacro {
   }
 }
 
+struct FilePathMacro: ExpressionMacro {
+  static var name: String { "filePath" }
+
+  static func apply(
+    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+  ) -> MacroResult<ExprSyntax> {
+    let fileName = context.sourceLocationConverter.location(
+      for: .init(utf8Offset: 0)
+    ).file ?? "<unknown file>"
+    let fileLiteral: ExprSyntax = #""\#(fileName)""#
+    if let leadingTrivia = macro.leadingTrivia {
+      return MacroResult(fileLiteral.withLeadingTrivia(leadingTrivia))
+    }
+    return MacroResult(fileLiteral)
+  }
+}
+
+struct FileIDMacro: ExpressionMacro {
+  static var name: String { "fileID" }
+
+  static func apply(
+    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+  ) -> MacroResult<ExprSyntax> {
+    var fileName = context.sourceLocationConverter.location(
+      for: .init(utf8Offset: 0)
+    ).file ?? "<unknown file>"
+
+    // Only keep everything after the last slash.
+    if let lastSlash = fileName.lastIndex(of: "/") {
+      fileName = String(fileName[fileName.index(after: lastSlash)...])
+    }
+
+    let fileLiteral: ExprSyntax = #""\#(context.moduleName)/\#(fileName)""#
+    if let leadingTrivia = macro.leadingTrivia {
+      return MacroResult(fileLiteral.withLeadingTrivia(leadingTrivia))
+    }
+    return MacroResult(fileLiteral)
+  }
+}
+
+struct FileMacro: ExpressionMacro {
+  static var name: String { "file" }
+
+  static func apply(
+    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+  ) -> MacroResult<ExprSyntax> {
+    // FIXME: Macro evaluation context needs to know the semantics of #file,
+    // which is a feature check.
+    return FilePathMacro.apply(macro, in: context)
+  }
+}
+
 extension MacroSystem {
   public static var exampleSystem: MacroSystem {
     var macroSystem = MacroSystem()
     try! macroSystem.add(ColorLiteralMacro.self)
     try! macroSystem.add(ColumnMacro.self)
+    try! macroSystem.add(FileIDMacro.self)
     try! macroSystem.add(FileLiteralMacro.self)
+    try! macroSystem.add(FilePathMacro.self)
     try! macroSystem.add(FunctionMacro.self)
     try! macroSystem.add(ImageLiteralMacro.self)
     try! macroSystem.add(LineMacro.self)

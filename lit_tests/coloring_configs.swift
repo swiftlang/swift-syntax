@@ -25,7 +25,7 @@ var f : Int
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>x3</id> : <type>Int</type>
   var x3 : Int
@@ -36,7 +36,7 @@ var f : Int
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>x4</id> : <type>Int</type>
   var x4 : Int
@@ -58,7 +58,7 @@ var f : Int
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>y2</id> : <type>Int</type>
   var y2 : Int
@@ -73,7 +73,7 @@ var f : Int
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>y3</id> : <type>Int</type>
   var y3 : Int
@@ -114,7 +114,7 @@ class C1 {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>x3</id> : <type>Int</type>
   var x3 : Int
@@ -125,7 +125,7 @@ class C1 {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>x4</id> : <type>Int</type>
   var x4 : Int
@@ -147,7 +147,7 @@ class C1 {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>y2</id> : <type>Int</type>
   var y2 : Int
@@ -162,7 +162,7 @@ class C1 {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>y3</id> : <type>Int</type>
   var y3 : Int
@@ -184,8 +184,7 @@ class C1 {
 // CHECK: <kw>func</kw> <id>test1</id>() {
 func test1() {
   // CHECK: <kw>var</kw> <id>f</id> : <type>Int</type>
-  var f : Int<id>
-</id>
+  var f : Int
 // CHECK: <#kw>#if</#kw> <#id>CONF</#id>
 #if CONF
   // CHECK: <kw>var</kw> <id>x</id> : <type>Int</type>
@@ -204,7 +203,7 @@ func test1() {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>x3</id> : <type>Int</type>
   var x3 : Int
@@ -215,7 +214,7 @@ func test1() {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>x4</id> : <type>Int</type>
   var x4 : Int
@@ -237,7 +236,7 @@ func test1() {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>y2</id> : <type>Int</type>
   var y2 : Int
@@ -252,7 +251,7 @@ func test1() {
 // CHECK: <#kw>#endif</#kw>
 #endif
 
-// CHECK: <#kw>#if</#kw> !<#id>CONF</#id>
+// CHECK: <#kw>#if</#kw> <op>!</op><#id>CONF</#id>
 #if !CONF
   // CHECK: <kw>var</kw> <id>y3</id> : <type>Int</type>
   var y3 : Int
@@ -331,16 +330,16 @@ class NestedPoundIf {
 #line 17 "abc.swift"
 
 @available(iOS 8.0, OSX 10.10, *)
-// CHECK: <attr-builtin>@available</attr-builtin>(<kw>iOS</kw> <float>8.0</float>, <kw>OSX</kw> <float>10.10</float>, *)
+// CHECK: <attr-builtin>@available</attr-builtin>(<kw>iOS</kw> <float>8.0</float>, <kw>OSX</kw> <float>10.10</float>, <op>*</op>)
 func foo() {
-// CHECK: <kw>if</kw> <kw>#available</kw> (<kw>OSX</kw> <float>10.10</float>, <kw>iOS</kw> <float>8.01</float>, *) {<kw>let</kw> <kw>_</kw> = <str>"iOS"</str>}
+// CHECK: <kw>if</kw> <kw>#available</kw> (<kw>OSX</kw> <float>10.10</float>, <kw>iOS</kw> <float>8.01</float>, <op>*</op>) {<kw>let</kw> <kw>_</kw> = <str>"iOS"</str>}
   if #available (OSX 10.10, iOS 8.01, *) {let _ = "iOS"}
 }
 
 // CHECK: <kw>func</kw> <id>test4</id>(<id>a</id>: <kw>inout</kw> <type>Int</type>) {{{$}}
 func test4(a: inout Int) {
-  // CHECK-OLD: <kw>if</kw> <kw>#available</kw> (<kw>OSX</kw> >= <float>10.10</float>, <kw>iOS</kw> >= <float>8.01</float>) {<kw>let</kw> OSX = <str>"iOS"</str>}}{{$}}
-  // CHECK-NEW: <kw>if</kw> <kw>#available</kw> (OSX >= <float>10.10</float>, iOS >= <float>8.01</float>) {<kw>let</kw> OSX = <str>"iOS"</str>}}{{$}}
+  // CHECK-OLD: <kw>if</kw> <kw>#available</kw> (<kw>OSX</kw> <op>>=</op> <float>10.10</float>, <kw>iOS</kw> <op>>=</op> <float>8.01</float>) {<kw>let</kw> OSX = <str>"iOS"</str>}}{{$}}
+  // CHECK-NEW: <kw>if</kw> <kw>#available</kw> (OSX <op>>=</op> <float>10.10</float>, iOS <op>>=</op> <float>8.01</float>) {<kw>let</kw> OSX = <str>"iOS"</str>}}{{$}}
   if #available (OSX >= 10.10, iOS >= 8.01) {let OSX = "iOS"}}
 
 // CHECK: <kw>func</kw> <id>test4b</id>(<id>a</id>: <kw>inout</kw> <type>Int</type>) {{{$}}

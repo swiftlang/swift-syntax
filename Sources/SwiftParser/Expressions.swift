@@ -592,13 +592,13 @@ extension Parser {
       // TODO: diagnose and skip the remaining token in the current clause.
       return result
     }
-  syntax: { parser, elements in
-      guard elements.count == 1 else {
-        assert(elements.isEmpty)
-        return RawSyntax(RawMissingExprSyntax(arena: parser.arena))
-      }
-      return RawSyntax(elements.first!)
+  syntax: { (parser, elements) -> RawSyntax? in
+    switch elements.count {
+    case 0: return nil
+    case 1: return RawSyntax(elements.first!)
+    default: fatalError("Postfix #if should only have one element")
     }
+  }
 
     return RawExprSyntax(RawPostfixIfConfigExprSyntax(
       base: start, config: config,

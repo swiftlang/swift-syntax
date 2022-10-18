@@ -102,7 +102,7 @@ DECL_NODES = [
                    ]),
              Child('Condition', kind='Expr', name_for_diagnostics='condition', classification='BuildConfigId',
                    is_optional=True),
-             Child('Elements', kind='Syntax',
+             Child('Elements', is_optional=True, kind='Syntax',
                    node_choices=[
                        Child('Statements', kind='CodeBlockItemList'),
                        Child('SwitchCases', kind='SwitchCaseList'),

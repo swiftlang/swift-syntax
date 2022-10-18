@@ -7999,7 +7999,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
     var unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodes?
     var condition: ExprBuildable?
     var unexpectedBetweenConditionAndElements: UnexpectedNodes?
-    var elements: SyntaxBuildable
+    var elements: SyntaxBuildable?
   }
   enum Data {
     case buildable(BuildableData)
@@ -8014,9 +8014,9 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   ///   - condition: 
   ///   - unexpectedBetweenConditionAndElements: 
   ///   - elements: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundKeyword: ExpressibleAsUnexpectedNodes? = nil, poundKeyword: Token, unexpectedBetweenPoundKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable? = nil, unexpectedBetweenConditionAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsSyntaxBuildable) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundKeyword: ExpressibleAsUnexpectedNodes? = nil, poundKeyword: Token, unexpectedBetweenPoundKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable? = nil, unexpectedBetweenConditionAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsSyntaxBuildable? = nil) {
     assert(poundKeyword.text == #"#if"# || poundKeyword.text == #"#elseif"# || poundKeyword.text == #"#else"#)
-    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundKeyword: unexpectedBeforePoundKeyword?.createUnexpectedNodes(), poundKeyword: poundKeyword, unexpectedBetweenPoundKeywordAndCondition: unexpectedBetweenPoundKeywordAndCondition?.createUnexpectedNodes(), condition: condition?.createExprBuildable(), unexpectedBetweenConditionAndElements: unexpectedBetweenConditionAndElements?.createUnexpectedNodes(), elements: elements.createSyntaxBuildable()))
+    self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundKeyword: unexpectedBeforePoundKeyword?.createUnexpectedNodes(), poundKeyword: poundKeyword, unexpectedBetweenPoundKeywordAndCondition: unexpectedBetweenPoundKeywordAndCondition?.createUnexpectedNodes(), condition: condition?.createExprBuildable(), unexpectedBetweenConditionAndElements: unexpectedBetweenConditionAndElements?.createUnexpectedNodes(), elements: elements?.createSyntaxBuildable()))
   }
   public init(_ constructedNode: IfConfigClauseSyntax) {
     self.data = .constructed(constructedNode)
@@ -8027,7 +8027,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   func buildIfConfigClause() -> IfConfigClauseSyntax {
     switch data {
     case .buildable(let buildableData): 
-      var result = IfConfigClauseSyntax(buildableData.unexpectedBeforePoundKeyword?.buildUnexpectedNodes(), poundKeyword: buildableData.poundKeyword.buildToken(), buildableData.unexpectedBetweenPoundKeywordAndCondition?.buildUnexpectedNodes(), condition: buildableData.condition?.buildExpr(), buildableData.unexpectedBetweenConditionAndElements?.buildUnexpectedNodes(), elements: buildableData.elements.buildSyntax())
+      var result = IfConfigClauseSyntax(buildableData.unexpectedBeforePoundKeyword?.buildUnexpectedNodes(), poundKeyword: buildableData.poundKeyword.buildToken(), buildableData.unexpectedBetweenPoundKeywordAndCondition?.buildUnexpectedNodes(), condition: buildableData.condition?.buildExpr(), buildableData.unexpectedBetweenConditionAndElements?.buildUnexpectedNodes(), elements: buildableData.elements?.buildSyntax())
       result.leadingTrivia = buildableData.leadingTrivia + (result.leadingTrivia ?? [])
       result.trailingTrivia = buildableData.trailingTrivia + (result.trailingTrivia ?? [])
       return result

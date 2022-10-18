@@ -934,7 +934,7 @@ open class BasicFormat: SyntaxRewriter {
     let unexpectedBetweenPoundKeywordAndCondition = node.unexpectedBetweenPoundKeywordAndCondition.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let condition = node.condition.map(self.visit)?.cast(ExprSyntax.self)
     let unexpectedBetweenConditionAndElements = node.unexpectedBetweenConditionAndElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = self.visit(node.elements).cast(Syntax.self)
+    let elements = node.elements.map(self.visit)?.cast(Syntax.self)
     return Syntax(IfConfigClauseSyntax(unexpectedBeforePoundKeyword, poundKeyword: poundKeyword, unexpectedBetweenPoundKeywordAndCondition, condition: condition, unexpectedBetweenConditionAndElements, elements: elements))
   }
   

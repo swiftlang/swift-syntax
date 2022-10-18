@@ -884,7 +884,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawExprSyntax?.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[5], as: RawSyntax.self)
+    _verify(layout[5], as: RawSyntax?.self)
     _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
     break
   case .ifConfigClauseList:

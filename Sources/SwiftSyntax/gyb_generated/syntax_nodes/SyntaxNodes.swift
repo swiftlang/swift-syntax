@@ -5589,7 +5589,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil,
     condition: ExprSyntax?,
     _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil,
-    elements: Syntax,
+    elements: Syntax?,
     _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
@@ -5598,7 +5598,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenPoundKeywordAndCondition?.raw,
       condition?.raw,
       unexpectedBetweenConditionAndElements?.raw,
-      elements.raw,
+      elements?.raw,
       unexpectedAfterElements?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClause,
@@ -5711,9 +5711,10 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return IfConfigClauseSyntax(newData)
   }
 
-  public var elements: Syntax {
+  public var elements: Syntax? {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
       return Syntax(childData!)
     }
     set(value) {
@@ -5726,7 +5727,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: Syntax?) -> IfConfigClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
+    let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 5)
     return IfConfigClauseSyntax(newData)
   }
@@ -5782,7 +5783,7 @@ extension IfConfigClauseSyntax: CustomReflectable {
       "unexpectedBetweenPoundKeywordAndCondition": unexpectedBetweenPoundKeywordAndCondition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "condition": condition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenConditionAndElements": unexpectedBetweenConditionAndElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
+      "elements": elements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedAfterElements": unexpectedAfterElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }

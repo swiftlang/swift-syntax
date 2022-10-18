@@ -99,6 +99,9 @@ extension TokenConsumer {
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
+    case .some(_):
+      // All other decl start keywords unconditonally start a decl.
+      return true
     case nil:
       if subparser.at(anyIn: ContextualDeclKeyword.self)?.0 != nil {
         subparser.consumeAnyToken()
@@ -106,7 +109,6 @@ extension TokenConsumer {
           isAtTopLevel: isAtTopLevel, allowRecovery: allowRecovery)
       }
       return false
-    default: return true
     }
   }
 }
@@ -146,8 +148,11 @@ extension Parser {
   ///     declaration → precedence-group-declaration
   ///
   ///     declarations → declaration declarations?
+  ///
+  /// If `allowMissingFuncOrVarKeywordRecovery` is `true`, this methods tries to
+  /// synthesize `func` or `var` keywords where necessary.
   @_spi(RawSyntax)
-  public mutating func parseDeclaration() -> RawDeclSyntax {
+  public mutating func parseDeclaration(allowMissingFuncOrVarKeywordRecovery: Bool = false) -> RawDeclSyntax {
     switch self.at(anyIn: PoundDeclarationStart.self) {
     case (.poundIfKeyword, _)?:
       let directive = self.parsePoundIfDirective { parser in
@@ -212,10 +217,25 @@ extension Parser {
     case (.actorContextualKeyword, let handle)?:
       return RawDeclSyntax(self.parseActorDeclaration(attrs, handle))
     case nil:
+      if allowMissingFuncOrVarKeywordRecovery {
+        let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().tokenKind.is(any: [.colon, .equal, .comma])
+        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().tokenKind.is(any: [.identifier, .wildcardKeyword])
+
+        if isProbablyVarDecl || isProbablyTupleDecl {
+          return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.varKeyword)))
+        }
+
+        let isProbablyFuncDecl = self.at(any: [.identifier, .wildcardKeyword]) || self.at(anyIn: Operator.self) != nil
+
+        if isProbablyFuncDecl {
+          return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.funcKeyword)))
+        }
+      }
       return RawDeclSyntax(RawMissingDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
-        arena: self.arena))
+        arena: self.arena
+      ))
     }
   }
 }
@@ -586,7 +606,7 @@ extension Parser {
     if self.at(.poundSourceLocationKeyword) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
     } else {
-      decl = self.parseDeclaration()
+      decl = self.parseDeclaration(allowMissingFuncOrVarKeywordRecovery: true)
     }
 
     let semi = self.consume(if: .semicolon)

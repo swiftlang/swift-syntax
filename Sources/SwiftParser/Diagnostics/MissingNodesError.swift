@@ -343,9 +343,16 @@ extension ParseDiagnosticsGenerator {
       notes.append(Note(node: Syntax(startToken), message: MatchingOpeningTokenNote(openingToken: startToken)))
     }
 
+    let position: AbsolutePosition
+    if node.shouldBeInsertedAfterNextTokenTrivia, let nextToken = node.nextToken(viewMode: .sourceAccurate) {
+      position = nextToken.positionAfterSkippingLeadingTrivia
+    } else {
+      position = node.endPosition
+    }
+
     addDiagnostic(
       node,
-      position: node.endPosition,
+      position: position,
       MissingNodesError(missingNodes: missingNodes),
       notes: notes,
       fixIts: [fixIt],

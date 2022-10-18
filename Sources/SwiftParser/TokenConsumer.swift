@@ -45,6 +45,9 @@ struct TokenConsumptionHandle {
   var tokenKind: RawTokenKind
   /// When not `nil`, the token's kind will be remapped to this kind when consumed.
   var remappedKind: RawTokenKind?
+  /// If `true`, the token we should consume should be synthesized as a missing token
+  /// and no tokens should be consumed.
+  var missing: Bool = false
 }
 
 extension TokenConsumer {
@@ -116,10 +119,13 @@ extension TokenConsumer {
 
   /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
   mutating func eat(_ handle: TokenConsumptionHandle) -> Token {
-    assert(self.at(handle.tokenKind))
-    if let remappedKind = handle.remappedKind {
+    if handle.missing {
+      return missingToken(handle.remappedKind ?? handle.tokenKind, text: nil)
+    } else if let remappedKind = handle.remappedKind {
+      assert(self.at(handle.tokenKind))
       return consumeAnyToken(remapping: remappedKind)
     } else {
+      assert(self.at(handle.tokenKind))
       return consumeAnyToken()
     }
   }

@@ -76,10 +76,22 @@ extension FixIt.Changes {
     if let trailingTrivia = trailingTrivia {
       presentNode = presentNode.withTrailingTrivia(trailingTrivia)
     }
-    return [.replace(
-      oldNode: Syntax(node),
-      newNode: Syntax(presentNode)
-    )]
+    if node.shouldBeInsertedAfterNextTokenTrivia,
+       let nextToken = node.nextToken(viewMode: .sourceAccurate),
+       leadingTrivia == nil {
+      return [
+        .replace(
+          oldNode: Syntax(node),
+          newNode: Syntax(presentNode).withLeadingTrivia(nextToken.leadingTrivia)
+        ),
+        .replaceLeadingTrivia(token: nextToken, newTrivia: [])
+      ]
+    } else {
+      return [.replace(
+        oldNode: Syntax(node),
+        newNode: Syntax(presentNode)
+      )]
+    }
   }
 
   /// Makes the `token` present, moving it in front of the previous token's trivia.

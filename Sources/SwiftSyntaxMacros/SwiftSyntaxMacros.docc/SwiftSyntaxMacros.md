@@ -25,8 +25,10 @@ Use `swift-parser-cli` to test out your macros and see what kind of syntactic tr
 A number of example macros have been implemented in the file `MacroSytem+Examples.swift`. They include:
 
 * `#line`: Implements the `#line` expression.
+* `#column`: Implements the `#column` expression.
+* `#function`: Implements the `#function` expression.
 * `#stringify(x)`: returns both the value `x` and the string form of its expression, as a tuple.
-* `#myColorLiteral(red: <value>, green: <value>, blue: <value>, alpha: <value>)`: behaves like the `#colorLiteral` expression.
+* `#colorLiteral(red: <value>, green: <value>, blue: <value>, alpha: <value>)`: Implements the `#colorLiteral` expression.
 
 New example macros can be added by defining new types that conform to the appropriate `*Macro` protocols, and adding those macros to the example macro system created by `MacroSystem.exampleSystem`. Have fun!
 

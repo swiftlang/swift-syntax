@@ -1104,11 +1104,6 @@ extension Parser {
     case (.poundKeyPathKeyword, _)?:
       return RawExprSyntax(self.parseObjectiveCKeyPathExpression())
 
-    case (.poundColorLiteralKeyword, _)?,
-         (.poundImageLiteralKeyword, _)?,
-         (.poundFileLiteralKeyword, _)?:
-      return RawExprSyntax(self.parseObjectLiteralExpression())
-
     case (.leftBrace, _)?:     // expr-closure
       return RawExprSyntax(self.parseClosureExpression())
     case (.period, let handle)?,              //=.foo
@@ -1167,32 +1162,6 @@ extension Parser {
     return RawExprSyntax(RawSpecializeExprSyntax(
       expression: RawExprSyntax(identifier), genericArgumentClause: generics,
       arena: self.arena))
-  }
-}
-
-extension Parser {
-  /// Parse an identifier as an expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     playground-literal → '#colorLiteral' '(' red ':' expression , green ':' expression , blue ':' expression , alpha ':' expression )
-  ///     playground-literal → '#fileLiteral' '(' resourceName ':' expression ')'
-  ///     playground-literal → '#imageLiteral' '(' resourceName ':' expression ')'
-  @_spi(RawSyntax)
-  public mutating func parseObjectLiteralExpression() -> RawObjectLiteralExprSyntax {
-    let poundKeyword = self.consumeAnyToken()
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let arguments = self.parseArgumentListElements(pattern: .none)
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawObjectLiteralExprSyntax(
-      identifier: poundKeyword,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      arguments: RawTupleExprElementListSyntax(elements: arguments, arena: self.arena),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena)
   }
 }
 

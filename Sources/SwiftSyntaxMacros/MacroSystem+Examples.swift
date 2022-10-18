@@ -145,7 +145,7 @@ struct FunctionMacro: ExpressionMacro {
   }
 }
 
-struct Stringify: ExpressionMacro {
+struct StringifyMacro: ExpressionMacro {
   static var name: String { "stringify" }
 
   static func apply(
@@ -160,8 +160,36 @@ struct Stringify: ExpressionMacro {
   }
 }
 
-struct ColorLiteral: ExpressionMacro {
-  static var name: String { "myColorLiteral" }
+struct ColorLiteralMacro: ExpressionMacro {
+  static var name: String { "colorLiteral" }
+
+  static func apply(
+    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+  ) -> MacroResult<ExprSyntax> {
+    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    if let leadingTrivia = macro.leadingTrivia {
+      return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
+    }
+    return MacroResult(initSyntax)
+  }
+}
+
+struct FileLiteralMacro: ExpressionMacro {
+  static var name: String { "fileLiteral" }
+
+  static func apply(
+    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+  ) -> MacroResult<ExprSyntax> {
+    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    if let leadingTrivia = macro.leadingTrivia {
+      return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
+    }
+    return MacroResult(initSyntax)
+  }
+}
+
+struct ImageLiteralMacro: ExpressionMacro {
+  static var name: String { "imageLiteral" }
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -177,11 +205,13 @@ struct ColorLiteral: ExpressionMacro {
 extension MacroSystem {
   public static var exampleSystem: MacroSystem {
     var macroSystem = MacroSystem()
+    try! macroSystem.add(ColorLiteralMacro.self)
     try! macroSystem.add(ColumnMacro.self)
+    try! macroSystem.add(FileLiteralMacro.self)
     try! macroSystem.add(FunctionMacro.self)
+    try! macroSystem.add(ImageLiteralMacro.self)
     try! macroSystem.add(LineMacro.self)
-    try! macroSystem.add(Stringify.self)
-    try! macroSystem.add(ColorLiteral.self)
+    try! macroSystem.add(StringifyMacro.self)
     return macroSystem
   }
 }

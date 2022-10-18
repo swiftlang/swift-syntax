@@ -738,12 +738,9 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case nilKeyword
   case period
   case pound
-  case poundColorLiteralKeyword
   case poundFileIDKeyword
   case poundFileKeyword
-  case poundFileLiteralKeyword
   case poundFilePathKeyword
-  case poundImageLiteralKeyword
   case poundKeyPathKeyword
   case poundSelectorKeyword
   case prefixPeriod
@@ -774,12 +771,9 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: self = .nilKeyword
     case .period: self = .period
     case .pound: self = .pound
-    case .poundColorLiteralKeyword: self = .poundColorLiteralKeyword
     case .poundFileIDKeyword: self = .poundFileIDKeyword
     case .poundFileKeyword: self = .poundFileKeyword
-    case .poundFileLiteralKeyword: self = .poundFileLiteralKeyword
     case .poundFilePathKeyword: self = .poundFilePathKeyword
-    case .poundImageLiteralKeyword: self = .poundImageLiteralKeyword
     case .poundKeyPathKeyword: self = .poundKeyPathKeyword
     case .poundSelectorKeyword: self = .poundSelectorKeyword
     case .prefixPeriod: self = .prefixPeriod
@@ -813,12 +807,9 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: return .nilKeyword
     case .period: return .period
     case .pound: return .pound
-    case .poundColorLiteralKeyword: return .poundColorLiteralKeyword
     case .poundFileIDKeyword: return .poundFileIDKeyword
     case .poundFileKeyword: return .poundFileKeyword
-    case .poundFileLiteralKeyword: return .poundFileLiteralKeyword
     case .poundFilePathKeyword: return .poundFilePathKeyword
-    case .poundImageLiteralKeyword: return .poundImageLiteralKeyword
     case .poundKeyPathKeyword: return .poundKeyPathKeyword
     case .poundSelectorKeyword: return .poundSelectorKeyword
     case .prefixPeriod: return .prefixPeriod

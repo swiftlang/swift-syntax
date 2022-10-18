@@ -142,7 +142,7 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in operator declaration")
+        DiagnosticSpec(message: "expected binary operator in operator declaration")
       ]
     )
   }
@@ -313,7 +313,7 @@ final class OperatorDeclTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in precedencegroup"),
+        DiagnosticSpec(message: "expected identifier in precedencegroup"),
       ]
     )
   }

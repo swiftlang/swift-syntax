@@ -5,7 +5,7 @@ STMT_NODES = [
     # labeled-stmt -> label ':' stmt
     Node('LabeledStmt', name_for_diagnostics='labeled statement', kind='Stmt',
          children=[
-             Child('LabelName', kind='IdentifierToken', name_for_diagnostics='name'),
+             Child('LabelName', kind='IdentifierToken', name_for_diagnostics='label name'),
              Child('LabelColon', kind='ColonToken'),
              Child('Statement', kind='Stmt'),
          ]),

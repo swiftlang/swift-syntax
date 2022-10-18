@@ -247,7 +247,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "name can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ':' in enum"),
       ]
     )
@@ -275,7 +275,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
@@ -331,7 +331,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case"),
       ]
     )
   }
@@ -344,7 +344,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case"),
         DiagnosticSpec(message: "unexpected code ':' in enum"),
       ]
     )
@@ -418,7 +418,7 @@ final class EnumTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'_' cannot be used as an identifier here"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'_' cannot be used as an identifier here"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in enum case"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in enum case"),
       ]
     )
   }
@@ -1287,7 +1287,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case"),
       ]
     )
   }
@@ -1301,7 +1301,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case"),
       ]
     )
   }
@@ -1329,8 +1329,8 @@ final class EnumTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected name in enum case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in enum case"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
       ]
     )
   }

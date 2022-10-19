@@ -8,6 +8,7 @@
 
 add_library(SwiftDiagnostics STATIC
   Diagnostic.swift
+  DiagnosticsFormatter.swift
   FixIt.swift
   Message.swift
   Note.swift

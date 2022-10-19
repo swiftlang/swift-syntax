@@ -238,6 +238,10 @@ final class ExpressionTests: XCTestCase {
       __COLUMN__
       __FUNCTION__
       __DSO_HANDLE__
+
+      func f() {
+        return #function
+      }
       """
     )
   }

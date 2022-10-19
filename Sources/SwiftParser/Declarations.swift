@@ -174,10 +174,14 @@ extension Parser {
       return RawDeclSyntax(directive)
     case (.poundWarningKeyword, _)?, (.poundErrorKeyword, _)?:
       return self.parsePoundDiagnosticDeclaration()
-    case (.pound, _)?:
-      return RawDeclSyntax(self.parseMacroExpansionDeclaration())
     case nil:
       break
+    }
+
+    if (self.at(.pound)) {
+      // FIXME: If we can have attributes for macro expansions, handle this
+      // via DeclarationStart.
+      return RawDeclSyntax(self.parseMacroExpansionDeclaration())
     }
 
     let attrs = DeclAttributes(

@@ -43,20 +43,20 @@ final class MacroSystemTests: XCTestCase {
       struct X {
         var computed: String {
           get {
-            (#function)
+            #function
           }
         }
 
         init(from: String) {
-          (#function)
+          #function
         }
 
         subscript(a: Int) -> String {
-          (#function)
+          #function
         }
 
         subscript(a a: Int) -> String {
-          (#function)
+          #function
         }
       }
 
@@ -81,20 +81,20 @@ final class MacroSystemTests: XCTestCase {
       struct X {
         var computed: String {
           get {
-            ("computed")
+            "computed"
           }
         }
 
         init(from: String) {
-          ("init(from:)")
+          "init(from:)"
         }
 
         subscript(a: Int) -> String {
-          ("subscript(_:)")
+          "subscript(_:)"
         }
 
         subscript(a a: Int) -> String {
-          ("subscript(a:)")
+          "subscript(a:)"
         }
       }
 

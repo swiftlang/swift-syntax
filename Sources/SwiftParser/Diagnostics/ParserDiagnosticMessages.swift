@@ -125,6 +125,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var expectedExpressionAfterTry: Self {
     .init("expected expression after 'try'")
   }
+  public static var initializerInPattern: Self {
+    .init("unexpected initializer in pattern; did you mean to use '='?")
+  }
   public static var invalidFlagAfterPrecedenceGroupAssignment: Self {
     .init("expected 'true' or 'false' after 'assignment'")
   }

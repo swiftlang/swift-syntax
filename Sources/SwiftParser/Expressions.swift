@@ -2211,32 +2211,6 @@ extension Parser {
     } while keepGoing != nil && loopProgress.evaluate(currentToken)
     return result
   }
-
-  /// Parse an argument list.
-  ///
-  /// This is currently the same as parsing a tuple expression. In the future,
-  /// this will be a dedicated argument list type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     tuple-expression → '(' ')' | '(' tuple-element ',' tuple-element-list ')'
-  ///     tuple-element-list → tuple-element | tuple-element ',' tuple-element-list
-  @_spi(RawSyntax)
-  public mutating func parseArgumentList(_ flavor: ExprFlavor, pattern: PatternContext) -> RawTupleExprSyntax {
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let args = self.parseArgumentListElements(pattern: pattern)
-    let (unexpectedBeforeRightParen, rparen) = self.expect(.rightParen)
-
-    // FIXME: Introduce new SyntaxKind for ArgumentList (rdar://81786229)
-    return RawTupleExprSyntax(
-      unexpectedBeforeLParen,
-      leftParen: lparen,
-      elementList: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
-      unexpectedBeforeRightParen,
-      rightParen: rparen,
-      arena: self.arena)
-  }
 }
 
 extension Parser {

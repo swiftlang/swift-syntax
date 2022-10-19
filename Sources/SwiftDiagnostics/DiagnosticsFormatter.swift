@@ -24,7 +24,7 @@ public struct DiagnosticsFormatter {
   static let contextSize = 2
   
   /// Print given diagnostics for a given syntax tree on the command line
-  public static func annotatedSource(tree: SourceFileSyntax, diags: [Diagnostic]) -> String {
+  public static func annotatedSource<SyntaxType: SyntaxProtocol>(tree: SyntaxType, diags: [Diagnostic]) -> String {
     let slc = SourceLocationConverter(file: "", tree: tree)
     
     // First, we need to put each line and its diagnostics together

@@ -99,7 +99,7 @@ public protocol SyntaxExpressibleByStringInterpolation:
 enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
   case didNotConsumeAllTokens(remainingTokens: [TokenSyntax])
   case producedInvalidNodeType(expectedType: SyntaxProtocol.Type, actualType: SyntaxProtocol.Type)
-  case diagnostics([Diagnostic])
+  case diagnostics([Diagnostic], tree: Syntax)
 
   var description: String {
     switch self {
@@ -107,8 +107,8 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
       return "Extraneous text in snippet: '\(tokens.map(\.description).joined())'"
     case .producedInvalidNodeType(expectedType: let expectedType, actualType: let actualType):
       return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"
-    case .diagnostics(let diagnostics):
-      return diagnostics.map(\.debugDescription).joined(separator: "\n")
+    case .diagnostics(let diagnostics, let tree):
+      return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
     }
   }
 }
@@ -145,7 +145,7 @@ extension SyntaxExpressibleByStringInterpolation {
         if result.hasError {
           let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
           assert(!diagnostics.isEmpty)
-          throw SyntaxStringInterpolationError.diagnostics(diagnostics)
+          throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(result))
         }
         return result
       }

@@ -717,13 +717,15 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       """
       struct S {
-        1️⃣/ 2️⃣###line 25 "line-directive.swift"
+        1️⃣/ 2️⃣#3️⃣#4️⃣#line 5️⃣25 "line-directive.swift"
       }
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '###line 25 "line-directive.swift"' in struct"#)
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in pound literal declaration"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in pound literal declaration"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: #"unexpected code '25 "line-directive.swift"' in struct"#)
       ]
     )
   }

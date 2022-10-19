@@ -238,4 +238,15 @@ final class AttributeTests: XCTestCase {
         """
     )
   }
+
+  func testObjcImplementationAttribute() throws {
+    AssertParse("""
+      @_objcImplementation extension MyClass {
+        func fn() {}
+      }
+      @_objcImplementation(Category) extension MyClass {
+        func fn2() {}
+      }
+      """)
+  }
 }

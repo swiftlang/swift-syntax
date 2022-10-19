@@ -921,10 +921,6 @@ extension Lexer.Cursor {
         guard !self.isAtEndOfFile else {
           break
         }
-        if case .trailing = position {
-          // Don't lex comments as trailing trivia (for now).
-          break
-        }
 
         switch self.peek() {
         case UInt8(ascii: "/"):

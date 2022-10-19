@@ -27,24 +27,30 @@ func AssertEqualTokens(_ actual: [Lexer.Lexeme], _ expected: [Lexer.Lexeme], fil
     }
 
     guard l.leadingTriviaText == r.leadingTriviaText else {
-      return XCTFail("""
-        Token at index \(idx) does not have matching leading trivia! \
-        \(l.leadingTriviaText.debugDescription) != \(r.leadingTriviaText.debugDescription)
-        """, file: file, line: line)
+      return FailStringsEqualWithDiff(
+        String(syntaxText: l.leadingTriviaText),
+        String(syntaxText: r.leadingTriviaText),
+        "Token at index \(idx) does not have matching leading trivia",
+        file: file, line: line
+      )
     }
 
-    guard l.tokenText == r.tokenText else {
-      return XCTFail("""
-        Text at index \(idx) does not have matching text! \
-        \(l.tokenText.debugDescription) != \(r.tokenText.debugDescription)"
-        """, file: file, line: line)
+    guard l.tokenText.debugDescription == r.tokenText.debugDescription else {
+      return FailStringsEqualWithDiff(
+        l.tokenText.debugDescription,
+        r.tokenText.debugDescription,
+        "Text at index \(idx) does not have matching text",
+        file: file, line: line
+      )
     }
 
     guard l.trailingTriviaText == r.trailingTriviaText else {
-      return XCTFail("""
-        Token at index \(idx) does not have matching trailing trivia! \
-        \(l.trailingTriviaText.debugDescription) != \(r.trailingTriviaText.debugDescription)
-        """, file: file, line: line)
+      return FailStringsEqualWithDiff(
+        String(syntaxText: l.trailingTriviaText),
+        String(syntaxText: r.trailingTriviaText),
+        "Token at index \(idx) does not have matching trailing trivia",
+        file: file, line: line
+      )
     }
   }
 }

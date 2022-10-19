@@ -142,7 +142,7 @@ final class IfconfigExprTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'return' in conditional compilation block"),
+        DiagnosticSpec(message: "unexpected 'return' keyword in conditional compilation block"),
       ]
     )
   }

@@ -187,7 +187,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'rethrows' may only occur before '->', Fix-It replacements: 43 - 43 = 'rethrows ', 46 - 55 = ''
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'rethrows' in function signature"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'rethrows' in function signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'rethrows' keyword in function signature"),
       ]
     )
   }
@@ -263,7 +263,7 @@ final class ErrorsTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';'
         // TODO: Old parser expected error on line 3: expected expression
-        DiagnosticSpec(message: "unexpected code 'throws' in function"),
+        DiagnosticSpec(message: "unexpected 'throws' keyword in function"),
       ]
     )
   }

@@ -55,7 +55,7 @@ final class TypeTests: XCTestCase {
         print("closure with empty capture list")
       }
       """)
-    
+
     AssertParse("""
                 { ()
                 throws -> Void in }
@@ -71,7 +71,7 @@ final class TypeTests: XCTestCase {
                 { $0.parseClosureExpression() },
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item"),
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'class' in closure capture signature"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'class' keyword in closure capture signature"),
                   DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end closure"),
                 ])
 

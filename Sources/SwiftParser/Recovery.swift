@@ -29,6 +29,15 @@ public struct RecoveryConsumptionHandle {
       unexpectedTokens: 0,
       tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: token))
   }
+
+  /// A `RecoveryConsumptionHandle` that will not eat any tokens but instead
+  /// synthesize a missing token of kind `token`.
+  @_spi(RawSyntax)
+  public static func missing(_ token: RawTokenKind) -> RecoveryConsumptionHandle {
+    return RecoveryConsumptionHandle(
+      unexpectedTokens: 0,
+      tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: token, missing: true))
+  }
 }
 
 extension Parser.Lookahead {

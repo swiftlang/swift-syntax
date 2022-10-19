@@ -3,41 +3,113 @@
 import XCTest
 
 final class DiagnosticMissingFuncKeywordTests: XCTestCase {
-  func testDiagnosticMissingFuncKeyword1() {
+  func testDiagnosticMissingFuncKeyword2a() {
+    // https://github.com/apple/swift/issues/52877
     AssertParse(
       """
-      // https://github.com/apple/swift/issues/52877
+      protocol Brew {
+        1️⃣tripel() -> Int
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"]),
+      ], fixedSource: """
+      protocol Brew {
+        func tripel() -> Int
+      }
       """
     )
   }
 
-  func testDiagnosticMissingFuncKeyword2() {
+  func testDiagnosticMissingFuncKeyword2b() {
+    // https://github.com/apple/swift/issues/52877
     AssertParse(
       """
-      protocol Brew { 1️⃣
-        tripel() -> Int 
-        quadrupel2️⃣: Int { get } 
-        static + (lhs: Self, rhs: Self) -> Self 
-        * (lhs: Self, rhs: Self) -> Self 
-        ipa: Int { get }; apa: Float { get }
-        stout: Int { get } porter: Float { get }
+      protocol Brew {
+        1️⃣quadrupel: Int { get }
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: in declaration of 'Brew'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end protocol"),
-        // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration, Fix-It replacements: 3 - 3 = 'func '
-        // TODO: Old parser expected error on line 3: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 4: expected 'func' keyword in operator function declaration, Fix-It replacements: 10 - 10 = 'func '
-        // TODO: Old parser expected error on line 5: expected 'func' keyword in operator function declaration, Fix-It replacements: 3 - 3 = 'func '
-        // TODO: Old parser expected error on line 5: operator '*' declared in protocol must be 'static', Fix-It replacements: 3 - 3 = 'static '
-        // TODO: Old parser expected error on line 6: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        // TODO: Old parser expected error on line 6: expected 'var' keyword in property declaration, Fix-It replacements: 21 - 21 = 'var '
-        // TODO: Old parser expected error on line 7: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        // TODO: Old parser expected error on line 7: expected declaration
-        // TODO: Old parser expected error on line 7: consecutive declarations on a line must be separated by ';'
-      ]
+        DiagnosticSpec(message: "expected 'var' in variable"),
+      ], fixedSource: """
+      protocol Brew {
+        var quadrupel: Int { get }
+      }
+      """
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword2c() {
+    // https://github.com/apple/swift/issues/52877
+    AssertParse(
+      """
+      protocol Brew {
+        static 1️⃣+ (lhs: Self, rhs: Self) -> Self
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
+      ], fixedSource: """
+      protocol Brew {
+        static func + (lhs: Self, rhs: Self) -> Self
+      }
+      """
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword2d() {
+    // https://github.com/apple/swift/issues/52877
+    AssertParse(
+      """
+      protocol Brew {
+        1️⃣* (lhs: Self, rhs: Self) -> Self
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
+      ], fixedSource: """
+      protocol Brew {
+        func * (lhs: Self, rhs: Self) -> Self
+      }
+      """
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword2e() {
+    // https://github.com/apple/swift/issues/52877
+    AssertParse(
+      """
+      protocol Brew {
+        1️⃣ipa: Int { get }; 2️⃣apa: Float { get }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'var' in variable"),
+      ], fixedSource: """
+      protocol Brew {
+        var ipa: Int { get }; var apa: Float { get }
+      }
+      """
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword2f() {
+    // https://github.com/apple/swift/issues/52877
+    AssertParse(
+      """
+      protocol Brew {
+        1️⃣stout: Int { get } 2️⃣porter: Float { get }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'var' in variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'var' in variable"),
+      ], fixedSource: """
+      protocol Brew {
+        var stout: Int { get } var porter: Float { get }
+      }
+      """
     )
   }
 
@@ -49,47 +121,125 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
     )
   }
 
-  func testDiagnosticMissingFuncKeyword4() {
+  func testDiagnosticMissingFuncKeyword4a() {
     AssertParse(
       """
-      struct Bar {1️⃣
-        2️⃣fisr = 0x5F3759DF 
-        %%<T: Brew> (lhs: T, rhs: T) -> T { 
-          lhs + lhs + rhs + rhs
-        }
-        _: Int = 42 
-        (light, dark) = (100, 200)
-        a, b: Int 
+      struct Bar {
+        1️⃣fisr = 0x5F3759DF
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in struct"),
-        // TODO: Old parser expected error on line 3: expected 'func' keyword in operator function declaration, Fix-It replacements: 3 - 3 = 'func '
-        // TODO: Old parser expected error on line 6: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        // TODO: Old parser expected error on line 7: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        // TODO: Old parser expected error on line 8: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
+        DiagnosticSpec(message: "expected 'var' in variable"),
       ]
     )
   }
 
-  func testDiagnosticMissingFuncKeyword5() {
+  func testDiagnosticMissingFuncKeyword4b() {
     AssertParse(
       """
-      class Baz {1️⃣
-        instanceMethod() {} 
-        2️⃣static staticMethod() {} 
-        instanceProperty: Int { 0 } 
-        static staticProperty: Int { 0 } 
+      struct Bar {
+        1️⃣%%<T: Brew> (lhs: T, rhs: T) -> T {
+          lhs + lhs + rhs + rhs
+        }
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end class"),
-        // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration, Fix-It replacements: 3 - 3 = 'func '
-        // TODO: Old parser expected error on line 3: expected 'func' keyword in static method declaration, Fix-It replacements: 10 - 10 = 'func '
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 4: expected 'var' keyword in property declaration, Fix-It replacements: 3 - 3 = 'var '
-        // TODO: Old parser expected error on line 5: expected 'var' keyword in static property declaration, Fix-It replacements: 10 - 10 = 'var '
+        DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
+      ]
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword4c() {
+    AssertParse(
+      """
+      struct Bar {
+        1️⃣_: Int = 42
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'var' in variable"),
+      ]
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword4d() {
+    AssertParse(
+      """
+      struct Bar {
+        1️⃣(light, dark) = (100, 200)
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'var' in variable"),
+      ]
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword4e() {
+    AssertParse(
+      """
+      struct Bar {
+        1️⃣a, b: Int
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
+      ], fixedSource: """
+      struct Bar {
+        var a, b: Int
+      }
+      """
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword5a() {
+    AssertParse(
+      """
+      class Baz {
+        1️⃣instanceMethod() {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'func' in function"),
+      ]
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword5b() {
+    AssertParse(
+      """
+      class Baz {
+        static 1️⃣staticMethod() {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'func' in function"),
+      ]
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword5c() {
+    AssertParse(
+      """
+      class Baz {
+        1️⃣instanceProperty: Int { 0 }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'var' in variable"),
+      ]
+    )
+  }
+
+  func testDiagnosticMissingFuncKeyword5d() {
+    AssertParse(
+      """
+      class Baz {
+        static 1️⃣staticProperty: Int { 0 }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected 'var' in variable"),
       ]
     )
   }
@@ -102,7 +252,6 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' in class
         DiagnosticSpec(message: "unexpected code '()' in class"),
       ]
     )
@@ -116,7 +265,6 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected declaration
         DiagnosticSpec(message: "unexpected code '0' in class"),
       ]
     )

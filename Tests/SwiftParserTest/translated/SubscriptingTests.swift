@@ -363,24 +363,19 @@ final class SubscriptingTests: XCTestCase {
       """
       struct A8 {
         subscript(i : Int) -> Int
-          1️⃣get {
+          1️⃣get 2️⃣{
             return stored
           }
-          set {
+          3️⃣set 4️⃣{
             stored = value
           }
         }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code in struct", highlight: """
-
-              get {
-                return stored
-              }
-              set {
-                stored = value
-              }
-          """),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected 'func' in function"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected parameter clause in function signature"),
       ]
     )
   }

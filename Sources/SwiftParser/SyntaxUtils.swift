@@ -47,3 +47,9 @@ extension SyntaxText {
     self.hasSuffix(SyntaxText("#>"))
   }
 }
+
+extension RawTokenKind {
+  func `is`(any kinds: [RawTokenKind]) -> Bool {
+    return kinds.contains(self)
+  }
+}

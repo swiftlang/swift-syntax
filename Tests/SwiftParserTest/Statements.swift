@@ -49,6 +49,11 @@ final class StatementTests: XCTestCase {
         DiagnosticSpec(message: "unexpected code '* ! = x' in 'if' statement"),
       ]
     )
+
+    AssertParse(
+      """
+      if includeSavedHints { a = a.flatMap{ $0 } ?? nil }
+      """)
   }
 
   func testNestedIfs() {

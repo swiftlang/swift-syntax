@@ -2294,7 +2294,6 @@ extension Parser.Lookahead {
     //   {...}()
     // by looking ahead for the ()'s, but this has been replaced by do{}, so this
     // probably isn't worthwhile.
-    //
     guard case .basic = flavor else {
       return true
     }
@@ -2317,8 +2316,8 @@ extension Parser.Lookahead {
     var backtrack = self.lookahead()
     backtrack.eat(.leftBrace)
     var loopProgress = LoopProgressCondition()
-    while !backtrack.at(any: [.eof, .rightBrace]) && loopProgress.evaluate(backtrack.currentToken) {
-      backtrack.consumeAnyToken()
+    while !backtrack.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword ]) && loopProgress.evaluate(backtrack.currentToken) {
+      backtrack.skipSingle()
     }
 
     guard backtrack.consume(if: .rightBrace) != nil else {

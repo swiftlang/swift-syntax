@@ -574,14 +574,12 @@ enum PoundDeclarationStart: RawTokenKindSubset {
   case poundIfKeyword
   case poundWarningKeyword
   case poundErrorKeyword
-  case pound
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme.tokenKind {
     case .poundIfKeyword: self = .poundIfKeyword
     case .poundWarningKeyword: self = .poundWarningKeyword
     case .poundErrorKeyword: self = .poundErrorKeyword
-    case .pound: self = .pound
     default: return nil
     }
   }
@@ -591,7 +589,6 @@ enum PoundDeclarationStart: RawTokenKindSubset {
     case .poundIfKeyword: return .poundIfKeyword
     case .poundWarningKeyword: return .poundWarningKeyword
     case .poundErrorKeyword: return .poundErrorKeyword
-    case .pound: return .pound
     }
   }
 }

@@ -72,6 +72,21 @@ extension ContextualKeywords where RawValue == SyntaxText {
 
 // MARK: - Subsets
 
+enum AccessorKind: SyntaxText, ContextualKeywords, Equatable {
+  case `get` = "get"
+  case `set` = "set"
+  case `didSet` = "didSet"
+  case `willSet` = "willSet"
+  case unsafeAddress = "unsafeAddress"
+  case addressWithOwner = "addressWithOwner"
+  case addressWithNativeOwner = "addressWithNativeOwner"
+  case unsafeMutableAddress = "unsafeMutableAddress"
+  case mutableAddressWithOwner = "mutableAddressWithOwner"
+  case mutableAddressWithNativeOwner = "mutableAddressWithNativeOwner"
+  case _read = "_read"
+  case _modify = "_modify"
+}
+
 enum BinaryOperator: RawTokenKindSubset {
   case spacedBinaryOperator
   case unspacedBinaryOperator

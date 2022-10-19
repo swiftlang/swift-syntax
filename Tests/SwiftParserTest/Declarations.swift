@@ -1143,6 +1143,57 @@ final class DeclarationTests: XCTestCase {
       """
     )
   }
+
+  func testVariableDeclWithGetSetButNoBrace() {
+    AssertParse(
+      """
+      struct Foo {
+        var x: Int 1️⃣
+          get {
+            4
+          }
+          set {
+            x = newValue
+          }
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '{' in variable")
+      ]
+    )
+  }
+
+  func testVariableDeclWithSetGetButNoBrace() {
+    AssertParse(
+      """
+      struct Foo {
+        var x: Int 1️⃣
+          set {
+            x = newValue
+          }
+          get {
+            4
+          }
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '{' in variable")
+      ]
+    )
+  }
+
+  func testVariableFollowedByReferenceToSet() {
+    AssertParse(
+      """
+      func bar() {
+          let a = b
+          set.c
+      }
+      """
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

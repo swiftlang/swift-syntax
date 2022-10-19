@@ -41,12 +41,12 @@ class Indenter: SyntaxRewriter {
     return Indenter(indentation: indentation).visit(Syntax(node)).as(SyntaxType.self)!
   }
 
-  public override func visit(_ token: TokenSyntax) -> Syntax {
-    return Syntax(TokenSyntax(
+  public override func visit(_ token: TokenSyntax) -> TokenSyntax {
+    return TokenSyntax(
       token.tokenKind,
       leadingTrivia: token.leadingTrivia.indented(indentation: indentation),
       trailingTrivia: token.trailingTrivia.indented(indentation: indentation),
       presence: token.presence
-    ))
+    )
   }
 }

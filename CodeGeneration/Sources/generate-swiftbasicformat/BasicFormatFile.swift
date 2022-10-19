@@ -163,7 +163,7 @@ private func createTokenFormatFunction() -> FunctionDecl {
 
         )
       ]),
-      output: "Syntax"
+      output: "TokenSyntax"
     )
   ) {
     VariableDecl("var leadingTrivia = node.leadingTrivia")
@@ -225,6 +225,6 @@ private func createTokenFormatFunction() -> FunctionDecl {
       """
     )
     SequenceExpr("lastRewrittenToken = rewritten")
-    ReturnStmt("return Syntax(rewritten)")
+    ReturnStmt("return rewritten")
   }
 }

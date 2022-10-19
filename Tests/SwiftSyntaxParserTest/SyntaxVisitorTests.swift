@@ -99,8 +99,8 @@ public class SyntaxVisitorTests: XCTestCase {
 
   public func testRewriteTrivia() {
     class TriviaRemover: SyntaxRewriter {
-      override func visit(_ token: TokenSyntax) -> Syntax {
-        return Syntax(token.withTrailingTrivia(.zero))
+      override func visit(_ token: TokenSyntax) -> TokenSyntax {
+        return token.withTrailingTrivia(.zero)
       }
     }
 

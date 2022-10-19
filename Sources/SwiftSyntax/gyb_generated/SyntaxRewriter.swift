@@ -1973,8 +1973,8 @@ open class SyntaxRewriter {
   /// Visit a `TokenSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ token: TokenSyntax) -> Syntax {
-    return Syntax(token)
+  open func visit(_ token: TokenSyntax) -> TokenSyntax {
+    return token
   }
   
   /// Visit an `UnknownSyntax`.
@@ -4884,7 +4884,7 @@ open class SyntaxRewriter {
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
     if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return visit(node)
+    return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.

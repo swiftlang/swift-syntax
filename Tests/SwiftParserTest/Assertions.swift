@@ -144,7 +144,7 @@ class FixItApplier: SyntaxRewriter {
     return nil
   }
 
-  override func visit(_ node: TokenSyntax) -> Syntax {
+  override func visit(_ node: TokenSyntax) -> TokenSyntax {
     var modifiedNode = node
     for change in changes {
       switch change {
@@ -156,7 +156,7 @@ class FixItApplier: SyntaxRewriter {
         break
       }
     }
-    return Syntax(modifiedNode)
+    return modifiedNode
   }
 
   /// If `messages` is `nil`, applies all Fix-Its in `diagnostics` to `tree` and returns the fixed syntax tree.

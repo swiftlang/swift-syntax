@@ -97,7 +97,7 @@ extension FixIt.Changes {
   /// Makes the `token` present, moving it in front of the previous token's trivia.
   static func makePresentBeforeTrivia(_ token: TokenSyntax) -> Self {
     if let previousToken = token.previousToken(viewMode: .sourceAccurate) {
-      var presentToken = PresentMaker().visit(token).as(TokenSyntax.self)!
+      var presentToken = PresentMaker().visit(token)
       if !previousToken.trailingTrivia.isEmpty {
         presentToken = presentToken.withTrailingTrivia(previousToken.trailingTrivia)
       }

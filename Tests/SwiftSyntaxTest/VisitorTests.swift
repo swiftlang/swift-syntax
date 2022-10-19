@@ -125,11 +125,11 @@ public class VisitorTests: XCTestCase {
     class RewritingTreePrinter: SyntaxRewriter {
       var out = ""
 
-      override func visit(_ node: TokenSyntax) -> Syntax {
+      override func visit(_ node: TokenSyntax) -> TokenSyntax {
         out += node.leadingTrivia.description
         out += node.text
         out += node.trailingTrivia.description
-        return Syntax(node)
+        return node
       }
 
 

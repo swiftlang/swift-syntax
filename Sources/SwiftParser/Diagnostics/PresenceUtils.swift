@@ -45,7 +45,7 @@ extension SyntaxProtocol {
 
 /// Transforms a syntax tree by making all missing tokens present.
 class PresentMaker: SyntaxRewriter {
-  override func visit(_ token: TokenSyntax) -> Syntax {
+  override func visit(_ token: TokenSyntax) -> TokenSyntax {
     if token.presence == .missing {
       let presentToken: TokenSyntax
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
@@ -57,7 +57,7 @@ class PresentMaker: SyntaxRewriter {
       }
       return BasicFormat().visit(presentToken)
     } else {
-      return Syntax(token)
+      return token
     }
   }
 
@@ -126,10 +126,10 @@ class PresentMaker: SyntaxRewriter {
 }
 
 class MissingMaker: SyntaxRewriter {
-  override func visit(_ node: TokenSyntax) -> Syntax {
+  override func visit(_ node: TokenSyntax) -> TokenSyntax {
     guard node.presence == .present else {
-      return Syntax(node)
+      return node
     }
-    return Syntax(TokenSyntax(node.tokenKind, presence: .missing))
+    return TokenSyntax(node.tokenKind, presence: .missing)
   }
 }

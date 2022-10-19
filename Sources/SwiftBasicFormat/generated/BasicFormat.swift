@@ -2755,7 +2755,7 @@ open class BasicFormat: SyntaxRewriter {
     return Syntax(VersionTupleSyntax(unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion))
   }
   
-  open override func visit(_ node: TokenSyntax) -> Syntax {
+  open override func visit(_ node: TokenSyntax) -> TokenSyntax {
     var leadingTrivia = node.leadingTrivia
     var trailingTrivia = node.trailingTrivia
     switch node.tokenKind {
@@ -3215,6 +3215,6 @@ open class BasicFormat: SyntaxRewriter {
       presence: node.presence
     )
     lastRewrittenToken = rewritten
-    return Syntax(rewritten)
+    return rewritten
   }
 }

@@ -22,7 +22,7 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name and function signature in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and function signature in function"),
       ]
     )
   }

@@ -8282,7 +8282,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     case 4:
       return nil
     case 5:
-      return "name"
+      return nil
     case 6:
       return nil
     case 7:
@@ -9739,7 +9739,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     case 0:
       return nil
     case 1:
-      return "name"
+      return nil
     case 2:
       return nil
     case 3:

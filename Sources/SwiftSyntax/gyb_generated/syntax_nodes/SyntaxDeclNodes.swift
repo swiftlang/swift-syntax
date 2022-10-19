@@ -694,7 +694,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -1163,7 +1163,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -2694,7 +2694,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -3214,7 +3214,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -3734,7 +3734,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -4254,7 +4254,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -4728,7 +4728,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -5242,7 +5242,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -8654,7 +8654,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -9048,7 +9048,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:
@@ -9534,7 +9534,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 6:
       return nil
     case 7:
-      return "name"
+      return nil
     case 8:
       return nil
     case 9:

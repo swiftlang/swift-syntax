@@ -296,7 +296,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     case 0:
       return nil
     case 1:
-      return "name"
+      return "label name"
     case 2:
       return nil
     case 3:

@@ -149,10 +149,10 @@ extension Parser {
   ///
   ///     declarations → declaration declarations?
   ///
-  /// If `allowMissingFuncOrVarKeywordRecovery` is `true`, this methods tries to
-  /// synthesize `func` or `var` keywords where necessary.
+  /// If `inMemberDeclList` is `true`, we know that the next item must be a
+  /// declaration and thus start with a keyword. This allows futher recovery.
   @_spi(RawSyntax)
-  public mutating func parseDeclaration(allowMissingFuncOrVarKeywordRecovery: Bool = false) -> RawDeclSyntax {
+  public mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
     switch self.at(anyIn: PoundDeclarationStart.self) {
     case (.poundIfKeyword, _)?:
       let directive = self.parsePoundIfDirective { parser in
@@ -211,7 +211,7 @@ extension Parser {
     case (.subscriptKeyword, let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
     case (.letKeyword, let handle)?, (.varKeyword, let handle)?:
-      return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, handle))
+      return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
     case (.initKeyword, let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
     case (.deinitKeyword, let handle)?:
@@ -223,7 +223,7 @@ extension Parser {
     case (.actorContextualKeyword, let handle)?:
       return RawDeclSyntax(self.parseActorDeclaration(attrs, handle))
     case nil:
-      if allowMissingFuncOrVarKeywordRecovery {
+      if inMemberDeclList {
         let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().tokenKind.is(any: [.colon, .equal, .comma])
         let isProbablyTupleDecl = self.at(.leftParen) && self.peek().tokenKind.is(any: [.identifier, .wildcardKeyword])
 
@@ -612,7 +612,7 @@ extension Parser {
     if self.at(.poundSourceLocationKeyword) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
     } else {
-      decl = self.parseDeclaration(allowMissingFuncOrVarKeywordRecovery: true)
+      decl = self.parseDeclaration(inMemberDeclList: true)
     }
 
     let semi = self.consume(if: .semicolon)
@@ -1694,7 +1694,7 @@ extension Parser {
 
     // Parse getter and setter.
     let accessor: RawSyntax?
-    if self.at(.leftBrace) {
+    if self.at(.leftBrace) || self.at(anyIn: AccessorKind.self) != nil {
       accessor = self.parseGetSet()
     } else {
       accessor = nil
@@ -1725,10 +1725,22 @@ extension Parser {
   ///     pattern-initializer-list → pattern-initializer | pattern-initializer ',' pattern-initializer-list
   ///     pattern-initializer → pattern initializer?
   ///     initializer → = expression
+  ///
+  /// If `inMemberDeclList` is `true`, we know that the next item needs to be a
+  /// declaration that is started by a keyword. Thus, we in the following case
+  /// we know that `set` can't start a new declaration and we can thus recover
+  /// by synthesizing a missing `{` in front of `set`.
+  /// ```
+  /// var x: Int
+  ///   set {
+  ///   }
+  /// }
+  /// ```
   @_spi(RawSyntax)
   public mutating func parseLetOrVarDeclaration(
     _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
+    _ handle: RecoveryConsumptionHandle,
+    inMemberDeclList: Bool = false
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
     let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
@@ -1790,7 +1802,7 @@ extension Parser {
         }
 
         let accessor: RawSyntax?
-        if self.at(.leftBrace) {
+        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorKind.self) != nil) {
           accessor = self.parseGetSet()
         } else {
           accessor = nil
@@ -1814,21 +1826,6 @@ extension Parser {
       letOrVarKeyword: introducer,
       bindings: RawPatternBindingListSyntax(elements: elements, arena: self.arena),
       arena: self.arena)
-  }
-
-  enum AccessorKind: SyntaxText, ContextualKeywords, Equatable {
-    case `get` = "get"
-    case `set` = "set"
-    case `didSet` = "didSet"
-    case `willSet` = "willSet"
-    case unsafeAddress = "unsafeAddress"
-    case addressWithOwner = "addressWithOwner"
-    case addressWithNativeOwner = "addressWithNativeOwner"
-    case unsafeMutableAddress = "unsafeMutableAddress"
-    case mutableAddressWithOwner = "mutableAddressWithOwner"
-    case mutableAddressWithNativeOwner = "mutableAddressWithNativeOwner"
-    case _read = "_read"
-    case _modify = "_modify"
   }
 
   struct AccessorIntroducer {
@@ -1925,7 +1922,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseGetSet() -> RawSyntax {
     // Parse getter and setter.
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
+    let lbrace: RawTokenSyntax
+    if self.at(anyIn: AccessorKind.self) != nil {
+      unexpectedBeforeLBrace = nil
+      lbrace = missingToken(.leftBrace, text: nil)
+    } else {
+      (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    }
     // Collect all explicit accessors to a list.
     var elements = [RawAccessorDeclSyntax]()
     do {

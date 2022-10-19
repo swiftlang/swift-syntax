@@ -362,20 +362,18 @@ final class SubscriptingTests: XCTestCase {
     AssertParse(
       """
       struct A8 {
-        subscript(i : Int) -> Int
-          1️⃣get 2️⃣{
+        subscript(i : Int) -> Int1️⃣
+          get {
             return stored
           }
-          3️⃣set 4️⃣{
+          set {
             stored = value
           }
-        }
+        }2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected 'func' in function"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in subscript"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct"),
       ]
     )
   }

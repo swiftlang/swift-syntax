@@ -110,7 +110,6 @@ enum CanBeDeclaratinStart: RawTokenKindSubset {
   case operatorKeyword
   case poundErrorKeyword
   case poundIfKeyword
-  case poundLineKeyword
   case poundSourceLocationKeyword
   case poundWarningKeyword
   case precedencegroupKeyword
@@ -142,7 +141,6 @@ enum CanBeDeclaratinStart: RawTokenKindSubset {
     case .operatorKeyword: self = .operatorKeyword
     case .poundErrorKeyword: self = .poundErrorKeyword
     case .poundIfKeyword: self = .poundIfKeyword
-    case .poundLineKeyword where lexeme.isAtStartOfLine: self = .poundLineKeyword
     case .poundSourceLocationKeyword: self = .poundSourceLocationKeyword
     case .poundWarningKeyword: self = .poundWarningKeyword
     case .precedencegroupKeyword: self = .precedencegroupKeyword
@@ -177,7 +175,6 @@ enum CanBeDeclaratinStart: RawTokenKindSubset {
     case .operatorKeyword: return .operatorKeyword
     case .poundErrorKeyword: return .poundErrorKeyword
     case .poundIfKeyword: return .poundIfKeyword
-    case .poundLineKeyword: return .poundLineKeyword
     case .poundSourceLocationKeyword: return .poundSourceLocationKeyword
     case .poundWarningKeyword: return .poundWarningKeyword
     case .precedencegroupKeyword: return .precedencegroupKeyword
@@ -577,12 +574,14 @@ enum PoundDeclarationStart: RawTokenKindSubset {
   case poundIfKeyword
   case poundWarningKeyword
   case poundErrorKeyword
+  case pound
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme.tokenKind {
     case .poundIfKeyword: self = .poundIfKeyword
     case .poundWarningKeyword: self = .poundWarningKeyword
     case .poundErrorKeyword: self = .poundErrorKeyword
+    case .pound: self = .pound
     default: return nil
     }
   }
@@ -592,6 +591,7 @@ enum PoundDeclarationStart: RawTokenKindSubset {
     case .poundIfKeyword: return .poundIfKeyword
     case .poundWarningKeyword: return .poundWarningKeyword
     case .poundErrorKeyword: return .poundErrorKeyword
+    case .pound: return .pound
     }
   }
 }
@@ -737,18 +737,8 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case leftSquareBracket
   case nilKeyword
   case period
-  case pound // For recovery of unknown directives
-  case poundColorLiteralKeyword
-  case poundColumnKeyword
-  case poundDsohandleKeyword
-  case poundFileIDKeyword
-  case poundFileKeyword
-  case poundFileLiteralKeyword
-  case poundFilePathKeyword
-  case poundFunctionKeyword
-  case poundImageLiteralKeyword
+  case pound
   case poundKeyPathKeyword
-  case poundLineKeyword
   case poundSelectorKeyword
   case prefixPeriod
   case regexLiteral
@@ -778,17 +768,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: self = .nilKeyword
     case .period: self = .period
     case .pound: self = .pound
-    case .poundColorLiteralKeyword: self = .poundColorLiteralKeyword
-    case .poundColumnKeyword: self = .poundColumnKeyword
-    case .poundDsohandleKeyword: self = .poundDsohandleKeyword
-    case .poundFileIDKeyword: self = .poundFileIDKeyword
-    case .poundFileKeyword: self = .poundFileKeyword
-    case .poundFileLiteralKeyword: self = .poundFileLiteralKeyword
-    case .poundFilePathKeyword: self = .poundFilePathKeyword
-    case .poundFunctionKeyword: self = .poundFunctionKeyword
-    case .poundImageLiteralKeyword: self = .poundImageLiteralKeyword
     case .poundKeyPathKeyword: self = .poundKeyPathKeyword
-    case .poundLineKeyword: self = .poundLineKeyword
     case .poundSelectorKeyword: self = .poundSelectorKeyword
     case .prefixPeriod: self = .prefixPeriod
     case .regexLiteral: self = .regexLiteral
@@ -821,17 +801,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: return .nilKeyword
     case .period: return .period
     case .pound: return .pound
-    case .poundColorLiteralKeyword: return .poundColorLiteralKeyword
-    case .poundColumnKeyword: return .poundColumnKeyword
-    case .poundDsohandleKeyword: return .poundDsohandleKeyword
-    case .poundFileIDKeyword: return .poundFileIDKeyword
-    case .poundFileKeyword: return .poundFileKeyword
-    case .poundFileLiteralKeyword: return .poundFileLiteralKeyword
-    case .poundFilePathKeyword: return .poundFilePathKeyword
-    case .poundFunctionKeyword: return .poundFunctionKeyword
-    case .poundImageLiteralKeyword: return .poundImageLiteralKeyword
     case .poundKeyPathKeyword: return .poundKeyPathKeyword
-    case .poundLineKeyword: return .poundLineKeyword
     case .poundSelectorKeyword: return .poundSelectorKeyword
     case .prefixPeriod: return .prefixPeriod
     case .regexLiteral: return .regexLiteral

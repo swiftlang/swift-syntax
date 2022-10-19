@@ -806,6 +806,24 @@ open class BasicFormat: SyntaxRewriter {
     return ExprSyntax(ObjcSelectorExprSyntax(unexpectedBeforePoundSelector, poundSelector: poundSelector, unexpectedBetweenPoundSelectorAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndKind, kind: kind, unexpectedBetweenKindAndColon, colon: colon, unexpectedBetweenColonAndName, name: name, unexpectedBetweenNameAndRightParen, rightParen: rightParen))
   }
   
+  open override func visit(_ node: MacroExpansionExprSyntax) -> ExprSyntax {
+    let unexpectedBeforePoundToken = node.unexpectedBeforePoundToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let poundToken = self.visit(node.poundToken).cast(TokenSyntax.self)
+    let unexpectedBetweenPoundTokenAndMacro = node.unexpectedBetweenPoundTokenAndMacro.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let macro = self.visit(node.macro).cast(TokenSyntax.self)
+    let unexpectedBetweenMacroAndLeftParen = node.unexpectedBetweenMacroAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let argumentList = self.visit(node.argumentList).cast(TupleExprElementListSyntax.self)
+    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let trailingClosure = node.trailingClosure.map(self.visit)?.cast(ClosureExprSyntax.self)
+    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)?.cast(MultipleTrailingClosureElementListSyntax.self)
+    return ExprSyntax(MacroExpansionExprSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures))
+  }
+  
   open override func visit(_ node: PostfixIfConfigExprSyntax) -> ExprSyntax {
     let unexpectedBeforeBase = node.unexpectedBeforeBase.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let base = node.base.map(self.visit)?.cast(ExprSyntax.self)
@@ -1573,6 +1591,24 @@ open class BasicFormat: SyntaxRewriter {
     let unexpectedBetweenColonAndValue = node.unexpectedBetweenColonAndValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
     let value = self.visit(node.value).cast(TokenSyntax.self)
     return Syntax(PrecedenceGroupAssociativitySyntax(unexpectedBeforeAssociativityKeyword, associativityKeyword: associativityKeyword, unexpectedBetweenAssociativityKeywordAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value))
+  }
+  
+  open override func visit(_ node: MacroExpansionDeclSyntax) -> DeclSyntax {
+    let unexpectedBeforePoundToken = node.unexpectedBeforePoundToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let poundToken = self.visit(node.poundToken).cast(TokenSyntax.self)
+    let unexpectedBetweenPoundTokenAndMacro = node.unexpectedBetweenPoundTokenAndMacro.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let macro = self.visit(node.macro).cast(TokenSyntax.self)
+    let unexpectedBetweenMacroAndLeftParen = node.unexpectedBetweenMacroAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let argumentList = self.visit(node.argumentList).cast(TupleExprElementListSyntax.self)
+    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let trailingClosure = node.trailingClosure.map(self.visit)?.cast(ClosureExprSyntax.self)
+    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)?.cast(MultipleTrailingClosureElementListSyntax.self)
+    return DeclSyntax(MacroExpansionDeclSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures))
   }
   
   open override func visit(_ node: TokenListSyntax) -> Syntax {

@@ -737,6 +737,27 @@ EXPR_NODES = [
              Child('RightParen', kind='RightParenToken'),
          ]),
 
+    # e.g., "#embed("filename.txt")"
+    Node('MacroExpansionExpr',
+         name_for_diagnostics="pound literal expression", kind='Expr',
+         children=[
+             Child('PoundToken', kind='PoundToken',
+                   description='The `#` sign.'),
+             Child('Macro', kind='IdentifierToken'),
+             Child('LeftParen', kind='LeftParenToken',
+                   is_optional=True),
+             Child('ArgumentList', kind='TupleExprElementList',
+                   collection_element_name='Argument'),
+             Child('RightParen', kind='RightParenToken',
+                   is_optional=True),
+             Child('TrailingClosure', kind='ClosureExpr',
+                   is_optional=True),
+             Child('AdditionalTrailingClosures',
+                   kind='MultipleTrailingClosureElementList',
+                   collection_element_name='AdditionalTrailingClosure',
+                   is_optional=True),
+         ]),
+
     # postfix '#if' expression
     Node('PostfixIfConfigExpr', name_for_diagnostics=None, kind='Expr',
          children=[

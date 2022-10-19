@@ -296,4 +296,6 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "KeyPathComponentList": 285,
   "KeyPathComponent": 286,
   "OldKeyPathExpr": 287,
+  "MacroExpansionExpr": 288,
+  "MacroExpansionDecl": 289,
 ]

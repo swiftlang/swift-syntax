@@ -50,6 +50,7 @@ let package = Package(
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
+    .library(name: "_SwiftSyntaxMacros", type: .static, targets: ["_SwiftSyntaxMacros"]),
   ],
   targets: [
     .target(
@@ -140,13 +141,21 @@ let package = Package(
         "SwiftCompilerSupport.h"
       ]
     ),
+    .target(
+      name: "_SwiftSyntaxMacros",
+      dependencies: [
+        "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftParser", "SwiftDiagnostics"
+      ],
+      exclude: [
+        "CMakeLists.txt",
+      ]),
     .executableTarget(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
     ),
     .executableTarget(
       name: "swift-parser-cli",
-      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftOperators",
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftOperators", "_SwiftSyntaxMacros",
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .testTarget(
@@ -165,6 +174,12 @@ let package = Package(
       name: "SwiftSyntaxParserTest",
       dependencies: ["SwiftSyntaxParser", "_SwiftSyntaxTestSupport"],
       exclude: ["Inputs"]
+    ),
+    .testTarget(
+      name: "SwiftSyntaxMacrosTest",
+      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser",
+                     "_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder",
+                     "_SwiftSyntaxMacros"]
     ),
     .testTarget(
       name: "PerformanceTest",

@@ -1539,14 +1539,7 @@ extension Lexer.Cursor {
     let kind: RawTokenKind
     switch literal {
     case "keyPath": kind = .poundKeyPathKeyword
-    case "line": kind = .poundLineKeyword
     case "selector": kind = .poundSelectorKeyword
-    case "file": kind = .poundFileKeyword
-    case "fileID": kind = .poundFileIDKeyword
-    case "filePath": kind = .poundFilePathKeyword
-    case "column": kind = .poundColumnKeyword
-    case "function": kind = .poundFunctionKeyword
-    case "dsohandle": kind = .poundDsohandleKeyword
     case "assert": kind = .poundAssertKeyword
     case "sourceLocation": kind = .poundSourceLocationKeyword
     case "warning": kind = .poundWarningKeyword
@@ -1557,9 +1550,6 @@ extension Lexer.Cursor {
     case "endif": kind = .poundEndifKeyword
     case "available": kind = .poundAvailableKeyword
     case "unavailable": kind = .poundUnavailableKeyword
-    case "fileLiteral": kind = .poundFileLiteralKeyword
-    case "imageLiteral": kind = .poundImageLiteralKeyword
-    case "colorLiteral": kind = .poundColorLiteralKeyword
     case "_hasSymbol": kind = .poundHasSymbolKeyword
     default:
       // If we didn't find a match, then just return `.pound`.  This is highly

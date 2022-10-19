@@ -503,7 +503,7 @@ extension Parser {
     forDirective: Bool,
     pattern: PatternContext
   ) -> RawExprSyntax {
-    let head = self.parsePrimaryExpression(pattern: pattern)
+    let head = self.parsePrimaryExpression(pattern: pattern, flavor: flavor)
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
@@ -975,8 +975,12 @@ extension Parser {
   ///     primary-expression → key-path-expression
   ///     primary-expression → selector-expression
   ///     primary-expression → key-path-string-expression
+  ///     primary-expression → macro-expansion-expression
   @_spi(RawSyntax)
-  public mutating func parsePrimaryExpression(pattern: PatternContext) -> RawExprSyntax {
+  public mutating func parsePrimaryExpression(
+    pattern: PatternContext,
+    flavor: ExprFlavor
+  ) -> RawExprSyntax {
     switch self.at(anyIn: PrimaryExpressionStart.self) {
     case (.integerLiteral, let handle)?:
       let digits = self.eat(handle)
@@ -1013,40 +1017,10 @@ extension Parser {
         poundFile: tok,
         arena: self.arena
       ))
-    case (.poundFileIDKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFileIDExprSyntax(
-        poundFileID: tok,
-        arena: self.arena
-      ))
-    case (.poundFileKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFileExprSyntax(
-        poundFile: tok,
-        arena: self.arena
-      ))
-    case (.poundFilePathKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFilePathExprSyntax(
-        poundFilePath: tok,
-        arena: self.arena
-      ))
-    case (.poundFunctionKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFunctionExprSyntax(
-        poundFunction: tok,
-        arena: self.arena
-      ))
     case (.__function__Keyword, let handle)?:
       let tok = self.eat(handle)
       return RawExprSyntax(RawPoundFunctionExprSyntax(
         poundFunction: tok,
-        arena: self.arena
-      ))
-    case (.poundLineKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundLineExprSyntax(
-        poundLine: tok,
         arena: self.arena
       ))
     case (.__line__Keyword, let handle)?:
@@ -1055,22 +1029,10 @@ extension Parser {
         poundLine: tok,
         arena: self.arena
       ))
-    case (.poundColumnKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundColumnExprSyntax(
-        poundColumn: tok,
-        arena: self.arena
-      ))
     case (.__column__Keyword, let handle)?:
       let tok = self.eat(handle)
       return RawExprSyntax(RawPoundColumnExprSyntax(
         poundColumn: tok,
-        arena: self.arena
-      ))
-    case (.poundDsohandleKeyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundDsohandleExprSyntax(
-        poundDsohandle: tok,
         arena: self.arena
       ))
     case (.__dso_handle__Keyword, let handle)?:
@@ -1113,17 +1075,16 @@ extension Parser {
         wildcard: wild,
         arena: self.arena
       ))
-    case (.pound, let handle)?:
-      return RawExprSyntax(self.parseUnknownPoundLiteral(poundHandle: handle))
+
+    case (.pound, _)?:
+      return RawExprSyntax(
+        self.parseMacroExpansionExpr(pattern: pattern, flavor: flavor)
+      )
+      
     case (.poundSelectorKeyword, _)?:
       return RawExprSyntax(self.parseObjectiveCSelectorLiteral())
     case (.poundKeyPathKeyword, _)?:
       return RawExprSyntax(self.parseObjectiveCKeyPathExpression())
-
-    case (.poundColorLiteralKeyword, _)?,
-         (.poundImageLiteralKeyword, _)?,
-         (.poundFileLiteralKeyword, _)?:
-      return RawExprSyntax(self.parseObjectLiteralExpression())
 
     case (.leftBrace, _)?:     // expr-closure
       return RawExprSyntax(self.parseClosureExpression())
@@ -1187,54 +1148,58 @@ extension Parser {
 }
 
 extension Parser {
-  /// Parse an identifier as an expression.
+  /// Parse a macro expansion as an expression.
+  ///
   ///
   /// Grammar
   /// =======
   ///
-  ///     playground-literal → '#colorLiteral' '(' red ':' expression , green ':' expression , blue ':' expression , alpha ':' expression )
-  ///     playground-literal → '#fileLiteral' '(' resourceName ':' expression ')'
-  ///     playground-literal → '#imageLiteral' '(' resourceName ':' expression ')'
+  /// macro-expansion-expression → '#' identifier expr-call-suffix?
   @_spi(RawSyntax)
-  public mutating func parseObjectLiteralExpression() -> RawObjectLiteralExprSyntax {
+  public mutating func parseMacroExpansionExpr(
+    pattern: PatternContext,
+    flavor: ExprFlavor
+  ) -> RawMacroExpansionExprSyntax {
     let poundKeyword = self.consumeAnyToken()
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let arguments = self.parseArgumentListElements(pattern: .none)
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawObjectLiteralExprSyntax(
-      identifier: poundKeyword,
-      unexpectedBeforeLeftParen,
+    let (unexpectedBeforeMacro, macro) = self.expectIdentifier()
+
+    // Parse the optional parenthesized argument list.
+    let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine })
+    let args: [RawTupleExprElementSyntax]
+    let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
+    let rightParen: RawTokenSyntax?
+    if leftParen != nil {
+      args = parseArgumentListElements(pattern: pattern)
+      (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+    } else {
+      args = []
+      unexpectedBeforeRightParen = nil
+      rightParen = nil
+    }
+
+    // Parse the optional trailing closures.
+    let trailingClosure: RawClosureExprSyntax?
+    let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
+    if case .trailingClosure = flavor, self.at(.leftBrace), self.lookahead().isValidTrailingClosure(flavor) {
+      (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
+    } else {
+      trailingClosure = nil
+      additionalTrailingClosures = nil
+    }
+
+    return RawMacroExpansionExprSyntax(
+      poundToken: poundKeyword,
+      unexpectedBeforeMacro,
+      macro: macro,
       leftParen: leftParen,
-      arguments: RawTupleExprElementListSyntax(elements: arguments, arena: self.arena),
+      argumentList: RawTupleExprElementListSyntax(
+        elements: args, arena: self.arena
+      ),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
+      trailingClosure: trailingClosure,
+      additionalTrailingClosures: additionalTrailingClosures,
       arena: self.arena)
-  }
-}
-
-extension Parser {
-  /// Parse an unknown pound literal, that starts with a `#` at `poundHandle`
-  /// into a `RawIdentifierExprSyntax` that is missing the identifier and
-  /// instead contains all the tokens of the pound literal as unexpected tokens.
-  mutating func parseUnknownPoundLiteral(poundHandle: TokenConsumptionHandle) -> RawIdentifierExprSyntax {
-    var unexpected: [RawSyntax] = []
-    unexpected.append(RawSyntax(self.eat(poundHandle)))
-    if let name = self.consume(if: .identifier) {
-      unexpected.append(RawSyntax(name))
-    }
-    // If there is a parenthesis, consume all tokens up to the closing parenthesis.
-    if let leftParen = self.consume(if: .leftParen) {
-      unexpected.append(RawSyntax(leftParen))
-      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-      unexpected += unexpectedBeforeRightParen?.elements ?? []
-      unexpected.append(RawSyntax(rightParen))
-    }
-    return RawIdentifierExprSyntax(
-      RawUnexpectedNodesSyntax(elements: unexpected, arena: self.arena),
-      identifier: missingToken(.identifier, text: nil),
-      declNameArguments: nil,
-      arena: self.arena
-    )
   }
 }
 

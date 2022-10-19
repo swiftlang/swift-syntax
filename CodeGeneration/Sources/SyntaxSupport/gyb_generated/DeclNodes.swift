@@ -1500,4 +1500,43 @@ public let DECL_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "MacroExpansionDecl",
+       nameForDiagnostics: "pound literal declaration",
+       kind: "Decl",
+       children: [
+         Child(name: "PoundToken",
+               kind: "PoundToken",
+               description: "The `#` sign.",
+               tokenChoices: [
+                 "Pound"
+               ]),
+         Child(name: "Macro",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ]),
+         Child(name: "LeftParen",
+               kind: "LeftParenToken",
+               isOptional: true,
+               tokenChoices: [
+                 "LeftParen"
+               ]),
+         Child(name: "ArgumentList",
+               kind: "TupleExprElementList",
+               collectionElementName: "Argument"),
+         Child(name: "RightParen",
+               kind: "RightParenToken",
+               isOptional: true,
+               tokenChoices: [
+                 "RightParen"
+               ]),
+         Child(name: "TrailingClosure",
+               kind: "ClosureExpr",
+               isOptional: true),
+         Child(name: "AdditionalTrailingClosures",
+               kind: "MultipleTrailingClosureElementList",
+               isOptional: true,
+               collectionElementName: "AdditionalTrailingClosure")
+       ]),
+
 ]

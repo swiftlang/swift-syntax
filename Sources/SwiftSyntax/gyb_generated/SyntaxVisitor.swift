@@ -981,6 +981,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `ObjcSelectorExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ObjcSelectorExprSyntax) {}
+  /// Visiting `MacroExpansionExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MacroExpansionExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MacroExpansionExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MacroExpansionExprSyntax) {}
   /// Visiting `PostfixIfConfigExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1641,6 +1651,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `PrecedenceGroupAssociativitySyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {}
+  /// Visiting `MacroExpansionDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MacroExpansionDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MacroExpansionDeclSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MacroExpansionDeclSyntax) {}
   /// Visiting `TokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3914,6 +3934,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMacroExpansionExprSyntax(_ data: SyntaxData) {
+      let node = MacroExpansionExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPostfixIfConfigExprSyntax(_ data: SyntaxData) {
       let node = PostfixIfConfigExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -4631,6 +4662,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupAssociativitySyntax(_ data: SyntaxData) {
       let node = PrecedenceGroupAssociativitySyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMacroExpansionDeclSyntax(_ data: SyntaxData) {
+      let node = MacroExpansionDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6123,6 +6165,8 @@ open class SyntaxVisitor {
       visitImplObjcKeyPathExprSyntax(data)
     case .objcSelectorExpr:
       visitImplObjcSelectorExprSyntax(data)
+    case .macroExpansionExpr:
+      visitImplMacroExpansionExprSyntax(data)
     case .postfixIfConfigExpr:
       visitImplPostfixIfConfigExprSyntax(data)
     case .editorPlaceholderExpr:
@@ -6255,6 +6299,8 @@ open class SyntaxVisitor {
       visitImplPrecedenceGroupAssignmentSyntax(data)
     case .precedenceGroupAssociativity:
       visitImplPrecedenceGroupAssociativitySyntax(data)
+    case .macroExpansionDecl:
+      visitImplMacroExpansionDeclSyntax(data)
     case .tokenList:
       visitImplTokenListSyntax(data)
     case .nonEmptyTokenList:

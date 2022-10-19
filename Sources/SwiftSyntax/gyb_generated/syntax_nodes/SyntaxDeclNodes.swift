@@ -9577,3 +9577,472 @@ extension PrecedenceGroupDeclSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MacroExpansionDeclSyntax
+
+public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MacroExpansionDeclSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .macroExpansionDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MacroExpansionDeclSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .macroExpansionDecl)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil,
+    poundToken: TokenSyntax,
+    _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
+    macro: TokenSyntax,
+    _ unexpectedBetweenMacroAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax?,
+    _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
+    argumentList: TupleExprElementListSyntax,
+    _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax?,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax?,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?,
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforePoundToken?.raw,
+      poundToken.raw,
+      unexpectedBetweenPoundTokenAndMacro?.raw,
+      macro.raw,
+      unexpectedBetweenMacroAndLeftParen?.raw,
+      leftParen?.raw,
+      unexpectedBetweenLeftParenAndArgumentList?.raw,
+      argumentList.raw,
+      unexpectedBetweenArgumentListAndRightParen?.raw,
+      rightParen?.raw,
+      unexpectedBetweenRightParenAndTrailingClosure?.raw,
+      trailingClosure?.raw,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
+      additionalTrailingClosures?.raw,
+      unexpectedAfterAdditionalTrailingClosures?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroExpansionDecl,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforePoundToken: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforePoundToken(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforePoundToken` replaced.
+  /// - param newChild: The new `unexpectedBeforePoundToken` to replace the node's
+  ///                   current `unexpectedBeforePoundToken`, if present.
+  public func withUnexpectedBeforePoundToken(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  /// The `#` sign.
+  public var poundToken: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundToken(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `poundToken` replaced.
+  /// - param newChild: The new `poundToken` to replace the node's
+  ///                   current `poundToken`, if present.
+  public func withPoundToken(
+    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.pound, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenPoundTokenAndMacro(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenPoundTokenAndMacro` replaced.
+  /// - param newChild: The new `unexpectedBetweenPoundTokenAndMacro` to replace the node's
+  ///                   current `unexpectedBetweenPoundTokenAndMacro`, if present.
+  public func withUnexpectedBetweenPoundTokenAndMacro(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var macro: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMacro(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `macro` replaced.
+  /// - param newChild: The new `macro` to replace the node's
+  ///                   current `macro`, if present.
+  public func withMacro(
+    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenMacroAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenMacroAndLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenMacroAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenMacroAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenMacroAndLeftParen`, if present.
+  public func withUnexpectedBetweenMacroAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var leftParen: TokenSyntax? {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftParen` replaced.
+  /// - param newChild: The new `leftParen` to replace the node's
+  ///                   current `leftParen`, if present.
+  public func withLeftParen(
+    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 5)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenLeftParenAndArgumentList(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndArgumentList` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndArgumentList` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndArgumentList`, if present.
+  public func withUnexpectedBetweenLeftParenAndArgumentList(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var argumentList: TupleExprElementListSyntax {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withArgumentList(value)
+    }
+  }
+
+  /// Adds the provided `Argument` to the node's `argumentList`
+  /// collection.
+  /// - param element: The new `Argument` to add to the node's
+  ///                  `argumentList` collection.
+  /// - returns: A copy of the receiver with the provided `Argument`
+  ///            appended to its `argumentList` collection.
+  public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionDeclSyntax {
+    var collection: RawSyntax
+    if let col = raw.layoutView!.children[7] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
+    }
+    let newData = data.replacingChild(collection, at: 7)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `argumentList` replaced.
+  /// - param newChild: The new `argumentList` to replace the node's
+  ///                   current `argumentList`, if present.
+  public func withArgumentList(
+    _ newChild: TupleExprElementListSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
+    let newData = data.replacingChild(raw, at: 7)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenArgumentListAndRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentListAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenArgumentListAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenArgumentListAndRightParen`, if present.
+  public func withUnexpectedBetweenArgumentListAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var rightParen: TokenSyntax? {
+    get {
+      let childData = data.child(at: 9, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightParen` replaced.
+  /// - param newChild: The new `rightParen` to replace the node's
+  ///                   current `rightParen`, if present.
+  public func withRightParen(
+    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 9)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 10, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenRightParenAndTrailingClosure(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenRightParenAndTrailingClosure` replaced.
+  /// - param newChild: The new `unexpectedBetweenRightParenAndTrailingClosure` to replace the node's
+  ///                   current `unexpectedBetweenRightParenAndTrailingClosure`, if present.
+  public func withUnexpectedBetweenRightParenAndTrailingClosure(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 10)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var trailingClosure: ClosureExprSyntax? {
+    get {
+      let childData = data.child(at: 11, parent: Syntax(self))
+      if childData == nil { return nil }
+      return ClosureExprSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingClosure(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `trailingClosure` replaced.
+  /// - param newChild: The new `trailingClosure` to replace the node's
+  ///                   current `trailingClosure`, if present.
+  public func withTrailingClosure(
+    _ newChild: ClosureExprSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 11)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 12, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures` replaced.
+  /// - param newChild: The new `unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures` to replace the node's
+  ///                   current `unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures`, if present.
+  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 12)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+    get {
+      let childData = data.child(at: 13, parent: Syntax(self))
+      if childData == nil { return nil }
+      return MultipleTrailingClosureElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withAdditionalTrailingClosures(value)
+    }
+  }
+
+  /// Adds the provided `AdditionalTrailingClosure` to the node's `additionalTrailingClosures`
+  /// collection.
+  /// - param element: The new `AdditionalTrailingClosure` to add to the node's
+  ///                  `additionalTrailingClosures` collection.
+  /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
+  ///            appended to its `additionalTrailingClosures` collection.
+  public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionDeclSyntax {
+    var collection: RawSyntax
+    if let col = raw.layoutView!.children[13] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
+        from: [element.raw], arena: .default)
+    }
+    let newData = data.replacingChild(collection, at: 13)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `additionalTrailingClosures` replaced.
+  /// - param newChild: The new `additionalTrailingClosures` to replace the node's
+  ///                   current `additionalTrailingClosures`, if present.
+  public func withAdditionalTrailingClosures(
+    _ newChild: MultipleTrailingClosureElementListSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 13)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterAdditionalTrailingClosures(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterAdditionalTrailingClosures` replaced.
+  /// - param newChild: The new `unexpectedAfterAdditionalTrailingClosures` to replace the node's
+  ///                   current `unexpectedAfterAdditionalTrailingClosures`, if present.
+  public func withUnexpectedAfterAdditionalTrailingClosures(
+    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 14)
+    return MacroExpansionDeclSyntax(newData)
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return nil
+    case 10:
+      return nil
+    case 11:
+      return nil
+    case 12:
+      return nil
+    case 13:
+      return nil
+    case 14:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension MacroExpansionDeclSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforePoundToken": unexpectedBeforePoundToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "poundToken": Syntax(poundToken).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenPoundTokenAndMacro": unexpectedBetweenPoundTokenAndMacro.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "macro": Syntax(macro).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenMacroAndLeftParen": unexpectedBetweenMacroAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndArgumentList": unexpectedBetweenLeftParenAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenArgumentListAndRightParen": unexpectedBetweenArgumentListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenRightParenAndTrailingClosure": unexpectedBetweenRightParenAndTrailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "trailingClosure": trailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures": unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "additionalTrailingClosures": additionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterAdditionalTrailingClosures": unexpectedAfterAdditionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+

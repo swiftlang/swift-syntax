@@ -1129,6 +1129,16 @@ final class DeclarationTests: XCTestCase {
       ]
     )
   }
+
+  func testMacroExpansionDeclaration() {
+    AssertParse(
+      """
+      struct X {
+        #memberwiseInit(access: .public)
+      }
+      """
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

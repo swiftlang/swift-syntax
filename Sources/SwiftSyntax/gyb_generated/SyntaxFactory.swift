@@ -2393,6 +2393,53 @@ public enum SyntaxFactory {
     ], arena: .default))
     return ObjcSelectorExprSyntax(data)
   }
+  @available(*, deprecated, message: "Use initializer on MacroExpansionExprSyntax")
+  public static func makeMacroExpansionExpr(_ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, poundToken: TokenSyntax, _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, macro: TokenSyntax, _ unexpectedBetweenMacroAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?, _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil) -> MacroExpansionExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforePoundToken?.raw,
+      poundToken.raw,
+      unexpectedBetweenPoundTokenAndMacro?.raw,
+      macro.raw,
+      unexpectedBetweenMacroAndLeftParen?.raw,
+      leftParen?.raw,
+      unexpectedBetweenLeftParenAndArgumentList?.raw,
+      argumentList.raw,
+      unexpectedBetweenArgumentListAndRightParen?.raw,
+      rightParen?.raw,
+      unexpectedBetweenRightParenAndTrailingClosure?.raw,
+      trailingClosure?.raw,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
+      additionalTrailingClosures?.raw,
+      unexpectedAfterAdditionalTrailingClosures?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroExpansionExpr,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return MacroExpansionExprSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on MacroExpansionExprSyntax")
+  public static func makeBlankMacroExpansionExpr(presence: SourcePresence = .present) -> MacroExpansionExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .macroExpansionExpr,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.pound, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      nil,
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default),
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+    ], arena: .default))
+    return MacroExpansionExprSyntax(data)
+  }
   @available(*, deprecated, message: "Use initializer on PostfixIfConfigExprSyntax")
   public static func makePostfixIfConfigExpr(_ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil, base: ExprSyntax?, _ unexpectedBetweenBaseAndConfig: UnexpectedNodesSyntax? = nil, config: IfConfigDeclSyntax, _ unexpectedAfterConfig: UnexpectedNodesSyntax? = nil) -> PostfixIfConfigExprSyntax {
     let layout: [RawSyntax?] = [
@@ -4515,6 +4562,53 @@ public enum SyntaxFactory {
       nil,
     ], arena: .default))
     return PrecedenceGroupAssociativitySyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on MacroExpansionDeclSyntax")
+  public static func makeMacroExpansionDecl(_ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, poundToken: TokenSyntax, _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, macro: TokenSyntax, _ unexpectedBetweenMacroAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?, _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil) -> MacroExpansionDeclSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforePoundToken?.raw,
+      poundToken.raw,
+      unexpectedBetweenPoundTokenAndMacro?.raw,
+      macro.raw,
+      unexpectedBetweenMacroAndLeftParen?.raw,
+      leftParen?.raw,
+      unexpectedBetweenLeftParenAndArgumentList?.raw,
+      argumentList.raw,
+      unexpectedBetweenArgumentListAndRightParen?.raw,
+      rightParen?.raw,
+      unexpectedBetweenRightParenAndTrailingClosure?.raw,
+      trailingClosure?.raw,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
+      additionalTrailingClosures?.raw,
+      unexpectedAfterAdditionalTrailingClosures?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroExpansionDecl,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return MacroExpansionDeclSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on MacroExpansionDeclSyntax")
+  public static func makeBlankMacroExpansionDecl(presence: SourcePresence = .present) -> MacroExpansionDeclSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .macroExpansionDecl,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.pound, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      nil,
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default),
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+    ], arena: .default))
+    return MacroExpansionDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TokenListSyntax")
   public static func makeTokenList(

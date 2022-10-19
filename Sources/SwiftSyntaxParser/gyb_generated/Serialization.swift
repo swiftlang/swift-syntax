@@ -113,6 +113,7 @@ extension SyntaxKind {
     case 173: self = .objcName
     case 67: self = .objcKeyPathExpr
     case 68: self = .objcSelectorExpr
+    case 288: self = .macroExpansionExpr
     case 250: self = .postfixIfConfigExpr
     case 69: self = .editorPlaceholderExpr
     case 70: self = .objectLiteralExpr
@@ -179,6 +180,7 @@ extension SyntaxKind {
     case 129: self = .precedenceGroupNameElement
     case 130: self = .precedenceGroupAssignment
     case 131: self = .precedenceGroupAssociativity
+    case 289: self = .macroExpansionDecl
     case 185: self = .tokenList
     case 186: self = .nonEmptyTokenList
     case 231: self = .customAttribute

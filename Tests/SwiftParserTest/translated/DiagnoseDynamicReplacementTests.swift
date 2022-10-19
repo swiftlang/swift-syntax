@@ -20,7 +20,6 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '(' in '_dynamicReplacement' attribute
         DiagnosticSpec(message: "expected '(', attribute argument, and ')' in attribute"),
       ]
     )
@@ -34,7 +33,6 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected 'for' in '_dynamicReplacement' attribute
         DiagnosticSpec(message: "expected argument for '@_dynamicReplacement' attribute"),
         DiagnosticSpec(message: "expected ')' to end attribute"),
       ]
@@ -51,8 +49,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected ')' to end attribute", notes: [
           NoteSpec(message: "to match this opening '('")
-        ]),
-        // TODO: Old parser expected error on line 2: expected ')' after function name for @_dynamicReplacement
+        ])
       ]
     )
   }

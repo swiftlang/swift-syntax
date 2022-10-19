@@ -137,7 +137,7 @@ final class IfconfigExprTests: XCTestCase {
       #if CONDITION_1
           .methodOne() 
       #elseif CONDITION_2
-        1️⃣return         
+        1️⃣return
       #endif
       }
       """,
@@ -206,79 +206,214 @@ final class IfconfigExprTests: XCTestCase {
 
   func testIfconfigExpr13() {
     AssertParse(
-      #"""
-      func canImportVersioned() {
+      """
       #if canImport(A, _version: 2)
         let a = 1
       #endif
+      """
+    )
+  }
+
+  func testIfconfigExpr14() {
+    AssertParse(
+      """
       #if canImport(A, _version: 2.2)
         let a = 1
       #endif
+      """
+    )
+  }
+
+  func testIfconfigExpr15() {
+    AssertParse(
+      """
       #if canImport(A, _version: 2.2.2)
         let a = 1
       #endif
+      """
+    )
+  }
+
+  func testIfconfigExpr16() {
+    AssertParse(
+      """
       #if canImport(A, _version: 2.2.2.2)
         let a = 1
       #endif
-      #if canImport(A, _version: 2.2.2.2.2) 
+      """
+    )
+  }
+
+  func testIfconfigExpr17() {
+    AssertParse(
+      """
+      #if canImport(A, _version: 2.2.2.2.2)
         let a = 1
       #endif
+      """,
+      diagnostics: [
+        // TODO: Old parser expected warning on line 1: trailing components of version '2.2.2.2' are ignored
+      ]
+    )
+  }
+
+  func testIfconfigExpr18() {
+    AssertParse(
+      """
       #if canImport(A, _underlyingVersion: 4)
         let a = 1
       #endif
+      """
+    )
+  }
+
+  func testIfconfigExpr19() {
+    AssertParse(
+      """
       #if canImport(A, _underlyingVersion: 2.200)
         let a = 1
       #endif
+      """
+    )
+  }
+
+  func testIfconfigExpr20() {
+    AssertParse(
+      """
       #if canImport(A, _underlyingVersion: 2.200.1)
         let a = 1
       #endif
+      """
+    )
+  }
+
+  func testIfconfigExpr21() {
+    AssertParse(
+      """
       #if canImport(A, _underlyingVersion: 2.200.1.3)
         let a = 1
       #endif
-      #if canImport(A, unknown: 2.2) 
+      """
+    )
+  }
+
+  func testIfconfigExpr22() {
+    AssertParse(
+      """
+      #if canImport(A, unknown: 2.2)
         let a = 1
       #endif
-      #if canImport(A,1️⃣) 
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
+      ]
+    )
+  }
+
+  func testIfconfigExpr23() {
+    AssertParse(
+      """
+      #if canImport(A,1️⃣)
         let a = 1
       #endif
-      #if canImport(A, 2.2) 
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: unexpected ',' separator
+        DiagnosticSpec(message: "expected value in function call")
+      ]
+    )
+  }
+
+  func testIfconfigExpr24() {
+    AssertParse(
+      """
+      #if canImport(A, 2.2)
         let a = 1
       #endif
-      #if canImport(A, 2.2, 1.1) 
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
+      ]
+    )
+  }
+
+  func testIfconfigExpr25() {
+    AssertParse(
+      """
+      #if canImport(A, 2.2, 1.1)
         let a = 1
       #endif
-      #if canImport(A, _version:2️⃣) 
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: canImport can take only two parameters
+      ]
+    )
+  }
+
+  func testIfconfigExpr26() {
+    AssertParse(
+      """
+      #if canImport(A, _version:1️⃣)
         let a = 1
       #endif
-      #if canImport(A, _version: "") 
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: expected expression in list of expressions
+        DiagnosticSpec(message: "expected value in function call")
+      ]
+    )
+  }
+
+  func testIfconfigExpr27() {
+    AssertParse(
+      #"""
+      #if canImport(A, _version: "")
         let a = 1
       #endif
-      #if canImport(A, _version: >=2.2) 
-        let a = 1
-      #endif
-      #if canImport(A, _version: 3️⃣20A301) 
-        let a = 1
-      #endif
-      #if canImport(A, _version: "20A301") 
-        let a = 1
-      #endif
-      }
       """#,
       diagnostics: [
-        // TODO: Old parser expected warning on line 14: trailing components of version '2.2.2.2' are ignored
-        // TODO: Old parser expected error on line 29: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
-        // TODO: Old parser expected error on line 32: unexpected ',' separator
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in function call"),
-        // TODO: Old parser expected error on line 35: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
-        // TODO: Old parser expected error on line 38: canImport can take only two parameters
-        // TODO: Old parser expected error on line 41: expected expression in list of expressions
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected value in function call"),
-        // TODO: Old parser expected error on line 44: _version argument cannot be empty
-        // TODO: Old parser expected error on line 47: cannot parse module version '>=2.2'
-        // TODO: Old parser expected error on line 50: 'A' is not a valid digit in integer literal
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected value in function call"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '20A301' in function call"),
-        // TODO: Old parser expected error on line 53: cannot parse module version '20A301'
+        // TODO: Old parser expected error on line 1: _version argument cannot be empty
+      ]
+    )
+  }
+
+  func testIfconfigExpr28() {
+    AssertParse(
+      """
+      #if canImport(A, _version: >=2.2)
+        let a = 1
+      #endif
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: cannot parse module version '>=2.2'
+      ]
+    )
+  }
+
+  func testIfconfigExpr29() {
+    AssertParse(
+      """
+      #if canImport(A, _version: 1️⃣20A301)
+        let a = 1
+      #endif
+      """,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: 'A' is not a valid digit in integer literal
+        DiagnosticSpec(message: "expected value in function call"),
+        DiagnosticSpec(message: "unexpected code '20A301' in function call"),
+      ]
+    )
+  }
+
+  func testIfconfigExpr30() {
+    AssertParse(
+      #"""
+      #if canImport(A, _version: "20A301")
+        let a = 1
+      #endif
+      """#,
+      diagnostics: [
+        // TODO: Old parser expected error on line 1: cannot parse module version '20A301'
       ]
     )
   }

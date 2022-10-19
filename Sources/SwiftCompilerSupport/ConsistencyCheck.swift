@@ -34,12 +34,16 @@ extension Syntax {
 ///   - flags: Flags that indicate what checks should be performed.
 ///       0x01: Perform round-trip checking.
 ///       0x02: Check for parser diagnostics.
+///   - hookCtx: A caller-provided context parameter to be passed back in the diagnostic hook.
+///   - diagnosticHook: A callback invoked once per diagnostic emitted by the parser.
 /// - Returns: 0 if all requested consistency checks passed, nonzero otherwise.
 @_cdecl("swift_parser_consistencyCheck")
 @_spi(SwiftCompiler)
 public func _parserConsistencyCheck(
   bufferPtr: UnsafePointer<UInt8>, bufferLength: Int,
-  filename: UnsafePointer<UInt8>, flags: CUnsignedInt
+  filename: UnsafePointer<UInt8>, flags: CUnsignedInt,
+  hookCtx: OpaquePointer,
+  diagnosticHook: @convention(c) (Int, UnsafePointer<Int8>, OpaquePointer) -> Void
 ) -> CInt {
   let buffer = UnsafeBufferPointer<UInt8>(
     start: bufferPtr, count: bufferLength)
@@ -62,7 +66,6 @@ public func _parserConsistencyCheck(
       var anyDiags = false
 
       let sourceFile = Syntax(raw: rawSourceFile.raw).as(SourceFileSyntax.self)!
-
       let diags = ParseDiagnosticsGenerator.diagnostics(
         for: sourceFile)
       for diag in diags {
@@ -73,7 +76,9 @@ public func _parserConsistencyCheck(
           continue
         }
 
-        print("\(String(cString: filename)): error: \(diag.debugDescription)")
+        diag.message.withCString { diagText in
+          diagnosticHook(diag.position.utf8Offset, diagText, hookCtx)
+        }
         anyDiags = true
       }
 

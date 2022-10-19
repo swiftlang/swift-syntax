@@ -2756,190 +2756,191 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open override func visit(_ node: TokenSyntax) -> Syntax {
-    var node = node
+    var leadingTrivia = node.leadingTrivia
+    var trailingTrivia = node.trailingTrivia
     switch node.tokenKind {
     case .associatedtypeKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .classKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .deinitKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .enumKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .extensionKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .funcKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .importKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .initKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .inoutKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .letKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .operatorKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .precedencegroupKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .protocolKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .structKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .subscriptKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .typealiasKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .varKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .fileprivateKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .internalKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .privateKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .publicKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .staticKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .deferKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .ifKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .guardKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .doKeyword: 
       break
     case .repeatKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .elseKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .forKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .inKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .whileKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .returnKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .breakKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .continueKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .fallthroughKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .switchKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .caseKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .defaultKeyword: 
       break
     case .whereKeyword: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .catchKeyword: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
     case .throwKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .asKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .anyKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .falseKeyword: 
       break
     case .isKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .nilKeyword: 
       break
     case .rethrowsKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .superKeyword: 
       break
@@ -2950,44 +2951,44 @@ open class BasicFormat: SyntaxRewriter {
     case .trueKeyword: 
       break
     case .tryKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .throwsKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .__file__Keyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .__line__Keyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .__column__Keyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .__function__Keyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .__dso_handle__Keyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .wildcardKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .leftParen: 
       break
     case .rightParen: 
       break
     case .leftBrace: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
     case .rightBrace: 
       break
@@ -2996,59 +2997,59 @@ open class BasicFormat: SyntaxRewriter {
     case .rightSquareBracket: 
       break
     case .leftAngle: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .rightAngle: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .period: 
       break
     case .prefixPeriod: 
       break
     case .comma: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .ellipsis: 
       break
     case .colon: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .semicolon: 
       break
     case .equal: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .atSign: 
       break
     case .pound: 
       break
     case .prefixAmpersand: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .arrow: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .backtick: 
       break
@@ -3067,96 +3068,96 @@ open class BasicFormat: SyntaxRewriter {
     case .multilineStringQuote: 
       break
     case .poundKeyPathKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundLineKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundSelectorKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundFileKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundFileIDKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundFilePathKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundColumnKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundFunctionKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundDsohandleKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundAssertKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundSourceLocationKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundWarningKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundErrorKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundIfKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundElseKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundElseifKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundEndifKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundAvailableKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundUnavailableKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundFileLiteralKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundImageLiteralKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundColorLiteralKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .poundHasSymbolKeyword: 
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .integerLiteral: 
       break
@@ -3173,11 +3174,11 @@ open class BasicFormat: SyntaxRewriter {
     case .unspacedBinaryOperator: 
       break
     case .spacedBinaryOperator: 
-      if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-        node.leadingTrivia += .space
+      if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        leadingTrivia += .space
       }
-      if node.trailingTrivia.isEmpty {
-        node.trailingTrivia += .space
+      if trailingTrivia.isEmpty {
+        trailingTrivia += .space
       }
     case .postfixOperator: 
       break
@@ -3197,17 +3198,23 @@ open class BasicFormat: SyntaxRewriter {
       break
     case .contextualKeyword: 
       switch node.text {
-        case "async":
-          if node.trailingTrivia.isEmpty {
-            node.trailingTrivia += .space
-          }
-        default:
-          break
+      case "async":
+        if trailingTrivia.isEmpty {
+          trailingTrivia += .space
+        }
+      default:
+        break
       }
     }
-    node.leadingTrivia = node.leadingTrivia.indented(indentation: indentation)
-    node.trailingTrivia = node.trailingTrivia.indented(indentation: indentation)
-    lastRewrittenToken = node
-    return Syntax(node)
+    leadingTrivia = leadingTrivia.indented(indentation: indentation)
+    trailingTrivia = trailingTrivia.indented(indentation: indentation)
+    let rewritten = TokenSyntax(
+      node.tokenKind,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: node.presence
+    )
+    lastRewrittenToken = rewritten
+    return Syntax(rewritten)
   }
 }

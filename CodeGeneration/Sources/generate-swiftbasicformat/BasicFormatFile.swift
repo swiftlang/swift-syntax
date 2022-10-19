@@ -166,15 +166,16 @@ private func createTokenFormatFunction() -> FunctionDecl {
       output: "Syntax"
     )
   ) {
-    VariableDecl("var node = node")
+    VariableDecl("var leadingTrivia = node.leadingTrivia")
+    VariableDecl("var trailingTrivia = node.trailingTrivia")
     SwitchStmt(expression: MemberAccessExpr(base: "node", name: "tokenKind")) {
       for token in SYNTAX_TOKENS where token.name != "ContextualKeyword" {
         SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: token.swiftKind))))) {
           if token.requiresLeadingSpace {
             IfStmt(
               """
-              if node.leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
-                node.leadingTrivia += .space
+              if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+                leadingTrivia += .space
               }
               """
             )
@@ -182,8 +183,8 @@ private func createTokenFormatFunction() -> FunctionDecl {
           if token.requiresTrailingSpace {
             IfStmt(
               """
-              if node.trailingTrivia.isEmpty {
-                node.trailingTrivia += .space
+              if trailingTrivia.isEmpty {
+                trailingTrivia += .space
               }
               """
             )
@@ -200,20 +201,30 @@ private func createTokenFormatFunction() -> FunctionDecl {
         SwitchStmt(
           """
           switch node.text {
-            case "async":
-              if node.trailingTrivia.isEmpty {
-                node.trailingTrivia += .space
-              }
-            default:
-              break
+          case "async":
+            if trailingTrivia.isEmpty {
+              trailingTrivia += .space
+            }
+          default:
+            break
           }
           """
         )
       }
     }
-    SequenceExpr("node.leadingTrivia = node.leadingTrivia.indented(indentation: indentation)")
-    SequenceExpr("node.trailingTrivia = node.trailingTrivia.indented(indentation: indentation)")
-    SequenceExpr("lastRewrittenToken = node")
-    ReturnStmt("return Syntax(node)")
+    SequenceExpr("leadingTrivia = leadingTrivia.indented(indentation: indentation)")
+    SequenceExpr("trailingTrivia = trailingTrivia.indented(indentation: indentation)")
+    VariableDecl(
+      """
+      let rewritten = TokenSyntax(
+        node.tokenKind,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia,
+        presence: node.presence
+      )
+      """
+    )
+    SequenceExpr("lastRewrittenToken = rewritten")
+    ReturnStmt("return Syntax(rewritten)")
   }
 }

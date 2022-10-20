@@ -28,14 +28,16 @@ fileprivate enum NodesDescriptionPart {
 
   func description(format: Bool) -> String? {
     switch self {
-    case .tokensWithDefaultText(let tokens):
-      let tokenContents: String
+    case .tokensWithDefaultText(var tokens):
       if format {
-        tokenContents = tokens.map({ BasicFormat().visit($0).description }).joined()
-      } else {
-        tokenContents = tokens.map(\.description).joined()
+        tokens = tokens.map({ BasicFormat().visit($0) })
       }
-      return "'\(tokenContents.trimmingWhitespace())'"
+      if !tokens.isEmpty {
+        tokens[0] = tokens[0].withLeadingTrivia([])
+        tokens[tokens.count - 1] = tokens[tokens.count - 1].withTrailingTrivia([])
+      }
+      let tokenContents = tokens.map(\.description).joined()
+      return "'\(tokenContents)'"
     case .tokenWithoutDefaultText(let token):
       if let childName = token.childNameInParent {
         return childName

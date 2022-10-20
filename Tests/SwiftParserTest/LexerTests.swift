@@ -6,16 +6,16 @@ import XCTest
 private func lexeme(
   _ kind: RawTokenKind,
   _ wholeText: SyntaxText,
-  leading: Int = 0,
-  trailing: Int = 0
+  leadingLength: Int = 0,
+  trailingLength: Int = 0
 ) -> Lexer.Lexeme {
   return Lexer.Lexeme(
     tokenKind: kind,
     flags: [.isAtStartOfLine],
     start: wholeText.baseAddress!,
-    leadingTriviaLength: leading,
-    textLength: wholeText.count - leading - trailing,
-    trailingTriviaLength: trailing)
+    leadingTriviaLength: leadingLength,
+    textLength: wholeText.count - leadingLength - trailingLength,
+    trailingTriviaLength: trailingLength)
 }
 
 public class LexerTests: XCTestCase {
@@ -27,7 +27,7 @@ public class LexerTests: XCTestCase {
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
-        lexeme(.identifier, "Hello ", trailing: 1),
+        lexeme(.identifier, "Hello ", trailingLength: 1),
         lexeme(.identifier, "World"),
         lexeme(.eof, ""),
       ])
@@ -42,8 +42,8 @@ public class LexerTests: XCTestCase {
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
-        lexeme(.identifier, "`Hello` ", trailing: 1),
-        lexeme(.identifier, "`World` ", trailing: 1),
+        lexeme(.identifier, "`Hello` ", trailingLength: 1),
+        lexeme(.identifier, "`World` ", trailingLength: 1),
         lexeme(.identifier, "`$`"),
         lexeme(.eof, ""),
      ])
@@ -61,10 +61,10 @@ public class LexerTests: XCTestCase {
       data.withUTF8 { buf in
         let lexemes = Lexer.lex(buf)
         AssertEqualTokens(lexemes, [
-          lexeme(.funcKeyword, "/*/ */\nfunc ", leading: 7, trailing: 1),
+          lexeme(.funcKeyword, "/*/ */\nfunc ", leadingLength: 7, trailingLength: 1),
           lexeme(.identifier, "not_doc5"),
           lexeme(.leftParen, "("),
-          lexeme(.rightParen, ") ", trailing: 1),
+          lexeme(.rightParen, ") ", trailingLength: 1),
           lexeme(.leftBrace, "{"),
           lexeme(.rightBrace, "}"),
           lexeme(.eof, ""),
@@ -83,7 +83,7 @@ public class LexerTests: XCTestCase {
       data.withUTF8 { buf in
         let lexemes = Lexer.lex(buf)
         AssertEqualTokens(lexemes, [
-          lexeme(.eof, "/* */\n/**/\n/* /* */ */", leading: 22),
+          lexeme(.eof, "/* */\n/**/\n/* /* */ */", leadingLength: 22),
         ])
       }
     }
@@ -160,18 +160,18 @@ public class LexerTests: XCTestCase {
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
         lexeme(.integerLiteral, "1234567890"),
-        lexeme(.integerLiteral, "\n0b1010101", leading: 1),
-        lexeme(.integerLiteral, "\n0xABC", leading: 1),
-        lexeme(.floatingLiteral, "\n1.0", leading: 1),
-        lexeme(.floatingLiteral, "\n1.0e10", leading: 1),
-        lexeme(.floatingLiteral, "\n1.0E10", leading: 1),
-        lexeme(.integerLiteral, "\n0xfeed_beef", leading: 1),
-        lexeme(.floatingLiteral, "\n0xff.0p2", leading: 1),
-        lexeme(.prefixOperator, "\n-", leading: 1),
+        lexeme(.integerLiteral, "\n0b1010101", leadingLength: 1),
+        lexeme(.integerLiteral, "\n0xABC", leadingLength: 1),
+        lexeme(.floatingLiteral, "\n1.0", leadingLength: 1),
+        lexeme(.floatingLiteral, "\n1.0e10", leadingLength: 1),
+        lexeme(.floatingLiteral, "\n1.0E10", leadingLength: 1),
+        lexeme(.integerLiteral, "\n0xfeed_beef", leadingLength: 1),
+        lexeme(.floatingLiteral, "\n0xff.0p2", leadingLength: 1),
+        lexeme(.prefixOperator, "\n-", leadingLength: 1),
         lexeme(.floatingLiteral, "0xff.0p2"),
-        lexeme(.prefixOperator, "\n+", leading: 1),
+        lexeme(.prefixOperator, "\n+", leadingLength: 1),
         lexeme(.floatingLiteral, "0xff.0p2"),
-        lexeme(.floatingLiteral, "\n0x1.921fb4p1", leading: 1),
+        lexeme(.floatingLiteral, "\n0x1.921fb4p1", leadingLength: 1),
         lexeme(.eof, ""),
       ])
     }
@@ -246,9 +246,9 @@ public class LexerTests: XCTestCase {
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
-        lexeme(.letKeyword, "#!/usr/bin/swiftc\nlet ", leading: 18, trailing: 1),
-        lexeme(.identifier, "x ", trailing: 1),
-        lexeme(.equal, "= ", trailing: 1),
+        lexeme(.letKeyword, "#!/usr/bin/swiftc\nlet ", leadingLength: 18, trailingLength: 1),
+        lexeme(.identifier, "x ", trailingLength: 1),
+        lexeme(.equal, "= ", trailingLength: 1),
         lexeme(.integerLiteral, "42"),
         lexeme(.eof, ""),
       ])
@@ -265,11 +265,11 @@ public class LexerTests: XCTestCase {
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
-        lexeme(.varKeyword, "/** hello */\nvar ", leading: 13, trailing: 1),
+        lexeme(.varKeyword, "/** hello */\nvar ", leadingLength: 13, trailingLength: 1),
         lexeme(.identifier, "x"),
-        lexeme(.colon, ": ", trailing: 1),
+        lexeme(.colon, ": ", trailingLength: 1),
         lexeme(.identifier, "Int"),
-        lexeme(.eof, "\n/* regular comment */", leading: 22),
+        lexeme(.eof, "\n/* regular comment */", leadingLength: 22),
       ])
     }
   }
@@ -287,23 +287,23 @@ public class LexerTests: XCTestCase {
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
-        lexeme(.atSign, "/* TestApp */\n@", leading: 14),
-        lexeme(.identifier, "main ", trailing: 1),
-        lexeme(.structKeyword, "struct ", trailing: 1),
-        lexeme(.identifier, "TestApp ", trailing: 1),
+        lexeme(.atSign, "/* TestApp */\n@", leadingLength: 14),
+        lexeme(.identifier, "main ", trailingLength: 1),
+        lexeme(.structKeyword, "struct ", trailingLength: 1),
+        lexeme(.identifier, "TestApp ", trailingLength: 1),
         lexeme(.leftBrace, "{"),
-        lexeme(.staticKeyword, "\n  static ", leading: 3, trailing: 1),
-        lexeme(.funcKeyword, "func ", trailing: 1),
+        lexeme(.staticKeyword, "\n  static ", leadingLength: 3, trailingLength: 1),
+        lexeme(.funcKeyword, "func ", trailingLength: 1),
         lexeme(.identifier, "main"),
         lexeme(.leftParen, "("),
-        lexeme(.rightParen, ") ", trailing: 1),
+        lexeme(.rightParen, ") ", trailingLength: 1),
         lexeme(.leftBrace, "{"),
-        lexeme(.identifier, "\n    print", leading: 5),
+        lexeme(.identifier, "\n    print", leadingLength: 5),
         lexeme(.leftParen, "("),
         lexeme(.stringLiteral, "\"Hello World\""),
         lexeme(.rightParen, ")"),
-        lexeme(.rightBrace, "\n  }", leading: 3),
-        lexeme(.rightBrace, "\n}", leading: 1),
+        lexeme(.rightBrace, "\n  }", leadingLength: 3),
+        lexeme(.rightBrace, "\n}", leadingLength: 1),
         lexeme(.eof, ""),
       ])
     }
@@ -356,7 +356,7 @@ public class LexerTests: XCTestCase {
         lexeme(.pound, "#"),
         lexeme(.unspacedBinaryOperator, "/"),
         lexeme(.identifier, "abc"),
-        lexeme(.prefixOperator, "\n/", leading: 1),
+        lexeme(.prefixOperator, "\n/", leadingLength: 1),
         lexeme(.pound, "#"),
         lexeme(.eof, ""),
       ]),
@@ -364,7 +364,7 @@ public class LexerTests: XCTestCase {
         lexeme(.pound, "#"),
         lexeme(.unspacedBinaryOperator, "/"),
         lexeme(.identifier, "abc"),
-        lexeme(.prefixOperator, "\r/", leading: 1),
+        lexeme(.prefixOperator, "\r/", leadingLength: 1),
         lexeme(.pound, "#"),
         lexeme(.eof, ""),
       ]),
@@ -390,10 +390,10 @@ public class LexerTests: XCTestCase {
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
-        lexeme(.staticKeyword, "static ", trailing: 1),
-        lexeme(.funcKeyword, "func �", trailing: 4),
+        lexeme(.staticKeyword, "static ", trailingLength: 1),
+        lexeme(.funcKeyword, "func �", trailingLength: 4),
         lexeme(.leftParen, "("),
-        lexeme(.rightParen, ") ", trailing: 1),
+        lexeme(.rightParen, ") ", trailingLength: 1),
         lexeme(.leftBrace, "{"),
         lexeme(.rightBrace, "}"),
         lexeme(.eof, ""),
@@ -410,7 +410,7 @@ public class LexerTests: XCTestCase {
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
-        lexeme(.identifier, "\u{feff}Hello", leading: 3),
+        lexeme(.identifier, "\u{feff}Hello", leadingLength: 3),
         lexeme(.eof, "")
       ])
     }
@@ -442,7 +442,7 @@ public class LexerTests: XCTestCase {
                  var a : String = "a"
                  var b : String = "B"
                  >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
-                 """, leading: 300)
+                 """, leadingLength: 300)
         ])
       }
 
@@ -481,7 +481,7 @@ public class LexerTests: XCTestCase {
                  var b : String = "B"
                  <<<<
 
-                 """, leading: 204),
+                 """, leadingLength: 204),
         ])
       }
     }
@@ -517,12 +517,12 @@ public class LexerTests: XCTestCase {
         lexeme(.leftParen, "("),
         lexeme(.identifier, "reduced"),
         lexeme(.period, "."),
-        lexeme(.identifier, "count ", trailing: 1),
-        lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
+        lexeme(.identifier, "count ", trailingLength: 1),
+        lexeme(.spacedBinaryOperator, "/ ", trailingLength: 1),
         lexeme(.integerLiteral, "2"),
-        lexeme(.comma, ", ", trailing: 1),
-        lexeme(.identifier, "chunkSize ", trailing: 1),
-        lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
+        lexeme(.comma, ", ", trailingLength: 1),
+        lexeme(.identifier, "chunkSize ", trailingLength: 1),
+        lexeme(.spacedBinaryOperator, "/ ", trailingLength: 1),
         lexeme(.integerLiteral, "2"),
         lexeme(.rightParen, ")"),
         lexeme(.eof, ""),
@@ -543,17 +543,17 @@ public class LexerTests: XCTestCase {
         Lexer.lex(buf)
       }
       AssertEqualTokens(lexemes, [
-        lexeme(.varKeyword, "var ", trailing: 1),
+        lexeme(.varKeyword, "var ", trailingLength: 1),
         lexeme(.identifier, "x"),
-        lexeme(.colon, ": ", trailing: 1),
-        lexeme(.identifier, "Int ", trailing: 1),
+        lexeme(.colon, ": ", trailingLength: 1),
+        lexeme(.identifier, "Int ", trailingLength: 1),
         lexeme(.leftBrace, "{"),
-        lexeme(.returnKeyword, "\n  return ", leading: 3, trailing: 1),
-        lexeme(.integerLiteral, "0 ", trailing: 1),
-        lexeme(.spacedBinaryOperator, "/", trailing: 0),
-        lexeme(.identifier, "\n         x", leading: 10),
-        lexeme(.rightBrace, "\n}", leading: 1),
-        lexeme(.eof, "\n\n///", leading: 5),
+        lexeme(.returnKeyword, "\n  return ", leadingLength: 3, trailingLength: 1),
+        lexeme(.integerLiteral, "0 ", trailingLength: 1),
+        lexeme(.spacedBinaryOperator, "/", trailingLength: 0),
+        lexeme(.identifier, "\n         x", leadingLength: 10),
+        lexeme(.rightBrace, "\n}", leadingLength: 1),
+        lexeme(.eof, "\n\n///", leadingLength: 5),
       ])
     }
 
@@ -565,10 +565,10 @@ public class LexerTests: XCTestCase {
       data.withUTF8 { buf in
         let lexemes = Lexer.lex(buf)
         AssertEqualTokens(lexemes, [
-          lexeme(.identifier, "n ", trailing: 1),
-          lexeme(.spacedBinaryOperator, "/= ", trailing: 1),
-          lexeme(.integerLiteral, "2 ", trailing: 1),
-          lexeme(.eof, "// foo", leading: 6),
+          lexeme(.identifier, "n ", trailingLength: 1),
+          lexeme(.spacedBinaryOperator, "/= ", trailingLength: 1),
+          lexeme(.integerLiteral, "2 // foo", trailingLength: 7),
+          lexeme(.eof, ""),
         ])
       }
     }
@@ -584,13 +584,13 @@ public class LexerTests: XCTestCase {
           lexeme(.identifier, "UIColor"),
           lexeme(.leftParen, "("),
           lexeme(.identifier, "white"),
-          lexeme(.colon, ": ", trailing: 1),
+          lexeme(.colon, ": ", trailingLength: 1),
           lexeme(.floatingLiteral, "216.0"),
           lexeme(.unspacedBinaryOperator, "/"),
           lexeme(.floatingLiteral, "255.0"),
-          lexeme(.comma, ", ", trailing: 1),
+          lexeme(.comma, ", ", trailingLength: 1),
           lexeme(.identifier, "alpha"),
-          lexeme(.colon, ": ", trailing: 1),
+          lexeme(.colon, ": ", trailingLength: 1),
           lexeme(.floatingLiteral, "44.0"),
           lexeme(.unspacedBinaryOperator, "/"),
           lexeme(.floatingLiteral, "255.0"),
@@ -631,9 +631,9 @@ public class LexerTests: XCTestCase {
         let lexemes = Lexer.lex(buf)
         AssertEqualTokens(lexemes, [
           lexeme(.leftParen, "("),
-          lexeme(.rightParen, ") ", trailing: 1),
-          lexeme(.arrow, "-> ", trailing: 1),
-          lexeme(.leftParen, "(\u{feff}", trailing: 3),
+          lexeme(.rightParen, ") ", trailingLength: 1),
+          lexeme(.arrow, "-> ", trailingLength: 1),
+          lexeme(.leftParen, "(\u{feff}", trailingLength: 3),
           lexeme(.rightParen, ")"),
           lexeme(.eof, ""),
         ])
@@ -648,8 +648,8 @@ public class LexerTests: XCTestCase {
       data.withUTF8 { buf in
         let lexemes = Lexer.lex(buf)
         AssertEqualTokens(lexemes, [
-          lexeme(.identifier, "y\u{fffe} ", trailing: 4),
-          lexeme(.spacedBinaryOperator, "+ ", trailing: 1),
+          lexeme(.identifier, "y\u{fffe} ", trailingLength: 4),
+          lexeme(.spacedBinaryOperator, "+ ", trailingLength: 1),
           lexeme(.identifier, "z"),
           lexeme(.eof, ""),
         ])
@@ -682,11 +682,54 @@ public class LexerTests: XCTestCase {
       let lexemes = Lexer.lex(buf)
       AssertEqualTokens(lexemes, [
         lexeme(.prefixOperator, "!"),
-        lexeme(.identifier, "<#b1#> ", trailing: 1),
-        lexeme(.spacedBinaryOperator, "&& ", trailing: 1),
+        lexeme(.identifier, "<#b1#> ", trailingLength: 1),
+        lexeme(.spacedBinaryOperator, "&& ", trailingLength: 1),
         lexeme(.prefixOperator, "!"),
         lexeme(.identifier, "<#b2#>"),
         lexeme(.eof, ""),
+      ])
+    }
+  }
+
+  func testCommentAttribution() {
+    var data =
+    """
+    func foo() { // comment
+        // new comment
+        bar()
+    }
+    """
+    data.withUTF8 { buf in
+      let lexemes = Lexer.lex(buf)
+      AssertEqualTokens(lexemes, [
+        lexeme(.funcKeyword, "func ", trailingLength: 1),
+        lexeme(.identifier, "foo"),
+        lexeme(.leftParen, "("),
+        lexeme(.rightParen, ") ", trailingLength: 1),
+        lexeme(.leftBrace, "{ // comment", trailingLength: 11),
+        lexeme(.identifier, """
+
+            // new comment
+            bar
+        """, leadingLength: 24),
+        lexeme(.leftParen, "("),
+        lexeme(.rightParen, ")"),
+        lexeme(.rightBrace, "\n}", leadingLength: 1),
+        lexeme(.eof, ""),
+      ])
+    }
+  }
+
+  func testCommentAttribution2() {
+    // Example from https://forums.swift.org/t/changing-comment-trivia-attribution-from-trailing-trivia-to-leading-trivia/50773
+    var data = "/*X_START*/x/*X_END*/ + /*Y_START*/y/*Y_END*/"
+    data.withUTF8 { buf in
+      let lexemes = Lexer.lex(buf)
+      AssertEqualTokens(lexemes, [
+        lexeme(.identifier, "/*X_START*/x/*X_END*/ ", leadingLength: 11, trailingLength: 10),
+        lexeme(.spacedBinaryOperator, "+ /*Y_START*/", trailingLength: 12),
+        lexeme(.identifier, "y/*Y_END*/", trailingLength: 9),
+        lexeme(.eof, "")
       ])
     }
   }

@@ -5,7 +5,10 @@ import SwiftParser
 public class ClassificationTests: XCTestCase {
 
   public func testClassification() {
-    let source = "// blah.\nlet x/*yo*/ = 0"
+    let source = """
+    // blah.
+    let x/*yo*/ = 0
+    """
     let tree = Parser.parse(source: source)
     do {
       let classif = Array(tree.classifications)
@@ -56,13 +59,13 @@ public class ClassificationTests: XCTestCase {
         return
       }
       XCTAssertEqual(classif[0].kind, .none)
-      XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 20, length: 3))
+      XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 21, length: 2))
     }
     do {
-      let initializer = (tree.statements[0].item.as(VariableDeclSyntax.self)!).bindings[0].initializer!
-      XCTAssertEqual(initializer.description, "/*yo*/ = 0")
+      let pattern = (tree.statements[0].item.as(VariableDeclSyntax.self)!).bindings[0].pattern
+      XCTAssertEqual(pattern.description, "x/*yo*/ ")
       // Classify with a relative range inside this node.
-      let classif = Array(initializer.classifications(in: ByteSourceRange(offset: 5, length: 2)))
+      let classif = Array(pattern.classifications(in: ByteSourceRange(offset: 5, length: 2)))
       XCTAssertEqual(classif.count, 2)
       guard classif.count == 2 else {
         return
@@ -70,14 +73,14 @@ public class ClassificationTests: XCTestCase {
       XCTAssertEqual(classif[0].kind, .blockComment)
       XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 14, length: 6))
       XCTAssertEqual(classif[1].kind, .none)
-      XCTAssertEqual(classif[1].range, ByteSourceRange(offset: 20, length: 3))
+      XCTAssertEqual(classif[1].range, ByteSourceRange(offset: 20, length: 1))
 
       do {
-        let singleClassif = initializer.classification(at: 5)
+        let singleClassif = pattern.classification(at: 5)
         XCTAssertEqual(singleClassif, classif[0])
       }
       do {
-        let singleClassif = initializer.classification(at: AbsolutePosition(utf8Offset: 19))
+        let singleClassif = pattern.classification(at: AbsolutePosition(utf8Offset: 19))
         XCTAssertEqual(singleClassif, classif[0])
       }
     }

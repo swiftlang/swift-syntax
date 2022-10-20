@@ -60,7 +60,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
     )
   }
 
-  func testDiagnoseInitializerAsTypedPattern5() {
+  func testDiagnoseInitializerAsTypedPattern5a() {
     AssertParse(
       """
       let f1️⃣:/*comment*/[X]()
@@ -70,6 +70,18 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       ], fixedSource: "let f=/*comment*/[X]()"
     )
   }
+
+  func testDiagnoseInitializerAsTypedPattern5b() {
+    AssertParse(
+      """
+      let f/*comment*/1️⃣:[X]()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+      ], fixedSource: "let f/*comment*/=[X]()"
+    )
+  }
+
 
   func testDiagnoseInitializerAsTypedPattern6() {
     AssertParse(

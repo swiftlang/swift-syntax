@@ -3,7 +3,7 @@ import SwiftDiagnostics
 import SwiftParser
 
 public class DiagnosticInfrastructureTests: XCTestCase {
-  public func testDiagnosticID() throws {
+  public func testDiagnosticID() {
     struct TestDiagnostic: ParserError {
       let message: String = "My test diagnostic"
     }

@@ -189,7 +189,7 @@ final class AttributeTests: XCTestCase {
       """)
   }
 
-  func testImplementsAttribute() throws {
+  func testImplementsAttribute() {
     AssertParse("""
       @_implements(P, f0())
       func g0() -> Int {
@@ -213,7 +213,7 @@ final class AttributeTests: XCTestCase {
       """)
   }
 
-  func testSemanticsAttribute() throws {
+  func testSemanticsAttribute() {
     AssertParse(
       """
       @_semantics("constant_evaluable")

@@ -13,7 +13,7 @@ final class TypeTests: XCTestCase {
       ])
   }
     
-  func testClosureParsing() throws {
+  func testClosureParsing() {
     AssertParse(
       "(a, b) -> c",
       { $0.parseType() }
@@ -27,7 +27,7 @@ final class TypeTests: XCTestCase {
     AssertParse("() -> (\u{feff})")
   }
 
-  func testGenericTypeWithTrivia() throws {
+  func testGenericTypeWithTrivia() {
     // N.B. Whitespace is significant here.
     AssertParse(
       """
@@ -39,7 +39,7 @@ final class TypeTests: XCTestCase {
     )
   }
 
-  func testFunctionTypes() throws {
+  func testFunctionTypes() {
     AssertParse("t as(1️⃣..)->2️⃣", diagnostics: [
       DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type"),
       DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '..' in function type"),
@@ -47,7 +47,7 @@ final class TypeTests: XCTestCase {
     ])
   }
 
-  func testClosureSignatures() throws {
+  func testClosureSignatures() {
 
     AssertParse(
       """
@@ -89,13 +89,13 @@ final class TypeTests: XCTestCase {
                 ])
   }
 
-  func testOpaqueReturnTypes() throws {
+  func testOpaqueReturnTypes() {
     AssertParse("""
                 public typealias Body = @_opaqueReturnTypeOf("$s6CatKit10pspspspspsV5cmereV6lilguyQrvp", 0) __
                 """)
   }
 
-  func testVariadics() throws {
+  func testVariadics() {
     AssertParse(
       #"""
       func takesVariadicFnWithGenericRet<T>(_ fn: (S...) -> T) {}
@@ -106,7 +106,7 @@ final class TypeTests: XCTestCase {
     )
   }
 
-  func testConvention() throws {
+  func testConvention() {
     AssertParse(
       #"""
       let _: @convention(thin) (@convention(thick) () -> (),
@@ -120,7 +120,7 @@ final class TypeTests: XCTestCase {
       """#)
   }
 
-  func testMetatypes() throws {
+  func testMetatypes() {
     AssertParse(
       """
       arg.covariantAssocMetatype1 { (_: Any.Type.Type.Type) in }
@@ -152,7 +152,7 @@ final class TypeTests: XCTestCase {
       """)
   }
 
-  func testNamedOpaqueReturnTypes() throws {
+  func testNamedOpaqueReturnTypes() {
     AssertParse(
       """
       func f2() -> <T: SignedInteger, U: SignedInteger> Int {
@@ -172,25 +172,25 @@ final class TypeTests: XCTestCase {
 }
 
 final class TypeParameterPackTests: XCTestCase {
-  func testParameterPacks1() throws {
+  func testParameterPacks1() {
     AssertParse(
       """
       func f1<T...>() -> T... {}
       """)
   }
-  func testParameterPacks2() throws {
+  func testParameterPacks2() {
     AssertParse(
       """
       func f2<T...>() -> (T...) {}
       """)
   }
-  func testParameterPacks3() throws {
+  func testParameterPacks3() {
     AssertParse(
       """
       func f3<T...>() -> G<T... > {}
       """)
   }
-  func testParameterPacks4() throws {
+  func testParameterPacks4() {
     AssertParse(
       """
       protocol P {
@@ -202,103 +202,103 @@ final class TypeParameterPackTests: XCTestCase {
                        fixIts: ["remove '...'"])
       ])
   }
-  func testParameterPacks5() throws {
+  func testParameterPacks5() {
     AssertParse(
     """
     typealias Alias<T...> = (T...)
     """)
   }
-  func testParameterPacks6() throws {
+  func testParameterPacks6() {
     AssertParse(
       """
       struct S<T...> {}
       """)
   }
-  func testParameterPacks7() throws {
+  func testParameterPacks7() {
     AssertParse(
       """
       struct S<T, U...> {}
       """)
   }
-  func testParameterPacks8() throws {
+  func testParameterPacks8() {
     AssertParse(
       """
       struct S<T..., U> {}
       """)
   }
-  func testParameterPacks9() throws {
+  func testParameterPacks9() {
     AssertParse(
       """
       struct S<T...:P, U> {}
       """)
   }
-  func testParameterPacks10() throws {
+  func testParameterPacks10() {
     AssertParse(
       """
       struct S<T... :P, U> {}
       """)
   }
-  func testParameterPacks11() throws {
+  func testParameterPacks11() {
     AssertParse(
       """
       struct S<T...: P> {}
       """)
   }
-  func testParameterPacks12() throws {
+  func testParameterPacks12() {
     AssertParse(
       """
       struct S<T... : P> {}
       """)
   }
-  func testParameterPacks13() throws {
+  func testParameterPacks13() {
     AssertParse(
       """
       func foo<T...>(_ x: T...) {}
       """)
   }
-  func testParameterPacks14() throws {
+  func testParameterPacks14() {
     AssertParse(
       """
       func foo<T...:P>(_ x: T...) {}
       """)
   }
-  func testParameterPacks15() throws {
+  func testParameterPacks15() {
     AssertParse(
       """
       func foo<T... :P>(_ x: T...) {}
       """)
   }
-  func testParameterPacks16() throws {
+  func testParameterPacks16() {
     AssertParse(
       """
       func foo<T... : P>(_ x: T...) {}
       """)
   }
-  func testParameterPacks17() throws {
+  func testParameterPacks17() {
     AssertParse(
       """
       func foo<T...: P>(_ x: T...) {}
       """)
   }
-  func testParameterPacks18() throws {
+  func testParameterPacks18() {
     AssertParse(
       """
       func foo<T, U, V...>(x: T, y: U, z: V...) { }
       """)
   }
-  func testParameterPacks19() throws {
+  func testParameterPacks19() {
     AssertParse(
       """
       func foo<T, U..., V>(x: T, y: U..., z: V) { }
       """)
   }
-  func testParameterPacks20() throws {
+  func testParameterPacks20() {
     AssertParse(
       """
       func foo<T..., U..., V...>(x: T..., y: U..., z: V...) { }
       """)
   }
-  func testParameterPacks21() throws {
+  func testParameterPacks21() {
     AssertParse(
       """
       enum E<T...> {
@@ -306,7 +306,7 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
-  func testParameterPacks22() throws {
+  func testParameterPacks22() {
     AssertParse(
       """
       enum E<T...> {
@@ -314,7 +314,7 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
-  func testParameterPacks23() throws {
+  func testParameterPacks23() {
     AssertParse(
       """
       enum E<T...> {
@@ -322,7 +322,7 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
-  func testParameterPacks24() throws {
+  func testParameterPacks24() {
     AssertParse(
       """
       enum E<T...> {
@@ -330,7 +330,7 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
-  func testParameterPacks25() throws {
+  func testParameterPacks25() {
     AssertParse(
       """
       enum E<T...> {
@@ -338,7 +338,7 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
-  func testParameterPacks26() throws {
+  func testParameterPacks26() {
     AssertParse(
       """
       enum E<T...> {
@@ -346,7 +346,7 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
-  func testParameterPacks27() throws {
+  func testParameterPacks27() {
     AssertParse(
       """
       enum E<T...> {
@@ -354,7 +354,7 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """)
   }
-  func testParameterPacks28() throws {
+  func testParameterPacks28() {
     // We allow whitespace between the generic parameter and the '...', this is
     // consistent with regular variadic parameters.
     AssertParse(

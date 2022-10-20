@@ -13,7 +13,7 @@ class TwoSpacesFormat: BasicFormat {
 }
 
 final class StringInterpolationTests: XCTestCase {
-  func testDeclInterpolation() throws {
+  func testDeclInterpolation() {
     let funcSyntax: DeclSyntax =
       """
       func f(a: Int, b: Int) -> Int {
@@ -29,7 +29,7 @@ final class StringInterpolationTests: XCTestCase {
       """)
   }
 
-  func testExprInterpolation() throws {
+  func testExprInterpolation() {
     let exprSyntax: ExprSyntax =
       """
       f(x + g(y), y.z)
@@ -40,13 +40,13 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(addIt.is(SequenceExprSyntax.self))
   }
 
-  func testStmtSyntax() throws {
+  func testStmtSyntax() {
     let collection: ExprSyntax = "[1, 2, 3, 4, 5]"
     let stmtSyntax: StmtSyntax = "for x in \(collection) { }"
     XCTAssertTrue(stmtSyntax.is(ForInStmtSyntax.self))
   }
 
-  func testTypeInterpolation() throws {
+  func testTypeInterpolation() {
     let tupleSyntax: TypeSyntax = "(Int, name: String)"
     XCTAssertTrue(tupleSyntax.is(TupleTypeSyntax.self))
     XCTAssertEqual(tupleSyntax.description, "(Int, name: String)")
@@ -56,12 +56,12 @@ final class StringInterpolationTests: XCTestCase {
                    "(String) async throws -> (Int, name: String)")
   }
 
-  func testPatternInterpolation() throws {
+  func testPatternInterpolation() {
     let letPattern: PatternSyntax = "let x"
     XCTAssertTrue(letPattern.is(ValueBindingPatternSyntax.self))
   }
 
-  func testStructGenerator() throws {
+  func testStructGenerator() {
     let name = "Type"
     let id = 17
 
@@ -74,7 +74,7 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
 
-  func testSourceFile() throws {
+  func testSourceFile() {
     let _: SourceFileSyntax =
       """
       print("Hello, world!")
@@ -82,7 +82,7 @@ final class StringInterpolationTests: XCTestCase {
   }
 
 
-  func testRewriter() throws {
+  func testRewriter() {
     let sourceFile = Parser.parse(source: """
       class Foo {
         func method() {}

@@ -4,7 +4,7 @@ import XCTest
 
 final class TriviaParserTests: XCTestCase {
 
-  func testTriviaParsing() throws {
+  func testTriviaParsing() {
 
     XCTAssertEqual(
       TriviaParser.parseTrivia("""
@@ -126,7 +126,7 @@ final class TriviaParserTests: XCTestCase {
       ])
   }
 
-  func testRawSyntaxLazyTriviaPieces() throws {
+  func testRawSyntaxLazyTriviaPieces() {
     withParser(source: """
         /// Foo.
         func foo() {
@@ -153,7 +153,7 @@ final class TriviaParserTests: XCTestCase {
 
   }
 
-  func testSyntaxLazyTrivia() throws {
+  func testSyntaxLazyTrivia() {
     let source = """
       /* comment only */
 
@@ -165,7 +165,7 @@ final class TriviaParserTests: XCTestCase {
     ])
   }
 
-  func testUnexpectedSplitting() throws {
+  func testUnexpectedSplitting() {
     XCTAssertEqual(
       TriviaParser.parseTrivia("\u{fffe} ", position: .trailing),
       [

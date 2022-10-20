@@ -3,7 +3,7 @@ import XCTest
 
 final class BumpPtrAllocatorTests: XCTestCase {
 
-    func testBasic() throws {
+    func testBasic() {
       let allocator = BumpPtrAllocator()
 
       let byteBuffer = allocator.allocate(byteCount: 42, alignment: 4)

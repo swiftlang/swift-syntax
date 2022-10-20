@@ -2,7 +2,7 @@ import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 
 final class SyntaxTextTests: XCTestCase {
-  func testLiteral() throws {
+  func testLiteral() {
     let strBasic: SyntaxText = "foobar"
     let strASCII: SyntaxText = "A"
     let strHiragana: SyntaxText = "ら"
@@ -16,7 +16,7 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertEqual(String(syntaxText: strUTF8), String("こんにちは世界！"))
   }
 
-  func testInvalid() throws {
+  func testInvalid() {
     let invalidUTF8: [UInt8] = [0x43, 0x61, 0x66, 0xC3]
     invalidUTF8.withUnsafeBufferPointer { buffer in
       let fromData = SyntaxText(baseAddress: buffer.baseAddress, count: buffer.count)
@@ -24,7 +24,7 @@ final class SyntaxTextTests: XCTestCase {
     }
   }
 
-  func testSlice() throws {
+  func testSlice() {
     let text: SyntaxText = "0123456789"
 
     let slice1 = SyntaxText(rebasing: text[0..<4])
@@ -45,7 +45,7 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertEqual(SyntaxText(rebasing: text[2..<2]), SyntaxText(rebasing: text[3..<3]))
   }
 
-  func testEmptyCompare() throws {
+  func testEmptyCompare() {
     let text: SyntaxText = "0123456789"
 
     let emptyDefault = SyntaxText()
@@ -79,7 +79,7 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertTrue(emptySlice2 == emptySlice2)
   }
 
-  func testFirstRange() throws {
+  func testFirstRange() {
     let text: SyntaxText = "0123456789012345"
 
     XCTAssertEqual(text.firstRange(of: ""), nil)
@@ -99,7 +99,7 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertEqual(SyntaxText(rebasing: text[5...]).firstRange(of: "0"), 5 ..< 6)
   }
 
-  func testContains() throws {
+  func testContains() {
     let text: SyntaxText = "0123456789012345"
     XCTAssertTrue(text.contains("123"))
     XCTAssertTrue(text.contains("0123456789012345"))
@@ -110,7 +110,7 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertFalse(text.contains("01234567890123456"))
   }
 
-  func testHasPrefixSuffix() throws {
+  func testHasPrefixSuffix() {
     let text: SyntaxText = "0123456789012345"
 
     XCTAssertTrue(text.hasPrefix(""))
@@ -128,7 +128,7 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertFalse(text.hasSuffix("abc"))
   }
 
-  func testWithSyntaxText() throws {
+  func testWithSyntaxText() {
     var str = "Lorem ipsum"
     str.withSyntaxText { text in
       XCTAssertEqual(SyntaxText(rebasing: text[0..<5]), "Lorem")

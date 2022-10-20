@@ -22,7 +22,7 @@ public class ParsingPerformanceTests: XCTestCase {
     }
   }
 
-  func testNativeParsingPerformance() throws {
+  func testNativeParsingPerformance() {
     measure {
       do {
         let source = try String(contentsOf: inputFile)

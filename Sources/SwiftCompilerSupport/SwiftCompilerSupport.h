@@ -32,6 +32,10 @@ enum SwiftConsistencyCheckFlags {
   SCC_FoldSequences = 0x04,
 };
 
+/// A callback function that is called once per emitted diagnostic with a
+/// byte offset and message text.
+typedef void (*swift_parser_diagnostic_hook_t)(ptrdiff_t off, const char *text, void *ctx);
+
 /// Entry point for the Swift compiler to use for consistency checking.
 ///
 /// - Parameters:
@@ -40,10 +44,13 @@ enum SwiftConsistencyCheckFlags {
 ///   - filename: The name of the source file, which is used only for diagnostics
 ///   - flags: Flags that indicate what checks should be performed.
 ///       0x01: Perform round-trip checking.
+///   - hookCtx: A caller-provided context parameter to be passed back in the diagnostic hook.
+///   - diagnosticHook: A callback invoked once per diagnostic emitted by the parser.
 /// - Returns: 0 if all requested consistency checks passed, nonzero otherwise.
 int swift_parser_consistencyCheck(
   const char *buffer, ptrdiff_t bufferLength, const char *filename,
-  unsigned int flags);
+  unsigned int flags,
+  void *hookCtx, swift_parser_diagnostic_hook_t hook);
 
 #ifdef __cplusplus
 }

@@ -24,8 +24,6 @@ final class EnumCaseElementTests: XCTestCase {
         EnumCaseElement(identifier: "hi")
       }
     }
-    let syntax = buildable.buildSyntax()
-
     AssertBuildResult(buildable,
       """
       ␣enum Greeting: String, Codable, Equatable {

@@ -84,7 +84,6 @@ final class FunctionTests: XCTestCase {
       }
     })
     let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: closure)
-    let syntax = buildable.buildSyntax()
     AssertBuildResult(
       buildable,
       """

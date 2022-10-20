@@ -216,8 +216,8 @@ class ExpandMacros: ParsableCommand {
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    try source.withUnsafeBufferPointer { sourceBuffer in
-      let tree = try Parser.parse(source: sourceBuffer)
+    source.withUnsafeBufferPointer { sourceBuffer in
+      let tree = Parser.parse(source: sourceBuffer)
 
       let resultTree: Syntax
       if foldSequences {

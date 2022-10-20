@@ -31,7 +31,9 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
     var errorTokens: SyntaxBuildable?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CodeBlockItemSyntax)
   }
   private var data: Data
@@ -47,7 +49,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
     assert(semicolon == nil || semicolon!.text == #";"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeItem: unexpectedBeforeItem?.createUnexpectedNodes(), item: item.createSyntaxBuildable(), unexpectedBetweenItemAndSemicolon: unexpectedBetweenItemAndSemicolon?.createUnexpectedNodes(), semicolon: semicolon, unexpectedBetweenSemicolonAndErrorTokens: unexpectedBetweenSemicolonAndErrorTokens?.createUnexpectedNodes(), errorTokens: errorTokens?.createSyntaxBuildable()))
   }
-  public init(_ constructedNode: CodeBlockItemSyntax) {
+  public init (_ constructedNode: CodeBlockItemSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CodeBlockItemSyntax`.
@@ -82,12 +84,12 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -96,12 +98,12 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -123,7 +125,9 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
     var rightBrace: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CodeBlockSyntax)
   }
   private var data: Data
@@ -143,12 +147,12 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace: unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements: unexpectedBetweenLeftBraceAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace: unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace)
   }
-  public init(_ constructedNode: CodeBlockSyntax) {
+  public init (_ constructedNode: CodeBlockSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CodeBlockSyntax`.
@@ -183,12 +187,12 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -197,12 +201,12 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -222,7 +226,9 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(InOutExprSyntax)
   }
   private var data: Data
@@ -236,7 +242,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
     assert(ampersand.text == #"&"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAmpersand: unexpectedBeforeAmpersand?.createUnexpectedNodes(), ampersand: ampersand, unexpectedBetweenAmpersandAndExpression: unexpectedBetweenAmpersandAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
   }
-  public init(_ constructedNode: InOutExprSyntax) {
+  public init (_ constructedNode: InOutExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `InOutExprSyntax`.
@@ -278,12 +284,12 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -292,12 +298,12 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -315,7 +321,9 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
     var poundColumn: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundColumnExprSyntax)
   }
   private var data: Data
@@ -327,7 +335,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
     assert(poundColumn.text == #"#column"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundColumn: unexpectedBeforePoundColumn?.createUnexpectedNodes(), poundColumn: poundColumn))
   }
-  public init(_ constructedNode: PoundColumnExprSyntax) {
+  public init (_ constructedNode: PoundColumnExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundColumnExprSyntax`.
@@ -369,12 +377,12 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -383,12 +391,12 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -410,7 +418,9 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TryExprSyntax)
   }
   private var data: Data
@@ -427,7 +437,7 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
     assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == #"?"# || questionOrExclamationMark!.text == #"!"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeTryKeyword: unexpectedBeforeTryKeyword?.createUnexpectedNodes(), tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.createUnexpectedNodes(), questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndExpression: unexpectedBetweenQuestionOrExclamationMarkAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
   }
-  public init(_ constructedNode: TryExprSyntax) {
+  public init (_ constructedNode: TryExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TryExprSyntax`.
@@ -469,12 +479,12 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -483,12 +493,12 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -508,7 +518,9 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AwaitExprSyntax)
   }
   private var data: Data
@@ -528,7 +540,7 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: String, unexpectedBetweenAwaitKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAwaitKeyword: unexpectedBeforeAwaitKeyword, awaitKeyword: Token.`contextualKeyword`(awaitKeyword), unexpectedBetweenAwaitKeywordAndExpression: unexpectedBetweenAwaitKeywordAndExpression, expression: expression)
   }
-  public init(_ constructedNode: AwaitExprSyntax) {
+  public init (_ constructedNode: AwaitExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AwaitExprSyntax`.
@@ -570,12 +582,12 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -584,12 +596,12 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -609,7 +621,9 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MoveExprSyntax)
   }
   private var data: Data
@@ -629,7 +643,7 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeMoveKeyword: ExpressibleAsUnexpectedNodes? = nil, moveKeyword: String, unexpectedBetweenMoveKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMoveKeyword: unexpectedBeforeMoveKeyword, moveKeyword: Token.`contextualKeyword`(moveKeyword), unexpectedBetweenMoveKeywordAndExpression: unexpectedBetweenMoveKeywordAndExpression, expression: expression)
   }
-  public init(_ constructedNode: MoveExprSyntax) {
+  public init (_ constructedNode: MoveExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MoveExprSyntax`.
@@ -671,12 +685,12 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -685,12 +699,12 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -710,7 +724,9 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
     var colon: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeclNameArgumentSyntax)
   }
   private var data: Data
@@ -724,7 +740,7 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
     assert(colon.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeName: unexpectedBeforeName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon?.createUnexpectedNodes(), colon: colon))
   }
-  public init(_ constructedNode: DeclNameArgumentSyntax) {
+  public init (_ constructedNode: DeclNameArgumentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeclNameArgumentSyntax`.
@@ -759,12 +775,12 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -773,12 +789,12 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -800,7 +816,9 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeclNameArgumentsSyntax)
   }
   private var data: Data
@@ -817,7 +835,7 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndArguments: unexpectedBetweenLeftParenAndArguments?.createUnexpectedNodes(), arguments: arguments.createDeclNameArgumentList(), unexpectedBetweenArgumentsAndRightParen: unexpectedBetweenArgumentsAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: DeclNameArgumentsSyntax) {
+  public init (_ constructedNode: DeclNameArgumentsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeclNameArgumentsSyntax`.
@@ -852,12 +870,12 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -866,12 +884,12 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -891,7 +909,9 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
     var declNameArguments: DeclNameArguments?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IdentifierExprSyntax)
   }
   private var data: Data
@@ -904,7 +924,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier?.createUnexpectedNodes(), identifier: identifier, unexpectedBetweenIdentifierAndDeclNameArguments: unexpectedBetweenIdentifierAndDeclNameArguments?.createUnexpectedNodes(), declNameArguments: declNameArguments?.createDeclNameArguments()))
   }
-  public init(_ constructedNode: IdentifierExprSyntax) {
+  public init (_ constructedNode: IdentifierExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IdentifierExprSyntax`.
@@ -946,12 +966,12 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -960,12 +980,12 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -983,7 +1003,9 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
     var superKeyword: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SuperRefExprSyntax)
   }
   private var data: Data
@@ -995,7 +1017,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
     assert(superKeyword.text == #"super"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeSuperKeyword: unexpectedBeforeSuperKeyword?.createUnexpectedNodes(), superKeyword: superKeyword))
   }
-  public init(_ constructedNode: SuperRefExprSyntax) {
+  public init (_ constructedNode: SuperRefExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SuperRefExprSyntax`.
@@ -1037,12 +1059,12 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1051,12 +1073,12 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1074,7 +1096,9 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
     var nilKeyword: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(NilLiteralExprSyntax)
   }
   private var data: Data
@@ -1086,7 +1110,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
     assert(nilKeyword.text == #"nil"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeNilKeyword: unexpectedBeforeNilKeyword?.createUnexpectedNodes(), nilKeyword: nilKeyword))
   }
-  public init(_ constructedNode: NilLiteralExprSyntax) {
+  public init (_ constructedNode: NilLiteralExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `NilLiteralExprSyntax`.
@@ -1128,12 +1152,12 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1142,12 +1166,12 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1165,7 +1189,9 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
     var wildcard: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DiscardAssignmentExprSyntax)
   }
   private var data: Data
@@ -1177,7 +1203,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
     assert(wildcard.text == #"_"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeWildcard: unexpectedBeforeWildcard?.createUnexpectedNodes(), wildcard: wildcard))
   }
-  public init(_ constructedNode: DiscardAssignmentExprSyntax) {
+  public init (_ constructedNode: DiscardAssignmentExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DiscardAssignmentExprSyntax`.
@@ -1219,12 +1245,12 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1233,12 +1259,12 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1256,7 +1282,9 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
     var assignToken: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AssignmentExprSyntax)
   }
   private var data: Data
@@ -1268,7 +1296,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
     assert(assignToken.text == #"="#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAssignToken: unexpectedBeforeAssignToken?.createUnexpectedNodes(), assignToken: assignToken))
   }
-  public init(_ constructedNode: AssignmentExprSyntax) {
+  public init (_ constructedNode: AssignmentExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AssignmentExprSyntax`.
@@ -1310,12 +1338,12 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1324,12 +1352,12 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1347,7 +1375,9 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
     var elements: ExprList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SequenceExprSyntax)
   }
   private var data: Data
@@ -1361,12 +1391,12 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeElements: ExpressibleAsUnexpectedNodes? = nil, @ExprListBuilder elementsBuilder: () -> ExpressibleAsExprList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeElements: ExpressibleAsUnexpectedNodes? = nil, @ExprListBuilder elementsBuilder: () -> ExpressibleAsExprList = {
     ExprList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeElements: unexpectedBeforeElements, elements: elementsBuilder())
   }
-  public init(_ constructedNode: SequenceExprSyntax) {
+  public init (_ constructedNode: SequenceExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SequenceExprSyntax`.
@@ -1408,12 +1438,12 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1422,12 +1452,12 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1445,7 +1475,9 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
     var poundLine: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundLineExprSyntax)
   }
   private var data: Data
@@ -1457,7 +1489,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
     assert(poundLine.text == #"#line"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundLine: unexpectedBeforePoundLine?.createUnexpectedNodes(), poundLine: poundLine))
   }
-  public init(_ constructedNode: PoundLineExprSyntax) {
+  public init (_ constructedNode: PoundLineExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundLineExprSyntax`.
@@ -1499,12 +1531,12 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1513,12 +1545,12 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1536,7 +1568,9 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
     var poundFile: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundFileExprSyntax)
   }
   private var data: Data
@@ -1548,7 +1582,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
     assert(poundFile.text == #"#file"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundFile: unexpectedBeforePoundFile?.createUnexpectedNodes(), poundFile: poundFile))
   }
-  public init(_ constructedNode: PoundFileExprSyntax) {
+  public init (_ constructedNode: PoundFileExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundFileExprSyntax`.
@@ -1590,12 +1624,12 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1604,12 +1638,12 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1627,7 +1661,9 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
     var poundFileID: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundFileIDExprSyntax)
   }
   private var data: Data
@@ -1639,7 +1675,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
     assert(poundFileID.text == #"#fileID"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundFileID: unexpectedBeforePoundFileID?.createUnexpectedNodes(), poundFileID: poundFileID))
   }
-  public init(_ constructedNode: PoundFileIDExprSyntax) {
+  public init (_ constructedNode: PoundFileIDExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundFileIDExprSyntax`.
@@ -1681,12 +1717,12 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1695,12 +1731,12 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1718,7 +1754,9 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
     var poundFilePath: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundFilePathExprSyntax)
   }
   private var data: Data
@@ -1730,7 +1768,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
     assert(poundFilePath.text == #"#filePath"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundFilePath: unexpectedBeforePoundFilePath?.createUnexpectedNodes(), poundFilePath: poundFilePath))
   }
-  public init(_ constructedNode: PoundFilePathExprSyntax) {
+  public init (_ constructedNode: PoundFilePathExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundFilePathExprSyntax`.
@@ -1772,12 +1810,12 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1786,12 +1824,12 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1809,7 +1847,9 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
     var poundFunction: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundFunctionExprSyntax)
   }
   private var data: Data
@@ -1821,7 +1861,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
     assert(poundFunction.text == #"#function"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundFunction: unexpectedBeforePoundFunction?.createUnexpectedNodes(), poundFunction: poundFunction))
   }
-  public init(_ constructedNode: PoundFunctionExprSyntax) {
+  public init (_ constructedNode: PoundFunctionExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundFunctionExprSyntax`.
@@ -1863,12 +1903,12 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1877,12 +1917,12 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1900,7 +1940,9 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
     var poundDsohandle: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundDsohandleExprSyntax)
   }
   private var data: Data
@@ -1912,7 +1954,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
     assert(poundDsohandle.text == #"#dsohandle"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundDsohandle: unexpectedBeforePoundDsohandle?.createUnexpectedNodes(), poundDsohandle: poundDsohandle))
   }
-  public init(_ constructedNode: PoundDsohandleExprSyntax) {
+  public init (_ constructedNode: PoundDsohandleExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundDsohandleExprSyntax`.
@@ -1954,12 +1996,12 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1968,12 +2010,12 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -1993,7 +2035,9 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
     var genericArgumentClause: GenericArgumentClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SymbolicReferenceExprSyntax)
   }
   private var data: Data
@@ -2012,7 +2056,7 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericArgumentClause: unexpectedBetweenIdentifierAndGenericArgumentClause, genericArgumentClause: genericArgumentClause)
   }
-  public init(_ constructedNode: SymbolicReferenceExprSyntax) {
+  public init (_ constructedNode: SymbolicReferenceExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SymbolicReferenceExprSyntax`.
@@ -2054,12 +2098,12 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2068,12 +2112,12 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2093,7 +2137,9 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
     var postfixExpression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrefixOperatorExprSyntax)
   }
   private var data: Data
@@ -2110,9 +2156,11 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: String?, unexpectedBetweenOperatorTokenAndPostfixExpression: ExpressibleAsUnexpectedNodes? = nil, postfixExpression: ExpressibleAsExprBuildable) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOperatorToken: unexpectedBeforeOperatorToken, operatorToken: operatorToken.map { Token.`prefixOperator`($0) }, unexpectedBetweenOperatorTokenAndPostfixExpression: unexpectedBetweenOperatorTokenAndPostfixExpression, postfixExpression: postfixExpression)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOperatorToken: unexpectedBeforeOperatorToken, operatorToken: operatorToken.map { 
+      Token.`prefixOperator`($0) 
+    }, unexpectedBetweenOperatorTokenAndPostfixExpression: unexpectedBetweenOperatorTokenAndPostfixExpression, postfixExpression: postfixExpression)
   }
-  public init(_ constructedNode: PrefixOperatorExprSyntax) {
+  public init (_ constructedNode: PrefixOperatorExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrefixOperatorExprSyntax`.
@@ -2154,12 +2202,12 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2168,12 +2216,12 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2191,7 +2239,9 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
     var operatorToken: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(BinaryOperatorExprSyntax)
   }
   private var data: Data
@@ -2202,7 +2252,7 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: Token) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeOperatorToken: unexpectedBeforeOperatorToken?.createUnexpectedNodes(), operatorToken: operatorToken))
   }
-  public init(_ constructedNode: BinaryOperatorExprSyntax) {
+  public init (_ constructedNode: BinaryOperatorExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `BinaryOperatorExprSyntax`.
@@ -2244,12 +2294,12 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2258,12 +2308,12 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2285,7 +2335,9 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
     var arrowToken: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ArrowExprSyntax)
   }
   private var data: Data
@@ -2307,9 +2359,11 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsToken: ExpressibleAsUnexpectedNodes? = nil, throwsToken: Token? = nil, unexpectedBetweenThrowsTokenAndArrowToken: ExpressibleAsUnexpectedNodes? = nil, arrowToken: Token = Token.`arrow`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAsyncKeyword: unexpectedBeforeAsyncKeyword, asyncKeyword: asyncKeyword.map { Token.`contextualKeyword`($0) }, unexpectedBetweenAsyncKeywordAndThrowsToken: unexpectedBetweenAsyncKeywordAndThrowsToken, throwsToken: throwsToken, unexpectedBetweenThrowsTokenAndArrowToken: unexpectedBetweenThrowsTokenAndArrowToken, arrowToken: arrowToken)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAsyncKeyword: unexpectedBeforeAsyncKeyword, asyncKeyword: asyncKeyword.map { 
+      Token.`contextualKeyword`($0) 
+    }, unexpectedBetweenAsyncKeywordAndThrowsToken: unexpectedBetweenAsyncKeywordAndThrowsToken, throwsToken: throwsToken, unexpectedBetweenThrowsTokenAndArrowToken: unexpectedBetweenThrowsTokenAndArrowToken, arrowToken: arrowToken)
   }
-  public init(_ constructedNode: ArrowExprSyntax) {
+  public init (_ constructedNode: ArrowExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ArrowExprSyntax`.
@@ -2351,12 +2405,12 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2365,12 +2419,12 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2392,7 +2446,9 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
     var rightOperand: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(InfixOperatorExprSyntax)
   }
   private var data: Data
@@ -2407,7 +2463,7 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftOperand: ExpressibleAsUnexpectedNodes? = nil, leftOperand: ExpressibleAsExprBuildable, unexpectedBetweenLeftOperandAndOperatorOperand: ExpressibleAsUnexpectedNodes? = nil, operatorOperand: ExpressibleAsExprBuildable, unexpectedBetweenOperatorOperandAndRightOperand: ExpressibleAsUnexpectedNodes? = nil, rightOperand: ExpressibleAsExprBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftOperand: unexpectedBeforeLeftOperand?.createUnexpectedNodes(), leftOperand: leftOperand.createExprBuildable(), unexpectedBetweenLeftOperandAndOperatorOperand: unexpectedBetweenLeftOperandAndOperatorOperand?.createUnexpectedNodes(), operatorOperand: operatorOperand.createExprBuildable(), unexpectedBetweenOperatorOperandAndRightOperand: unexpectedBetweenOperatorOperandAndRightOperand?.createUnexpectedNodes(), rightOperand: rightOperand.createExprBuildable()))
   }
-  public init(_ constructedNode: InfixOperatorExprSyntax) {
+  public init (_ constructedNode: InfixOperatorExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `InfixOperatorExprSyntax`.
@@ -2449,12 +2505,12 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2463,12 +2519,12 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2486,7 +2542,9 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
     var floatingDigits: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FloatLiteralExprSyntax)
   }
   private var data: Data
@@ -2503,7 +2561,7 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeFloatingDigits: ExpressibleAsUnexpectedNodes? = nil, floatingDigits: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeFloatingDigits: unexpectedBeforeFloatingDigits, floatingDigits: Token.`floatingLiteral`(floatingDigits))
   }
-  public init(_ constructedNode: FloatLiteralExprSyntax) {
+  public init (_ constructedNode: FloatLiteralExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FloatLiteralExprSyntax`.
@@ -2545,12 +2603,12 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2559,12 +2617,12 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2586,7 +2644,9 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TupleExprSyntax)
   }
   private var data: Data
@@ -2606,12 +2666,12 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder elementListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder elementListBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList: unexpectedBetweenLeftParenAndElementList, elementList: elementListBuilder(), unexpectedBetweenElementListAndRightParen: unexpectedBetweenElementListAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: TupleExprSyntax) {
+  public init (_ constructedNode: TupleExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TupleExprSyntax`.
@@ -2653,12 +2713,12 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2667,12 +2727,12 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2694,7 +2754,9 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
     var rightSquare: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ArrayExprSyntax)
   }
   private var data: Data
@@ -2714,12 +2776,12 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`, @ArrayElementListBuilder elementsBuilder: () -> ExpressibleAsArrayElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`, @ArrayElementListBuilder elementsBuilder: () -> ExpressibleAsArrayElementList = {
     ArrayElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare: unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndElements: unexpectedBetweenLeftSquareAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightSquare: unexpectedBetweenElementsAndRightSquare, rightSquare: rightSquare)
   }
-  public init(_ constructedNode: ArrayExprSyntax) {
+  public init (_ constructedNode: ArrayExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ArrayExprSyntax`.
@@ -2761,12 +2823,12 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2775,12 +2837,12 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2802,7 +2864,9 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
     var rightSquare: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DictionaryExprSyntax)
   }
   private var data: Data
@@ -2819,7 +2883,7 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
     assert(rightSquare.text == #"]"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftSquare: unexpectedBeforeLeftSquare?.createUnexpectedNodes(), leftSquare: leftSquare, unexpectedBetweenLeftSquareAndContent: unexpectedBetweenLeftSquareAndContent?.createUnexpectedNodes(), content: content.createSyntaxBuildable(), unexpectedBetweenContentAndRightSquare: unexpectedBetweenContentAndRightSquare?.createUnexpectedNodes(), rightSquare: rightSquare))
   }
-  public init(_ constructedNode: DictionaryExprSyntax) {
+  public init (_ constructedNode: DictionaryExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DictionaryExprSyntax`.
@@ -2861,12 +2925,12 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2875,12 +2939,12 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2904,15 +2968,17 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TupleExprElementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -2931,7 +2997,7 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel?.createUnexpectedNodes(), label: label, unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndExpression: unexpectedBetweenColonAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: TupleExprElementSyntax) {
+  public init (_ constructedNode: TupleExprElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TupleExprElementSyntax`.
@@ -2967,12 +3033,12 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -2981,12 +3047,12 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -2995,12 +3061,12 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3020,15 +3086,17 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ArrayElementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -3042,7 +3110,7 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: ArrayElementSyntax) {
+  public init (_ constructedNode: ArrayElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ArrayElementSyntax`.
@@ -3078,12 +3146,12 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -3092,12 +3160,12 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3106,12 +3174,12 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3135,15 +3203,17 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DictionaryElementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -3162,7 +3232,7 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeKeyExpression: unexpectedBeforeKeyExpression?.createUnexpectedNodes(), keyExpression: keyExpression.createExprBuildable(), unexpectedBetweenKeyExpressionAndColon: unexpectedBetweenKeyExpressionAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndValueExpression: unexpectedBetweenColonAndValueExpression?.createUnexpectedNodes(), valueExpression: valueExpression.createExprBuildable(), unexpectedBetweenValueExpressionAndTrailingComma: unexpectedBetweenValueExpressionAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: DictionaryElementSyntax) {
+  public init (_ constructedNode: DictionaryElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DictionaryElementSyntax`.
@@ -3198,12 +3268,12 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -3212,12 +3282,12 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3226,12 +3296,12 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3249,7 +3319,9 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
     var digits: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IntegerLiteralExprSyntax)
   }
   private var data: Data
@@ -3266,7 +3338,7 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   public init (leadingTrivia: Trivia = [], unexpectedBeforeDigits: ExpressibleAsUnexpectedNodes? = nil, digits: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDigits: unexpectedBeforeDigits, digits: Token.`integerLiteral`(digits))
   }
-  public init(_ constructedNode: IntegerLiteralExprSyntax) {
+  public init (_ constructedNode: IntegerLiteralExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IntegerLiteralExprSyntax`.
@@ -3308,12 +3380,12 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3322,12 +3394,12 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3345,7 +3417,9 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
     var booleanLiteral: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(BooleanLiteralExprSyntax)
   }
   private var data: Data
@@ -3357,7 +3431,7 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
     assert(booleanLiteral.text == #"true"# || booleanLiteral.text == #"false"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBooleanLiteral: unexpectedBeforeBooleanLiteral?.createUnexpectedNodes(), booleanLiteral: booleanLiteral))
   }
-  public init(_ constructedNode: BooleanLiteralExprSyntax) {
+  public init (_ constructedNode: BooleanLiteralExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `BooleanLiteralExprSyntax`.
@@ -3399,12 +3473,12 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3413,12 +3487,12 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3440,7 +3514,9 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
     var colonMark: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(UnresolvedTernaryExprSyntax)
   }
   private var data: Data
@@ -3457,7 +3533,7 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
     assert(colonMark.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeQuestionMark: unexpectedBeforeQuestionMark?.createUnexpectedNodes(), questionMark: questionMark, unexpectedBetweenQuestionMarkAndFirstChoice: unexpectedBetweenQuestionMarkAndFirstChoice?.createUnexpectedNodes(), firstChoice: firstChoice.createExprBuildable(), unexpectedBetweenFirstChoiceAndColonMark: unexpectedBetweenFirstChoiceAndColonMark?.createUnexpectedNodes(), colonMark: colonMark))
   }
-  public init(_ constructedNode: UnresolvedTernaryExprSyntax) {
+  public init (_ constructedNode: UnresolvedTernaryExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `UnresolvedTernaryExprSyntax`.
@@ -3499,12 +3575,12 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3513,12 +3589,12 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3544,7 +3620,9 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
     var secondChoice: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TernaryExprSyntax)
   }
   private var data: Data
@@ -3565,7 +3643,7 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
     assert(colonMark.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeConditionExpression: unexpectedBeforeConditionExpression?.createUnexpectedNodes(), conditionExpression: conditionExpression.createExprBuildable(), unexpectedBetweenConditionExpressionAndQuestionMark: unexpectedBetweenConditionExpressionAndQuestionMark?.createUnexpectedNodes(), questionMark: questionMark, unexpectedBetweenQuestionMarkAndFirstChoice: unexpectedBetweenQuestionMarkAndFirstChoice?.createUnexpectedNodes(), firstChoice: firstChoice.createExprBuildable(), unexpectedBetweenFirstChoiceAndColonMark: unexpectedBetweenFirstChoiceAndColonMark?.createUnexpectedNodes(), colonMark: colonMark, unexpectedBetweenColonMarkAndSecondChoice: unexpectedBetweenColonMarkAndSecondChoice?.createUnexpectedNodes(), secondChoice: secondChoice.createExprBuildable()))
   }
-  public init(_ constructedNode: TernaryExprSyntax) {
+  public init (_ constructedNode: TernaryExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TernaryExprSyntax`.
@@ -3607,12 +3685,12 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3621,12 +3699,12 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3650,7 +3728,9 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
     var declNameArguments: DeclNameArguments?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MemberAccessExprSyntax)
   }
   private var data: Data
@@ -3668,7 +3748,7 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
     assert(dot.text == #"."# || dot.text == #"."#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBase: unexpectedBeforeBase?.createUnexpectedNodes(), base: base?.createExprBuildable(), unexpectedBetweenBaseAndDot: unexpectedBetweenBaseAndDot?.createUnexpectedNodes(), dot: dot, unexpectedBetweenDotAndName: unexpectedBetweenDotAndName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndDeclNameArguments: unexpectedBetweenNameAndDeclNameArguments?.createUnexpectedNodes(), declNameArguments: declNameArguments?.createDeclNameArguments()))
   }
-  public init(_ constructedNode: MemberAccessExprSyntax) {
+  public init (_ constructedNode: MemberAccessExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MemberAccessExprSyntax`.
@@ -3710,12 +3790,12 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3724,12 +3804,12 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3747,7 +3827,9 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
     var isTok: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(UnresolvedIsExprSyntax)
   }
   private var data: Data
@@ -3759,7 +3841,7 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
     assert(isTok.text == #"is"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeIsTok: unexpectedBeforeIsTok?.createUnexpectedNodes(), isTok: isTok))
   }
-  public init(_ constructedNode: UnresolvedIsExprSyntax) {
+  public init (_ constructedNode: UnresolvedIsExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `UnresolvedIsExprSyntax`.
@@ -3801,12 +3883,12 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3815,12 +3897,12 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3842,7 +3924,9 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
     var typeName: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IsExprSyntax)
   }
   private var data: Data
@@ -3858,7 +3942,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
     assert(isTok.text == #"is"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndIsTok: unexpectedBetweenExpressionAndIsTok?.createUnexpectedNodes(), isTok: isTok, unexpectedBetweenIsTokAndTypeName: unexpectedBetweenIsTokAndTypeName?.createUnexpectedNodes(), typeName: typeName.createTypeBuildable()))
   }
-  public init(_ constructedNode: IsExprSyntax) {
+  public init (_ constructedNode: IsExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IsExprSyntax`.
@@ -3900,12 +3984,12 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3914,12 +3998,12 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -3939,7 +4023,9 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
     var questionOrExclamationMark: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(UnresolvedAsExprSyntax)
   }
   private var data: Data
@@ -3954,7 +4040,7 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
     assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == #"?"# || questionOrExclamationMark!.text == #"!"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAsTok: unexpectedBeforeAsTok?.createUnexpectedNodes(), asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark: unexpectedBetweenAsTokAndQuestionOrExclamationMark?.createUnexpectedNodes(), questionOrExclamationMark: questionOrExclamationMark))
   }
-  public init(_ constructedNode: UnresolvedAsExprSyntax) {
+  public init (_ constructedNode: UnresolvedAsExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `UnresolvedAsExprSyntax`.
@@ -3996,12 +4082,12 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4010,12 +4096,12 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4039,7 +4125,9 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
     var typeName: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AsExprSyntax)
   }
   private var data: Data
@@ -4058,7 +4146,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
     assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == #"?"# || questionOrExclamationMark!.text == #"!"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndAsTok: unexpectedBetweenExpressionAndAsTok?.createUnexpectedNodes(), asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark: unexpectedBetweenAsTokAndQuestionOrExclamationMark?.createUnexpectedNodes(), questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndTypeName: unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.createUnexpectedNodes(), typeName: typeName.createTypeBuildable()))
   }
-  public init(_ constructedNode: AsExprSyntax) {
+  public init (_ constructedNode: AsExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AsExprSyntax`.
@@ -4100,12 +4188,12 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4114,12 +4202,12 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4137,7 +4225,9 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
     var type: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TypeExprSyntax)
   }
   private var data: Data
@@ -4148,7 +4238,7 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeType: unexpectedBeforeType?.createUnexpectedNodes(), type: type.createTypeBuildable()))
   }
-  public init(_ constructedNode: TypeExprSyntax) {
+  public init (_ constructedNode: TypeExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TypeExprSyntax`.
@@ -4190,12 +4280,12 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4204,12 +4294,12 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4235,15 +4325,17 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ClosureCaptureItemSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -4268,9 +4360,11 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeSpecifier: ExpressibleAsUnexpectedNodes? = nil, specifier: ExpressibleAsTokenList? = nil, unexpectedBetweenSpecifierAndName: ExpressibleAsUnexpectedNodes? = nil, name: String?, unexpectedBetweenNameAndAssignToken: ExpressibleAsUnexpectedNodes? = nil, assignToken: Token? = nil, unexpectedBetweenAssignTokenAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSpecifier: unexpectedBeforeSpecifier, specifier: specifier, unexpectedBetweenSpecifierAndName: unexpectedBetweenSpecifierAndName, name: name.map { Token.`identifier`($0) }, unexpectedBetweenNameAndAssignToken: unexpectedBetweenNameAndAssignToken, assignToken: assignToken, unexpectedBetweenAssignTokenAndExpression: unexpectedBetweenAssignTokenAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSpecifier: unexpectedBeforeSpecifier, specifier: specifier, unexpectedBetweenSpecifierAndName: unexpectedBetweenSpecifierAndName, name: name.map { 
+      Token.`identifier`($0) 
+    }, unexpectedBetweenNameAndAssignToken: unexpectedBetweenNameAndAssignToken, assignToken: assignToken, unexpectedBetweenAssignTokenAndExpression: unexpectedBetweenAssignTokenAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: ClosureCaptureItemSyntax) {
+  public init (_ constructedNode: ClosureCaptureItemSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ClosureCaptureItemSyntax`.
@@ -4306,12 +4400,12 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -4320,12 +4414,12 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4334,12 +4428,12 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4361,7 +4455,9 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
     var rightSquare: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ClosureCaptureSignatureSyntax)
   }
   private var data: Data
@@ -4381,12 +4477,12 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenItemsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`, @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenItemsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`, @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? = {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare: unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndItems: unexpectedBetweenLeftSquareAndItems, items: itemsBuilder(), unexpectedBetweenItemsAndRightSquare: unexpectedBetweenItemsAndRightSquare, rightSquare: rightSquare)
   }
-  public init(_ constructedNode: ClosureCaptureSignatureSyntax) {
+  public init (_ constructedNode: ClosureCaptureSignatureSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ClosureCaptureSignatureSyntax`.
@@ -4421,12 +4517,12 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4435,12 +4531,12 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4460,15 +4556,17 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ClosureParamSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -4482,7 +4580,7 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeName: unexpectedBeforeName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: ClosureParamSyntax) {
+  public init (_ constructedNode: ClosureParamSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ClosureParamSyntax`.
@@ -4518,12 +4616,12 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -4532,12 +4630,12 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4546,12 +4644,12 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4581,7 +4679,9 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
     var inTok: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ClosureSignatureSyntax)
   }
   private var data: Data
@@ -4611,9 +4711,11 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndCapture: ExpressibleAsUnexpectedNodes? = nil, capture: ExpressibleAsClosureCaptureSignature? = nil, unexpectedBetweenCaptureAndInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenInputAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsTok: ExpressibleAsUnexpectedNodes? = nil, throwsTok: Token? = nil, unexpectedBetweenThrowsTokAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil, unexpectedBetweenOutputAndInTok: ExpressibleAsUnexpectedNodes? = nil, inTok: Token = Token.`in`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndCapture: unexpectedBetweenAttributesAndCapture, capture: capture, unexpectedBetweenCaptureAndInput: unexpectedBetweenCaptureAndInput, input: input, unexpectedBetweenInputAndAsyncKeyword: unexpectedBetweenInputAndAsyncKeyword, asyncKeyword: asyncKeyword.map { Token.`contextualKeyword`($0) }, unexpectedBetweenAsyncKeywordAndThrowsTok: unexpectedBetweenAsyncKeywordAndThrowsTok, throwsTok: throwsTok, unexpectedBetweenThrowsTokAndOutput: unexpectedBetweenThrowsTokAndOutput, output: output, unexpectedBetweenOutputAndInTok: unexpectedBetweenOutputAndInTok, inTok: inTok)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndCapture: unexpectedBetweenAttributesAndCapture, capture: capture, unexpectedBetweenCaptureAndInput: unexpectedBetweenCaptureAndInput, input: input, unexpectedBetweenInputAndAsyncKeyword: unexpectedBetweenInputAndAsyncKeyword, asyncKeyword: asyncKeyword.map { 
+      Token.`contextualKeyword`($0) 
+    }, unexpectedBetweenAsyncKeywordAndThrowsTok: unexpectedBetweenAsyncKeywordAndThrowsTok, throwsTok: throwsTok, unexpectedBetweenThrowsTokAndOutput: unexpectedBetweenThrowsTokAndOutput, output: output, unexpectedBetweenOutputAndInTok: unexpectedBetweenOutputAndInTok, inTok: inTok)
   }
-  public init(_ constructedNode: ClosureSignatureSyntax) {
+  public init (_ constructedNode: ClosureSignatureSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ClosureSignatureSyntax`.
@@ -4648,12 +4750,12 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4662,12 +4764,12 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4691,7 +4793,9 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
     var rightBrace: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ClosureExprSyntax)
   }
   private var data: Data
@@ -4713,12 +4817,12 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsClosureSignature? = nil, unexpectedBetweenSignatureAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsClosureSignature? = nil, unexpectedBetweenSignatureAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace: unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndSignature: unexpectedBetweenLeftBraceAndSignature, signature: signature, unexpectedBetweenSignatureAndStatements: unexpectedBetweenSignatureAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace: unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace)
   }
-  public init(_ constructedNode: ClosureExprSyntax) {
+  public init (_ constructedNode: ClosureExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ClosureExprSyntax`.
@@ -4760,12 +4864,12 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4774,12 +4878,12 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4797,7 +4901,9 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
     var pattern: PatternBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(UnresolvedPatternExprSyntax)
   }
   private var data: Data
@@ -4808,7 +4914,7 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePattern: unexpectedBeforePattern?.createUnexpectedNodes(), pattern: pattern.createPatternBuildable()))
   }
-  public init(_ constructedNode: UnresolvedPatternExprSyntax) {
+  public init (_ constructedNode: UnresolvedPatternExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `UnresolvedPatternExprSyntax`.
@@ -4850,12 +4956,12 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4864,12 +4970,12 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4891,7 +4997,9 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
     var closure: ClosureExpr
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MultipleTrailingClosureElementSyntax)
   }
   private var data: Data
@@ -4907,7 +5015,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
     assert(colon.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel?.createUnexpectedNodes(), label: label, unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndClosure: unexpectedBetweenColonAndClosure?.createUnexpectedNodes(), closure: closure.createClosureExpr()))
   }
-  public init(_ constructedNode: MultipleTrailingClosureElementSyntax) {
+  public init (_ constructedNode: MultipleTrailingClosureElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MultipleTrailingClosureElementSyntax`.
@@ -4942,12 +5050,12 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4956,12 +5064,12 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -4989,7 +5097,9 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
     var additionalTrailingClosures: MultipleTrailingClosureElementList?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FunctionCallExprSyntax)
   }
   private var data: Data
@@ -5015,12 +5125,12 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression: unexpectedBeforeCalledExpression, calledExpression: calledExpression, unexpectedBetweenCalledExpressionAndLeftParen: unexpectedBetweenCalledExpressionAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList: unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen: unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure: unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
   }
-  public init(_ constructedNode: FunctionCallExprSyntax) {
+  public init (_ constructedNode: FunctionCallExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FunctionCallExprSyntax`.
@@ -5062,12 +5172,12 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5076,12 +5186,12 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5109,7 +5219,9 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
     var additionalTrailingClosures: MultipleTrailingClosureElementList?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SubscriptExprSyntax)
   }
   private var data: Data
@@ -5135,12 +5247,12 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`, unexpectedBetweenRightBracketAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`, unexpectedBetweenRightBracketAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression: unexpectedBeforeCalledExpression, calledExpression: calledExpression, unexpectedBetweenCalledExpressionAndLeftBracket: unexpectedBetweenCalledExpressionAndLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList: unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket: unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, unexpectedBetweenRightBracketAndTrailingClosure: unexpectedBetweenRightBracketAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
   }
-  public init(_ constructedNode: SubscriptExprSyntax) {
+  public init (_ constructedNode: SubscriptExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SubscriptExprSyntax`.
@@ -5182,12 +5294,12 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5196,12 +5308,12 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5221,7 +5333,9 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
     var questionMark: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OptionalChainingExprSyntax)
   }
   private var data: Data
@@ -5235,7 +5349,7 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
     assert(questionMark.text == #"?"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndQuestionMark: unexpectedBetweenExpressionAndQuestionMark?.createUnexpectedNodes(), questionMark: questionMark))
   }
-  public init(_ constructedNode: OptionalChainingExprSyntax) {
+  public init (_ constructedNode: OptionalChainingExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OptionalChainingExprSyntax`.
@@ -5277,12 +5391,12 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5291,12 +5405,12 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5316,7 +5430,9 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
     var exclamationMark: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ForcedValueExprSyntax)
   }
   private var data: Data
@@ -5330,7 +5446,7 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
     assert(exclamationMark.text == #"!"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndExclamationMark: unexpectedBetweenExpressionAndExclamationMark?.createUnexpectedNodes(), exclamationMark: exclamationMark))
   }
-  public init(_ constructedNode: ForcedValueExprSyntax) {
+  public init (_ constructedNode: ForcedValueExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ForcedValueExprSyntax`.
@@ -5372,12 +5488,12 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5386,12 +5502,12 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5411,7 +5527,9 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
     var operatorToken: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PostfixUnaryExprSyntax)
   }
   private var data: Data
@@ -5430,7 +5548,7 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndOperatorToken: unexpectedBetweenExpressionAndOperatorToken, operatorToken: Token.`postfixOperator`(operatorToken))
   }
-  public init(_ constructedNode: PostfixUnaryExprSyntax) {
+  public init (_ constructedNode: PostfixUnaryExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PostfixUnaryExprSyntax`.
@@ -5472,12 +5590,12 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5486,12 +5604,12 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5511,7 +5629,9 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
     var genericArgumentClause: GenericArgumentClause
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SpecializeExprSyntax)
   }
   private var data: Data
@@ -5524,7 +5644,7 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndGenericArgumentClause: unexpectedBetweenExpressionAndGenericArgumentClause?.createUnexpectedNodes(), genericArgumentClause: genericArgumentClause.createGenericArgumentClause()))
   }
-  public init(_ constructedNode: SpecializeExprSyntax) {
+  public init (_ constructedNode: SpecializeExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SpecializeExprSyntax`.
@@ -5566,12 +5686,12 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5580,12 +5700,12 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5603,7 +5723,9 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
     var content: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(StringSegmentSyntax)
   }
   private var data: Data
@@ -5620,7 +5742,7 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeContent: ExpressibleAsUnexpectedNodes? = nil, content: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeContent: unexpectedBeforeContent, content: Token.`stringSegment`(content))
   }
-  public init(_ constructedNode: StringSegmentSyntax) {
+  public init (_ constructedNode: StringSegmentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `StringSegmentSyntax`.
@@ -5655,12 +5777,12 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5669,12 +5791,12 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5700,7 +5822,9 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ExpressionSegmentSyntax)
   }
   private var data: Data
@@ -5725,12 +5849,14 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndDelimiter: ExpressibleAsUnexpectedNodes? = nil, delimiter: String?, unexpectedBetweenDelimiterAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndExpressions: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenExpressionsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`stringInterpolationAnchor`, @TupleExprElementListBuilder expressionsBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndDelimiter: ExpressibleAsUnexpectedNodes? = nil, delimiter: String?, unexpectedBetweenDelimiterAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndExpressions: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenExpressionsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`stringInterpolationAnchor`, @TupleExprElementListBuilder expressionsBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter: unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter.map { Token.`rawStringDelimiter`($0) }, unexpectedBetweenDelimiterAndLeftParen: unexpectedBetweenDelimiterAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions: unexpectedBetweenLeftParenAndExpressions, expressions: expressionsBuilder(), unexpectedBetweenExpressionsAndRightParen: unexpectedBetweenExpressionsAndRightParen, rightParen: rightParen)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter: unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter.map { 
+      Token.`rawStringDelimiter`($0) 
+    }, unexpectedBetweenDelimiterAndLeftParen: unexpectedBetweenDelimiterAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions: unexpectedBetweenLeftParenAndExpressions, expressions: expressionsBuilder(), unexpectedBetweenExpressionsAndRightParen: unexpectedBetweenExpressionsAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: ExpressionSegmentSyntax) {
+  public init (_ constructedNode: ExpressionSegmentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ExpressionSegmentSyntax`.
@@ -5765,12 +5891,12 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5779,12 +5905,12 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5810,7 +5936,9 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
     var closeDelimiter: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(StringLiteralExprSyntax)
   }
   private var data: Data
@@ -5835,9 +5963,13 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeOpenDelimiter: ExpressibleAsUnexpectedNodes? = nil, openDelimiter: String?, unexpectedBetweenOpenDelimiterAndOpenQuote: ExpressibleAsUnexpectedNodes? = nil, openQuote: Token, unexpectedBetweenOpenQuoteAndSegments: ExpressibleAsUnexpectedNodes? = nil, segments: ExpressibleAsStringLiteralSegments, unexpectedBetweenSegmentsAndCloseQuote: ExpressibleAsUnexpectedNodes? = nil, closeQuote: Token, unexpectedBetweenCloseQuoteAndCloseDelimiter: ExpressibleAsUnexpectedNodes? = nil, closeDelimiter: String?) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOpenDelimiter: unexpectedBeforeOpenDelimiter, openDelimiter: openDelimiter.map { Token.`rawStringDelimiter`($0) }, unexpectedBetweenOpenDelimiterAndOpenQuote: unexpectedBetweenOpenDelimiterAndOpenQuote, openQuote: openQuote, unexpectedBetweenOpenQuoteAndSegments: unexpectedBetweenOpenQuoteAndSegments, segments: segments, unexpectedBetweenSegmentsAndCloseQuote: unexpectedBetweenSegmentsAndCloseQuote, closeQuote: closeQuote, unexpectedBetweenCloseQuoteAndCloseDelimiter: unexpectedBetweenCloseQuoteAndCloseDelimiter, closeDelimiter: closeDelimiter.map { Token.`rawStringDelimiter`($0) })
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOpenDelimiter: unexpectedBeforeOpenDelimiter, openDelimiter: openDelimiter.map { 
+      Token.`rawStringDelimiter`($0) 
+    }, unexpectedBetweenOpenDelimiterAndOpenQuote: unexpectedBetweenOpenDelimiterAndOpenQuote, openQuote: openQuote, unexpectedBetweenOpenQuoteAndSegments: unexpectedBetweenOpenQuoteAndSegments, segments: segments, unexpectedBetweenSegmentsAndCloseQuote: unexpectedBetweenSegmentsAndCloseQuote, closeQuote: closeQuote, unexpectedBetweenCloseQuoteAndCloseDelimiter: unexpectedBetweenCloseQuoteAndCloseDelimiter, closeDelimiter: closeDelimiter.map { 
+      Token.`rawStringDelimiter`($0) 
+    })
   }
-  public init(_ constructedNode: StringLiteralExprSyntax) {
+  public init (_ constructedNode: StringLiteralExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `StringLiteralExprSyntax`.
@@ -5879,12 +6011,12 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5893,12 +6025,12 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5916,7 +6048,9 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
     var regex: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(RegexLiteralExprSyntax)
   }
   private var data: Data
@@ -5933,7 +6067,7 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeRegex: ExpressibleAsUnexpectedNodes? = nil, regex: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeRegex: unexpectedBeforeRegex, regex: Token.`regexLiteral`(regex))
   }
-  public init(_ constructedNode: RegexLiteralExprSyntax) {
+  public init (_ constructedNode: RegexLiteralExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `RegexLiteralExprSyntax`.
@@ -5975,12 +6109,12 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -5989,12 +6123,12 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6016,7 +6150,9 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
     var components: KeyPathComponentList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(KeyPathExprSyntax)
   }
   private var data: Data
@@ -6032,7 +6168,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
     assert(backslash.text == #"\"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash?.createUnexpectedNodes(), backslash: backslash, unexpectedBetweenBackslashAndRoot: unexpectedBetweenBackslashAndRoot?.createUnexpectedNodes(), root: root?.createTypeBuildable(), unexpectedBetweenRootAndComponents: unexpectedBetweenRootAndComponents?.createUnexpectedNodes(), components: components.createKeyPathComponentList()))
   }
-  public init(_ constructedNode: KeyPathExprSyntax) {
+  public init (_ constructedNode: KeyPathExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `KeyPathExprSyntax`.
@@ -6074,12 +6210,12 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6088,12 +6224,12 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6113,7 +6249,9 @@ public struct KeyPathComponent: SyntaxBuildable, ExpressibleAsKeyPathComponent {
     var component: SyntaxBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(KeyPathComponentSyntax)
   }
   private var data: Data
@@ -6127,7 +6265,7 @@ public struct KeyPathComponent: SyntaxBuildable, ExpressibleAsKeyPathComponent {
     assert(period == nil || period!.text == #"."# || period!.text == #"."#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePeriod: unexpectedBeforePeriod?.createUnexpectedNodes(), period: period, unexpectedBetweenPeriodAndComponent: unexpectedBetweenPeriodAndComponent?.createUnexpectedNodes(), component: component.createSyntaxBuildable()))
   }
-  public init(_ constructedNode: KeyPathComponentSyntax) {
+  public init (_ constructedNode: KeyPathComponentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `KeyPathComponentSyntax`.
@@ -6162,12 +6300,12 @@ public struct KeyPathComponent: SyntaxBuildable, ExpressibleAsKeyPathComponent {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6176,12 +6314,12 @@ public struct KeyPathComponent: SyntaxBuildable, ExpressibleAsKeyPathComponent {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6203,7 +6341,9 @@ public struct KeyPathPropertyComponent: SyntaxBuildable, ExpressibleAsKeyPathPro
     var genericArgumentClause: GenericArgumentClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(KeyPathPropertyComponentSyntax)
   }
   private var data: Data
@@ -6218,7 +6358,7 @@ public struct KeyPathPropertyComponent: SyntaxBuildable, ExpressibleAsKeyPathPro
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil, unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier?.createUnexpectedNodes(), identifier: identifier, unexpectedBetweenIdentifierAndDeclNameArguments: unexpectedBetweenIdentifierAndDeclNameArguments?.createUnexpectedNodes(), declNameArguments: declNameArguments?.createDeclNameArguments(), unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause?.createUnexpectedNodes(), genericArgumentClause: genericArgumentClause?.createGenericArgumentClause()))
   }
-  public init(_ constructedNode: KeyPathPropertyComponentSyntax) {
+  public init (_ constructedNode: KeyPathPropertyComponentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `KeyPathPropertyComponentSyntax`.
@@ -6253,12 +6393,12 @@ public struct KeyPathPropertyComponent: SyntaxBuildable, ExpressibleAsKeyPathPro
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6267,12 +6407,12 @@ public struct KeyPathPropertyComponent: SyntaxBuildable, ExpressibleAsKeyPathPro
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6294,7 +6434,9 @@ public struct KeyPathSubscriptComponent: SyntaxBuildable, ExpressibleAsKeyPathSu
     var rightBracket: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(KeyPathSubscriptComponentSyntax)
   }
   private var data: Data
@@ -6314,12 +6456,12 @@ public struct KeyPathSubscriptComponent: SyntaxBuildable, ExpressibleAsKeyPathSu
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBracket: unexpectedBeforeLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList: unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket: unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket)
   }
-  public init(_ constructedNode: KeyPathSubscriptComponentSyntax) {
+  public init (_ constructedNode: KeyPathSubscriptComponentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `KeyPathSubscriptComponentSyntax`.
@@ -6354,12 +6496,12 @@ public struct KeyPathSubscriptComponent: SyntaxBuildable, ExpressibleAsKeyPathSu
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6368,12 +6510,12 @@ public struct KeyPathSubscriptComponent: SyntaxBuildable, ExpressibleAsKeyPathSu
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6391,7 +6533,9 @@ public struct KeyPathOptionalComponent: SyntaxBuildable, ExpressibleAsKeyPathOpt
     var questionOrExclamationMark: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(KeyPathOptionalComponentSyntax)
   }
   private var data: Data
@@ -6403,7 +6547,7 @@ public struct KeyPathOptionalComponent: SyntaxBuildable, ExpressibleAsKeyPathOpt
     assert(questionOrExclamationMark.text == #"?"# || questionOrExclamationMark.text == #"!"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeQuestionOrExclamationMark: unexpectedBeforeQuestionOrExclamationMark?.createUnexpectedNodes(), questionOrExclamationMark: questionOrExclamationMark))
   }
-  public init(_ constructedNode: KeyPathOptionalComponentSyntax) {
+  public init (_ constructedNode: KeyPathOptionalComponentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `KeyPathOptionalComponentSyntax`.
@@ -6438,12 +6582,12 @@ public struct KeyPathOptionalComponent: SyntaxBuildable, ExpressibleAsKeyPathOpt
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6452,12 +6596,12 @@ public struct KeyPathOptionalComponent: SyntaxBuildable, ExpressibleAsKeyPathOpt
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6479,7 +6623,9 @@ public struct OldKeyPathExpr: ExprBuildable, ExpressibleAsOldKeyPathExpr {
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OldKeyPathExprSyntax)
   }
   private var data: Data
@@ -6495,7 +6641,7 @@ public struct OldKeyPathExpr: ExprBuildable, ExpressibleAsOldKeyPathExpr {
     assert(backslash.text == #"\"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash?.createUnexpectedNodes(), backslash: backslash, unexpectedBetweenBackslashAndRootExpr: unexpectedBetweenBackslashAndRootExpr?.createUnexpectedNodes(), rootExpr: rootExpr?.createExprBuildable(), unexpectedBetweenRootExprAndExpression: unexpectedBetweenRootExprAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
   }
-  public init(_ constructedNode: OldKeyPathExprSyntax) {
+  public init (_ constructedNode: OldKeyPathExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OldKeyPathExprSyntax`.
@@ -6537,12 +6683,12 @@ public struct OldKeyPathExpr: ExprBuildable, ExpressibleAsOldKeyPathExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6551,12 +6697,12 @@ public struct OldKeyPathExpr: ExprBuildable, ExpressibleAsOldKeyPathExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6574,7 +6720,9 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
     var period: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(KeyPathBaseExprSyntax)
   }
   private var data: Data
@@ -6586,7 +6734,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
     assert(period.text == #"."#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePeriod: unexpectedBeforePeriod?.createUnexpectedNodes(), period: period))
   }
-  public init(_ constructedNode: KeyPathBaseExprSyntax) {
+  public init (_ constructedNode: KeyPathBaseExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `KeyPathBaseExprSyntax`.
@@ -6628,12 +6776,12 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6642,12 +6790,12 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6667,7 +6815,9 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
     var dot: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ObjcNamePieceSyntax)
   }
   private var data: Data
@@ -6687,7 +6837,7 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndDot: unexpectedBetweenNameAndDot, dot: dot)
   }
-  public init(_ constructedNode: ObjcNamePieceSyntax) {
+  public init (_ constructedNode: ObjcNamePieceSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ObjcNamePieceSyntax`.
@@ -6722,12 +6872,12 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6736,12 +6886,12 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6765,7 +6915,9 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ObjcKeyPathExprSyntax)
   }
   private var data: Data
@@ -6785,7 +6937,7 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeKeyPath: unexpectedBeforeKeyPath?.createUnexpectedNodes(), keyPath: keyPath, unexpectedBetweenKeyPathAndLeftParen: unexpectedBetweenKeyPathAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndName: unexpectedBetweenLeftParenAndName?.createUnexpectedNodes(), name: name.createObjcName(), unexpectedBetweenNameAndRightParen: unexpectedBetweenNameAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: ObjcKeyPathExprSyntax) {
+  public init (_ constructedNode: ObjcKeyPathExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ObjcKeyPathExprSyntax`.
@@ -6827,12 +6979,12 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6841,12 +6993,12 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6874,7 +7026,9 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ObjcSelectorExprSyntax)
   }
   private var data: Data
@@ -6904,9 +7058,11 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforePoundSelector: ExpressibleAsUnexpectedNodes? = nil, poundSelector: Token = Token.`poundSelector`, unexpectedBetweenPoundSelectorAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndKind: ExpressibleAsUnexpectedNodes? = nil, kind: String?, unexpectedBetweenKindAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsExprBuildable, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundSelector: unexpectedBeforePoundSelector, poundSelector: poundSelector, unexpectedBetweenPoundSelectorAndLeftParen: unexpectedBetweenPoundSelectorAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndKind: unexpectedBetweenLeftParenAndKind, kind: kind.map { Token.`contextualKeyword`($0) }, unexpectedBetweenKindAndColon: unexpectedBetweenKindAndColon, colon: colon, unexpectedBetweenColonAndName: unexpectedBetweenColonAndName, name: name, unexpectedBetweenNameAndRightParen: unexpectedBetweenNameAndRightParen, rightParen: rightParen)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundSelector: unexpectedBeforePoundSelector, poundSelector: poundSelector, unexpectedBetweenPoundSelectorAndLeftParen: unexpectedBetweenPoundSelectorAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndKind: unexpectedBetweenLeftParenAndKind, kind: kind.map { 
+      Token.`contextualKeyword`($0) 
+    }, unexpectedBetweenKindAndColon: unexpectedBetweenKindAndColon, colon: colon, unexpectedBetweenColonAndName: unexpectedBetweenColonAndName, name: name, unexpectedBetweenNameAndRightParen: unexpectedBetweenNameAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: ObjcSelectorExprSyntax) {
+  public init (_ constructedNode: ObjcSelectorExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ObjcSelectorExprSyntax`.
@@ -6948,12 +7104,12 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6962,12 +7118,12 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -6997,7 +7153,9 @@ public struct MacroExpansionExpr: ExprBuildable, ExpressibleAsMacroExpansionExpr
     var additionalTrailingClosures: MultipleTrailingClosureElementList?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MacroExpansionExprSyntax)
   }
   private var data: Data
@@ -7026,12 +7184,12 @@ public struct MacroExpansionExpr: ExprBuildable, ExpressibleAsMacroExpansionExpr
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: ExpressibleAsUnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: ExpressibleAsUnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: ExpressibleAsUnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: ExpressibleAsUnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundToken: unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro: unexpectedBetweenPoundTokenAndMacro, macro: Token.`identifier`(macro), unexpectedBetweenMacroAndLeftParen: unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList: unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen: unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure: unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
   }
-  public init(_ constructedNode: MacroExpansionExprSyntax) {
+  public init (_ constructedNode: MacroExpansionExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MacroExpansionExprSyntax`.
@@ -7073,12 +7231,12 @@ public struct MacroExpansionExpr: ExprBuildable, ExpressibleAsMacroExpansionExpr
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7087,12 +7245,12 @@ public struct MacroExpansionExpr: ExprBuildable, ExpressibleAsMacroExpansionExpr
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7112,7 +7270,9 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
     var config: IfConfigDecl
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PostfixIfConfigExprSyntax)
   }
   private var data: Data
@@ -7125,7 +7285,7 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeBase: ExpressibleAsUnexpectedNodes? = nil, base: ExpressibleAsExprBuildable? = nil, unexpectedBetweenBaseAndConfig: ExpressibleAsUnexpectedNodes? = nil, config: ExpressibleAsIfConfigDecl) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBase: unexpectedBeforeBase?.createUnexpectedNodes(), base: base?.createExprBuildable(), unexpectedBetweenBaseAndConfig: unexpectedBetweenBaseAndConfig?.createUnexpectedNodes(), config: config.createIfConfigDecl()))
   }
-  public init(_ constructedNode: PostfixIfConfigExprSyntax) {
+  public init (_ constructedNode: PostfixIfConfigExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PostfixIfConfigExprSyntax`.
@@ -7167,12 +7327,12 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7181,12 +7341,12 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7204,7 +7364,9 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
     var identifier: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(EditorPlaceholderExprSyntax)
   }
   private var data: Data
@@ -7221,7 +7383,7 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: Token.`identifier`(identifier))
   }
-  public init(_ constructedNode: EditorPlaceholderExprSyntax) {
+  public init (_ constructedNode: EditorPlaceholderExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `EditorPlaceholderExprSyntax`.
@@ -7263,12 +7425,12 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7277,12 +7439,12 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7306,7 +7468,9 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ObjectLiteralExprSyntax)
   }
   private var data: Data
@@ -7329,12 +7493,12 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder argumentsBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder argumentsBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndLeftParen: unexpectedBetweenIdentifierAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments: unexpectedBetweenLeftParenAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightParen: unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: ObjectLiteralExprSyntax) {
+  public init (_ constructedNode: ObjectLiteralExprSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ObjectLiteralExprSyntax`.
@@ -7376,12 +7540,12 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7390,12 +7554,12 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7415,7 +7579,9 @@ public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListE
     var comma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(YieldExprListElementSyntax)
   }
   private var data: Data
@@ -7429,7 +7595,7 @@ public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListE
     assert(comma == nil || comma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndComma: unexpectedBetweenExpressionAndComma?.createUnexpectedNodes(), comma: comma))
   }
-  public init(_ constructedNode: YieldExprListElementSyntax) {
+  public init (_ constructedNode: YieldExprListElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `YieldExprListElementSyntax`.
@@ -7464,12 +7630,12 @@ public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListE
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7478,12 +7644,12 @@ public struct YieldExprListElement: SyntaxBuildable, ExpressibleAsYieldExprListE
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7503,7 +7669,9 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
     var value: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TypeInitializerClauseSyntax)
   }
   private var data: Data
@@ -7517,7 +7685,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
     assert(equal.text == #"="#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeEqual: unexpectedBeforeEqual?.createUnexpectedNodes(), equal: equal, unexpectedBetweenEqualAndValue: unexpectedBetweenEqualAndValue?.createUnexpectedNodes(), value: value.createTypeBuildable()))
   }
-  public init(_ constructedNode: TypeInitializerClauseSyntax) {
+  public init (_ constructedNode: TypeInitializerClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TypeInitializerClauseSyntax`.
@@ -7552,12 +7720,12 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7566,12 +7734,12 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7601,7 +7769,9 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
     var genericWhereClause: GenericWhereClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TypealiasDeclSyntax)
   }
   private var data: Data
@@ -7631,7 +7801,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: ExpressibleAsUnexpectedNodes? = nil, typealiasKeyword: Token = Token.`typealias`, unexpectedBetweenTypealiasKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndTypealiasKeyword: unexpectedBetweenModifiersAndTypealiasKeyword, typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier: unexpectedBetweenTypealiasKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInitializer: unexpectedBetweenGenericParameterClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause: unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause)
   }
-  public init(_ constructedNode: TypealiasDeclSyntax) {
+  public init (_ constructedNode: TypealiasDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TypealiasDeclSyntax`.
@@ -7673,12 +7843,12 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7687,12 +7857,12 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7722,7 +7892,9 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
     var genericWhereClause: GenericWhereClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AssociatedtypeDeclSyntax)
   }
   private var data: Data
@@ -7752,7 +7924,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndAssociatedtypeKeyword: ExpressibleAsUnexpectedNodes? = nil, associatedtypeKeyword: Token = Token.`associatedtype`, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause? = nil, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndAssociatedtypeKeyword: unexpectedBetweenModifiersAndAssociatedtypeKeyword, associatedtypeKeyword: associatedtypeKeyword, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: unexpectedBetweenAssociatedtypeKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndInheritanceClause: unexpectedBetweenIdentifierAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndInitializer: unexpectedBetweenInheritanceClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause: unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause)
   }
-  public init(_ constructedNode: AssociatedtypeDeclSyntax) {
+  public init (_ constructedNode: AssociatedtypeDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AssociatedtypeDeclSyntax`.
@@ -7794,12 +7966,12 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7808,12 +7980,12 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7835,7 +8007,9 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ParameterClauseSyntax)
   }
   private var data: Data
@@ -7855,12 +8029,12 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenParameterListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @FunctionParameterListBuilder parameterListBuilder: () -> ExpressibleAsFunctionParameterList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenParameterListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @FunctionParameterListBuilder parameterListBuilder: () -> ExpressibleAsFunctionParameterList = {
     FunctionParameterList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList: unexpectedBetweenLeftParenAndParameterList, parameterList: parameterListBuilder(), unexpectedBetweenParameterListAndRightParen: unexpectedBetweenParameterListAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: ParameterClauseSyntax) {
+  public init (_ constructedNode: ParameterClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ParameterClauseSyntax`.
@@ -7895,12 +8069,12 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7909,12 +8083,12 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7934,7 +8108,9 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
     var returnType: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ReturnClauseSyntax)
   }
   private var data: Data
@@ -7948,7 +8124,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
     assert(arrow.text == #"->"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeArrow: unexpectedBeforeArrow?.createUnexpectedNodes(), arrow: arrow, unexpectedBetweenArrowAndReturnType: unexpectedBetweenArrowAndReturnType?.createUnexpectedNodes(), returnType: returnType.createTypeBuildable()))
   }
-  public init(_ constructedNode: ReturnClauseSyntax) {
+  public init (_ constructedNode: ReturnClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ReturnClauseSyntax`.
@@ -7983,12 +8159,12 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -7997,12 +8173,12 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8026,7 +8202,9 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
     var output: ReturnClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FunctionSignatureSyntax)
   }
   private var data: Data
@@ -8049,9 +8227,11 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsParameterClause, unexpectedBetweenInputAndAsyncOrReasyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncOrReasyncKeyword: String?, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsOrRethrowsKeyword: Token? = nil, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeInput: unexpectedBeforeInput, input: input, unexpectedBetweenInputAndAsyncOrReasyncKeyword: unexpectedBetweenInputAndAsyncOrReasyncKeyword, asyncOrReasyncKeyword: asyncOrReasyncKeyword.map { Token.`contextualKeyword`($0) }, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword, throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: unexpectedBetweenThrowsOrRethrowsKeywordAndOutput, output: output)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeInput: unexpectedBeforeInput, input: input, unexpectedBetweenInputAndAsyncOrReasyncKeyword: unexpectedBetweenInputAndAsyncOrReasyncKeyword, asyncOrReasyncKeyword: asyncOrReasyncKeyword.map { 
+      Token.`contextualKeyword`($0) 
+    }, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword, throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: unexpectedBetweenThrowsOrRethrowsKeywordAndOutput, output: output)
   }
-  public init(_ constructedNode: FunctionSignatureSyntax) {
+  public init (_ constructedNode: FunctionSignatureSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FunctionSignatureSyntax`.
@@ -8086,12 +8266,12 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8100,12 +8280,12 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8127,7 +8307,9 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
     var elements: SyntaxBuildable?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IfConfigClauseSyntax)
   }
   private var data: Data
@@ -8143,7 +8325,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
     assert(poundKeyword.text == #"#if"# || poundKeyword.text == #"#elseif"# || poundKeyword.text == #"#else"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundKeyword: unexpectedBeforePoundKeyword?.createUnexpectedNodes(), poundKeyword: poundKeyword, unexpectedBetweenPoundKeywordAndCondition: unexpectedBetweenPoundKeywordAndCondition?.createUnexpectedNodes(), condition: condition?.createExprBuildable(), unexpectedBetweenConditionAndElements: unexpectedBetweenConditionAndElements?.createUnexpectedNodes(), elements: elements?.createSyntaxBuildable()))
   }
-  public init(_ constructedNode: IfConfigClauseSyntax) {
+  public init (_ constructedNode: IfConfigClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IfConfigClauseSyntax`.
@@ -8178,12 +8360,12 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8192,12 +8374,12 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8217,7 +8399,9 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
     var poundEndif: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IfConfigDeclSyntax)
   }
   private var data: Data
@@ -8231,7 +8415,7 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
     assert(poundEndif.text == #"#endif"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeClauses: unexpectedBeforeClauses?.createUnexpectedNodes(), clauses: clauses.createIfConfigClauseList(), unexpectedBetweenClausesAndPoundEndif: unexpectedBetweenClausesAndPoundEndif?.createUnexpectedNodes(), poundEndif: poundEndif))
   }
-  public init(_ constructedNode: IfConfigDeclSyntax) {
+  public init (_ constructedNode: IfConfigDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IfConfigDeclSyntax`.
@@ -8273,12 +8457,12 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8287,12 +8471,12 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8316,7 +8500,9 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundErrorDeclSyntax)
   }
   private var data: Data
@@ -8336,7 +8522,7 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundError: unexpectedBeforePoundError?.createUnexpectedNodes(), poundError: poundError, unexpectedBetweenPoundErrorAndLeftParen: unexpectedBetweenPoundErrorAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndMessage: unexpectedBetweenLeftParenAndMessage?.createUnexpectedNodes(), message: message.createStringLiteralExpr(), unexpectedBetweenMessageAndRightParen: unexpectedBetweenMessageAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: PoundErrorDeclSyntax) {
+  public init (_ constructedNode: PoundErrorDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundErrorDeclSyntax`.
@@ -8378,12 +8564,12 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8392,12 +8578,12 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8421,7 +8607,9 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundWarningDeclSyntax)
   }
   private var data: Data
@@ -8441,7 +8629,7 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundWarning: unexpectedBeforePoundWarning?.createUnexpectedNodes(), poundWarning: poundWarning, unexpectedBetweenPoundWarningAndLeftParen: unexpectedBetweenPoundWarningAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndMessage: unexpectedBetweenLeftParenAndMessage?.createUnexpectedNodes(), message: message.createStringLiteralExpr(), unexpectedBetweenMessageAndRightParen: unexpectedBetweenMessageAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: PoundWarningDeclSyntax) {
+  public init (_ constructedNode: PoundWarningDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundWarningDeclSyntax`.
@@ -8483,12 +8671,12 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8497,12 +8685,12 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8526,7 +8714,9 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundSourceLocationSyntax)
   }
   private var data: Data
@@ -8546,7 +8736,7 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundSourceLocation: unexpectedBeforePoundSourceLocation?.createUnexpectedNodes(), poundSourceLocation: poundSourceLocation, unexpectedBetweenPoundSourceLocationAndLeftParen: unexpectedBetweenPoundSourceLocationAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndArgs: unexpectedBetweenLeftParenAndArgs?.createUnexpectedNodes(), args: args?.createPoundSourceLocationArgs(), unexpectedBetweenArgsAndRightParen: unexpectedBetweenArgsAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: PoundSourceLocationSyntax) {
+  public init (_ constructedNode: PoundSourceLocationSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundSourceLocationSyntax`.
@@ -8588,12 +8778,12 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8602,12 +8792,12 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8637,7 +8827,9 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
     var lineNumber: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundSourceLocationArgsSyntax)
   }
   private var data: Data
@@ -8671,7 +8863,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   public init (leadingTrivia: Trivia = [], unexpectedBeforeFileArgLabel: ExpressibleAsUnexpectedNodes? = nil, fileArgLabel: String, unexpectedBetweenFileArgLabelAndFileArgColon: ExpressibleAsUnexpectedNodes? = nil, fileArgColon: Token = Token.`colon`, unexpectedBetweenFileArgColonAndFileName: ExpressibleAsUnexpectedNodes? = nil, fileName: String, unexpectedBetweenFileNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndLineArgLabel: ExpressibleAsUnexpectedNodes? = nil, lineArgLabel: String, unexpectedBetweenLineArgLabelAndLineArgColon: ExpressibleAsUnexpectedNodes? = nil, lineArgColon: Token = Token.`colon`, unexpectedBetweenLineArgColonAndLineNumber: ExpressibleAsUnexpectedNodes? = nil, lineNumber: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeFileArgLabel: unexpectedBeforeFileArgLabel, fileArgLabel: Token.`identifier`(fileArgLabel), unexpectedBetweenFileArgLabelAndFileArgColon: unexpectedBetweenFileArgLabelAndFileArgColon, fileArgColon: fileArgColon, unexpectedBetweenFileArgColonAndFileName: unexpectedBetweenFileArgColonAndFileName, fileName: Token.`stringLiteral`(fileName), unexpectedBetweenFileNameAndComma: unexpectedBetweenFileNameAndComma, comma: comma, unexpectedBetweenCommaAndLineArgLabel: unexpectedBetweenCommaAndLineArgLabel, lineArgLabel: Token.`identifier`(lineArgLabel), unexpectedBetweenLineArgLabelAndLineArgColon: unexpectedBetweenLineArgLabelAndLineArgColon, lineArgColon: lineArgColon, unexpectedBetweenLineArgColonAndLineNumber: unexpectedBetweenLineArgColonAndLineNumber, lineNumber: Token.`integerLiteral`(lineNumber))
   }
-  public init(_ constructedNode: PoundSourceLocationArgsSyntax) {
+  public init (_ constructedNode: PoundSourceLocationArgsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundSourceLocationArgsSyntax`.
@@ -8706,12 +8898,12 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8720,12 +8912,12 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8747,7 +8939,9 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeclModifierDetailSyntax)
   }
   private var data: Data
@@ -8770,7 +8964,7 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndDetail: ExpressibleAsUnexpectedNodes? = nil, detail: String, unexpectedBetweenDetailAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndDetail: unexpectedBetweenLeftParenAndDetail, detail: Token.`identifier`(detail), unexpectedBetweenDetailAndRightParen: unexpectedBetweenDetailAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: DeclModifierDetailSyntax) {
+  public init (_ constructedNode: DeclModifierDetailSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeclModifierDetailSyntax`.
@@ -8805,12 +8999,12 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8819,12 +9013,12 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8844,7 +9038,9 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
     var detail: DeclModifierDetail?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeclModifierSyntax)
   }
   private var data: Data
@@ -8858,7 +9054,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
     assert(name.text == #"class"# || name.text == #"convenience"# || name.text == #"dynamic"# || name.text == #"final"# || name.text == #"infix"# || name.text == #"lazy"# || name.text == #"optional"# || name.text == #"override"# || name.text == #"postfix"# || name.text == #"prefix"# || name.text == #"required"# || name.text == #"static"# || name.text == #"unowned"# || name.text == #"weak"# || name.text == #"private"# || name.text == #"fileprivate"# || name.text == #"internal"# || name.text == #"public"# || name.text == #"open"# || name.text == #"mutating"# || name.text == #"nonmutating"# || name.text == #"indirect"# || name.text == #"__consuming"# || name.text == #"actor"# || name.text == #"async"# || name.text == #"distributed"# || name.text == #"isolated"# || name.text == #"nonisolated"# || name.text == #"_const"# || name.text == #"_local"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeName: unexpectedBeforeName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndDetail: unexpectedBetweenNameAndDetail?.createUnexpectedNodes(), detail: detail?.createDeclModifierDetail()))
   }
-  public init(_ constructedNode: DeclModifierSyntax) {
+  public init (_ constructedNode: DeclModifierSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeclModifierSyntax`.
@@ -8893,12 +9089,12 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8907,12 +9103,12 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -8932,15 +9128,17 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(InheritedTypeSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -8954,7 +9152,7 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeTypeName: unexpectedBeforeTypeName?.createUnexpectedNodes(), typeName: typeName.createTypeBuildable(), unexpectedBetweenTypeNameAndTrailingComma: unexpectedBetweenTypeNameAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: InheritedTypeSyntax) {
+  public init (_ constructedNode: InheritedTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `InheritedTypeSyntax`.
@@ -8990,12 +9188,12 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -9004,12 +9202,12 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9018,12 +9216,12 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9043,7 +9241,9 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
     var inheritedTypeCollection: InheritedTypeList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TypeInheritanceClauseSyntax)
   }
   private var data: Data
@@ -9060,12 +9260,12 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndInheritedTypeCollection: ExpressibleAsUnexpectedNodes? = nil, @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> ExpressibleAsInheritedTypeList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndInheritedTypeCollection: ExpressibleAsUnexpectedNodes? = nil, @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> ExpressibleAsInheritedTypeList = {
     InheritedTypeList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeColon: unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndInheritedTypeCollection: unexpectedBetweenColonAndInheritedTypeCollection, inheritedTypeCollection: inheritedTypeCollectionBuilder())
   }
-  public init(_ constructedNode: TypeInheritanceClauseSyntax) {
+  public init (_ constructedNode: TypeInheritanceClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TypeInheritanceClauseSyntax`.
@@ -9100,12 +9300,12 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9114,12 +9314,12 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9151,7 +9351,9 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     var members: MemberDeclBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ClassDeclSyntax)
   }
   private var data: Data
@@ -9180,12 +9382,12 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: Token = Token.`class`, unexpectedBetweenClassKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: Token = Token.`class`, unexpectedBetweenClassKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndClassKeyword: unexpectedBetweenModifiersAndClassKeyword, classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier: unexpectedBetweenClassKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
-  public init(_ constructedNode: ClassDeclSyntax) {
+  public init (_ constructedNode: ClassDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ClassDeclSyntax`.
@@ -9227,12 +9429,12 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9241,12 +9443,12 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9278,7 +9480,9 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
     var members: MemberDeclBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ActorDeclSyntax)
   }
   private var data: Data
@@ -9307,12 +9511,12 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndActorKeyword: ExpressibleAsUnexpectedNodes? = nil, actorKeyword: String, unexpectedBetweenActorKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndActorKeyword: ExpressibleAsUnexpectedNodes? = nil, actorKeyword: String, unexpectedBetweenActorKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndActorKeyword: unexpectedBetweenModifiersAndActorKeyword, actorKeyword: Token.`contextualKeyword`(actorKeyword), unexpectedBetweenActorKeywordAndIdentifier: unexpectedBetweenActorKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
-  public init(_ constructedNode: ActorDeclSyntax) {
+  public init (_ constructedNode: ActorDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ActorDeclSyntax`.
@@ -9354,12 +9558,12 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9368,12 +9572,12 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9405,7 +9609,9 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
     var members: MemberDeclBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(StructDeclSyntax)
   }
   private var data: Data
@@ -9434,12 +9640,12 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndStructKeyword: ExpressibleAsUnexpectedNodes? = nil, structKeyword: Token = Token.`struct`, unexpectedBetweenStructKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndStructKeyword: ExpressibleAsUnexpectedNodes? = nil, structKeyword: Token = Token.`struct`, unexpectedBetweenStructKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndStructKeyword: unexpectedBetweenModifiersAndStructKeyword, structKeyword: structKeyword, unexpectedBetweenStructKeywordAndIdentifier: unexpectedBetweenStructKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
-  public init(_ constructedNode: StructDeclSyntax) {
+  public init (_ constructedNode: StructDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `StructDeclSyntax`.
@@ -9481,12 +9687,12 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9495,12 +9701,12 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9532,7 +9738,9 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     var members: MemberDeclBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ProtocolDeclSyntax)
   }
   private var data: Data
@@ -9561,12 +9769,12 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndProtocolKeyword: ExpressibleAsUnexpectedNodes? = nil, protocolKeyword: Token = Token.`protocol`, unexpectedBetweenProtocolKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndProtocolKeyword: ExpressibleAsUnexpectedNodes? = nil, protocolKeyword: Token = Token.`protocol`, unexpectedBetweenProtocolKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndProtocolKeyword: unexpectedBetweenModifiersAndProtocolKeyword, protocolKeyword: protocolKeyword, unexpectedBetweenProtocolKeywordAndIdentifier: unexpectedBetweenProtocolKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, primaryAssociatedTypeClause: primaryAssociatedTypeClause, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
-  public init(_ constructedNode: ProtocolDeclSyntax) {
+  public init (_ constructedNode: ProtocolDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ProtocolDeclSyntax`.
@@ -9608,12 +9816,12 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9622,12 +9830,12 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9657,7 +9865,9 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
     var members: MemberDeclBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ExtensionDeclSyntax)
   }
   private var data: Data
@@ -9684,12 +9894,12 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndExtensionKeyword: ExpressibleAsUnexpectedNodes? = nil, extensionKeyword: Token = Token.`extension`, unexpectedBetweenExtensionKeywordAndExtendedType: ExpressibleAsUnexpectedNodes? = nil, extendedType: ExpressibleAsTypeBuildable, unexpectedBetweenExtendedTypeAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndExtensionKeyword: ExpressibleAsUnexpectedNodes? = nil, extensionKeyword: Token = Token.`extension`, unexpectedBetweenExtensionKeywordAndExtendedType: ExpressibleAsUnexpectedNodes? = nil, extendedType: ExpressibleAsTypeBuildable, unexpectedBetweenExtendedTypeAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndExtensionKeyword: unexpectedBetweenModifiersAndExtensionKeyword, extensionKeyword: extensionKeyword, unexpectedBetweenExtensionKeywordAndExtendedType: unexpectedBetweenExtensionKeywordAndExtendedType, extendedType: extendedType, unexpectedBetweenExtendedTypeAndInheritanceClause: unexpectedBetweenExtendedTypeAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
-  public init(_ constructedNode: ExtensionDeclSyntax) {
+  public init (_ constructedNode: ExtensionDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ExtensionDeclSyntax`.
@@ -9731,12 +9941,12 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9745,12 +9955,12 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9772,7 +9982,9 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
     var rightBrace: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MemberDeclBlockSyntax)
   }
   private var data: Data
@@ -9792,12 +10004,12 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndMembers: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenMembersAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndMembers: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenMembersAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace: unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndMembers: unexpectedBetweenLeftBraceAndMembers, members: membersBuilder(), unexpectedBetweenMembersAndRightBrace: unexpectedBetweenMembersAndRightBrace, rightBrace: rightBrace)
   }
-  public init(_ constructedNode: MemberDeclBlockSyntax) {
+  public init (_ constructedNode: MemberDeclBlockSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MemberDeclBlockSyntax`.
@@ -9832,12 +10044,12 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9846,12 +10058,12 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9872,7 +10084,9 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
     var semicolon: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MemberDeclListItemSyntax)
   }
   private var data: Data
@@ -9886,7 +10100,7 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
     assert(semicolon == nil || semicolon!.text == #";"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeDecl: unexpectedBeforeDecl?.createUnexpectedNodes(), decl: decl.createDeclBuildable(), unexpectedBetweenDeclAndSemicolon: unexpectedBetweenDeclAndSemicolon?.createUnexpectedNodes(), semicolon: semicolon))
   }
-  public init(_ constructedNode: MemberDeclListItemSyntax) {
+  public init (_ constructedNode: MemberDeclListItemSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MemberDeclListItemSyntax`.
@@ -9921,12 +10135,12 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9935,12 +10149,12 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -9960,7 +10174,9 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
     var eofToken: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SourceFileSyntax)
   }
   private var data: Data
@@ -9976,12 +10192,12 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndEOFToken: ExpressibleAsUnexpectedNodes? = nil, eofToken: Token = Token.eof, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndEOFToken: ExpressibleAsUnexpectedNodes? = nil, eofToken: Token = Token.eof, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeStatements: unexpectedBeforeStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndEOFToken: unexpectedBetweenStatementsAndEOFToken, eofToken: eofToken)
   }
-  public init(_ constructedNode: SourceFileSyntax) {
+  public init (_ constructedNode: SourceFileSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SourceFileSyntax`.
@@ -10016,12 +10232,12 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10030,12 +10246,12 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10055,7 +10271,9 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
     var value: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(InitializerClauseSyntax)
   }
   private var data: Data
@@ -10069,7 +10287,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
     assert(equal.text == #"="#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeEqual: unexpectedBeforeEqual?.createUnexpectedNodes(), equal: equal, unexpectedBetweenEqualAndValue: unexpectedBetweenEqualAndValue?.createUnexpectedNodes(), value: value.createExprBuildable()))
   }
-  public init(_ constructedNode: InitializerClauseSyntax) {
+  public init (_ constructedNode: InitializerClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `InitializerClauseSyntax`.
@@ -10104,12 +10322,12 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10118,12 +10336,12 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10157,15 +10375,17 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FunctionParameterSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -10195,7 +10415,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes?.createUnexpectedNodes(), attributes: attributes?.createAttributeList(), unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers?.createUnexpectedNodes(), modifiers: modifiers?.createModifierList(), unexpectedBetweenModifiersAndFirstName: unexpectedBetweenModifiersAndFirstName?.createUnexpectedNodes(), firstName: firstName, unexpectedBetweenFirstNameAndSecondName: unexpectedBetweenFirstNameAndSecondName?.createUnexpectedNodes(), secondName: secondName, unexpectedBetweenSecondNameAndColon: unexpectedBetweenSecondNameAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndType: unexpectedBetweenColonAndType?.createUnexpectedNodes(), type: type?.createTypeBuildable(), unexpectedBetweenTypeAndEllipsis: unexpectedBetweenTypeAndEllipsis?.createUnexpectedNodes(), ellipsis: ellipsis, unexpectedBetweenEllipsisAndDefaultArgument: unexpectedBetweenEllipsisAndDefaultArgument?.createUnexpectedNodes(), defaultArgument: defaultArgument?.createInitializerClause(), unexpectedBetweenDefaultArgumentAndTrailingComma: unexpectedBetweenDefaultArgumentAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: FunctionParameterSyntax) {
+  public init (_ constructedNode: FunctionParameterSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FunctionParameterSyntax`.
@@ -10231,12 +10451,12 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -10245,12 +10465,12 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10259,12 +10479,12 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10296,7 +10516,9 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
     var body: CodeBlock?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FunctionDeclSyntax)
   }
   private var data: Data
@@ -10325,12 +10547,12 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndFuncKeyword: ExpressibleAsUnexpectedNodes? = nil, funcKeyword: Token = Token.`func`, unexpectedBetweenFuncKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndFuncKeyword: ExpressibleAsUnexpectedNodes? = nil, funcKeyword: Token = Token.`func`, unexpectedBetweenFuncKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndFuncKeyword: unexpectedBetweenModifiersAndFuncKeyword, funcKeyword: funcKeyword, unexpectedBetweenFuncKeywordAndIdentifier: unexpectedBetweenFuncKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature: unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause: unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody: unexpectedBetweenGenericWhereClauseAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: FunctionDeclSyntax) {
+  public init (_ constructedNode: FunctionDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FunctionDeclSyntax`.
@@ -10372,12 +10594,12 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10386,12 +10608,12 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10423,7 +10645,9 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
     var body: CodeBlock?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(InitializerDeclSyntax)
   }
   private var data: Data
@@ -10453,12 +10677,12 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndInitKeyword: ExpressibleAsUnexpectedNodes? = nil, initKeyword: Token = Token.`init`, unexpectedBetweenInitKeywordAndOptionalMark: ExpressibleAsUnexpectedNodes? = nil, optionalMark: Token? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndInitKeyword: ExpressibleAsUnexpectedNodes? = nil, initKeyword: Token = Token.`init`, unexpectedBetweenInitKeywordAndOptionalMark: ExpressibleAsUnexpectedNodes? = nil, optionalMark: Token? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndInitKeyword: unexpectedBetweenModifiersAndInitKeyword, initKeyword: initKeyword, unexpectedBetweenInitKeywordAndOptionalMark: unexpectedBetweenInitKeywordAndOptionalMark, optionalMark: optionalMark, unexpectedBetweenOptionalMarkAndGenericParameterClause: unexpectedBetweenOptionalMarkAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature: unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause: unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody: unexpectedBetweenGenericWhereClauseAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: InitializerDeclSyntax) {
+  public init (_ constructedNode: InitializerDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `InitializerDeclSyntax`.
@@ -10500,12 +10724,12 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10514,12 +10738,12 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10543,7 +10767,9 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
     var body: CodeBlock?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeinitializerDeclSyntax)
   }
   private var data: Data
@@ -10564,12 +10790,12 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndDeinitKeyword: ExpressibleAsUnexpectedNodes? = nil, deinitKeyword: Token = Token.`deinit`, unexpectedBetweenDeinitKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndDeinitKeyword: ExpressibleAsUnexpectedNodes? = nil, deinitKeyword: Token = Token.`deinit`, unexpectedBetweenDeinitKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndDeinitKeyword: unexpectedBetweenModifiersAndDeinitKeyword, deinitKeyword: deinitKeyword, unexpectedBetweenDeinitKeywordAndBody: unexpectedBetweenDeinitKeywordAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: DeinitializerDeclSyntax) {
+  public init (_ constructedNode: DeinitializerDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeinitializerDeclSyntax`.
@@ -10611,12 +10837,12 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10625,12 +10851,12 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10662,7 +10888,9 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
     var accessor: SyntaxBuildable?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SubscriptDeclSyntax)
   }
   private var data: Data
@@ -10688,7 +10916,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
     assert(subscriptKeyword.text == #"subscript"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes?.createUnexpectedNodes(), attributes: attributes?.createAttributeList(), unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers?.createUnexpectedNodes(), modifiers: modifiers?.createModifierList(), unexpectedBetweenModifiersAndSubscriptKeyword: unexpectedBetweenModifiersAndSubscriptKeyword?.createUnexpectedNodes(), subscriptKeyword: subscriptKeyword, unexpectedBetweenSubscriptKeywordAndGenericParameterClause: unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.createUnexpectedNodes(), genericParameterClause: genericParameterClause?.createGenericParameterClause(), unexpectedBetweenGenericParameterClauseAndIndices: unexpectedBetweenGenericParameterClauseAndIndices?.createUnexpectedNodes(), indices: indices.createParameterClause(), unexpectedBetweenIndicesAndResult: unexpectedBetweenIndicesAndResult?.createUnexpectedNodes(), result: result.createReturnClause(), unexpectedBetweenResultAndGenericWhereClause: unexpectedBetweenResultAndGenericWhereClause?.createUnexpectedNodes(), genericWhereClause: genericWhereClause?.createGenericWhereClause(), unexpectedBetweenGenericWhereClauseAndAccessor: unexpectedBetweenGenericWhereClauseAndAccessor?.createUnexpectedNodes(), accessor: accessor?.createSyntaxBuildable()))
   }
-  public init(_ constructedNode: SubscriptDeclSyntax) {
+  public init (_ constructedNode: SubscriptDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SubscriptDeclSyntax`.
@@ -10730,12 +10958,12 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10744,12 +10972,12 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10769,7 +10997,9 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
     var modifier: DeclModifierDetail?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AccessLevelModifierSyntax)
   }
   private var data: Data
@@ -10788,7 +11018,7 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifierDetail? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndModifier: unexpectedBetweenNameAndModifier, modifier: modifier)
   }
-  public init(_ constructedNode: AccessLevelModifierSyntax) {
+  public init (_ constructedNode: AccessLevelModifierSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AccessLevelModifierSyntax`.
@@ -10823,12 +11053,12 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10837,12 +11067,12 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10862,7 +11092,9 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
     var trailingDot: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AccessPathComponentSyntax)
   }
   private var data: Data
@@ -10882,7 +11114,7 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingDot: ExpressibleAsUnexpectedNodes? = nil, trailingDot: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndTrailingDot: unexpectedBetweenNameAndTrailingDot, trailingDot: trailingDot)
   }
-  public init(_ constructedNode: AccessPathComponentSyntax) {
+  public init (_ constructedNode: AccessPathComponentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AccessPathComponentSyntax`.
@@ -10917,12 +11149,12 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10931,12 +11163,12 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -10962,7 +11194,9 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
     var path: AccessPath
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ImportDeclSyntax)
   }
   private var data: Data
@@ -10983,7 +11217,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
     assert(importKind == nil || importKind!.text == #"typealias"# || importKind!.text == #"struct"# || importKind!.text == #"class"# || importKind!.text == #"enum"# || importKind!.text == #"protocol"# || importKind!.text == #"var"# || importKind!.text == #"let"# || importKind!.text == #"func"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes?.createUnexpectedNodes(), attributes: attributes?.createAttributeList(), unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers?.createUnexpectedNodes(), modifiers: modifiers?.createModifierList(), unexpectedBetweenModifiersAndImportTok: unexpectedBetweenModifiersAndImportTok?.createUnexpectedNodes(), importTok: importTok, unexpectedBetweenImportTokAndImportKind: unexpectedBetweenImportTokAndImportKind?.createUnexpectedNodes(), importKind: importKind, unexpectedBetweenImportKindAndPath: unexpectedBetweenImportKindAndPath?.createUnexpectedNodes(), path: path.createAccessPath()))
   }
-  public init(_ constructedNode: ImportDeclSyntax) {
+  public init (_ constructedNode: ImportDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ImportDeclSyntax`.
@@ -11025,12 +11259,12 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11039,12 +11273,12 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11066,7 +11300,9 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AccessorParameterSyntax)
   }
   private var data: Data
@@ -11089,7 +11325,7 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndName: unexpectedBetweenLeftParenAndName, name: Token.`identifier`(name), unexpectedBetweenNameAndRightParen: unexpectedBetweenNameAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: AccessorParameterSyntax) {
+  public init (_ constructedNode: AccessorParameterSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AccessorParameterSyntax`.
@@ -11124,12 +11360,12 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11138,12 +11374,12 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11173,7 +11409,9 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
     var body: CodeBlock?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AccessorDeclSyntax)
   }
   private var data: Data
@@ -11202,12 +11440,14 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifier? = nil, unexpectedBetweenModifierAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: Token, unexpectedBetweenAccessorKindAndParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsAccessorParameter? = nil, unexpectedBetweenParameterAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsKeyword: Token? = nil, unexpectedBetweenThrowsKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifier? = nil, unexpectedBetweenModifierAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: Token, unexpectedBetweenAccessorKindAndParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsAccessorParameter? = nil, unexpectedBetweenParameterAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsKeyword: Token? = nil, unexpectedBetweenThrowsKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = {
     nil
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifier: unexpectedBetweenAttributesAndModifier, modifier: modifier, unexpectedBetweenModifierAndAccessorKind: unexpectedBetweenModifierAndAccessorKind, accessorKind: accessorKind, unexpectedBetweenAccessorKindAndParameter: unexpectedBetweenAccessorKindAndParameter, parameter: parameter, unexpectedBetweenParameterAndAsyncKeyword: unexpectedBetweenParameterAndAsyncKeyword, asyncKeyword: asyncKeyword.map { Token.`contextualKeyword`($0) }, unexpectedBetweenAsyncKeywordAndThrowsKeyword: unexpectedBetweenAsyncKeywordAndThrowsKeyword, throwsKeyword: throwsKeyword, unexpectedBetweenThrowsKeywordAndBody: unexpectedBetweenThrowsKeywordAndBody, body: bodyBuilder())
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifier: unexpectedBetweenAttributesAndModifier, modifier: modifier, unexpectedBetweenModifierAndAccessorKind: unexpectedBetweenModifierAndAccessorKind, accessorKind: accessorKind, unexpectedBetweenAccessorKindAndParameter: unexpectedBetweenAccessorKindAndParameter, parameter: parameter, unexpectedBetweenParameterAndAsyncKeyword: unexpectedBetweenParameterAndAsyncKeyword, asyncKeyword: asyncKeyword.map { 
+      Token.`contextualKeyword`($0) 
+    }, unexpectedBetweenAsyncKeywordAndThrowsKeyword: unexpectedBetweenAsyncKeywordAndThrowsKeyword, throwsKeyword: throwsKeyword, unexpectedBetweenThrowsKeywordAndBody: unexpectedBetweenThrowsKeywordAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: AccessorDeclSyntax) {
+  public init (_ constructedNode: AccessorDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AccessorDeclSyntax`.
@@ -11249,12 +11489,12 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11263,12 +11503,12 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11290,7 +11530,9 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
     var rightBrace: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AccessorBlockSyntax)
   }
   private var data: Data
@@ -11307,7 +11549,7 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
     assert(rightBrace.text == #"}"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftBrace: unexpectedBeforeLeftBrace?.createUnexpectedNodes(), leftBrace: leftBrace, unexpectedBetweenLeftBraceAndAccessors: unexpectedBetweenLeftBraceAndAccessors?.createUnexpectedNodes(), accessors: accessors.createAccessorList(), unexpectedBetweenAccessorsAndRightBrace: unexpectedBetweenAccessorsAndRightBrace?.createUnexpectedNodes(), rightBrace: rightBrace))
   }
-  public init(_ constructedNode: AccessorBlockSyntax) {
+  public init (_ constructedNode: AccessorBlockSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AccessorBlockSyntax`.
@@ -11342,12 +11584,12 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11356,12 +11598,12 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11387,15 +11629,17 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PatternBindingSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -11415,7 +11659,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePattern: unexpectedBeforePattern?.createUnexpectedNodes(), pattern: pattern.createPatternBuildable(), unexpectedBetweenPatternAndTypeAnnotation: unexpectedBetweenPatternAndTypeAnnotation?.createUnexpectedNodes(), typeAnnotation: typeAnnotation?.createTypeAnnotation(), unexpectedBetweenTypeAnnotationAndInitializer: unexpectedBetweenTypeAnnotationAndInitializer?.createUnexpectedNodes(), initializer: initializer?.createInitializerClause(), unexpectedBetweenInitializerAndAccessor: unexpectedBetweenInitializerAndAccessor?.createUnexpectedNodes(), accessor: accessor?.createSyntaxBuildable(), unexpectedBetweenAccessorAndTrailingComma: unexpectedBetweenAccessorAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: PatternBindingSyntax) {
+  public init (_ constructedNode: PatternBindingSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PatternBindingSyntax`.
@@ -11451,12 +11695,12 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -11465,12 +11709,12 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11479,12 +11723,12 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11508,7 +11752,9 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
     var bindings: PatternBindingList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(VariableDeclSyntax)
   }
   private var data: Data
@@ -11529,12 +11775,12 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: Token, unexpectedBetweenLetOrVarKeywordAndBindings: ExpressibleAsUnexpectedNodes? = nil, @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: Token, unexpectedBetweenLetOrVarKeywordAndBindings: ExpressibleAsUnexpectedNodes? = nil, @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList = {
     PatternBindingList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndLetOrVarKeyword: unexpectedBetweenModifiersAndLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndBindings: unexpectedBetweenLetOrVarKeywordAndBindings, bindings: bindingsBuilder())
   }
-  public init(_ constructedNode: VariableDeclSyntax) {
+  public init (_ constructedNode: VariableDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `VariableDeclSyntax`.
@@ -11576,12 +11822,12 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11590,12 +11836,12 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11620,15 +11866,17 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(EnumCaseElementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -11652,7 +11900,7 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndAssociatedValue: ExpressibleAsUnexpectedNodes? = nil, associatedValue: ExpressibleAsParameterClause? = nil, unexpectedBetweenAssociatedValueAndRawValue: ExpressibleAsUnexpectedNodes? = nil, rawValue: ExpressibleAsInitializerClause? = nil, unexpectedBetweenRawValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndAssociatedValue: unexpectedBetweenIdentifierAndAssociatedValue, associatedValue: associatedValue, unexpectedBetweenAssociatedValueAndRawValue: unexpectedBetweenAssociatedValueAndRawValue, rawValue: rawValue, unexpectedBetweenRawValueAndTrailingComma: unexpectedBetweenRawValueAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: EnumCaseElementSyntax) {
+  public init (_ constructedNode: EnumCaseElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `EnumCaseElementSyntax`.
@@ -11688,12 +11936,12 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -11702,12 +11950,12 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11716,12 +11964,12 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11746,7 +11994,9 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
     var elements: EnumCaseElementList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(EnumCaseDeclSyntax)
   }
   private var data: Data
@@ -11767,12 +12017,12 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndElements: ExpressibleAsUnexpectedNodes? = nil, @EnumCaseElementListBuilder elementsBuilder: () -> ExpressibleAsEnumCaseElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndElements: ExpressibleAsUnexpectedNodes? = nil, @EnumCaseElementListBuilder elementsBuilder: () -> ExpressibleAsEnumCaseElementList = {
     EnumCaseElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndCaseKeyword: unexpectedBetweenModifiersAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndElements: unexpectedBetweenCaseKeywordAndElements, elements: elementsBuilder())
   }
-  public init(_ constructedNode: EnumCaseDeclSyntax) {
+  public init (_ constructedNode: EnumCaseDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `EnumCaseDeclSyntax`.
@@ -11814,12 +12064,12 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11828,12 +12078,12 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11866,7 +12116,9 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
     var members: MemberDeclBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(EnumDeclSyntax)
   }
   private var data: Data
@@ -11895,12 +12147,12 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndEnumKeyword: ExpressibleAsUnexpectedNodes? = nil, enumKeyword: Token = Token.`enum`, unexpectedBetweenEnumKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndEnumKeyword: ExpressibleAsUnexpectedNodes? = nil, enumKeyword: Token = Token.`enum`, unexpectedBetweenEnumKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndEnumKeyword: unexpectedBetweenModifiersAndEnumKeyword, enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier: unexpectedBetweenEnumKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameters: unexpectedBetweenIdentifierAndGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndInheritanceClause: unexpectedBetweenGenericParametersAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
-  public init(_ constructedNode: EnumDeclSyntax) {
+  public init (_ constructedNode: EnumDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `EnumDeclSyntax`.
@@ -11942,12 +12194,12 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11956,12 +12208,12 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -11988,7 +12240,9 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
     var operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OperatorDeclSyntax)
   }
   private var data: Data
@@ -12008,7 +12262,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
     assert(operatorKeyword.text == #"operator"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes?.createUnexpectedNodes(), attributes: attributes?.createAttributeList(), unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers?.createUnexpectedNodes(), modifiers: modifiers?.createModifierList(), unexpectedBetweenModifiersAndOperatorKeyword: unexpectedBetweenModifiersAndOperatorKeyword?.createUnexpectedNodes(), operatorKeyword: operatorKeyword, unexpectedBetweenOperatorKeywordAndIdentifier: unexpectedBetweenOperatorKeywordAndIdentifier?.createUnexpectedNodes(), identifier: identifier, unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.createUnexpectedNodes(), operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.createOperatorPrecedenceAndTypes()))
   }
-  public init(_ constructedNode: OperatorDeclSyntax) {
+  public init (_ constructedNode: OperatorDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OperatorDeclSyntax`.
@@ -12050,12 +12304,12 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12064,12 +12318,12 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12089,7 +12343,9 @@ public struct DesignatedTypeElement: SyntaxBuildable, ExpressibleAsDesignatedTyp
     var name: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DesignatedTypeElementSyntax)
   }
   private var data: Data
@@ -12109,7 +12365,7 @@ public struct DesignatedTypeElement: SyntaxBuildable, ExpressibleAsDesignatedTyp
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLeadingComma: ExpressibleAsUnexpectedNodes? = nil, leadingComma: Token = Token.`comma`, unexpectedBetweenLeadingCommaAndName: ExpressibleAsUnexpectedNodes? = nil, name: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeadingComma: unexpectedBeforeLeadingComma, leadingComma: leadingComma, unexpectedBetweenLeadingCommaAndName: unexpectedBetweenLeadingCommaAndName, name: Token.`identifier`(name))
   }
-  public init(_ constructedNode: DesignatedTypeElementSyntax) {
+  public init (_ constructedNode: DesignatedTypeElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DesignatedTypeElementSyntax`.
@@ -12144,12 +12400,12 @@ public struct DesignatedTypeElement: SyntaxBuildable, ExpressibleAsDesignatedTyp
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12158,12 +12414,12 @@ public struct DesignatedTypeElement: SyntaxBuildable, ExpressibleAsDesignatedTyp
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12186,7 +12442,9 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
     var designatedTypes: DesignatedTypeList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OperatorPrecedenceAndTypesSyntax)
   }
   private var data: Data
@@ -12208,7 +12466,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroup: ExpressibleAsUnexpectedNodes? = nil, precedenceGroup: String, unexpectedBetweenPrecedenceGroupAndDesignatedTypes: ExpressibleAsUnexpectedNodes? = nil, designatedTypes: ExpressibleAsDesignatedTypeList) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeColon: unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndPrecedenceGroup: unexpectedBetweenColonAndPrecedenceGroup, precedenceGroup: Token.`identifier`(precedenceGroup), unexpectedBetweenPrecedenceGroupAndDesignatedTypes: unexpectedBetweenPrecedenceGroupAndDesignatedTypes, designatedTypes: designatedTypes)
   }
-  public init(_ constructedNode: OperatorPrecedenceAndTypesSyntax) {
+  public init (_ constructedNode: OperatorPrecedenceAndTypesSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OperatorPrecedenceAndTypesSyntax`.
@@ -12243,12 +12501,12 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12257,12 +12515,12 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12293,7 +12551,9 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
     var rightBrace: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrecedenceGroupDeclSyntax)
   }
   private var data: Data
@@ -12325,7 +12585,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndPrecedencegroupKeyword: ExpressibleAsUnexpectedNodes? = nil, precedencegroupKeyword: Token = Token.`precedencegroup`, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndGroupAttributes: ExpressibleAsUnexpectedNodes? = nil, groupAttributes: ExpressibleAsPrecedenceGroupAttributeList, unexpectedBetweenGroupAttributesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndPrecedencegroupKeyword: unexpectedBetweenModifiersAndPrecedencegroupKeyword, precedencegroupKeyword: precedencegroupKeyword, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: unexpectedBetweenPrecedencegroupKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndLeftBrace: unexpectedBetweenIdentifierAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndGroupAttributes: unexpectedBetweenLeftBraceAndGroupAttributes, groupAttributes: groupAttributes, unexpectedBetweenGroupAttributesAndRightBrace: unexpectedBetweenGroupAttributesAndRightBrace, rightBrace: rightBrace)
   }
-  public init(_ constructedNode: PrecedenceGroupDeclSyntax) {
+  public init (_ constructedNode: PrecedenceGroupDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrecedenceGroupDeclSyntax`.
@@ -12367,12 +12627,12 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12381,12 +12641,12 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12409,7 +12669,9 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
     var otherNames: PrecedenceGroupNameList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrecedenceGroupRelationSyntax)
   }
   private var data: Data
@@ -12432,7 +12694,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   public init (leadingTrivia: Trivia = [], unexpectedBeforeHigherThanOrLowerThan: ExpressibleAsUnexpectedNodes? = nil, higherThanOrLowerThan: String, unexpectedBetweenHigherThanOrLowerThanAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndOtherNames: ExpressibleAsUnexpectedNodes? = nil, otherNames: ExpressibleAsPrecedenceGroupNameList) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeHigherThanOrLowerThan: unexpectedBeforeHigherThanOrLowerThan, higherThanOrLowerThan: Token.`identifier`(higherThanOrLowerThan), unexpectedBetweenHigherThanOrLowerThanAndColon: unexpectedBetweenHigherThanOrLowerThanAndColon, colon: colon, unexpectedBetweenColonAndOtherNames: unexpectedBetweenColonAndOtherNames, otherNames: otherNames)
   }
-  public init(_ constructedNode: PrecedenceGroupRelationSyntax) {
+  public init (_ constructedNode: PrecedenceGroupRelationSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrecedenceGroupRelationSyntax`.
@@ -12467,12 +12729,12 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12481,12 +12743,12 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12506,7 +12768,9 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrecedenceGroupNameElementSyntax)
   }
   private var data: Data
@@ -12526,7 +12790,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: PrecedenceGroupNameElementSyntax) {
+  public init (_ constructedNode: PrecedenceGroupNameElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrecedenceGroupNameElementSyntax`.
@@ -12561,12 +12825,12 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12575,12 +12839,12 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12603,7 +12867,9 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
     var flag: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrecedenceGroupAssignmentSyntax)
   }
   private var data: Data
@@ -12627,7 +12893,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAssignmentKeyword: ExpressibleAsUnexpectedNodes? = nil, assignmentKeyword: String, unexpectedBetweenAssignmentKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndFlag: ExpressibleAsUnexpectedNodes? = nil, flag: Token) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAssignmentKeyword: unexpectedBeforeAssignmentKeyword, assignmentKeyword: Token.`identifier`(assignmentKeyword), unexpectedBetweenAssignmentKeywordAndColon: unexpectedBetweenAssignmentKeywordAndColon, colon: colon, unexpectedBetweenColonAndFlag: unexpectedBetweenColonAndFlag, flag: flag)
   }
-  public init(_ constructedNode: PrecedenceGroupAssignmentSyntax) {
+  public init (_ constructedNode: PrecedenceGroupAssignmentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrecedenceGroupAssignmentSyntax`.
@@ -12662,12 +12928,12 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12676,12 +12942,12 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12704,7 +12970,9 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
     var value: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrecedenceGroupAssociativitySyntax)
   }
   private var data: Data
@@ -12728,7 +12996,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAssociativityKeyword: ExpressibleAsUnexpectedNodes? = nil, associativityKeyword: String, unexpectedBetweenAssociativityKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAssociativityKeyword: unexpectedBeforeAssociativityKeyword, associativityKeyword: Token.`identifier`(associativityKeyword), unexpectedBetweenAssociativityKeywordAndColon: unexpectedBetweenAssociativityKeywordAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: Token.`identifier`(value))
   }
-  public init(_ constructedNode: PrecedenceGroupAssociativitySyntax) {
+  public init (_ constructedNode: PrecedenceGroupAssociativitySyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrecedenceGroupAssociativitySyntax`.
@@ -12763,12 +13031,12 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12777,12 +13045,12 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12812,7 +13080,9 @@ public struct MacroExpansionDecl: DeclBuildable, ExpressibleAsMacroExpansionDecl
     var additionalTrailingClosures: MultipleTrailingClosureElementList?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MacroExpansionDeclSyntax)
   }
   private var data: Data
@@ -12841,12 +13111,12 @@ public struct MacroExpansionDecl: DeclBuildable, ExpressibleAsMacroExpansionDecl
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: ExpressibleAsUnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: ExpressibleAsUnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: ExpressibleAsUnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: ExpressibleAsUnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundToken: unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro: unexpectedBetweenPoundTokenAndMacro, macro: Token.`identifier`(macro), unexpectedBetweenMacroAndLeftParen: unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList: unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen: unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure: unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
   }
-  public init(_ constructedNode: MacroExpansionDeclSyntax) {
+  public init (_ constructedNode: MacroExpansionDeclSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MacroExpansionDeclSyntax`.
@@ -12888,12 +13158,12 @@ public struct MacroExpansionDecl: DeclBuildable, ExpressibleAsMacroExpansionDecl
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12902,12 +13172,12 @@ public struct MacroExpansionDecl: DeclBuildable, ExpressibleAsMacroExpansionDecl
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -12934,7 +13204,9 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
     var rightParen: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CustomAttributeSyntax)
   }
   private var data: Data
@@ -12959,12 +13231,12 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: Token = Token.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: ExpressibleAsTypeBuildable, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: Token = Token.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: ExpressibleAsTypeBuildable, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList? = {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAtSignToken: unexpectedBeforeAtSignToken, atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName: unexpectedBetweenAtSignTokenAndAttributeName, attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen: unexpectedBetweenAttributeNameAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList: unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen: unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: CustomAttributeSyntax) {
+  public init (_ constructedNode: CustomAttributeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CustomAttributeSyntax`.
@@ -12999,12 +13271,12 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13013,12 +13285,12 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13047,7 +13319,9 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
     var tokenList: TokenList?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AttributeSyntax)
   }
   private var data: Data
@@ -13071,7 +13345,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
     assert(rightParen == nil || rightParen!.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAtSignToken: unexpectedBeforeAtSignToken?.createUnexpectedNodes(), atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName: unexpectedBetweenAtSignTokenAndAttributeName?.createUnexpectedNodes(), attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen: unexpectedBetweenAttributeNameAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndArgument: unexpectedBetweenLeftParenAndArgument?.createUnexpectedNodes(), argument: argument?.createSyntaxBuildable(), unexpectedBetweenArgumentAndRightParen: unexpectedBetweenArgumentAndRightParen?.createUnexpectedNodes(), rightParen: rightParen, unexpectedBetweenRightParenAndTokenList: unexpectedBetweenRightParenAndTokenList?.createUnexpectedNodes(), tokenList: tokenList?.createTokenList()))
   }
-  public init(_ constructedNode: AttributeSyntax) {
+  public init (_ constructedNode: AttributeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AttributeSyntax`.
@@ -13106,12 +13380,12 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13120,12 +13394,12 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13150,7 +13424,9 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
     var semicolon: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AvailabilityEntrySyntax)
   }
   private var data: Data
@@ -13175,7 +13451,7 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndAvailabilityList: ExpressibleAsUnexpectedNodes? = nil, availabilityList: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilityListAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: Token = Token.`semicolon`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndAvailabilityList: unexpectedBetweenColonAndAvailabilityList, availabilityList: availabilityList, unexpectedBetweenAvailabilityListAndSemicolon: unexpectedBetweenAvailabilityListAndSemicolon, semicolon: semicolon)
   }
-  public init(_ constructedNode: AvailabilityEntrySyntax) {
+  public init (_ constructedNode: AvailabilityEntrySyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AvailabilityEntrySyntax`.
@@ -13210,12 +13486,12 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13224,12 +13500,12 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13254,15 +13530,17 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(LabeledSpecializeEntrySyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -13287,7 +13565,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: Token, unexpectedBetweenValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma: unexpectedBetweenValueAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: LabeledSpecializeEntrySyntax) {
+  public init (_ constructedNode: LabeledSpecializeEntrySyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `LabeledSpecializeEntrySyntax`.
@@ -13323,12 +13601,12 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -13337,12 +13615,12 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13351,12 +13629,12 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13381,15 +13659,17 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TargetFunctionEntrySyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -13414,7 +13694,7 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndDeclname: ExpressibleAsUnexpectedNodes? = nil, declname: ExpressibleAsDeclName, unexpectedBetweenDeclnameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname: unexpectedBetweenColonAndDeclname, declname: declname, unexpectedBetweenDeclnameAndTrailingComma: unexpectedBetweenDeclnameAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: TargetFunctionEntrySyntax) {
+  public init (_ constructedNode: TargetFunctionEntrySyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TargetFunctionEntrySyntax`.
@@ -13450,12 +13730,12 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -13464,12 +13744,12 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13478,12 +13758,12 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13506,7 +13786,9 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
     var stringOrDeclname: SyntaxBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(NamedAttributeStringArgumentSyntax)
   }
   private var data: Data
@@ -13522,7 +13804,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
     assert(colon.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeNameTok: unexpectedBeforeNameTok?.createUnexpectedNodes(), nameTok: nameTok, unexpectedBetweenNameTokAndColon: unexpectedBetweenNameTokAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndStringOrDeclname: unexpectedBetweenColonAndStringOrDeclname?.createUnexpectedNodes(), stringOrDeclname: stringOrDeclname.createSyntaxBuildable()))
   }
-  public init(_ constructedNode: NamedAttributeStringArgumentSyntax) {
+  public init (_ constructedNode: NamedAttributeStringArgumentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `NamedAttributeStringArgumentSyntax`.
@@ -13557,12 +13839,12 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13571,12 +13853,12 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13596,7 +13878,9 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
     var declNameArguments: DeclNameArguments?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeclNameSyntax)
   }
   private var data: Data
@@ -13609,7 +13893,7 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeDeclBaseName: ExpressibleAsUnexpectedNodes? = nil, declBaseName: ExpressibleAsSyntaxBuildable, unexpectedBetweenDeclBaseNameAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeDeclBaseName: unexpectedBeforeDeclBaseName?.createUnexpectedNodes(), declBaseName: declBaseName.createSyntaxBuildable(), unexpectedBetweenDeclBaseNameAndDeclNameArguments: unexpectedBetweenDeclBaseNameAndDeclNameArguments?.createUnexpectedNodes(), declNameArguments: declNameArguments?.createDeclNameArguments()))
   }
-  public init(_ constructedNode: DeclNameSyntax) {
+  public init (_ constructedNode: DeclNameSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeclNameSyntax`.
@@ -13644,12 +13928,12 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13658,12 +13942,12 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13688,7 +13972,9 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
     var declNameArguments: DeclNameArguments?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ImplementsAttributeArgumentsSyntax)
   }
   private var data: Data
@@ -13706,7 +13992,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
     assert(comma.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeType: unexpectedBeforeType?.createUnexpectedNodes(), type: type.createTypeBuildable(), unexpectedBetweenTypeAndComma: unexpectedBetweenTypeAndComma?.createUnexpectedNodes(), comma: comma, unexpectedBetweenCommaAndDeclBaseName: unexpectedBetweenCommaAndDeclBaseName?.createUnexpectedNodes(), declBaseName: declBaseName, unexpectedBetweenDeclBaseNameAndDeclNameArguments: unexpectedBetweenDeclBaseNameAndDeclNameArguments?.createUnexpectedNodes(), declNameArguments: declNameArguments?.createDeclNameArguments()))
   }
-  public init(_ constructedNode: ImplementsAttributeArgumentsSyntax) {
+  public init (_ constructedNode: ImplementsAttributeArgumentsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ImplementsAttributeArgumentsSyntax`.
@@ -13741,12 +14027,12 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13755,12 +14041,12 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13781,7 +14067,9 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
     var colon: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ObjCSelectorPieceSyntax)
   }
   private var data: Data
@@ -13799,9 +14087,11 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String?, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: name.map { Token.`identifier`($0) }, unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon, colon: colon)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: name.map { 
+      Token.`identifier`($0) 
+    }, unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon, colon: colon)
   }
-  public init(_ constructedNode: ObjCSelectorPieceSyntax) {
+  public init (_ constructedNode: ObjCSelectorPieceSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ObjCSelectorPieceSyntax`.
@@ -13836,12 +14126,12 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13850,12 +14140,12 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13882,7 +14172,9 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
     var whereClause: GenericWhereClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DifferentiableAttributeArgumentsSyntax)
   }
   private var data: Data
@@ -13908,9 +14200,11 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeDiffKind: ExpressibleAsUnexpectedNodes? = nil, diffKind: String?, unexpectedBetweenDiffKindAndDiffKindComma: ExpressibleAsUnexpectedNodes? = nil, diffKindComma: Token? = nil, unexpectedBetweenDiffKindCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil, unexpectedBetweenDiffParamsAndDiffParamsComma: ExpressibleAsUnexpectedNodes? = nil, diffParamsComma: Token? = nil, unexpectedBetweenDiffParamsCommaAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsGenericWhereClause? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDiffKind: unexpectedBeforeDiffKind, diffKind: diffKind.map { Token.`identifier`($0) }, unexpectedBetweenDiffKindAndDiffKindComma: unexpectedBetweenDiffKindAndDiffKindComma, diffKindComma: diffKindComma, unexpectedBetweenDiffKindCommaAndDiffParams: unexpectedBetweenDiffKindCommaAndDiffParams, diffParams: diffParams, unexpectedBetweenDiffParamsAndDiffParamsComma: unexpectedBetweenDiffParamsAndDiffParamsComma, diffParamsComma: diffParamsComma, unexpectedBetweenDiffParamsCommaAndWhereClause: unexpectedBetweenDiffParamsCommaAndWhereClause, whereClause: whereClause)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDiffKind: unexpectedBeforeDiffKind, diffKind: diffKind.map { 
+      Token.`identifier`($0) 
+    }, unexpectedBetweenDiffKindAndDiffKindComma: unexpectedBetweenDiffKindAndDiffKindComma, diffKindComma: diffKindComma, unexpectedBetweenDiffKindCommaAndDiffParams: unexpectedBetweenDiffKindCommaAndDiffParams, diffParams: diffParams, unexpectedBetweenDiffParamsAndDiffParamsComma: unexpectedBetweenDiffParamsAndDiffParamsComma, diffParamsComma: diffParamsComma, unexpectedBetweenDiffParamsCommaAndWhereClause: unexpectedBetweenDiffParamsCommaAndWhereClause, whereClause: whereClause)
   }
-  public init(_ constructedNode: DifferentiableAttributeArgumentsSyntax) {
+  public init (_ constructedNode: DifferentiableAttributeArgumentsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DifferentiableAttributeArgumentsSyntax`.
@@ -13945,12 +14239,12 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13959,12 +14253,12 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -13987,7 +14281,9 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
     var parameters: SyntaxBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DifferentiabilityParamsClauseSyntax)
   }
   private var data: Data
@@ -14010,7 +14306,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   public init (leadingTrivia: Trivia = [], unexpectedBeforeWrtLabel: ExpressibleAsUnexpectedNodes? = nil, wrtLabel: String, unexpectedBetweenWrtLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndParameters: ExpressibleAsUnexpectedNodes? = nil, parameters: ExpressibleAsSyntaxBuildable) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWrtLabel: unexpectedBeforeWrtLabel, wrtLabel: Token.`identifier`(wrtLabel), unexpectedBetweenWrtLabelAndColon: unexpectedBetweenWrtLabelAndColon, colon: colon, unexpectedBetweenColonAndParameters: unexpectedBetweenColonAndParameters, parameters: parameters)
   }
-  public init(_ constructedNode: DifferentiabilityParamsClauseSyntax) {
+  public init (_ constructedNode: DifferentiabilityParamsClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DifferentiabilityParamsClauseSyntax`.
@@ -14045,12 +14341,12 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14059,12 +14355,12 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14087,7 +14383,9 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DifferentiabilityParamsSyntax)
   }
   private var data: Data
@@ -14104,7 +14402,7 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndDiffParams: unexpectedBetweenLeftParenAndDiffParams?.createUnexpectedNodes(), diffParams: diffParams.createDifferentiabilityParamList(), unexpectedBetweenDiffParamsAndRightParen: unexpectedBetweenDiffParamsAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: DifferentiabilityParamsSyntax) {
+  public init (_ constructedNode: DifferentiabilityParamsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DifferentiabilityParamsSyntax`.
@@ -14139,12 +14437,12 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14153,12 +14451,12 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14179,15 +14477,17 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DifferentiabilityParamSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -14201,7 +14501,7 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeParameter: unexpectedBeforeParameter?.createUnexpectedNodes(), parameter: parameter.createSyntaxBuildable(), unexpectedBetweenParameterAndTrailingComma: unexpectedBetweenParameterAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: DifferentiabilityParamSyntax) {
+  public init (_ constructedNode: DifferentiabilityParamSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DifferentiabilityParamSyntax`.
@@ -14237,12 +14537,12 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -14251,12 +14551,12 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14265,12 +14565,12 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14301,7 +14601,9 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
     var diffParams: DifferentiabilityParamsClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DerivativeRegistrationAttributeArgumentsSyntax)
   }
   private var data: Data
@@ -14333,9 +14635,11 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeOfLabel: ExpressibleAsUnexpectedNodes? = nil, ofLabel: String, unexpectedBetweenOfLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndOriginalDeclName: ExpressibleAsUnexpectedNodes? = nil, originalDeclName: ExpressibleAsQualifiedDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token? = nil, unexpectedBetweenPeriodAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: String?, unexpectedBetweenAccessorKindAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOfLabel: unexpectedBeforeOfLabel, ofLabel: Token.`identifier`(ofLabel), unexpectedBetweenOfLabelAndColon: unexpectedBetweenOfLabelAndColon, colon: colon, unexpectedBetweenColonAndOriginalDeclName: unexpectedBetweenColonAndOriginalDeclName, originalDeclName: originalDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: unexpectedBetweenOriginalDeclNameAndPeriod, period: period, unexpectedBetweenPeriodAndAccessorKind: unexpectedBetweenPeriodAndAccessorKind, accessorKind: accessorKind.map { Token.`identifier`($0) }, unexpectedBetweenAccessorKindAndComma: unexpectedBetweenAccessorKindAndComma, comma: comma, unexpectedBetweenCommaAndDiffParams: unexpectedBetweenCommaAndDiffParams, diffParams: diffParams)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOfLabel: unexpectedBeforeOfLabel, ofLabel: Token.`identifier`(ofLabel), unexpectedBetweenOfLabelAndColon: unexpectedBetweenOfLabelAndColon, colon: colon, unexpectedBetweenColonAndOriginalDeclName: unexpectedBetweenColonAndOriginalDeclName, originalDeclName: originalDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: unexpectedBetweenOriginalDeclNameAndPeriod, period: period, unexpectedBetweenPeriodAndAccessorKind: unexpectedBetweenPeriodAndAccessorKind, accessorKind: accessorKind.map { 
+      Token.`identifier`($0) 
+    }, unexpectedBetweenAccessorKindAndComma: unexpectedBetweenAccessorKindAndComma, comma: comma, unexpectedBetweenCommaAndDiffParams: unexpectedBetweenCommaAndDiffParams, diffParams: diffParams)
   }
-  public init(_ constructedNode: DerivativeRegistrationAttributeArgumentsSyntax) {
+  public init (_ constructedNode: DerivativeRegistrationAttributeArgumentsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DerivativeRegistrationAttributeArgumentsSyntax`.
@@ -14370,12 +14674,12 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14384,12 +14688,12 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14414,7 +14718,9 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
     var arguments: DeclNameArguments?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(QualifiedDeclNameSyntax)
   }
   private var data: Data
@@ -14432,7 +14738,7 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
     assert(dot == nil || dot!.text == #"."# || dot!.text == #"."#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBaseType: unexpectedBeforeBaseType?.createUnexpectedNodes(), baseType: baseType?.createTypeBuildable(), unexpectedBetweenBaseTypeAndDot: unexpectedBetweenBaseTypeAndDot?.createUnexpectedNodes(), dot: dot, unexpectedBetweenDotAndName: unexpectedBetweenDotAndName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndArguments: unexpectedBetweenNameAndArguments?.createUnexpectedNodes(), arguments: arguments?.createDeclNameArguments()))
   }
-  public init(_ constructedNode: QualifiedDeclNameSyntax) {
+  public init (_ constructedNode: QualifiedDeclNameSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `QualifiedDeclNameSyntax`.
@@ -14467,12 +14773,12 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14481,12 +14787,12 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14507,7 +14813,9 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
     var arguments: DeclNameArguments?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FunctionDeclNameSyntax)
   }
   private var data: Data
@@ -14520,7 +14828,7 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsSyntaxBuildable, unexpectedBetweenNameAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsDeclNameArguments? = nil) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeName: unexpectedBeforeName?.createUnexpectedNodes(), name: name.createSyntaxBuildable(), unexpectedBetweenNameAndArguments: unexpectedBetweenNameAndArguments?.createUnexpectedNodes(), arguments: arguments?.createDeclNameArguments()))
   }
-  public init(_ constructedNode: FunctionDeclNameSyntax) {
+  public init (_ constructedNode: FunctionDeclNameSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FunctionDeclNameSyntax`.
@@ -14555,12 +14863,12 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14569,12 +14877,12 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14597,7 +14905,9 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
     var versionList: BackDeployVersionList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(BackDeployAttributeSpecListSyntax)
   }
   private var data: Data
@@ -14620,7 +14930,7 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   public init (leadingTrivia: Trivia = [], unexpectedBeforeBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, beforeLabel: String, unexpectedBetweenBeforeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndVersionList: ExpressibleAsUnexpectedNodes? = nil, versionList: ExpressibleAsBackDeployVersionList) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBeforeLabel: unexpectedBeforeBeforeLabel, beforeLabel: Token.`identifier`(beforeLabel), unexpectedBetweenBeforeLabelAndColon: unexpectedBetweenBeforeLabelAndColon, colon: colon, unexpectedBetweenColonAndVersionList: unexpectedBetweenColonAndVersionList, versionList: versionList)
   }
-  public init(_ constructedNode: BackDeployAttributeSpecListSyntax) {
+  public init (_ constructedNode: BackDeployAttributeSpecListSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `BackDeployAttributeSpecListSyntax`.
@@ -14655,12 +14965,12 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14669,12 +14979,12 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14695,7 +15005,9 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(BackDeployVersionArgumentSyntax)
   }
   private var data: Data
@@ -14709,7 +15021,7 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeAvailabilityVersionRestriction: unexpectedBeforeAvailabilityVersionRestriction?.createUnexpectedNodes(), availabilityVersionRestriction: availabilityVersionRestriction.createAvailabilityVersionRestriction(), unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: BackDeployVersionArgumentSyntax) {
+  public init (_ constructedNode: BackDeployVersionArgumentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `BackDeployVersionArgumentSyntax`.
@@ -14744,12 +15056,12 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14758,12 +15070,12 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14786,7 +15098,9 @@ public struct OpaqueReturnTypeOfAttributeArguments: SyntaxBuildable, Expressible
     var ordinal: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OpaqueReturnTypeOfAttributeArgumentsSyntax)
   }
   private var data: Data
@@ -14808,7 +15122,7 @@ public struct OpaqueReturnTypeOfAttributeArguments: SyntaxBuildable, Expressible
   public init (leadingTrivia: Trivia = [], unexpectedBeforeMangledName: ExpressibleAsUnexpectedNodes? = nil, mangledName: String, unexpectedBetweenMangledNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndOrdinal: ExpressibleAsUnexpectedNodes? = nil, ordinal: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMangledName: unexpectedBeforeMangledName, mangledName: Token.`stringLiteral`(mangledName), unexpectedBetweenMangledNameAndComma: unexpectedBetweenMangledNameAndComma, comma: comma, unexpectedBetweenCommaAndOrdinal: unexpectedBetweenCommaAndOrdinal, ordinal: Token.`integerLiteral`(ordinal))
   }
-  public init(_ constructedNode: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
+  public init (_ constructedNode: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OpaqueReturnTypeOfAttributeArgumentsSyntax`.
@@ -14843,12 +15157,12 @@ public struct OpaqueReturnTypeOfAttributeArguments: SyntaxBuildable, Expressible
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14857,12 +15171,12 @@ public struct OpaqueReturnTypeOfAttributeArguments: SyntaxBuildable, Expressible
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14889,7 +15203,9 @@ public struct ConventionAttributeArguments: SyntaxBuildable, ExpressibleAsConven
     var cTypeString: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ConventionAttributeArgumentsSyntax)
   }
   private var data: Data
@@ -14916,9 +15232,13 @@ public struct ConventionAttributeArguments: SyntaxBuildable, ExpressibleAsConven
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeConventionLabel: ExpressibleAsUnexpectedNodes? = nil, conventionLabel: String, unexpectedBetweenConventionLabelAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndCTypeLabel: ExpressibleAsUnexpectedNodes? = nil, cTypeLabel: String?, unexpectedBetweenCTypeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndCTypeString: ExpressibleAsUnexpectedNodes? = nil, cTypeString: String?) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeConventionLabel: unexpectedBeforeConventionLabel, conventionLabel: Token.`identifier`(conventionLabel), unexpectedBetweenConventionLabelAndComma: unexpectedBetweenConventionLabelAndComma, comma: comma, unexpectedBetweenCommaAndCTypeLabel: unexpectedBetweenCommaAndCTypeLabel, cTypeLabel: cTypeLabel.map { Token.`identifier`($0) }, unexpectedBetweenCTypeLabelAndColon: unexpectedBetweenCTypeLabelAndColon, colon: colon, unexpectedBetweenColonAndCTypeString: unexpectedBetweenColonAndCTypeString, cTypeString: cTypeString.map { Token.`stringLiteral`($0) })
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeConventionLabel: unexpectedBeforeConventionLabel, conventionLabel: Token.`identifier`(conventionLabel), unexpectedBetweenConventionLabelAndComma: unexpectedBetweenConventionLabelAndComma, comma: comma, unexpectedBetweenCommaAndCTypeLabel: unexpectedBetweenCommaAndCTypeLabel, cTypeLabel: cTypeLabel.map { 
+      Token.`identifier`($0) 
+    }, unexpectedBetweenCTypeLabelAndColon: unexpectedBetweenCTypeLabelAndColon, colon: colon, unexpectedBetweenColonAndCTypeString: unexpectedBetweenColonAndCTypeString, cTypeString: cTypeString.map { 
+      Token.`stringLiteral`($0) 
+    })
   }
-  public init(_ constructedNode: ConventionAttributeArgumentsSyntax) {
+  public init (_ constructedNode: ConventionAttributeArgumentsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ConventionAttributeArgumentsSyntax`.
@@ -14953,12 +15273,12 @@ public struct ConventionAttributeArguments: SyntaxBuildable, ExpressibleAsConven
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14967,12 +15287,12 @@ public struct ConventionAttributeArguments: SyntaxBuildable, ExpressibleAsConven
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -14995,7 +15315,9 @@ public struct ConventionWitnessMethodAttributeArguments: SyntaxBuildable, Expres
     var protocolName: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ConventionWitnessMethodAttributeArgumentsSyntax)
   }
   private var data: Data
@@ -15017,7 +15339,7 @@ public struct ConventionWitnessMethodAttributeArguments: SyntaxBuildable, Expres
   public init (leadingTrivia: Trivia = [], unexpectedBeforeWitnessMethodLabel: ExpressibleAsUnexpectedNodes? = nil, witnessMethodLabel: String, unexpectedBetweenWitnessMethodLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndProtocolName: ExpressibleAsUnexpectedNodes? = nil, protocolName: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWitnessMethodLabel: unexpectedBeforeWitnessMethodLabel, witnessMethodLabel: Token.`identifier`(witnessMethodLabel), unexpectedBetweenWitnessMethodLabelAndColon: unexpectedBetweenWitnessMethodLabelAndColon, colon: colon, unexpectedBetweenColonAndProtocolName: unexpectedBetweenColonAndProtocolName, protocolName: Token.`identifier`(protocolName))
   }
-  public init(_ constructedNode: ConventionWitnessMethodAttributeArgumentsSyntax) {
+  public init (_ constructedNode: ConventionWitnessMethodAttributeArgumentsSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ConventionWitnessMethodAttributeArgumentsSyntax`.
@@ -15052,12 +15374,12 @@ public struct ConventionWitnessMethodAttributeArguments: SyntaxBuildable, Expres
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15066,12 +15388,12 @@ public struct ConventionWitnessMethodAttributeArguments: SyntaxBuildable, Expres
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15093,7 +15415,9 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
     var statement: StmtBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(LabeledStmtSyntax)
   }
   private var data: Data
@@ -15115,7 +15439,7 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: String, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: Token = Token.`colon`, unexpectedBetweenLabelColonAndStatement: ExpressibleAsUnexpectedNodes? = nil, statement: ExpressibleAsStmtBuildable) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabelName: unexpectedBeforeLabelName, labelName: Token.`identifier`(labelName), unexpectedBetweenLabelNameAndLabelColon: unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndStatement: unexpectedBetweenLabelColonAndStatement, statement: statement)
   }
-  public init(_ constructedNode: LabeledStmtSyntax) {
+  public init (_ constructedNode: LabeledStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `LabeledStmtSyntax`.
@@ -15157,12 +15481,12 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15171,12 +15495,12 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15196,7 +15520,9 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
     var label: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ContinueStmtSyntax)
   }
   private var data: Data
@@ -15214,9 +15540,11 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeContinueKeyword: ExpressibleAsUnexpectedNodes? = nil, continueKeyword: Token = Token.`continue`, unexpectedBetweenContinueKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: String?) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeContinueKeyword: unexpectedBeforeContinueKeyword, continueKeyword: continueKeyword, unexpectedBetweenContinueKeywordAndLabel: unexpectedBetweenContinueKeywordAndLabel, label: label.map { Token.`identifier`($0) })
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeContinueKeyword: unexpectedBeforeContinueKeyword, continueKeyword: continueKeyword, unexpectedBetweenContinueKeywordAndLabel: unexpectedBetweenContinueKeywordAndLabel, label: label.map { 
+      Token.`identifier`($0) 
+    })
   }
-  public init(_ constructedNode: ContinueStmtSyntax) {
+  public init (_ constructedNode: ContinueStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ContinueStmtSyntax`.
@@ -15258,12 +15586,12 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15272,12 +15600,12 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15299,7 +15627,9 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
     var body: CodeBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(WhileStmtSyntax)
   }
   private var data: Data
@@ -15318,12 +15648,12 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhileKeyword: unexpectedBeforeWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndConditions: unexpectedBetweenWhileKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody: unexpectedBetweenConditionsAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: WhileStmtSyntax) {
+  public init (_ constructedNode: WhileStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `WhileStmtSyntax`.
@@ -15365,12 +15695,12 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15379,12 +15709,12 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15404,7 +15734,9 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
     var body: CodeBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeferStmtSyntax)
   }
   private var data: Data
@@ -15421,12 +15753,12 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDeferKeyword: ExpressibleAsUnexpectedNodes? = nil, deferKeyword: Token = Token.`defer`, unexpectedBetweenDeferKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDeferKeyword: ExpressibleAsUnexpectedNodes? = nil, deferKeyword: Token = Token.`defer`, unexpectedBetweenDeferKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDeferKeyword: unexpectedBeforeDeferKeyword, deferKeyword: deferKeyword, unexpectedBetweenDeferKeywordAndBody: unexpectedBetweenDeferKeywordAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: DeferStmtSyntax) {
+  public init (_ constructedNode: DeferStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeferStmtSyntax`.
@@ -15468,12 +15800,12 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15482,12 +15814,12 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15505,7 +15837,9 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ExpressionStmtSyntax)
   }
   private var data: Data
@@ -15516,7 +15850,7 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
   }
-  public init(_ constructedNode: ExpressionStmtSyntax) {
+  public init (_ constructedNode: ExpressionStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ExpressionStmtSyntax`.
@@ -15558,12 +15892,12 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15572,12 +15906,12 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15601,7 +15935,9 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     var condition: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(RepeatWhileStmtSyntax)
   }
   private var data: Data
@@ -15623,12 +15959,12 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeRepeatKeyword: ExpressibleAsUnexpectedNodes? = nil, repeatKeyword: Token = Token.`repeat`, unexpectedBetweenRepeatKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeRepeatKeyword: ExpressibleAsUnexpectedNodes? = nil, repeatKeyword: Token = Token.`repeat`, unexpectedBetweenRepeatKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeRepeatKeyword: unexpectedBeforeRepeatKeyword, repeatKeyword: repeatKeyword, unexpectedBetweenRepeatKeywordAndBody: unexpectedBetweenRepeatKeywordAndBody, body: bodyBuilder(), unexpectedBetweenBodyAndWhileKeyword: unexpectedBetweenBodyAndWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndCondition: unexpectedBetweenWhileKeywordAndCondition, condition: condition)
   }
-  public init(_ constructedNode: RepeatWhileStmtSyntax) {
+  public init (_ constructedNode: RepeatWhileStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `RepeatWhileStmtSyntax`.
@@ -15670,12 +16006,12 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15684,12 +16020,12 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15713,7 +16049,9 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
     var body: CodeBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(GuardStmtSyntax)
   }
   private var data: Data
@@ -15735,12 +16073,12 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeGuardKeyword: ExpressibleAsUnexpectedNodes? = nil, guardKeyword: Token = Token.`guard`, unexpectedBetweenGuardKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token = Token.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeGuardKeyword: ExpressibleAsUnexpectedNodes? = nil, guardKeyword: Token = Token.`guard`, unexpectedBetweenGuardKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token = Token.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeGuardKeyword: unexpectedBeforeGuardKeyword, guardKeyword: guardKeyword, unexpectedBetweenGuardKeywordAndConditions: unexpectedBetweenGuardKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndElseKeyword: unexpectedBetweenConditionsAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody: unexpectedBetweenElseKeywordAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: GuardStmtSyntax) {
+  public init (_ constructedNode: GuardStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `GuardStmtSyntax`.
@@ -15782,12 +16120,12 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15796,12 +16134,12 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15821,7 +16159,9 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
     var guardResult: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(WhereClauseSyntax)
   }
   private var data: Data
@@ -15835,7 +16175,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
     assert(whereKeyword.text == #"where"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeWhereKeyword: unexpectedBeforeWhereKeyword?.createUnexpectedNodes(), whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndGuardResult: unexpectedBetweenWhereKeywordAndGuardResult?.createUnexpectedNodes(), guardResult: guardResult.createExprBuildable()))
   }
-  public init(_ constructedNode: WhereClauseSyntax) {
+  public init (_ constructedNode: WhereClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `WhereClauseSyntax`.
@@ -15870,12 +16210,12 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15884,12 +16224,12 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -15925,7 +16265,9 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     var body: CodeBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ForInStmtSyntax)
   }
   private var data: Data
@@ -15962,12 +16304,14 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeForKeyword: ExpressibleAsUnexpectedNodes? = nil, forKeyword: Token = Token.`for`, unexpectedBetweenForKeywordAndTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: Token? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: String?, unexpectedBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token? = nil, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: ExpressibleAsUnexpectedNodes? = nil, inKeyword: Token = Token.`in`, unexpectedBetweenInKeywordAndSequenceExpr: ExpressibleAsUnexpectedNodes? = nil, sequenceExpr: ExpressibleAsExprBuildable, unexpectedBetweenSequenceExprAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeForKeyword: ExpressibleAsUnexpectedNodes? = nil, forKeyword: Token = Token.`for`, unexpectedBetweenForKeywordAndTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: Token? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: String?, unexpectedBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token? = nil, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: ExpressibleAsUnexpectedNodes? = nil, inKeyword: Token = Token.`in`, unexpectedBetweenInKeywordAndSequenceExpr: ExpressibleAsUnexpectedNodes? = nil, sequenceExpr: ExpressibleAsExprBuildable, unexpectedBetweenSequenceExprAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeForKeyword: unexpectedBeforeForKeyword, forKeyword: forKeyword, unexpectedBetweenForKeywordAndTryKeyword: unexpectedBetweenForKeywordAndTryKeyword, tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndAwaitKeyword: unexpectedBetweenTryKeywordAndAwaitKeyword, awaitKeyword: awaitKeyword.map { Token.`identifier`($0) }, unexpectedBetweenAwaitKeywordAndCaseKeyword: unexpectedBetweenAwaitKeywordAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern: unexpectedBetweenCaseKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation: unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInKeyword: unexpectedBetweenTypeAnnotationAndInKeyword, inKeyword: inKeyword, unexpectedBetweenInKeywordAndSequenceExpr: unexpectedBetweenInKeywordAndSequenceExpr, sequenceExpr: sequenceExpr, unexpectedBetweenSequenceExprAndWhereClause: unexpectedBetweenSequenceExprAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndBody: unexpectedBetweenWhereClauseAndBody, body: bodyBuilder())
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeForKeyword: unexpectedBeforeForKeyword, forKeyword: forKeyword, unexpectedBetweenForKeywordAndTryKeyword: unexpectedBetweenForKeywordAndTryKeyword, tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndAwaitKeyword: unexpectedBetweenTryKeywordAndAwaitKeyword, awaitKeyword: awaitKeyword.map { 
+      Token.`identifier`($0) 
+    }, unexpectedBetweenAwaitKeywordAndCaseKeyword: unexpectedBetweenAwaitKeywordAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern: unexpectedBetweenCaseKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation: unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInKeyword: unexpectedBetweenTypeAnnotationAndInKeyword, inKeyword: inKeyword, unexpectedBetweenInKeywordAndSequenceExpr: unexpectedBetweenInKeywordAndSequenceExpr, sequenceExpr: sequenceExpr, unexpectedBetweenSequenceExprAndWhereClause: unexpectedBetweenSequenceExprAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndBody: unexpectedBetweenWhereClauseAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: ForInStmtSyntax) {
+  public init (_ constructedNode: ForInStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ForInStmtSyntax`.
@@ -16009,12 +16353,12 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16023,12 +16367,12 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16054,7 +16398,9 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
     var rightBrace: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SwitchStmtSyntax)
   }
   private var data: Data
@@ -16079,12 +16425,12 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSwitchKeyword: ExpressibleAsUnexpectedNodes? = nil, switchKeyword: Token = Token.`switch`, unexpectedBetweenSwitchKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndCases: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCasesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @SwitchCaseListBuilder casesBuilder: () -> ExpressibleAsSwitchCaseList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSwitchKeyword: ExpressibleAsUnexpectedNodes? = nil, switchKeyword: Token = Token.`switch`, unexpectedBetweenSwitchKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndCases: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCasesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @SwitchCaseListBuilder casesBuilder: () -> ExpressibleAsSwitchCaseList = {
     SwitchCaseList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSwitchKeyword: unexpectedBeforeSwitchKeyword, switchKeyword: switchKeyword, unexpectedBetweenSwitchKeywordAndExpression: unexpectedBetweenSwitchKeywordAndExpression, expression: expression, unexpectedBetweenExpressionAndLeftBrace: unexpectedBetweenExpressionAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndCases: unexpectedBetweenLeftBraceAndCases, cases: casesBuilder(), unexpectedBetweenCasesAndRightBrace: unexpectedBetweenCasesAndRightBrace, rightBrace: rightBrace)
   }
-  public init(_ constructedNode: SwitchStmtSyntax) {
+  public init (_ constructedNode: SwitchStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SwitchStmtSyntax`.
@@ -16126,12 +16472,12 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16140,12 +16486,12 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16167,7 +16513,9 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
     var catchClauses: CatchClauseList?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DoStmtSyntax)
   }
   private var data: Data
@@ -16186,12 +16534,12 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDoKeyword: ExpressibleAsUnexpectedNodes? = nil, doKeyword: Token = Token.`do`, unexpectedBetweenDoKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndCatchClauses: ExpressibleAsUnexpectedNodes? = nil, catchClauses: ExpressibleAsCatchClauseList? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDoKeyword: ExpressibleAsUnexpectedNodes? = nil, doKeyword: Token = Token.`do`, unexpectedBetweenDoKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndCatchClauses: ExpressibleAsUnexpectedNodes? = nil, catchClauses: ExpressibleAsCatchClauseList? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDoKeyword: unexpectedBeforeDoKeyword, doKeyword: doKeyword, unexpectedBetweenDoKeywordAndBody: unexpectedBetweenDoKeywordAndBody, body: bodyBuilder(), unexpectedBetweenBodyAndCatchClauses: unexpectedBetweenBodyAndCatchClauses, catchClauses: catchClauses)
   }
-  public init(_ constructedNode: DoStmtSyntax) {
+  public init (_ constructedNode: DoStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DoStmtSyntax`.
@@ -16233,12 +16581,12 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16247,12 +16595,12 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16272,7 +16620,9 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
     var expression: ExprBuildable?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ReturnStmtSyntax)
   }
   private var data: Data
@@ -16286,7 +16636,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
     assert(returnKeyword.text == #"return"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeReturnKeyword: unexpectedBeforeReturnKeyword?.createUnexpectedNodes(), returnKeyword: returnKeyword, unexpectedBetweenReturnKeywordAndExpression: unexpectedBetweenReturnKeywordAndExpression?.createUnexpectedNodes(), expression: expression?.createExprBuildable()))
   }
-  public init(_ constructedNode: ReturnStmtSyntax) {
+  public init (_ constructedNode: ReturnStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ReturnStmtSyntax`.
@@ -16328,12 +16678,12 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16342,12 +16692,12 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16367,7 +16717,9 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
     var yields: SyntaxBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(YieldStmtSyntax)
   }
   private var data: Data
@@ -16381,7 +16733,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
     assert(yieldKeyword.text == #"yield"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeYieldKeyword: unexpectedBeforeYieldKeyword?.createUnexpectedNodes(), yieldKeyword: yieldKeyword, unexpectedBetweenYieldKeywordAndYields: unexpectedBetweenYieldKeywordAndYields?.createUnexpectedNodes(), yields: yields.createSyntaxBuildable()))
   }
-  public init(_ constructedNode: YieldStmtSyntax) {
+  public init (_ constructedNode: YieldStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `YieldStmtSyntax`.
@@ -16423,12 +16775,12 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16437,12 +16789,12 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16464,7 +16816,9 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(YieldListSyntax)
   }
   private var data: Data
@@ -16481,7 +16835,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndElementList: unexpectedBetweenLeftParenAndElementList?.createUnexpectedNodes(), elementList: elementList.createYieldExprList(), unexpectedBetweenElementListAndRightParen: unexpectedBetweenElementListAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: YieldListSyntax) {
+  public init (_ constructedNode: YieldListSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `YieldListSyntax`.
@@ -16516,12 +16870,12 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16530,12 +16884,12 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16553,7 +16907,9 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
     var fallthroughKeyword: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FallthroughStmtSyntax)
   }
   private var data: Data
@@ -16565,7 +16921,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
     assert(fallthroughKeyword.text == #"fallthrough"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeFallthroughKeyword: unexpectedBeforeFallthroughKeyword?.createUnexpectedNodes(), fallthroughKeyword: fallthroughKeyword))
   }
-  public init(_ constructedNode: FallthroughStmtSyntax) {
+  public init (_ constructedNode: FallthroughStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FallthroughStmtSyntax`.
@@ -16607,12 +16963,12 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16621,12 +16977,12 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16646,7 +17002,9 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
     var label: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(BreakStmtSyntax)
   }
   private var data: Data
@@ -16664,9 +17022,11 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeBreakKeyword: ExpressibleAsUnexpectedNodes? = nil, breakKeyword: Token = Token.`break`, unexpectedBetweenBreakKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: String?) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBreakKeyword: unexpectedBeforeBreakKeyword, breakKeyword: breakKeyword, unexpectedBetweenBreakKeywordAndLabel: unexpectedBetweenBreakKeywordAndLabel, label: label.map { Token.`identifier`($0) })
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBreakKeyword: unexpectedBeforeBreakKeyword, breakKeyword: breakKeyword, unexpectedBetweenBreakKeywordAndLabel: unexpectedBetweenBreakKeywordAndLabel, label: label.map { 
+      Token.`identifier`($0) 
+    })
   }
-  public init(_ constructedNode: BreakStmtSyntax) {
+  public init (_ constructedNode: BreakStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `BreakStmtSyntax`.
@@ -16708,12 +17068,12 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16722,12 +17082,12 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16747,15 +17107,17 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ConditionElementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -16769,7 +17131,7 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeCondition: unexpectedBeforeCondition?.createUnexpectedNodes(), condition: condition.createSyntaxBuildable(), unexpectedBetweenConditionAndTrailingComma: unexpectedBetweenConditionAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: ConditionElementSyntax) {
+  public init (_ constructedNode: ConditionElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ConditionElementSyntax`.
@@ -16805,12 +17167,12 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -16819,12 +17181,12 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16833,12 +17195,12 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16862,7 +17224,9 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AvailabilityConditionSyntax)
   }
   private var data: Data
@@ -16882,7 +17246,7 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundAvailableKeyword: unexpectedBeforePoundAvailableKeyword?.createUnexpectedNodes(), poundAvailableKeyword: poundAvailableKeyword, unexpectedBetweenPoundAvailableKeywordAndLeftParen: unexpectedBetweenPoundAvailableKeywordAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec: unexpectedBetweenLeftParenAndAvailabilitySpec?.createUnexpectedNodes(), availabilitySpec: availabilitySpec.createAvailabilitySpecList(), unexpectedBetweenAvailabilitySpecAndRightParen: unexpectedBetweenAvailabilitySpecAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: AvailabilityConditionSyntax) {
+  public init (_ constructedNode: AvailabilityConditionSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AvailabilityConditionSyntax`.
@@ -16917,12 +17281,12 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16931,12 +17295,12 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -16960,7 +17324,9 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
     var initializer: InitializerClause
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MatchingPatternConditionSyntax)
   }
   private var data: Data
@@ -16978,7 +17344,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
     assert(caseKeyword.text == #"case"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeCaseKeyword: unexpectedBeforeCaseKeyword?.createUnexpectedNodes(), caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern: unexpectedBetweenCaseKeywordAndPattern?.createUnexpectedNodes(), pattern: pattern.createPatternBuildable(), unexpectedBetweenPatternAndTypeAnnotation: unexpectedBetweenPatternAndTypeAnnotation?.createUnexpectedNodes(), typeAnnotation: typeAnnotation?.createTypeAnnotation(), unexpectedBetweenTypeAnnotationAndInitializer: unexpectedBetweenTypeAnnotationAndInitializer?.createUnexpectedNodes(), initializer: initializer.createInitializerClause()))
   }
-  public init(_ constructedNode: MatchingPatternConditionSyntax) {
+  public init (_ constructedNode: MatchingPatternConditionSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MatchingPatternConditionSyntax`.
@@ -17013,12 +17379,12 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17027,12 +17393,12 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17056,7 +17422,9 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
     var initializer: InitializerClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OptionalBindingConditionSyntax)
   }
   private var data: Data
@@ -17074,7 +17442,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
     assert(letOrVarKeyword.text == #"let"# || letOrVarKeyword.text == #"var"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLetOrVarKeyword: unexpectedBeforeLetOrVarKeyword?.createUnexpectedNodes(), letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndPattern: unexpectedBetweenLetOrVarKeywordAndPattern?.createUnexpectedNodes(), pattern: pattern.createPatternBuildable(), unexpectedBetweenPatternAndTypeAnnotation: unexpectedBetweenPatternAndTypeAnnotation?.createUnexpectedNodes(), typeAnnotation: typeAnnotation?.createTypeAnnotation(), unexpectedBetweenTypeAnnotationAndInitializer: unexpectedBetweenTypeAnnotationAndInitializer?.createUnexpectedNodes(), initializer: initializer?.createInitializerClause()))
   }
-  public init(_ constructedNode: OptionalBindingConditionSyntax) {
+  public init (_ constructedNode: OptionalBindingConditionSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OptionalBindingConditionSyntax`.
@@ -17109,12 +17477,12 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17123,12 +17491,12 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17152,7 +17520,9 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(UnavailabilityConditionSyntax)
   }
   private var data: Data
@@ -17172,7 +17542,7 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePoundUnavailableKeyword: unexpectedBeforePoundUnavailableKeyword?.createUnexpectedNodes(), poundUnavailableKeyword: poundUnavailableKeyword, unexpectedBetweenPoundUnavailableKeywordAndLeftParen: unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec: unexpectedBetweenLeftParenAndAvailabilitySpec?.createUnexpectedNodes(), availabilitySpec: availabilitySpec.createAvailabilitySpecList(), unexpectedBetweenAvailabilitySpecAndRightParen: unexpectedBetweenAvailabilitySpecAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: UnavailabilityConditionSyntax) {
+  public init (_ constructedNode: UnavailabilityConditionSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `UnavailabilityConditionSyntax`.
@@ -17207,12 +17577,12 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17221,12 +17591,12 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17250,7 +17620,9 @@ public struct HasSymbolCondition: SyntaxBuildable, ExpressibleAsHasSymbolConditi
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(HasSymbolConditionSyntax)
   }
   private var data: Data
@@ -17269,7 +17641,7 @@ public struct HasSymbolCondition: SyntaxBuildable, ExpressibleAsHasSymbolConditi
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeHasSymbolKeyword: unexpectedBeforeHasSymbolKeyword?.createUnexpectedNodes(), hasSymbolKeyword: hasSymbolKeyword, unexpectedBetweenHasSymbolKeywordAndLeftParen: unexpectedBetweenHasSymbolKeywordAndLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndExpression: unexpectedBetweenLeftParenAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable(), unexpectedBetweenExpressionAndRightParen: unexpectedBetweenExpressionAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: HasSymbolConditionSyntax) {
+  public init (_ constructedNode: HasSymbolConditionSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `HasSymbolConditionSyntax`.
@@ -17304,12 +17676,12 @@ public struct HasSymbolCondition: SyntaxBuildable, ExpressibleAsHasSymbolConditi
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17318,12 +17690,12 @@ public struct HasSymbolCondition: SyntaxBuildable, ExpressibleAsHasSymbolConditi
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17341,7 +17713,9 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
     var declaration: DeclBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DeclarationStmtSyntax)
   }
   private var data: Data
@@ -17352,7 +17726,7 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeDeclaration: ExpressibleAsUnexpectedNodes? = nil, declaration: ExpressibleAsDeclBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeDeclaration: unexpectedBeforeDeclaration?.createUnexpectedNodes(), declaration: declaration.createDeclBuildable()))
   }
-  public init(_ constructedNode: DeclarationStmtSyntax) {
+  public init (_ constructedNode: DeclarationStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DeclarationStmtSyntax`.
@@ -17394,12 +17768,12 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17408,12 +17782,12 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17433,7 +17807,9 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ThrowStmtSyntax)
   }
   private var data: Data
@@ -17447,7 +17823,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
     assert(throwKeyword.text == #"throw"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeThrowKeyword: unexpectedBeforeThrowKeyword?.createUnexpectedNodes(), throwKeyword: throwKeyword, unexpectedBetweenThrowKeywordAndExpression: unexpectedBetweenThrowKeywordAndExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
   }
-  public init(_ constructedNode: ThrowStmtSyntax) {
+  public init (_ constructedNode: ThrowStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ThrowStmtSyntax`.
@@ -17489,12 +17865,12 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17503,12 +17879,12 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17534,7 +17910,9 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     var elseBody: SyntaxBuildable?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IfStmtSyntax)
   }
   private var data: Data
@@ -17558,12 +17936,12 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIfKeyword: ExpressibleAsUnexpectedNodes? = nil, ifKeyword: Token = Token.`if`, unexpectedBetweenIfKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token? = nil, unexpectedBetweenElseKeywordAndElseBody: ExpressibleAsUnexpectedNodes? = nil, elseBody: ExpressibleAsSyntaxBuildable? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIfKeyword: ExpressibleAsUnexpectedNodes? = nil, ifKeyword: Token = Token.`if`, unexpectedBetweenIfKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token? = nil, unexpectedBetweenElseKeywordAndElseBody: ExpressibleAsUnexpectedNodes? = nil, elseBody: ExpressibleAsSyntaxBuildable? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIfKeyword: unexpectedBeforeIfKeyword, ifKeyword: ifKeyword, unexpectedBetweenIfKeywordAndConditions: unexpectedBetweenIfKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody: unexpectedBetweenConditionsAndBody, body: bodyBuilder(), unexpectedBetweenBodyAndElseKeyword: unexpectedBetweenBodyAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndElseBody: unexpectedBetweenElseKeywordAndElseBody, elseBody: elseBody)
   }
-  public init(_ constructedNode: IfStmtSyntax) {
+  public init (_ constructedNode: IfStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IfStmtSyntax`.
@@ -17605,12 +17983,12 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17619,12 +17997,12 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17646,7 +18024,9 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
     var statements: CodeBlockItemList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SwitchCaseSyntax)
   }
   private var data: Data
@@ -17664,12 +18044,12 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeUnknownAttr: ExpressibleAsUnexpectedNodes? = nil, unknownAttr: ExpressibleAsAttribute? = nil, unexpectedBetweenUnknownAttrAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: ExpressibleAsSyntaxBuildable, unexpectedBetweenLabelAndStatements: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeUnknownAttr: ExpressibleAsUnexpectedNodes? = nil, unknownAttr: ExpressibleAsAttribute? = nil, unexpectedBetweenUnknownAttrAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: ExpressibleAsSyntaxBuildable, unexpectedBetweenLabelAndStatements: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeUnknownAttr: unexpectedBeforeUnknownAttr, unknownAttr: unknownAttr, unexpectedBetweenUnknownAttrAndLabel: unexpectedBetweenUnknownAttrAndLabel, label: label, unexpectedBetweenLabelAndStatements: unexpectedBetweenLabelAndStatements, statements: statementsBuilder())
   }
-  public init(_ constructedNode: SwitchCaseSyntax) {
+  public init (_ constructedNode: SwitchCaseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SwitchCaseSyntax`.
@@ -17704,12 +18084,12 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17718,12 +18098,12 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17743,7 +18123,9 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
     var colon: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SwitchDefaultLabelSyntax)
   }
   private var data: Data
@@ -17758,7 +18140,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
     assert(colon.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeDefaultKeyword: unexpectedBeforeDefaultKeyword?.createUnexpectedNodes(), defaultKeyword: defaultKeyword, unexpectedBetweenDefaultKeywordAndColon: unexpectedBetweenDefaultKeywordAndColon?.createUnexpectedNodes(), colon: colon))
   }
-  public init(_ constructedNode: SwitchDefaultLabelSyntax) {
+  public init (_ constructedNode: SwitchDefaultLabelSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SwitchDefaultLabelSyntax`.
@@ -17793,12 +18175,12 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17807,12 +18189,12 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17834,15 +18216,17 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CaseItemSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -17858,7 +18242,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePattern: unexpectedBeforePattern?.createUnexpectedNodes(), pattern: pattern.createPatternBuildable(), unexpectedBetweenPatternAndWhereClause: unexpectedBetweenPatternAndWhereClause?.createUnexpectedNodes(), whereClause: whereClause?.createWhereClause(), unexpectedBetweenWhereClauseAndTrailingComma: unexpectedBetweenWhereClauseAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: CaseItemSyntax) {
+  public init (_ constructedNode: CaseItemSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CaseItemSyntax`.
@@ -17894,12 +18278,12 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -17908,12 +18292,12 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17922,12 +18306,12 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -17949,15 +18333,17 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CatchItemSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -17973,7 +18359,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePattern: unexpectedBeforePattern?.createUnexpectedNodes(), pattern: pattern?.createPatternBuildable(), unexpectedBetweenPatternAndWhereClause: unexpectedBetweenPatternAndWhereClause?.createUnexpectedNodes(), whereClause: whereClause?.createWhereClause(), unexpectedBetweenWhereClauseAndTrailingComma: unexpectedBetweenWhereClauseAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: CatchItemSyntax) {
+  public init (_ constructedNode: CatchItemSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CatchItemSyntax`.
@@ -18009,12 +18395,12 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -18023,12 +18409,12 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18037,12 +18423,12 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18064,7 +18450,9 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
     var colon: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SwitchCaseLabelSyntax)
   }
   private var data: Data
@@ -18084,12 +18472,12 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndCaseItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCaseItemsAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndCaseItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCaseItemsAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList = {
     CaseItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCaseKeyword: unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems: unexpectedBetweenCaseKeywordAndCaseItems, caseItems: caseItemsBuilder(), unexpectedBetweenCaseItemsAndColon: unexpectedBetweenCaseItemsAndColon, colon: colon)
   }
-  public init(_ constructedNode: SwitchCaseLabelSyntax) {
+  public init (_ constructedNode: SwitchCaseLabelSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SwitchCaseLabelSyntax`.
@@ -18124,12 +18512,12 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18138,12 +18526,12 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18165,7 +18553,9 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
     var body: CodeBlock
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CatchClauseSyntax)
   }
   private var data: Data
@@ -18184,12 +18574,12 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCatchKeyword: ExpressibleAsUnexpectedNodes? = nil, catchKeyword: Token = Token.`catch`, unexpectedBetweenCatchKeywordAndCatchItems: ExpressibleAsUnexpectedNodes? = nil, catchItems: ExpressibleAsCatchItemList? = nil, unexpectedBetweenCatchItemsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCatchKeyword: ExpressibleAsUnexpectedNodes? = nil, catchKeyword: Token = Token.`catch`, unexpectedBetweenCatchKeywordAndCatchItems: ExpressibleAsUnexpectedNodes? = nil, catchItems: ExpressibleAsCatchItemList? = nil, unexpectedBetweenCatchItemsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCatchKeyword: unexpectedBeforeCatchKeyword, catchKeyword: catchKeyword, unexpectedBetweenCatchKeywordAndCatchItems: unexpectedBetweenCatchKeywordAndCatchItems, catchItems: catchItems, unexpectedBetweenCatchItemsAndBody: unexpectedBetweenCatchItemsAndBody, body: bodyBuilder())
   }
-  public init(_ constructedNode: CatchClauseSyntax) {
+  public init (_ constructedNode: CatchClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CatchClauseSyntax`.
@@ -18224,12 +18614,12 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18238,12 +18628,12 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18271,7 +18661,9 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PoundAssertStmtSyntax)
   }
   private var data: Data
@@ -18300,9 +18692,11 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforePoundAssert: ExpressibleAsUnexpectedNodes? = nil, poundAssert: Token = Token.`poundAssert`, unexpectedBetweenPoundAssertAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, unexpectedBetweenConditionAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: String?, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundAssert: unexpectedBeforePoundAssert, poundAssert: poundAssert, unexpectedBetweenPoundAssertAndLeftParen: unexpectedBetweenPoundAssertAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndCondition: unexpectedBetweenLeftParenAndCondition, condition: condition, unexpectedBetweenConditionAndComma: unexpectedBetweenConditionAndComma, comma: comma, unexpectedBetweenCommaAndMessage: unexpectedBetweenCommaAndMessage, message: message.map { Token.`stringLiteral`($0) }, unexpectedBetweenMessageAndRightParen: unexpectedBetweenMessageAndRightParen, rightParen: rightParen)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundAssert: unexpectedBeforePoundAssert, poundAssert: poundAssert, unexpectedBetweenPoundAssertAndLeftParen: unexpectedBetweenPoundAssertAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndCondition: unexpectedBetweenLeftParenAndCondition, condition: condition, unexpectedBetweenConditionAndComma: unexpectedBetweenConditionAndComma, comma: comma, unexpectedBetweenCommaAndMessage: unexpectedBetweenCommaAndMessage, message: message.map { 
+      Token.`stringLiteral`($0) 
+    }, unexpectedBetweenMessageAndRightParen: unexpectedBetweenMessageAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: PoundAssertStmtSyntax) {
+  public init (_ constructedNode: PoundAssertStmtSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PoundAssertStmtSyntax`.
@@ -18344,12 +18738,12 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18358,12 +18752,12 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18383,7 +18777,9 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
     var requirementList: GenericRequirementList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(GenericWhereClauseSyntax)
   }
   private var data: Data
@@ -18400,12 +18796,12 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: Token = Token.`where`, unexpectedBetweenWhereKeywordAndRequirementList: ExpressibleAsUnexpectedNodes? = nil, @GenericRequirementListBuilder requirementListBuilder: () -> ExpressibleAsGenericRequirementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: Token = Token.`where`, unexpectedBetweenWhereKeywordAndRequirementList: ExpressibleAsUnexpectedNodes? = nil, @GenericRequirementListBuilder requirementListBuilder: () -> ExpressibleAsGenericRequirementList = {
     GenericRequirementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhereKeyword: unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndRequirementList: unexpectedBetweenWhereKeywordAndRequirementList, requirementList: requirementListBuilder())
   }
-  public init(_ constructedNode: GenericWhereClauseSyntax) {
+  public init (_ constructedNode: GenericWhereClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `GenericWhereClauseSyntax`.
@@ -18440,12 +18836,12 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18454,12 +18850,12 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18479,15 +18875,17 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(GenericRequirementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -18501,7 +18899,7 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBody: unexpectedBeforeBody?.createUnexpectedNodes(), body: body.createSyntaxBuildable(), unexpectedBetweenBodyAndTrailingComma: unexpectedBetweenBodyAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: GenericRequirementSyntax) {
+  public init (_ constructedNode: GenericRequirementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `GenericRequirementSyntax`.
@@ -18537,12 +18935,12 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -18551,12 +18949,12 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18565,12 +18963,12 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18592,7 +18990,9 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
     var rightTypeIdentifier: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SameTypeRequirementSyntax)
   }
   private var data: Data
@@ -18607,7 +19007,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, leftTypeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenLeftTypeIdentifierAndEqualityToken: ExpressibleAsUnexpectedNodes? = nil, equalityToken: Token, unexpectedBetweenEqualityTokenAndRightTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, rightTypeIdentifier: ExpressibleAsTypeBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftTypeIdentifier: unexpectedBeforeLeftTypeIdentifier?.createUnexpectedNodes(), leftTypeIdentifier: leftTypeIdentifier.createTypeBuildable(), unexpectedBetweenLeftTypeIdentifierAndEqualityToken: unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.createUnexpectedNodes(), equalityToken: equalityToken, unexpectedBetweenEqualityTokenAndRightTypeIdentifier: unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.createUnexpectedNodes(), rightTypeIdentifier: rightTypeIdentifier.createTypeBuildable()))
   }
-  public init(_ constructedNode: SameTypeRequirementSyntax) {
+  public init (_ constructedNode: SameTypeRequirementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SameTypeRequirementSyntax`.
@@ -18642,12 +19042,12 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18656,12 +19056,12 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18693,7 +19093,9 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
     var rightParen: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(LayoutRequirementSyntax)
   }
   private var data: Data
@@ -18726,9 +19128,13 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, typeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenTypeIdentifierAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndLayoutConstraint: ExpressibleAsUnexpectedNodes? = nil, layoutConstraint: String, unexpectedBetweenLayoutConstraintAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndSize: ExpressibleAsUnexpectedNodes? = nil, size: String?, unexpectedBetweenSizeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndAlignment: ExpressibleAsUnexpectedNodes? = nil, alignment: String?, unexpectedBetweenAlignmentAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeTypeIdentifier: unexpectedBeforeTypeIdentifier, typeIdentifier: typeIdentifier, unexpectedBetweenTypeIdentifierAndColon: unexpectedBetweenTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndLayoutConstraint: unexpectedBetweenColonAndLayoutConstraint, layoutConstraint: Token.`identifier`(layoutConstraint), unexpectedBetweenLayoutConstraintAndLeftParen: unexpectedBetweenLayoutConstraintAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndSize: unexpectedBetweenLeftParenAndSize, size: size.map { Token.`integerLiteral`($0) }, unexpectedBetweenSizeAndComma: unexpectedBetweenSizeAndComma, comma: comma, unexpectedBetweenCommaAndAlignment: unexpectedBetweenCommaAndAlignment, alignment: alignment.map { Token.`integerLiteral`($0) }, unexpectedBetweenAlignmentAndRightParen: unexpectedBetweenAlignmentAndRightParen, rightParen: rightParen)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeTypeIdentifier: unexpectedBeforeTypeIdentifier, typeIdentifier: typeIdentifier, unexpectedBetweenTypeIdentifierAndColon: unexpectedBetweenTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndLayoutConstraint: unexpectedBetweenColonAndLayoutConstraint, layoutConstraint: Token.`identifier`(layoutConstraint), unexpectedBetweenLayoutConstraintAndLeftParen: unexpectedBetweenLayoutConstraintAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndSize: unexpectedBetweenLeftParenAndSize, size: size.map { 
+      Token.`integerLiteral`($0) 
+    }, unexpectedBetweenSizeAndComma: unexpectedBetweenSizeAndComma, comma: comma, unexpectedBetweenCommaAndAlignment: unexpectedBetweenCommaAndAlignment, alignment: alignment.map { 
+      Token.`integerLiteral`($0) 
+    }, unexpectedBetweenAlignmentAndRightParen: unexpectedBetweenAlignmentAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: LayoutRequirementSyntax) {
+  public init (_ constructedNode: LayoutRequirementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `LayoutRequirementSyntax`.
@@ -18763,12 +19169,12 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18777,12 +19183,12 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18810,15 +19216,17 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(GenericParameterSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -18848,7 +19256,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName, name: Token.`identifier`(name), unexpectedBetweenNameAndEllipsis: unexpectedBetweenNameAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndColon: unexpectedBetweenEllipsisAndColon, colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: GenericParameterSyntax) {
+  public init (_ constructedNode: GenericParameterSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `GenericParameterSyntax`.
@@ -18884,12 +19292,12 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -18898,12 +19306,12 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18912,12 +19320,12 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -18937,15 +19345,17 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrimaryAssociatedTypeSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -18965,7 +19375,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: PrimaryAssociatedTypeSyntax) {
+  public init (_ constructedNode: PrimaryAssociatedTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrimaryAssociatedTypeSyntax`.
@@ -19001,12 +19411,12 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -19015,12 +19425,12 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19029,12 +19439,12 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19058,7 +19468,9 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
     var rightAngleBracket: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(GenericParameterClauseSyntax)
   }
   private var data: Data
@@ -19080,12 +19492,12 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList = {
     GenericParameterList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList: unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndGenericWhereClause: unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
   }
-  public init(_ constructedNode: GenericParameterClauseSyntax) {
+  public init (_ constructedNode: GenericParameterClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `GenericParameterClauseSyntax`.
@@ -19120,12 +19532,12 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19134,12 +19546,12 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19161,7 +19573,9 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
     var rightTypeIdentifier: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ConformanceRequirementSyntax)
   }
   private var data: Data
@@ -19177,7 +19591,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
     assert(colon.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftTypeIdentifier: unexpectedBeforeLeftTypeIdentifier?.createUnexpectedNodes(), leftTypeIdentifier: leftTypeIdentifier.createTypeBuildable(), unexpectedBetweenLeftTypeIdentifierAndColon: unexpectedBetweenLeftTypeIdentifierAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndRightTypeIdentifier: unexpectedBetweenColonAndRightTypeIdentifier?.createUnexpectedNodes(), rightTypeIdentifier: rightTypeIdentifier.createTypeBuildable()))
   }
-  public init(_ constructedNode: ConformanceRequirementSyntax) {
+  public init (_ constructedNode: ConformanceRequirementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ConformanceRequirementSyntax`.
@@ -19212,12 +19626,12 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19226,12 +19640,12 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19253,7 +19667,9 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
     var rightAngleBracket: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PrimaryAssociatedTypeClauseSyntax)
   }
   private var data: Data
@@ -19270,7 +19686,7 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
     assert(rightAngleBracket.text == #">"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes(), leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.createUnexpectedNodes(), primaryAssociatedTypeList: primaryAssociatedTypeList.createPrimaryAssociatedTypeList(), unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.createUnexpectedNodes(), rightAngleBracket: rightAngleBracket))
   }
-  public init(_ constructedNode: PrimaryAssociatedTypeClauseSyntax) {
+  public init (_ constructedNode: PrimaryAssociatedTypeClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PrimaryAssociatedTypeClauseSyntax`.
@@ -19305,12 +19721,12 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19319,12 +19735,12 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19344,7 +19760,9 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
     var genericArgumentClause: GenericArgumentClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(SimpleTypeIdentifierSyntax)
   }
   private var data: Data
@@ -19357,7 +19775,7 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeName: unexpectedBeforeName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndGenericArgumentClause: unexpectedBetweenNameAndGenericArgumentClause?.createUnexpectedNodes(), genericArgumentClause: genericArgumentClause?.createGenericArgumentClause()))
   }
-  public init(_ constructedNode: SimpleTypeIdentifierSyntax) {
+  public init (_ constructedNode: SimpleTypeIdentifierSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `SimpleTypeIdentifierSyntax`.
@@ -19399,12 +19817,12 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19413,12 +19831,12 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19442,7 +19860,9 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
     var genericArgumentClause: GenericArgumentClause?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MemberTypeIdentifierSyntax)
   }
   private var data: Data
@@ -19460,7 +19880,7 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
     assert(period.text == #"."# || period.text == #"."#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeBaseType: unexpectedBeforeBaseType?.createUnexpectedNodes(), baseType: baseType.createTypeBuildable(), unexpectedBetweenBaseTypeAndPeriod: unexpectedBetweenBaseTypeAndPeriod?.createUnexpectedNodes(), period: period, unexpectedBetweenPeriodAndName: unexpectedBetweenPeriodAndName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndGenericArgumentClause: unexpectedBetweenNameAndGenericArgumentClause?.createUnexpectedNodes(), genericArgumentClause: genericArgumentClause?.createGenericArgumentClause()))
   }
-  public init(_ constructedNode: MemberTypeIdentifierSyntax) {
+  public init (_ constructedNode: MemberTypeIdentifierSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MemberTypeIdentifierSyntax`.
@@ -19502,12 +19922,12 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19516,12 +19936,12 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19539,7 +19959,9 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
     var classKeyword: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ClassRestrictionTypeSyntax)
   }
   private var data: Data
@@ -19551,7 +19973,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
     assert(classKeyword.text == #"class"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeClassKeyword: unexpectedBeforeClassKeyword?.createUnexpectedNodes(), classKeyword: classKeyword))
   }
-  public init(_ constructedNode: ClassRestrictionTypeSyntax) {
+  public init (_ constructedNode: ClassRestrictionTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ClassRestrictionTypeSyntax`.
@@ -19593,12 +20015,12 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19607,12 +20029,12 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19634,7 +20056,9 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
     var rightSquareBracket: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ArrayTypeSyntax)
   }
   private var data: Data
@@ -19651,7 +20075,7 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
     assert(rightSquareBracket.text == #"]"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftSquareBracket: unexpectedBeforeLeftSquareBracket?.createUnexpectedNodes(), leftSquareBracket: leftSquareBracket, unexpectedBetweenLeftSquareBracketAndElementType: unexpectedBetweenLeftSquareBracketAndElementType?.createUnexpectedNodes(), elementType: elementType.createTypeBuildable(), unexpectedBetweenElementTypeAndRightSquareBracket: unexpectedBetweenElementTypeAndRightSquareBracket?.createUnexpectedNodes(), rightSquareBracket: rightSquareBracket))
   }
-  public init(_ constructedNode: ArrayTypeSyntax) {
+  public init (_ constructedNode: ArrayTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ArrayTypeSyntax`.
@@ -19693,12 +20117,12 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19707,12 +20131,12 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19738,7 +20162,9 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
     var rightSquareBracket: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(DictionaryTypeSyntax)
   }
   private var data: Data
@@ -19760,7 +20186,7 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
     assert(rightSquareBracket.text == #"]"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftSquareBracket: unexpectedBeforeLeftSquareBracket?.createUnexpectedNodes(), leftSquareBracket: leftSquareBracket, unexpectedBetweenLeftSquareBracketAndKeyType: unexpectedBetweenLeftSquareBracketAndKeyType?.createUnexpectedNodes(), keyType: keyType.createTypeBuildable(), unexpectedBetweenKeyTypeAndColon: unexpectedBetweenKeyTypeAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndValueType: unexpectedBetweenColonAndValueType?.createUnexpectedNodes(), valueType: valueType.createTypeBuildable(), unexpectedBetweenValueTypeAndRightSquareBracket: unexpectedBetweenValueTypeAndRightSquareBracket?.createUnexpectedNodes(), rightSquareBracket: rightSquareBracket))
   }
-  public init(_ constructedNode: DictionaryTypeSyntax) {
+  public init (_ constructedNode: DictionaryTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `DictionaryTypeSyntax`.
@@ -19802,12 +20228,12 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19816,12 +20242,12 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19843,7 +20269,9 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
     var typeOrProtocol: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(MetatypeTypeSyntax)
   }
   private var data: Data
@@ -19866,7 +20294,7 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable, unexpectedBetweenBaseTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndTypeOrProtocol: ExpressibleAsUnexpectedNodes? = nil, typeOrProtocol: String) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBaseType: unexpectedBeforeBaseType, baseType: baseType, unexpectedBetweenBaseTypeAndPeriod: unexpectedBetweenBaseTypeAndPeriod, period: period, unexpectedBetweenPeriodAndTypeOrProtocol: unexpectedBetweenPeriodAndTypeOrProtocol, typeOrProtocol: Token.`identifier`(typeOrProtocol))
   }
-  public init(_ constructedNode: MetatypeTypeSyntax) {
+  public init (_ constructedNode: MetatypeTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `MetatypeTypeSyntax`.
@@ -19908,12 +20336,12 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19922,12 +20350,12 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -19947,7 +20375,9 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
     var questionMark: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OptionalTypeSyntax)
   }
   private var data: Data
@@ -19961,7 +20391,7 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
     assert(questionMark.text == #"?"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeWrappedType: unexpectedBeforeWrappedType?.createUnexpectedNodes(), wrappedType: wrappedType.createTypeBuildable(), unexpectedBetweenWrappedTypeAndQuestionMark: unexpectedBetweenWrappedTypeAndQuestionMark?.createUnexpectedNodes(), questionMark: questionMark))
   }
-  public init(_ constructedNode: OptionalTypeSyntax) {
+  public init (_ constructedNode: OptionalTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OptionalTypeSyntax`.
@@ -20003,12 +20433,12 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20017,12 +20447,12 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20042,7 +20472,9 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
     var baseType: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ConstrainedSugarTypeSyntax)
   }
   private var data: Data
@@ -20062,7 +20494,7 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   public init (leadingTrivia: Trivia = [], unexpectedBeforeSomeOrAnySpecifier: ExpressibleAsUnexpectedNodes? = nil, someOrAnySpecifier: String, unexpectedBetweenSomeOrAnySpecifierAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSomeOrAnySpecifier: unexpectedBeforeSomeOrAnySpecifier, someOrAnySpecifier: Token.`identifier`(someOrAnySpecifier), unexpectedBetweenSomeOrAnySpecifierAndBaseType: unexpectedBetweenSomeOrAnySpecifierAndBaseType, baseType: baseType)
   }
-  public init(_ constructedNode: ConstrainedSugarTypeSyntax) {
+  public init (_ constructedNode: ConstrainedSugarTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ConstrainedSugarTypeSyntax`.
@@ -20104,12 +20536,12 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20118,12 +20550,12 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20143,7 +20575,9 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
     var exclamationMark: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ImplicitlyUnwrappedOptionalTypeSyntax)
   }
   private var data: Data
@@ -20157,7 +20591,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
     assert(exclamationMark.text == #"!"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeWrappedType: unexpectedBeforeWrappedType?.createUnexpectedNodes(), wrappedType: wrappedType.createTypeBuildable(), unexpectedBetweenWrappedTypeAndExclamationMark: unexpectedBetweenWrappedTypeAndExclamationMark?.createUnexpectedNodes(), exclamationMark: exclamationMark))
   }
-  public init(_ constructedNode: ImplicitlyUnwrappedOptionalTypeSyntax) {
+  public init (_ constructedNode: ImplicitlyUnwrappedOptionalTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ImplicitlyUnwrappedOptionalTypeSyntax`.
@@ -20199,12 +20633,12 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20213,12 +20647,12 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20238,7 +20672,9 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
     var ampersand: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CompositionTypeElementSyntax)
   }
   private var data: Data
@@ -20252,7 +20688,7 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
     assert(ampersand == nil || ampersand!.text == #"&"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeType: unexpectedBeforeType?.createUnexpectedNodes(), type: type.createTypeBuildable(), unexpectedBetweenTypeAndAmpersand: unexpectedBetweenTypeAndAmpersand?.createUnexpectedNodes(), ampersand: ampersand))
   }
-  public init(_ constructedNode: CompositionTypeElementSyntax) {
+  public init (_ constructedNode: CompositionTypeElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CompositionTypeElementSyntax`.
@@ -20287,12 +20723,12 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20301,12 +20737,12 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20324,7 +20760,9 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
     var elements: CompositionTypeElementList
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(CompositionTypeSyntax)
   }
   private var data: Data
@@ -20335,7 +20773,7 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsCompositionTypeElementList) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeElements: unexpectedBeforeElements?.createUnexpectedNodes(), elements: elements.createCompositionTypeElementList()))
   }
-  public init(_ constructedNode: CompositionTypeSyntax) {
+  public init (_ constructedNode: CompositionTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `CompositionTypeSyntax`.
@@ -20377,12 +20815,12 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20391,12 +20829,12 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20416,7 +20854,9 @@ public struct PackExpansionType: TypeBuildable, ExpressibleAsPackExpansionType {
     var ellipsis: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(PackExpansionTypeSyntax)
   }
   private var data: Data
@@ -20430,7 +20870,7 @@ public struct PackExpansionType: TypeBuildable, ExpressibleAsPackExpansionType {
     assert(ellipsis.text == #"..."#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePatternType: unexpectedBeforePatternType?.createUnexpectedNodes(), patternType: patternType.createTypeBuildable(), unexpectedBetweenPatternTypeAndEllipsis: unexpectedBetweenPatternTypeAndEllipsis?.createUnexpectedNodes(), ellipsis: ellipsis))
   }
-  public init(_ constructedNode: PackExpansionTypeSyntax) {
+  public init (_ constructedNode: PackExpansionTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `PackExpansionTypeSyntax`.
@@ -20472,12 +20912,12 @@ public struct PackExpansionType: TypeBuildable, ExpressibleAsPackExpansionType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20486,12 +20926,12 @@ public struct PackExpansionType: TypeBuildable, ExpressibleAsPackExpansionType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20523,15 +20963,17 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TupleTypeElementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -20560,7 +21002,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeInOut: unexpectedBeforeInOut?.createUnexpectedNodes(), inOut: inOut, unexpectedBetweenInOutAndName: unexpectedBetweenInOutAndName?.createUnexpectedNodes(), name: name, unexpectedBetweenNameAndSecondName: unexpectedBetweenNameAndSecondName?.createUnexpectedNodes(), secondName: secondName, unexpectedBetweenSecondNameAndColon: unexpectedBetweenSecondNameAndColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndType: unexpectedBetweenColonAndType?.createUnexpectedNodes(), type: type.createTypeBuildable(), unexpectedBetweenTypeAndEllipsis: unexpectedBetweenTypeAndEllipsis?.createUnexpectedNodes(), ellipsis: ellipsis, unexpectedBetweenEllipsisAndInitializer: unexpectedBetweenEllipsisAndInitializer?.createUnexpectedNodes(), initializer: initializer?.createInitializerClause(), unexpectedBetweenInitializerAndTrailingComma: unexpectedBetweenInitializerAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: TupleTypeElementSyntax) {
+  public init (_ constructedNode: TupleTypeElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TupleTypeElementSyntax`.
@@ -20596,12 +21038,12 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -20610,12 +21052,12 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20624,12 +21066,12 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20651,7 +21093,9 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TupleTypeSyntax)
   }
   private var data: Data
@@ -20668,7 +21112,7 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
     assert(rightParen.text == #")"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndElements: unexpectedBetweenLeftParenAndElements?.createUnexpectedNodes(), elements: elements.createTupleTypeElementList(), unexpectedBetweenElementsAndRightParen: unexpectedBetweenElementsAndRightParen?.createUnexpectedNodes(), rightParen: rightParen))
   }
-  public init(_ constructedNode: TupleTypeSyntax) {
+  public init (_ constructedNode: TupleTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TupleTypeSyntax`.
@@ -20710,12 +21154,12 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20724,12 +21168,12 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20759,7 +21203,9 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
     var returnType: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(FunctionTypeSyntax)
   }
   private var data: Data
@@ -20787,7 +21233,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
     assert(arrow.text == #"->"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen?.createUnexpectedNodes(), leftParen: leftParen, unexpectedBetweenLeftParenAndArguments: unexpectedBetweenLeftParenAndArguments?.createUnexpectedNodes(), arguments: arguments.createTupleTypeElementList(), unexpectedBetweenArgumentsAndRightParen: unexpectedBetweenArgumentsAndRightParen?.createUnexpectedNodes(), rightParen: rightParen, unexpectedBetweenRightParenAndAsyncKeyword: unexpectedBetweenRightParenAndAsyncKeyword?.createUnexpectedNodes(), asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.createUnexpectedNodes(), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.createUnexpectedNodes(), arrow: arrow, unexpectedBetweenArrowAndReturnType: unexpectedBetweenArrowAndReturnType?.createUnexpectedNodes(), returnType: returnType.createTypeBuildable()))
   }
-  public init(_ constructedNode: FunctionTypeSyntax) {
+  public init (_ constructedNode: FunctionTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `FunctionTypeSyntax`.
@@ -20829,12 +21275,12 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20843,12 +21289,12 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20870,7 +21316,9 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
     var baseType: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AttributedTypeSyntax)
   }
   private var data: Data
@@ -20886,7 +21334,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
     assert(specifier == nil || specifier!.text == #"inout"# || specifier!.text == #"__shared"# || specifier!.text == #"__owned"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeSpecifier: unexpectedBeforeSpecifier?.createUnexpectedNodes(), specifier: specifier, unexpectedBetweenSpecifierAndAttributes: unexpectedBetweenSpecifierAndAttributes?.createUnexpectedNodes(), attributes: attributes?.createAttributeList(), unexpectedBetweenAttributesAndBaseType: unexpectedBetweenAttributesAndBaseType?.createUnexpectedNodes(), baseType: baseType.createTypeBuildable()))
   }
-  public init(_ constructedNode: AttributedTypeSyntax) {
+  public init (_ constructedNode: AttributedTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AttributedTypeSyntax`.
@@ -20928,12 +21376,12 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20942,12 +21390,12 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -20967,15 +21415,17 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(GenericArgumentSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -20989,7 +21439,7 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeArgumentType: unexpectedBeforeArgumentType?.createUnexpectedNodes(), argumentType: argumentType.createTypeBuildable(), unexpectedBetweenArgumentTypeAndTrailingComma: unexpectedBetweenArgumentTypeAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: GenericArgumentSyntax) {
+  public init (_ constructedNode: GenericArgumentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `GenericArgumentSyntax`.
@@ -21025,12 +21475,12 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -21039,12 +21489,12 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21053,12 +21503,12 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21080,7 +21530,9 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
     var rightAngleBracket: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(GenericArgumentClauseSyntax)
   }
   private var data: Data
@@ -21100,12 +21552,12 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList = {
     GenericArgumentList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndArguments: unexpectedBetweenLeftAngleBracketAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightAngleBracket: unexpectedBetweenArgumentsAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
   }
-  public init(_ constructedNode: GenericArgumentClauseSyntax) {
+  public init (_ constructedNode: GenericArgumentClauseSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `GenericArgumentClauseSyntax`.
@@ -21140,12 +21592,12 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21154,12 +21606,12 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21179,7 +21631,9 @@ public struct NamedOpaqueReturnType: TypeBuildable, ExpressibleAsNamedOpaqueRetu
     var baseType: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(NamedOpaqueReturnTypeSyntax)
   }
   private var data: Data
@@ -21192,7 +21646,7 @@ public struct NamedOpaqueReturnType: TypeBuildable, ExpressibleAsNamedOpaqueRetu
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause, unexpectedBetweenGenericParametersAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeGenericParameters: unexpectedBeforeGenericParameters?.createUnexpectedNodes(), genericParameters: genericParameters.createGenericParameterClause(), unexpectedBetweenGenericParametersAndBaseType: unexpectedBetweenGenericParametersAndBaseType?.createUnexpectedNodes(), baseType: baseType.createTypeBuildable()))
   }
-  public init(_ constructedNode: NamedOpaqueReturnTypeSyntax) {
+  public init (_ constructedNode: NamedOpaqueReturnTypeSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `NamedOpaqueReturnTypeSyntax`.
@@ -21234,12 +21688,12 @@ public struct NamedOpaqueReturnType: TypeBuildable, ExpressibleAsNamedOpaqueRetu
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21248,12 +21702,12 @@ public struct NamedOpaqueReturnType: TypeBuildable, ExpressibleAsNamedOpaqueRetu
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21273,7 +21727,9 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
     var type: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TypeAnnotationSyntax)
   }
   private var data: Data
@@ -21287,7 +21743,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
     assert(colon.text == #":"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeColon: unexpectedBeforeColon?.createUnexpectedNodes(), colon: colon, unexpectedBetweenColonAndType: unexpectedBetweenColonAndType?.createUnexpectedNodes(), type: type.createTypeBuildable()))
   }
-  public init(_ constructedNode: TypeAnnotationSyntax) {
+  public init (_ constructedNode: TypeAnnotationSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TypeAnnotationSyntax`.
@@ -21322,12 +21778,12 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21336,12 +21792,12 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21365,7 +21821,9 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
     var associatedTuple: TuplePattern?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(EnumCasePatternSyntax)
   }
   private var data: Data
@@ -21389,7 +21847,7 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndCaseName: ExpressibleAsUnexpectedNodes? = nil, caseName: String, unexpectedBetweenCaseNameAndAssociatedTuple: ExpressibleAsUnexpectedNodes? = nil, associatedTuple: ExpressibleAsTuplePattern? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeType: unexpectedBeforeType, type: type, unexpectedBetweenTypeAndPeriod: unexpectedBetweenTypeAndPeriod, period: period, unexpectedBetweenPeriodAndCaseName: unexpectedBetweenPeriodAndCaseName, caseName: Token.`identifier`(caseName), unexpectedBetweenCaseNameAndAssociatedTuple: unexpectedBetweenCaseNameAndAssociatedTuple, associatedTuple: associatedTuple)
   }
-  public init(_ constructedNode: EnumCasePatternSyntax) {
+  public init (_ constructedNode: EnumCasePatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `EnumCasePatternSyntax`.
@@ -21431,12 +21889,12 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21445,12 +21903,12 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21470,7 +21928,9 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
     var type: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IsTypePatternSyntax)
   }
   private var data: Data
@@ -21484,7 +21944,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
     assert(isKeyword.text == #"is"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeIsKeyword: unexpectedBeforeIsKeyword?.createUnexpectedNodes(), isKeyword: isKeyword, unexpectedBetweenIsKeywordAndType: unexpectedBetweenIsKeywordAndType?.createUnexpectedNodes(), type: type.createTypeBuildable()))
   }
-  public init(_ constructedNode: IsTypePatternSyntax) {
+  public init (_ constructedNode: IsTypePatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IsTypePatternSyntax`.
@@ -21526,12 +21986,12 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21540,12 +22000,12 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21565,7 +22025,9 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
     var questionMark: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(OptionalPatternSyntax)
   }
   private var data: Data
@@ -21579,7 +22041,7 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
     assert(questionMark.text == #"?"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeSubPattern: unexpectedBeforeSubPattern?.createUnexpectedNodes(), subPattern: subPattern.createPatternBuildable(), unexpectedBetweenSubPatternAndQuestionMark: unexpectedBetweenSubPatternAndQuestionMark?.createUnexpectedNodes(), questionMark: questionMark))
   }
-  public init(_ constructedNode: OptionalPatternSyntax) {
+  public init (_ constructedNode: OptionalPatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `OptionalPatternSyntax`.
@@ -21621,12 +22083,12 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21635,12 +22097,12 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21658,7 +22120,9 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
     var identifier: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(IdentifierPatternSyntax)
   }
   private var data: Data
@@ -21669,7 +22133,7 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier?.createUnexpectedNodes(), identifier: identifier))
   }
-  public init(_ constructedNode: IdentifierPatternSyntax) {
+  public init (_ constructedNode: IdentifierPatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `IdentifierPatternSyntax`.
@@ -21711,12 +22175,12 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21725,12 +22189,12 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21752,7 +22216,9 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
     var type: TypeBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AsTypePatternSyntax)
   }
   private var data: Data
@@ -21768,7 +22234,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
     assert(asKeyword.text == #"as"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforePattern: unexpectedBeforePattern?.createUnexpectedNodes(), pattern: pattern.createPatternBuildable(), unexpectedBetweenPatternAndAsKeyword: unexpectedBetweenPatternAndAsKeyword?.createUnexpectedNodes(), asKeyword: asKeyword, unexpectedBetweenAsKeywordAndType: unexpectedBetweenAsKeywordAndType?.createUnexpectedNodes(), type: type.createTypeBuildable()))
   }
-  public init(_ constructedNode: AsTypePatternSyntax) {
+  public init (_ constructedNode: AsTypePatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AsTypePatternSyntax`.
@@ -21810,12 +22276,12 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21824,12 +22290,12 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21851,7 +22317,9 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
     var rightParen: Token
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TuplePatternSyntax)
   }
   private var data: Data
@@ -21871,12 +22339,12 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList = {
     TuplePatternElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElements: unexpectedBetweenLeftParenAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightParen: unexpectedBetweenElementsAndRightParen, rightParen: rightParen)
   }
-  public init(_ constructedNode: TuplePatternSyntax) {
+  public init (_ constructedNode: TuplePatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TuplePatternSyntax`.
@@ -21918,12 +22386,12 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21932,12 +22400,12 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -21957,7 +22425,9 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
     var typeAnnotation: TypeAnnotation?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(WildcardPatternSyntax)
   }
   private var data: Data
@@ -21971,7 +22441,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
     assert(wildcard.text == #"_"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeWildcard: unexpectedBeforeWildcard?.createUnexpectedNodes(), wildcard: wildcard, unexpectedBetweenWildcardAndTypeAnnotation: unexpectedBetweenWildcardAndTypeAnnotation?.createUnexpectedNodes(), typeAnnotation: typeAnnotation?.createTypeAnnotation()))
   }
-  public init(_ constructedNode: WildcardPatternSyntax) {
+  public init (_ constructedNode: WildcardPatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `WildcardPatternSyntax`.
@@ -22013,12 +22483,12 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22027,12 +22497,12 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22056,15 +22526,17 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(TuplePatternElementSyntax)
   }
   private var data: Data
   var hasTrailingComma: Bool {
     switch data {
-    case .buildable(let buildableData):
+    case .buildable(let buildableData): 
       return buildableData.trailingComma != nil
-    case .constructed(let node):
+    case .constructed(let node): 
       return node.trailingComma != nil
     }
   }
@@ -22087,9 +22559,11 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: String?, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: Token? = nil, unexpectedBetweenLabelColonAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabelName: unexpectedBeforeLabelName, labelName: labelName.map { Token.`identifier`($0) }, unexpectedBetweenLabelNameAndLabelColon: unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndPattern: unexpectedBetweenLabelColonAndPattern, pattern: pattern, unexpectedBetweenPatternAndTrailingComma: unexpectedBetweenPatternAndTrailingComma, trailingComma: trailingComma)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabelName: unexpectedBeforeLabelName, labelName: labelName.map { 
+      Token.`identifier`($0) 
+    }, unexpectedBetweenLabelNameAndLabelColon: unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndPattern: unexpectedBetweenLabelColonAndPattern, pattern: pattern, unexpectedBetweenPatternAndTrailingComma: unexpectedBetweenPatternAndTrailingComma, trailingComma: trailingComma)
   }
-  public init(_ constructedNode: TuplePatternElementSyntax) {
+  public init (_ constructedNode: TuplePatternElementSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `TuplePatternElementSyntax`.
@@ -22125,12 +22599,12 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingComma = withComma ? .comma : nil
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
       var result = self
       result.data = .constructed(withComma)
@@ -22139,12 +22613,12 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22153,12 +22627,12 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22176,7 +22650,9 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
     var expression: ExprBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ExpressionPatternSyntax)
   }
   private var data: Data
@@ -22187,7 +22663,7 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression?.createUnexpectedNodes(), expression: expression.createExprBuildable()))
   }
-  public init(_ constructedNode: ExpressionPatternSyntax) {
+  public init (_ constructedNode: ExpressionPatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ExpressionPatternSyntax`.
@@ -22229,12 +22705,12 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22243,12 +22719,12 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22268,7 +22744,9 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
     var valuePattern: PatternBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(ValueBindingPatternSyntax)
   }
   private var data: Data
@@ -22282,7 +22760,7 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
     assert(letOrVarKeyword.text == #"let"# || letOrVarKeyword.text == #"var"#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeLetOrVarKeyword: unexpectedBeforeLetOrVarKeyword?.createUnexpectedNodes(), letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndValuePattern: unexpectedBetweenLetOrVarKeywordAndValuePattern?.createUnexpectedNodes(), valuePattern: valuePattern.createPatternBuildable()))
   }
-  public init(_ constructedNode: ValueBindingPatternSyntax) {
+  public init (_ constructedNode: ValueBindingPatternSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `ValueBindingPatternSyntax`.
@@ -22324,12 +22802,12 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22338,12 +22816,12 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22364,7 +22842,9 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
     var trailingComma: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AvailabilityArgumentSyntax)
   }
   private var data: Data
@@ -22378,7 +22858,7 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
     assert(trailingComma == nil || trailingComma!.text == #","#)
     self.data = .buildable(BuildableData(leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, unexpectedBeforeEntry: unexpectedBeforeEntry?.createUnexpectedNodes(), entry: entry.createSyntaxBuildable(), unexpectedBetweenEntryAndTrailingComma: unexpectedBetweenEntryAndTrailingComma?.createUnexpectedNodes(), trailingComma: trailingComma))
   }
-  public init(_ constructedNode: AvailabilityArgumentSyntax) {
+  public init (_ constructedNode: AvailabilityArgumentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AvailabilityArgumentSyntax`.
@@ -22413,12 +22893,12 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22427,12 +22907,12 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22455,7 +22935,9 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
     var value: SyntaxBuildable
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AvailabilityLabeledArgumentSyntax)
   }
   private var data: Data
@@ -22477,7 +22959,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsSyntaxBuildable) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: value)
   }
-  public init(_ constructedNode: AvailabilityLabeledArgumentSyntax) {
+  public init (_ constructedNode: AvailabilityLabeledArgumentSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AvailabilityLabeledArgumentSyntax`.
@@ -22512,12 +22994,12 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22526,12 +23008,12 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22552,7 +23034,9 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
     var version: VersionTuple?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(AvailabilityVersionRestrictionSyntax)
   }
   private var data: Data
@@ -22571,7 +23055,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   public init (leadingTrivia: Trivia = [], unexpectedBeforePlatform: ExpressibleAsUnexpectedNodes? = nil, platform: String, unexpectedBetweenPlatformAndVersion: ExpressibleAsUnexpectedNodes? = nil, version: ExpressibleAsVersionTuple? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforePlatform: unexpectedBeforePlatform, platform: Token.`identifier`(platform), unexpectedBetweenPlatformAndVersion: unexpectedBetweenPlatformAndVersion, version: version)
   }
-  public init(_ constructedNode: AvailabilityVersionRestrictionSyntax) {
+  public init (_ constructedNode: AvailabilityVersionRestrictionSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `AvailabilityVersionRestrictionSyntax`.
@@ -22606,12 +23090,12 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22620,12 +23104,12 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22648,7 +23132,9 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
     var patchVersion: Token?
   }
   enum Data {
+    
     case buildable(BuildableData)
+    
     case constructed(VersionTupleSyntax)
   }
   private var data: Data
@@ -22668,9 +23154,11 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeMajorMinor: ExpressibleAsUnexpectedNodes? = nil, majorMinor: ExpressibleAsSyntaxBuildable, unexpectedBetweenMajorMinorAndPatchPeriod: ExpressibleAsUnexpectedNodes? = nil, patchPeriod: Token? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: ExpressibleAsUnexpectedNodes? = nil, patchVersion: String?) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMajorMinor: unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod: unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion: unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion.map { Token.`integerLiteral`($0) })
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMajorMinor: unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod: unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion: unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion.map { 
+      Token.`integerLiteral`($0) 
+    })
   }
-  public init(_ constructedNode: VersionTupleSyntax) {
+  public init (_ constructedNode: VersionTupleSyntax) {
     self.data = .constructed(constructedNode)
   }
   /// Builds a `VersionTupleSyntax`.
@@ -22705,12 +23193,12 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   }
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.leadingTrivia = leadingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withLeadingTrivia(leadingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)
@@ -22719,12 +23207,12 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   }
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
     switch data {
-    case .buildable(var buildableData):
+    case .buildable(var buildableData): 
       buildableData.trailingTrivia = trailingTrivia
       var result = self
       result.data = .buildable(buildableData)
       return result
-    case .constructed(let node):
+    case .constructed(let node): 
       let withNewTrivia = node.withTrailingTrivia(trailingTrivia)
       var result = self
       result.data = .constructed(withNewTrivia)

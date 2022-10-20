@@ -172,7 +172,7 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
       createTriviaAttachment(varName: IdentifierExpr("result"), triviaVarName: IdentifierExpr(trivia), trivia: trivia)
     }
     ReturnStmt("return result")
-  }.buildSyntax(format: Format(indentWidth: 2))
+  }.build(format: CodeGenerationFormat())
 
   return FunctionDecl(
     """

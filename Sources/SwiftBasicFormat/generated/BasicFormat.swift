@@ -16,8 +16,12 @@
 import SwiftSyntax
 open class BasicFormat: SyntaxRewriter {
   public var indentationLevel: Int = 0
-  open var indentation: TriviaPiece { .spaces(indentationLevel * 4) }
-  public var indentedNewline: Trivia { Trivia(pieces: [.newlines(1), indentation]) }
+  open var indentation: TriviaPiece { 
+    .spaces(indentationLevel * 4) 
+  }
+  public var indentedNewline: Trivia { 
+    Trivia(pieces: [.newlines(1), indentation]) 
+  }
   private var lastRewrittenToken: TokenSyntax?
   
   open override func visit(_ node: UnknownDeclSyntax) -> DeclSyntax {
@@ -2860,7 +2864,7 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .doKeyword: 
-      break
+      break 
     case .repeatKeyword: 
       if trailingTrivia.isEmpty {
         trailingTrivia += .space
@@ -2906,7 +2910,7 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .defaultKeyword: 
-      break
+      break 
     case .whereKeyword: 
       if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
         leadingTrivia += .space
@@ -2931,25 +2935,25 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .falseKeyword: 
-      break
+      break 
     case .isKeyword: 
       if trailingTrivia.isEmpty {
         trailingTrivia += .space
       }
     case .nilKeyword: 
-      break
+      break 
     case .rethrowsKeyword: 
       if trailingTrivia.isEmpty {
         trailingTrivia += .space
       }
     case .superKeyword: 
-      break
+      break 
     case .selfKeyword: 
-      break
+      break 
     case .capitalSelfKeyword: 
-      break
+      break 
     case .trueKeyword: 
-      break
+      break 
     case .tryKeyword: 
       if trailingTrivia.isEmpty {
         trailingTrivia += .space
@@ -2983,19 +2987,19 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .leftParen: 
-      break
+      break 
     case .rightParen: 
-      break
+      break 
     case .leftBrace: 
       if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
         leadingTrivia += .space
       }
     case .rightBrace: 
-      break
+      break 
     case .leftSquareBracket: 
-      break
+      break 
     case .rightSquareBracket: 
-      break
+      break 
     case .leftAngle: 
       if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
         leadingTrivia += .space
@@ -3011,21 +3015,21 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .period: 
-      break
+      break 
     case .prefixPeriod: 
-      break
+      break 
     case .comma: 
       if trailingTrivia.isEmpty {
         trailingTrivia += .space
       }
     case .ellipsis: 
-      break
+      break 
     case .colon: 
       if trailingTrivia.isEmpty {
         trailingTrivia += .space
       }
     case .semicolon: 
-      break
+      break 
     case .equal: 
       if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
         leadingTrivia += .space
@@ -3034,9 +3038,9 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .atSign: 
-      break
+      break 
     case .pound: 
-      break
+      break 
     case .prefixAmpersand: 
       if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
         leadingTrivia += .space
@@ -3052,21 +3056,21 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .backtick: 
-      break
+      break 
     case .backslash: 
-      break
+      break 
     case .exclamationMark: 
-      break
+      break 
     case .postfixQuestionMark: 
-      break
+      break 
     case .infixQuestionMark: 
-      break
+      break 
     case .stringQuote: 
-      break
+      break 
     case .singleQuote: 
-      break
+      break 
     case .multilineStringQuote: 
-      break
+      break 
     case .poundKeyPathKeyword: 
       if trailingTrivia.isEmpty {
         trailingTrivia += .space
@@ -3160,19 +3164,19 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .integerLiteral: 
-      break
+      break 
     case .floatingLiteral: 
-      break
+      break 
     case .stringLiteral: 
-      break
+      break 
     case .regexLiteral: 
-      break
+      break 
     case .unknown: 
-      break
+      break 
     case .identifier: 
-      break
+      break 
     case .unspacedBinaryOperator: 
-      break
+      break 
     case .spacedBinaryOperator: 
       if leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
         leadingTrivia += .space
@@ -3181,38 +3185,38 @@ open class BasicFormat: SyntaxRewriter {
         trailingTrivia += .space
       }
     case .postfixOperator: 
-      break
+      break 
     case .prefixOperator: 
-      break
+      break 
     case .dollarIdentifier: 
-      break
+      break 
     case .rawStringDelimiter: 
-      break
+      break 
     case .stringSegment: 
-      break
+      break 
     case .stringInterpolationAnchor: 
-      break
+      break 
     case .yield: 
-      break
+      break 
     case .eof: 
-      break
+      break 
     case .contextualKeyword: 
       switch node.text {
-      case "async":
+      case "async": 
         if trailingTrivia.isEmpty {
           trailingTrivia += .space
         }
-      default:
-        break
+      default: 
+        break 
       }
     }
     leadingTrivia = leadingTrivia.indented(indentation: indentation)
     trailingTrivia = trailingTrivia.indented(indentation: indentation)
     let rewritten = TokenSyntax(
-      node.tokenKind,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: node.presence
+    node.tokenKind, 
+    leadingTrivia: leadingTrivia, 
+    trailingTrivia: trailingTrivia, 
+    presence: node.presence
     )
     lastRewrittenToken = rewritten
     return rewritten

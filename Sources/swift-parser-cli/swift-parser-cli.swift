@@ -14,6 +14,7 @@ import SwiftDiagnostics
 import SwiftSyntax
 @_spi(Testing) import _SwiftSyntaxMacros
 import SwiftParser
+import SwiftParserDiagnostics
 import SwiftOperators
 import Foundation
 import ArgumentParser

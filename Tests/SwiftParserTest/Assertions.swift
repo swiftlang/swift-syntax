@@ -13,6 +13,7 @@
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(Testing) @_spi(RawSyntax)  import SwiftParser
+import SwiftParserDiagnostics
 import SwiftDiagnostics
 import _SwiftSyntaxTestSupport
 

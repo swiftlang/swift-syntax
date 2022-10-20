@@ -6,26 +6,28 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(SwiftCompilerSupport STATIC
-  ConsistencyCheck.swift
-)
+add_library(SwiftParserDiagnostics STATIC
+  DiagnosticExtensions.swift
+  MissingNodesError.swift
+  ParserDiagnosticMessages.swift
+  ParseDiagnosticsGenerator.swift
+  PresenceUtils.swift
+  SyntaxExtensions.swift
+  Utils.swift)
 
-target_link_libraries(SwiftCompilerSupport PUBLIC
+target_link_libraries(SwiftParserDiagnostics PUBLIC
+  SwiftBasicFormat
   SwiftSyntax
-  SwiftDiagnostics
-  SwiftParser
-  SwiftParserDiagnostics
-  SwiftOperators
-)
+  SwiftDiagnostics)
 
-set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftCompilerSupport)
+set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftParserDiagnostics)
 
 # NOTE: workaround for CMake not setting up include flags yet
-set_target_properties(SwiftCompilerSupport PROPERTIES
+set_target_properties(SwiftParserDiagnostics PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES
   "${CMAKE_Swift_MODULE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR}")
 
-install(TARGETS SwiftCompilerSupport
+install(TARGETS SwiftParserDiagnostics
   EXPORT SwiftSyntaxTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

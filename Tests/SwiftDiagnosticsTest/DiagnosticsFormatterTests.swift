@@ -14,6 +14,7 @@ import _SwiftSyntaxTestSupport
 import XCTest
 import SwiftDiagnostics
 import SwiftParser
+import SwiftParserDiagnostics
 
 final class DiagnosticsFormatterTests: XCTestCase {
   

@@ -12,6 +12,7 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
+import SwiftParserDiagnostics
 import SwiftDiagnostics
 import SwiftBasicFormat
 

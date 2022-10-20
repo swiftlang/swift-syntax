@@ -226,12 +226,15 @@ public struct MissingNodesError: ParserError {
   /// If applicable, returns a string that describes the node in which the missing nodes are expected.
   private func parentContextClause(anchor: Syntax?) -> String? {
     // anchorParent is the first parent that has a type name for diagnostics.
-    guard let anchorParent = anchor?.ancestorOrSelf(where: {
-      $0.nodeTypeNameForDiagnostics(allowBlockNames: false) != nil
+    guard let (anchorParent, anchorTypeName) = anchor?.ancestorOrSelf(mapping: { (node: Syntax) -> (Syntax, String)? in
+      if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+        return (node, name)
+      } else {
+        return nil
+      }
     }) else {
       return nil
     }
-    let anchorTypeName = anchorParent.nodeTypeNameForDiagnostics(allowBlockNames: false)!
     if anchorParent.is(SourceFileSyntax.self) {
       return nil
     }

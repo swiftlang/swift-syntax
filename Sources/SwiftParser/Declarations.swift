@@ -31,6 +31,7 @@ extension DeclarationModifier {
 extension TokenConsumer {
   func atStartOfDeclaration(
     isAtTopLevel: Bool = false,
+    allowInitDecl: Bool = true,
     allowRecovery: Bool = false
   ) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
@@ -93,12 +94,14 @@ extension TokenConsumer {
       var lookahead = subparser.lookahead()
       repeat {
         lookahead.consumeAnyToken()
-      } while lookahead.atStartOfDeclaration()
+      } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl)
       return lookahead.at(.identifier)
     case .caseKeyword:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
+    case .initKeyword:
+      return allowInitDecl
     case .some(_):
       // All other decl start keywords unconditonally start a decl.
       return true
@@ -106,7 +109,7 @@ extension TokenConsumer {
       if subparser.at(anyIn: ContextualDeclKeyword.self)?.0 != nil {
         subparser.consumeAnyToken()
         return subparser.atStartOfDeclaration(
-          isAtTopLevel: isAtTopLevel, allowRecovery: allowRecovery)
+          isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: allowRecovery)
       }
       return false
     }
@@ -1310,7 +1313,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let items = self.parseOptionalCodeBlock()
+    let items = self.parseOptionalCodeBlock(allowInitDecl: false)
 
     return RawInitializerDeclSyntax(
       attributes: attrs.attributes,

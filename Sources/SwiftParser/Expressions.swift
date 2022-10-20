@@ -1041,7 +1041,7 @@ extension Parser {
         poundDsohandle: tok,
         arena: self.arena
       ))
-    case (.identifier, let handle)?, (.selfKeyword, let handle)?:
+    case (.identifier, let handle)?, (.selfKeyword, let handle)?, (.initKeyword, let handle)?:
       // If we have "case let x." or "case let x(", we parse x as a normal
       // name, not a binding, because it is the start of an enum pattern or
       // call pattern.

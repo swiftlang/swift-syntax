@@ -319,7 +319,7 @@ extension FixItMessage where Self == StaticParserFixIt {
   public static var removeOperatorBody: Self {
     .init("remove operator body")
   }
-  public static var wrapKeywordInBackticks: Self {
+  public static var wrapInBackticks: Self {
     .init("if this name is unavoidable, use backticks to escape it")
   }
 }

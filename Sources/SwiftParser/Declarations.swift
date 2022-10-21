@@ -1402,7 +1402,7 @@ extension Parser {
     var elements = [RawFunctionParameterSyntax]()
     // If we are missing the left parenthesis and the next token doesn't appear
     // to be an argument label, don't parse any parameters.
-    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel || currentToken.isKeyword)
+    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
@@ -1426,22 +1426,26 @@ extension Parser {
           misplacedSpecifiers.append(specifier)
         }
 
+        let unexpectedBeforeFirstName: RawUnexpectedNodesSyntax?
         let firstName: RawTokenSyntax?
+        let unexpectedBeforeSecondName: RawUnexpectedNodesSyntax?
         let secondName: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
         let colon: RawTokenSyntax?
         let shouldParseType: Bool
 
         if self.withLookahead({ $0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
-          if self.currentToken.canBeArgumentLabel {
-            firstName = self.parseArgumentLabel()
+          if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+            (unexpectedBeforeFirstName, firstName) = self.parseArgumentLabel()
           } else {
+            unexpectedBeforeFirstName = nil
             firstName = nil
           }
 
-          if self.currentToken.canBeArgumentLabel {
-            secondName = self.parseArgumentLabel()
+          if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+            (unexpectedBeforeSecondName, secondName) = self.parseArgumentLabel()
           } else {
+            unexpectedBeforeSecondName = nil
             secondName = nil
           }
           if subject.isClosure {
@@ -1453,7 +1457,9 @@ extension Parser {
             shouldParseType = true
           }
         } else {
+          unexpectedBeforeFirstName = nil
           firstName = nil
+          unexpectedBeforeSecondName = nil
           secondName = nil
           unexpectedBeforeColon = nil
           colon = nil
@@ -1486,8 +1492,9 @@ extension Parser {
         elements.append(RawFunctionParameterSyntax(
           attributes: attrs,
           modifiers: modifiers,
-          RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
+          RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirstName?.elements ?? []), arena: self.arena),
           firstName: firstName,
+          unexpectedBeforeSecondName,
           secondName: secondName,
           unexpectedBeforeColon,
           colon: colon,

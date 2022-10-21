@@ -212,8 +212,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
          let invalidIdentifier = node.previousToken(viewMode: .all),
          let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self) {
         let fixIts: [FixIt]
-        if invalidIdentifier.tokenKind.isKeyword {
-          fixIts = [FixIt(message: .wrapKeywordInBackticks, changes: [
+        if invalidIdentifier.tokenKind.isKeyword || invalidIdentifier.tokenKind.isDollarIdentifier {
+          fixIts = [FixIt(message: .wrapInBackticks, changes: [
             .replace(
               oldNode: Syntax(invalidIdentifier),
               newNode: Syntax(TokenSyntax.identifier("`\(invalidIdentifier.text)`", leadingTrivia: invalidIdentifier.leadingTrivia, trailingTrivia: invalidIdentifier.trailingTrivia))

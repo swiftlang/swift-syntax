@@ -133,4 +133,13 @@ extension TokenKind {
       return false
     }
   }
+
+  var isDollarIdentifier: Bool {
+    switch self {
+    case .dollarIdentifier:
+      return true
+    default:
+      return false
+    }
+  }
 }

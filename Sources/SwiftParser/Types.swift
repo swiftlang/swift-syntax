@@ -398,7 +398,9 @@ extension Parser {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
+        let unexpectedBeforeFirst: RawUnexpectedNodesSyntax?
         let first: RawTokenSyntax?
+        let unexpectedBeforeSecond: RawUnexpectedNodesSyntax?
         let second: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
         let colon: RawTokenSyntax?
@@ -407,21 +409,25 @@ extension Parser {
           while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
             misplacedSpecifiers.append(specifier)
           }
-          first = self.parseArgumentLabel()
+          (unexpectedBeforeFirst, first) = self.parseArgumentLabel()
           if let parsedColon = self.consume(if: .colon) {
+            unexpectedBeforeSecond = nil
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon {
-            second = self.parseArgumentLabel()
+          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon {
+            (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {
+            unexpectedBeforeSecond = nil
             second = nil
             unexpectedBeforeColon = nil
             colon = RawTokenSyntax(missing: .colon, arena: self.arena)
           }
         } else {
+          unexpectedBeforeFirst = nil
           first = nil
+          unexpectedBeforeSecond = nil
           second = nil
           unexpectedBeforeColon = nil
           colon = nil
@@ -459,8 +465,9 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(RawTupleTypeElementSyntax(
             inOut: nil,
-            RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
+            RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirst?.elements ?? []), arena: self.arena),
             name: first,
+            unexpectedBeforeSecond,
             secondName: second,
             unexpectedBeforeColon,
             colon: colon,
@@ -626,7 +633,7 @@ extension Parser.Lookahead {
       // by a type annotation.
       if self.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) {
         self.consumeAnyToken()
-        if self.currentToken.canBeArgumentLabel {
+        if self.currentToken.canBeArgumentLabel() {
           self.consumeAnyToken()
           guard self.at(.colon) else {
             return false

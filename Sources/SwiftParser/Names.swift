@@ -23,9 +23,16 @@ extension Parser {
     }
   }
 
-  mutating func parseArgumentLabel() -> RawTokenSyntax {
-    assert(self.currentToken.canBeArgumentLabel)
-    return self.consumeAnyToken()
+  mutating func parseArgumentLabel() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
+    assert(self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true))
+    if let dollarIdent = self.consume(if: .dollarIdentifier) {
+      return (
+        RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena),
+        self.missingToken(.identifier, text: nil)
+      )
+    } else {
+      return (nil, self.consumeAnyToken())
+    }
   }
 }
 
@@ -86,7 +93,7 @@ extension Parser {
     // A close parenthesis, if empty lists are allowed.
     let nextIsRParen = flags.contains(.zeroArgCompoundNames) && next.tokenKind == .rightParen
     // An argument label.
-    let nextIsArgLabel = next.canBeArgumentLabel || next.tokenKind == .colon
+    let nextIsArgLabel = next.canBeArgumentLabel() || next.tokenKind == .colon
 
     guard nextIsRParen || nextIsArgLabel else {
       return nil
@@ -105,7 +112,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
         // Check to see if there is an argument label.
-        assert(self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon)
+        assert(self.currentToken.canBeArgumentLabel() && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(RawDeclNameArgumentSyntax(
@@ -217,7 +224,7 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     while !lookahead.at(any: [.eof, .rightParen]) && loopProgress.evaluate(lookahead.currentToken) {
       // Check to see if there is an argument label.
-      guard lookahead.currentToken.canBeArgumentLabel && lookahead.peek().tokenKind == .colon else {
+      guard lookahead.currentToken.canBeArgumentLabel() && lookahead.peek().tokenKind == .colon else {
         return false
       }
 
@@ -236,7 +243,7 @@ extension Parser.Lookahead {
 }
 
 extension Lexer.Lexeme {
-  var canBeArgumentLabel: Bool {
+  func canBeArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
     if TypeSpecifier(lexeme: self) != nil {
       return false
     }
@@ -244,6 +251,8 @@ extension Lexer.Lexeme {
     case .identifier, .wildcardKeyword:
       // Identifiers, escaped identifiers, and '_' can be argument labels.
       return true
+    case .dollarIdentifier:
+      return allowDollarIdentifier
     default:
       // All other keywords can be argument labels.
       return self.isKeyword

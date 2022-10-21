@@ -1573,7 +1573,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     case 2:
       return nil
     case 3:
-      return "conditions"
+      return "condition"
     case 4:
       return nil
     case 5:

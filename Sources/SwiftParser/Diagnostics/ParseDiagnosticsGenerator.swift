@@ -157,7 +157,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  override public func visit(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
+  public override func visit(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }
@@ -201,7 +201,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .skipChildren
   }
 
-  override public func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
+  public override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }
@@ -237,6 +237,47 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   // MARK: - Specialized diagnostic generation
+
+  public override func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    exchangeTokens(
+      unexpected: node.unexpectedAfterArrowToken,
+      unexpectedTokenCondition: { $0.tokenKind == .contextualKeyword("async") || $0.tokenKind == .throwsKeyword },
+      correctTokens: [node.asyncKeyword, node.throwsToken],
+      message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
+      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
+    )
+    return .visitChildren
+  }
+
+  public override func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // Emit a custom diagnostic for an unexpected '...' after an associatedtype
+    // name.
+    removeToken(
+      node.unexpectedBetweenIdentifierAndInheritanceClause,
+      where: { $0.tokenKind == .ellipsis },
+      message: { _ in .associatedTypeCannotUsePack }
+    )
+    return .visitChildren
+  }
+
+  public override func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let argument = node.argument, argument.isMissingAllTokens {
+      addDiagnostic(argument, MissingAttributeArgument(attributeName: node.attributeName), fixIts: [
+        FixIt(message: .insertAttributeArguments, changes: .makePresent(argument))
+      ], handledNodes: [argument.id])
+      return .visitChildren
+    }
+    return .visitChildren
+  }
 
   public override func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
@@ -279,145 +320,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       }
       return .skipChildren
     }
-    return .visitChildren
-  }
-
-  public override func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    if let unexpected = node.unexpectedAfterOperatorPrecedenceAndTypes,
-        unexpected.contains(where: { $0.is(PrecedenceGroupAttributeListSyntax.self) }) == true {
-      addDiagnostic(unexpected, .operatorShouldBeDeclaredWithoutBody, fixIts: [
-        FixIt(message: .removeOperatorBody, changes: .makeMissing(unexpected))
-      ], handledNodes: [unexpected.id])
-    }
-
-    func diagnoseIdentifierInOperatorName(unexpected: UnexpectedNodesSyntax?, name: TokenSyntax) {
-      guard let unexpected = unexpected else {
-        return
-      }
-      let message: DiagnosticMessage?
-      if let identifier = unexpected.onlyToken(where: { $0.tokenKind.isIdentifier }) {
-        message = IdentifierNotAllowedInOperatorName(identifier: identifier)
-      } else if let tokens = unexpected.onlyTokens(satisfying: { _ in true }) {
-        message = TokensNotAllowedInOperatorName(tokens: tokens)
-      } else {
-        message = nil
-      }
-      if let message = message {
-        let fixIts: [FixIt]
-        if node.identifier.presence == .present {
-          fixIts = [FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))]
-        } else {
-          fixIts = []
-        }
-        addDiagnostic(unexpected, message, highlights: [Syntax(unexpected)], fixIts: fixIts, handledNodes: [unexpected.id, node.identifier.id])
-      }
-    }
-
-    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenOperatorKeywordAndIdentifier, name: node.identifier)
-    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, name: node.identifier)
-
-    return .visitChildren
-  }
-
-  public override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    if let unexpected = node.unexpectedBetweenSubscriptKeywordAndGenericParameterClause,
-        let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
-      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
-        FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
-      ], handledNodes: [unexpected.id])
-    }
-    if let unexpected = node.indices.unexpectedBeforeLeftParen,
-        let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
-      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
-        FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
-      ], handledNodes: [unexpected.id])
-    }
-    return .visitChildren
-  }
-
-  public override func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    if let unexpected = node.unexpectedBetweenDefaultKeywordAndColon, unexpected.first?.as(TokenSyntax.self)?.tokenKind == .whereKeyword {
-      addDiagnostic(unexpected, .defaultCannotBeUsedWithWhere, handledNodes: [unexpected.id])
-    }
-    return .visitChildren
-  }
-
-  public override func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    if let semicolon = node.semicolon, semicolon.presence == .missing {
-      if !node.decl.hasError {
-        // Only diagnose the missing semicolon if the decl doesn't contain any errors.
-        // If the decl contains errors, the root cause is most likely something different and not the missing semicolon.
-        let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
-        addDiagnostic(semicolon, position: position, .consecutiveDeclarationsOnSameLine, fixIts: [
-          FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
-        ], handledNodes: [semicolon.id])
-      } else {
-        handledNodes.append(semicolon.id)
-      }
-    }
-    return .visitChildren
-  }
-
-  public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
-  }
-
-  public override func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
-  }
-
-  public override func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
-  }
-
-  public override func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
-  }
-
-  public override func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
-  }
-
-  public override func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node)
-  }
-
-  public override func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    if let argument = node.argument, argument.isMissingAllTokens {
-      addDiagnostic(argument, MissingAttributeArgument(attributeName: node.attributeName), fixIts: [
-        FixIt(message: .insertAttributeArguments, changes: .makePresent(argument))
-      ], handledNodes: [argument.id])
-      return .visitChildren
-    }
-    return .visitChildren
-  }
-
-  public override func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    exchangeTokens(
-      unexpected: node.unexpectedAfterArrowToken,
-      unexpectedTokenCondition: { $0.tokenKind == .contextualKeyword("async") || $0.tokenKind == .throwsKeyword },
-      correctTokens: [node.asyncKeyword, node.throwsToken],
-      message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
-      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) }
-    )
     return .visitChildren
   }
 
@@ -472,6 +374,21 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    exchangeTokens(
+      unexpected: node.unexpectedBetweenModifiersAndFirstName,
+      unexpectedTokenCondition: { TypeSpecifier(token: $0) != nil },
+      correctTokens: [node.type?.as(AttributedTypeSyntax.self)?.specifier],
+      message: { SpecifierOnParameterName(misplacedSpecifiers: $0) },
+      moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
+      removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+    )
+    return .visitChildren
+  }
+
   public override func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -514,21 +431,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    exchangeTokens(
-      unexpected: node.unexpectedBetweenModifiersAndFirstName,
-      unexpectedTokenCondition: { TypeSpecifier(token: $0) != nil },
-      correctTokens: [node.type?.as(AttributedTypeSyntax.self)?.specifier],
-      message: { SpecifierOnParameterName(misplacedSpecifiers: $0) },
-      moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
-      removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
-    )
-    return .visitChildren
-  }
-
   public override func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -542,6 +444,89 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: node.equal) }
       )
     }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let semicolon = node.semicolon, semicolon.presence == .missing {
+      if !node.decl.hasError {
+        // Only diagnose the missing semicolon if the decl doesn't contain any errors.
+        // If the decl contains errors, the root cause is most likely something different and not the missing semicolon.
+        let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
+        addDiagnostic(semicolon, position: position, .consecutiveDeclarationsOnSameLine, fixIts: [
+          FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
+        ], handledNodes: [semicolon.id])
+      } else {
+        handledNodes.append(semicolon.id)
+      }
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.unexpectedAfterOperatorPrecedenceAndTypes,
+       unexpected.contains(where: { $0.is(PrecedenceGroupAttributeListSyntax.self) }) == true {
+      addDiagnostic(unexpected, .operatorShouldBeDeclaredWithoutBody, fixIts: [
+        FixIt(message: .removeOperatorBody, changes: .makeMissing(unexpected))
+      ], handledNodes: [unexpected.id])
+    }
+
+    func diagnoseIdentifierInOperatorName(unexpected: UnexpectedNodesSyntax?, name: TokenSyntax) {
+      guard let unexpected = unexpected else {
+        return
+      }
+      let message: DiagnosticMessage?
+      if let identifier = unexpected.onlyToken(where: { $0.tokenKind.isIdentifier }) {
+        message = IdentifierNotAllowedInOperatorName(identifier: identifier)
+      } else if let tokens = unexpected.onlyTokens(satisfying: { _ in true }) {
+        message = TokensNotAllowedInOperatorName(tokens: tokens)
+      } else {
+        message = nil
+      }
+      if let message = message {
+        let fixIts: [FixIt]
+        if node.identifier.presence == .present {
+          fixIts = [FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))]
+        } else {
+          fixIts = []
+        }
+        addDiagnostic(unexpected, message, highlights: [Syntax(unexpected)], fixIts: fixIts, handledNodes: [unexpected.id, node.identifier.id])
+      }
+    }
+
+    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenOperatorKeywordAndIdentifier, name: node.identifier)
+    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, name: node.identifier)
+
     return .visitChildren
   }
 
@@ -581,6 +566,25 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.unexpectedBetweenSubscriptKeywordAndGenericParameterClause,
+       let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
+      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
+        FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
+      ], handledNodes: [unexpected.id])
+    }
+    if let unexpected = node.indices.unexpectedBeforeLeftParen,
+       let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
+      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
+        FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
+      ], handledNodes: [unexpected.id])
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -589,6 +593,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(node.statements, .allStatmentsInSwitchMustBeCoveredByCase, fixIts: [
         FixIt(message: InsertTokenFixIt(missingNodes: [node.label]), changes: .makePresent(node.label, leadingTrivia: .newline))
       ], handledNodes: [node.label.id])
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.unexpectedBetweenDefaultKeywordAndColon, unexpected.first?.as(TokenSyntax.self)?.tokenKind == .whereKeyword {
+      addDiagnostic(unexpected, .defaultCannotBeUsedWithWhere, handledNodes: [unexpected.id])
     }
     return .visitChildren
   }
@@ -673,20 +687,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-    // Emit a custom diagnostic for an unexpected '...' after an associatedtype
-    // name.
-    removeToken(
-      node.unexpectedBetweenIdentifierAndInheritanceClause,
-      where: { $0.tokenKind == .ellipsis },
-      message: { _ in .associatedTypeCannotUsePack }
-    )
-    return .visitChildren
-  }
-
   public override func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
@@ -704,5 +704,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     )
     return .visitChildren
   }
+
+  //==========================================================================//
+  // IMPORTANT: If you are tempted to add a `visit` method here, please       //
+  // insert it in alphabetical order above                                    //
+  //==========================================================================//
 }
 

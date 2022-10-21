@@ -358,9 +358,86 @@ final class TypeParameterPackTests: XCTestCase {
     // We allow whitespace between the generic parameter and the '...', this is
     // consistent with regular variadic parameters.
     AssertParse(
+    """
+    func f1<T ...>(_ x: T ...) -> (T ...) {}
+    """)
+  }
+  
+  func testMissingCommaInType() throws {
+    AssertParse(
       """
-      func f1<T ...>(_ x: T ...) -> (T ...) {}
+      var foo: (Int)
       """)
+    
+    AssertParse(
+      """
+      var foo: (Int, Int)
+      """)
+    
+    AssertParse(
+      """
+      var foo: (bar: Int 1️⃣bar2: Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ])
+    
+    AssertParse(
+      """
+      var foo: (bar: Int 1️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ])
+    
+    AssertParse(
+      """
+      var foo: (a 1️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in tuple type")
+      ])
+    
+    AssertParse(
+      """
+      var foo: (A 1️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ])
+    
+    AssertParse(
+      """
+      var foo: (_ 1️⃣a 2️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in tuple type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type")
+      ])
+    
+    AssertParse(
+      """
+      var foo: (Array<Foo> 1️⃣Array<Bar>)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type"),
+      ])
+    
+    AssertParse(
+      """
+      var foo: (a 1️⃣Array<Bar>)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in tuple type"),
+      ])
+    
+    AssertParse(
+      """
+      var foo: (Array<Foo> 1️⃣a)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type"),
+      ])
   }
 }
 

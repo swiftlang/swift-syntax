@@ -426,10 +426,36 @@ extension Parser {
           unexpectedBeforeColon = nil
           colon = nil
         }
+        
+        // In the case that the input is "(foo bar)" we have to decide whether we parse it as "(foo: bar)" or "(foo, bar)".
+        // As most people write identifiers lowercase and types capitalized, we decide on the first character of the first token
+        if let first = first,
+            second == nil,
+            colon?.isMissing == true,
+            first.tokenText.description.first?.isUppercase == true {
+          elements.append(RawTupleTypeElementSyntax(
+            inOut: nil,
+            name: nil,
+            secondName: nil,
+            unexpectedBeforeColon,
+            colon: nil,
+            type: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
+            ellipsis: nil,
+            initializer: nil,
+            trailingComma: self.missingToken(.comma),
+            arena: self.arena
+          ))
+          keepGoing = true
+          continue
+        }
         // Parse the type annotation.
         let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
         let ellipsis = self.currentToken.isEllipsis ? self.consumeAnyToken() : nil
-        let trailingComma = self.consume(if: .comma)
+        var trailingComma = self.consume(if: .comma)
+        if trailingComma == nil && self.withLookahead({ $0.canParseType() }) {
+          // If the next token does not close the tuple, it is very likely the user forgot the comma.
+          trailingComma = self.missingToken(.comma)
+        }
         keepGoing = trailingComma != nil
         elements.append(RawTupleTypeElementSyntax(
             inOut: nil,

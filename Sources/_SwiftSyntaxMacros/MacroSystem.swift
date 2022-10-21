@@ -68,7 +68,7 @@ class MacroApplication : SyntaxRewriter {
     )
   }
 
-  override func visit(_ node: CodeBlockItemListSyntax) -> Syntax {
+  override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
     var newItems: [CodeBlockItemSyntax] = []
     for item in node {
       // Recurse on the child node.
@@ -82,7 +82,7 @@ class MacroApplication : SyntaxRewriter {
       }
     }
 
-    return Syntax(CodeBlockItemListSyntax(newItems))
+    return CodeBlockItemListSyntax(newItems)
   }
 }
 

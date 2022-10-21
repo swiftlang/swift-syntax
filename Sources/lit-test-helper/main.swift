@@ -233,8 +233,7 @@ func performClassifySyntax(args: CommandLineArguments) throws {
   do {
     // Sanity check that we get the same result if the tree has constructed nodes.
     let ctorTree = TreeReconstructor().visit(tree)
-    assert(ctorTree.is(SourceFileSyntax.self))
-    let ctorResult = ClassifiedSyntaxTreePrinter.print(ctorTree)
+    let ctorResult = ClassifiedSyntaxTreePrinter.print(Syntax(ctorTree))
     if ctorResult != result {
       throw TestingError.classificationVerificationFailed(result, ctorResult)
     }

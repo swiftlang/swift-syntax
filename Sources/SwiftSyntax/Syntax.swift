@@ -67,6 +67,10 @@ extension Syntax {
   public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
   }
+
+  func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
 }
 
 extension Syntax: CustomReflectable {

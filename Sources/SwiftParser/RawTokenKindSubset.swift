@@ -443,6 +443,7 @@ enum IdentifierTokens: RawTokenKindSubset {
   case anyKeyword
   case capitalSelfKeyword
   case identifier
+  case initKeyword
   case selfKeyword
 
   init?(lexeme: Lexer.Lexeme) {
@@ -450,6 +451,7 @@ enum IdentifierTokens: RawTokenKindSubset {
     case .anyKeyword: self = .anyKeyword
     case .capitalSelfKeyword: self = .capitalSelfKeyword
     case .identifier: self = .identifier
+    case .initKeyword: self = .initKeyword
     case .selfKeyword: self = .selfKeyword
     default: return nil
     }
@@ -460,6 +462,7 @@ enum IdentifierTokens: RawTokenKindSubset {
     case .anyKeyword: return .anyKeyword
     case .capitalSelfKeyword: return .capitalSelfKeyword
     case .identifier: return .identifier
+    case .initKeyword: return .initKeyword
     case .selfKeyword: return .selfKeyword
     }
   }
@@ -743,6 +746,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case falseKeyword
   case floatingLiteral
   case identifier
+  case initKeyword
   case integerLiteral
   case leftBrace
   case leftParen
@@ -773,6 +777,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .falseKeyword: self = .falseKeyword
     case .floatingLiteral: self = .floatingLiteral
     case .identifier: self = .identifier
+    case .initKeyword: self = .initKeyword
     case .integerLiteral: self = .integerLiteral
     case .leftBrace: self = .leftBrace
     case .leftParen: self = .leftParen
@@ -806,6 +811,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .falseKeyword: return .falseKeyword
     case .floatingLiteral: return .floatingLiteral
     case .identifier: return .identifier
+    case .initKeyword: return .initKeyword
     case .integerLiteral: return .integerLiteral
     case .leftBrace: return .leftBrace
     case .leftParen: return .leftParen

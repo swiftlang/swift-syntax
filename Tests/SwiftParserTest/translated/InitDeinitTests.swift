@@ -333,15 +333,9 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       class Aaron {
-        init(x: Int) {}
-        convenience init() { init(x: 1️⃣1) } 
+        convenience init() { init(x: 1) }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 24 - 24 = 'self.'
-        DiagnosticSpec(message: "expected type in parameter"),
-        DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
-      ]
+      """
     )
   }
 
@@ -350,15 +344,10 @@ final class InitDeinitTests: XCTestCase {
       """
       class Theodosia: Aaron {
         init() {
-          init(x: 1️⃣2) 
+          init(x: 2)
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'super.' at initializer invocation, Fix-It replacements: 5 - 5 = 'super.'
-        DiagnosticSpec(message: "expected type in parameter"),
-        DiagnosticSpec(message: "unexpected code '2' in parameter clause"),
-      ]
+      """
     )
   }
 
@@ -367,14 +356,9 @@ final class InitDeinitTests: XCTestCase {
       """
       struct AaronStruct {
         init(x: Int) {}
-        init() { init(x: 1️⃣1) } 
+        init() { init(x: 1) }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 12 - 12 = 'self.'
-        DiagnosticSpec(message: "expected type in parameter"),
-        DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
-      ]
+      """
     )
   }
 
@@ -383,13 +367,9 @@ final class InitDeinitTests: XCTestCase {
       """
       enum AaronEnum: Int {
         case A = 1
-        init(x: Int) { init(rawValue: x)1️⃣! } 
+        init(x: Int) { init(rawValue: x)! }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 18 - 18 = 'self.'
-        DiagnosticSpec(message: "unexpected code '!' in initializer"),
-      ]
+      """
     )
   }
 

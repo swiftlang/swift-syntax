@@ -224,10 +224,10 @@ public struct SpaceSeparatedIdentifiersError: ParserError {
   public let additionalTokens: [TokenSyntax]
 
   public var message: String {
-    if let anchorParent = firstToken.parent?.ancestorOrSelf(where: {
-      $0.nodeTypeNameForDiagnostics(allowBlockNames: false) != nil
+    if let name = firstToken.parent?.ancestorOrSelf(mapping: {
+      $0.nodeTypeNameForDiagnostics(allowBlockNames: false)
     }) {
-      return "found an unexpected second identifier in \(anchorParent.nodeTypeNameForDiagnostics(allowBlockNames: false)!)"
+      return "found an unexpected second identifier in \(name)"
     } else {
       return "found an unexpected second identifier"
     }
@@ -266,7 +266,7 @@ public struct UnexpectedNodesError: ParserError {
     if let parent = unexpectedNodes.parent {
       if let parentTypeName = parent.nodeTypeNameForDiagnostics(allowBlockNames: false), parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id {
         message += " before \(parentTypeName)"
-      } else if let parentTypeName = parent.ancestorOrSelf(where: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) != nil })?.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+      } else if let parentTypeName = parent.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) }) {
         message += " in \(parentTypeName)"
       }
     }

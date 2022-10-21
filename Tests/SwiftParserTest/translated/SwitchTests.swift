@@ -215,6 +215,7 @@ final class SwitchTests: XCTestCase {
       ], fixedSource: """
       switch x {
       case 0:
+      
       case 1:
         x = 0
       }

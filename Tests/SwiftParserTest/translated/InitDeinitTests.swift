@@ -156,7 +156,7 @@ final class InitDeinitTests: XCTestCase {
         DiagnosticSpec(message: "deinitializers cannot have parameters", fixIts: ["remove function signature"]),
       ], fixedSource: """
       class FooClassDeinitializerA {
-        deinit{}
+        deinit {}
       }
       """
     )

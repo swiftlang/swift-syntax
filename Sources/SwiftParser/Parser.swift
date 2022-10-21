@@ -393,7 +393,7 @@ extension Parser {
         self.missingToken(.identifier)
       )
     }
-    if let number = self.consume(ifAny: [.integerLiteral, .floatingLiteral]) {
+    if let number = self.consume(ifAny: [.integerLiteral, .floatingLiteral, .dollarIdentifier]) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
         self.missingToken(.identifier, text: nil)

@@ -187,7 +187,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
   }
 
-  func testParseErrors() throws {
+  func testParseErrors() {
     let sources =
     """
     infix operator +
@@ -231,7 +231,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     _ = existingGroup
   }
 
-  func testUnaryErrors() throws {
+  func testUnaryErrors() {
     let sources =
       """
       prefix operator +

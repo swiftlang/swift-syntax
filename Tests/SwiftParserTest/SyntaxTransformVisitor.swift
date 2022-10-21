@@ -10,7 +10,7 @@ import SwiftParser
 import SwiftSyntax
 
 final class SyntaxTransformVisitorTest: XCTestCase {
-  public func testFunctionCounter() throws {
+  public func testFunctionCounter() {
     struct FuncCounter: SyntaxTransformVisitor {
       public func visitAny(_ node: Syntax) -> Int {
         visitChildren(node).reduce(0, +)
@@ -38,7 +38,7 @@ final class SyntaxTransformVisitorTest: XCTestCase {
     }()
   }
   
-  public func testPrintFunctionType() throws {
+  public func testPrintFunctionType() {
     /// Assuming there is a single functioned declaration in the source file, print the type of that function.
     struct PrintFunctionType: SyntaxTransformVisitor {
       func visitAny(_ node: SwiftSyntax.Syntax) -> String {

@@ -3,7 +3,7 @@
 import XCTest
 
 final class AvailabilityTests: XCTestCase {
-  func testAvailableMember() throws {
+  func testAvailableMember() {
     AssertParse(
       """
       @available(OSX 10.0, introduced: 10.12)
@@ -51,7 +51,7 @@ final class AvailabilityTests: XCTestCase {
     )
   }
 
-  func testAvailabilityMacros() throws {
+  func testAvailabilityMacros() {
     AssertParse(
       """
       @available(_iOS9, _macOS10_11, tvOS 11.0, *)
@@ -65,7 +65,7 @@ final class AvailabilityTests: XCTestCase {
       """)
   }
 
-  func testSPIAvailabilityAttribute() throws {
+  func testSPIAvailabilityAttribute() {
     AssertParse(
       """
       @_spi_available(*, deprecated, renamed: "another")

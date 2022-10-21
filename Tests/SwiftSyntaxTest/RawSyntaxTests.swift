@@ -40,7 +40,7 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
 
 final class RawSyntaxTests: XCTestCase {
 
-  func testFactory() throws {
+  func testFactory() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual("\(structDecl.raw)",
@@ -51,7 +51,7 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
-  func testAccessor() throws {
+  func testAccessor() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(structDecl.identifier.tokenKind, .identifier)
@@ -66,7 +66,7 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
-  func testMaterializedToken() throws {
+  func testMaterializedToken() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier, text: arena.intern("foo"),
@@ -85,7 +85,7 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
-  func testParsedToken() throws {
+  func testParsedToken() {
     // Dummy trivia parsing function.
     func dummyParseToken(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
       // Emit a single `unexpectedText` trivia of the whole trivia text.

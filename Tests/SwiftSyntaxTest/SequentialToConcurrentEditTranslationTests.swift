@@ -63,7 +63,7 @@ func verifySequentialToConcurrentTranslation(
 }
 
 final class TranslateSequentialToConcurrentEditsTests: XCTestCase {
-  func testEmpty() throws {
+  func testEmpty() {
     verifySequentialToConcurrentTranslation([], [])
   }
 
@@ -76,7 +76,7 @@ final class TranslateSequentialToConcurrentEditsTests: XCTestCase {
     }())
   }
 
-  func testSingleEdit1() throws {
+  func testSingleEdit1() {
     verifySequentialToConcurrentTranslation([
       SourceEdit(offset: 5, length: 1, replacementLength: 0)
     ], [
@@ -84,7 +84,7 @@ final class TranslateSequentialToConcurrentEditsTests: XCTestCase {
     ])
   }
 
-  func testSingleEdit2() throws {
+  func testSingleEdit2() {
     verifySequentialToConcurrentTranslation([
       SourceEdit(offset: 5, length: 0, replacementLength: 1)
     ], [
@@ -276,7 +276,7 @@ final class TranslateSequentialToConcurrentEditsTests: XCTestCase {
 
   /// Enable and run this test to randomly generate edit arrays and verify that
   /// translating them to sequential edits results in the same post-edit string.
-  func disabledTestFuzz() throws {
+  func disabledTestFuzz() {
     var i = 0
     while true {
       i += 1

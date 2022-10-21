@@ -1083,7 +1083,7 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
-  func testReasyncFunctions() throws {
+  func testReasyncFunctions() {
     AssertParse(
       """
       class MyType {

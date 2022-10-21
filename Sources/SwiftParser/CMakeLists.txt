@@ -18,6 +18,7 @@ add_library(SwiftParser STATIC
   LoopProgressCondition.swift
   Modifiers.swift
   Names.swift
+  Nominals.swift
   Parser.swift
   Patterns.swift
   RawTokenKindSubset.swift

@@ -1,4 +1,4 @@
-//===------ PlatformMutex.swift - Platform-specific Mutual Exclusion  -----===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //

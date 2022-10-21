@@ -1,4 +1,4 @@
-//===------------ main.swift - Entry point for lit-test-help --------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //

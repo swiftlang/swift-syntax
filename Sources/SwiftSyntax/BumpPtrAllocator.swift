@@ -1,4 +1,4 @@
-//===---------- BumpPtrAllocator.swift - Bump-pointer Allocaiton ----------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //

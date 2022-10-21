@@ -15,19 +15,20 @@
 
 import SwiftSyntax
 import SwiftBasicFormat
-
 /// Represents `TokenSyntax` in `SwiftSyntaxBuilder`.
 /// At the moment, this just wraps `TokenSyntax`, but we can make it store just the information necessary to build a `TokenSyntax` in the future.
 public struct Token: SyntaxBuildable, ExpressibleAsBinaryOperatorExpr, ExpressibleAsDeclModifier, ExpressibleAsIdentifierExpr, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList {
   let tokenSyntax: TokenSyntax
   let leadingTrivia: Trivia?
   let trailingTrivia: Trivia?
-  var text: String { tokenSyntax.text }
+  var text: String { 
+    tokenSyntax.text 
+  }
   
-  public init(
-    tokenSyntax: TokenSyntax,
-    leadingTrivia: Trivia? = nil,
-    trailingTrivia: Trivia? = nil
+  public init (
+  tokenSyntax: TokenSyntax, 
+  leadingTrivia: Trivia? = nil, 
+  trailingTrivia: Trivia? = nil
   ) {
     self.tokenSyntax = tokenSyntax
     self.leadingTrivia = leadingTrivia
@@ -36,17 +37,17 @@ public struct Token: SyntaxBuildable, ExpressibleAsBinaryOperatorExpr, Expressib
   
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Token {
     Token(
-      tokenSyntax: tokenSyntax,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia
+    tokenSyntax: tokenSyntax, 
+    leadingTrivia: leadingTrivia, 
+    trailingTrivia: trailingTrivia
     )
   }
   
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Token {
     Token(
-      tokenSyntax: tokenSyntax,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia
+    tokenSyntax: tokenSyntax, 
+    leadingTrivia: leadingTrivia, 
+    trailingTrivia: trailingTrivia
     )
   }
   
@@ -100,7 +101,6 @@ public struct Token: SyntaxBuildable, ExpressibleAsBinaryOperatorExpr, Expressib
     return createIdentifierExpr()
   }
 }
-
 /// Namespace for commonly used tokens with default trivia.
 public extension Token {
   

@@ -14,7 +14,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-
 @resultBuilder
 public struct CodeBlockItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -29,7 +28,9 @@ public struct CodeBlockItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -57,7 +58,9 @@ public struct CodeBlockItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -69,15 +72,17 @@ public struct CodeBlockItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createCodeBlockItem() })
+    return .init(component.map { 
+      $0.createCodeBlockItem() 
+    })
   }
 }
 public extension CodeBlockItemList {
-  init(@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemList) {
+  
+  init (@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct UnexpectedNodesBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -92,7 +97,9 @@ public struct UnexpectedNodesBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -120,7 +127,9 @@ public struct UnexpectedNodesBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -132,15 +141,17 @@ public struct UnexpectedNodesBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createSyntaxBuildable() })
+    return .init(component.map { 
+      $0.createSyntaxBuildable() 
+    })
   }
 }
 public extension UnexpectedNodes {
-  init(@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodes) {
+  
+  init (@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodes) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct TupleExprElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -155,7 +166,9 @@ public struct TupleExprElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -183,7 +196,9 @@ public struct TupleExprElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -196,18 +211,18 @@ public struct TupleExprElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createTupleExprElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension TupleExprElementList {
-  init(@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementList) {
+  
+  init (@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ArrayElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -222,7 +237,9 @@ public struct ArrayElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -250,7 +267,9 @@ public struct ArrayElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -263,18 +282,18 @@ public struct ArrayElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createArrayElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension ArrayElementList {
-  init(@ArrayElementListBuilder itemsBuilder: () -> ArrayElementList) {
+  
+  init (@ArrayElementListBuilder itemsBuilder: () -> ArrayElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct DictionaryElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -289,7 +308,9 @@ public struct DictionaryElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -317,7 +338,9 @@ public struct DictionaryElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -330,18 +353,18 @@ public struct DictionaryElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createDictionaryElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension DictionaryElementList {
-  init(@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementList) {
+  
+  init (@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct StringLiteralSegmentsBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -356,7 +379,9 @@ public struct StringLiteralSegmentsBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -384,7 +409,9 @@ public struct StringLiteralSegmentsBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -396,15 +423,17 @@ public struct StringLiteralSegmentsBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createSyntaxBuildable() })
+    return .init(component.map { 
+      $0.createSyntaxBuildable() 
+    })
   }
 }
 public extension StringLiteralSegments {
-  init(@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegments) {
+  
+  init (@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegments) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct DeclNameArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -419,7 +448,9 @@ public struct DeclNameArgumentListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -447,7 +478,9 @@ public struct DeclNameArgumentListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -459,15 +492,17 @@ public struct DeclNameArgumentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createDeclNameArgument() })
+    return .init(component.map { 
+      $0.createDeclNameArgument() 
+    })
   }
 }
 public extension DeclNameArgumentList {
-  init(@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentList) {
+  
+  init (@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ExprListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -482,7 +517,9 @@ public struct ExprListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -510,7 +547,9 @@ public struct ExprListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -522,15 +561,17 @@ public struct ExprListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createExprBuildable() })
+    return .init(component.map { 
+      $0.createExprBuildable() 
+    })
   }
 }
 public extension ExprList {
-  init(@ExprListBuilder itemsBuilder: () -> ExprList) {
+  
+  init (@ExprListBuilder itemsBuilder: () -> ExprList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ClosureCaptureItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -545,7 +586,9 @@ public struct ClosureCaptureItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -573,7 +616,9 @@ public struct ClosureCaptureItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -586,18 +631,18 @@ public struct ClosureCaptureItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createClosureCaptureItem()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension ClosureCaptureItemList {
-  init(@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList) {
+  
+  init (@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ClosureParamListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -612,7 +657,9 @@ public struct ClosureParamListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -640,7 +687,9 @@ public struct ClosureParamListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -653,18 +702,18 @@ public struct ClosureParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createClosureParam()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension ClosureParamList {
-  init(@ClosureParamListBuilder itemsBuilder: () -> ClosureParamList) {
+  
+  init (@ClosureParamListBuilder itemsBuilder: () -> ClosureParamList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct MultipleTrailingClosureElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -679,7 +728,9 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -707,7 +758,9 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -719,15 +772,17 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createMultipleTrailingClosureElement() })
+    return .init(component.map { 
+      $0.createMultipleTrailingClosureElement() 
+    })
   }
 }
 public extension MultipleTrailingClosureElementList {
-  init(@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementList) {
+  
+  init (@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct KeyPathComponentListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -742,7 +797,9 @@ public struct KeyPathComponentListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -770,7 +827,9 @@ public struct KeyPathComponentListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -782,15 +841,17 @@ public struct KeyPathComponentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createKeyPathComponent() })
+    return .init(component.map { 
+      $0.createKeyPathComponent() 
+    })
   }
 }
 public extension KeyPathComponentList {
-  init(@KeyPathComponentListBuilder itemsBuilder: () -> KeyPathComponentList) {
+  
+  init (@KeyPathComponentListBuilder itemsBuilder: () -> KeyPathComponentList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ObjcNameBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -805,7 +866,9 @@ public struct ObjcNameBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -833,7 +896,9 @@ public struct ObjcNameBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -845,15 +910,17 @@ public struct ObjcNameBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createObjcNamePiece() })
+    return .init(component.map { 
+      $0.createObjcNamePiece() 
+    })
   }
 }
 public extension ObjcName {
-  init(@ObjcNameBuilder itemsBuilder: () -> ObjcName) {
+  
+  init (@ObjcNameBuilder itemsBuilder: () -> ObjcName) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct YieldExprListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -868,7 +935,9 @@ public struct YieldExprListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -896,7 +965,9 @@ public struct YieldExprListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -908,15 +979,17 @@ public struct YieldExprListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createYieldExprListElement() })
+    return .init(component.map { 
+      $0.createYieldExprListElement() 
+    })
   }
 }
 public extension YieldExprList {
-  init(@YieldExprListBuilder itemsBuilder: () -> YieldExprList) {
+  
+  init (@YieldExprListBuilder itemsBuilder: () -> YieldExprList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct FunctionParameterListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -931,7 +1004,9 @@ public struct FunctionParameterListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -959,7 +1034,9 @@ public struct FunctionParameterListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -972,18 +1049,18 @@ public struct FunctionParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createFunctionParameter()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension FunctionParameterList {
-  init(@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterList) {
+  
+  init (@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct IfConfigClauseListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -998,7 +1075,9 @@ public struct IfConfigClauseListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1026,7 +1105,9 @@ public struct IfConfigClauseListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1038,15 +1119,17 @@ public struct IfConfigClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createIfConfigClause() })
+    return .init(component.map { 
+      $0.createIfConfigClause() 
+    })
   }
 }
 public extension IfConfigClauseList {
-  init(@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseList) {
+  
+  init (@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct InheritedTypeListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1061,7 +1144,9 @@ public struct InheritedTypeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1089,7 +1174,9 @@ public struct InheritedTypeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1102,18 +1189,18 @@ public struct InheritedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createInheritedType()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension InheritedTypeList {
-  init(@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeList) {
+  
+  init (@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct MemberDeclListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1128,7 +1215,9 @@ public struct MemberDeclListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1156,7 +1245,9 @@ public struct MemberDeclListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1168,15 +1259,17 @@ public struct MemberDeclListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createMemberDeclListItem() })
+    return .init(component.map { 
+      $0.createMemberDeclListItem() 
+    })
   }
 }
 public extension MemberDeclList {
-  init(@MemberDeclListBuilder itemsBuilder: () -> MemberDeclList) {
+  
+  init (@MemberDeclListBuilder itemsBuilder: () -> MemberDeclList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ModifierListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1191,7 +1284,9 @@ public struct ModifierListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1219,7 +1314,9 @@ public struct ModifierListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1231,15 +1328,17 @@ public struct ModifierListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createDeclModifier() })
+    return .init(component.map { 
+      $0.createDeclModifier() 
+    })
   }
 }
 public extension ModifierList {
-  init(@ModifierListBuilder itemsBuilder: () -> ModifierList) {
+  
+  init (@ModifierListBuilder itemsBuilder: () -> ModifierList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct AccessPathBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1254,7 +1353,9 @@ public struct AccessPathBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1282,7 +1383,9 @@ public struct AccessPathBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1294,15 +1397,17 @@ public struct AccessPathBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createAccessPathComponent() })
+    return .init(component.map { 
+      $0.createAccessPathComponent() 
+    })
   }
 }
 public extension AccessPath {
-  init(@AccessPathBuilder itemsBuilder: () -> AccessPath) {
+  
+  init (@AccessPathBuilder itemsBuilder: () -> AccessPath) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct AccessorListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1317,7 +1422,9 @@ public struct AccessorListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1345,7 +1452,9 @@ public struct AccessorListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1357,15 +1466,17 @@ public struct AccessorListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createAccessorDecl() })
+    return .init(component.map { 
+      $0.createAccessorDecl() 
+    })
   }
 }
 public extension AccessorList {
-  init(@AccessorListBuilder itemsBuilder: () -> AccessorList) {
+  
+  init (@AccessorListBuilder itemsBuilder: () -> AccessorList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct PatternBindingListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1380,7 +1491,9 @@ public struct PatternBindingListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1408,7 +1521,9 @@ public struct PatternBindingListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1421,18 +1536,18 @@ public struct PatternBindingListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createPatternBinding()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension PatternBindingList {
-  init(@PatternBindingListBuilder itemsBuilder: () -> PatternBindingList) {
+  
+  init (@PatternBindingListBuilder itemsBuilder: () -> PatternBindingList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct EnumCaseElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1447,7 +1562,9 @@ public struct EnumCaseElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1475,7 +1592,9 @@ public struct EnumCaseElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1488,18 +1607,18 @@ public struct EnumCaseElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createEnumCaseElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension EnumCaseElementList {
-  init(@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementList) {
+  
+  init (@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct DesignatedTypeListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1514,7 +1633,9 @@ public struct DesignatedTypeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1542,7 +1663,9 @@ public struct DesignatedTypeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1554,15 +1677,17 @@ public struct DesignatedTypeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createDesignatedTypeElement() })
+    return .init(component.map { 
+      $0.createDesignatedTypeElement() 
+    })
   }
 }
 public extension DesignatedTypeList {
-  init(@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeList) {
+  
+  init (@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct PrecedenceGroupAttributeListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1577,7 +1702,9 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1605,7 +1732,9 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1617,15 +1746,17 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createSyntaxBuildable() })
+    return .init(component.map { 
+      $0.createSyntaxBuildable() 
+    })
   }
 }
 public extension PrecedenceGroupAttributeList {
-  init(@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeList) {
+  
+  init (@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct PrecedenceGroupNameListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1640,7 +1771,9 @@ public struct PrecedenceGroupNameListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1668,7 +1801,9 @@ public struct PrecedenceGroupNameListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1680,15 +1815,17 @@ public struct PrecedenceGroupNameListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createPrecedenceGroupNameElement() })
+    return .init(component.map { 
+      $0.createPrecedenceGroupNameElement() 
+    })
   }
 }
 public extension PrecedenceGroupNameList {
-  init(@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameList) {
+  
+  init (@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct TokenListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1703,7 +1840,9 @@ public struct TokenListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1731,7 +1870,9 @@ public struct TokenListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1747,11 +1888,11 @@ public struct TokenListBuilder {
   }
 }
 public extension TokenList {
-  init(@TokenListBuilder itemsBuilder: () -> TokenList) {
+  
+  init (@TokenListBuilder itemsBuilder: () -> TokenList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct NonEmptyTokenListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1766,7 +1907,9 @@ public struct NonEmptyTokenListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1794,7 +1937,9 @@ public struct NonEmptyTokenListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1810,11 +1955,11 @@ public struct NonEmptyTokenListBuilder {
   }
 }
 public extension NonEmptyTokenList {
-  init(@NonEmptyTokenListBuilder itemsBuilder: () -> NonEmptyTokenList) {
+  
+  init (@NonEmptyTokenListBuilder itemsBuilder: () -> NonEmptyTokenList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct AttributeListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1829,7 +1974,9 @@ public struct AttributeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1857,7 +2004,9 @@ public struct AttributeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1869,15 +2018,17 @@ public struct AttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createSyntaxBuildable() })
+    return .init(component.map { 
+      $0.createSyntaxBuildable() 
+    })
   }
 }
 public extension AttributeList {
-  init(@AttributeListBuilder itemsBuilder: () -> AttributeList) {
+  
+  init (@AttributeListBuilder itemsBuilder: () -> AttributeList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct SpecializeAttributeSpecListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1892,7 +2043,9 @@ public struct SpecializeAttributeSpecListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1920,7 +2073,9 @@ public struct SpecializeAttributeSpecListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1932,15 +2087,17 @@ public struct SpecializeAttributeSpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createSyntaxBuildable() })
+    return .init(component.map { 
+      $0.createSyntaxBuildable() 
+    })
   }
 }
 public extension SpecializeAttributeSpecList {
-  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecList) {
+  
+  init (@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ObjCSelectorBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -1955,7 +2112,9 @@ public struct ObjCSelectorBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -1983,7 +2142,9 @@ public struct ObjCSelectorBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -1995,15 +2156,17 @@ public struct ObjCSelectorBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createObjCSelectorPiece() })
+    return .init(component.map { 
+      $0.createObjCSelectorPiece() 
+    })
   }
 }
 public extension ObjCSelector {
-  init(@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelector) {
+  
+  init (@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelector) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct DifferentiabilityParamListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2018,7 +2181,9 @@ public struct DifferentiabilityParamListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2046,7 +2211,9 @@ public struct DifferentiabilityParamListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2059,18 +2226,18 @@ public struct DifferentiabilityParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createDifferentiabilityParam()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension DifferentiabilityParamList {
-  init(@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamList) {
+  
+  init (@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct BackDeployVersionListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2085,7 +2252,9 @@ public struct BackDeployVersionListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2113,7 +2282,9 @@ public struct BackDeployVersionListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2125,15 +2296,17 @@ public struct BackDeployVersionListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createBackDeployVersionArgument() })
+    return .init(component.map { 
+      $0.createBackDeployVersionArgument() 
+    })
   }
 }
 public extension BackDeployVersionList {
-  init(@BackDeployVersionListBuilder itemsBuilder: () -> BackDeployVersionList) {
+  
+  init (@BackDeployVersionListBuilder itemsBuilder: () -> BackDeployVersionList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct SwitchCaseListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2148,7 +2321,9 @@ public struct SwitchCaseListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2176,7 +2351,9 @@ public struct SwitchCaseListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2188,15 +2365,17 @@ public struct SwitchCaseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createSyntaxBuildable() })
+    return .init(component.map { 
+      $0.createSyntaxBuildable() 
+    })
   }
 }
 public extension SwitchCaseList {
-  init(@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseList) {
+  
+  init (@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct CatchClauseListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2211,7 +2390,9 @@ public struct CatchClauseListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2239,7 +2420,9 @@ public struct CatchClauseListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2251,15 +2434,17 @@ public struct CatchClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createCatchClause() })
+    return .init(component.map { 
+      $0.createCatchClause() 
+    })
   }
 }
 public extension CatchClauseList {
-  init(@CatchClauseListBuilder itemsBuilder: () -> CatchClauseList) {
+  
+  init (@CatchClauseListBuilder itemsBuilder: () -> CatchClauseList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct CaseItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2274,7 +2459,9 @@ public struct CaseItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2302,7 +2489,9 @@ public struct CaseItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2315,18 +2504,18 @@ public struct CaseItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createCaseItem()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension CaseItemList {
-  init(@CaseItemListBuilder itemsBuilder: () -> CaseItemList) {
+  
+  init (@CaseItemListBuilder itemsBuilder: () -> CaseItemList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct CatchItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2341,7 +2530,9 @@ public struct CatchItemListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2369,7 +2560,9 @@ public struct CatchItemListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2382,18 +2575,18 @@ public struct CatchItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createCatchItem()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension CatchItemList {
-  init(@CatchItemListBuilder itemsBuilder: () -> CatchItemList) {
+  
+  init (@CatchItemListBuilder itemsBuilder: () -> CatchItemList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct ConditionElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2408,7 +2601,9 @@ public struct ConditionElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2436,7 +2631,9 @@ public struct ConditionElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2449,18 +2646,18 @@ public struct ConditionElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createConditionElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension ConditionElementList {
-  init(@ConditionElementListBuilder itemsBuilder: () -> ConditionElementList) {
+  
+  init (@ConditionElementListBuilder itemsBuilder: () -> ConditionElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct GenericRequirementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2475,7 +2672,9 @@ public struct GenericRequirementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2503,7 +2702,9 @@ public struct GenericRequirementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2516,18 +2717,18 @@ public struct GenericRequirementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createGenericRequirement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension GenericRequirementList {
-  init(@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementList) {
+  
+  init (@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct GenericParameterListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2542,7 +2743,9 @@ public struct GenericParameterListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2570,7 +2773,9 @@ public struct GenericParameterListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2583,18 +2788,18 @@ public struct GenericParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createGenericParameter()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension GenericParameterList {
-  init(@GenericParameterListBuilder itemsBuilder: () -> GenericParameterList) {
+  
+  init (@GenericParameterListBuilder itemsBuilder: () -> GenericParameterList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct PrimaryAssociatedTypeListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2609,7 +2814,9 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2637,7 +2844,9 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2650,18 +2859,18 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createPrimaryAssociatedType()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension PrimaryAssociatedTypeList {
-  init(@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeList) {
+  
+  init (@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct CompositionTypeElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2676,7 +2885,9 @@ public struct CompositionTypeElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2704,7 +2915,9 @@ public struct CompositionTypeElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2716,15 +2929,17 @@ public struct CompositionTypeElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createCompositionTypeElement() })
+    return .init(component.map { 
+      $0.createCompositionTypeElement() 
+    })
   }
 }
 public extension CompositionTypeElementList {
-  init(@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementList) {
+  
+  init (@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct TupleTypeElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2739,7 +2954,9 @@ public struct TupleTypeElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2767,7 +2984,9 @@ public struct TupleTypeElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2780,18 +2999,18 @@ public struct TupleTypeElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createTupleTypeElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension TupleTypeElementList {
-  init(@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementList) {
+  
+  init (@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct GenericArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2806,7 +3025,9 @@ public struct GenericArgumentListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2834,7 +3055,9 @@ public struct GenericArgumentListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2847,18 +3070,18 @@ public struct GenericArgumentListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createGenericArgument()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension GenericArgumentList {
-  init(@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentList) {
+  
+  init (@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct TuplePatternElementListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2873,7 +3096,9 @@ public struct TuplePatternElementListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2901,7 +3126,9 @@ public struct TuplePatternElementListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2914,18 +3141,18 @@ public struct TuplePatternElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
+    return .init(component.enumerated().map { index, source in 
       let element = source.createTuplePatternElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     })
   }
 }
 public extension TuplePatternElementList {
-  init(@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementList) {
+  
+  init (@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementList) {
     self = itemsBuilder()
   }
 }
-
 @resultBuilder
 public struct AvailabilitySpecListBuilder {
   /// The type of individual statement expressions in the transformed function,
@@ -2940,7 +3167,9 @@ public struct AvailabilitySpecListBuilder {
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
@@ -2968,7 +3197,9 @@ public struct AvailabilitySpecListBuilder {
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    return components.flatMap { $0 }
+    return components.flatMap { 
+      $0 
+    }
   }
   /// If declared, this will be called on the partial result of an 'if'
   /// #available' block to allow the result builder to erase type
@@ -2980,11 +3211,14 @@ public struct AvailabilitySpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createAvailabilityArgument() })
+    return .init(component.map { 
+      $0.createAvailabilityArgument() 
+    })
   }
 }
 public extension AvailabilitySpecList {
-  init(@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecList) {
+  
+  init (@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecList) {
     self = itemsBuilder()
   }
 }

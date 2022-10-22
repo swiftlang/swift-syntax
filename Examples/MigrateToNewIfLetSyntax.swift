@@ -49,7 +49,7 @@ struct Main {
     let file = CommandLine.arguments[1]
     let url = URL(fileURLWithPath: file)
     let source = try String(contentsOf: url, encoding: .utf8)
-    let sourceFile = try Parser.parse(source: source)
+    let sourceFile = Parser.parse(source: source)
     let rewritten = MigrateToNewIfLetSyntax().visit(sourceFile)
     print(rewritten)
   }

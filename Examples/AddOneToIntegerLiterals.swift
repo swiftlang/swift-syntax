@@ -18,10 +18,10 @@ import Foundation
 /// ```
 ///
 private class AddOneToIntegerLiterals: SyntaxRewriter {
-  override func visit(_ token: TokenSyntax) -> Syntax {
+  override func visit(_ token: TokenSyntax) -> TokenSyntax {
     // Only transform integer literals.
     guard case .integerLiteral(let text) = token.tokenKind else {
-      return Syntax(token)
+      return token
     }
 
     // Remove underscores from the original text.
@@ -34,7 +34,7 @@ private class AddOneToIntegerLiterals: SyntaxRewriter {
     let newIntegerLiteralToken = token.withKind(.integerLiteral("\(int + 1)"))
 
     // Return the new integer literal.
-    return Syntax(newIntegerLiteralToken)
+    return newIntegerLiteralToken
   }
 }
 
@@ -44,7 +44,7 @@ struct Main {
     let file = CommandLine.arguments[1]
     let url = URL(fileURLWithPath: file)
     let source = try String(contentsOf: url, encoding: .utf8)
-    let sourceFile = try Parser.parse(source: source)
+    let sourceFile = Parser.parse(source: source)
     let incremented = AddOneToIntegerLiterals().visit(sourceFile)
     print(incremented)
   }

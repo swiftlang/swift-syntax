@@ -88,6 +88,10 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return S.init(_syntaxNode)
   }
 
+  public func cast<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
+
   /// Syntax nodes always conform to `DeclSyntaxProtocol`. This API is just
   /// added for consistency.
   /// Note that this will incur an existential conversion.
@@ -189,6 +193,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(_syntaxNode)
+  }
+
+  public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
   }
 
   /// Syntax nodes always conform to `ExprSyntaxProtocol`. This API is just
@@ -294,6 +302,10 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return S.init(_syntaxNode)
   }
 
+  public func cast<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
+
   /// Syntax nodes always conform to `StmtSyntaxProtocol`. This API is just
   /// added for consistency.
   /// Note that this will incur an existential conversion.
@@ -397,6 +409,10 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return S.init(_syntaxNode)
   }
 
+  public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
+
   /// Syntax nodes always conform to `TypeSyntaxProtocol`. This API is just
   /// added for consistency.
   /// Note that this will incur an existential conversion.
@@ -498,6 +514,10 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public func `as`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(_syntaxNode)
+  }
+
+  public func cast<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
   }
 
   /// Syntax nodes always conform to `PatternSyntaxProtocol`. This API is just

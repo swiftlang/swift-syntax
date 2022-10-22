@@ -40,12 +40,27 @@ let basicFormatFile = SourceFile {
   }
 }
 
+private func createChildVisitCall(childType: SyntaxBuildableType, rewrittenExpr: ExprBuildable) -> ExprBuildable {
+  let visitCall: FunctionCallExpr
+  if childType.isOptional {
+    visitCall = FunctionCallExpr("\(rewrittenExpr).map(self.visit)")
+  } else {
+    visitCall = FunctionCallExpr("self.visit(\(rewrittenExpr))")
+  }
+  if childType.baseType?.baseName != "Syntax", childType.baseType?.isSyntaxCollection != true, childType.baseType != nil {
+    let optionalChained = childType.optionalChained(expr: visitCall).createExprBuildable()
+    return FunctionCallExpr("\(optionalChained).cast(\(childType.syntaxBaseName).self)")
+  } else {
+    return visitCall
+  }
+}
+
 private func makeLayoutNodeRewriteFunc(node: Node) -> FunctionDecl {
   let rewriteResultType: String
-  if node.isSyntaxCollection {
-    rewriteResultType = "Syntax"
+  if node.type.baseType?.syntaxKind == "Syntax" && node.type.syntaxKind != "Missing" {
+    rewriteResultType = node.type.syntaxBaseName
   } else {
-    rewriteResultType = node.type.baseType?.syntaxBaseName ?? "Syntax"
+    rewriteResultType = node.type.baseType?.syntaxBaseName ?? node.type.syntaxBaseName
   }
   return FunctionDecl(
     leadingTrivia: .newline,
@@ -69,11 +84,7 @@ private func makeLayoutNodeRewriteFunc(node: Node) -> FunctionDecl {
         SequenceExpr("indentationLevel += 1")
       }
       let variableLetVar = child.requiresLeadingNewline ? "var" : "let"
-      if child.isOptional {
-        VariableDecl("\(variableLetVar) \(child.swiftName) = node.\(child.swiftName).map(self.visit)?.cast(\(child.type.syntaxBaseName).self)")
-      } else {
-        VariableDecl("\(variableLetVar) \(child.swiftName) = self.visit(node.\(child.swiftName)).cast(\(child.type.syntaxBaseName).self)")
-      }
+      VariableDecl("\(variableLetVar) \(child.swiftName) = \(createChildVisitCall(childType: child.type, rewrittenExpr: MemberAccessExpr("node.\(child.swiftName)")))")
       if child.requiresLeadingNewline {
         IfStmt(
           """
@@ -95,17 +106,16 @@ private func makeLayoutNodeRewriteFunc(node: Node) -> FunctionDecl {
         )
       }
     }
-    ReturnStmt("return \(rewriteResultType)(\(reconstructed))")
+    if rewriteResultType != node.type.syntaxBaseName {
+      ReturnStmt("return \(rewriteResultType)(\(reconstructed))")
+    } else {
+      ReturnStmt("return \(reconstructed)")
+    }
   }
 }
 
 private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
-  let rewriteResultType: String
-  if node.isSyntaxCollection {
-    rewriteResultType = "Syntax"
-  } else {
-    rewriteResultType = node.type.baseType?.syntaxBaseName ?? "Syntax"
-  }
+  let rewriteResultType = node.type.syntaxBaseName
   return FunctionDecl(
     leadingTrivia: .newline,
     modifiers: [Token.open, Token(tokenSyntax: TokenSyntax.contextualKeyword("override", trailingTrivia: .space))],
@@ -126,8 +136,8 @@ private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
     let formattedChildrenVarLet = node.elementsSeparatedByNewline ? "var" : "let"
     VariableDecl(
       """
-      \(formattedChildrenVarLet) formattedChildren = node.children(viewMode: .all).map {
-        self.visit($0).cast(\(node.collectionElementType.syntaxBaseName).self)
+      \(formattedChildrenVarLet) formattedChildren = node.map {
+        \(createChildVisitCall(childType: node.collectionElementType, rewrittenExpr: IdentifierExpr(identifier: .dollarIdentifier("$0"))))
       }
       """
     )
@@ -144,7 +154,7 @@ private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
         """
       )
     }
-    ReturnStmt("return Syntax(\(node.type.syntaxBaseName)(formattedChildren))")
+    ReturnStmt("return \(node.type.syntaxBaseName)(formattedChildren)")
   }
 }
 

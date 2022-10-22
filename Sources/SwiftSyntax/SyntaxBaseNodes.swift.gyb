@@ -107,6 +107,10 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
     return S.init(_syntaxNode)
   }
 
+  public func cast<S: ${node.name}Protocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
+
   /// Syntax nodes always conform to `${node.name}Protocol`. This API is just
   /// added for consistency.
   /// Note that this will incur an existential conversion.

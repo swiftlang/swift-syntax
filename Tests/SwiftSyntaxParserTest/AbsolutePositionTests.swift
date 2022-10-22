@@ -52,7 +52,7 @@ public class AbsolutePositionTests: XCTestCase {
   public func testRename() {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      let renamed = FuncRenamer().visit(parsed).as(SourceFileSyntax.self)!
+      let renamed = FuncRenamer().visit(parsed)
       let renamedSource = renamed.description
       XCTAssertEqual(renamedSource.count, 
         renamed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)

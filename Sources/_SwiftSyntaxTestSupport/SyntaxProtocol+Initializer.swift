@@ -36,21 +36,21 @@ private class InitializerExprFormat: BasicFormat {
     return formattedChildren
   }
 
-  override func visit(_ node: TupleExprElementListSyntax) -> Syntax {
+  override func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
     let children = node.children(viewMode: .all)
     // If the function only takes a single argument, display it on the same line
     if children.count > 1 {
-      return Syntax(TupleExprElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: TupleExprElementSyntax.self)))
+      return TupleExprElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: TupleExprElementSyntax.self))
     } else {
       return super.visit(node)
     }
   }
 
-  override func visit(_ node: ArrayElementListSyntax) -> Syntax {
+  override func visit(_ node: ArrayElementListSyntax) -> ArrayElementListSyntax {
     let children = node.children(viewMode: .all)
     // Short array literals are presented on one line, list each element on a different line.
     if node.description.count > 30 {
-      return Syntax(ArrayElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self)))
+      return ArrayElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self))
     } else {
       return super.visit(node)
     }

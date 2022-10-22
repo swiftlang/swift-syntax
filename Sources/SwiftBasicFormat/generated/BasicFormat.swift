@@ -49,10 +49,10 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open override func visit(_ node: MissingDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
     return DeclSyntax(MissingDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers))
   }
   
@@ -72,19 +72,19 @@ open class BasicFormat: SyntaxRewriter {
     return PatternSyntax(MissingPatternSyntax())
   }
   
-  open override func visit(_ node: CodeBlockItemSyntax) -> Syntax {
-    let unexpectedBeforeItem = node.unexpectedBeforeItem.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let item = self.visit(node.item).cast(Syntax.self)
-    let unexpectedBetweenItemAndSemicolon = node.unexpectedBetweenItemAndSemicolon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let semicolon = node.semicolon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenSemicolonAndErrorTokens = node.unexpectedBetweenSemicolonAndErrorTokens.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let errorTokens = node.errorTokens.map(self.visit)?.cast(Syntax.self)
-    return Syntax(CodeBlockItemSyntax(unexpectedBeforeItem, item: item, unexpectedBetweenItemAndSemicolon, semicolon: semicolon, unexpectedBetweenSemicolonAndErrorTokens, errorTokens: errorTokens))
+  open override func visit(_ node: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
+    let unexpectedBeforeItem = node.unexpectedBeforeItem.map(self.visit)
+    let item = self.visit(node.item)
+    let unexpectedBetweenItemAndSemicolon = node.unexpectedBetweenItemAndSemicolon.map(self.visit)
+    let semicolon = node.semicolon.map(self.visit)
+    let unexpectedBetweenSemicolonAndErrorTokens = node.unexpectedBetweenSemicolonAndErrorTokens.map(self.visit)
+    let errorTokens = node.errorTokens.map(self.visit)
+    return CodeBlockItemSyntax(unexpectedBeforeItem, item: item, unexpectedBetweenItemAndSemicolon, semicolon: semicolon, unexpectedBetweenSemicolonAndErrorTokens, errorTokens: errorTokens)
   }
   
-  open override func visit(_ node: CodeBlockItemListSyntax) -> Syntax {
-    var formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(CodeBlockItemSyntax.self)
+  open override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
+    var formattedChildren = node.map {
+      self.visit($0)
     }
     formattedChildren = formattedChildren.map {
       if $0.leadingTrivia?.first?.isNewline == true {
@@ -93,480 +93,480 @@ open class BasicFormat: SyntaxRewriter {
         return $0.withLeadingTrivia(indentedNewline + ($0.leadingTrivia ?? []))
       }
     }
-    return Syntax(CodeBlockItemListSyntax(formattedChildren))
+    return CodeBlockItemListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: CodeBlockSyntax) -> Syntax {
-    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBrace = self.visit(node.leftBrace).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBraceAndStatements = node.unexpectedBetweenLeftBraceAndStatements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+  open override func visit(_ node: CodeBlockSyntax) -> CodeBlockSyntax {
+    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)
+    let leftBrace = self.visit(node.leftBrace)
+    let unexpectedBetweenLeftBraceAndStatements = node.unexpectedBetweenLeftBraceAndStatements.map(self.visit)
     indentationLevel += 1
-    let statements = self.visit(node.statements).cast(CodeBlockItemListSyntax.self)
+    let statements = self.visit(node.statements)
     indentationLevel -= 1
-    let unexpectedBetweenStatementsAndRightBrace = node.unexpectedBetweenStatementsAndRightBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    var rightBrace = self.visit(node.rightBrace).cast(TokenSyntax.self)
+    let unexpectedBetweenStatementsAndRightBrace = node.unexpectedBetweenStatementsAndRightBrace.map(self.visit)
+    var rightBrace = self.visit(node.rightBrace)
     if rightBrace.leadingTrivia.first?.isNewline != true {
       rightBrace.leadingTrivia = indentedNewline + rightBrace.leadingTrivia
     }
-    return Syntax(CodeBlockSyntax(unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements, statements: statements, unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace))
+    return CodeBlockSyntax(unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements, statements: statements, unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace)
   }
   
-  open override func visit(_ node: UnexpectedNodesSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(Syntax.self)
+  open override func visit(_ node: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(UnexpectedNodesSyntax(formattedChildren))
+    return UnexpectedNodesSyntax(formattedChildren)
   }
   
   open override func visit(_ node: InOutExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeAmpersand = node.unexpectedBeforeAmpersand.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ampersand = self.visit(node.ampersand).cast(TokenSyntax.self)
-    let unexpectedBetweenAmpersandAndExpression = node.unexpectedBetweenAmpersandAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeAmpersand = node.unexpectedBeforeAmpersand.map(self.visit)
+    let ampersand = self.visit(node.ampersand)
+    let unexpectedBetweenAmpersandAndExpression = node.unexpectedBetweenAmpersandAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return ExprSyntax(InOutExprSyntax(unexpectedBeforeAmpersand, ampersand: ampersand, unexpectedBetweenAmpersandAndExpression, expression: expression))
   }
   
   open override func visit(_ node: PoundColumnExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundColumn = node.unexpectedBeforePoundColumn.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundColumn = self.visit(node.poundColumn).cast(TokenSyntax.self)
+    let unexpectedBeforePoundColumn = node.unexpectedBeforePoundColumn.map(self.visit)
+    let poundColumn = self.visit(node.poundColumn)
     return ExprSyntax(PoundColumnExprSyntax(unexpectedBeforePoundColumn, poundColumn: poundColumn))
   }
   
-  open override func visit(_ node: TupleExprElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(TupleExprElementSyntax.self)
+  open override func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(TupleExprElementListSyntax(formattedChildren))
+    return TupleExprElementListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: ArrayElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(ArrayElementSyntax.self)
+  open override func visit(_ node: ArrayElementListSyntax) -> ArrayElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ArrayElementListSyntax(formattedChildren))
+    return ArrayElementListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: DictionaryElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(DictionaryElementSyntax.self)
+  open override func visit(_ node: DictionaryElementListSyntax) -> DictionaryElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(DictionaryElementListSyntax(formattedChildren))
+    return DictionaryElementListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: StringLiteralSegmentsSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(Syntax.self)
+  open override func visit(_ node: StringLiteralSegmentsSyntax) -> StringLiteralSegmentsSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(StringLiteralSegmentsSyntax(formattedChildren))
+    return StringLiteralSegmentsSyntax(formattedChildren)
   }
   
   open override func visit(_ node: TryExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeTryKeyword = node.unexpectedBeforeTryKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let tryKeyword = self.visit(node.tryKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenTryKeywordAndQuestionOrExclamationMark = node.unexpectedBetweenTryKeywordAndQuestionOrExclamationMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionOrExclamationMark = node.questionOrExclamationMark.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenQuestionOrExclamationMarkAndExpression = node.unexpectedBetweenQuestionOrExclamationMarkAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeTryKeyword = node.unexpectedBeforeTryKeyword.map(self.visit)
+    let tryKeyword = self.visit(node.tryKeyword)
+    let unexpectedBetweenTryKeywordAndQuestionOrExclamationMark = node.unexpectedBetweenTryKeywordAndQuestionOrExclamationMark.map(self.visit)
+    let questionOrExclamationMark = node.questionOrExclamationMark.map(self.visit)
+    let unexpectedBetweenQuestionOrExclamationMarkAndExpression = node.unexpectedBetweenQuestionOrExclamationMarkAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return ExprSyntax(TryExprSyntax(unexpectedBeforeTryKeyword, tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndQuestionOrExclamationMark, questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndExpression, expression: expression))
   }
   
   open override func visit(_ node: AwaitExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeAwaitKeyword = node.unexpectedBeforeAwaitKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let awaitKeyword = self.visit(node.awaitKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenAwaitKeywordAndExpression = node.unexpectedBetweenAwaitKeywordAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeAwaitKeyword = node.unexpectedBeforeAwaitKeyword.map(self.visit)
+    let awaitKeyword = self.visit(node.awaitKeyword)
+    let unexpectedBetweenAwaitKeywordAndExpression = node.unexpectedBetweenAwaitKeywordAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return ExprSyntax(AwaitExprSyntax(unexpectedBeforeAwaitKeyword, awaitKeyword: awaitKeyword, unexpectedBetweenAwaitKeywordAndExpression, expression: expression))
   }
   
   open override func visit(_ node: MoveExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeMoveKeyword = node.unexpectedBeforeMoveKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let moveKeyword = self.visit(node.moveKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenMoveKeywordAndExpression = node.unexpectedBetweenMoveKeywordAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeMoveKeyword = node.unexpectedBeforeMoveKeyword.map(self.visit)
+    let moveKeyword = self.visit(node.moveKeyword)
+    let unexpectedBetweenMoveKeywordAndExpression = node.unexpectedBetweenMoveKeywordAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return ExprSyntax(MoveExprSyntax(unexpectedBeforeMoveKeyword, moveKeyword: moveKeyword, unexpectedBetweenMoveKeywordAndExpression, expression: expression))
   }
   
-  open override func visit(_ node: DeclNameArgumentSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndColon = node.unexpectedBetweenNameAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    return Syntax(DeclNameArgumentSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndColon, colon: colon))
+  open override func visit(_ node: DeclNameArgumentSyntax) -> DeclNameArgumentSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndColon = node.unexpectedBetweenNameAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    return DeclNameArgumentSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndColon, colon: colon)
   }
   
-  open override func visit(_ node: DeclNameArgumentListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(DeclNameArgumentSyntax.self)
+  open override func visit(_ node: DeclNameArgumentListSyntax) -> DeclNameArgumentListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(DeclNameArgumentListSyntax(formattedChildren))
+    return DeclNameArgumentListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: DeclNameArgumentsSyntax) -> Syntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArguments = node.unexpectedBetweenLeftParenAndArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arguments = self.visit(node.arguments).cast(DeclNameArgumentListSyntax.self)
-    let unexpectedBetweenArgumentsAndRightParen = node.unexpectedBetweenArgumentsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(DeclNameArgumentsSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments, arguments: arguments, unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: DeclNameArgumentsSyntax) -> DeclNameArgumentsSyntax {
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndArguments = node.unexpectedBetweenLeftParenAndArguments.map(self.visit)
+    let arguments = self.visit(node.arguments)
+    let unexpectedBetweenArgumentsAndRightParen = node.unexpectedBetweenArgumentsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return DeclNameArgumentsSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments, arguments: arguments, unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen)
   }
   
   open override func visit(_ node: IdentifierExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndDeclNameArguments = node.unexpectedBetweenIdentifierAndDeclNameArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declNameArguments = node.declNameArguments.map(self.visit)?.cast(DeclNameArgumentsSyntax.self)
+    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndDeclNameArguments = node.unexpectedBetweenIdentifierAndDeclNameArguments.map(self.visit)
+    let declNameArguments = node.declNameArguments.map(self.visit)
     return ExprSyntax(IdentifierExprSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndDeclNameArguments, declNameArguments: declNameArguments))
   }
   
   open override func visit(_ node: SuperRefExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeSuperKeyword = node.unexpectedBeforeSuperKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let superKeyword = self.visit(node.superKeyword).cast(TokenSyntax.self)
+    let unexpectedBeforeSuperKeyword = node.unexpectedBeforeSuperKeyword.map(self.visit)
+    let superKeyword = self.visit(node.superKeyword)
     return ExprSyntax(SuperRefExprSyntax(unexpectedBeforeSuperKeyword, superKeyword: superKeyword))
   }
   
   open override func visit(_ node: NilLiteralExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeNilKeyword = node.unexpectedBeforeNilKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let nilKeyword = self.visit(node.nilKeyword).cast(TokenSyntax.self)
+    let unexpectedBeforeNilKeyword = node.unexpectedBeforeNilKeyword.map(self.visit)
+    let nilKeyword = self.visit(node.nilKeyword)
     return ExprSyntax(NilLiteralExprSyntax(unexpectedBeforeNilKeyword, nilKeyword: nilKeyword))
   }
   
   open override func visit(_ node: DiscardAssignmentExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeWildcard = node.unexpectedBeforeWildcard.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let wildcard = self.visit(node.wildcard).cast(TokenSyntax.self)
+    let unexpectedBeforeWildcard = node.unexpectedBeforeWildcard.map(self.visit)
+    let wildcard = self.visit(node.wildcard)
     return ExprSyntax(DiscardAssignmentExprSyntax(unexpectedBeforeWildcard, wildcard: wildcard))
   }
   
   open override func visit(_ node: AssignmentExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeAssignToken = node.unexpectedBeforeAssignToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let assignToken = self.visit(node.assignToken).cast(TokenSyntax.self)
+    let unexpectedBeforeAssignToken = node.unexpectedBeforeAssignToken.map(self.visit)
+    let assignToken = self.visit(node.assignToken)
     return ExprSyntax(AssignmentExprSyntax(unexpectedBeforeAssignToken, assignToken: assignToken))
   }
   
   open override func visit(_ node: SequenceExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeElements = node.unexpectedBeforeElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = self.visit(node.elements).cast(ExprListSyntax.self)
+    let unexpectedBeforeElements = node.unexpectedBeforeElements.map(self.visit)
+    let elements = self.visit(node.elements)
     return ExprSyntax(SequenceExprSyntax(unexpectedBeforeElements, elements: elements))
   }
   
-  open override func visit(_ node: ExprListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(ExprSyntax.self)
+  open override func visit(_ node: ExprListSyntax) -> ExprListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ExprListSyntax(formattedChildren))
+    return ExprListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: PoundLineExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundLine = node.unexpectedBeforePoundLine.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundLine = self.visit(node.poundLine).cast(TokenSyntax.self)
+    let unexpectedBeforePoundLine = node.unexpectedBeforePoundLine.map(self.visit)
+    let poundLine = self.visit(node.poundLine)
     return ExprSyntax(PoundLineExprSyntax(unexpectedBeforePoundLine, poundLine: poundLine))
   }
   
   open override func visit(_ node: PoundFileExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundFile = node.unexpectedBeforePoundFile.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundFile = self.visit(node.poundFile).cast(TokenSyntax.self)
+    let unexpectedBeforePoundFile = node.unexpectedBeforePoundFile.map(self.visit)
+    let poundFile = self.visit(node.poundFile)
     return ExprSyntax(PoundFileExprSyntax(unexpectedBeforePoundFile, poundFile: poundFile))
   }
   
   open override func visit(_ node: PoundFileIDExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundFileID = node.unexpectedBeforePoundFileID.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundFileID = self.visit(node.poundFileID).cast(TokenSyntax.self)
+    let unexpectedBeforePoundFileID = node.unexpectedBeforePoundFileID.map(self.visit)
+    let poundFileID = self.visit(node.poundFileID)
     return ExprSyntax(PoundFileIDExprSyntax(unexpectedBeforePoundFileID, poundFileID: poundFileID))
   }
   
   open override func visit(_ node: PoundFilePathExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundFilePath = node.unexpectedBeforePoundFilePath.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundFilePath = self.visit(node.poundFilePath).cast(TokenSyntax.self)
+    let unexpectedBeforePoundFilePath = node.unexpectedBeforePoundFilePath.map(self.visit)
+    let poundFilePath = self.visit(node.poundFilePath)
     return ExprSyntax(PoundFilePathExprSyntax(unexpectedBeforePoundFilePath, poundFilePath: poundFilePath))
   }
   
   open override func visit(_ node: PoundFunctionExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundFunction = node.unexpectedBeforePoundFunction.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundFunction = self.visit(node.poundFunction).cast(TokenSyntax.self)
+    let unexpectedBeforePoundFunction = node.unexpectedBeforePoundFunction.map(self.visit)
+    let poundFunction = self.visit(node.poundFunction)
     return ExprSyntax(PoundFunctionExprSyntax(unexpectedBeforePoundFunction, poundFunction: poundFunction))
   }
   
   open override func visit(_ node: PoundDsohandleExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundDsohandle = node.unexpectedBeforePoundDsohandle.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundDsohandle = self.visit(node.poundDsohandle).cast(TokenSyntax.self)
+    let unexpectedBeforePoundDsohandle = node.unexpectedBeforePoundDsohandle.map(self.visit)
+    let poundDsohandle = self.visit(node.poundDsohandle)
     return ExprSyntax(PoundDsohandleExprSyntax(unexpectedBeforePoundDsohandle, poundDsohandle: poundDsohandle))
   }
   
   open override func visit(_ node: SymbolicReferenceExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndGenericArgumentClause = node.unexpectedBetweenIdentifierAndGenericArgumentClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericArgumentClause = node.genericArgumentClause.map(self.visit)?.cast(GenericArgumentClauseSyntax.self)
+    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndGenericArgumentClause = node.unexpectedBetweenIdentifierAndGenericArgumentClause.map(self.visit)
+    let genericArgumentClause = node.genericArgumentClause.map(self.visit)
     return ExprSyntax(SymbolicReferenceExprSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericArgumentClause, genericArgumentClause: genericArgumentClause))
   }
   
   open override func visit(_ node: PrefixOperatorExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeOperatorToken = node.unexpectedBeforeOperatorToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let operatorToken = node.operatorToken.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenOperatorTokenAndPostfixExpression = node.unexpectedBetweenOperatorTokenAndPostfixExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let postfixExpression = self.visit(node.postfixExpression).cast(ExprSyntax.self)
+    let unexpectedBeforeOperatorToken = node.unexpectedBeforeOperatorToken.map(self.visit)
+    let operatorToken = node.operatorToken.map(self.visit)
+    let unexpectedBetweenOperatorTokenAndPostfixExpression = node.unexpectedBetweenOperatorTokenAndPostfixExpression.map(self.visit)
+    let postfixExpression = self.visit(node.postfixExpression)
     return ExprSyntax(PrefixOperatorExprSyntax(unexpectedBeforeOperatorToken, operatorToken: operatorToken, unexpectedBetweenOperatorTokenAndPostfixExpression, postfixExpression: postfixExpression))
   }
   
   open override func visit(_ node: BinaryOperatorExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeOperatorToken = node.unexpectedBeforeOperatorToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let operatorToken = self.visit(node.operatorToken).cast(TokenSyntax.self)
+    let unexpectedBeforeOperatorToken = node.unexpectedBeforeOperatorToken.map(self.visit)
+    let operatorToken = self.visit(node.operatorToken)
     return ExprSyntax(BinaryOperatorExprSyntax(unexpectedBeforeOperatorToken, operatorToken: operatorToken))
   }
   
   open override func visit(_ node: ArrowExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeAsyncKeyword = node.unexpectedBeforeAsyncKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asyncKeyword = node.asyncKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAsyncKeywordAndThrowsToken = node.unexpectedBetweenAsyncKeywordAndThrowsToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let throwsToken = node.throwsToken.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenThrowsTokenAndArrowToken = node.unexpectedBetweenThrowsTokenAndArrowToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arrowToken = self.visit(node.arrowToken).cast(TokenSyntax.self)
+    let unexpectedBeforeAsyncKeyword = node.unexpectedBeforeAsyncKeyword.map(self.visit)
+    let asyncKeyword = node.asyncKeyword.map(self.visit)
+    let unexpectedBetweenAsyncKeywordAndThrowsToken = node.unexpectedBetweenAsyncKeywordAndThrowsToken.map(self.visit)
+    let throwsToken = node.throwsToken.map(self.visit)
+    let unexpectedBetweenThrowsTokenAndArrowToken = node.unexpectedBetweenThrowsTokenAndArrowToken.map(self.visit)
+    let arrowToken = self.visit(node.arrowToken)
     return ExprSyntax(ArrowExprSyntax(unexpectedBeforeAsyncKeyword, asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsToken, throwsToken: throwsToken, unexpectedBetweenThrowsTokenAndArrowToken, arrowToken: arrowToken))
   }
   
   open override func visit(_ node: InfixOperatorExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeLeftOperand = node.unexpectedBeforeLeftOperand.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftOperand = self.visit(node.leftOperand).cast(ExprSyntax.self)
-    let unexpectedBetweenLeftOperandAndOperatorOperand = node.unexpectedBetweenLeftOperandAndOperatorOperand.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let operatorOperand = self.visit(node.operatorOperand).cast(ExprSyntax.self)
-    let unexpectedBetweenOperatorOperandAndRightOperand = node.unexpectedBetweenOperatorOperandAndRightOperand.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightOperand = self.visit(node.rightOperand).cast(ExprSyntax.self)
+    let unexpectedBeforeLeftOperand = node.unexpectedBeforeLeftOperand.map(self.visit)
+    let leftOperand = self.visit(node.leftOperand)
+    let unexpectedBetweenLeftOperandAndOperatorOperand = node.unexpectedBetweenLeftOperandAndOperatorOperand.map(self.visit)
+    let operatorOperand = self.visit(node.operatorOperand)
+    let unexpectedBetweenOperatorOperandAndRightOperand = node.unexpectedBetweenOperatorOperandAndRightOperand.map(self.visit)
+    let rightOperand = self.visit(node.rightOperand)
     return ExprSyntax(InfixOperatorExprSyntax(unexpectedBeforeLeftOperand, leftOperand: leftOperand, unexpectedBetweenLeftOperandAndOperatorOperand, operatorOperand: operatorOperand, unexpectedBetweenOperatorOperandAndRightOperand, rightOperand: rightOperand))
   }
   
   open override func visit(_ node: FloatLiteralExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeFloatingDigits = node.unexpectedBeforeFloatingDigits.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let floatingDigits = self.visit(node.floatingDigits).cast(TokenSyntax.self)
+    let unexpectedBeforeFloatingDigits = node.unexpectedBeforeFloatingDigits.map(self.visit)
+    let floatingDigits = self.visit(node.floatingDigits)
     return ExprSyntax(FloatLiteralExprSyntax(unexpectedBeforeFloatingDigits, floatingDigits: floatingDigits))
   }
   
   open override func visit(_ node: TupleExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndElementList = node.unexpectedBetweenLeftParenAndElementList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elementList = self.visit(node.elementList).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenElementListAndRightParen = node.unexpectedBetweenElementListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndElementList = node.unexpectedBetweenLeftParenAndElementList.map(self.visit)
+    let elementList = self.visit(node.elementList)
+    let unexpectedBetweenElementListAndRightParen = node.unexpectedBetweenElementListAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return ExprSyntax(TupleExprSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList, elementList: elementList, unexpectedBetweenElementListAndRightParen, rightParen: rightParen))
   }
   
   open override func visit(_ node: ArrayExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeLeftSquare = node.unexpectedBeforeLeftSquare.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftSquare = self.visit(node.leftSquare).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftSquareAndElements = node.unexpectedBetweenLeftSquareAndElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = self.visit(node.elements).cast(ArrayElementListSyntax.self)
-    let unexpectedBetweenElementsAndRightSquare = node.unexpectedBetweenElementsAndRightSquare.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightSquare = self.visit(node.rightSquare).cast(TokenSyntax.self)
+    let unexpectedBeforeLeftSquare = node.unexpectedBeforeLeftSquare.map(self.visit)
+    let leftSquare = self.visit(node.leftSquare)
+    let unexpectedBetweenLeftSquareAndElements = node.unexpectedBetweenLeftSquareAndElements.map(self.visit)
+    let elements = self.visit(node.elements)
+    let unexpectedBetweenElementsAndRightSquare = node.unexpectedBetweenElementsAndRightSquare.map(self.visit)
+    let rightSquare = self.visit(node.rightSquare)
     return ExprSyntax(ArrayExprSyntax(unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndElements, elements: elements, unexpectedBetweenElementsAndRightSquare, rightSquare: rightSquare))
   }
   
   open override func visit(_ node: DictionaryExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeLeftSquare = node.unexpectedBeforeLeftSquare.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftSquare = self.visit(node.leftSquare).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftSquareAndContent = node.unexpectedBetweenLeftSquareAndContent.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let content = self.visit(node.content).cast(Syntax.self)
-    let unexpectedBetweenContentAndRightSquare = node.unexpectedBetweenContentAndRightSquare.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightSquare = self.visit(node.rightSquare).cast(TokenSyntax.self)
+    let unexpectedBeforeLeftSquare = node.unexpectedBeforeLeftSquare.map(self.visit)
+    let leftSquare = self.visit(node.leftSquare)
+    let unexpectedBetweenLeftSquareAndContent = node.unexpectedBetweenLeftSquareAndContent.map(self.visit)
+    let content = self.visit(node.content)
+    let unexpectedBetweenContentAndRightSquare = node.unexpectedBetweenContentAndRightSquare.map(self.visit)
+    let rightSquare = self.visit(node.rightSquare)
     return ExprSyntax(DictionaryExprSyntax(unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndContent, content: content, unexpectedBetweenContentAndRightSquare, rightSquare: rightSquare))
   }
   
-  open override func visit(_ node: TupleExprElementSyntax) -> Syntax {
-    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = node.label.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndExpression = node.unexpectedBetweenColonAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndTrailingComma = node.unexpectedBetweenExpressionAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(TupleExprElementSyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: TupleExprElementSyntax) -> TupleExprElementSyntax {
+    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)
+    let label = node.label.map(self.visit)
+    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)
+    let colon = node.colon.map(self.visit)
+    let unexpectedBetweenColonAndExpression = node.unexpectedBetweenColonAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndTrailingComma = node.unexpectedBetweenExpressionAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return TupleExprElementSyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: ArrayElementSyntax) -> Syntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndTrailingComma = node.unexpectedBetweenExpressionAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(ArrayElementSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: ArrayElementSyntax) -> ArrayElementSyntax {
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndTrailingComma = node.unexpectedBetweenExpressionAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return ArrayElementSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: DictionaryElementSyntax) -> Syntax {
-    let unexpectedBeforeKeyExpression = node.unexpectedBeforeKeyExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let keyExpression = self.visit(node.keyExpression).cast(ExprSyntax.self)
-    let unexpectedBetweenKeyExpressionAndColon = node.unexpectedBetweenKeyExpressionAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndValueExpression = node.unexpectedBetweenColonAndValueExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let valueExpression = self.visit(node.valueExpression).cast(ExprSyntax.self)
-    let unexpectedBetweenValueExpressionAndTrailingComma = node.unexpectedBetweenValueExpressionAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(DictionaryElementSyntax(unexpectedBeforeKeyExpression, keyExpression: keyExpression, unexpectedBetweenKeyExpressionAndColon, colon: colon, unexpectedBetweenColonAndValueExpression, valueExpression: valueExpression, unexpectedBetweenValueExpressionAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: DictionaryElementSyntax) -> DictionaryElementSyntax {
+    let unexpectedBeforeKeyExpression = node.unexpectedBeforeKeyExpression.map(self.visit)
+    let keyExpression = self.visit(node.keyExpression)
+    let unexpectedBetweenKeyExpressionAndColon = node.unexpectedBetweenKeyExpressionAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndValueExpression = node.unexpectedBetweenColonAndValueExpression.map(self.visit)
+    let valueExpression = self.visit(node.valueExpression)
+    let unexpectedBetweenValueExpressionAndTrailingComma = node.unexpectedBetweenValueExpressionAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return DictionaryElementSyntax(unexpectedBeforeKeyExpression, keyExpression: keyExpression, unexpectedBetweenKeyExpressionAndColon, colon: colon, unexpectedBetweenColonAndValueExpression, valueExpression: valueExpression, unexpectedBetweenValueExpressionAndTrailingComma, trailingComma: trailingComma)
   }
   
   open override func visit(_ node: IntegerLiteralExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeDigits = node.unexpectedBeforeDigits.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let digits = self.visit(node.digits).cast(TokenSyntax.self)
+    let unexpectedBeforeDigits = node.unexpectedBeforeDigits.map(self.visit)
+    let digits = self.visit(node.digits)
     return ExprSyntax(IntegerLiteralExprSyntax(unexpectedBeforeDigits, digits: digits))
   }
   
   open override func visit(_ node: BooleanLiteralExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeBooleanLiteral = node.unexpectedBeforeBooleanLiteral.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let booleanLiteral = self.visit(node.booleanLiteral).cast(TokenSyntax.self)
+    let unexpectedBeforeBooleanLiteral = node.unexpectedBeforeBooleanLiteral.map(self.visit)
+    let booleanLiteral = self.visit(node.booleanLiteral)
     return ExprSyntax(BooleanLiteralExprSyntax(unexpectedBeforeBooleanLiteral, booleanLiteral: booleanLiteral))
   }
   
   open override func visit(_ node: UnresolvedTernaryExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeQuestionMark = node.unexpectedBeforeQuestionMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionMark = self.visit(node.questionMark).cast(TokenSyntax.self)
-    let unexpectedBetweenQuestionMarkAndFirstChoice = node.unexpectedBetweenQuestionMarkAndFirstChoice.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let firstChoice = self.visit(node.firstChoice).cast(ExprSyntax.self)
-    let unexpectedBetweenFirstChoiceAndColonMark = node.unexpectedBetweenFirstChoiceAndColonMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colonMark = self.visit(node.colonMark).cast(TokenSyntax.self)
+    let unexpectedBeforeQuestionMark = node.unexpectedBeforeQuestionMark.map(self.visit)
+    let questionMark = self.visit(node.questionMark)
+    let unexpectedBetweenQuestionMarkAndFirstChoice = node.unexpectedBetweenQuestionMarkAndFirstChoice.map(self.visit)
+    let firstChoice = self.visit(node.firstChoice)
+    let unexpectedBetweenFirstChoiceAndColonMark = node.unexpectedBetweenFirstChoiceAndColonMark.map(self.visit)
+    let colonMark = self.visit(node.colonMark)
     return ExprSyntax(UnresolvedTernaryExprSyntax(unexpectedBeforeQuestionMark, questionMark: questionMark, unexpectedBetweenQuestionMarkAndFirstChoice, firstChoice: firstChoice, unexpectedBetweenFirstChoiceAndColonMark, colonMark: colonMark))
   }
   
   open override func visit(_ node: TernaryExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeConditionExpression = node.unexpectedBeforeConditionExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let conditionExpression = self.visit(node.conditionExpression).cast(ExprSyntax.self)
-    let unexpectedBetweenConditionExpressionAndQuestionMark = node.unexpectedBetweenConditionExpressionAndQuestionMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionMark = self.visit(node.questionMark).cast(TokenSyntax.self)
-    let unexpectedBetweenQuestionMarkAndFirstChoice = node.unexpectedBetweenQuestionMarkAndFirstChoice.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let firstChoice = self.visit(node.firstChoice).cast(ExprSyntax.self)
-    let unexpectedBetweenFirstChoiceAndColonMark = node.unexpectedBetweenFirstChoiceAndColonMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colonMark = self.visit(node.colonMark).cast(TokenSyntax.self)
-    let unexpectedBetweenColonMarkAndSecondChoice = node.unexpectedBetweenColonMarkAndSecondChoice.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let secondChoice = self.visit(node.secondChoice).cast(ExprSyntax.self)
+    let unexpectedBeforeConditionExpression = node.unexpectedBeforeConditionExpression.map(self.visit)
+    let conditionExpression = self.visit(node.conditionExpression)
+    let unexpectedBetweenConditionExpressionAndQuestionMark = node.unexpectedBetweenConditionExpressionAndQuestionMark.map(self.visit)
+    let questionMark = self.visit(node.questionMark)
+    let unexpectedBetweenQuestionMarkAndFirstChoice = node.unexpectedBetweenQuestionMarkAndFirstChoice.map(self.visit)
+    let firstChoice = self.visit(node.firstChoice)
+    let unexpectedBetweenFirstChoiceAndColonMark = node.unexpectedBetweenFirstChoiceAndColonMark.map(self.visit)
+    let colonMark = self.visit(node.colonMark)
+    let unexpectedBetweenColonMarkAndSecondChoice = node.unexpectedBetweenColonMarkAndSecondChoice.map(self.visit)
+    let secondChoice = self.visit(node.secondChoice)
     return ExprSyntax(TernaryExprSyntax(unexpectedBeforeConditionExpression, conditionExpression: conditionExpression, unexpectedBetweenConditionExpressionAndQuestionMark, questionMark: questionMark, unexpectedBetweenQuestionMarkAndFirstChoice, firstChoice: firstChoice, unexpectedBetweenFirstChoiceAndColonMark, colonMark: colonMark, unexpectedBetweenColonMarkAndSecondChoice, secondChoice: secondChoice))
   }
   
   open override func visit(_ node: MemberAccessExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeBase = node.unexpectedBeforeBase.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let base = node.base.map(self.visit)?.cast(ExprSyntax.self)
-    let unexpectedBetweenBaseAndDot = node.unexpectedBetweenBaseAndDot.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let dot = self.visit(node.dot).cast(TokenSyntax.self)
-    let unexpectedBetweenDotAndName = node.unexpectedBetweenDotAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndDeclNameArguments = node.unexpectedBetweenNameAndDeclNameArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declNameArguments = node.declNameArguments.map(self.visit)?.cast(DeclNameArgumentsSyntax.self)
+    let unexpectedBeforeBase = node.unexpectedBeforeBase.map(self.visit)
+    let base = node.base.map(self.visit)
+    let unexpectedBetweenBaseAndDot = node.unexpectedBetweenBaseAndDot.map(self.visit)
+    let dot = self.visit(node.dot)
+    let unexpectedBetweenDotAndName = node.unexpectedBetweenDotAndName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndDeclNameArguments = node.unexpectedBetweenNameAndDeclNameArguments.map(self.visit)
+    let declNameArguments = node.declNameArguments.map(self.visit)
     return ExprSyntax(MemberAccessExprSyntax(unexpectedBeforeBase, base: base, unexpectedBetweenBaseAndDot, dot: dot, unexpectedBetweenDotAndName, name: name, unexpectedBetweenNameAndDeclNameArguments, declNameArguments: declNameArguments))
   }
   
   open override func visit(_ node: UnresolvedIsExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeIsTok = node.unexpectedBeforeIsTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let isTok = self.visit(node.isTok).cast(TokenSyntax.self)
+    let unexpectedBeforeIsTok = node.unexpectedBeforeIsTok.map(self.visit)
+    let isTok = self.visit(node.isTok)
     return ExprSyntax(UnresolvedIsExprSyntax(unexpectedBeforeIsTok, isTok: isTok))
   }
   
   open override func visit(_ node: IsExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndIsTok = node.unexpectedBetweenExpressionAndIsTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let isTok = self.visit(node.isTok).cast(TokenSyntax.self)
-    let unexpectedBetweenIsTokAndTypeName = node.unexpectedBetweenIsTokAndTypeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeName = self.visit(node.typeName).cast(TypeSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndIsTok = node.unexpectedBetweenExpressionAndIsTok.map(self.visit)
+    let isTok = self.visit(node.isTok)
+    let unexpectedBetweenIsTokAndTypeName = node.unexpectedBetweenIsTokAndTypeName.map(self.visit)
+    let typeName = self.visit(node.typeName)
     return ExprSyntax(IsExprSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndIsTok, isTok: isTok, unexpectedBetweenIsTokAndTypeName, typeName: typeName))
   }
   
   open override func visit(_ node: UnresolvedAsExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeAsTok = node.unexpectedBeforeAsTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asTok = self.visit(node.asTok).cast(TokenSyntax.self)
-    let unexpectedBetweenAsTokAndQuestionOrExclamationMark = node.unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionOrExclamationMark = node.questionOrExclamationMark.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBeforeAsTok = node.unexpectedBeforeAsTok.map(self.visit)
+    let asTok = self.visit(node.asTok)
+    let unexpectedBetweenAsTokAndQuestionOrExclamationMark = node.unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(self.visit)
+    let questionOrExclamationMark = node.questionOrExclamationMark.map(self.visit)
     return ExprSyntax(UnresolvedAsExprSyntax(unexpectedBeforeAsTok, asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark, questionOrExclamationMark: questionOrExclamationMark))
   }
   
   open override func visit(_ node: AsExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndAsTok = node.unexpectedBetweenExpressionAndAsTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asTok = self.visit(node.asTok).cast(TokenSyntax.self)
-    let unexpectedBetweenAsTokAndQuestionOrExclamationMark = node.unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionOrExclamationMark = node.questionOrExclamationMark.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenQuestionOrExclamationMarkAndTypeName = node.unexpectedBetweenQuestionOrExclamationMarkAndTypeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeName = self.visit(node.typeName).cast(TypeSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndAsTok = node.unexpectedBetweenExpressionAndAsTok.map(self.visit)
+    let asTok = self.visit(node.asTok)
+    let unexpectedBetweenAsTokAndQuestionOrExclamationMark = node.unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(self.visit)
+    let questionOrExclamationMark = node.questionOrExclamationMark.map(self.visit)
+    let unexpectedBetweenQuestionOrExclamationMarkAndTypeName = node.unexpectedBetweenQuestionOrExclamationMarkAndTypeName.map(self.visit)
+    let typeName = self.visit(node.typeName)
     return ExprSyntax(AsExprSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndAsTok, asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark, questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndTypeName, typeName: typeName))
   }
   
   open override func visit(_ node: TypeExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = self.visit(node.type).cast(TypeSyntax.self)
+    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)
+    let type = self.visit(node.type)
     return ExprSyntax(TypeExprSyntax(unexpectedBeforeType, type: type))
   }
   
-  open override func visit(_ node: ClosureCaptureItemSyntax) -> Syntax {
-    let unexpectedBeforeSpecifier = node.unexpectedBeforeSpecifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let specifier = node.specifier.map(self.visit)?.cast(TokenListSyntax.self)
-    let unexpectedBetweenSpecifierAndName = node.unexpectedBetweenSpecifierAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = node.name.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndAssignToken = node.unexpectedBetweenNameAndAssignToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let assignToken = node.assignToken.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAssignTokenAndExpression = node.unexpectedBetweenAssignTokenAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndTrailingComma = node.unexpectedBetweenExpressionAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(ClosureCaptureItemSyntax(unexpectedBeforeSpecifier, specifier: specifier, unexpectedBetweenSpecifierAndName, name: name, unexpectedBetweenNameAndAssignToken, assignToken: assignToken, unexpectedBetweenAssignTokenAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: ClosureCaptureItemSyntax) -> ClosureCaptureItemSyntax {
+    let unexpectedBeforeSpecifier = node.unexpectedBeforeSpecifier.map(self.visit)
+    let specifier = node.specifier.map(self.visit)
+    let unexpectedBetweenSpecifierAndName = node.unexpectedBetweenSpecifierAndName.map(self.visit)
+    let name = node.name.map(self.visit)
+    let unexpectedBetweenNameAndAssignToken = node.unexpectedBetweenNameAndAssignToken.map(self.visit)
+    let assignToken = node.assignToken.map(self.visit)
+    let unexpectedBetweenAssignTokenAndExpression = node.unexpectedBetweenAssignTokenAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndTrailingComma = node.unexpectedBetweenExpressionAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return ClosureCaptureItemSyntax(unexpectedBeforeSpecifier, specifier: specifier, unexpectedBetweenSpecifierAndName, name: name, unexpectedBetweenNameAndAssignToken, assignToken: assignToken, unexpectedBetweenAssignTokenAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: ClosureCaptureItemListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(ClosureCaptureItemSyntax.self)
+  open override func visit(_ node: ClosureCaptureItemListSyntax) -> ClosureCaptureItemListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ClosureCaptureItemListSyntax(formattedChildren))
+    return ClosureCaptureItemListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: ClosureCaptureSignatureSyntax) -> Syntax {
-    let unexpectedBeforeLeftSquare = node.unexpectedBeforeLeftSquare.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftSquare = self.visit(node.leftSquare).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftSquareAndItems = node.unexpectedBetweenLeftSquareAndItems.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let items = node.items.map(self.visit)?.cast(ClosureCaptureItemListSyntax.self)
-    let unexpectedBetweenItemsAndRightSquare = node.unexpectedBetweenItemsAndRightSquare.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightSquare = self.visit(node.rightSquare).cast(TokenSyntax.self)
-    return Syntax(ClosureCaptureSignatureSyntax(unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndItems, items: items, unexpectedBetweenItemsAndRightSquare, rightSquare: rightSquare))
+  open override func visit(_ node: ClosureCaptureSignatureSyntax) -> ClosureCaptureSignatureSyntax {
+    let unexpectedBeforeLeftSquare = node.unexpectedBeforeLeftSquare.map(self.visit)
+    let leftSquare = self.visit(node.leftSquare)
+    let unexpectedBetweenLeftSquareAndItems = node.unexpectedBetweenLeftSquareAndItems.map(self.visit)
+    let items = node.items.map(self.visit)
+    let unexpectedBetweenItemsAndRightSquare = node.unexpectedBetweenItemsAndRightSquare.map(self.visit)
+    let rightSquare = self.visit(node.rightSquare)
+    return ClosureCaptureSignatureSyntax(unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndItems, items: items, unexpectedBetweenItemsAndRightSquare, rightSquare: rightSquare)
   }
   
-  open override func visit(_ node: ClosureParamSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndTrailingComma = node.unexpectedBetweenNameAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(ClosureParamSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: ClosureParamSyntax) -> ClosureParamSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndTrailingComma = node.unexpectedBetweenNameAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return ClosureParamSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: ClosureParamListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(ClosureParamSyntax.self)
+  open override func visit(_ node: ClosureParamListSyntax) -> ClosureParamListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ClosureParamListSyntax(formattedChildren))
+    return ClosureParamListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: ClosureSignatureSyntax) -> Syntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndCapture = node.unexpectedBetweenAttributesAndCapture.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let capture = node.capture.map(self.visit)?.cast(ClosureCaptureSignatureSyntax.self)
-    let unexpectedBetweenCaptureAndInput = node.unexpectedBetweenCaptureAndInput.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let input = node.input.map(self.visit)?.cast(Syntax.self)
-    let unexpectedBetweenInputAndAsyncKeyword = node.unexpectedBetweenInputAndAsyncKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asyncKeyword = node.asyncKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAsyncKeywordAndThrowsTok = node.unexpectedBetweenAsyncKeywordAndThrowsTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let throwsTok = node.throwsTok.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenThrowsTokAndOutput = node.unexpectedBetweenThrowsTokAndOutput.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let output = node.output.map(self.visit)?.cast(ReturnClauseSyntax.self)
-    let unexpectedBetweenOutputAndInTok = node.unexpectedBetweenOutputAndInTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inTok = self.visit(node.inTok).cast(TokenSyntax.self)
-    return Syntax(ClosureSignatureSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndCapture, capture: capture, unexpectedBetweenCaptureAndInput, input: input, unexpectedBetweenInputAndAsyncKeyword, asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsTok, throwsTok: throwsTok, unexpectedBetweenThrowsTokAndOutput, output: output, unexpectedBetweenOutputAndInTok, inTok: inTok))
+  open override func visit(_ node: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndCapture = node.unexpectedBetweenAttributesAndCapture.map(self.visit)
+    let capture = node.capture.map(self.visit)
+    let unexpectedBetweenCaptureAndInput = node.unexpectedBetweenCaptureAndInput.map(self.visit)
+    let input = node.input.map(self.visit)
+    let unexpectedBetweenInputAndAsyncKeyword = node.unexpectedBetweenInputAndAsyncKeyword.map(self.visit)
+    let asyncKeyword = node.asyncKeyword.map(self.visit)
+    let unexpectedBetweenAsyncKeywordAndThrowsTok = node.unexpectedBetweenAsyncKeywordAndThrowsTok.map(self.visit)
+    let throwsTok = node.throwsTok.map(self.visit)
+    let unexpectedBetweenThrowsTokAndOutput = node.unexpectedBetweenThrowsTokAndOutput.map(self.visit)
+    let output = node.output.map(self.visit)
+    let unexpectedBetweenOutputAndInTok = node.unexpectedBetweenOutputAndInTok.map(self.visit)
+    let inTok = self.visit(node.inTok)
+    return ClosureSignatureSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndCapture, capture: capture, unexpectedBetweenCaptureAndInput, input: input, unexpectedBetweenInputAndAsyncKeyword, asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsTok, throwsTok: throwsTok, unexpectedBetweenThrowsTokAndOutput, output: output, unexpectedBetweenOutputAndInTok, inTok: inTok)
   }
   
   open override func visit(_ node: ClosureExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBrace = self.visit(node.leftBrace).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBraceAndSignature = node.unexpectedBetweenLeftBraceAndSignature.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let signature = node.signature.map(self.visit)?.cast(ClosureSignatureSyntax.self)
-    let unexpectedBetweenSignatureAndStatements = node.unexpectedBetweenSignatureAndStatements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)
+    let leftBrace = self.visit(node.leftBrace)
+    let unexpectedBetweenLeftBraceAndSignature = node.unexpectedBetweenLeftBraceAndSignature.map(self.visit)
+    let signature = node.signature.map(self.visit)
+    let unexpectedBetweenSignatureAndStatements = node.unexpectedBetweenSignatureAndStatements.map(self.visit)
     indentationLevel += 1
-    let statements = self.visit(node.statements).cast(CodeBlockItemListSyntax.self)
+    let statements = self.visit(node.statements)
     indentationLevel -= 1
-    let unexpectedBetweenStatementsAndRightBrace = node.unexpectedBetweenStatementsAndRightBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    var rightBrace = self.visit(node.rightBrace).cast(TokenSyntax.self)
+    let unexpectedBetweenStatementsAndRightBrace = node.unexpectedBetweenStatementsAndRightBrace.map(self.visit)
+    var rightBrace = self.visit(node.rightBrace)
     if rightBrace.leadingTrivia.first?.isNewline != true {
       rightBrace.leadingTrivia = indentedNewline + rightBrace.leadingTrivia
     }
@@ -574,618 +574,618 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open override func visit(_ node: UnresolvedPatternExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
+    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
     return ExprSyntax(UnresolvedPatternExprSyntax(unexpectedBeforePattern, pattern: pattern))
   }
   
-  open override func visit(_ node: MultipleTrailingClosureElementSyntax) -> Syntax {
-    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = self.visit(node.label).cast(TokenSyntax.self)
-    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndClosure = node.unexpectedBetweenColonAndClosure.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+  open override func visit(_ node: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementSyntax {
+    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)
+    let label = self.visit(node.label)
+    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndClosure = node.unexpectedBetweenColonAndClosure.map(self.visit)
     let closure = self.visit(node.closure).cast(ClosureExprSyntax.self)
-    return Syntax(MultipleTrailingClosureElementSyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndClosure, closure: closure))
+    return MultipleTrailingClosureElementSyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndClosure, closure: closure)
   }
   
-  open override func visit(_ node: MultipleTrailingClosureElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(MultipleTrailingClosureElementSyntax.self)
+  open override func visit(_ node: MultipleTrailingClosureElementListSyntax) -> MultipleTrailingClosureElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(MultipleTrailingClosureElementListSyntax(formattedChildren))
+    return MultipleTrailingClosureElementListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: FunctionCallExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeCalledExpression = node.unexpectedBeforeCalledExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let calledExpression = self.visit(node.calledExpression).cast(ExprSyntax.self)
-    let unexpectedBetweenCalledExpressionAndLeftParen = node.unexpectedBetweenCalledExpressionAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argumentList = self.visit(node.argumentList).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforeCalledExpression = node.unexpectedBeforeCalledExpression.map(self.visit)
+    let calledExpression = self.visit(node.calledExpression)
+    let unexpectedBetweenCalledExpressionAndLeftParen = node.unexpectedBetweenCalledExpressionAndLeftParen.map(self.visit)
+    let leftParen = node.leftParen.map(self.visit)
+    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)
+    let argumentList = self.visit(node.argumentList)
+    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)
+    let rightParen = node.rightParen.map(self.visit)
+    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)
     let trailingClosure = node.trailingClosure.map(self.visit)?.cast(ClosureExprSyntax.self)
-    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)?.cast(MultipleTrailingClosureElementListSyntax.self)
+    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)
+    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)
     return ExprSyntax(FunctionCallExprSyntax(unexpectedBeforeCalledExpression, calledExpression: calledExpression, unexpectedBetweenCalledExpressionAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures))
   }
   
   open override func visit(_ node: SubscriptExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeCalledExpression = node.unexpectedBeforeCalledExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let calledExpression = self.visit(node.calledExpression).cast(ExprSyntax.self)
-    let unexpectedBetweenCalledExpressionAndLeftBracket = node.unexpectedBetweenCalledExpressionAndLeftBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBracket = self.visit(node.leftBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBracketAndArgumentList = node.unexpectedBetweenLeftBracketAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argumentList = self.visit(node.argumentList).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenArgumentListAndRightBracket = node.unexpectedBetweenArgumentListAndRightBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightBracket = self.visit(node.rightBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenRightBracketAndTrailingClosure = node.unexpectedBetweenRightBracketAndTrailingClosure.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforeCalledExpression = node.unexpectedBeforeCalledExpression.map(self.visit)
+    let calledExpression = self.visit(node.calledExpression)
+    let unexpectedBetweenCalledExpressionAndLeftBracket = node.unexpectedBetweenCalledExpressionAndLeftBracket.map(self.visit)
+    let leftBracket = self.visit(node.leftBracket)
+    let unexpectedBetweenLeftBracketAndArgumentList = node.unexpectedBetweenLeftBracketAndArgumentList.map(self.visit)
+    let argumentList = self.visit(node.argumentList)
+    let unexpectedBetweenArgumentListAndRightBracket = node.unexpectedBetweenArgumentListAndRightBracket.map(self.visit)
+    let rightBracket = self.visit(node.rightBracket)
+    let unexpectedBetweenRightBracketAndTrailingClosure = node.unexpectedBetweenRightBracketAndTrailingClosure.map(self.visit)
     let trailingClosure = node.trailingClosure.map(self.visit)?.cast(ClosureExprSyntax.self)
-    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)?.cast(MultipleTrailingClosureElementListSyntax.self)
+    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)
+    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)
     return ExprSyntax(SubscriptExprSyntax(unexpectedBeforeCalledExpression, calledExpression: calledExpression, unexpectedBetweenCalledExpressionAndLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, unexpectedBetweenRightBracketAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures))
   }
   
   open override func visit(_ node: OptionalChainingExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndQuestionMark = node.unexpectedBetweenExpressionAndQuestionMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionMark = self.visit(node.questionMark).cast(TokenSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndQuestionMark = node.unexpectedBetweenExpressionAndQuestionMark.map(self.visit)
+    let questionMark = self.visit(node.questionMark)
     return ExprSyntax(OptionalChainingExprSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndQuestionMark, questionMark: questionMark))
   }
   
   open override func visit(_ node: ForcedValueExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndExclamationMark = node.unexpectedBetweenExpressionAndExclamationMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let exclamationMark = self.visit(node.exclamationMark).cast(TokenSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndExclamationMark = node.unexpectedBetweenExpressionAndExclamationMark.map(self.visit)
+    let exclamationMark = self.visit(node.exclamationMark)
     return ExprSyntax(ForcedValueExprSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndExclamationMark, exclamationMark: exclamationMark))
   }
   
   open override func visit(_ node: PostfixUnaryExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndOperatorToken = node.unexpectedBetweenExpressionAndOperatorToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let operatorToken = self.visit(node.operatorToken).cast(TokenSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndOperatorToken = node.unexpectedBetweenExpressionAndOperatorToken.map(self.visit)
+    let operatorToken = self.visit(node.operatorToken)
     return ExprSyntax(PostfixUnaryExprSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndOperatorToken, operatorToken: operatorToken))
   }
   
   open override func visit(_ node: SpecializeExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndGenericArgumentClause = node.unexpectedBetweenExpressionAndGenericArgumentClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericArgumentClause = self.visit(node.genericArgumentClause).cast(GenericArgumentClauseSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndGenericArgumentClause = node.unexpectedBetweenExpressionAndGenericArgumentClause.map(self.visit)
+    let genericArgumentClause = self.visit(node.genericArgumentClause)
     return ExprSyntax(SpecializeExprSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndGenericArgumentClause, genericArgumentClause: genericArgumentClause))
   }
   
-  open override func visit(_ node: StringSegmentSyntax) -> Syntax {
-    let unexpectedBeforeContent = node.unexpectedBeforeContent.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let content = self.visit(node.content).cast(TokenSyntax.self)
-    return Syntax(StringSegmentSyntax(unexpectedBeforeContent, content: content))
+  open override func visit(_ node: StringSegmentSyntax) -> StringSegmentSyntax {
+    let unexpectedBeforeContent = node.unexpectedBeforeContent.map(self.visit)
+    let content = self.visit(node.content)
+    return StringSegmentSyntax(unexpectedBeforeContent, content: content)
   }
   
-  open override func visit(_ node: ExpressionSegmentSyntax) -> Syntax {
-    let unexpectedBeforeBackslash = node.unexpectedBeforeBackslash.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let backslash = self.visit(node.backslash).cast(TokenSyntax.self)
-    let unexpectedBetweenBackslashAndDelimiter = node.unexpectedBetweenBackslashAndDelimiter.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let delimiter = node.delimiter.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenDelimiterAndLeftParen = node.unexpectedBetweenDelimiterAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndExpressions = node.unexpectedBetweenLeftParenAndExpressions.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expressions = self.visit(node.expressions).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenExpressionsAndRightParen = node.unexpectedBetweenExpressionsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(ExpressionSegmentSyntax(unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter, unexpectedBetweenDelimiterAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions, expressions: expressions, unexpectedBetweenExpressionsAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
+    let unexpectedBeforeBackslash = node.unexpectedBeforeBackslash.map(self.visit)
+    let backslash = self.visit(node.backslash)
+    let unexpectedBetweenBackslashAndDelimiter = node.unexpectedBetweenBackslashAndDelimiter.map(self.visit)
+    let delimiter = node.delimiter.map(self.visit)
+    let unexpectedBetweenDelimiterAndLeftParen = node.unexpectedBetweenDelimiterAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndExpressions = node.unexpectedBetweenLeftParenAndExpressions.map(self.visit)
+    let expressions = self.visit(node.expressions)
+    let unexpectedBetweenExpressionsAndRightParen = node.unexpectedBetweenExpressionsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return ExpressionSegmentSyntax(unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter, unexpectedBetweenDelimiterAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions, expressions: expressions, unexpectedBetweenExpressionsAndRightParen, rightParen: rightParen)
   }
   
   open override func visit(_ node: StringLiteralExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeOpenDelimiter = node.unexpectedBeforeOpenDelimiter.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let openDelimiter = node.openDelimiter.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenOpenDelimiterAndOpenQuote = node.unexpectedBetweenOpenDelimiterAndOpenQuote.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let openQuote = self.visit(node.openQuote).cast(TokenSyntax.self)
-    let unexpectedBetweenOpenQuoteAndSegments = node.unexpectedBetweenOpenQuoteAndSegments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let segments = self.visit(node.segments).cast(StringLiteralSegmentsSyntax.self)
-    let unexpectedBetweenSegmentsAndCloseQuote = node.unexpectedBetweenSegmentsAndCloseQuote.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let closeQuote = self.visit(node.closeQuote).cast(TokenSyntax.self)
-    let unexpectedBetweenCloseQuoteAndCloseDelimiter = node.unexpectedBetweenCloseQuoteAndCloseDelimiter.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let closeDelimiter = node.closeDelimiter.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBeforeOpenDelimiter = node.unexpectedBeforeOpenDelimiter.map(self.visit)
+    let openDelimiter = node.openDelimiter.map(self.visit)
+    let unexpectedBetweenOpenDelimiterAndOpenQuote = node.unexpectedBetweenOpenDelimiterAndOpenQuote.map(self.visit)
+    let openQuote = self.visit(node.openQuote)
+    let unexpectedBetweenOpenQuoteAndSegments = node.unexpectedBetweenOpenQuoteAndSegments.map(self.visit)
+    let segments = self.visit(node.segments)
+    let unexpectedBetweenSegmentsAndCloseQuote = node.unexpectedBetweenSegmentsAndCloseQuote.map(self.visit)
+    let closeQuote = self.visit(node.closeQuote)
+    let unexpectedBetweenCloseQuoteAndCloseDelimiter = node.unexpectedBetweenCloseQuoteAndCloseDelimiter.map(self.visit)
+    let closeDelimiter = node.closeDelimiter.map(self.visit)
     return ExprSyntax(StringLiteralExprSyntax(unexpectedBeforeOpenDelimiter, openDelimiter: openDelimiter, unexpectedBetweenOpenDelimiterAndOpenQuote, openQuote: openQuote, unexpectedBetweenOpenQuoteAndSegments, segments: segments, unexpectedBetweenSegmentsAndCloseQuote, closeQuote: closeQuote, unexpectedBetweenCloseQuoteAndCloseDelimiter, closeDelimiter: closeDelimiter))
   }
   
   open override func visit(_ node: RegexLiteralExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeRegex = node.unexpectedBeforeRegex.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let regex = self.visit(node.regex).cast(TokenSyntax.self)
+    let unexpectedBeforeRegex = node.unexpectedBeforeRegex.map(self.visit)
+    let regex = self.visit(node.regex)
     return ExprSyntax(RegexLiteralExprSyntax(unexpectedBeforeRegex, regex: regex))
   }
   
   open override func visit(_ node: KeyPathExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeBackslash = node.unexpectedBeforeBackslash.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let backslash = self.visit(node.backslash).cast(TokenSyntax.self)
-    let unexpectedBetweenBackslashAndRoot = node.unexpectedBetweenBackslashAndRoot.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let root = node.root.map(self.visit)?.cast(TypeSyntax.self)
-    let unexpectedBetweenRootAndComponents = node.unexpectedBetweenRootAndComponents.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let components = self.visit(node.components).cast(KeyPathComponentListSyntax.self)
+    let unexpectedBeforeBackslash = node.unexpectedBeforeBackslash.map(self.visit)
+    let backslash = self.visit(node.backslash)
+    let unexpectedBetweenBackslashAndRoot = node.unexpectedBetweenBackslashAndRoot.map(self.visit)
+    let root = node.root.map(self.visit)
+    let unexpectedBetweenRootAndComponents = node.unexpectedBetweenRootAndComponents.map(self.visit)
+    let components = self.visit(node.components)
     return ExprSyntax(KeyPathExprSyntax(unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndRoot, root: root, unexpectedBetweenRootAndComponents, components: components))
   }
   
-  open override func visit(_ node: KeyPathComponentListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(KeyPathComponentSyntax.self)
+  open override func visit(_ node: KeyPathComponentListSyntax) -> KeyPathComponentListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(KeyPathComponentListSyntax(formattedChildren))
+    return KeyPathComponentListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: KeyPathComponentSyntax) -> Syntax {
-    let unexpectedBeforePeriod = node.unexpectedBeforePeriod.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let period = node.period.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenPeriodAndComponent = node.unexpectedBetweenPeriodAndComponent.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let component = self.visit(node.component).cast(Syntax.self)
-    return Syntax(KeyPathComponentSyntax(unexpectedBeforePeriod, period: period, unexpectedBetweenPeriodAndComponent, component: component))
+  open override func visit(_ node: KeyPathComponentSyntax) -> KeyPathComponentSyntax {
+    let unexpectedBeforePeriod = node.unexpectedBeforePeriod.map(self.visit)
+    let period = node.period.map(self.visit)
+    let unexpectedBetweenPeriodAndComponent = node.unexpectedBetweenPeriodAndComponent.map(self.visit)
+    let component = self.visit(node.component)
+    return KeyPathComponentSyntax(unexpectedBeforePeriod, period: period, unexpectedBetweenPeriodAndComponent, component: component)
   }
   
-  open override func visit(_ node: KeyPathPropertyComponentSyntax) -> Syntax {
-    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndDeclNameArguments = node.unexpectedBetweenIdentifierAndDeclNameArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declNameArguments = node.declNameArguments.map(self.visit)?.cast(DeclNameArgumentsSyntax.self)
-    let unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause = node.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericArgumentClause = node.genericArgumentClause.map(self.visit)?.cast(GenericArgumentClauseSyntax.self)
-    return Syntax(KeyPathPropertyComponentSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndDeclNameArguments, declNameArguments: declNameArguments, unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, genericArgumentClause: genericArgumentClause))
+  open override func visit(_ node: KeyPathPropertyComponentSyntax) -> KeyPathPropertyComponentSyntax {
+    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndDeclNameArguments = node.unexpectedBetweenIdentifierAndDeclNameArguments.map(self.visit)
+    let declNameArguments = node.declNameArguments.map(self.visit)
+    let unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause = node.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause.map(self.visit)
+    let genericArgumentClause = node.genericArgumentClause.map(self.visit)
+    return KeyPathPropertyComponentSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndDeclNameArguments, declNameArguments: declNameArguments, unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, genericArgumentClause: genericArgumentClause)
   }
   
-  open override func visit(_ node: KeyPathSubscriptComponentSyntax) -> Syntax {
-    let unexpectedBeforeLeftBracket = node.unexpectedBeforeLeftBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBracket = self.visit(node.leftBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBracketAndArgumentList = node.unexpectedBetweenLeftBracketAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argumentList = self.visit(node.argumentList).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenArgumentListAndRightBracket = node.unexpectedBetweenArgumentListAndRightBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightBracket = self.visit(node.rightBracket).cast(TokenSyntax.self)
-    return Syntax(KeyPathSubscriptComponentSyntax(unexpectedBeforeLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket))
+  open override func visit(_ node: KeyPathSubscriptComponentSyntax) -> KeyPathSubscriptComponentSyntax {
+    let unexpectedBeforeLeftBracket = node.unexpectedBeforeLeftBracket.map(self.visit)
+    let leftBracket = self.visit(node.leftBracket)
+    let unexpectedBetweenLeftBracketAndArgumentList = node.unexpectedBetweenLeftBracketAndArgumentList.map(self.visit)
+    let argumentList = self.visit(node.argumentList)
+    let unexpectedBetweenArgumentListAndRightBracket = node.unexpectedBetweenArgumentListAndRightBracket.map(self.visit)
+    let rightBracket = self.visit(node.rightBracket)
+    return KeyPathSubscriptComponentSyntax(unexpectedBeforeLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket)
   }
   
-  open override func visit(_ node: KeyPathOptionalComponentSyntax) -> Syntax {
-    let unexpectedBeforeQuestionOrExclamationMark = node.unexpectedBeforeQuestionOrExclamationMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionOrExclamationMark = self.visit(node.questionOrExclamationMark).cast(TokenSyntax.self)
-    return Syntax(KeyPathOptionalComponentSyntax(unexpectedBeforeQuestionOrExclamationMark, questionOrExclamationMark: questionOrExclamationMark))
+  open override func visit(_ node: KeyPathOptionalComponentSyntax) -> KeyPathOptionalComponentSyntax {
+    let unexpectedBeforeQuestionOrExclamationMark = node.unexpectedBeforeQuestionOrExclamationMark.map(self.visit)
+    let questionOrExclamationMark = self.visit(node.questionOrExclamationMark)
+    return KeyPathOptionalComponentSyntax(unexpectedBeforeQuestionOrExclamationMark, questionOrExclamationMark: questionOrExclamationMark)
   }
   
   open override func visit(_ node: OldKeyPathExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeBackslash = node.unexpectedBeforeBackslash.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let backslash = self.visit(node.backslash).cast(TokenSyntax.self)
-    let unexpectedBetweenBackslashAndRootExpr = node.unexpectedBetweenBackslashAndRootExpr.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rootExpr = node.rootExpr.map(self.visit)?.cast(ExprSyntax.self)
-    let unexpectedBetweenRootExprAndExpression = node.unexpectedBetweenRootExprAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeBackslash = node.unexpectedBeforeBackslash.map(self.visit)
+    let backslash = self.visit(node.backslash)
+    let unexpectedBetweenBackslashAndRootExpr = node.unexpectedBetweenBackslashAndRootExpr.map(self.visit)
+    let rootExpr = node.rootExpr.map(self.visit)
+    let unexpectedBetweenRootExprAndExpression = node.unexpectedBetweenRootExprAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return ExprSyntax(OldKeyPathExprSyntax(unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndRootExpr, rootExpr: rootExpr, unexpectedBetweenRootExprAndExpression, expression: expression))
   }
   
   open override func visit(_ node: KeyPathBaseExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePeriod = node.unexpectedBeforePeriod.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let period = self.visit(node.period).cast(TokenSyntax.self)
+    let unexpectedBeforePeriod = node.unexpectedBeforePeriod.map(self.visit)
+    let period = self.visit(node.period)
     return ExprSyntax(KeyPathBaseExprSyntax(unexpectedBeforePeriod, period: period))
   }
   
-  open override func visit(_ node: ObjcNamePieceSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndDot = node.unexpectedBetweenNameAndDot.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let dot = node.dot.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(ObjcNamePieceSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndDot, dot: dot))
+  open override func visit(_ node: ObjcNamePieceSyntax) -> ObjcNamePieceSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndDot = node.unexpectedBetweenNameAndDot.map(self.visit)
+    let dot = node.dot.map(self.visit)
+    return ObjcNamePieceSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndDot, dot: dot)
   }
   
-  open override func visit(_ node: ObjcNameSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(ObjcNamePieceSyntax.self)
+  open override func visit(_ node: ObjcNameSyntax) -> ObjcNameSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ObjcNameSyntax(formattedChildren))
+    return ObjcNameSyntax(formattedChildren)
   }
   
   open override func visit(_ node: ObjcKeyPathExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeKeyPath = node.unexpectedBeforeKeyPath.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let keyPath = self.visit(node.keyPath).cast(TokenSyntax.self)
-    let unexpectedBetweenKeyPathAndLeftParen = node.unexpectedBetweenKeyPathAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndName = node.unexpectedBetweenLeftParenAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(ObjcNameSyntax.self)
-    let unexpectedBetweenNameAndRightParen = node.unexpectedBetweenNameAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforeKeyPath = node.unexpectedBeforeKeyPath.map(self.visit)
+    let keyPath = self.visit(node.keyPath)
+    let unexpectedBetweenKeyPathAndLeftParen = node.unexpectedBetweenKeyPathAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndName = node.unexpectedBetweenLeftParenAndName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndRightParen = node.unexpectedBetweenNameAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return ExprSyntax(ObjcKeyPathExprSyntax(unexpectedBeforeKeyPath, keyPath: keyPath, unexpectedBetweenKeyPathAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndName, name: name, unexpectedBetweenNameAndRightParen, rightParen: rightParen))
   }
   
   open override func visit(_ node: ObjcSelectorExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundSelector = node.unexpectedBeforePoundSelector.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundSelector = self.visit(node.poundSelector).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundSelectorAndLeftParen = node.unexpectedBetweenPoundSelectorAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndKind = node.unexpectedBetweenLeftParenAndKind.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let kind = node.kind.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenKindAndColon = node.unexpectedBetweenKindAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndName = node.unexpectedBetweenColonAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(ExprSyntax.self)
-    let unexpectedBetweenNameAndRightParen = node.unexpectedBetweenNameAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforePoundSelector = node.unexpectedBeforePoundSelector.map(self.visit)
+    let poundSelector = self.visit(node.poundSelector)
+    let unexpectedBetweenPoundSelectorAndLeftParen = node.unexpectedBetweenPoundSelectorAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndKind = node.unexpectedBetweenLeftParenAndKind.map(self.visit)
+    let kind = node.kind.map(self.visit)
+    let unexpectedBetweenKindAndColon = node.unexpectedBetweenKindAndColon.map(self.visit)
+    let colon = node.colon.map(self.visit)
+    let unexpectedBetweenColonAndName = node.unexpectedBetweenColonAndName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndRightParen = node.unexpectedBetweenNameAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return ExprSyntax(ObjcSelectorExprSyntax(unexpectedBeforePoundSelector, poundSelector: poundSelector, unexpectedBetweenPoundSelectorAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndKind, kind: kind, unexpectedBetweenKindAndColon, colon: colon, unexpectedBetweenColonAndName, name: name, unexpectedBetweenNameAndRightParen, rightParen: rightParen))
   }
   
   open override func visit(_ node: MacroExpansionExprSyntax) -> ExprSyntax {
-    let unexpectedBeforePoundToken = node.unexpectedBeforePoundToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundToken = self.visit(node.poundToken).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundTokenAndMacro = node.unexpectedBetweenPoundTokenAndMacro.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let macro = self.visit(node.macro).cast(TokenSyntax.self)
-    let unexpectedBetweenMacroAndLeftParen = node.unexpectedBetweenMacroAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argumentList = self.visit(node.argumentList).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforePoundToken = node.unexpectedBeforePoundToken.map(self.visit)
+    let poundToken = self.visit(node.poundToken)
+    let unexpectedBetweenPoundTokenAndMacro = node.unexpectedBetweenPoundTokenAndMacro.map(self.visit)
+    let macro = self.visit(node.macro)
+    let unexpectedBetweenMacroAndLeftParen = node.unexpectedBetweenMacroAndLeftParen.map(self.visit)
+    let leftParen = node.leftParen.map(self.visit)
+    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)
+    let argumentList = self.visit(node.argumentList)
+    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)
+    let rightParen = node.rightParen.map(self.visit)
+    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)
     let trailingClosure = node.trailingClosure.map(self.visit)?.cast(ClosureExprSyntax.self)
-    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)?.cast(MultipleTrailingClosureElementListSyntax.self)
+    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)
+    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)
     return ExprSyntax(MacroExpansionExprSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures))
   }
   
   open override func visit(_ node: PostfixIfConfigExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeBase = node.unexpectedBeforeBase.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let base = node.base.map(self.visit)?.cast(ExprSyntax.self)
-    let unexpectedBetweenBaseAndConfig = node.unexpectedBetweenBaseAndConfig.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforeBase = node.unexpectedBeforeBase.map(self.visit)
+    let base = node.base.map(self.visit)
+    let unexpectedBetweenBaseAndConfig = node.unexpectedBetweenBaseAndConfig.map(self.visit)
     let config = self.visit(node.config).cast(IfConfigDeclSyntax.self)
     return ExprSyntax(PostfixIfConfigExprSyntax(unexpectedBeforeBase, base: base, unexpectedBetweenBaseAndConfig, config: config))
   }
   
   open override func visit(_ node: EditorPlaceholderExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
+    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
     return ExprSyntax(EditorPlaceholderExprSyntax(unexpectedBeforeIdentifier, identifier: identifier))
   }
   
   open override func visit(_ node: ObjectLiteralExprSyntax) -> ExprSyntax {
-    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndLeftParen = node.unexpectedBetweenIdentifierAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArguments = node.unexpectedBetweenLeftParenAndArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arguments = self.visit(node.arguments).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenArgumentsAndRightParen = node.unexpectedBetweenArgumentsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndLeftParen = node.unexpectedBetweenIdentifierAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndArguments = node.unexpectedBetweenLeftParenAndArguments.map(self.visit)
+    let arguments = self.visit(node.arguments)
+    let unexpectedBetweenArgumentsAndRightParen = node.unexpectedBetweenArgumentsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return ExprSyntax(ObjectLiteralExprSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments, arguments: arguments, unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen))
   }
   
-  open override func visit(_ node: YieldExprListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(YieldExprListElementSyntax.self)
+  open override func visit(_ node: YieldExprListSyntax) -> YieldExprListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(YieldExprListSyntax(formattedChildren))
+    return YieldExprListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: YieldExprListElementSyntax) -> Syntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndComma = node.unexpectedBetweenExpressionAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = node.comma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(YieldExprListElementSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndComma, comma: comma))
+  open override func visit(_ node: YieldExprListElementSyntax) -> YieldExprListElementSyntax {
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndComma = node.unexpectedBetweenExpressionAndComma.map(self.visit)
+    let comma = node.comma.map(self.visit)
+    return YieldExprListElementSyntax(unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndComma, comma: comma)
   }
   
-  open override func visit(_ node: TypeInitializerClauseSyntax) -> Syntax {
-    let unexpectedBeforeEqual = node.unexpectedBeforeEqual.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let equal = self.visit(node.equal).cast(TokenSyntax.self)
-    let unexpectedBetweenEqualAndValue = node.unexpectedBetweenEqualAndValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let value = self.visit(node.value).cast(TypeSyntax.self)
-    return Syntax(TypeInitializerClauseSyntax(unexpectedBeforeEqual, equal: equal, unexpectedBetweenEqualAndValue, value: value))
+  open override func visit(_ node: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
+    let unexpectedBeforeEqual = node.unexpectedBeforeEqual.map(self.visit)
+    let equal = self.visit(node.equal)
+    let unexpectedBetweenEqualAndValue = node.unexpectedBetweenEqualAndValue.map(self.visit)
+    let value = self.visit(node.value)
+    return TypeInitializerClauseSyntax(unexpectedBeforeEqual, equal: equal, unexpectedBetweenEqualAndValue, value: value)
   }
   
   open override func visit(_ node: TypealiasDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndTypealiasKeyword = node.unexpectedBetweenModifiersAndTypealiasKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typealiasKeyword = self.visit(node.typealiasKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenTypealiasKeywordAndIdentifier = node.unexpectedBetweenTypealiasKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterClause = node.genericParameterClause.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParameterClauseAndInitializer = node.unexpectedBetweenGenericParameterClauseAndInitializer.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let initializer = self.visit(node.initializer).cast(TypeInitializerClauseSyntax.self)
-    let unexpectedBetweenInitializerAndGenericWhereClause = node.unexpectedBetweenInitializerAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndTypealiasKeyword = node.unexpectedBetweenModifiersAndTypealiasKeyword.map(self.visit)
+    let typealiasKeyword = self.visit(node.typealiasKeyword)
+    let unexpectedBetweenTypealiasKeywordAndIdentifier = node.unexpectedBetweenTypealiasKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)
+    let genericParameterClause = node.genericParameterClause.map(self.visit)
+    let unexpectedBetweenGenericParameterClauseAndInitializer = node.unexpectedBetweenGenericParameterClauseAndInitializer.map(self.visit)
+    let initializer = self.visit(node.initializer)
+    let unexpectedBetweenInitializerAndGenericWhereClause = node.unexpectedBetweenInitializerAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
     return DeclSyntax(TypealiasDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndTypealiasKeyword, typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause))
   }
   
   open override func visit(_ node: AssociatedtypeDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndAssociatedtypeKeyword = node.unexpectedBetweenModifiersAndAssociatedtypeKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let associatedtypeKeyword = self.visit(node.associatedtypeKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenAssociatedtypeKeywordAndIdentifier = node.unexpectedBetweenAssociatedtypeKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndInheritanceClause = node.unexpectedBetweenIdentifierAndInheritanceClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritanceClause = node.inheritanceClause.map(self.visit)?.cast(TypeInheritanceClauseSyntax.self)
-    let unexpectedBetweenInheritanceClauseAndInitializer = node.unexpectedBetweenInheritanceClauseAndInitializer.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let initializer = node.initializer.map(self.visit)?.cast(TypeInitializerClauseSyntax.self)
-    let unexpectedBetweenInitializerAndGenericWhereClause = node.unexpectedBetweenInitializerAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndAssociatedtypeKeyword = node.unexpectedBetweenModifiersAndAssociatedtypeKeyword.map(self.visit)
+    let associatedtypeKeyword = self.visit(node.associatedtypeKeyword)
+    let unexpectedBetweenAssociatedtypeKeywordAndIdentifier = node.unexpectedBetweenAssociatedtypeKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndInheritanceClause = node.unexpectedBetweenIdentifierAndInheritanceClause.map(self.visit)
+    let inheritanceClause = node.inheritanceClause.map(self.visit)
+    let unexpectedBetweenInheritanceClauseAndInitializer = node.unexpectedBetweenInheritanceClauseAndInitializer.map(self.visit)
+    let initializer = node.initializer.map(self.visit)
+    let unexpectedBetweenInitializerAndGenericWhereClause = node.unexpectedBetweenInitializerAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
     return DeclSyntax(AssociatedtypeDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndAssociatedtypeKeyword, associatedtypeKeyword: associatedtypeKeyword, unexpectedBetweenAssociatedtypeKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause))
   }
   
-  open override func visit(_ node: FunctionParameterListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(FunctionParameterSyntax.self)
+  open override func visit(_ node: FunctionParameterListSyntax) -> FunctionParameterListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(FunctionParameterListSyntax(formattedChildren))
+    return FunctionParameterListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: ParameterClauseSyntax) -> Syntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndParameterList = node.unexpectedBetweenLeftParenAndParameterList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let parameterList = self.visit(node.parameterList).cast(FunctionParameterListSyntax.self)
-    let unexpectedBetweenParameterListAndRightParen = node.unexpectedBetweenParameterListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(ParameterClauseSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList, parameterList: parameterList, unexpectedBetweenParameterListAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: ParameterClauseSyntax) -> ParameterClauseSyntax {
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndParameterList = node.unexpectedBetweenLeftParenAndParameterList.map(self.visit)
+    let parameterList = self.visit(node.parameterList)
+    let unexpectedBetweenParameterListAndRightParen = node.unexpectedBetweenParameterListAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return ParameterClauseSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList, parameterList: parameterList, unexpectedBetweenParameterListAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: ReturnClauseSyntax) -> Syntax {
-    let unexpectedBeforeArrow = node.unexpectedBeforeArrow.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arrow = self.visit(node.arrow).cast(TokenSyntax.self)
-    let unexpectedBetweenArrowAndReturnType = node.unexpectedBetweenArrowAndReturnType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let returnType = self.visit(node.returnType).cast(TypeSyntax.self)
-    return Syntax(ReturnClauseSyntax(unexpectedBeforeArrow, arrow: arrow, unexpectedBetweenArrowAndReturnType, returnType: returnType))
+  open override func visit(_ node: ReturnClauseSyntax) -> ReturnClauseSyntax {
+    let unexpectedBeforeArrow = node.unexpectedBeforeArrow.map(self.visit)
+    let arrow = self.visit(node.arrow)
+    let unexpectedBetweenArrowAndReturnType = node.unexpectedBetweenArrowAndReturnType.map(self.visit)
+    let returnType = self.visit(node.returnType)
+    return ReturnClauseSyntax(unexpectedBeforeArrow, arrow: arrow, unexpectedBetweenArrowAndReturnType, returnType: returnType)
   }
   
-  open override func visit(_ node: FunctionSignatureSyntax) -> Syntax {
-    let unexpectedBeforeInput = node.unexpectedBeforeInput.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let input = self.visit(node.input).cast(ParameterClauseSyntax.self)
-    let unexpectedBetweenInputAndAsyncOrReasyncKeyword = node.unexpectedBetweenInputAndAsyncOrReasyncKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asyncOrReasyncKeyword = node.asyncOrReasyncKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword = node.unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let throwsOrRethrowsKeyword = node.throwsOrRethrowsKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenThrowsOrRethrowsKeywordAndOutput = node.unexpectedBetweenThrowsOrRethrowsKeywordAndOutput.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let output = node.output.map(self.visit)?.cast(ReturnClauseSyntax.self)
-    return Syntax(FunctionSignatureSyntax(unexpectedBeforeInput, input: input, unexpectedBetweenInputAndAsyncOrReasyncKeyword, asyncOrReasyncKeyword: asyncOrReasyncKeyword, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword, throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput, output: output))
+  open override func visit(_ node: FunctionSignatureSyntax) -> FunctionSignatureSyntax {
+    let unexpectedBeforeInput = node.unexpectedBeforeInput.map(self.visit)
+    let input = self.visit(node.input)
+    let unexpectedBetweenInputAndAsyncOrReasyncKeyword = node.unexpectedBetweenInputAndAsyncOrReasyncKeyword.map(self.visit)
+    let asyncOrReasyncKeyword = node.asyncOrReasyncKeyword.map(self.visit)
+    let unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword = node.unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword.map(self.visit)
+    let throwsOrRethrowsKeyword = node.throwsOrRethrowsKeyword.map(self.visit)
+    let unexpectedBetweenThrowsOrRethrowsKeywordAndOutput = node.unexpectedBetweenThrowsOrRethrowsKeywordAndOutput.map(self.visit)
+    let output = node.output.map(self.visit)
+    return FunctionSignatureSyntax(unexpectedBeforeInput, input: input, unexpectedBetweenInputAndAsyncOrReasyncKeyword, asyncOrReasyncKeyword: asyncOrReasyncKeyword, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword, throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput, output: output)
   }
   
-  open override func visit(_ node: IfConfigClauseSyntax) -> Syntax {
-    let unexpectedBeforePoundKeyword = node.unexpectedBeforePoundKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundKeyword = self.visit(node.poundKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundKeywordAndCondition = node.unexpectedBetweenPoundKeywordAndCondition.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let condition = node.condition.map(self.visit)?.cast(ExprSyntax.self)
-    let unexpectedBetweenConditionAndElements = node.unexpectedBetweenConditionAndElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = node.elements.map(self.visit)?.cast(Syntax.self)
-    return Syntax(IfConfigClauseSyntax(unexpectedBeforePoundKeyword, poundKeyword: poundKeyword, unexpectedBetweenPoundKeywordAndCondition, condition: condition, unexpectedBetweenConditionAndElements, elements: elements))
+  open override func visit(_ node: IfConfigClauseSyntax) -> IfConfigClauseSyntax {
+    let unexpectedBeforePoundKeyword = node.unexpectedBeforePoundKeyword.map(self.visit)
+    let poundKeyword = self.visit(node.poundKeyword)
+    let unexpectedBetweenPoundKeywordAndCondition = node.unexpectedBetweenPoundKeywordAndCondition.map(self.visit)
+    let condition = node.condition.map(self.visit)
+    let unexpectedBetweenConditionAndElements = node.unexpectedBetweenConditionAndElements.map(self.visit)
+    let elements = node.elements.map(self.visit)
+    return IfConfigClauseSyntax(unexpectedBeforePoundKeyword, poundKeyword: poundKeyword, unexpectedBetweenPoundKeywordAndCondition, condition: condition, unexpectedBetweenConditionAndElements, elements: elements)
   }
   
-  open override func visit(_ node: IfConfigClauseListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(IfConfigClauseSyntax.self)
+  open override func visit(_ node: IfConfigClauseListSyntax) -> IfConfigClauseListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(IfConfigClauseListSyntax(formattedChildren))
+    return IfConfigClauseListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: IfConfigDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeClauses = node.unexpectedBeforeClauses.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let clauses = self.visit(node.clauses).cast(IfConfigClauseListSyntax.self)
-    let unexpectedBetweenClausesAndPoundEndif = node.unexpectedBetweenClausesAndPoundEndif.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundEndif = self.visit(node.poundEndif).cast(TokenSyntax.self)
+    let unexpectedBeforeClauses = node.unexpectedBeforeClauses.map(self.visit)
+    let clauses = self.visit(node.clauses)
+    let unexpectedBetweenClausesAndPoundEndif = node.unexpectedBetweenClausesAndPoundEndif.map(self.visit)
+    let poundEndif = self.visit(node.poundEndif)
     return DeclSyntax(IfConfigDeclSyntax(unexpectedBeforeClauses, clauses: clauses, unexpectedBetweenClausesAndPoundEndif, poundEndif: poundEndif))
   }
   
   open override func visit(_ node: PoundErrorDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforePoundError = node.unexpectedBeforePoundError.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundError = self.visit(node.poundError).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundErrorAndLeftParen = node.unexpectedBetweenPoundErrorAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndMessage = node.unexpectedBetweenLeftParenAndMessage.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforePoundError = node.unexpectedBeforePoundError.map(self.visit)
+    let poundError = self.visit(node.poundError)
+    let unexpectedBetweenPoundErrorAndLeftParen = node.unexpectedBetweenPoundErrorAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndMessage = node.unexpectedBetweenLeftParenAndMessage.map(self.visit)
     let message = self.visit(node.message).cast(StringLiteralExprSyntax.self)
-    let unexpectedBetweenMessageAndRightParen = node.unexpectedBetweenMessageAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBetweenMessageAndRightParen = node.unexpectedBetweenMessageAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return DeclSyntax(PoundErrorDeclSyntax(unexpectedBeforePoundError, poundError: poundError, unexpectedBetweenPoundErrorAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndMessage, message: message, unexpectedBetweenMessageAndRightParen, rightParen: rightParen))
   }
   
   open override func visit(_ node: PoundWarningDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforePoundWarning = node.unexpectedBeforePoundWarning.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundWarning = self.visit(node.poundWarning).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundWarningAndLeftParen = node.unexpectedBetweenPoundWarningAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndMessage = node.unexpectedBetweenLeftParenAndMessage.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforePoundWarning = node.unexpectedBeforePoundWarning.map(self.visit)
+    let poundWarning = self.visit(node.poundWarning)
+    let unexpectedBetweenPoundWarningAndLeftParen = node.unexpectedBetweenPoundWarningAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndMessage = node.unexpectedBetweenLeftParenAndMessage.map(self.visit)
     let message = self.visit(node.message).cast(StringLiteralExprSyntax.self)
-    let unexpectedBetweenMessageAndRightParen = node.unexpectedBetweenMessageAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBetweenMessageAndRightParen = node.unexpectedBetweenMessageAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return DeclSyntax(PoundWarningDeclSyntax(unexpectedBeforePoundWarning, poundWarning: poundWarning, unexpectedBetweenPoundWarningAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndMessage, message: message, unexpectedBetweenMessageAndRightParen, rightParen: rightParen))
   }
   
   open override func visit(_ node: PoundSourceLocationSyntax) -> DeclSyntax {
-    let unexpectedBeforePoundSourceLocation = node.unexpectedBeforePoundSourceLocation.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundSourceLocation = self.visit(node.poundSourceLocation).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundSourceLocationAndLeftParen = node.unexpectedBetweenPoundSourceLocationAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArgs = node.unexpectedBetweenLeftParenAndArgs.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let args = node.args.map(self.visit)?.cast(PoundSourceLocationArgsSyntax.self)
-    let unexpectedBetweenArgsAndRightParen = node.unexpectedBetweenArgsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforePoundSourceLocation = node.unexpectedBeforePoundSourceLocation.map(self.visit)
+    let poundSourceLocation = self.visit(node.poundSourceLocation)
+    let unexpectedBetweenPoundSourceLocationAndLeftParen = node.unexpectedBetweenPoundSourceLocationAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndArgs = node.unexpectedBetweenLeftParenAndArgs.map(self.visit)
+    let args = node.args.map(self.visit)
+    let unexpectedBetweenArgsAndRightParen = node.unexpectedBetweenArgsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return DeclSyntax(PoundSourceLocationSyntax(unexpectedBeforePoundSourceLocation, poundSourceLocation: poundSourceLocation, unexpectedBetweenPoundSourceLocationAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgs, args: args, unexpectedBetweenArgsAndRightParen, rightParen: rightParen))
   }
   
-  open override func visit(_ node: PoundSourceLocationArgsSyntax) -> Syntax {
-    let unexpectedBeforeFileArgLabel = node.unexpectedBeforeFileArgLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let fileArgLabel = self.visit(node.fileArgLabel).cast(TokenSyntax.self)
-    let unexpectedBetweenFileArgLabelAndFileArgColon = node.unexpectedBetweenFileArgLabelAndFileArgColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let fileArgColon = self.visit(node.fileArgColon).cast(TokenSyntax.self)
-    let unexpectedBetweenFileArgColonAndFileName = node.unexpectedBetweenFileArgColonAndFileName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let fileName = self.visit(node.fileName).cast(TokenSyntax.self)
-    let unexpectedBetweenFileNameAndComma = node.unexpectedBetweenFileNameAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = self.visit(node.comma).cast(TokenSyntax.self)
-    let unexpectedBetweenCommaAndLineArgLabel = node.unexpectedBetweenCommaAndLineArgLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let lineArgLabel = self.visit(node.lineArgLabel).cast(TokenSyntax.self)
-    let unexpectedBetweenLineArgLabelAndLineArgColon = node.unexpectedBetweenLineArgLabelAndLineArgColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let lineArgColon = self.visit(node.lineArgColon).cast(TokenSyntax.self)
-    let unexpectedBetweenLineArgColonAndLineNumber = node.unexpectedBetweenLineArgColonAndLineNumber.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let lineNumber = self.visit(node.lineNumber).cast(TokenSyntax.self)
-    return Syntax(PoundSourceLocationArgsSyntax(unexpectedBeforeFileArgLabel, fileArgLabel: fileArgLabel, unexpectedBetweenFileArgLabelAndFileArgColon, fileArgColon: fileArgColon, unexpectedBetweenFileArgColonAndFileName, fileName: fileName, unexpectedBetweenFileNameAndComma, comma: comma, unexpectedBetweenCommaAndLineArgLabel, lineArgLabel: lineArgLabel, unexpectedBetweenLineArgLabelAndLineArgColon, lineArgColon: lineArgColon, unexpectedBetweenLineArgColonAndLineNumber, lineNumber: lineNumber))
+  open override func visit(_ node: PoundSourceLocationArgsSyntax) -> PoundSourceLocationArgsSyntax {
+    let unexpectedBeforeFileArgLabel = node.unexpectedBeforeFileArgLabel.map(self.visit)
+    let fileArgLabel = self.visit(node.fileArgLabel)
+    let unexpectedBetweenFileArgLabelAndFileArgColon = node.unexpectedBetweenFileArgLabelAndFileArgColon.map(self.visit)
+    let fileArgColon = self.visit(node.fileArgColon)
+    let unexpectedBetweenFileArgColonAndFileName = node.unexpectedBetweenFileArgColonAndFileName.map(self.visit)
+    let fileName = self.visit(node.fileName)
+    let unexpectedBetweenFileNameAndComma = node.unexpectedBetweenFileNameAndComma.map(self.visit)
+    let comma = self.visit(node.comma)
+    let unexpectedBetweenCommaAndLineArgLabel = node.unexpectedBetweenCommaAndLineArgLabel.map(self.visit)
+    let lineArgLabel = self.visit(node.lineArgLabel)
+    let unexpectedBetweenLineArgLabelAndLineArgColon = node.unexpectedBetweenLineArgLabelAndLineArgColon.map(self.visit)
+    let lineArgColon = self.visit(node.lineArgColon)
+    let unexpectedBetweenLineArgColonAndLineNumber = node.unexpectedBetweenLineArgColonAndLineNumber.map(self.visit)
+    let lineNumber = self.visit(node.lineNumber)
+    return PoundSourceLocationArgsSyntax(unexpectedBeforeFileArgLabel, fileArgLabel: fileArgLabel, unexpectedBetweenFileArgLabelAndFileArgColon, fileArgColon: fileArgColon, unexpectedBetweenFileArgColonAndFileName, fileName: fileName, unexpectedBetweenFileNameAndComma, comma: comma, unexpectedBetweenCommaAndLineArgLabel, lineArgLabel: lineArgLabel, unexpectedBetweenLineArgLabelAndLineArgColon, lineArgColon: lineArgColon, unexpectedBetweenLineArgColonAndLineNumber, lineNumber: lineNumber)
   }
   
-  open override func visit(_ node: DeclModifierDetailSyntax) -> Syntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndDetail = node.unexpectedBetweenLeftParenAndDetail.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let detail = self.visit(node.detail).cast(TokenSyntax.self)
-    let unexpectedBetweenDetailAndRightParen = node.unexpectedBetweenDetailAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(DeclModifierDetailSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndDetail, detail: detail, unexpectedBetweenDetailAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: DeclModifierDetailSyntax) -> DeclModifierDetailSyntax {
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndDetail = node.unexpectedBetweenLeftParenAndDetail.map(self.visit)
+    let detail = self.visit(node.detail)
+    let unexpectedBetweenDetailAndRightParen = node.unexpectedBetweenDetailAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return DeclModifierDetailSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndDetail, detail: detail, unexpectedBetweenDetailAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: DeclModifierSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndDetail = node.unexpectedBetweenNameAndDetail.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let detail = node.detail.map(self.visit)?.cast(DeclModifierDetailSyntax.self)
-    return Syntax(DeclModifierSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndDetail, detail: detail))
+  open override func visit(_ node: DeclModifierSyntax) -> DeclModifierSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndDetail = node.unexpectedBetweenNameAndDetail.map(self.visit)
+    let detail = node.detail.map(self.visit)
+    return DeclModifierSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndDetail, detail: detail)
   }
   
-  open override func visit(_ node: InheritedTypeSyntax) -> Syntax {
-    let unexpectedBeforeTypeName = node.unexpectedBeforeTypeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeName = self.visit(node.typeName).cast(TypeSyntax.self)
-    let unexpectedBetweenTypeNameAndTrailingComma = node.unexpectedBetweenTypeNameAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(InheritedTypeSyntax(unexpectedBeforeTypeName, typeName: typeName, unexpectedBetweenTypeNameAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: InheritedTypeSyntax) -> InheritedTypeSyntax {
+    let unexpectedBeforeTypeName = node.unexpectedBeforeTypeName.map(self.visit)
+    let typeName = self.visit(node.typeName)
+    let unexpectedBetweenTypeNameAndTrailingComma = node.unexpectedBetweenTypeNameAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return InheritedTypeSyntax(unexpectedBeforeTypeName, typeName: typeName, unexpectedBetweenTypeNameAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: InheritedTypeListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(InheritedTypeSyntax.self)
+  open override func visit(_ node: InheritedTypeListSyntax) -> InheritedTypeListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(InheritedTypeListSyntax(formattedChildren))
+    return InheritedTypeListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: TypeInheritanceClauseSyntax) -> Syntax {
-    let unexpectedBeforeColon = node.unexpectedBeforeColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndInheritedTypeCollection = node.unexpectedBetweenColonAndInheritedTypeCollection.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritedTypeCollection = self.visit(node.inheritedTypeCollection).cast(InheritedTypeListSyntax.self)
-    return Syntax(TypeInheritanceClauseSyntax(unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndInheritedTypeCollection, inheritedTypeCollection: inheritedTypeCollection))
+  open override func visit(_ node: TypeInheritanceClauseSyntax) -> TypeInheritanceClauseSyntax {
+    let unexpectedBeforeColon = node.unexpectedBeforeColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndInheritedTypeCollection = node.unexpectedBetweenColonAndInheritedTypeCollection.map(self.visit)
+    let inheritedTypeCollection = self.visit(node.inheritedTypeCollection)
+    return TypeInheritanceClauseSyntax(unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndInheritedTypeCollection, inheritedTypeCollection: inheritedTypeCollection)
   }
   
   open override func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndClassKeyword = node.unexpectedBetweenModifiersAndClassKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let classKeyword = self.visit(node.classKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenClassKeywordAndIdentifier = node.unexpectedBetweenClassKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterClause = node.genericParameterClause.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParameterClauseAndInheritanceClause = node.unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritanceClause = node.inheritanceClause.map(self.visit)?.cast(TypeInheritanceClauseSyntax.self)
-    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let members = self.visit(node.members).cast(MemberDeclBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndClassKeyword = node.unexpectedBetweenModifiersAndClassKeyword.map(self.visit)
+    let classKeyword = self.visit(node.classKeyword)
+    let unexpectedBetweenClassKeywordAndIdentifier = node.unexpectedBetweenClassKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)
+    let genericParameterClause = node.genericParameterClause.map(self.visit)
+    let unexpectedBetweenGenericParameterClauseAndInheritanceClause = node.unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(self.visit)
+    let inheritanceClause = node.inheritanceClause.map(self.visit)
+    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)
+    let members = self.visit(node.members)
     return DeclSyntax(ClassDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndClassKeyword, classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: members))
   }
   
   open override func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndActorKeyword = node.unexpectedBetweenModifiersAndActorKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let actorKeyword = self.visit(node.actorKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenActorKeywordAndIdentifier = node.unexpectedBetweenActorKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterClause = node.genericParameterClause.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParameterClauseAndInheritanceClause = node.unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritanceClause = node.inheritanceClause.map(self.visit)?.cast(TypeInheritanceClauseSyntax.self)
-    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let members = self.visit(node.members).cast(MemberDeclBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndActorKeyword = node.unexpectedBetweenModifiersAndActorKeyword.map(self.visit)
+    let actorKeyword = self.visit(node.actorKeyword)
+    let unexpectedBetweenActorKeywordAndIdentifier = node.unexpectedBetweenActorKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)
+    let genericParameterClause = node.genericParameterClause.map(self.visit)
+    let unexpectedBetweenGenericParameterClauseAndInheritanceClause = node.unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(self.visit)
+    let inheritanceClause = node.inheritanceClause.map(self.visit)
+    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)
+    let members = self.visit(node.members)
     return DeclSyntax(ActorDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndActorKeyword, actorKeyword: actorKeyword, unexpectedBetweenActorKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: members))
   }
   
   open override func visit(_ node: StructDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndStructKeyword = node.unexpectedBetweenModifiersAndStructKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let structKeyword = self.visit(node.structKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenStructKeywordAndIdentifier = node.unexpectedBetweenStructKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterClause = node.genericParameterClause.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParameterClauseAndInheritanceClause = node.unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritanceClause = node.inheritanceClause.map(self.visit)?.cast(TypeInheritanceClauseSyntax.self)
-    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let members = self.visit(node.members).cast(MemberDeclBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndStructKeyword = node.unexpectedBetweenModifiersAndStructKeyword.map(self.visit)
+    let structKeyword = self.visit(node.structKeyword)
+    let unexpectedBetweenStructKeywordAndIdentifier = node.unexpectedBetweenStructKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)
+    let genericParameterClause = node.genericParameterClause.map(self.visit)
+    let unexpectedBetweenGenericParameterClauseAndInheritanceClause = node.unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(self.visit)
+    let inheritanceClause = node.inheritanceClause.map(self.visit)
+    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)
+    let members = self.visit(node.members)
     return DeclSyntax(StructDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndStructKeyword, structKeyword: structKeyword, unexpectedBetweenStructKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: members))
   }
   
   open override func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndProtocolKeyword = node.unexpectedBetweenModifiersAndProtocolKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let protocolKeyword = self.visit(node.protocolKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenProtocolKeywordAndIdentifier = node.unexpectedBetweenProtocolKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause = node.unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let primaryAssociatedTypeClause = node.primaryAssociatedTypeClause.map(self.visit)?.cast(PrimaryAssociatedTypeClauseSyntax.self)
-    let unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause = node.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritanceClause = node.inheritanceClause.map(self.visit)?.cast(TypeInheritanceClauseSyntax.self)
-    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let members = self.visit(node.members).cast(MemberDeclBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndProtocolKeyword = node.unexpectedBetweenModifiersAndProtocolKeyword.map(self.visit)
+    let protocolKeyword = self.visit(node.protocolKeyword)
+    let unexpectedBetweenProtocolKeywordAndIdentifier = node.unexpectedBetweenProtocolKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause = node.unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause.map(self.visit)
+    let primaryAssociatedTypeClause = node.primaryAssociatedTypeClause.map(self.visit)
+    let unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause = node.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause.map(self.visit)
+    let inheritanceClause = node.inheritanceClause.map(self.visit)
+    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)
+    let members = self.visit(node.members)
     return DeclSyntax(ProtocolDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndProtocolKeyword, protocolKeyword: protocolKeyword, unexpectedBetweenProtocolKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, primaryAssociatedTypeClause: primaryAssociatedTypeClause, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: members))
   }
   
   open override func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndExtensionKeyword = node.unexpectedBetweenModifiersAndExtensionKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let extensionKeyword = self.visit(node.extensionKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenExtensionKeywordAndExtendedType = node.unexpectedBetweenExtensionKeywordAndExtendedType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let extendedType = self.visit(node.extendedType).cast(TypeSyntax.self)
-    let unexpectedBetweenExtendedTypeAndInheritanceClause = node.unexpectedBetweenExtendedTypeAndInheritanceClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritanceClause = node.inheritanceClause.map(self.visit)?.cast(TypeInheritanceClauseSyntax.self)
-    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let members = self.visit(node.members).cast(MemberDeclBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndExtensionKeyword = node.unexpectedBetweenModifiersAndExtensionKeyword.map(self.visit)
+    let extensionKeyword = self.visit(node.extensionKeyword)
+    let unexpectedBetweenExtensionKeywordAndExtendedType = node.unexpectedBetweenExtensionKeywordAndExtendedType.map(self.visit)
+    let extendedType = self.visit(node.extendedType)
+    let unexpectedBetweenExtendedTypeAndInheritanceClause = node.unexpectedBetweenExtendedTypeAndInheritanceClause.map(self.visit)
+    let inheritanceClause = node.inheritanceClause.map(self.visit)
+    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)
+    let members = self.visit(node.members)
     return DeclSyntax(ExtensionDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndExtensionKeyword, extensionKeyword: extensionKeyword, unexpectedBetweenExtensionKeywordAndExtendedType, extendedType: extendedType, unexpectedBetweenExtendedTypeAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: members))
   }
   
-  open override func visit(_ node: MemberDeclBlockSyntax) -> Syntax {
-    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBrace = self.visit(node.leftBrace).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBraceAndMembers = node.unexpectedBetweenLeftBraceAndMembers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+  open override func visit(_ node: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)
+    let leftBrace = self.visit(node.leftBrace)
+    let unexpectedBetweenLeftBraceAndMembers = node.unexpectedBetweenLeftBraceAndMembers.map(self.visit)
     indentationLevel += 1
-    let members = self.visit(node.members).cast(MemberDeclListSyntax.self)
+    let members = self.visit(node.members)
     indentationLevel -= 1
-    let unexpectedBetweenMembersAndRightBrace = node.unexpectedBetweenMembersAndRightBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    var rightBrace = self.visit(node.rightBrace).cast(TokenSyntax.self)
+    let unexpectedBetweenMembersAndRightBrace = node.unexpectedBetweenMembersAndRightBrace.map(self.visit)
+    var rightBrace = self.visit(node.rightBrace)
     if rightBrace.leadingTrivia.first?.isNewline != true {
       rightBrace.leadingTrivia = indentedNewline + rightBrace.leadingTrivia
     }
-    return Syntax(MemberDeclBlockSyntax(unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndMembers, members: members, unexpectedBetweenMembersAndRightBrace, rightBrace: rightBrace))
+    return MemberDeclBlockSyntax(unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndMembers, members: members, unexpectedBetweenMembersAndRightBrace, rightBrace: rightBrace)
   }
   
-  open override func visit(_ node: MemberDeclListSyntax) -> Syntax {
-    var formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(MemberDeclListItemSyntax.self)
+  open override func visit(_ node: MemberDeclListSyntax) -> MemberDeclListSyntax {
+    var formattedChildren = node.map {
+      self.visit($0)
     }
     formattedChildren = formattedChildren.map {
       if $0.leadingTrivia?.first?.isNewline == true {
@@ -1194,757 +1194,757 @@ open class BasicFormat: SyntaxRewriter {
         return $0.withLeadingTrivia(indentedNewline + ($0.leadingTrivia ?? []))
       }
     }
-    return Syntax(MemberDeclListSyntax(formattedChildren))
+    return MemberDeclListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: MemberDeclListItemSyntax) -> Syntax {
-    let unexpectedBeforeDecl = node.unexpectedBeforeDecl.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let decl = self.visit(node.decl).cast(DeclSyntax.self)
-    let unexpectedBetweenDeclAndSemicolon = node.unexpectedBetweenDeclAndSemicolon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let semicolon = node.semicolon.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(MemberDeclListItemSyntax(unexpectedBeforeDecl, decl: decl, unexpectedBetweenDeclAndSemicolon, semicolon: semicolon))
+  open override func visit(_ node: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
+    let unexpectedBeforeDecl = node.unexpectedBeforeDecl.map(self.visit)
+    let decl = self.visit(node.decl)
+    let unexpectedBetweenDeclAndSemicolon = node.unexpectedBetweenDeclAndSemicolon.map(self.visit)
+    let semicolon = node.semicolon.map(self.visit)
+    return MemberDeclListItemSyntax(unexpectedBeforeDecl, decl: decl, unexpectedBetweenDeclAndSemicolon, semicolon: semicolon)
   }
   
-  open override func visit(_ node: SourceFileSyntax) -> Syntax {
-    let unexpectedBeforeStatements = node.unexpectedBeforeStatements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let statements = self.visit(node.statements).cast(CodeBlockItemListSyntax.self)
-    let unexpectedBetweenStatementsAndEOFToken = node.unexpectedBetweenStatementsAndEOFToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let eofToken = self.visit(node.eofToken).cast(TokenSyntax.self)
-    return Syntax(SourceFileSyntax(unexpectedBeforeStatements, statements: statements, unexpectedBetweenStatementsAndEOFToken, eofToken: eofToken))
+  open override func visit(_ node: SourceFileSyntax) -> SourceFileSyntax {
+    let unexpectedBeforeStatements = node.unexpectedBeforeStatements.map(self.visit)
+    let statements = self.visit(node.statements)
+    let unexpectedBetweenStatementsAndEOFToken = node.unexpectedBetweenStatementsAndEOFToken.map(self.visit)
+    let eofToken = self.visit(node.eofToken)
+    return SourceFileSyntax(unexpectedBeforeStatements, statements: statements, unexpectedBetweenStatementsAndEOFToken, eofToken: eofToken)
   }
   
-  open override func visit(_ node: InitializerClauseSyntax) -> Syntax {
-    let unexpectedBeforeEqual = node.unexpectedBeforeEqual.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let equal = self.visit(node.equal).cast(TokenSyntax.self)
-    let unexpectedBetweenEqualAndValue = node.unexpectedBetweenEqualAndValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let value = self.visit(node.value).cast(ExprSyntax.self)
-    return Syntax(InitializerClauseSyntax(unexpectedBeforeEqual, equal: equal, unexpectedBetweenEqualAndValue, value: value))
+  open override func visit(_ node: InitializerClauseSyntax) -> InitializerClauseSyntax {
+    let unexpectedBeforeEqual = node.unexpectedBeforeEqual.map(self.visit)
+    let equal = self.visit(node.equal)
+    let unexpectedBetweenEqualAndValue = node.unexpectedBetweenEqualAndValue.map(self.visit)
+    let value = self.visit(node.value)
+    return InitializerClauseSyntax(unexpectedBeforeEqual, equal: equal, unexpectedBetweenEqualAndValue, value: value)
   }
   
-  open override func visit(_ node: FunctionParameterSyntax) -> Syntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndFirstName = node.unexpectedBetweenModifiersAndFirstName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let firstName = node.firstName.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenFirstNameAndSecondName = node.unexpectedBetweenFirstNameAndSecondName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let secondName = node.secondName.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenSecondNameAndColon = node.unexpectedBetweenSecondNameAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndType = node.unexpectedBetweenColonAndType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = node.type.map(self.visit)?.cast(TypeSyntax.self)
-    let unexpectedBetweenTypeAndEllipsis = node.unexpectedBetweenTypeAndEllipsis.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ellipsis = node.ellipsis.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenEllipsisAndDefaultArgument = node.unexpectedBetweenEllipsisAndDefaultArgument.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let defaultArgument = node.defaultArgument.map(self.visit)?.cast(InitializerClauseSyntax.self)
-    let unexpectedBetweenDefaultArgumentAndTrailingComma = node.unexpectedBetweenDefaultArgumentAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(FunctionParameterSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndFirstName, firstName: firstName, unexpectedBetweenFirstNameAndSecondName, secondName: secondName, unexpectedBetweenSecondNameAndColon, colon: colon, unexpectedBetweenColonAndType, type: type, unexpectedBetweenTypeAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndDefaultArgument, defaultArgument: defaultArgument, unexpectedBetweenDefaultArgumentAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: FunctionParameterSyntax) -> FunctionParameterSyntax {
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndFirstName = node.unexpectedBetweenModifiersAndFirstName.map(self.visit)
+    let firstName = node.firstName.map(self.visit)
+    let unexpectedBetweenFirstNameAndSecondName = node.unexpectedBetweenFirstNameAndSecondName.map(self.visit)
+    let secondName = node.secondName.map(self.visit)
+    let unexpectedBetweenSecondNameAndColon = node.unexpectedBetweenSecondNameAndColon.map(self.visit)
+    let colon = node.colon.map(self.visit)
+    let unexpectedBetweenColonAndType = node.unexpectedBetweenColonAndType.map(self.visit)
+    let type = node.type.map(self.visit)
+    let unexpectedBetweenTypeAndEllipsis = node.unexpectedBetweenTypeAndEllipsis.map(self.visit)
+    let ellipsis = node.ellipsis.map(self.visit)
+    let unexpectedBetweenEllipsisAndDefaultArgument = node.unexpectedBetweenEllipsisAndDefaultArgument.map(self.visit)
+    let defaultArgument = node.defaultArgument.map(self.visit)
+    let unexpectedBetweenDefaultArgumentAndTrailingComma = node.unexpectedBetweenDefaultArgumentAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return FunctionParameterSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndFirstName, firstName: firstName, unexpectedBetweenFirstNameAndSecondName, secondName: secondName, unexpectedBetweenSecondNameAndColon, colon: colon, unexpectedBetweenColonAndType, type: type, unexpectedBetweenTypeAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndDefaultArgument, defaultArgument: defaultArgument, unexpectedBetweenDefaultArgumentAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: ModifierListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(DeclModifierSyntax.self)
+  open override func visit(_ node: ModifierListSyntax) -> ModifierListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ModifierListSyntax(formattedChildren))
+    return ModifierListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndFuncKeyword = node.unexpectedBetweenModifiersAndFuncKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let funcKeyword = self.visit(node.funcKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenFuncKeywordAndIdentifier = node.unexpectedBetweenFuncKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterClause = node.genericParameterClause.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParameterClauseAndSignature = node.unexpectedBetweenGenericParameterClauseAndSignature.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let signature = self.visit(node.signature).cast(FunctionSignatureSyntax.self)
-    let unexpectedBetweenSignatureAndGenericWhereClause = node.unexpectedBetweenSignatureAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndBody = node.unexpectedBetweenGenericWhereClauseAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = node.body.map(self.visit)?.cast(CodeBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndFuncKeyword = node.unexpectedBetweenModifiersAndFuncKeyword.map(self.visit)
+    let funcKeyword = self.visit(node.funcKeyword)
+    let unexpectedBetweenFuncKeywordAndIdentifier = node.unexpectedBetweenFuncKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndGenericParameterClause = node.unexpectedBetweenIdentifierAndGenericParameterClause.map(self.visit)
+    let genericParameterClause = node.genericParameterClause.map(self.visit)
+    let unexpectedBetweenGenericParameterClauseAndSignature = node.unexpectedBetweenGenericParameterClauseAndSignature.map(self.visit)
+    let signature = self.visit(node.signature)
+    let unexpectedBetweenSignatureAndGenericWhereClause = node.unexpectedBetweenSignatureAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndBody = node.unexpectedBetweenGenericWhereClauseAndBody.map(self.visit)
+    let body = node.body.map(self.visit)
     return DeclSyntax(FunctionDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndFuncKeyword, funcKeyword: funcKeyword, unexpectedBetweenFuncKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody, body: body))
   }
   
   open override func visit(_ node: InitializerDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndInitKeyword = node.unexpectedBetweenModifiersAndInitKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let initKeyword = self.visit(node.initKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenInitKeywordAndOptionalMark = node.unexpectedBetweenInitKeywordAndOptionalMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let optionalMark = node.optionalMark.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenOptionalMarkAndGenericParameterClause = node.unexpectedBetweenOptionalMarkAndGenericParameterClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterClause = node.genericParameterClause.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParameterClauseAndSignature = node.unexpectedBetweenGenericParameterClauseAndSignature.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let signature = self.visit(node.signature).cast(FunctionSignatureSyntax.self)
-    let unexpectedBetweenSignatureAndGenericWhereClause = node.unexpectedBetweenSignatureAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndBody = node.unexpectedBetweenGenericWhereClauseAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = node.body.map(self.visit)?.cast(CodeBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndInitKeyword = node.unexpectedBetweenModifiersAndInitKeyword.map(self.visit)
+    let initKeyword = self.visit(node.initKeyword)
+    let unexpectedBetweenInitKeywordAndOptionalMark = node.unexpectedBetweenInitKeywordAndOptionalMark.map(self.visit)
+    let optionalMark = node.optionalMark.map(self.visit)
+    let unexpectedBetweenOptionalMarkAndGenericParameterClause = node.unexpectedBetweenOptionalMarkAndGenericParameterClause.map(self.visit)
+    let genericParameterClause = node.genericParameterClause.map(self.visit)
+    let unexpectedBetweenGenericParameterClauseAndSignature = node.unexpectedBetweenGenericParameterClauseAndSignature.map(self.visit)
+    let signature = self.visit(node.signature)
+    let unexpectedBetweenSignatureAndGenericWhereClause = node.unexpectedBetweenSignatureAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndBody = node.unexpectedBetweenGenericWhereClauseAndBody.map(self.visit)
+    let body = node.body.map(self.visit)
     return DeclSyntax(InitializerDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndInitKeyword, initKeyword: initKeyword, unexpectedBetweenInitKeywordAndOptionalMark, optionalMark: optionalMark, unexpectedBetweenOptionalMarkAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody, body: body))
   }
   
   open override func visit(_ node: DeinitializerDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndDeinitKeyword = node.unexpectedBetweenModifiersAndDeinitKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let deinitKeyword = self.visit(node.deinitKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenDeinitKeywordAndBody = node.unexpectedBetweenDeinitKeywordAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = node.body.map(self.visit)?.cast(CodeBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndDeinitKeyword = node.unexpectedBetweenModifiersAndDeinitKeyword.map(self.visit)
+    let deinitKeyword = self.visit(node.deinitKeyword)
+    let unexpectedBetweenDeinitKeywordAndBody = node.unexpectedBetweenDeinitKeywordAndBody.map(self.visit)
+    let body = node.body.map(self.visit)
     return DeclSyntax(DeinitializerDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndDeinitKeyword, deinitKeyword: deinitKeyword, unexpectedBetweenDeinitKeywordAndBody, body: body))
   }
   
   open override func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndSubscriptKeyword = node.unexpectedBetweenModifiersAndSubscriptKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let subscriptKeyword = self.visit(node.subscriptKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenSubscriptKeywordAndGenericParameterClause = node.unexpectedBetweenSubscriptKeywordAndGenericParameterClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterClause = node.genericParameterClause.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParameterClauseAndIndices = node.unexpectedBetweenGenericParameterClauseAndIndices.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let indices = self.visit(node.indices).cast(ParameterClauseSyntax.self)
-    let unexpectedBetweenIndicesAndResult = node.unexpectedBetweenIndicesAndResult.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let result = self.visit(node.result).cast(ReturnClauseSyntax.self)
-    let unexpectedBetweenResultAndGenericWhereClause = node.unexpectedBetweenResultAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndAccessor = node.unexpectedBetweenGenericWhereClauseAndAccessor.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let accessor = node.accessor.map(self.visit)?.cast(Syntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndSubscriptKeyword = node.unexpectedBetweenModifiersAndSubscriptKeyword.map(self.visit)
+    let subscriptKeyword = self.visit(node.subscriptKeyword)
+    let unexpectedBetweenSubscriptKeywordAndGenericParameterClause = node.unexpectedBetweenSubscriptKeywordAndGenericParameterClause.map(self.visit)
+    let genericParameterClause = node.genericParameterClause.map(self.visit)
+    let unexpectedBetweenGenericParameterClauseAndIndices = node.unexpectedBetweenGenericParameterClauseAndIndices.map(self.visit)
+    let indices = self.visit(node.indices)
+    let unexpectedBetweenIndicesAndResult = node.unexpectedBetweenIndicesAndResult.map(self.visit)
+    let result = self.visit(node.result)
+    let unexpectedBetweenResultAndGenericWhereClause = node.unexpectedBetweenResultAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndAccessor = node.unexpectedBetweenGenericWhereClauseAndAccessor.map(self.visit)
+    let accessor = node.accessor.map(self.visit)
     return DeclSyntax(SubscriptDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndSubscriptKeyword, subscriptKeyword: subscriptKeyword, unexpectedBetweenSubscriptKeywordAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndIndices, indices: indices, unexpectedBetweenIndicesAndResult, result: result, unexpectedBetweenResultAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndAccessor, accessor: accessor))
   }
   
-  open override func visit(_ node: AccessLevelModifierSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndModifier = node.unexpectedBetweenNameAndModifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifier = node.modifier.map(self.visit)?.cast(DeclModifierDetailSyntax.self)
-    return Syntax(AccessLevelModifierSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndModifier, modifier: modifier))
+  open override func visit(_ node: AccessLevelModifierSyntax) -> AccessLevelModifierSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndModifier = node.unexpectedBetweenNameAndModifier.map(self.visit)
+    let modifier = node.modifier.map(self.visit)
+    return AccessLevelModifierSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndModifier, modifier: modifier)
   }
   
-  open override func visit(_ node: AccessPathComponentSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndTrailingDot = node.unexpectedBetweenNameAndTrailingDot.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingDot = node.trailingDot.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(AccessPathComponentSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingDot, trailingDot: trailingDot))
+  open override func visit(_ node: AccessPathComponentSyntax) -> AccessPathComponentSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndTrailingDot = node.unexpectedBetweenNameAndTrailingDot.map(self.visit)
+    let trailingDot = node.trailingDot.map(self.visit)
+    return AccessPathComponentSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingDot, trailingDot: trailingDot)
   }
   
-  open override func visit(_ node: AccessPathSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(AccessPathComponentSyntax.self)
+  open override func visit(_ node: AccessPathSyntax) -> AccessPathSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(AccessPathSyntax(formattedChildren))
+    return AccessPathSyntax(formattedChildren)
   }
   
   open override func visit(_ node: ImportDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndImportTok = node.unexpectedBetweenModifiersAndImportTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let importTok = self.visit(node.importTok).cast(TokenSyntax.self)
-    let unexpectedBetweenImportTokAndImportKind = node.unexpectedBetweenImportTokAndImportKind.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let importKind = node.importKind.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenImportKindAndPath = node.unexpectedBetweenImportKindAndPath.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let path = self.visit(node.path).cast(AccessPathSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndImportTok = node.unexpectedBetweenModifiersAndImportTok.map(self.visit)
+    let importTok = self.visit(node.importTok)
+    let unexpectedBetweenImportTokAndImportKind = node.unexpectedBetweenImportTokAndImportKind.map(self.visit)
+    let importKind = node.importKind.map(self.visit)
+    let unexpectedBetweenImportKindAndPath = node.unexpectedBetweenImportKindAndPath.map(self.visit)
+    let path = self.visit(node.path)
     return DeclSyntax(ImportDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndImportTok, importTok: importTok, unexpectedBetweenImportTokAndImportKind, importKind: importKind, unexpectedBetweenImportKindAndPath, path: path))
   }
   
-  open override func visit(_ node: AccessorParameterSyntax) -> Syntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndName = node.unexpectedBetweenLeftParenAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndRightParen = node.unexpectedBetweenNameAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(AccessorParameterSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndName, name: name, unexpectedBetweenNameAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: AccessorParameterSyntax) -> AccessorParameterSyntax {
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndName = node.unexpectedBetweenLeftParenAndName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndRightParen = node.unexpectedBetweenNameAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return AccessorParameterSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndName, name: name, unexpectedBetweenNameAndRightParen, rightParen: rightParen)
   }
   
   open override func visit(_ node: AccessorDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifier = node.unexpectedBetweenAttributesAndModifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifier = node.modifier.map(self.visit)?.cast(DeclModifierSyntax.self)
-    let unexpectedBetweenModifierAndAccessorKind = node.unexpectedBetweenModifierAndAccessorKind.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let accessorKind = self.visit(node.accessorKind).cast(TokenSyntax.self)
-    let unexpectedBetweenAccessorKindAndParameter = node.unexpectedBetweenAccessorKindAndParameter.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let parameter = node.parameter.map(self.visit)?.cast(AccessorParameterSyntax.self)
-    let unexpectedBetweenParameterAndAsyncKeyword = node.unexpectedBetweenParameterAndAsyncKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asyncKeyword = node.asyncKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAsyncKeywordAndThrowsKeyword = node.unexpectedBetweenAsyncKeywordAndThrowsKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let throwsKeyword = node.throwsKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenThrowsKeywordAndBody = node.unexpectedBetweenThrowsKeywordAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = node.body.map(self.visit)?.cast(CodeBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifier = node.unexpectedBetweenAttributesAndModifier.map(self.visit)
+    let modifier = node.modifier.map(self.visit)
+    let unexpectedBetweenModifierAndAccessorKind = node.unexpectedBetweenModifierAndAccessorKind.map(self.visit)
+    let accessorKind = self.visit(node.accessorKind)
+    let unexpectedBetweenAccessorKindAndParameter = node.unexpectedBetweenAccessorKindAndParameter.map(self.visit)
+    let parameter = node.parameter.map(self.visit)
+    let unexpectedBetweenParameterAndAsyncKeyword = node.unexpectedBetweenParameterAndAsyncKeyword.map(self.visit)
+    let asyncKeyword = node.asyncKeyword.map(self.visit)
+    let unexpectedBetweenAsyncKeywordAndThrowsKeyword = node.unexpectedBetweenAsyncKeywordAndThrowsKeyword.map(self.visit)
+    let throwsKeyword = node.throwsKeyword.map(self.visit)
+    let unexpectedBetweenThrowsKeywordAndBody = node.unexpectedBetweenThrowsKeywordAndBody.map(self.visit)
+    let body = node.body.map(self.visit)
     return DeclSyntax(AccessorDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifier, modifier: modifier, unexpectedBetweenModifierAndAccessorKind, accessorKind: accessorKind, unexpectedBetweenAccessorKindAndParameter, parameter: parameter, unexpectedBetweenParameterAndAsyncKeyword, asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsKeyword, throwsKeyword: throwsKeyword, unexpectedBetweenThrowsKeywordAndBody, body: body))
   }
   
-  open override func visit(_ node: AccessorListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
+  open override func visit(_ node: AccessorListSyntax) -> AccessorListSyntax {
+    let formattedChildren = node.map {
       self.visit($0).cast(AccessorDeclSyntax.self)
     }
-    return Syntax(AccessorListSyntax(formattedChildren))
+    return AccessorListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: AccessorBlockSyntax) -> Syntax {
-    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBrace = self.visit(node.leftBrace).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBraceAndAccessors = node.unexpectedBetweenLeftBraceAndAccessors.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let accessors = self.visit(node.accessors).cast(AccessorListSyntax.self)
-    let unexpectedBetweenAccessorsAndRightBrace = node.unexpectedBetweenAccessorsAndRightBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightBrace = self.visit(node.rightBrace).cast(TokenSyntax.self)
-    return Syntax(AccessorBlockSyntax(unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndAccessors, accessors: accessors, unexpectedBetweenAccessorsAndRightBrace, rightBrace: rightBrace))
+  open override func visit(_ node: AccessorBlockSyntax) -> AccessorBlockSyntax {
+    let unexpectedBeforeLeftBrace = node.unexpectedBeforeLeftBrace.map(self.visit)
+    let leftBrace = self.visit(node.leftBrace)
+    let unexpectedBetweenLeftBraceAndAccessors = node.unexpectedBetweenLeftBraceAndAccessors.map(self.visit)
+    let accessors = self.visit(node.accessors)
+    let unexpectedBetweenAccessorsAndRightBrace = node.unexpectedBetweenAccessorsAndRightBrace.map(self.visit)
+    let rightBrace = self.visit(node.rightBrace)
+    return AccessorBlockSyntax(unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndAccessors, accessors: accessors, unexpectedBetweenAccessorsAndRightBrace, rightBrace: rightBrace)
   }
   
-  open override func visit(_ node: PatternBindingSyntax) -> Syntax {
-    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeAnnotation = node.typeAnnotation.map(self.visit)?.cast(TypeAnnotationSyntax.self)
-    let unexpectedBetweenTypeAnnotationAndInitializer = node.unexpectedBetweenTypeAnnotationAndInitializer.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let initializer = node.initializer.map(self.visit)?.cast(InitializerClauseSyntax.self)
-    let unexpectedBetweenInitializerAndAccessor = node.unexpectedBetweenInitializerAndAccessor.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let accessor = node.accessor.map(self.visit)?.cast(Syntax.self)
-    let unexpectedBetweenAccessorAndTrailingComma = node.unexpectedBetweenAccessorAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(PatternBindingSyntax(unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndAccessor, accessor: accessor, unexpectedBetweenAccessorAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: PatternBindingSyntax) -> PatternBindingSyntax {
+    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
+    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)
+    let typeAnnotation = node.typeAnnotation.map(self.visit)
+    let unexpectedBetweenTypeAnnotationAndInitializer = node.unexpectedBetweenTypeAnnotationAndInitializer.map(self.visit)
+    let initializer = node.initializer.map(self.visit)
+    let unexpectedBetweenInitializerAndAccessor = node.unexpectedBetweenInitializerAndAccessor.map(self.visit)
+    let accessor = node.accessor.map(self.visit)
+    let unexpectedBetweenAccessorAndTrailingComma = node.unexpectedBetweenAccessorAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return PatternBindingSyntax(unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndAccessor, accessor: accessor, unexpectedBetweenAccessorAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: PatternBindingListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(PatternBindingSyntax.self)
+  open override func visit(_ node: PatternBindingListSyntax) -> PatternBindingListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(PatternBindingListSyntax(formattedChildren))
+    return PatternBindingListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndLetOrVarKeyword = node.unexpectedBetweenModifiersAndLetOrVarKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let letOrVarKeyword = self.visit(node.letOrVarKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenLetOrVarKeywordAndBindings = node.unexpectedBetweenLetOrVarKeywordAndBindings.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let bindings = self.visit(node.bindings).cast(PatternBindingListSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndLetOrVarKeyword = node.unexpectedBetweenModifiersAndLetOrVarKeyword.map(self.visit)
+    let letOrVarKeyword = self.visit(node.letOrVarKeyword)
+    let unexpectedBetweenLetOrVarKeywordAndBindings = node.unexpectedBetweenLetOrVarKeywordAndBindings.map(self.visit)
+    let bindings = self.visit(node.bindings)
     return DeclSyntax(VariableDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndBindings, bindings: bindings))
   }
   
-  open override func visit(_ node: EnumCaseElementSyntax) -> Syntax {
-    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndAssociatedValue = node.unexpectedBetweenIdentifierAndAssociatedValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let associatedValue = node.associatedValue.map(self.visit)?.cast(ParameterClauseSyntax.self)
-    let unexpectedBetweenAssociatedValueAndRawValue = node.unexpectedBetweenAssociatedValueAndRawValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rawValue = node.rawValue.map(self.visit)?.cast(InitializerClauseSyntax.self)
-    let unexpectedBetweenRawValueAndTrailingComma = node.unexpectedBetweenRawValueAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(EnumCaseElementSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndAssociatedValue, associatedValue: associatedValue, unexpectedBetweenAssociatedValueAndRawValue, rawValue: rawValue, unexpectedBetweenRawValueAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
+    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndAssociatedValue = node.unexpectedBetweenIdentifierAndAssociatedValue.map(self.visit)
+    let associatedValue = node.associatedValue.map(self.visit)
+    let unexpectedBetweenAssociatedValueAndRawValue = node.unexpectedBetweenAssociatedValueAndRawValue.map(self.visit)
+    let rawValue = node.rawValue.map(self.visit)
+    let unexpectedBetweenRawValueAndTrailingComma = node.unexpectedBetweenRawValueAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return EnumCaseElementSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndAssociatedValue, associatedValue: associatedValue, unexpectedBetweenAssociatedValueAndRawValue, rawValue: rawValue, unexpectedBetweenRawValueAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: EnumCaseElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(EnumCaseElementSyntax.self)
+  open override func visit(_ node: EnumCaseElementListSyntax) -> EnumCaseElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(EnumCaseElementListSyntax(formattedChildren))
+    return EnumCaseElementListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: EnumCaseDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndCaseKeyword = node.unexpectedBetweenModifiersAndCaseKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let caseKeyword = self.visit(node.caseKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenCaseKeywordAndElements = node.unexpectedBetweenCaseKeywordAndElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = self.visit(node.elements).cast(EnumCaseElementListSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndCaseKeyword = node.unexpectedBetweenModifiersAndCaseKeyword.map(self.visit)
+    let caseKeyword = self.visit(node.caseKeyword)
+    let unexpectedBetweenCaseKeywordAndElements = node.unexpectedBetweenCaseKeywordAndElements.map(self.visit)
+    let elements = self.visit(node.elements)
     return DeclSyntax(EnumCaseDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndElements, elements: elements))
   }
   
   open override func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndEnumKeyword = node.unexpectedBetweenModifiersAndEnumKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let enumKeyword = self.visit(node.enumKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenEnumKeywordAndIdentifier = node.unexpectedBetweenEnumKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndGenericParameters = node.unexpectedBetweenIdentifierAndGenericParameters.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameters = node.genericParameters.map(self.visit)?.cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParametersAndInheritanceClause = node.unexpectedBetweenGenericParametersAndInheritanceClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritanceClause = node.inheritanceClause.map(self.visit)?.cast(TypeInheritanceClauseSyntax.self)
-    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let members = self.visit(node.members).cast(MemberDeclBlockSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndEnumKeyword = node.unexpectedBetweenModifiersAndEnumKeyword.map(self.visit)
+    let enumKeyword = self.visit(node.enumKeyword)
+    let unexpectedBetweenEnumKeywordAndIdentifier = node.unexpectedBetweenEnumKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndGenericParameters = node.unexpectedBetweenIdentifierAndGenericParameters.map(self.visit)
+    let genericParameters = node.genericParameters.map(self.visit)
+    let unexpectedBetweenGenericParametersAndInheritanceClause = node.unexpectedBetweenGenericParametersAndInheritanceClause.map(self.visit)
+    let inheritanceClause = node.inheritanceClause.map(self.visit)
+    let unexpectedBetweenInheritanceClauseAndGenericWhereClause = node.unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndMembers = node.unexpectedBetweenGenericWhereClauseAndMembers.map(self.visit)
+    let members = self.visit(node.members)
     return DeclSyntax(EnumDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndEnumKeyword, enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers, members: members))
   }
   
   open override func visit(_ node: OperatorDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndOperatorKeyword = node.unexpectedBetweenModifiersAndOperatorKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let operatorKeyword = self.visit(node.operatorKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenOperatorKeywordAndIdentifier = node.unexpectedBetweenOperatorKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes = node.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let operatorPrecedenceAndTypes = node.operatorPrecedenceAndTypes.map(self.visit)?.cast(OperatorPrecedenceAndTypesSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndOperatorKeyword = node.unexpectedBetweenModifiersAndOperatorKeyword.map(self.visit)
+    let operatorKeyword = self.visit(node.operatorKeyword)
+    let unexpectedBetweenOperatorKeywordAndIdentifier = node.unexpectedBetweenOperatorKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes = node.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes.map(self.visit)
+    let operatorPrecedenceAndTypes = node.operatorPrecedenceAndTypes.map(self.visit)
     return DeclSyntax(OperatorDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndOperatorKeyword, operatorKeyword: operatorKeyword, unexpectedBetweenOperatorKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, operatorPrecedenceAndTypes: operatorPrecedenceAndTypes))
   }
   
-  open override func visit(_ node: DesignatedTypeListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(DesignatedTypeElementSyntax.self)
+  open override func visit(_ node: DesignatedTypeListSyntax) -> DesignatedTypeListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(DesignatedTypeListSyntax(formattedChildren))
+    return DesignatedTypeListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: DesignatedTypeElementSyntax) -> Syntax {
-    let unexpectedBeforeLeadingComma = node.unexpectedBeforeLeadingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leadingComma = self.visit(node.leadingComma).cast(TokenSyntax.self)
-    let unexpectedBetweenLeadingCommaAndName = node.unexpectedBetweenLeadingCommaAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    return Syntax(DesignatedTypeElementSyntax(unexpectedBeforeLeadingComma, leadingComma: leadingComma, unexpectedBetweenLeadingCommaAndName, name: name))
+  open override func visit(_ node: DesignatedTypeElementSyntax) -> DesignatedTypeElementSyntax {
+    let unexpectedBeforeLeadingComma = node.unexpectedBeforeLeadingComma.map(self.visit)
+    let leadingComma = self.visit(node.leadingComma)
+    let unexpectedBetweenLeadingCommaAndName = node.unexpectedBetweenLeadingCommaAndName.map(self.visit)
+    let name = self.visit(node.name)
+    return DesignatedTypeElementSyntax(unexpectedBeforeLeadingComma, leadingComma: leadingComma, unexpectedBetweenLeadingCommaAndName, name: name)
   }
   
-  open override func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> Syntax {
-    let unexpectedBeforeColon = node.unexpectedBeforeColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndPrecedenceGroup = node.unexpectedBetweenColonAndPrecedenceGroup.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let precedenceGroup = self.visit(node.precedenceGroup).cast(TokenSyntax.self)
-    let unexpectedBetweenPrecedenceGroupAndDesignatedTypes = node.unexpectedBetweenPrecedenceGroupAndDesignatedTypes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let designatedTypes = self.visit(node.designatedTypes).cast(DesignatedTypeListSyntax.self)
-    return Syntax(OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndPrecedenceGroup, precedenceGroup: precedenceGroup, unexpectedBetweenPrecedenceGroupAndDesignatedTypes, designatedTypes: designatedTypes))
+  open override func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
+    let unexpectedBeforeColon = node.unexpectedBeforeColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndPrecedenceGroup = node.unexpectedBetweenColonAndPrecedenceGroup.map(self.visit)
+    let precedenceGroup = self.visit(node.precedenceGroup)
+    let unexpectedBetweenPrecedenceGroupAndDesignatedTypes = node.unexpectedBetweenPrecedenceGroupAndDesignatedTypes.map(self.visit)
+    let designatedTypes = self.visit(node.designatedTypes)
+    return OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndPrecedenceGroup, precedenceGroup: precedenceGroup, unexpectedBetweenPrecedenceGroupAndDesignatedTypes, designatedTypes: designatedTypes)
   }
   
   open override func visit(_ node: PrecedenceGroupDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let modifiers = node.modifiers.map(self.visit)?.cast(ModifierListSyntax.self)
-    let unexpectedBetweenModifiersAndPrecedencegroupKeyword = node.unexpectedBetweenModifiersAndPrecedencegroupKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let precedencegroupKeyword = self.visit(node.precedencegroupKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenPrecedencegroupKeywordAndIdentifier = node.unexpectedBetweenPrecedencegroupKeywordAndIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
-    let unexpectedBetweenIdentifierAndLeftBrace = node.unexpectedBetweenIdentifierAndLeftBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBrace = self.visit(node.leftBrace).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBraceAndGroupAttributes = node.unexpectedBetweenLeftBraceAndGroupAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let groupAttributes = self.visit(node.groupAttributes).cast(PrecedenceGroupAttributeListSyntax.self)
-    let unexpectedBetweenGroupAttributesAndRightBrace = node.unexpectedBetweenGroupAttributesAndRightBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightBrace = self.visit(node.rightBrace).cast(TokenSyntax.self)
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndModifiers = node.unexpectedBetweenAttributesAndModifiers.map(self.visit)
+    let modifiers = node.modifiers.map(self.visit)
+    let unexpectedBetweenModifiersAndPrecedencegroupKeyword = node.unexpectedBetweenModifiersAndPrecedencegroupKeyword.map(self.visit)
+    let precedencegroupKeyword = self.visit(node.precedencegroupKeyword)
+    let unexpectedBetweenPrecedencegroupKeywordAndIdentifier = node.unexpectedBetweenPrecedencegroupKeywordAndIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
+    let unexpectedBetweenIdentifierAndLeftBrace = node.unexpectedBetweenIdentifierAndLeftBrace.map(self.visit)
+    let leftBrace = self.visit(node.leftBrace)
+    let unexpectedBetweenLeftBraceAndGroupAttributes = node.unexpectedBetweenLeftBraceAndGroupAttributes.map(self.visit)
+    let groupAttributes = self.visit(node.groupAttributes)
+    let unexpectedBetweenGroupAttributesAndRightBrace = node.unexpectedBetweenGroupAttributesAndRightBrace.map(self.visit)
+    let rightBrace = self.visit(node.rightBrace)
     return DeclSyntax(PrecedenceGroupDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndPrecedencegroupKeyword, precedencegroupKeyword: precedencegroupKeyword, unexpectedBetweenPrecedencegroupKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndGroupAttributes, groupAttributes: groupAttributes, unexpectedBetweenGroupAttributesAndRightBrace, rightBrace: rightBrace))
   }
   
-  open override func visit(_ node: PrecedenceGroupAttributeListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(Syntax.self)
+  open override func visit(_ node: PrecedenceGroupAttributeListSyntax) -> PrecedenceGroupAttributeListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(PrecedenceGroupAttributeListSyntax(formattedChildren))
+    return PrecedenceGroupAttributeListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: PrecedenceGroupRelationSyntax) -> Syntax {
-    let unexpectedBeforeHigherThanOrLowerThan = node.unexpectedBeforeHigherThanOrLowerThan.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let higherThanOrLowerThan = self.visit(node.higherThanOrLowerThan).cast(TokenSyntax.self)
-    let unexpectedBetweenHigherThanOrLowerThanAndColon = node.unexpectedBetweenHigherThanOrLowerThanAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndOtherNames = node.unexpectedBetweenColonAndOtherNames.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let otherNames = self.visit(node.otherNames).cast(PrecedenceGroupNameListSyntax.self)
-    return Syntax(PrecedenceGroupRelationSyntax(unexpectedBeforeHigherThanOrLowerThan, higherThanOrLowerThan: higherThanOrLowerThan, unexpectedBetweenHigherThanOrLowerThanAndColon, colon: colon, unexpectedBetweenColonAndOtherNames, otherNames: otherNames))
+  open override func visit(_ node: PrecedenceGroupRelationSyntax) -> PrecedenceGroupRelationSyntax {
+    let unexpectedBeforeHigherThanOrLowerThan = node.unexpectedBeforeHigherThanOrLowerThan.map(self.visit)
+    let higherThanOrLowerThan = self.visit(node.higherThanOrLowerThan)
+    let unexpectedBetweenHigherThanOrLowerThanAndColon = node.unexpectedBetweenHigherThanOrLowerThanAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndOtherNames = node.unexpectedBetweenColonAndOtherNames.map(self.visit)
+    let otherNames = self.visit(node.otherNames)
+    return PrecedenceGroupRelationSyntax(unexpectedBeforeHigherThanOrLowerThan, higherThanOrLowerThan: higherThanOrLowerThan, unexpectedBetweenHigherThanOrLowerThanAndColon, colon: colon, unexpectedBetweenColonAndOtherNames, otherNames: otherNames)
   }
   
-  open override func visit(_ node: PrecedenceGroupNameListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(PrecedenceGroupNameElementSyntax.self)
+  open override func visit(_ node: PrecedenceGroupNameListSyntax) -> PrecedenceGroupNameListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(PrecedenceGroupNameListSyntax(formattedChildren))
+    return PrecedenceGroupNameListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: PrecedenceGroupNameElementSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndTrailingComma = node.unexpectedBetweenNameAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(PrecedenceGroupNameElementSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameElementSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndTrailingComma = node.unexpectedBetweenNameAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return PrecedenceGroupNameElementSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: PrecedenceGroupAssignmentSyntax) -> Syntax {
-    let unexpectedBeforeAssignmentKeyword = node.unexpectedBeforeAssignmentKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let assignmentKeyword = self.visit(node.assignmentKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenAssignmentKeywordAndColon = node.unexpectedBetweenAssignmentKeywordAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndFlag = node.unexpectedBetweenColonAndFlag.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let flag = self.visit(node.flag).cast(TokenSyntax.self)
-    return Syntax(PrecedenceGroupAssignmentSyntax(unexpectedBeforeAssignmentKeyword, assignmentKeyword: assignmentKeyword, unexpectedBetweenAssignmentKeywordAndColon, colon: colon, unexpectedBetweenColonAndFlag, flag: flag))
+  open override func visit(_ node: PrecedenceGroupAssignmentSyntax) -> PrecedenceGroupAssignmentSyntax {
+    let unexpectedBeforeAssignmentKeyword = node.unexpectedBeforeAssignmentKeyword.map(self.visit)
+    let assignmentKeyword = self.visit(node.assignmentKeyword)
+    let unexpectedBetweenAssignmentKeywordAndColon = node.unexpectedBetweenAssignmentKeywordAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndFlag = node.unexpectedBetweenColonAndFlag.map(self.visit)
+    let flag = self.visit(node.flag)
+    return PrecedenceGroupAssignmentSyntax(unexpectedBeforeAssignmentKeyword, assignmentKeyword: assignmentKeyword, unexpectedBetweenAssignmentKeywordAndColon, colon: colon, unexpectedBetweenColonAndFlag, flag: flag)
   }
   
-  open override func visit(_ node: PrecedenceGroupAssociativitySyntax) -> Syntax {
-    let unexpectedBeforeAssociativityKeyword = node.unexpectedBeforeAssociativityKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let associativityKeyword = self.visit(node.associativityKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenAssociativityKeywordAndColon = node.unexpectedBetweenAssociativityKeywordAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndValue = node.unexpectedBetweenColonAndValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let value = self.visit(node.value).cast(TokenSyntax.self)
-    return Syntax(PrecedenceGroupAssociativitySyntax(unexpectedBeforeAssociativityKeyword, associativityKeyword: associativityKeyword, unexpectedBetweenAssociativityKeywordAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value))
+  open override func visit(_ node: PrecedenceGroupAssociativitySyntax) -> PrecedenceGroupAssociativitySyntax {
+    let unexpectedBeforeAssociativityKeyword = node.unexpectedBeforeAssociativityKeyword.map(self.visit)
+    let associativityKeyword = self.visit(node.associativityKeyword)
+    let unexpectedBetweenAssociativityKeywordAndColon = node.unexpectedBetweenAssociativityKeywordAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndValue = node.unexpectedBetweenColonAndValue.map(self.visit)
+    let value = self.visit(node.value)
+    return PrecedenceGroupAssociativitySyntax(unexpectedBeforeAssociativityKeyword, associativityKeyword: associativityKeyword, unexpectedBetweenAssociativityKeywordAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value)
   }
   
   open override func visit(_ node: MacroExpansionDeclSyntax) -> DeclSyntax {
-    let unexpectedBeforePoundToken = node.unexpectedBeforePoundToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundToken = self.visit(node.poundToken).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundTokenAndMacro = node.unexpectedBetweenPoundTokenAndMacro.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let macro = self.visit(node.macro).cast(TokenSyntax.self)
-    let unexpectedBetweenMacroAndLeftParen = node.unexpectedBetweenMacroAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argumentList = self.visit(node.argumentList).cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforePoundToken = node.unexpectedBeforePoundToken.map(self.visit)
+    let poundToken = self.visit(node.poundToken)
+    let unexpectedBetweenPoundTokenAndMacro = node.unexpectedBetweenPoundTokenAndMacro.map(self.visit)
+    let macro = self.visit(node.macro)
+    let unexpectedBetweenMacroAndLeftParen = node.unexpectedBetweenMacroAndLeftParen.map(self.visit)
+    let leftParen = node.leftParen.map(self.visit)
+    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)
+    let argumentList = self.visit(node.argumentList)
+    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)
+    let rightParen = node.rightParen.map(self.visit)
+    let unexpectedBetweenRightParenAndTrailingClosure = node.unexpectedBetweenRightParenAndTrailingClosure.map(self.visit)
     let trailingClosure = node.trailingClosure.map(self.visit)?.cast(ClosureExprSyntax.self)
-    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)?.cast(MultipleTrailingClosureElementListSyntax.self)
+    let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = node.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(self.visit)
+    let additionalTrailingClosures = node.additionalTrailingClosures.map(self.visit)
     return DeclSyntax(MacroExpansionDeclSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures))
   }
   
-  open override func visit(_ node: TokenListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(TokenSyntax.self)
+  open override func visit(_ node: TokenListSyntax) -> TokenListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(TokenListSyntax(formattedChildren))
+    return TokenListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: NonEmptyTokenListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(TokenSyntax.self)
+  open override func visit(_ node: NonEmptyTokenListSyntax) -> NonEmptyTokenListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(NonEmptyTokenListSyntax(formattedChildren))
+    return NonEmptyTokenListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: CustomAttributeSyntax) -> Syntax {
-    let unexpectedBeforeAtSignToken = node.unexpectedBeforeAtSignToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let atSignToken = self.visit(node.atSignToken).cast(TokenSyntax.self)
-    let unexpectedBetweenAtSignTokenAndAttributeName = node.unexpectedBetweenAtSignTokenAndAttributeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributeName = self.visit(node.attributeName).cast(TypeSyntax.self)
-    let unexpectedBetweenAttributeNameAndLeftParen = node.unexpectedBetweenAttributeNameAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argumentList = node.argumentList.map(self.visit)?.cast(TupleExprElementListSyntax.self)
-    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(CustomAttributeSyntax(unexpectedBeforeAtSignToken, atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName, attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: CustomAttributeSyntax) -> CustomAttributeSyntax {
+    let unexpectedBeforeAtSignToken = node.unexpectedBeforeAtSignToken.map(self.visit)
+    let atSignToken = self.visit(node.atSignToken)
+    let unexpectedBetweenAtSignTokenAndAttributeName = node.unexpectedBetweenAtSignTokenAndAttributeName.map(self.visit)
+    let attributeName = self.visit(node.attributeName)
+    let unexpectedBetweenAttributeNameAndLeftParen = node.unexpectedBetweenAttributeNameAndLeftParen.map(self.visit)
+    let leftParen = node.leftParen.map(self.visit)
+    let unexpectedBetweenLeftParenAndArgumentList = node.unexpectedBetweenLeftParenAndArgumentList.map(self.visit)
+    let argumentList = node.argumentList.map(self.visit)
+    let unexpectedBetweenArgumentListAndRightParen = node.unexpectedBetweenArgumentListAndRightParen.map(self.visit)
+    let rightParen = node.rightParen.map(self.visit)
+    return CustomAttributeSyntax(unexpectedBeforeAtSignToken, atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName, attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: AttributeSyntax) -> Syntax {
-    let unexpectedBeforeAtSignToken = node.unexpectedBeforeAtSignToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let atSignToken = self.visit(node.atSignToken).cast(TokenSyntax.self)
-    let unexpectedBetweenAtSignTokenAndAttributeName = node.unexpectedBetweenAtSignTokenAndAttributeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributeName = self.visit(node.attributeName).cast(TokenSyntax.self)
-    let unexpectedBetweenAttributeNameAndLeftParen = node.unexpectedBetweenAttributeNameAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArgument = node.unexpectedBetweenLeftParenAndArgument.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argument = node.argument.map(self.visit)?.cast(Syntax.self)
-    let unexpectedBetweenArgumentAndRightParen = node.unexpectedBetweenArgumentAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenRightParenAndTokenList = node.unexpectedBetweenRightParenAndTokenList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let tokenList = node.tokenList.map(self.visit)?.cast(TokenListSyntax.self)
-    return Syntax(AttributeSyntax(unexpectedBeforeAtSignToken, atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName, attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgument, argument: argument, unexpectedBetweenArgumentAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTokenList, tokenList: tokenList))
+  open override func visit(_ node: AttributeSyntax) -> AttributeSyntax {
+    let unexpectedBeforeAtSignToken = node.unexpectedBeforeAtSignToken.map(self.visit)
+    let atSignToken = self.visit(node.atSignToken)
+    let unexpectedBetweenAtSignTokenAndAttributeName = node.unexpectedBetweenAtSignTokenAndAttributeName.map(self.visit)
+    let attributeName = self.visit(node.attributeName)
+    let unexpectedBetweenAttributeNameAndLeftParen = node.unexpectedBetweenAttributeNameAndLeftParen.map(self.visit)
+    let leftParen = node.leftParen.map(self.visit)
+    let unexpectedBetweenLeftParenAndArgument = node.unexpectedBetweenLeftParenAndArgument.map(self.visit)
+    let argument = node.argument.map(self.visit)
+    let unexpectedBetweenArgumentAndRightParen = node.unexpectedBetweenArgumentAndRightParen.map(self.visit)
+    let rightParen = node.rightParen.map(self.visit)
+    let unexpectedBetweenRightParenAndTokenList = node.unexpectedBetweenRightParenAndTokenList.map(self.visit)
+    let tokenList = node.tokenList.map(self.visit)
+    return AttributeSyntax(unexpectedBeforeAtSignToken, atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName, attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgument, argument: argument, unexpectedBetweenArgumentAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTokenList, tokenList: tokenList)
   }
   
-  open override func visit(_ node: AttributeListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(Syntax.self)
+  open override func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(AttributeListSyntax(formattedChildren))
+    return AttributeListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: SpecializeAttributeSpecListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(Syntax.self)
+  open override func visit(_ node: SpecializeAttributeSpecListSyntax) -> SpecializeAttributeSpecListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(SpecializeAttributeSpecListSyntax(formattedChildren))
+    return SpecializeAttributeSpecListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: AvailabilityEntrySyntax) -> Syntax {
-    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = self.visit(node.label).cast(TokenSyntax.self)
-    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndAvailabilityList = node.unexpectedBetweenColonAndAvailabilityList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let availabilityList = self.visit(node.availabilityList).cast(AvailabilitySpecListSyntax.self)
-    let unexpectedBetweenAvailabilityListAndSemicolon = node.unexpectedBetweenAvailabilityListAndSemicolon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let semicolon = self.visit(node.semicolon).cast(TokenSyntax.self)
-    return Syntax(AvailabilityEntrySyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndAvailabilityList, availabilityList: availabilityList, unexpectedBetweenAvailabilityListAndSemicolon, semicolon: semicolon))
+  open override func visit(_ node: AvailabilityEntrySyntax) -> AvailabilityEntrySyntax {
+    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)
+    let label = self.visit(node.label)
+    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndAvailabilityList = node.unexpectedBetweenColonAndAvailabilityList.map(self.visit)
+    let availabilityList = self.visit(node.availabilityList)
+    let unexpectedBetweenAvailabilityListAndSemicolon = node.unexpectedBetweenAvailabilityListAndSemicolon.map(self.visit)
+    let semicolon = self.visit(node.semicolon)
+    return AvailabilityEntrySyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndAvailabilityList, availabilityList: availabilityList, unexpectedBetweenAvailabilityListAndSemicolon, semicolon: semicolon)
   }
   
-  open override func visit(_ node: LabeledSpecializeEntrySyntax) -> Syntax {
-    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = self.visit(node.label).cast(TokenSyntax.self)
-    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndValue = node.unexpectedBetweenColonAndValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let value = self.visit(node.value).cast(TokenSyntax.self)
-    let unexpectedBetweenValueAndTrailingComma = node.unexpectedBetweenValueAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(LabeledSpecializeEntrySyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: LabeledSpecializeEntrySyntax) -> LabeledSpecializeEntrySyntax {
+    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)
+    let label = self.visit(node.label)
+    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndValue = node.unexpectedBetweenColonAndValue.map(self.visit)
+    let value = self.visit(node.value)
+    let unexpectedBetweenValueAndTrailingComma = node.unexpectedBetweenValueAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return LabeledSpecializeEntrySyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: TargetFunctionEntrySyntax) -> Syntax {
-    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = self.visit(node.label).cast(TokenSyntax.self)
-    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndDeclname = node.unexpectedBetweenColonAndDeclname.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declname = self.visit(node.declname).cast(DeclNameSyntax.self)
-    let unexpectedBetweenDeclnameAndTrailingComma = node.unexpectedBetweenDeclnameAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(TargetFunctionEntrySyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname, declname: declname, unexpectedBetweenDeclnameAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: TargetFunctionEntrySyntax) -> TargetFunctionEntrySyntax {
+    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)
+    let label = self.visit(node.label)
+    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndDeclname = node.unexpectedBetweenColonAndDeclname.map(self.visit)
+    let declname = self.visit(node.declname)
+    let unexpectedBetweenDeclnameAndTrailingComma = node.unexpectedBetweenDeclnameAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return TargetFunctionEntrySyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname, declname: declname, unexpectedBetweenDeclnameAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: NamedAttributeStringArgumentSyntax) -> Syntax {
-    let unexpectedBeforeNameTok = node.unexpectedBeforeNameTok.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let nameTok = self.visit(node.nameTok).cast(TokenSyntax.self)
-    let unexpectedBetweenNameTokAndColon = node.unexpectedBetweenNameTokAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndStringOrDeclname = node.unexpectedBetweenColonAndStringOrDeclname.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let stringOrDeclname = self.visit(node.stringOrDeclname).cast(Syntax.self)
-    return Syntax(NamedAttributeStringArgumentSyntax(unexpectedBeforeNameTok, nameTok: nameTok, unexpectedBetweenNameTokAndColon, colon: colon, unexpectedBetweenColonAndStringOrDeclname, stringOrDeclname: stringOrDeclname))
+  open override func visit(_ node: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
+    let unexpectedBeforeNameTok = node.unexpectedBeforeNameTok.map(self.visit)
+    let nameTok = self.visit(node.nameTok)
+    let unexpectedBetweenNameTokAndColon = node.unexpectedBetweenNameTokAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndStringOrDeclname = node.unexpectedBetweenColonAndStringOrDeclname.map(self.visit)
+    let stringOrDeclname = self.visit(node.stringOrDeclname)
+    return NamedAttributeStringArgumentSyntax(unexpectedBeforeNameTok, nameTok: nameTok, unexpectedBetweenNameTokAndColon, colon: colon, unexpectedBetweenColonAndStringOrDeclname, stringOrDeclname: stringOrDeclname)
   }
   
-  open override func visit(_ node: DeclNameSyntax) -> Syntax {
-    let unexpectedBeforeDeclBaseName = node.unexpectedBeforeDeclBaseName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declBaseName = self.visit(node.declBaseName).cast(Syntax.self)
-    let unexpectedBetweenDeclBaseNameAndDeclNameArguments = node.unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declNameArguments = node.declNameArguments.map(self.visit)?.cast(DeclNameArgumentsSyntax.self)
-    return Syntax(DeclNameSyntax(unexpectedBeforeDeclBaseName, declBaseName: declBaseName, unexpectedBetweenDeclBaseNameAndDeclNameArguments, declNameArguments: declNameArguments))
+  open override func visit(_ node: DeclNameSyntax) -> DeclNameSyntax {
+    let unexpectedBeforeDeclBaseName = node.unexpectedBeforeDeclBaseName.map(self.visit)
+    let declBaseName = self.visit(node.declBaseName)
+    let unexpectedBetweenDeclBaseNameAndDeclNameArguments = node.unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(self.visit)
+    let declNameArguments = node.declNameArguments.map(self.visit)
+    return DeclNameSyntax(unexpectedBeforeDeclBaseName, declBaseName: declBaseName, unexpectedBetweenDeclBaseNameAndDeclNameArguments, declNameArguments: declNameArguments)
   }
   
-  open override func visit(_ node: ImplementsAttributeArgumentsSyntax) -> Syntax {
-    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = self.visit(node.type).cast(TypeSyntax.self)
-    let unexpectedBetweenTypeAndComma = node.unexpectedBetweenTypeAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = self.visit(node.comma).cast(TokenSyntax.self)
-    let unexpectedBetweenCommaAndDeclBaseName = node.unexpectedBetweenCommaAndDeclBaseName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declBaseName = self.visit(node.declBaseName).cast(TokenSyntax.self)
-    let unexpectedBetweenDeclBaseNameAndDeclNameArguments = node.unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declNameArguments = node.declNameArguments.map(self.visit)?.cast(DeclNameArgumentsSyntax.self)
-    return Syntax(ImplementsAttributeArgumentsSyntax(unexpectedBeforeType, type: type, unexpectedBetweenTypeAndComma, comma: comma, unexpectedBetweenCommaAndDeclBaseName, declBaseName: declBaseName, unexpectedBetweenDeclBaseNameAndDeclNameArguments, declNameArguments: declNameArguments))
+  open override func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ImplementsAttributeArgumentsSyntax {
+    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)
+    let type = self.visit(node.type)
+    let unexpectedBetweenTypeAndComma = node.unexpectedBetweenTypeAndComma.map(self.visit)
+    let comma = self.visit(node.comma)
+    let unexpectedBetweenCommaAndDeclBaseName = node.unexpectedBetweenCommaAndDeclBaseName.map(self.visit)
+    let declBaseName = self.visit(node.declBaseName)
+    let unexpectedBetweenDeclBaseNameAndDeclNameArguments = node.unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(self.visit)
+    let declNameArguments = node.declNameArguments.map(self.visit)
+    return ImplementsAttributeArgumentsSyntax(unexpectedBeforeType, type: type, unexpectedBetweenTypeAndComma, comma: comma, unexpectedBetweenCommaAndDeclBaseName, declBaseName: declBaseName, unexpectedBetweenDeclBaseNameAndDeclNameArguments, declNameArguments: declNameArguments)
   }
   
-  open override func visit(_ node: ObjCSelectorPieceSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = node.name.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndColon = node.unexpectedBetweenNameAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(ObjCSelectorPieceSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndColon, colon: colon))
+  open override func visit(_ node: ObjCSelectorPieceSyntax) -> ObjCSelectorPieceSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = node.name.map(self.visit)
+    let unexpectedBetweenNameAndColon = node.unexpectedBetweenNameAndColon.map(self.visit)
+    let colon = node.colon.map(self.visit)
+    return ObjCSelectorPieceSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndColon, colon: colon)
   }
   
-  open override func visit(_ node: ObjCSelectorSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(ObjCSelectorPieceSyntax.self)
+  open override func visit(_ node: ObjCSelectorSyntax) -> ObjCSelectorSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ObjCSelectorSyntax(formattedChildren))
+    return ObjCSelectorSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> Syntax {
-    let unexpectedBeforeDiffKind = node.unexpectedBeforeDiffKind.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let diffKind = node.diffKind.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenDiffKindAndDiffKindComma = node.unexpectedBetweenDiffKindAndDiffKindComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let diffKindComma = node.diffKindComma.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenDiffKindCommaAndDiffParams = node.unexpectedBetweenDiffKindCommaAndDiffParams.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let diffParams = node.diffParams.map(self.visit)?.cast(DifferentiabilityParamsClauseSyntax.self)
-    let unexpectedBetweenDiffParamsAndDiffParamsComma = node.unexpectedBetweenDiffParamsAndDiffParamsComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let diffParamsComma = node.diffParamsComma.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenDiffParamsCommaAndWhereClause = node.unexpectedBetweenDiffParamsCommaAndWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whereClause = node.whereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    return Syntax(DifferentiableAttributeArgumentsSyntax(unexpectedBeforeDiffKind, diffKind: diffKind, unexpectedBetweenDiffKindAndDiffKindComma, diffKindComma: diffKindComma, unexpectedBetweenDiffKindCommaAndDiffParams, diffParams: diffParams, unexpectedBetweenDiffParamsAndDiffParamsComma, diffParamsComma: diffParamsComma, unexpectedBetweenDiffParamsCommaAndWhereClause, whereClause: whereClause))
+  open override func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> DifferentiableAttributeArgumentsSyntax {
+    let unexpectedBeforeDiffKind = node.unexpectedBeforeDiffKind.map(self.visit)
+    let diffKind = node.diffKind.map(self.visit)
+    let unexpectedBetweenDiffKindAndDiffKindComma = node.unexpectedBetweenDiffKindAndDiffKindComma.map(self.visit)
+    let diffKindComma = node.diffKindComma.map(self.visit)
+    let unexpectedBetweenDiffKindCommaAndDiffParams = node.unexpectedBetweenDiffKindCommaAndDiffParams.map(self.visit)
+    let diffParams = node.diffParams.map(self.visit)
+    let unexpectedBetweenDiffParamsAndDiffParamsComma = node.unexpectedBetweenDiffParamsAndDiffParamsComma.map(self.visit)
+    let diffParamsComma = node.diffParamsComma.map(self.visit)
+    let unexpectedBetweenDiffParamsCommaAndWhereClause = node.unexpectedBetweenDiffParamsCommaAndWhereClause.map(self.visit)
+    let whereClause = node.whereClause.map(self.visit)
+    return DifferentiableAttributeArgumentsSyntax(unexpectedBeforeDiffKind, diffKind: diffKind, unexpectedBetweenDiffKindAndDiffKindComma, diffKindComma: diffKindComma, unexpectedBetweenDiffKindCommaAndDiffParams, diffParams: diffParams, unexpectedBetweenDiffParamsAndDiffParamsComma, diffParamsComma: diffParamsComma, unexpectedBetweenDiffParamsCommaAndWhereClause, whereClause: whereClause)
   }
   
-  open override func visit(_ node: DifferentiabilityParamsClauseSyntax) -> Syntax {
-    let unexpectedBeforeWrtLabel = node.unexpectedBeforeWrtLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let wrtLabel = self.visit(node.wrtLabel).cast(TokenSyntax.self)
-    let unexpectedBetweenWrtLabelAndColon = node.unexpectedBetweenWrtLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndParameters = node.unexpectedBetweenColonAndParameters.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let parameters = self.visit(node.parameters).cast(Syntax.self)
-    return Syntax(DifferentiabilityParamsClauseSyntax(unexpectedBeforeWrtLabel, wrtLabel: wrtLabel, unexpectedBetweenWrtLabelAndColon, colon: colon, unexpectedBetweenColonAndParameters, parameters: parameters))
+  open override func visit(_ node: DifferentiabilityParamsClauseSyntax) -> DifferentiabilityParamsClauseSyntax {
+    let unexpectedBeforeWrtLabel = node.unexpectedBeforeWrtLabel.map(self.visit)
+    let wrtLabel = self.visit(node.wrtLabel)
+    let unexpectedBetweenWrtLabelAndColon = node.unexpectedBetweenWrtLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndParameters = node.unexpectedBetweenColonAndParameters.map(self.visit)
+    let parameters = self.visit(node.parameters)
+    return DifferentiabilityParamsClauseSyntax(unexpectedBeforeWrtLabel, wrtLabel: wrtLabel, unexpectedBetweenWrtLabelAndColon, colon: colon, unexpectedBetweenColonAndParameters, parameters: parameters)
   }
   
-  open override func visit(_ node: DifferentiabilityParamsSyntax) -> Syntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndDiffParams = node.unexpectedBetweenLeftParenAndDiffParams.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let diffParams = self.visit(node.diffParams).cast(DifferentiabilityParamListSyntax.self)
-    let unexpectedBetweenDiffParamsAndRightParen = node.unexpectedBetweenDiffParamsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(DifferentiabilityParamsSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndDiffParams, diffParams: diffParams, unexpectedBetweenDiffParamsAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: DifferentiabilityParamsSyntax) -> DifferentiabilityParamsSyntax {
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndDiffParams = node.unexpectedBetweenLeftParenAndDiffParams.map(self.visit)
+    let diffParams = self.visit(node.diffParams)
+    let unexpectedBetweenDiffParamsAndRightParen = node.unexpectedBetweenDiffParamsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return DifferentiabilityParamsSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndDiffParams, diffParams: diffParams, unexpectedBetweenDiffParamsAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: DifferentiabilityParamListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(DifferentiabilityParamSyntax.self)
+  open override func visit(_ node: DifferentiabilityParamListSyntax) -> DifferentiabilityParamListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(DifferentiabilityParamListSyntax(formattedChildren))
+    return DifferentiabilityParamListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: DifferentiabilityParamSyntax) -> Syntax {
-    let unexpectedBeforeParameter = node.unexpectedBeforeParameter.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let parameter = self.visit(node.parameter).cast(Syntax.self)
-    let unexpectedBetweenParameterAndTrailingComma = node.unexpectedBetweenParameterAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(DifferentiabilityParamSyntax(unexpectedBeforeParameter, parameter: parameter, unexpectedBetweenParameterAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: DifferentiabilityParamSyntax) -> DifferentiabilityParamSyntax {
+    let unexpectedBeforeParameter = node.unexpectedBeforeParameter.map(self.visit)
+    let parameter = self.visit(node.parameter)
+    let unexpectedBetweenParameterAndTrailingComma = node.unexpectedBetweenParameterAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return DifferentiabilityParamSyntax(unexpectedBeforeParameter, parameter: parameter, unexpectedBetweenParameterAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> Syntax {
-    let unexpectedBeforeOfLabel = node.unexpectedBeforeOfLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ofLabel = self.visit(node.ofLabel).cast(TokenSyntax.self)
-    let unexpectedBetweenOfLabelAndColon = node.unexpectedBetweenOfLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndOriginalDeclName = node.unexpectedBetweenColonAndOriginalDeclName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let originalDeclName = self.visit(node.originalDeclName).cast(QualifiedDeclNameSyntax.self)
-    let unexpectedBetweenOriginalDeclNameAndPeriod = node.unexpectedBetweenOriginalDeclNameAndPeriod.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let period = node.period.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenPeriodAndAccessorKind = node.unexpectedBetweenPeriodAndAccessorKind.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let accessorKind = node.accessorKind.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAccessorKindAndComma = node.unexpectedBetweenAccessorKindAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = node.comma.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenCommaAndDiffParams = node.unexpectedBetweenCommaAndDiffParams.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let diffParams = node.diffParams.map(self.visit)?.cast(DifferentiabilityParamsClauseSyntax.self)
-    return Syntax(DerivativeRegistrationAttributeArgumentsSyntax(unexpectedBeforeOfLabel, ofLabel: ofLabel, unexpectedBetweenOfLabelAndColon, colon: colon, unexpectedBetweenColonAndOriginalDeclName, originalDeclName: originalDeclName, unexpectedBetweenOriginalDeclNameAndPeriod, period: period, unexpectedBetweenPeriodAndAccessorKind, accessorKind: accessorKind, unexpectedBetweenAccessorKindAndComma, comma: comma, unexpectedBetweenCommaAndDiffParams, diffParams: diffParams))
+  open override func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let unexpectedBeforeOfLabel = node.unexpectedBeforeOfLabel.map(self.visit)
+    let ofLabel = self.visit(node.ofLabel)
+    let unexpectedBetweenOfLabelAndColon = node.unexpectedBetweenOfLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndOriginalDeclName = node.unexpectedBetweenColonAndOriginalDeclName.map(self.visit)
+    let originalDeclName = self.visit(node.originalDeclName)
+    let unexpectedBetweenOriginalDeclNameAndPeriod = node.unexpectedBetweenOriginalDeclNameAndPeriod.map(self.visit)
+    let period = node.period.map(self.visit)
+    let unexpectedBetweenPeriodAndAccessorKind = node.unexpectedBetweenPeriodAndAccessorKind.map(self.visit)
+    let accessorKind = node.accessorKind.map(self.visit)
+    let unexpectedBetweenAccessorKindAndComma = node.unexpectedBetweenAccessorKindAndComma.map(self.visit)
+    let comma = node.comma.map(self.visit)
+    let unexpectedBetweenCommaAndDiffParams = node.unexpectedBetweenCommaAndDiffParams.map(self.visit)
+    let diffParams = node.diffParams.map(self.visit)
+    return DerivativeRegistrationAttributeArgumentsSyntax(unexpectedBeforeOfLabel, ofLabel: ofLabel, unexpectedBetweenOfLabelAndColon, colon: colon, unexpectedBetweenColonAndOriginalDeclName, originalDeclName: originalDeclName, unexpectedBetweenOriginalDeclNameAndPeriod, period: period, unexpectedBetweenPeriodAndAccessorKind, accessorKind: accessorKind, unexpectedBetweenAccessorKindAndComma, comma: comma, unexpectedBetweenCommaAndDiffParams, diffParams: diffParams)
   }
   
-  open override func visit(_ node: QualifiedDeclNameSyntax) -> Syntax {
-    let unexpectedBeforeBaseType = node.unexpectedBeforeBaseType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let baseType = node.baseType.map(self.visit)?.cast(TypeSyntax.self)
-    let unexpectedBetweenBaseTypeAndDot = node.unexpectedBetweenBaseTypeAndDot.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let dot = node.dot.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenDotAndName = node.unexpectedBetweenDotAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndArguments = node.unexpectedBetweenNameAndArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arguments = node.arguments.map(self.visit)?.cast(DeclNameArgumentsSyntax.self)
-    return Syntax(QualifiedDeclNameSyntax(unexpectedBeforeBaseType, baseType: baseType, unexpectedBetweenBaseTypeAndDot, dot: dot, unexpectedBetweenDotAndName, name: name, unexpectedBetweenNameAndArguments, arguments: arguments))
+  open override func visit(_ node: QualifiedDeclNameSyntax) -> QualifiedDeclNameSyntax {
+    let unexpectedBeforeBaseType = node.unexpectedBeforeBaseType.map(self.visit)
+    let baseType = node.baseType.map(self.visit)
+    let unexpectedBetweenBaseTypeAndDot = node.unexpectedBetweenBaseTypeAndDot.map(self.visit)
+    let dot = node.dot.map(self.visit)
+    let unexpectedBetweenDotAndName = node.unexpectedBetweenDotAndName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndArguments = node.unexpectedBetweenNameAndArguments.map(self.visit)
+    let arguments = node.arguments.map(self.visit)
+    return QualifiedDeclNameSyntax(unexpectedBeforeBaseType, baseType: baseType, unexpectedBetweenBaseTypeAndDot, dot: dot, unexpectedBetweenDotAndName, name: name, unexpectedBetweenNameAndArguments, arguments: arguments)
   }
   
-  open override func visit(_ node: FunctionDeclNameSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(Syntax.self)
-    let unexpectedBetweenNameAndArguments = node.unexpectedBetweenNameAndArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arguments = node.arguments.map(self.visit)?.cast(DeclNameArgumentsSyntax.self)
-    return Syntax(FunctionDeclNameSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndArguments, arguments: arguments))
+  open override func visit(_ node: FunctionDeclNameSyntax) -> FunctionDeclNameSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndArguments = node.unexpectedBetweenNameAndArguments.map(self.visit)
+    let arguments = node.arguments.map(self.visit)
+    return FunctionDeclNameSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndArguments, arguments: arguments)
   }
   
-  open override func visit(_ node: BackDeployAttributeSpecListSyntax) -> Syntax {
-    let unexpectedBeforeBeforeLabel = node.unexpectedBeforeBeforeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let beforeLabel = self.visit(node.beforeLabel).cast(TokenSyntax.self)
-    let unexpectedBetweenBeforeLabelAndColon = node.unexpectedBetweenBeforeLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndVersionList = node.unexpectedBetweenColonAndVersionList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let versionList = self.visit(node.versionList).cast(BackDeployVersionListSyntax.self)
-    return Syntax(BackDeployAttributeSpecListSyntax(unexpectedBeforeBeforeLabel, beforeLabel: beforeLabel, unexpectedBetweenBeforeLabelAndColon, colon: colon, unexpectedBetweenColonAndVersionList, versionList: versionList))
+  open override func visit(_ node: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
+    let unexpectedBeforeBeforeLabel = node.unexpectedBeforeBeforeLabel.map(self.visit)
+    let beforeLabel = self.visit(node.beforeLabel)
+    let unexpectedBetweenBeforeLabelAndColon = node.unexpectedBetweenBeforeLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndVersionList = node.unexpectedBetweenColonAndVersionList.map(self.visit)
+    let versionList = self.visit(node.versionList)
+    return BackDeployAttributeSpecListSyntax(unexpectedBeforeBeforeLabel, beforeLabel: beforeLabel, unexpectedBetweenBeforeLabelAndColon, colon: colon, unexpectedBetweenColonAndVersionList, versionList: versionList)
   }
   
-  open override func visit(_ node: BackDeployVersionListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(BackDeployVersionArgumentSyntax.self)
+  open override func visit(_ node: BackDeployVersionListSyntax) -> BackDeployVersionListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(BackDeployVersionListSyntax(formattedChildren))
+    return BackDeployVersionListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: BackDeployVersionArgumentSyntax) -> Syntax {
-    let unexpectedBeforeAvailabilityVersionRestriction = node.unexpectedBeforeAvailabilityVersionRestriction.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let availabilityVersionRestriction = self.visit(node.availabilityVersionRestriction).cast(AvailabilityVersionRestrictionSyntax.self)
-    let unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma = node.unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(BackDeployVersionArgumentSyntax(unexpectedBeforeAvailabilityVersionRestriction, availabilityVersionRestriction: availabilityVersionRestriction, unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: BackDeployVersionArgumentSyntax) -> BackDeployVersionArgumentSyntax {
+    let unexpectedBeforeAvailabilityVersionRestriction = node.unexpectedBeforeAvailabilityVersionRestriction.map(self.visit)
+    let availabilityVersionRestriction = self.visit(node.availabilityVersionRestriction)
+    let unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma = node.unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return BackDeployVersionArgumentSyntax(unexpectedBeforeAvailabilityVersionRestriction, availabilityVersionRestriction: availabilityVersionRestriction, unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> Syntax {
-    let unexpectedBeforeMangledName = node.unexpectedBeforeMangledName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let mangledName = self.visit(node.mangledName).cast(TokenSyntax.self)
-    let unexpectedBetweenMangledNameAndComma = node.unexpectedBetweenMangledNameAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = self.visit(node.comma).cast(TokenSyntax.self)
-    let unexpectedBetweenCommaAndOrdinal = node.unexpectedBetweenCommaAndOrdinal.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ordinal = self.visit(node.ordinal).cast(TokenSyntax.self)
-    return Syntax(OpaqueReturnTypeOfAttributeArgumentsSyntax(unexpectedBeforeMangledName, mangledName: mangledName, unexpectedBetweenMangledNameAndComma, comma: comma, unexpectedBetweenCommaAndOrdinal, ordinal: ordinal))
+  open override func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let unexpectedBeforeMangledName = node.unexpectedBeforeMangledName.map(self.visit)
+    let mangledName = self.visit(node.mangledName)
+    let unexpectedBetweenMangledNameAndComma = node.unexpectedBetweenMangledNameAndComma.map(self.visit)
+    let comma = self.visit(node.comma)
+    let unexpectedBetweenCommaAndOrdinal = node.unexpectedBetweenCommaAndOrdinal.map(self.visit)
+    let ordinal = self.visit(node.ordinal)
+    return OpaqueReturnTypeOfAttributeArgumentsSyntax(unexpectedBeforeMangledName, mangledName: mangledName, unexpectedBetweenMangledNameAndComma, comma: comma, unexpectedBetweenCommaAndOrdinal, ordinal: ordinal)
   }
   
-  open override func visit(_ node: ConventionAttributeArgumentsSyntax) -> Syntax {
-    let unexpectedBeforeConventionLabel = node.unexpectedBeforeConventionLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let conventionLabel = self.visit(node.conventionLabel).cast(TokenSyntax.self)
-    let unexpectedBetweenConventionLabelAndComma = node.unexpectedBetweenConventionLabelAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = node.comma.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenCommaAndCTypeLabel = node.unexpectedBetweenCommaAndCTypeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let cTypeLabel = node.cTypeLabel.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenCTypeLabelAndColon = node.unexpectedBetweenCTypeLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndCTypeString = node.unexpectedBetweenColonAndCTypeString.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let cTypeString = node.cTypeString.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(ConventionAttributeArgumentsSyntax(unexpectedBeforeConventionLabel, conventionLabel: conventionLabel, unexpectedBetweenConventionLabelAndComma, comma: comma, unexpectedBetweenCommaAndCTypeLabel, cTypeLabel: cTypeLabel, unexpectedBetweenCTypeLabelAndColon, colon: colon, unexpectedBetweenColonAndCTypeString, cTypeString: cTypeString))
+  open override func visit(_ node: ConventionAttributeArgumentsSyntax) -> ConventionAttributeArgumentsSyntax {
+    let unexpectedBeforeConventionLabel = node.unexpectedBeforeConventionLabel.map(self.visit)
+    let conventionLabel = self.visit(node.conventionLabel)
+    let unexpectedBetweenConventionLabelAndComma = node.unexpectedBetweenConventionLabelAndComma.map(self.visit)
+    let comma = node.comma.map(self.visit)
+    let unexpectedBetweenCommaAndCTypeLabel = node.unexpectedBetweenCommaAndCTypeLabel.map(self.visit)
+    let cTypeLabel = node.cTypeLabel.map(self.visit)
+    let unexpectedBetweenCTypeLabelAndColon = node.unexpectedBetweenCTypeLabelAndColon.map(self.visit)
+    let colon = node.colon.map(self.visit)
+    let unexpectedBetweenColonAndCTypeString = node.unexpectedBetweenColonAndCTypeString.map(self.visit)
+    let cTypeString = node.cTypeString.map(self.visit)
+    return ConventionAttributeArgumentsSyntax(unexpectedBeforeConventionLabel, conventionLabel: conventionLabel, unexpectedBetweenConventionLabelAndComma, comma: comma, unexpectedBetweenCommaAndCTypeLabel, cTypeLabel: cTypeLabel, unexpectedBetweenCTypeLabelAndColon, colon: colon, unexpectedBetweenColonAndCTypeString, cTypeString: cTypeString)
   }
   
-  open override func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> Syntax {
-    let unexpectedBeforeWitnessMethodLabel = node.unexpectedBeforeWitnessMethodLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let witnessMethodLabel = self.visit(node.witnessMethodLabel).cast(TokenSyntax.self)
-    let unexpectedBetweenWitnessMethodLabelAndColon = node.unexpectedBetweenWitnessMethodLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndProtocolName = node.unexpectedBetweenColonAndProtocolName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let protocolName = self.visit(node.protocolName).cast(TokenSyntax.self)
-    return Syntax(ConventionWitnessMethodAttributeArgumentsSyntax(unexpectedBeforeWitnessMethodLabel, witnessMethodLabel: witnessMethodLabel, unexpectedBetweenWitnessMethodLabelAndColon, colon: colon, unexpectedBetweenColonAndProtocolName, protocolName: protocolName))
+  open override func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let unexpectedBeforeWitnessMethodLabel = node.unexpectedBeforeWitnessMethodLabel.map(self.visit)
+    let witnessMethodLabel = self.visit(node.witnessMethodLabel)
+    let unexpectedBetweenWitnessMethodLabelAndColon = node.unexpectedBetweenWitnessMethodLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndProtocolName = node.unexpectedBetweenColonAndProtocolName.map(self.visit)
+    let protocolName = self.visit(node.protocolName)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(unexpectedBeforeWitnessMethodLabel, witnessMethodLabel: witnessMethodLabel, unexpectedBetweenWitnessMethodLabelAndColon, colon: colon, unexpectedBetweenColonAndProtocolName, protocolName: protocolName)
   }
   
   open override func visit(_ node: LabeledStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeLabelName = node.unexpectedBeforeLabelName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let labelName = self.visit(node.labelName).cast(TokenSyntax.self)
-    let unexpectedBetweenLabelNameAndLabelColon = node.unexpectedBetweenLabelNameAndLabelColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let labelColon = self.visit(node.labelColon).cast(TokenSyntax.self)
-    let unexpectedBetweenLabelColonAndStatement = node.unexpectedBetweenLabelColonAndStatement.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let statement = self.visit(node.statement).cast(StmtSyntax.self)
+    let unexpectedBeforeLabelName = node.unexpectedBeforeLabelName.map(self.visit)
+    let labelName = self.visit(node.labelName)
+    let unexpectedBetweenLabelNameAndLabelColon = node.unexpectedBetweenLabelNameAndLabelColon.map(self.visit)
+    let labelColon = self.visit(node.labelColon)
+    let unexpectedBetweenLabelColonAndStatement = node.unexpectedBetweenLabelColonAndStatement.map(self.visit)
+    let statement = self.visit(node.statement)
     return StmtSyntax(LabeledStmtSyntax(unexpectedBeforeLabelName, labelName: labelName, unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndStatement, statement: statement))
   }
   
   open override func visit(_ node: ContinueStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeContinueKeyword = node.unexpectedBeforeContinueKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let continueKeyword = self.visit(node.continueKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenContinueKeywordAndLabel = node.unexpectedBetweenContinueKeywordAndLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = node.label.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBeforeContinueKeyword = node.unexpectedBeforeContinueKeyword.map(self.visit)
+    let continueKeyword = self.visit(node.continueKeyword)
+    let unexpectedBetweenContinueKeywordAndLabel = node.unexpectedBetweenContinueKeywordAndLabel.map(self.visit)
+    let label = node.label.map(self.visit)
     return StmtSyntax(ContinueStmtSyntax(unexpectedBeforeContinueKeyword, continueKeyword: continueKeyword, unexpectedBetweenContinueKeywordAndLabel, label: label))
   }
   
   open override func visit(_ node: WhileStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeWhileKeyword = node.unexpectedBeforeWhileKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whileKeyword = self.visit(node.whileKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenWhileKeywordAndConditions = node.unexpectedBetweenWhileKeywordAndConditions.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let conditions = self.visit(node.conditions).cast(ConditionElementListSyntax.self)
-    let unexpectedBetweenConditionsAndBody = node.unexpectedBetweenConditionsAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
+    let unexpectedBeforeWhileKeyword = node.unexpectedBeforeWhileKeyword.map(self.visit)
+    let whileKeyword = self.visit(node.whileKeyword)
+    let unexpectedBetweenWhileKeywordAndConditions = node.unexpectedBetweenWhileKeywordAndConditions.map(self.visit)
+    let conditions = self.visit(node.conditions)
+    let unexpectedBetweenConditionsAndBody = node.unexpectedBetweenConditionsAndBody.map(self.visit)
+    let body = self.visit(node.body)
     return StmtSyntax(WhileStmtSyntax(unexpectedBeforeWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody, body: body))
   }
   
   open override func visit(_ node: DeferStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeDeferKeyword = node.unexpectedBeforeDeferKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let deferKeyword = self.visit(node.deferKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenDeferKeywordAndBody = node.unexpectedBetweenDeferKeywordAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
+    let unexpectedBeforeDeferKeyword = node.unexpectedBeforeDeferKeyword.map(self.visit)
+    let deferKeyword = self.visit(node.deferKeyword)
+    let unexpectedBetweenDeferKeywordAndBody = node.unexpectedBetweenDeferKeywordAndBody.map(self.visit)
+    let body = self.visit(node.body)
     return StmtSyntax(DeferStmtSyntax(unexpectedBeforeDeferKeyword, deferKeyword: deferKeyword, unexpectedBetweenDeferKeywordAndBody, body: body))
   }
   
   open override func visit(_ node: ExpressionStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return StmtSyntax(ExpressionStmtSyntax(unexpectedBeforeExpression, expression: expression))
   }
   
-  open override func visit(_ node: SwitchCaseListSyntax) -> Syntax {
-    var formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(Syntax.self)
+  open override func visit(_ node: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
+    var formattedChildren = node.map {
+      self.visit($0)
     }
     formattedChildren = formattedChildren.map {
       if $0.leadingTrivia?.first?.isNewline == true {
@@ -1953,810 +1953,810 @@ open class BasicFormat: SyntaxRewriter {
         return $0.withLeadingTrivia(indentedNewline + ($0.leadingTrivia ?? []))
       }
     }
-    return Syntax(SwitchCaseListSyntax(formattedChildren))
+    return SwitchCaseListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: RepeatWhileStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeRepeatKeyword = node.unexpectedBeforeRepeatKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let repeatKeyword = self.visit(node.repeatKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenRepeatKeywordAndBody = node.unexpectedBetweenRepeatKeywordAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
-    let unexpectedBetweenBodyAndWhileKeyword = node.unexpectedBetweenBodyAndWhileKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whileKeyword = self.visit(node.whileKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenWhileKeywordAndCondition = node.unexpectedBetweenWhileKeywordAndCondition.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let condition = self.visit(node.condition).cast(ExprSyntax.self)
+    let unexpectedBeforeRepeatKeyword = node.unexpectedBeforeRepeatKeyword.map(self.visit)
+    let repeatKeyword = self.visit(node.repeatKeyword)
+    let unexpectedBetweenRepeatKeywordAndBody = node.unexpectedBetweenRepeatKeywordAndBody.map(self.visit)
+    let body = self.visit(node.body)
+    let unexpectedBetweenBodyAndWhileKeyword = node.unexpectedBetweenBodyAndWhileKeyword.map(self.visit)
+    let whileKeyword = self.visit(node.whileKeyword)
+    let unexpectedBetweenWhileKeywordAndCondition = node.unexpectedBetweenWhileKeywordAndCondition.map(self.visit)
+    let condition = self.visit(node.condition)
     return StmtSyntax(RepeatWhileStmtSyntax(unexpectedBeforeRepeatKeyword, repeatKeyword: repeatKeyword, unexpectedBetweenRepeatKeywordAndBody, body: body, unexpectedBetweenBodyAndWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndCondition, condition: condition))
   }
   
   open override func visit(_ node: GuardStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeGuardKeyword = node.unexpectedBeforeGuardKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let guardKeyword = self.visit(node.guardKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenGuardKeywordAndConditions = node.unexpectedBetweenGuardKeywordAndConditions.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let conditions = self.visit(node.conditions).cast(ConditionElementListSyntax.self)
-    let unexpectedBetweenConditionsAndElseKeyword = node.unexpectedBetweenConditionsAndElseKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elseKeyword = self.visit(node.elseKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenElseKeywordAndBody = node.unexpectedBetweenElseKeywordAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
+    let unexpectedBeforeGuardKeyword = node.unexpectedBeforeGuardKeyword.map(self.visit)
+    let guardKeyword = self.visit(node.guardKeyword)
+    let unexpectedBetweenGuardKeywordAndConditions = node.unexpectedBetweenGuardKeywordAndConditions.map(self.visit)
+    let conditions = self.visit(node.conditions)
+    let unexpectedBetweenConditionsAndElseKeyword = node.unexpectedBetweenConditionsAndElseKeyword.map(self.visit)
+    let elseKeyword = self.visit(node.elseKeyword)
+    let unexpectedBetweenElseKeywordAndBody = node.unexpectedBetweenElseKeywordAndBody.map(self.visit)
+    let body = self.visit(node.body)
     return StmtSyntax(GuardStmtSyntax(unexpectedBeforeGuardKeyword, guardKeyword: guardKeyword, unexpectedBetweenGuardKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody, body: body))
   }
   
-  open override func visit(_ node: WhereClauseSyntax) -> Syntax {
-    let unexpectedBeforeWhereKeyword = node.unexpectedBeforeWhereKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whereKeyword = self.visit(node.whereKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenWhereKeywordAndGuardResult = node.unexpectedBetweenWhereKeywordAndGuardResult.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let guardResult = self.visit(node.guardResult).cast(ExprSyntax.self)
-    return Syntax(WhereClauseSyntax(unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndGuardResult, guardResult: guardResult))
+  open override func visit(_ node: WhereClauseSyntax) -> WhereClauseSyntax {
+    let unexpectedBeforeWhereKeyword = node.unexpectedBeforeWhereKeyword.map(self.visit)
+    let whereKeyword = self.visit(node.whereKeyword)
+    let unexpectedBetweenWhereKeywordAndGuardResult = node.unexpectedBetweenWhereKeywordAndGuardResult.map(self.visit)
+    let guardResult = self.visit(node.guardResult)
+    return WhereClauseSyntax(unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndGuardResult, guardResult: guardResult)
   }
   
   open override func visit(_ node: ForInStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeForKeyword = node.unexpectedBeforeForKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let forKeyword = self.visit(node.forKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenForKeywordAndTryKeyword = node.unexpectedBetweenForKeywordAndTryKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let tryKeyword = node.tryKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenTryKeywordAndAwaitKeyword = node.unexpectedBetweenTryKeywordAndAwaitKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let awaitKeyword = node.awaitKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAwaitKeywordAndCaseKeyword = node.unexpectedBetweenAwaitKeywordAndCaseKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let caseKeyword = node.caseKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenCaseKeywordAndPattern = node.unexpectedBetweenCaseKeywordAndPattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeAnnotation = node.typeAnnotation.map(self.visit)?.cast(TypeAnnotationSyntax.self)
-    let unexpectedBetweenTypeAnnotationAndInKeyword = node.unexpectedBetweenTypeAnnotationAndInKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inKeyword = self.visit(node.inKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenInKeywordAndSequenceExpr = node.unexpectedBetweenInKeywordAndSequenceExpr.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let sequenceExpr = self.visit(node.sequenceExpr).cast(ExprSyntax.self)
-    let unexpectedBetweenSequenceExprAndWhereClause = node.unexpectedBetweenSequenceExprAndWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whereClause = node.whereClause.map(self.visit)?.cast(WhereClauseSyntax.self)
-    let unexpectedBetweenWhereClauseAndBody = node.unexpectedBetweenWhereClauseAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
+    let unexpectedBeforeForKeyword = node.unexpectedBeforeForKeyword.map(self.visit)
+    let forKeyword = self.visit(node.forKeyword)
+    let unexpectedBetweenForKeywordAndTryKeyword = node.unexpectedBetweenForKeywordAndTryKeyword.map(self.visit)
+    let tryKeyword = node.tryKeyword.map(self.visit)
+    let unexpectedBetweenTryKeywordAndAwaitKeyword = node.unexpectedBetweenTryKeywordAndAwaitKeyword.map(self.visit)
+    let awaitKeyword = node.awaitKeyword.map(self.visit)
+    let unexpectedBetweenAwaitKeywordAndCaseKeyword = node.unexpectedBetweenAwaitKeywordAndCaseKeyword.map(self.visit)
+    let caseKeyword = node.caseKeyword.map(self.visit)
+    let unexpectedBetweenCaseKeywordAndPattern = node.unexpectedBetweenCaseKeywordAndPattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
+    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)
+    let typeAnnotation = node.typeAnnotation.map(self.visit)
+    let unexpectedBetweenTypeAnnotationAndInKeyword = node.unexpectedBetweenTypeAnnotationAndInKeyword.map(self.visit)
+    let inKeyword = self.visit(node.inKeyword)
+    let unexpectedBetweenInKeywordAndSequenceExpr = node.unexpectedBetweenInKeywordAndSequenceExpr.map(self.visit)
+    let sequenceExpr = self.visit(node.sequenceExpr)
+    let unexpectedBetweenSequenceExprAndWhereClause = node.unexpectedBetweenSequenceExprAndWhereClause.map(self.visit)
+    let whereClause = node.whereClause.map(self.visit)
+    let unexpectedBetweenWhereClauseAndBody = node.unexpectedBetweenWhereClauseAndBody.map(self.visit)
+    let body = self.visit(node.body)
     return StmtSyntax(ForInStmtSyntax(unexpectedBeforeForKeyword, forKeyword: forKeyword, unexpectedBetweenForKeywordAndTryKeyword, tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndAwaitKeyword, awaitKeyword: awaitKeyword, unexpectedBetweenAwaitKeywordAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInKeyword, inKeyword: inKeyword, unexpectedBetweenInKeywordAndSequenceExpr, sequenceExpr: sequenceExpr, unexpectedBetweenSequenceExprAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndBody, body: body))
   }
   
   open override func visit(_ node: SwitchStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeSwitchKeyword = node.unexpectedBeforeSwitchKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let switchKeyword = self.visit(node.switchKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenSwitchKeywordAndExpression = node.unexpectedBetweenSwitchKeywordAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndLeftBrace = node.unexpectedBetweenExpressionAndLeftBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftBrace = self.visit(node.leftBrace).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftBraceAndCases = node.unexpectedBetweenLeftBraceAndCases.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let cases = self.visit(node.cases).cast(SwitchCaseListSyntax.self)
-    let unexpectedBetweenCasesAndRightBrace = node.unexpectedBetweenCasesAndRightBrace.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    var rightBrace = self.visit(node.rightBrace).cast(TokenSyntax.self)
+    let unexpectedBeforeSwitchKeyword = node.unexpectedBeforeSwitchKeyword.map(self.visit)
+    let switchKeyword = self.visit(node.switchKeyword)
+    let unexpectedBetweenSwitchKeywordAndExpression = node.unexpectedBetweenSwitchKeywordAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndLeftBrace = node.unexpectedBetweenExpressionAndLeftBrace.map(self.visit)
+    let leftBrace = self.visit(node.leftBrace)
+    let unexpectedBetweenLeftBraceAndCases = node.unexpectedBetweenLeftBraceAndCases.map(self.visit)
+    let cases = self.visit(node.cases)
+    let unexpectedBetweenCasesAndRightBrace = node.unexpectedBetweenCasesAndRightBrace.map(self.visit)
+    var rightBrace = self.visit(node.rightBrace)
     if rightBrace.leadingTrivia.first?.isNewline != true {
       rightBrace.leadingTrivia = indentedNewline + rightBrace.leadingTrivia
     }
     return StmtSyntax(SwitchStmtSyntax(unexpectedBeforeSwitchKeyword, switchKeyword: switchKeyword, unexpectedBetweenSwitchKeywordAndExpression, expression: expression, unexpectedBetweenExpressionAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndCases, cases: cases, unexpectedBetweenCasesAndRightBrace, rightBrace: rightBrace))
   }
   
-  open override func visit(_ node: CatchClauseListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(CatchClauseSyntax.self)
+  open override func visit(_ node: CatchClauseListSyntax) -> CatchClauseListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(CatchClauseListSyntax(formattedChildren))
+    return CatchClauseListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: DoStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeDoKeyword = node.unexpectedBeforeDoKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let doKeyword = self.visit(node.doKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenDoKeywordAndBody = node.unexpectedBetweenDoKeywordAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
-    let unexpectedBetweenBodyAndCatchClauses = node.unexpectedBetweenBodyAndCatchClauses.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let catchClauses = node.catchClauses.map(self.visit)?.cast(CatchClauseListSyntax.self)
+    let unexpectedBeforeDoKeyword = node.unexpectedBeforeDoKeyword.map(self.visit)
+    let doKeyword = self.visit(node.doKeyword)
+    let unexpectedBetweenDoKeywordAndBody = node.unexpectedBetweenDoKeywordAndBody.map(self.visit)
+    let body = self.visit(node.body)
+    let unexpectedBetweenBodyAndCatchClauses = node.unexpectedBetweenBodyAndCatchClauses.map(self.visit)
+    let catchClauses = node.catchClauses.map(self.visit)
     return StmtSyntax(DoStmtSyntax(unexpectedBeforeDoKeyword, doKeyword: doKeyword, unexpectedBetweenDoKeywordAndBody, body: body, unexpectedBetweenBodyAndCatchClauses, catchClauses: catchClauses))
   }
   
   open override func visit(_ node: ReturnStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeReturnKeyword = node.unexpectedBeforeReturnKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let returnKeyword = self.visit(node.returnKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenReturnKeywordAndExpression = node.unexpectedBetweenReturnKeywordAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = node.expression.map(self.visit)?.cast(ExprSyntax.self)
+    let unexpectedBeforeReturnKeyword = node.unexpectedBeforeReturnKeyword.map(self.visit)
+    let returnKeyword = self.visit(node.returnKeyword)
+    let unexpectedBetweenReturnKeywordAndExpression = node.unexpectedBetweenReturnKeywordAndExpression.map(self.visit)
+    let expression = node.expression.map(self.visit)
     return StmtSyntax(ReturnStmtSyntax(unexpectedBeforeReturnKeyword, returnKeyword: returnKeyword, unexpectedBetweenReturnKeywordAndExpression, expression: expression))
   }
   
   open override func visit(_ node: YieldStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeYieldKeyword = node.unexpectedBeforeYieldKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let yieldKeyword = self.visit(node.yieldKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenYieldKeywordAndYields = node.unexpectedBetweenYieldKeywordAndYields.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let yields = self.visit(node.yields).cast(Syntax.self)
+    let unexpectedBeforeYieldKeyword = node.unexpectedBeforeYieldKeyword.map(self.visit)
+    let yieldKeyword = self.visit(node.yieldKeyword)
+    let unexpectedBetweenYieldKeywordAndYields = node.unexpectedBetweenYieldKeywordAndYields.map(self.visit)
+    let yields = self.visit(node.yields)
     return StmtSyntax(YieldStmtSyntax(unexpectedBeforeYieldKeyword, yieldKeyword: yieldKeyword, unexpectedBetweenYieldKeywordAndYields, yields: yields))
   }
   
-  open override func visit(_ node: YieldListSyntax) -> Syntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndElementList = node.unexpectedBetweenLeftParenAndElementList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elementList = self.visit(node.elementList).cast(YieldExprListSyntax.self)
-    let unexpectedBetweenElementListAndRightParen = node.unexpectedBetweenElementListAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(YieldListSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList, elementList: elementList, unexpectedBetweenElementListAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: YieldListSyntax) -> YieldListSyntax {
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndElementList = node.unexpectedBetweenLeftParenAndElementList.map(self.visit)
+    let elementList = self.visit(node.elementList)
+    let unexpectedBetweenElementListAndRightParen = node.unexpectedBetweenElementListAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return YieldListSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList, elementList: elementList, unexpectedBetweenElementListAndRightParen, rightParen: rightParen)
   }
   
   open override func visit(_ node: FallthroughStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeFallthroughKeyword = node.unexpectedBeforeFallthroughKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let fallthroughKeyword = self.visit(node.fallthroughKeyword).cast(TokenSyntax.self)
+    let unexpectedBeforeFallthroughKeyword = node.unexpectedBeforeFallthroughKeyword.map(self.visit)
+    let fallthroughKeyword = self.visit(node.fallthroughKeyword)
     return StmtSyntax(FallthroughStmtSyntax(unexpectedBeforeFallthroughKeyword, fallthroughKeyword: fallthroughKeyword))
   }
   
   open override func visit(_ node: BreakStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeBreakKeyword = node.unexpectedBeforeBreakKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let breakKeyword = self.visit(node.breakKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenBreakKeywordAndLabel = node.unexpectedBetweenBreakKeywordAndLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = node.label.map(self.visit)?.cast(TokenSyntax.self)
+    let unexpectedBeforeBreakKeyword = node.unexpectedBeforeBreakKeyword.map(self.visit)
+    let breakKeyword = self.visit(node.breakKeyword)
+    let unexpectedBetweenBreakKeywordAndLabel = node.unexpectedBetweenBreakKeywordAndLabel.map(self.visit)
+    let label = node.label.map(self.visit)
     return StmtSyntax(BreakStmtSyntax(unexpectedBeforeBreakKeyword, breakKeyword: breakKeyword, unexpectedBetweenBreakKeywordAndLabel, label: label))
   }
   
-  open override func visit(_ node: CaseItemListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(CaseItemSyntax.self)
+  open override func visit(_ node: CaseItemListSyntax) -> CaseItemListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(CaseItemListSyntax(formattedChildren))
+    return CaseItemListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: CatchItemListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(CatchItemSyntax.self)
+  open override func visit(_ node: CatchItemListSyntax) -> CatchItemListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(CatchItemListSyntax(formattedChildren))
+    return CatchItemListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: ConditionElementSyntax) -> Syntax {
-    let unexpectedBeforeCondition = node.unexpectedBeforeCondition.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let condition = self.visit(node.condition).cast(Syntax.self)
-    let unexpectedBetweenConditionAndTrailingComma = node.unexpectedBetweenConditionAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(ConditionElementSyntax(unexpectedBeforeCondition, condition: condition, unexpectedBetweenConditionAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: ConditionElementSyntax) -> ConditionElementSyntax {
+    let unexpectedBeforeCondition = node.unexpectedBeforeCondition.map(self.visit)
+    let condition = self.visit(node.condition)
+    let unexpectedBetweenConditionAndTrailingComma = node.unexpectedBetweenConditionAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return ConditionElementSyntax(unexpectedBeforeCondition, condition: condition, unexpectedBetweenConditionAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: AvailabilityConditionSyntax) -> Syntax {
-    let unexpectedBeforePoundAvailableKeyword = node.unexpectedBeforePoundAvailableKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundAvailableKeyword = self.visit(node.poundAvailableKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundAvailableKeywordAndLeftParen = node.unexpectedBetweenPoundAvailableKeywordAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndAvailabilitySpec = node.unexpectedBetweenLeftParenAndAvailabilitySpec.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let availabilitySpec = self.visit(node.availabilitySpec).cast(AvailabilitySpecListSyntax.self)
-    let unexpectedBetweenAvailabilitySpecAndRightParen = node.unexpectedBetweenAvailabilitySpecAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(AvailabilityConditionSyntax(unexpectedBeforePoundAvailableKeyword, poundAvailableKeyword: poundAvailableKeyword, unexpectedBetweenPoundAvailableKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec, availabilitySpec: availabilitySpec, unexpectedBetweenAvailabilitySpecAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: AvailabilityConditionSyntax) -> AvailabilityConditionSyntax {
+    let unexpectedBeforePoundAvailableKeyword = node.unexpectedBeforePoundAvailableKeyword.map(self.visit)
+    let poundAvailableKeyword = self.visit(node.poundAvailableKeyword)
+    let unexpectedBetweenPoundAvailableKeywordAndLeftParen = node.unexpectedBetweenPoundAvailableKeywordAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndAvailabilitySpec = node.unexpectedBetweenLeftParenAndAvailabilitySpec.map(self.visit)
+    let availabilitySpec = self.visit(node.availabilitySpec)
+    let unexpectedBetweenAvailabilitySpecAndRightParen = node.unexpectedBetweenAvailabilitySpecAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return AvailabilityConditionSyntax(unexpectedBeforePoundAvailableKeyword, poundAvailableKeyword: poundAvailableKeyword, unexpectedBetweenPoundAvailableKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec, availabilitySpec: availabilitySpec, unexpectedBetweenAvailabilitySpecAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: MatchingPatternConditionSyntax) -> Syntax {
-    let unexpectedBeforeCaseKeyword = node.unexpectedBeforeCaseKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let caseKeyword = self.visit(node.caseKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenCaseKeywordAndPattern = node.unexpectedBetweenCaseKeywordAndPattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeAnnotation = node.typeAnnotation.map(self.visit)?.cast(TypeAnnotationSyntax.self)
-    let unexpectedBetweenTypeAnnotationAndInitializer = node.unexpectedBetweenTypeAnnotationAndInitializer.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let initializer = self.visit(node.initializer).cast(InitializerClauseSyntax.self)
-    return Syntax(MatchingPatternConditionSyntax(unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer))
+  open override func visit(_ node: MatchingPatternConditionSyntax) -> MatchingPatternConditionSyntax {
+    let unexpectedBeforeCaseKeyword = node.unexpectedBeforeCaseKeyword.map(self.visit)
+    let caseKeyword = self.visit(node.caseKeyword)
+    let unexpectedBetweenCaseKeywordAndPattern = node.unexpectedBetweenCaseKeywordAndPattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
+    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)
+    let typeAnnotation = node.typeAnnotation.map(self.visit)
+    let unexpectedBetweenTypeAnnotationAndInitializer = node.unexpectedBetweenTypeAnnotationAndInitializer.map(self.visit)
+    let initializer = self.visit(node.initializer)
+    return MatchingPatternConditionSyntax(unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer)
   }
   
-  open override func visit(_ node: OptionalBindingConditionSyntax) -> Syntax {
-    let unexpectedBeforeLetOrVarKeyword = node.unexpectedBeforeLetOrVarKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let letOrVarKeyword = self.visit(node.letOrVarKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenLetOrVarKeywordAndPattern = node.unexpectedBetweenLetOrVarKeywordAndPattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeAnnotation = node.typeAnnotation.map(self.visit)?.cast(TypeAnnotationSyntax.self)
-    let unexpectedBetweenTypeAnnotationAndInitializer = node.unexpectedBetweenTypeAnnotationAndInitializer.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let initializer = node.initializer.map(self.visit)?.cast(InitializerClauseSyntax.self)
-    return Syntax(OptionalBindingConditionSyntax(unexpectedBeforeLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer))
+  open override func visit(_ node: OptionalBindingConditionSyntax) -> OptionalBindingConditionSyntax {
+    let unexpectedBeforeLetOrVarKeyword = node.unexpectedBeforeLetOrVarKeyword.map(self.visit)
+    let letOrVarKeyword = self.visit(node.letOrVarKeyword)
+    let unexpectedBetweenLetOrVarKeywordAndPattern = node.unexpectedBetweenLetOrVarKeywordAndPattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
+    let unexpectedBetweenPatternAndTypeAnnotation = node.unexpectedBetweenPatternAndTypeAnnotation.map(self.visit)
+    let typeAnnotation = node.typeAnnotation.map(self.visit)
+    let unexpectedBetweenTypeAnnotationAndInitializer = node.unexpectedBetweenTypeAnnotationAndInitializer.map(self.visit)
+    let initializer = node.initializer.map(self.visit)
+    return OptionalBindingConditionSyntax(unexpectedBeforeLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer)
   }
   
-  open override func visit(_ node: UnavailabilityConditionSyntax) -> Syntax {
-    let unexpectedBeforePoundUnavailableKeyword = node.unexpectedBeforePoundUnavailableKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundUnavailableKeyword = self.visit(node.poundUnavailableKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundUnavailableKeywordAndLeftParen = node.unexpectedBetweenPoundUnavailableKeywordAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndAvailabilitySpec = node.unexpectedBetweenLeftParenAndAvailabilitySpec.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let availabilitySpec = self.visit(node.availabilitySpec).cast(AvailabilitySpecListSyntax.self)
-    let unexpectedBetweenAvailabilitySpecAndRightParen = node.unexpectedBetweenAvailabilitySpecAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(UnavailabilityConditionSyntax(unexpectedBeforePoundUnavailableKeyword, poundUnavailableKeyword: poundUnavailableKeyword, unexpectedBetweenPoundUnavailableKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec, availabilitySpec: availabilitySpec, unexpectedBetweenAvailabilitySpecAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: UnavailabilityConditionSyntax) -> UnavailabilityConditionSyntax {
+    let unexpectedBeforePoundUnavailableKeyword = node.unexpectedBeforePoundUnavailableKeyword.map(self.visit)
+    let poundUnavailableKeyword = self.visit(node.poundUnavailableKeyword)
+    let unexpectedBetweenPoundUnavailableKeywordAndLeftParen = node.unexpectedBetweenPoundUnavailableKeywordAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndAvailabilitySpec = node.unexpectedBetweenLeftParenAndAvailabilitySpec.map(self.visit)
+    let availabilitySpec = self.visit(node.availabilitySpec)
+    let unexpectedBetweenAvailabilitySpecAndRightParen = node.unexpectedBetweenAvailabilitySpecAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return UnavailabilityConditionSyntax(unexpectedBeforePoundUnavailableKeyword, poundUnavailableKeyword: poundUnavailableKeyword, unexpectedBetweenPoundUnavailableKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec, availabilitySpec: availabilitySpec, unexpectedBetweenAvailabilitySpecAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: HasSymbolConditionSyntax) -> Syntax {
-    let unexpectedBeforeHasSymbolKeyword = node.unexpectedBeforeHasSymbolKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let hasSymbolKeyword = self.visit(node.hasSymbolKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenHasSymbolKeywordAndLeftParen = node.unexpectedBetweenHasSymbolKeywordAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndExpression = node.unexpectedBetweenLeftParenAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
-    let unexpectedBetweenExpressionAndRightParen = node.unexpectedBetweenExpressionAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    return Syntax(HasSymbolConditionSyntax(unexpectedBeforeHasSymbolKeyword, hasSymbolKeyword: hasSymbolKeyword, unexpectedBetweenHasSymbolKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpression, expression: expression, unexpectedBetweenExpressionAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: HasSymbolConditionSyntax) -> HasSymbolConditionSyntax {
+    let unexpectedBeforeHasSymbolKeyword = node.unexpectedBeforeHasSymbolKeyword.map(self.visit)
+    let hasSymbolKeyword = self.visit(node.hasSymbolKeyword)
+    let unexpectedBetweenHasSymbolKeywordAndLeftParen = node.unexpectedBetweenHasSymbolKeywordAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndExpression = node.unexpectedBetweenLeftParenAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
+    let unexpectedBetweenExpressionAndRightParen = node.unexpectedBetweenExpressionAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    return HasSymbolConditionSyntax(unexpectedBeforeHasSymbolKeyword, hasSymbolKeyword: hasSymbolKeyword, unexpectedBetweenHasSymbolKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpression, expression: expression, unexpectedBetweenExpressionAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: ConditionElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(ConditionElementSyntax.self)
+  open override func visit(_ node: ConditionElementListSyntax) -> ConditionElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(ConditionElementListSyntax(formattedChildren))
+    return ConditionElementListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: DeclarationStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeDeclaration = node.unexpectedBeforeDeclaration.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let declaration = self.visit(node.declaration).cast(DeclSyntax.self)
+    let unexpectedBeforeDeclaration = node.unexpectedBeforeDeclaration.map(self.visit)
+    let declaration = self.visit(node.declaration)
     return StmtSyntax(DeclarationStmtSyntax(unexpectedBeforeDeclaration, declaration: declaration))
   }
   
   open override func visit(_ node: ThrowStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeThrowKeyword = node.unexpectedBeforeThrowKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let throwKeyword = self.visit(node.throwKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenThrowKeywordAndExpression = node.unexpectedBetweenThrowKeywordAndExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeThrowKeyword = node.unexpectedBeforeThrowKeyword.map(self.visit)
+    let throwKeyword = self.visit(node.throwKeyword)
+    let unexpectedBetweenThrowKeywordAndExpression = node.unexpectedBetweenThrowKeywordAndExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return StmtSyntax(ThrowStmtSyntax(unexpectedBeforeThrowKeyword, throwKeyword: throwKeyword, unexpectedBetweenThrowKeywordAndExpression, expression: expression))
   }
   
   open override func visit(_ node: IfStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforeIfKeyword = node.unexpectedBeforeIfKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ifKeyword = self.visit(node.ifKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenIfKeywordAndConditions = node.unexpectedBetweenIfKeywordAndConditions.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let conditions = self.visit(node.conditions).cast(ConditionElementListSyntax.self)
-    let unexpectedBetweenConditionsAndBody = node.unexpectedBetweenConditionsAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
-    let unexpectedBetweenBodyAndElseKeyword = node.unexpectedBetweenBodyAndElseKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elseKeyword = node.elseKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenElseKeywordAndElseBody = node.unexpectedBetweenElseKeywordAndElseBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elseBody = node.elseBody.map(self.visit)?.cast(Syntax.self)
+    let unexpectedBeforeIfKeyword = node.unexpectedBeforeIfKeyword.map(self.visit)
+    let ifKeyword = self.visit(node.ifKeyword)
+    let unexpectedBetweenIfKeywordAndConditions = node.unexpectedBetweenIfKeywordAndConditions.map(self.visit)
+    let conditions = self.visit(node.conditions)
+    let unexpectedBetweenConditionsAndBody = node.unexpectedBetweenConditionsAndBody.map(self.visit)
+    let body = self.visit(node.body)
+    let unexpectedBetweenBodyAndElseKeyword = node.unexpectedBetweenBodyAndElseKeyword.map(self.visit)
+    let elseKeyword = node.elseKeyword.map(self.visit)
+    let unexpectedBetweenElseKeywordAndElseBody = node.unexpectedBetweenElseKeywordAndElseBody.map(self.visit)
+    let elseBody = node.elseBody.map(self.visit)
     return StmtSyntax(IfStmtSyntax(unexpectedBeforeIfKeyword, ifKeyword: ifKeyword, unexpectedBetweenIfKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody, body: body, unexpectedBetweenBodyAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndElseBody, elseBody: elseBody))
   }
   
-  open override func visit(_ node: SwitchCaseSyntax) -> Syntax {
-    let unexpectedBeforeUnknownAttr = node.unexpectedBeforeUnknownAttr.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let unknownAttr = node.unknownAttr.map(self.visit)?.cast(AttributeSyntax.self)
-    let unexpectedBetweenUnknownAttrAndLabel = node.unexpectedBetweenUnknownAttrAndLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = self.visit(node.label).cast(Syntax.self)
-    let unexpectedBetweenLabelAndStatements = node.unexpectedBetweenLabelAndStatements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+  open override func visit(_ node: SwitchCaseSyntax) -> SwitchCaseSyntax {
+    let unexpectedBeforeUnknownAttr = node.unexpectedBeforeUnknownAttr.map(self.visit)
+    let unknownAttr = node.unknownAttr.map(self.visit)
+    let unexpectedBetweenUnknownAttrAndLabel = node.unexpectedBetweenUnknownAttrAndLabel.map(self.visit)
+    let label = self.visit(node.label)
+    let unexpectedBetweenLabelAndStatements = node.unexpectedBetweenLabelAndStatements.map(self.visit)
     indentationLevel += 1
-    let statements = self.visit(node.statements).cast(CodeBlockItemListSyntax.self)
+    let statements = self.visit(node.statements)
     indentationLevel -= 1
-    return Syntax(SwitchCaseSyntax(unexpectedBeforeUnknownAttr, unknownAttr: unknownAttr, unexpectedBetweenUnknownAttrAndLabel, label: label, unexpectedBetweenLabelAndStatements, statements: statements))
+    return SwitchCaseSyntax(unexpectedBeforeUnknownAttr, unknownAttr: unknownAttr, unexpectedBetweenUnknownAttrAndLabel, label: label, unexpectedBetweenLabelAndStatements, statements: statements)
   }
   
-  open override func visit(_ node: SwitchDefaultLabelSyntax) -> Syntax {
-    let unexpectedBeforeDefaultKeyword = node.unexpectedBeforeDefaultKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let defaultKeyword = self.visit(node.defaultKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenDefaultKeywordAndColon = node.unexpectedBetweenDefaultKeywordAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    return Syntax(SwitchDefaultLabelSyntax(unexpectedBeforeDefaultKeyword, defaultKeyword: defaultKeyword, unexpectedBetweenDefaultKeywordAndColon, colon: colon))
+  open override func visit(_ node: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
+    let unexpectedBeforeDefaultKeyword = node.unexpectedBeforeDefaultKeyword.map(self.visit)
+    let defaultKeyword = self.visit(node.defaultKeyword)
+    let unexpectedBetweenDefaultKeywordAndColon = node.unexpectedBetweenDefaultKeywordAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    return SwitchDefaultLabelSyntax(unexpectedBeforeDefaultKeyword, defaultKeyword: defaultKeyword, unexpectedBetweenDefaultKeywordAndColon, colon: colon)
   }
   
-  open override func visit(_ node: CaseItemSyntax) -> Syntax {
-    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndWhereClause = node.unexpectedBetweenPatternAndWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whereClause = node.whereClause.map(self.visit)?.cast(WhereClauseSyntax.self)
-    let unexpectedBetweenWhereClauseAndTrailingComma = node.unexpectedBetweenWhereClauseAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(CaseItemSyntax(unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: CaseItemSyntax) -> CaseItemSyntax {
+    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
+    let unexpectedBetweenPatternAndWhereClause = node.unexpectedBetweenPatternAndWhereClause.map(self.visit)
+    let whereClause = node.whereClause.map(self.visit)
+    let unexpectedBetweenWhereClauseAndTrailingComma = node.unexpectedBetweenWhereClauseAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return CaseItemSyntax(unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: CatchItemSyntax) -> Syntax {
-    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = node.pattern.map(self.visit)?.cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndWhereClause = node.unexpectedBetweenPatternAndWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whereClause = node.whereClause.map(self.visit)?.cast(WhereClauseSyntax.self)
-    let unexpectedBetweenWhereClauseAndTrailingComma = node.unexpectedBetweenWhereClauseAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(CatchItemSyntax(unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: CatchItemSyntax) -> CatchItemSyntax {
+    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)
+    let pattern = node.pattern.map(self.visit)
+    let unexpectedBetweenPatternAndWhereClause = node.unexpectedBetweenPatternAndWhereClause.map(self.visit)
+    let whereClause = node.whereClause.map(self.visit)
+    let unexpectedBetweenWhereClauseAndTrailingComma = node.unexpectedBetweenWhereClauseAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return CatchItemSyntax(unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: SwitchCaseLabelSyntax) -> Syntax {
-    let unexpectedBeforeCaseKeyword = node.unexpectedBeforeCaseKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let caseKeyword = self.visit(node.caseKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenCaseKeywordAndCaseItems = node.unexpectedBetweenCaseKeywordAndCaseItems.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let caseItems = self.visit(node.caseItems).cast(CaseItemListSyntax.self)
-    let unexpectedBetweenCaseItemsAndColon = node.unexpectedBetweenCaseItemsAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    return Syntax(SwitchCaseLabelSyntax(unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems, caseItems: caseItems, unexpectedBetweenCaseItemsAndColon, colon: colon))
+  open override func visit(_ node: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
+    let unexpectedBeforeCaseKeyword = node.unexpectedBeforeCaseKeyword.map(self.visit)
+    let caseKeyword = self.visit(node.caseKeyword)
+    let unexpectedBetweenCaseKeywordAndCaseItems = node.unexpectedBetweenCaseKeywordAndCaseItems.map(self.visit)
+    let caseItems = self.visit(node.caseItems)
+    let unexpectedBetweenCaseItemsAndColon = node.unexpectedBetweenCaseItemsAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    return SwitchCaseLabelSyntax(unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems, caseItems: caseItems, unexpectedBetweenCaseItemsAndColon, colon: colon)
   }
   
-  open override func visit(_ node: CatchClauseSyntax) -> Syntax {
-    let unexpectedBeforeCatchKeyword = node.unexpectedBeforeCatchKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let catchKeyword = self.visit(node.catchKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenCatchKeywordAndCatchItems = node.unexpectedBetweenCatchKeywordAndCatchItems.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let catchItems = node.catchItems.map(self.visit)?.cast(CatchItemListSyntax.self)
-    let unexpectedBetweenCatchItemsAndBody = node.unexpectedBetweenCatchItemsAndBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(CodeBlockSyntax.self)
-    return Syntax(CatchClauseSyntax(unexpectedBeforeCatchKeyword, catchKeyword: catchKeyword, unexpectedBetweenCatchKeywordAndCatchItems, catchItems: catchItems, unexpectedBetweenCatchItemsAndBody, body: body))
+  open override func visit(_ node: CatchClauseSyntax) -> CatchClauseSyntax {
+    let unexpectedBeforeCatchKeyword = node.unexpectedBeforeCatchKeyword.map(self.visit)
+    let catchKeyword = self.visit(node.catchKeyword)
+    let unexpectedBetweenCatchKeywordAndCatchItems = node.unexpectedBetweenCatchKeywordAndCatchItems.map(self.visit)
+    let catchItems = node.catchItems.map(self.visit)
+    let unexpectedBetweenCatchItemsAndBody = node.unexpectedBetweenCatchItemsAndBody.map(self.visit)
+    let body = self.visit(node.body)
+    return CatchClauseSyntax(unexpectedBeforeCatchKeyword, catchKeyword: catchKeyword, unexpectedBetweenCatchKeywordAndCatchItems, catchItems: catchItems, unexpectedBetweenCatchItemsAndBody, body: body)
   }
   
   open override func visit(_ node: PoundAssertStmtSyntax) -> StmtSyntax {
-    let unexpectedBeforePoundAssert = node.unexpectedBeforePoundAssert.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let poundAssert = self.visit(node.poundAssert).cast(TokenSyntax.self)
-    let unexpectedBetweenPoundAssertAndLeftParen = node.unexpectedBetweenPoundAssertAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndCondition = node.unexpectedBetweenLeftParenAndCondition.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let condition = self.visit(node.condition).cast(ExprSyntax.self)
-    let unexpectedBetweenConditionAndComma = node.unexpectedBetweenConditionAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = node.comma.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenCommaAndMessage = node.unexpectedBetweenCommaAndMessage.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let message = node.message.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenMessageAndRightParen = node.unexpectedBetweenMessageAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforePoundAssert = node.unexpectedBeforePoundAssert.map(self.visit)
+    let poundAssert = self.visit(node.poundAssert)
+    let unexpectedBetweenPoundAssertAndLeftParen = node.unexpectedBetweenPoundAssertAndLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndCondition = node.unexpectedBetweenLeftParenAndCondition.map(self.visit)
+    let condition = self.visit(node.condition)
+    let unexpectedBetweenConditionAndComma = node.unexpectedBetweenConditionAndComma.map(self.visit)
+    let comma = node.comma.map(self.visit)
+    let unexpectedBetweenCommaAndMessage = node.unexpectedBetweenCommaAndMessage.map(self.visit)
+    let message = node.message.map(self.visit)
+    let unexpectedBetweenMessageAndRightParen = node.unexpectedBetweenMessageAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return StmtSyntax(PoundAssertStmtSyntax(unexpectedBeforePoundAssert, poundAssert: poundAssert, unexpectedBetweenPoundAssertAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndCondition, condition: condition, unexpectedBetweenConditionAndComma, comma: comma, unexpectedBetweenCommaAndMessage, message: message, unexpectedBetweenMessageAndRightParen, rightParen: rightParen))
   }
   
-  open override func visit(_ node: GenericWhereClauseSyntax) -> Syntax {
-    let unexpectedBeforeWhereKeyword = node.unexpectedBeforeWhereKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let whereKeyword = self.visit(node.whereKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenWhereKeywordAndRequirementList = node.unexpectedBetweenWhereKeywordAndRequirementList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let requirementList = self.visit(node.requirementList).cast(GenericRequirementListSyntax.self)
-    return Syntax(GenericWhereClauseSyntax(unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndRequirementList, requirementList: requirementList))
+  open override func visit(_ node: GenericWhereClauseSyntax) -> GenericWhereClauseSyntax {
+    let unexpectedBeforeWhereKeyword = node.unexpectedBeforeWhereKeyword.map(self.visit)
+    let whereKeyword = self.visit(node.whereKeyword)
+    let unexpectedBetweenWhereKeywordAndRequirementList = node.unexpectedBetweenWhereKeywordAndRequirementList.map(self.visit)
+    let requirementList = self.visit(node.requirementList)
+    return GenericWhereClauseSyntax(unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndRequirementList, requirementList: requirementList)
   }
   
-  open override func visit(_ node: GenericRequirementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(GenericRequirementSyntax.self)
+  open override func visit(_ node: GenericRequirementListSyntax) -> GenericRequirementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(GenericRequirementListSyntax(formattedChildren))
+    return GenericRequirementListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: GenericRequirementSyntax) -> Syntax {
-    let unexpectedBeforeBody = node.unexpectedBeforeBody.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let body = self.visit(node.body).cast(Syntax.self)
-    let unexpectedBetweenBodyAndTrailingComma = node.unexpectedBetweenBodyAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(GenericRequirementSyntax(unexpectedBeforeBody, body: body, unexpectedBetweenBodyAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: GenericRequirementSyntax) -> GenericRequirementSyntax {
+    let unexpectedBeforeBody = node.unexpectedBeforeBody.map(self.visit)
+    let body = self.visit(node.body)
+    let unexpectedBetweenBodyAndTrailingComma = node.unexpectedBetweenBodyAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return GenericRequirementSyntax(unexpectedBeforeBody, body: body, unexpectedBetweenBodyAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: SameTypeRequirementSyntax) -> Syntax {
-    let unexpectedBeforeLeftTypeIdentifier = node.unexpectedBeforeLeftTypeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftTypeIdentifier = self.visit(node.leftTypeIdentifier).cast(TypeSyntax.self)
-    let unexpectedBetweenLeftTypeIdentifierAndEqualityToken = node.unexpectedBetweenLeftTypeIdentifierAndEqualityToken.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let equalityToken = self.visit(node.equalityToken).cast(TokenSyntax.self)
-    let unexpectedBetweenEqualityTokenAndRightTypeIdentifier = node.unexpectedBetweenEqualityTokenAndRightTypeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightTypeIdentifier = self.visit(node.rightTypeIdentifier).cast(TypeSyntax.self)
-    return Syntax(SameTypeRequirementSyntax(unexpectedBeforeLeftTypeIdentifier, leftTypeIdentifier: leftTypeIdentifier, unexpectedBetweenLeftTypeIdentifierAndEqualityToken, equalityToken: equalityToken, unexpectedBetweenEqualityTokenAndRightTypeIdentifier, rightTypeIdentifier: rightTypeIdentifier))
+  open override func visit(_ node: SameTypeRequirementSyntax) -> SameTypeRequirementSyntax {
+    let unexpectedBeforeLeftTypeIdentifier = node.unexpectedBeforeLeftTypeIdentifier.map(self.visit)
+    let leftTypeIdentifier = self.visit(node.leftTypeIdentifier)
+    let unexpectedBetweenLeftTypeIdentifierAndEqualityToken = node.unexpectedBetweenLeftTypeIdentifierAndEqualityToken.map(self.visit)
+    let equalityToken = self.visit(node.equalityToken)
+    let unexpectedBetweenEqualityTokenAndRightTypeIdentifier = node.unexpectedBetweenEqualityTokenAndRightTypeIdentifier.map(self.visit)
+    let rightTypeIdentifier = self.visit(node.rightTypeIdentifier)
+    return SameTypeRequirementSyntax(unexpectedBeforeLeftTypeIdentifier, leftTypeIdentifier: leftTypeIdentifier, unexpectedBetweenLeftTypeIdentifierAndEqualityToken, equalityToken: equalityToken, unexpectedBetweenEqualityTokenAndRightTypeIdentifier, rightTypeIdentifier: rightTypeIdentifier)
   }
   
-  open override func visit(_ node: LayoutRequirementSyntax) -> Syntax {
-    let unexpectedBeforeTypeIdentifier = node.unexpectedBeforeTypeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeIdentifier = self.visit(node.typeIdentifier).cast(TypeSyntax.self)
-    let unexpectedBetweenTypeIdentifierAndColon = node.unexpectedBetweenTypeIdentifierAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndLayoutConstraint = node.unexpectedBetweenColonAndLayoutConstraint.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let layoutConstraint = self.visit(node.layoutConstraint).cast(TokenSyntax.self)
-    let unexpectedBetweenLayoutConstraintAndLeftParen = node.unexpectedBetweenLayoutConstraintAndLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = node.leftParen.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndSize = node.unexpectedBetweenLeftParenAndSize.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let size = node.size.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenSizeAndComma = node.unexpectedBetweenSizeAndComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let comma = node.comma.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenCommaAndAlignment = node.unexpectedBetweenCommaAndAlignment.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let alignment = node.alignment.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAlignmentAndRightParen = node.unexpectedBetweenAlignmentAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = node.rightParen.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(LayoutRequirementSyntax(unexpectedBeforeTypeIdentifier, typeIdentifier: typeIdentifier, unexpectedBetweenTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndLayoutConstraint, layoutConstraint: layoutConstraint, unexpectedBetweenLayoutConstraintAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndSize, size: size, unexpectedBetweenSizeAndComma, comma: comma, unexpectedBetweenCommaAndAlignment, alignment: alignment, unexpectedBetweenAlignmentAndRightParen, rightParen: rightParen))
+  open override func visit(_ node: LayoutRequirementSyntax) -> LayoutRequirementSyntax {
+    let unexpectedBeforeTypeIdentifier = node.unexpectedBeforeTypeIdentifier.map(self.visit)
+    let typeIdentifier = self.visit(node.typeIdentifier)
+    let unexpectedBetweenTypeIdentifierAndColon = node.unexpectedBetweenTypeIdentifierAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndLayoutConstraint = node.unexpectedBetweenColonAndLayoutConstraint.map(self.visit)
+    let layoutConstraint = self.visit(node.layoutConstraint)
+    let unexpectedBetweenLayoutConstraintAndLeftParen = node.unexpectedBetweenLayoutConstraintAndLeftParen.map(self.visit)
+    let leftParen = node.leftParen.map(self.visit)
+    let unexpectedBetweenLeftParenAndSize = node.unexpectedBetweenLeftParenAndSize.map(self.visit)
+    let size = node.size.map(self.visit)
+    let unexpectedBetweenSizeAndComma = node.unexpectedBetweenSizeAndComma.map(self.visit)
+    let comma = node.comma.map(self.visit)
+    let unexpectedBetweenCommaAndAlignment = node.unexpectedBetweenCommaAndAlignment.map(self.visit)
+    let alignment = node.alignment.map(self.visit)
+    let unexpectedBetweenAlignmentAndRightParen = node.unexpectedBetweenAlignmentAndRightParen.map(self.visit)
+    let rightParen = node.rightParen.map(self.visit)
+    return LayoutRequirementSyntax(unexpectedBeforeTypeIdentifier, typeIdentifier: typeIdentifier, unexpectedBetweenTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndLayoutConstraint, layoutConstraint: layoutConstraint, unexpectedBetweenLayoutConstraintAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndSize, size: size, unexpectedBetweenSizeAndComma, comma: comma, unexpectedBetweenCommaAndAlignment, alignment: alignment, unexpectedBetweenAlignmentAndRightParen, rightParen: rightParen)
   }
   
-  open override func visit(_ node: GenericParameterListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(GenericParameterSyntax.self)
+  open override func visit(_ node: GenericParameterListSyntax) -> GenericParameterListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(GenericParameterListSyntax(formattedChildren))
+    return GenericParameterListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: GenericParameterSyntax) -> Syntax {
-    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndName = node.unexpectedBetweenAttributesAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndEllipsis = node.unexpectedBetweenNameAndEllipsis.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ellipsis = node.ellipsis.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenEllipsisAndColon = node.unexpectedBetweenEllipsisAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndInheritedType = node.unexpectedBetweenColonAndInheritedType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inheritedType = node.inheritedType.map(self.visit)?.cast(TypeSyntax.self)
-    let unexpectedBetweenInheritedTypeAndTrailingComma = node.unexpectedBetweenInheritedTypeAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(GenericParameterSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName, name: name, unexpectedBetweenNameAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndColon, colon: colon, unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: GenericParameterSyntax) -> GenericParameterSyntax {
+    let unexpectedBeforeAttributes = node.unexpectedBeforeAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndName = node.unexpectedBetweenAttributesAndName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndEllipsis = node.unexpectedBetweenNameAndEllipsis.map(self.visit)
+    let ellipsis = node.ellipsis.map(self.visit)
+    let unexpectedBetweenEllipsisAndColon = node.unexpectedBetweenEllipsisAndColon.map(self.visit)
+    let colon = node.colon.map(self.visit)
+    let unexpectedBetweenColonAndInheritedType = node.unexpectedBetweenColonAndInheritedType.map(self.visit)
+    let inheritedType = node.inheritedType.map(self.visit)
+    let unexpectedBetweenInheritedTypeAndTrailingComma = node.unexpectedBetweenInheritedTypeAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return GenericParameterSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName, name: name, unexpectedBetweenNameAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndColon, colon: colon, unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: PrimaryAssociatedTypeListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(PrimaryAssociatedTypeSyntax.self)
+  open override func visit(_ node: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(PrimaryAssociatedTypeListSyntax(formattedChildren))
+    return PrimaryAssociatedTypeListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: PrimaryAssociatedTypeSyntax) -> Syntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndTrailingComma = node.unexpectedBetweenNameAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(PrimaryAssociatedTypeSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeSyntax {
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndTrailingComma = node.unexpectedBetweenNameAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return PrimaryAssociatedTypeSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: GenericParameterClauseSyntax) -> Syntax {
-    let unexpectedBeforeLeftAngleBracket = node.unexpectedBeforeLeftAngleBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftAngleBracket = self.visit(node.leftAngleBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftAngleBracketAndGenericParameterList = node.unexpectedBetweenLeftAngleBracketAndGenericParameterList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameterList = self.visit(node.genericParameterList).cast(GenericParameterListSyntax.self)
-    let unexpectedBetweenGenericParameterListAndGenericWhereClause = node.unexpectedBetweenGenericParameterListAndGenericWhereClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericWhereClause = node.genericWhereClause.map(self.visit)?.cast(GenericWhereClauseSyntax.self)
-    let unexpectedBetweenGenericWhereClauseAndRightAngleBracket = node.unexpectedBetweenGenericWhereClauseAndRightAngleBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightAngleBracket = self.visit(node.rightAngleBracket).cast(TokenSyntax.self)
-    return Syntax(GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterList, unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket))
+  open override func visit(_ node: GenericParameterClauseSyntax) -> GenericParameterClauseSyntax {
+    let unexpectedBeforeLeftAngleBracket = node.unexpectedBeforeLeftAngleBracket.map(self.visit)
+    let leftAngleBracket = self.visit(node.leftAngleBracket)
+    let unexpectedBetweenLeftAngleBracketAndGenericParameterList = node.unexpectedBetweenLeftAngleBracketAndGenericParameterList.map(self.visit)
+    let genericParameterList = self.visit(node.genericParameterList)
+    let unexpectedBetweenGenericParameterListAndGenericWhereClause = node.unexpectedBetweenGenericParameterListAndGenericWhereClause.map(self.visit)
+    let genericWhereClause = node.genericWhereClause.map(self.visit)
+    let unexpectedBetweenGenericWhereClauseAndRightAngleBracket = node.unexpectedBetweenGenericWhereClauseAndRightAngleBracket.map(self.visit)
+    let rightAngleBracket = self.visit(node.rightAngleBracket)
+    return GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterList, unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
   }
   
-  open override func visit(_ node: ConformanceRequirementSyntax) -> Syntax {
-    let unexpectedBeforeLeftTypeIdentifier = node.unexpectedBeforeLeftTypeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftTypeIdentifier = self.visit(node.leftTypeIdentifier).cast(TypeSyntax.self)
-    let unexpectedBetweenLeftTypeIdentifierAndColon = node.unexpectedBetweenLeftTypeIdentifierAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndRightTypeIdentifier = node.unexpectedBetweenColonAndRightTypeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightTypeIdentifier = self.visit(node.rightTypeIdentifier).cast(TypeSyntax.self)
-    return Syntax(ConformanceRequirementSyntax(unexpectedBeforeLeftTypeIdentifier, leftTypeIdentifier: leftTypeIdentifier, unexpectedBetweenLeftTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndRightTypeIdentifier, rightTypeIdentifier: rightTypeIdentifier))
+  open override func visit(_ node: ConformanceRequirementSyntax) -> ConformanceRequirementSyntax {
+    let unexpectedBeforeLeftTypeIdentifier = node.unexpectedBeforeLeftTypeIdentifier.map(self.visit)
+    let leftTypeIdentifier = self.visit(node.leftTypeIdentifier)
+    let unexpectedBetweenLeftTypeIdentifierAndColon = node.unexpectedBetweenLeftTypeIdentifierAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndRightTypeIdentifier = node.unexpectedBetweenColonAndRightTypeIdentifier.map(self.visit)
+    let rightTypeIdentifier = self.visit(node.rightTypeIdentifier)
+    return ConformanceRequirementSyntax(unexpectedBeforeLeftTypeIdentifier, leftTypeIdentifier: leftTypeIdentifier, unexpectedBetweenLeftTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndRightTypeIdentifier, rightTypeIdentifier: rightTypeIdentifier)
   }
   
-  open override func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> Syntax {
-    let unexpectedBeforeLeftAngleBracket = node.unexpectedBeforeLeftAngleBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftAngleBracket = self.visit(node.leftAngleBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList = node.unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let primaryAssociatedTypeList = self.visit(node.primaryAssociatedTypeList).cast(PrimaryAssociatedTypeListSyntax.self)
-    let unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket = node.unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightAngleBracket = self.visit(node.rightAngleBracket).cast(TokenSyntax.self)
-    return Syntax(PrimaryAssociatedTypeClauseSyntax(unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList, primaryAssociatedTypeList: primaryAssociatedTypeList, unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket, rightAngleBracket: rightAngleBracket))
+  open override func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+    let unexpectedBeforeLeftAngleBracket = node.unexpectedBeforeLeftAngleBracket.map(self.visit)
+    let leftAngleBracket = self.visit(node.leftAngleBracket)
+    let unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList = node.unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList.map(self.visit)
+    let primaryAssociatedTypeList = self.visit(node.primaryAssociatedTypeList)
+    let unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket = node.unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket.map(self.visit)
+    let rightAngleBracket = self.visit(node.rightAngleBracket)
+    return PrimaryAssociatedTypeClauseSyntax(unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList, primaryAssociatedTypeList: primaryAssociatedTypeList, unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
   }
   
   open override func visit(_ node: SimpleTypeIdentifierSyntax) -> TypeSyntax {
-    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndGenericArgumentClause = node.unexpectedBetweenNameAndGenericArgumentClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericArgumentClause = node.genericArgumentClause.map(self.visit)?.cast(GenericArgumentClauseSyntax.self)
+    let unexpectedBeforeName = node.unexpectedBeforeName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndGenericArgumentClause = node.unexpectedBetweenNameAndGenericArgumentClause.map(self.visit)
+    let genericArgumentClause = node.genericArgumentClause.map(self.visit)
     return TypeSyntax(SimpleTypeIdentifierSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndGenericArgumentClause, genericArgumentClause: genericArgumentClause))
   }
   
   open override func visit(_ node: MemberTypeIdentifierSyntax) -> TypeSyntax {
-    let unexpectedBeforeBaseType = node.unexpectedBeforeBaseType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let baseType = self.visit(node.baseType).cast(TypeSyntax.self)
-    let unexpectedBetweenBaseTypeAndPeriod = node.unexpectedBetweenBaseTypeAndPeriod.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let period = self.visit(node.period).cast(TokenSyntax.self)
-    let unexpectedBetweenPeriodAndName = node.unexpectedBetweenPeriodAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = self.visit(node.name).cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndGenericArgumentClause = node.unexpectedBetweenNameAndGenericArgumentClause.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericArgumentClause = node.genericArgumentClause.map(self.visit)?.cast(GenericArgumentClauseSyntax.self)
+    let unexpectedBeforeBaseType = node.unexpectedBeforeBaseType.map(self.visit)
+    let baseType = self.visit(node.baseType)
+    let unexpectedBetweenBaseTypeAndPeriod = node.unexpectedBetweenBaseTypeAndPeriod.map(self.visit)
+    let period = self.visit(node.period)
+    let unexpectedBetweenPeriodAndName = node.unexpectedBetweenPeriodAndName.map(self.visit)
+    let name = self.visit(node.name)
+    let unexpectedBetweenNameAndGenericArgumentClause = node.unexpectedBetweenNameAndGenericArgumentClause.map(self.visit)
+    let genericArgumentClause = node.genericArgumentClause.map(self.visit)
     return TypeSyntax(MemberTypeIdentifierSyntax(unexpectedBeforeBaseType, baseType: baseType, unexpectedBetweenBaseTypeAndPeriod, period: period, unexpectedBetweenPeriodAndName, name: name, unexpectedBetweenNameAndGenericArgumentClause, genericArgumentClause: genericArgumentClause))
   }
   
   open override func visit(_ node: ClassRestrictionTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeClassKeyword = node.unexpectedBeforeClassKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let classKeyword = self.visit(node.classKeyword).cast(TokenSyntax.self)
+    let unexpectedBeforeClassKeyword = node.unexpectedBeforeClassKeyword.map(self.visit)
+    let classKeyword = self.visit(node.classKeyword)
     return TypeSyntax(ClassRestrictionTypeSyntax(unexpectedBeforeClassKeyword, classKeyword: classKeyword))
   }
   
   open override func visit(_ node: ArrayTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeLeftSquareBracket = node.unexpectedBeforeLeftSquareBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftSquareBracket = self.visit(node.leftSquareBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftSquareBracketAndElementType = node.unexpectedBetweenLeftSquareBracketAndElementType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elementType = self.visit(node.elementType).cast(TypeSyntax.self)
-    let unexpectedBetweenElementTypeAndRightSquareBracket = node.unexpectedBetweenElementTypeAndRightSquareBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightSquareBracket = self.visit(node.rightSquareBracket).cast(TokenSyntax.self)
+    let unexpectedBeforeLeftSquareBracket = node.unexpectedBeforeLeftSquareBracket.map(self.visit)
+    let leftSquareBracket = self.visit(node.leftSquareBracket)
+    let unexpectedBetweenLeftSquareBracketAndElementType = node.unexpectedBetweenLeftSquareBracketAndElementType.map(self.visit)
+    let elementType = self.visit(node.elementType)
+    let unexpectedBetweenElementTypeAndRightSquareBracket = node.unexpectedBetweenElementTypeAndRightSquareBracket.map(self.visit)
+    let rightSquareBracket = self.visit(node.rightSquareBracket)
     return TypeSyntax(ArrayTypeSyntax(unexpectedBeforeLeftSquareBracket, leftSquareBracket: leftSquareBracket, unexpectedBetweenLeftSquareBracketAndElementType, elementType: elementType, unexpectedBetweenElementTypeAndRightSquareBracket, rightSquareBracket: rightSquareBracket))
   }
   
   open override func visit(_ node: DictionaryTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeLeftSquareBracket = node.unexpectedBeforeLeftSquareBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftSquareBracket = self.visit(node.leftSquareBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftSquareBracketAndKeyType = node.unexpectedBetweenLeftSquareBracketAndKeyType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let keyType = self.visit(node.keyType).cast(TypeSyntax.self)
-    let unexpectedBetweenKeyTypeAndColon = node.unexpectedBetweenKeyTypeAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndValueType = node.unexpectedBetweenColonAndValueType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let valueType = self.visit(node.valueType).cast(TypeSyntax.self)
-    let unexpectedBetweenValueTypeAndRightSquareBracket = node.unexpectedBetweenValueTypeAndRightSquareBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightSquareBracket = self.visit(node.rightSquareBracket).cast(TokenSyntax.self)
+    let unexpectedBeforeLeftSquareBracket = node.unexpectedBeforeLeftSquareBracket.map(self.visit)
+    let leftSquareBracket = self.visit(node.leftSquareBracket)
+    let unexpectedBetweenLeftSquareBracketAndKeyType = node.unexpectedBetweenLeftSquareBracketAndKeyType.map(self.visit)
+    let keyType = self.visit(node.keyType)
+    let unexpectedBetweenKeyTypeAndColon = node.unexpectedBetweenKeyTypeAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndValueType = node.unexpectedBetweenColonAndValueType.map(self.visit)
+    let valueType = self.visit(node.valueType)
+    let unexpectedBetweenValueTypeAndRightSquareBracket = node.unexpectedBetweenValueTypeAndRightSquareBracket.map(self.visit)
+    let rightSquareBracket = self.visit(node.rightSquareBracket)
     return TypeSyntax(DictionaryTypeSyntax(unexpectedBeforeLeftSquareBracket, leftSquareBracket: leftSquareBracket, unexpectedBetweenLeftSquareBracketAndKeyType, keyType: keyType, unexpectedBetweenKeyTypeAndColon, colon: colon, unexpectedBetweenColonAndValueType, valueType: valueType, unexpectedBetweenValueTypeAndRightSquareBracket, rightSquareBracket: rightSquareBracket))
   }
   
   open override func visit(_ node: MetatypeTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeBaseType = node.unexpectedBeforeBaseType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let baseType = self.visit(node.baseType).cast(TypeSyntax.self)
-    let unexpectedBetweenBaseTypeAndPeriod = node.unexpectedBetweenBaseTypeAndPeriod.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let period = self.visit(node.period).cast(TokenSyntax.self)
-    let unexpectedBetweenPeriodAndTypeOrProtocol = node.unexpectedBetweenPeriodAndTypeOrProtocol.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeOrProtocol = self.visit(node.typeOrProtocol).cast(TokenSyntax.self)
+    let unexpectedBeforeBaseType = node.unexpectedBeforeBaseType.map(self.visit)
+    let baseType = self.visit(node.baseType)
+    let unexpectedBetweenBaseTypeAndPeriod = node.unexpectedBetweenBaseTypeAndPeriod.map(self.visit)
+    let period = self.visit(node.period)
+    let unexpectedBetweenPeriodAndTypeOrProtocol = node.unexpectedBetweenPeriodAndTypeOrProtocol.map(self.visit)
+    let typeOrProtocol = self.visit(node.typeOrProtocol)
     return TypeSyntax(MetatypeTypeSyntax(unexpectedBeforeBaseType, baseType: baseType, unexpectedBetweenBaseTypeAndPeriod, period: period, unexpectedBetweenPeriodAndTypeOrProtocol, typeOrProtocol: typeOrProtocol))
   }
   
   open override func visit(_ node: OptionalTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeWrappedType = node.unexpectedBeforeWrappedType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let wrappedType = self.visit(node.wrappedType).cast(TypeSyntax.self)
-    let unexpectedBetweenWrappedTypeAndQuestionMark = node.unexpectedBetweenWrappedTypeAndQuestionMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionMark = self.visit(node.questionMark).cast(TokenSyntax.self)
+    let unexpectedBeforeWrappedType = node.unexpectedBeforeWrappedType.map(self.visit)
+    let wrappedType = self.visit(node.wrappedType)
+    let unexpectedBetweenWrappedTypeAndQuestionMark = node.unexpectedBetweenWrappedTypeAndQuestionMark.map(self.visit)
+    let questionMark = self.visit(node.questionMark)
     return TypeSyntax(OptionalTypeSyntax(unexpectedBeforeWrappedType, wrappedType: wrappedType, unexpectedBetweenWrappedTypeAndQuestionMark, questionMark: questionMark))
   }
   
   open override func visit(_ node: ConstrainedSugarTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeSomeOrAnySpecifier = node.unexpectedBeforeSomeOrAnySpecifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let someOrAnySpecifier = self.visit(node.someOrAnySpecifier).cast(TokenSyntax.self)
-    let unexpectedBetweenSomeOrAnySpecifierAndBaseType = node.unexpectedBetweenSomeOrAnySpecifierAndBaseType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let baseType = self.visit(node.baseType).cast(TypeSyntax.self)
+    let unexpectedBeforeSomeOrAnySpecifier = node.unexpectedBeforeSomeOrAnySpecifier.map(self.visit)
+    let someOrAnySpecifier = self.visit(node.someOrAnySpecifier)
+    let unexpectedBetweenSomeOrAnySpecifierAndBaseType = node.unexpectedBetweenSomeOrAnySpecifierAndBaseType.map(self.visit)
+    let baseType = self.visit(node.baseType)
     return TypeSyntax(ConstrainedSugarTypeSyntax(unexpectedBeforeSomeOrAnySpecifier, someOrAnySpecifier: someOrAnySpecifier, unexpectedBetweenSomeOrAnySpecifierAndBaseType, baseType: baseType))
   }
   
   open override func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeWrappedType = node.unexpectedBeforeWrappedType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let wrappedType = self.visit(node.wrappedType).cast(TypeSyntax.self)
-    let unexpectedBetweenWrappedTypeAndExclamationMark = node.unexpectedBetweenWrappedTypeAndExclamationMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let exclamationMark = self.visit(node.exclamationMark).cast(TokenSyntax.self)
+    let unexpectedBeforeWrappedType = node.unexpectedBeforeWrappedType.map(self.visit)
+    let wrappedType = self.visit(node.wrappedType)
+    let unexpectedBetweenWrappedTypeAndExclamationMark = node.unexpectedBetweenWrappedTypeAndExclamationMark.map(self.visit)
+    let exclamationMark = self.visit(node.exclamationMark)
     return TypeSyntax(ImplicitlyUnwrappedOptionalTypeSyntax(unexpectedBeforeWrappedType, wrappedType: wrappedType, unexpectedBetweenWrappedTypeAndExclamationMark, exclamationMark: exclamationMark))
   }
   
-  open override func visit(_ node: CompositionTypeElementSyntax) -> Syntax {
-    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = self.visit(node.type).cast(TypeSyntax.self)
-    let unexpectedBetweenTypeAndAmpersand = node.unexpectedBetweenTypeAndAmpersand.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ampersand = node.ampersand.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(CompositionTypeElementSyntax(unexpectedBeforeType, type: type, unexpectedBetweenTypeAndAmpersand, ampersand: ampersand))
+  open override func visit(_ node: CompositionTypeElementSyntax) -> CompositionTypeElementSyntax {
+    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)
+    let type = self.visit(node.type)
+    let unexpectedBetweenTypeAndAmpersand = node.unexpectedBetweenTypeAndAmpersand.map(self.visit)
+    let ampersand = node.ampersand.map(self.visit)
+    return CompositionTypeElementSyntax(unexpectedBeforeType, type: type, unexpectedBetweenTypeAndAmpersand, ampersand: ampersand)
   }
   
-  open override func visit(_ node: CompositionTypeElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(CompositionTypeElementSyntax.self)
+  open override func visit(_ node: CompositionTypeElementListSyntax) -> CompositionTypeElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(CompositionTypeElementListSyntax(formattedChildren))
+    return CompositionTypeElementListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: CompositionTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeElements = node.unexpectedBeforeElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = self.visit(node.elements).cast(CompositionTypeElementListSyntax.self)
+    let unexpectedBeforeElements = node.unexpectedBeforeElements.map(self.visit)
+    let elements = self.visit(node.elements)
     return TypeSyntax(CompositionTypeSyntax(unexpectedBeforeElements, elements: elements))
   }
   
   open override func visit(_ node: PackExpansionTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforePatternType = node.unexpectedBeforePatternType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let patternType = self.visit(node.patternType).cast(TypeSyntax.self)
-    let unexpectedBetweenPatternTypeAndEllipsis = node.unexpectedBetweenPatternTypeAndEllipsis.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ellipsis = self.visit(node.ellipsis).cast(TokenSyntax.self)
+    let unexpectedBeforePatternType = node.unexpectedBeforePatternType.map(self.visit)
+    let patternType = self.visit(node.patternType)
+    let unexpectedBetweenPatternTypeAndEllipsis = node.unexpectedBetweenPatternTypeAndEllipsis.map(self.visit)
+    let ellipsis = self.visit(node.ellipsis)
     return TypeSyntax(PackExpansionTypeSyntax(unexpectedBeforePatternType, patternType: patternType, unexpectedBetweenPatternTypeAndEllipsis, ellipsis: ellipsis))
   }
   
-  open override func visit(_ node: TupleTypeElementSyntax) -> Syntax {
-    let unexpectedBeforeInOut = node.unexpectedBeforeInOut.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let inOut = node.inOut.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenInOutAndName = node.unexpectedBetweenInOutAndName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let name = node.name.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenNameAndSecondName = node.unexpectedBetweenNameAndSecondName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let secondName = node.secondName.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenSecondNameAndColon = node.unexpectedBetweenSecondNameAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = node.colon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndType = node.unexpectedBetweenColonAndType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = self.visit(node.type).cast(TypeSyntax.self)
-    let unexpectedBetweenTypeAndEllipsis = node.unexpectedBetweenTypeAndEllipsis.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let ellipsis = node.ellipsis.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenEllipsisAndInitializer = node.unexpectedBetweenEllipsisAndInitializer.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let initializer = node.initializer.map(self.visit)?.cast(InitializerClauseSyntax.self)
-    let unexpectedBetweenInitializerAndTrailingComma = node.unexpectedBetweenInitializerAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(TupleTypeElementSyntax(unexpectedBeforeInOut, inOut: inOut, unexpectedBetweenInOutAndName, name: name, unexpectedBetweenNameAndSecondName, secondName: secondName, unexpectedBetweenSecondNameAndColon, colon: colon, unexpectedBetweenColonAndType, type: type, unexpectedBetweenTypeAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
+    let unexpectedBeforeInOut = node.unexpectedBeforeInOut.map(self.visit)
+    let inOut = node.inOut.map(self.visit)
+    let unexpectedBetweenInOutAndName = node.unexpectedBetweenInOutAndName.map(self.visit)
+    let name = node.name.map(self.visit)
+    let unexpectedBetweenNameAndSecondName = node.unexpectedBetweenNameAndSecondName.map(self.visit)
+    let secondName = node.secondName.map(self.visit)
+    let unexpectedBetweenSecondNameAndColon = node.unexpectedBetweenSecondNameAndColon.map(self.visit)
+    let colon = node.colon.map(self.visit)
+    let unexpectedBetweenColonAndType = node.unexpectedBetweenColonAndType.map(self.visit)
+    let type = self.visit(node.type)
+    let unexpectedBetweenTypeAndEllipsis = node.unexpectedBetweenTypeAndEllipsis.map(self.visit)
+    let ellipsis = node.ellipsis.map(self.visit)
+    let unexpectedBetweenEllipsisAndInitializer = node.unexpectedBetweenEllipsisAndInitializer.map(self.visit)
+    let initializer = node.initializer.map(self.visit)
+    let unexpectedBetweenInitializerAndTrailingComma = node.unexpectedBetweenInitializerAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return TupleTypeElementSyntax(unexpectedBeforeInOut, inOut: inOut, unexpectedBetweenInOutAndName, name: name, unexpectedBetweenNameAndSecondName, secondName: secondName, unexpectedBetweenSecondNameAndColon, colon: colon, unexpectedBetweenColonAndType, type: type, unexpectedBetweenTypeAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: TupleTypeElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(TupleTypeElementSyntax.self)
+  open override func visit(_ node: TupleTypeElementListSyntax) -> TupleTypeElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(TupleTypeElementListSyntax(formattedChildren))
+    return TupleTypeElementListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: TupleTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndElements = node.unexpectedBetweenLeftParenAndElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = self.visit(node.elements).cast(TupleTypeElementListSyntax.self)
-    let unexpectedBetweenElementsAndRightParen = node.unexpectedBetweenElementsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndElements = node.unexpectedBetweenLeftParenAndElements.map(self.visit)
+    let elements = self.visit(node.elements)
+    let unexpectedBetweenElementsAndRightParen = node.unexpectedBetweenElementsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return TypeSyntax(TupleTypeSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElements, elements: elements, unexpectedBetweenElementsAndRightParen, rightParen: rightParen))
   }
   
   open override func visit(_ node: FunctionTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndArguments = node.unexpectedBetweenLeftParenAndArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arguments = self.visit(node.arguments).cast(TupleTypeElementListSyntax.self)
-    let unexpectedBetweenArgumentsAndRightParen = node.unexpectedBetweenArgumentsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
-    let unexpectedBetweenRightParenAndAsyncKeyword = node.unexpectedBetweenRightParenAndAsyncKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asyncKeyword = node.asyncKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword = node.unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let throwsOrRethrowsKeyword = node.throwsOrRethrowsKeyword.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenThrowsOrRethrowsKeywordAndArrow = node.unexpectedBetweenThrowsOrRethrowsKeywordAndArrow.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arrow = self.visit(node.arrow).cast(TokenSyntax.self)
-    let unexpectedBetweenArrowAndReturnType = node.unexpectedBetweenArrowAndReturnType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let returnType = self.visit(node.returnType).cast(TypeSyntax.self)
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndArguments = node.unexpectedBetweenLeftParenAndArguments.map(self.visit)
+    let arguments = self.visit(node.arguments)
+    let unexpectedBetweenArgumentsAndRightParen = node.unexpectedBetweenArgumentsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
+    let unexpectedBetweenRightParenAndAsyncKeyword = node.unexpectedBetweenRightParenAndAsyncKeyword.map(self.visit)
+    let asyncKeyword = node.asyncKeyword.map(self.visit)
+    let unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword = node.unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword.map(self.visit)
+    let throwsOrRethrowsKeyword = node.throwsOrRethrowsKeyword.map(self.visit)
+    let unexpectedBetweenThrowsOrRethrowsKeywordAndArrow = node.unexpectedBetweenThrowsOrRethrowsKeywordAndArrow.map(self.visit)
+    let arrow = self.visit(node.arrow)
+    let unexpectedBetweenArrowAndReturnType = node.unexpectedBetweenArrowAndReturnType.map(self.visit)
+    let returnType = self.visit(node.returnType)
     return TypeSyntax(FunctionTypeSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments, arguments: arguments, unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndAsyncKeyword, asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword, throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndArrow, arrow: arrow, unexpectedBetweenArrowAndReturnType, returnType: returnType))
   }
   
   open override func visit(_ node: AttributedTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeSpecifier = node.unexpectedBeforeSpecifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let specifier = node.specifier.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenSpecifierAndAttributes = node.unexpectedBetweenSpecifierAndAttributes.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let attributes = node.attributes.map(self.visit)?.cast(AttributeListSyntax.self)
-    let unexpectedBetweenAttributesAndBaseType = node.unexpectedBetweenAttributesAndBaseType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let baseType = self.visit(node.baseType).cast(TypeSyntax.self)
+    let unexpectedBeforeSpecifier = node.unexpectedBeforeSpecifier.map(self.visit)
+    let specifier = node.specifier.map(self.visit)
+    let unexpectedBetweenSpecifierAndAttributes = node.unexpectedBetweenSpecifierAndAttributes.map(self.visit)
+    let attributes = node.attributes.map(self.visit)
+    let unexpectedBetweenAttributesAndBaseType = node.unexpectedBetweenAttributesAndBaseType.map(self.visit)
+    let baseType = self.visit(node.baseType)
     return TypeSyntax(AttributedTypeSyntax(unexpectedBeforeSpecifier, specifier: specifier, unexpectedBetweenSpecifierAndAttributes, attributes: attributes, unexpectedBetweenAttributesAndBaseType, baseType: baseType))
   }
   
-  open override func visit(_ node: GenericArgumentListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(GenericArgumentSyntax.self)
+  open override func visit(_ node: GenericArgumentListSyntax) -> GenericArgumentListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(GenericArgumentListSyntax(formattedChildren))
+    return GenericArgumentListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: GenericArgumentSyntax) -> Syntax {
-    let unexpectedBeforeArgumentType = node.unexpectedBeforeArgumentType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let argumentType = self.visit(node.argumentType).cast(TypeSyntax.self)
-    let unexpectedBetweenArgumentTypeAndTrailingComma = node.unexpectedBetweenArgumentTypeAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(GenericArgumentSyntax(unexpectedBeforeArgumentType, argumentType: argumentType, unexpectedBetweenArgumentTypeAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: GenericArgumentSyntax) -> GenericArgumentSyntax {
+    let unexpectedBeforeArgumentType = node.unexpectedBeforeArgumentType.map(self.visit)
+    let argumentType = self.visit(node.argumentType)
+    let unexpectedBetweenArgumentTypeAndTrailingComma = node.unexpectedBetweenArgumentTypeAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return GenericArgumentSyntax(unexpectedBeforeArgumentType, argumentType: argumentType, unexpectedBetweenArgumentTypeAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: GenericArgumentClauseSyntax) -> Syntax {
-    let unexpectedBeforeLeftAngleBracket = node.unexpectedBeforeLeftAngleBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftAngleBracket = self.visit(node.leftAngleBracket).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftAngleBracketAndArguments = node.unexpectedBetweenLeftAngleBracketAndArguments.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let arguments = self.visit(node.arguments).cast(GenericArgumentListSyntax.self)
-    let unexpectedBetweenArgumentsAndRightAngleBracket = node.unexpectedBetweenArgumentsAndRightAngleBracket.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightAngleBracket = self.visit(node.rightAngleBracket).cast(TokenSyntax.self)
-    return Syntax(GenericArgumentClauseSyntax(unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndArguments, arguments: arguments, unexpectedBetweenArgumentsAndRightAngleBracket, rightAngleBracket: rightAngleBracket))
+  open override func visit(_ node: GenericArgumentClauseSyntax) -> GenericArgumentClauseSyntax {
+    let unexpectedBeforeLeftAngleBracket = node.unexpectedBeforeLeftAngleBracket.map(self.visit)
+    let leftAngleBracket = self.visit(node.leftAngleBracket)
+    let unexpectedBetweenLeftAngleBracketAndArguments = node.unexpectedBetweenLeftAngleBracketAndArguments.map(self.visit)
+    let arguments = self.visit(node.arguments)
+    let unexpectedBetweenArgumentsAndRightAngleBracket = node.unexpectedBetweenArgumentsAndRightAngleBracket.map(self.visit)
+    let rightAngleBracket = self.visit(node.rightAngleBracket)
+    return GenericArgumentClauseSyntax(unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndArguments, arguments: arguments, unexpectedBetweenArgumentsAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
   }
   
   open override func visit(_ node: NamedOpaqueReturnTypeSyntax) -> TypeSyntax {
-    let unexpectedBeforeGenericParameters = node.unexpectedBeforeGenericParameters.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let genericParameters = self.visit(node.genericParameters).cast(GenericParameterClauseSyntax.self)
-    let unexpectedBetweenGenericParametersAndBaseType = node.unexpectedBetweenGenericParametersAndBaseType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let baseType = self.visit(node.baseType).cast(TypeSyntax.self)
+    let unexpectedBeforeGenericParameters = node.unexpectedBeforeGenericParameters.map(self.visit)
+    let genericParameters = self.visit(node.genericParameters)
+    let unexpectedBetweenGenericParametersAndBaseType = node.unexpectedBetweenGenericParametersAndBaseType.map(self.visit)
+    let baseType = self.visit(node.baseType)
     return TypeSyntax(NamedOpaqueReturnTypeSyntax(unexpectedBeforeGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndBaseType, baseType: baseType))
   }
   
-  open override func visit(_ node: TypeAnnotationSyntax) -> Syntax {
-    let unexpectedBeforeColon = node.unexpectedBeforeColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndType = node.unexpectedBetweenColonAndType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = self.visit(node.type).cast(TypeSyntax.self)
-    return Syntax(TypeAnnotationSyntax(unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndType, type: type))
+  open override func visit(_ node: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
+    let unexpectedBeforeColon = node.unexpectedBeforeColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndType = node.unexpectedBetweenColonAndType.map(self.visit)
+    let type = self.visit(node.type)
+    return TypeAnnotationSyntax(unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndType, type: type)
   }
   
   open override func visit(_ node: EnumCasePatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = node.type.map(self.visit)?.cast(TypeSyntax.self)
-    let unexpectedBetweenTypeAndPeriod = node.unexpectedBetweenTypeAndPeriod.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let period = self.visit(node.period).cast(TokenSyntax.self)
-    let unexpectedBetweenPeriodAndCaseName = node.unexpectedBetweenPeriodAndCaseName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let caseName = self.visit(node.caseName).cast(TokenSyntax.self)
-    let unexpectedBetweenCaseNameAndAssociatedTuple = node.unexpectedBetweenCaseNameAndAssociatedTuple.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
+    let unexpectedBeforeType = node.unexpectedBeforeType.map(self.visit)
+    let type = node.type.map(self.visit)
+    let unexpectedBetweenTypeAndPeriod = node.unexpectedBetweenTypeAndPeriod.map(self.visit)
+    let period = self.visit(node.period)
+    let unexpectedBetweenPeriodAndCaseName = node.unexpectedBetweenPeriodAndCaseName.map(self.visit)
+    let caseName = self.visit(node.caseName)
+    let unexpectedBetweenCaseNameAndAssociatedTuple = node.unexpectedBetweenCaseNameAndAssociatedTuple.map(self.visit)
     let associatedTuple = node.associatedTuple.map(self.visit)?.cast(TuplePatternSyntax.self)
     return PatternSyntax(EnumCasePatternSyntax(unexpectedBeforeType, type: type, unexpectedBetweenTypeAndPeriod, period: period, unexpectedBetweenPeriodAndCaseName, caseName: caseName, unexpectedBetweenCaseNameAndAssociatedTuple, associatedTuple: associatedTuple))
   }
   
   open override func visit(_ node: IsTypePatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeIsKeyword = node.unexpectedBeforeIsKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let isKeyword = self.visit(node.isKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenIsKeywordAndType = node.unexpectedBetweenIsKeywordAndType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = self.visit(node.type).cast(TypeSyntax.self)
+    let unexpectedBeforeIsKeyword = node.unexpectedBeforeIsKeyword.map(self.visit)
+    let isKeyword = self.visit(node.isKeyword)
+    let unexpectedBetweenIsKeywordAndType = node.unexpectedBetweenIsKeywordAndType.map(self.visit)
+    let type = self.visit(node.type)
     return PatternSyntax(IsTypePatternSyntax(unexpectedBeforeIsKeyword, isKeyword: isKeyword, unexpectedBetweenIsKeywordAndType, type: type))
   }
   
   open override func visit(_ node: OptionalPatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeSubPattern = node.unexpectedBeforeSubPattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let subPattern = self.visit(node.subPattern).cast(PatternSyntax.self)
-    let unexpectedBetweenSubPatternAndQuestionMark = node.unexpectedBetweenSubPatternAndQuestionMark.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let questionMark = self.visit(node.questionMark).cast(TokenSyntax.self)
+    let unexpectedBeforeSubPattern = node.unexpectedBeforeSubPattern.map(self.visit)
+    let subPattern = self.visit(node.subPattern)
+    let unexpectedBetweenSubPatternAndQuestionMark = node.unexpectedBetweenSubPatternAndQuestionMark.map(self.visit)
+    let questionMark = self.visit(node.questionMark)
     return PatternSyntax(OptionalPatternSyntax(unexpectedBeforeSubPattern, subPattern: subPattern, unexpectedBetweenSubPatternAndQuestionMark, questionMark: questionMark))
   }
   
   open override func visit(_ node: IdentifierPatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let identifier = self.visit(node.identifier).cast(TokenSyntax.self)
+    let unexpectedBeforeIdentifier = node.unexpectedBeforeIdentifier.map(self.visit)
+    let identifier = self.visit(node.identifier)
     return PatternSyntax(IdentifierPatternSyntax(unexpectedBeforeIdentifier, identifier: identifier))
   }
   
   open override func visit(_ node: AsTypePatternSyntax) -> PatternSyntax {
-    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndAsKeyword = node.unexpectedBetweenPatternAndAsKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let asKeyword = self.visit(node.asKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenAsKeywordAndType = node.unexpectedBetweenAsKeywordAndType.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let type = self.visit(node.type).cast(TypeSyntax.self)
+    let unexpectedBeforePattern = node.unexpectedBeforePattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
+    let unexpectedBetweenPatternAndAsKeyword = node.unexpectedBetweenPatternAndAsKeyword.map(self.visit)
+    let asKeyword = self.visit(node.asKeyword)
+    let unexpectedBetweenAsKeywordAndType = node.unexpectedBetweenAsKeywordAndType.map(self.visit)
+    let type = self.visit(node.type)
     return PatternSyntax(AsTypePatternSyntax(unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndAsKeyword, asKeyword: asKeyword, unexpectedBetweenAsKeywordAndType, type: type))
   }
   
   open override func visit(_ node: TuplePatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let leftParen = self.visit(node.leftParen).cast(TokenSyntax.self)
-    let unexpectedBetweenLeftParenAndElements = node.unexpectedBetweenLeftParenAndElements.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let elements = self.visit(node.elements).cast(TuplePatternElementListSyntax.self)
-    let unexpectedBetweenElementsAndRightParen = node.unexpectedBetweenElementsAndRightParen.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let rightParen = self.visit(node.rightParen).cast(TokenSyntax.self)
+    let unexpectedBeforeLeftParen = node.unexpectedBeforeLeftParen.map(self.visit)
+    let leftParen = self.visit(node.leftParen)
+    let unexpectedBetweenLeftParenAndElements = node.unexpectedBetweenLeftParenAndElements.map(self.visit)
+    let elements = self.visit(node.elements)
+    let unexpectedBetweenElementsAndRightParen = node.unexpectedBetweenElementsAndRightParen.map(self.visit)
+    let rightParen = self.visit(node.rightParen)
     return PatternSyntax(TuplePatternSyntax(unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElements, elements: elements, unexpectedBetweenElementsAndRightParen, rightParen: rightParen))
   }
   
   open override func visit(_ node: WildcardPatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeWildcard = node.unexpectedBeforeWildcard.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let wildcard = self.visit(node.wildcard).cast(TokenSyntax.self)
-    let unexpectedBetweenWildcardAndTypeAnnotation = node.unexpectedBetweenWildcardAndTypeAnnotation.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let typeAnnotation = node.typeAnnotation.map(self.visit)?.cast(TypeAnnotationSyntax.self)
+    let unexpectedBeforeWildcard = node.unexpectedBeforeWildcard.map(self.visit)
+    let wildcard = self.visit(node.wildcard)
+    let unexpectedBetweenWildcardAndTypeAnnotation = node.unexpectedBetweenWildcardAndTypeAnnotation.map(self.visit)
+    let typeAnnotation = node.typeAnnotation.map(self.visit)
     return PatternSyntax(WildcardPatternSyntax(unexpectedBeforeWildcard, wildcard: wildcard, unexpectedBetweenWildcardAndTypeAnnotation, typeAnnotation: typeAnnotation))
   }
   
-  open override func visit(_ node: TuplePatternElementSyntax) -> Syntax {
-    let unexpectedBeforeLabelName = node.unexpectedBeforeLabelName.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let labelName = node.labelName.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLabelNameAndLabelColon = node.unexpectedBetweenLabelNameAndLabelColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let labelColon = node.labelColon.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenLabelColonAndPattern = node.unexpectedBetweenLabelColonAndPattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let pattern = self.visit(node.pattern).cast(PatternSyntax.self)
-    let unexpectedBetweenPatternAndTrailingComma = node.unexpectedBetweenPatternAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(TuplePatternElementSyntax(unexpectedBeforeLabelName, labelName: labelName, unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndPattern, pattern: pattern, unexpectedBetweenPatternAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: TuplePatternElementSyntax) -> TuplePatternElementSyntax {
+    let unexpectedBeforeLabelName = node.unexpectedBeforeLabelName.map(self.visit)
+    let labelName = node.labelName.map(self.visit)
+    let unexpectedBetweenLabelNameAndLabelColon = node.unexpectedBetweenLabelNameAndLabelColon.map(self.visit)
+    let labelColon = node.labelColon.map(self.visit)
+    let unexpectedBetweenLabelColonAndPattern = node.unexpectedBetweenLabelColonAndPattern.map(self.visit)
+    let pattern = self.visit(node.pattern)
+    let unexpectedBetweenPatternAndTrailingComma = node.unexpectedBetweenPatternAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return TuplePatternElementSyntax(unexpectedBeforeLabelName, labelName: labelName, unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndPattern, pattern: pattern, unexpectedBetweenPatternAndTrailingComma, trailingComma: trailingComma)
   }
   
   open override func visit(_ node: ExpressionPatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let expression = self.visit(node.expression).cast(ExprSyntax.self)
+    let unexpectedBeforeExpression = node.unexpectedBeforeExpression.map(self.visit)
+    let expression = self.visit(node.expression)
     return PatternSyntax(ExpressionPatternSyntax(unexpectedBeforeExpression, expression: expression))
   }
   
-  open override func visit(_ node: TuplePatternElementListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(TuplePatternElementSyntax.self)
+  open override func visit(_ node: TuplePatternElementListSyntax) -> TuplePatternElementListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(TuplePatternElementListSyntax(formattedChildren))
+    return TuplePatternElementListSyntax(formattedChildren)
   }
   
   open override func visit(_ node: ValueBindingPatternSyntax) -> PatternSyntax {
-    let unexpectedBeforeLetOrVarKeyword = node.unexpectedBeforeLetOrVarKeyword.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let letOrVarKeyword = self.visit(node.letOrVarKeyword).cast(TokenSyntax.self)
-    let unexpectedBetweenLetOrVarKeywordAndValuePattern = node.unexpectedBetweenLetOrVarKeywordAndValuePattern.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let valuePattern = self.visit(node.valuePattern).cast(PatternSyntax.self)
+    let unexpectedBeforeLetOrVarKeyword = node.unexpectedBeforeLetOrVarKeyword.map(self.visit)
+    let letOrVarKeyword = self.visit(node.letOrVarKeyword)
+    let unexpectedBetweenLetOrVarKeywordAndValuePattern = node.unexpectedBetweenLetOrVarKeywordAndValuePattern.map(self.visit)
+    let valuePattern = self.visit(node.valuePattern)
     return PatternSyntax(ValueBindingPatternSyntax(unexpectedBeforeLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndValuePattern, valuePattern: valuePattern))
   }
   
-  open override func visit(_ node: AvailabilitySpecListSyntax) -> Syntax {
-    let formattedChildren = node.children(viewMode: .all).map {
-      self.visit($0).cast(AvailabilityArgumentSyntax.self)
+  open override func visit(_ node: AvailabilitySpecListSyntax) -> AvailabilitySpecListSyntax {
+    let formattedChildren = node.map {
+      self.visit($0)
     }
-    return Syntax(AvailabilitySpecListSyntax(formattedChildren))
+    return AvailabilitySpecListSyntax(formattedChildren)
   }
   
-  open override func visit(_ node: AvailabilityArgumentSyntax) -> Syntax {
-    let unexpectedBeforeEntry = node.unexpectedBeforeEntry.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let entry = self.visit(node.entry).cast(Syntax.self)
-    let unexpectedBetweenEntryAndTrailingComma = node.unexpectedBetweenEntryAndTrailingComma.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let trailingComma = node.trailingComma.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(AvailabilityArgumentSyntax(unexpectedBeforeEntry, entry: entry, unexpectedBetweenEntryAndTrailingComma, trailingComma: trailingComma))
+  open override func visit(_ node: AvailabilityArgumentSyntax) -> AvailabilityArgumentSyntax {
+    let unexpectedBeforeEntry = node.unexpectedBeforeEntry.map(self.visit)
+    let entry = self.visit(node.entry)
+    let unexpectedBetweenEntryAndTrailingComma = node.unexpectedBetweenEntryAndTrailingComma.map(self.visit)
+    let trailingComma = node.trailingComma.map(self.visit)
+    return AvailabilityArgumentSyntax(unexpectedBeforeEntry, entry: entry, unexpectedBetweenEntryAndTrailingComma, trailingComma: trailingComma)
   }
   
-  open override func visit(_ node: AvailabilityLabeledArgumentSyntax) -> Syntax {
-    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let label = self.visit(node.label).cast(TokenSyntax.self)
-    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let colon = self.visit(node.colon).cast(TokenSyntax.self)
-    let unexpectedBetweenColonAndValue = node.unexpectedBetweenColonAndValue.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let value = self.visit(node.value).cast(Syntax.self)
-    return Syntax(AvailabilityLabeledArgumentSyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value))
+  open override func visit(_ node: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
+    let unexpectedBeforeLabel = node.unexpectedBeforeLabel.map(self.visit)
+    let label = self.visit(node.label)
+    let unexpectedBetweenLabelAndColon = node.unexpectedBetweenLabelAndColon.map(self.visit)
+    let colon = self.visit(node.colon)
+    let unexpectedBetweenColonAndValue = node.unexpectedBetweenColonAndValue.map(self.visit)
+    let value = self.visit(node.value)
+    return AvailabilityLabeledArgumentSyntax(unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue, value: value)
   }
   
-  open override func visit(_ node: AvailabilityVersionRestrictionSyntax) -> Syntax {
-    let unexpectedBeforePlatform = node.unexpectedBeforePlatform.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let platform = self.visit(node.platform).cast(TokenSyntax.self)
-    let unexpectedBetweenPlatformAndVersion = node.unexpectedBetweenPlatformAndVersion.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let version = node.version.map(self.visit)?.cast(VersionTupleSyntax.self)
-    return Syntax(AvailabilityVersionRestrictionSyntax(unexpectedBeforePlatform, platform: platform, unexpectedBetweenPlatformAndVersion, version: version))
+  open override func visit(_ node: AvailabilityVersionRestrictionSyntax) -> AvailabilityVersionRestrictionSyntax {
+    let unexpectedBeforePlatform = node.unexpectedBeforePlatform.map(self.visit)
+    let platform = self.visit(node.platform)
+    let unexpectedBetweenPlatformAndVersion = node.unexpectedBetweenPlatformAndVersion.map(self.visit)
+    let version = node.version.map(self.visit)
+    return AvailabilityVersionRestrictionSyntax(unexpectedBeforePlatform, platform: platform, unexpectedBetweenPlatformAndVersion, version: version)
   }
   
-  open override func visit(_ node: VersionTupleSyntax) -> Syntax {
-    let unexpectedBeforeMajorMinor = node.unexpectedBeforeMajorMinor.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let majorMinor = self.visit(node.majorMinor).cast(Syntax.self)
-    let unexpectedBetweenMajorMinorAndPatchPeriod = node.unexpectedBetweenMajorMinorAndPatchPeriod.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let patchPeriod = node.patchPeriod.map(self.visit)?.cast(TokenSyntax.self)
-    let unexpectedBetweenPatchPeriodAndPatchVersion = node.unexpectedBetweenPatchPeriodAndPatchVersion.map(self.visit)?.cast(UnexpectedNodesSyntax.self)
-    let patchVersion = node.patchVersion.map(self.visit)?.cast(TokenSyntax.self)
-    return Syntax(VersionTupleSyntax(unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion))
+  open override func visit(_ node: VersionTupleSyntax) -> VersionTupleSyntax {
+    let unexpectedBeforeMajorMinor = node.unexpectedBeforeMajorMinor.map(self.visit)
+    let majorMinor = self.visit(node.majorMinor)
+    let unexpectedBetweenMajorMinorAndPatchPeriod = node.unexpectedBetweenMajorMinorAndPatchPeriod.map(self.visit)
+    let patchPeriod = node.patchPeriod.map(self.visit)
+    let unexpectedBetweenPatchPeriodAndPatchVersion = node.unexpectedBetweenPatchPeriodAndPatchVersion.map(self.visit)
+    let patchVersion = node.patchVersion.map(self.visit)
+    return VersionTupleSyntax(unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion)
   }
   
   open override func visit(_ node: TokenSyntax) -> TokenSyntax {

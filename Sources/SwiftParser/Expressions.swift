@@ -2188,13 +2188,9 @@ extension Parser {
       let unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
       let label: RawTokenSyntax?
       let colon: RawTokenSyntax?
-      if let labelAndColon = self.consume(if: { $0.canBeArgumentLabel() }, followedBy: { $0.tokenKind == .colon }) {
-        unexpectedBeforeLabel = nil
-        (label, colon) = labelAndColon
-      } else if let dollarLabelAndColon = self.consume(if: .dollarIdentifier, followedBy: .colon) {
-        unexpectedBeforeLabel = RawUnexpectedNodesSyntax([dollarLabelAndColon.0], arena: self.arena)
-        label = missingToken(.identifier)
-        colon = dollarLabelAndColon.1
+      if currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon {
+        (unexpectedBeforeLabel, label) = parseArgumentLabel()
+        colon = consumeAnyToken()
       } else {
         unexpectedBeforeLabel = nil
         label = nil

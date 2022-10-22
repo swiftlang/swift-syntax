@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftBasicFormat
 
@@ -26,7 +27,7 @@ public func generateTemplates(templates: [(SourceFile, String)], destination: UR
     if verbose {
       print("Generating \(fileURL.path)...")
     }
-    let syntax = sourceFile.build(format: CodeGenerationFormat())
+    let syntax = sourceFile.formatted(using: CodeGenerationFormat())
     try "\(syntax)\n".write(to: fileURL, atomically: true, encoding: .utf8)
   }
 }

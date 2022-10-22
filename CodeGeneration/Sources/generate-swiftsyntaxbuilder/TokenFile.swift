@@ -19,10 +19,10 @@ import Utils
 let tokenFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
-    path: "SwiftSyntax"
+    path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 
-  ExtensionDecl(modifiers: [Token.public], extendedType: "TokenSyntax") {
+  ExtensionDecl(modifiers: [DeclModifier(name: .public)], extendedType: Type("TokenSyntax")) {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {
         VariableDecl("""

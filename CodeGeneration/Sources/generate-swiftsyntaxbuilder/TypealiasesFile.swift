@@ -20,7 +20,7 @@ import SwiftBasicFormat
 let typealiasesFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
-    path: "SwiftSyntax"
+    path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 
   TypealiasDecl("public typealias Token = TokenSyntax")

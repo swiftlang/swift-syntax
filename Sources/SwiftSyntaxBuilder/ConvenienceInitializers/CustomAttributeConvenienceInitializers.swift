@@ -17,8 +17,8 @@ extension CustomAttribute {
   /// and automatically adds parentheses as needed, similar to the convenience
   /// initializer for ``FunctionCallExpr``.
   public init(
-    _ attributeName: ExpressibleAsTypeBuildable,
-    @TupleExprElementListBuilder argumentList: () -> ExpressibleAsTupleExprElementList? = { nil }
+    _ attributeName: TypeSyntax,
+    @TupleExprElementListBuilder argumentList: () -> TupleExprElementList? = { nil }
   ) {
     let argumentList = argumentList()
     self.init(

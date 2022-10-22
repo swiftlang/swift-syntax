@@ -20,19 +20,19 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
     
     @CodeBlockItemListBuilder
-    func buildInnerCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
-      FunctionCallExpr(calledExpression: "innerBuilder")
+    func buildInnerCodeBlockItemList() -> CodeBlockItemList {
+      FunctionCallExpr(calledExpression: Expr("innerBuilder"))
     }
     
     @CodeBlockItemListBuilder
-    func buildOuterCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
-      FunctionCallExpr(calledExpression: "outerBuilder")
+    func buildOuterCodeBlockItemList() -> CodeBlockItemList {
+      FunctionCallExpr(calledExpression: Expr("outerBuilder"))
       
       buildInnerCodeBlockItemList()
     }
     
     let codeBlock = CodeBlock(leadingTrivia: leadingTrivia) {
-      FunctionCallExpr(calledExpression: "outsideBuilder")
+      FunctionCallExpr(calledExpression: Expr("outsideBuilder"))
       buildOuterCodeBlockItemList()
     }
 
@@ -43,40 +43,5 @@ final class CollectionNodeFlatteningTests: XCTestCase {
           innerBuilder()
       }
       """)
-  }
-  
-  func test_FlattenCodeBlockItemListWithConstructor() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-    
-    func buildInnerCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
-      CodeBlockItemList([FunctionCallExpr(calledExpression: "innerBuilder")])
-    }
-    
-    func buildOuterCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
-      CodeBlockItemList(
-        combining: [
-          CodeBlockItemList([FunctionCallExpr(calledExpression: "outerBuilder")]),
-          buildInnerCodeBlockItemList()
-        ]
-      )
-    }
-    
-    let codeBlock = CodeBlock(
-      leadingTrivia: leadingTrivia,
-      statements: CodeBlockItemList(
-        combining: [
-          CodeBlockItemList([FunctionCallExpr(calledExpression: "outsideBuilder")]),
-          buildOuterCodeBlockItemList()
-        ]
-      )
-    )
-    
-    AssertBuildResult(codeBlock, """
-        ␣{
-            outsideBuilder()
-            outerBuilder()
-            innerBuilder()
-        }
-        """)
   }
 }

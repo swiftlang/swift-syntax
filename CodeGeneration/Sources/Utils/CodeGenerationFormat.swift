@@ -21,4 +21,13 @@ public class CodeGenerationFormat: BasicFormat {
     let formatted = super.visit(node)
     return formatted.withLeadingTrivia(indentedNewline + (formatted.leadingTrivia ?? []))
   }
+
+  public override func visit(_ node: CodeBlockItemSyntax) -> Syntax {
+    if node.parent?.parent?.is(SourceFileSyntax.self) == true, !node.item.is(ImportDeclSyntax.self) {
+      let formatted = super.visit(node)
+      return formatted.withLeadingTrivia(indentedNewline + indentedNewline + (formatted.leadingTrivia ?? []))
+    } else {
+      return super.visit(node)
+    }
+  }
 }

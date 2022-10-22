@@ -15,11 +15,11 @@ import SwiftSyntax
 extension MemberAccessExpr {
   /// Creates a `MemberAccessExpr` using the provided parameters.
   public init(
-    base: ExpressibleAsExprBuildable? = nil,
+    base: ExprSyntax? = nil,
     dot: Token = .period,
     name: String,
-    declNameArguments: ExpressibleAsDeclNameArguments? = nil
+    declNameArguments: DeclNameArgumentsSyntax? = nil
   ) {
-    self.init(base: base, dot: dot, name: .identifier(name), declNameArguments: declNameArguments)
+    self.init(base: base, dot: dot, name: TokenSyntax.identifier(name), declNameArguments: declNameArguments)
   }
 }

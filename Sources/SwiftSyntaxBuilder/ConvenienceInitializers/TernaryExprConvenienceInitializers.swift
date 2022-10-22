@@ -14,9 +14,9 @@ import SwiftSyntax
 
 extension TernaryExpr {
   public init(
-    if condition: ExpressibleAsExprBuildable,
-    then firstChoice: ExpressibleAsExprBuildable,
-    else secondChoice: ExpressibleAsExprBuildable
+    if condition: ExprSyntaxProtocol,
+    then firstChoice: ExprSyntaxProtocol,
+    else secondChoice: ExprSyntaxProtocol
   ) {
     self.init(
       conditionExpression: condition,

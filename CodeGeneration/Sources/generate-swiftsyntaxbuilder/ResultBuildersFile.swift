@@ -24,7 +24,7 @@ let resultBuildersFile = SourceFile {
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let type = SyntaxBuildableType(syntaxKind: node.syntaxKind)
     let elementType = node.collectionElementType
-    
+
     StructDecl(
       attributes: Token.identifier("@resultBuilder").withLeadingTrivia(.newlines(1)).withTrailingTrivia(.newlines(1)),
       modifiers: Token.public,
@@ -34,7 +34,7 @@ let resultBuildersFile = SourceFile {
           """
           /// The type of individual statement expressions in the transformed function,
           /// which defaults to Component if buildExpression() is not provided.
-          public typealias Expression = \(elementType.expressibleAsBaseName)
+          public typealias Expression = \(elementType.parameterType)
           """
         )
         
@@ -42,7 +42,7 @@ let resultBuildersFile = SourceFile {
           """
           /// The type of a partial result, which will be carried through all of the
           /// build methods.
-          public typealias Component = [\(elementType.expressibleAs)]
+          public typealias Component = [\(elementType.parameterType)]
           """
         )
         
@@ -77,12 +77,12 @@ let resultBuildersFile = SourceFile {
         FunctionDecl(
           """
           /// Add all the elements of `expression` to this result builder, effectively flattening them.
-          public static func buildExpression(_ expression: \(type.expressibleAs)) -> Component {
-            return expression.create\(type.buildable)().elements
+          public static func buildExpression(_ expression: FinalResult) -> Component {
+            return expression.map { $0 }
           }
           """
         )
-        
+
         FunctionDecl(
           """
           /// Enables support for `if` statements that do not have an `else`.
@@ -152,40 +152,25 @@ let resultBuildersFile = SourceFile {
             },
             output: "FinalResult")) {
               if elementType.isToken {
-                ReturnStmt(
-                  """
-                  return .init(component)
-                  """
-                )
+                ReturnStmt("return .init(component)")
               } else if elementType.hasWithTrailingCommaTrait {
-                VariableDecl(
-                  """
-                  let lastIndex = component.count - 1
-                  """
-                )
+                VariableDecl("let lastIndex = component.count - 1")
                 
-                ReturnStmt(
-                  """
+                ReturnStmt("""
                   return .init(component.enumerated().map { index, source in
-                    let element = source.create\(elementType.buildableBaseName)()
-                    return index < lastIndex ? element.ensuringTrailingComma() : element
+                    return index < lastIndex ? source.ensuringTrailingComma() : source
                   })
-                  """
-                )
+                  """)
               } else {
-                ReturnStmt(
-                  """
-                  return .init(component.map { $0.create\(elementType.buildableBaseName)() })
-                  """
-                )
+                ReturnStmt("return .init(component)")
               }
             }
       }
       
     ExtensionDecl(
       """
-      public extension \(type.buildableBaseName) {
-        init(@\(type.resultBuilderBaseName) itemsBuilder: () -> \(type.buildableBaseName)) {
+      public extension \(type.shorthandName) {
+        init(@\(type.resultBuilderBaseName) itemsBuilder: () -> \(type.shorthandName)) {
           self = itemsBuilder()
         }
       }

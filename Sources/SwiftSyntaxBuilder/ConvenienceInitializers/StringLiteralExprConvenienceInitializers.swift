@@ -17,24 +17,42 @@ import Foundation
 /// interpolation. Used to determine the number of `#`s for a raw string literal.
 private let rawStringPotentialEscapesPattern = try! NSRegularExpression(
   pattern: [
-    #""(#+)"#, // Match potential opening delimiters
-    #"(#+)""#, // Match potential closing delimiters
-    #"\\(#+)\("#, // Match potential interpolations
+    #""(#*)"#, // Match potential opening delimiters
+    #"(#*)""#, // Match potential closing delimiters
+    #"\\(#*)\("#, // Match potential interpolations
   ].joined(separator: "|")
 )
 
 extension StringLiteralExpr {
   /// Creates a string literal, optionally specifying quotes and delimiters.
+  /// If `openDelimiter` and `closeDelimiter` are `nil`, automatically determines
+  /// the number of `#`s needed to express the string as-is without any escapes.
   public init(
     openDelimiter: Token? = nil,
     openQuote: Token = .stringQuote,
-    _ value: String,
+    content: String,
     closeQuote: Token = .stringQuote,
     closeDelimiter: Token? = nil
   ) {
-    let content = Token.stringSegment(value)
-    let segment = StringSegment(content: content)
+    let contentToken = Token.stringSegment(content)
+    let segment = StringSegment(content: contentToken)
     let segments = StringLiteralSegments([segment])
+
+    var openDelimiter = openDelimiter
+    var closeDelimiter = closeDelimiter
+    if openDelimiter == nil, closeDelimiter == nil {
+      // Match potential escapes in the string
+      let matches = rawStringPotentialEscapesPattern.matches(in: content, range: NSRange(content.startIndex..., in: content))
+
+      // Find longest sequence of `#`s by taking the maximum length over all captures
+      let poundCount = matches
+        .compactMap { match in (1..<match.numberOfRanges).map { match.range(at: $0).length + 1 }.max() }
+        .max() ?? 0
+
+      // Use a delimiter that is exactly one longer
+      openDelimiter = Token.rawStringDelimiter(String(repeating: "#", count: poundCount))
+      closeDelimiter = openDelimiter
+    }
 
     self.init(
       openDelimiter: openDelimiter,
@@ -42,27 +60,6 @@ extension StringLiteralExpr {
       segments: segments,
       closeQuote: closeQuote,
       closeDelimiter: closeDelimiter
-    )
-  }
-
-  /// Creates a raw string literal. Automatically determines
-  /// the number of `#`s needed to express the string as-is without any escapes.
-  public init(raw value: String) {
-    // Match potential escapes in the string
-    let matches = rawStringPotentialEscapesPattern.matches(in: value, range: NSRange(value.startIndex..., in: value))
-
-    // Find longest sequence of `#`s by taking the maximum length over all captures
-    let maxPoundCount = matches
-      .compactMap { match in (1..<match.numberOfRanges).map { match.range(at: $0).length }.max() }
-      .max() ?? 0
-
-    // Use a delimiter that is exactly one longer
-    let delimiter = Token.rawStringDelimiter(String(repeating: "#", count: 1 + maxPoundCount))
-
-    self.init(
-      openDelimiter: delimiter,
-      value,
-      closeDelimiter: delimiter
     )
   }
 }

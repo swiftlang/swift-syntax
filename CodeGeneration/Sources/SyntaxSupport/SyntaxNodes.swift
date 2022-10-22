@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public let SYNTAX_NODES: [Node] = COMMON_NODES
+public let SYNTAX_NODES: [Node] = (COMMON_NODES
   + EXPR_NODES
   + DECL_NODES
   + ATTRIBUTE_NODES
@@ -18,7 +18,7 @@ public let SYNTAX_NODES: [Node] = COMMON_NODES
   + GENERIC_NODES
   + TYPE_NODES
   + PATTERN_NODES
-  + AVAILABILITY_NODES
+  + AVAILABILITY_NODES).sorted { $0.name < $1.name }
 
 /// A lookup table of nodes indexed by their kind.
 public let SYNTAX_NODE_MAP: [String: Node] = Dictionary(

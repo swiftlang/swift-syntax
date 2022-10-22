@@ -97,7 +97,7 @@ let package = Package(
       name: "SwiftSyntaxBuilder",
       dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftParser"],
       exclude: [
-        "gyb_helpers",
+        "CMakeLists.txt",
         "SyntaxExpressibleByStringInterpolationConformances.swift.gyb",
       ]
     ),

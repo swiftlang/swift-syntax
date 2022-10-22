@@ -21,21 +21,22 @@ final class EnumCaseElementTests: XCTestCase {
       leadingTrivia: leadingTrivia,
       identifier: "Greeting",
       inheritanceClause: TypeInheritanceClause {
-        InheritedType(typeName: "String")
-        InheritedType(typeName: "Codable")
-        InheritedType(typeName: "Equatable")
+        InheritedType(typeName: Type("String"))
+        InheritedType(typeName: Type("Codable"))
+        InheritedType(typeName: Type("Equatable"))
       }
-    ) {
-      EnumCaseDecl {
+    ) { 
+      MemberDeclListItem(decl: EnumCaseDecl {
         EnumCaseElement(
           identifier: "goodMorning",
-          rawValue: StringLiteralExpr("Good Morning"))
+          rawValue: InitializerClause(value: StringLiteralExpr(content: "Good Morning")))
         EnumCaseElement(
           identifier: "helloWorld",
-          rawValue: StringLiteralExpr("Hello World"))
+          rawValue: InitializerClause(value: StringLiteralExpr(content: "Hello World")))
         EnumCaseElement(identifier: "hi")
-      }
+      })
     }
+
     AssertBuildResult(buildable,
       """
       ␣enum Greeting: String, Codable, Equatable {

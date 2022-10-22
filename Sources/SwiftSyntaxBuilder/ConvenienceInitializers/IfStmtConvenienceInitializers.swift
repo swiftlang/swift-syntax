@@ -18,15 +18,15 @@ public extension IfStmt {
   /// body.
   init(
     leadingTrivia: Trivia = [],
-    conditions: ExpressibleAsConditionElementList,
-    @CodeBlockItemListBuilder body: () -> ExpressibleAsCodeBlockItemList,
-    @CodeBlockItemListBuilder elseBody: () -> ExpressibleAsCodeBlockItemList? = { nil }
+    conditions: ConditionElementList,
+    @CodeBlockItemListBuilder body: () -> CodeBlockItemList,
+    @CodeBlockItemListBuilder elseBody: () -> CodeBlockItemList? = { nil }
   ) {
     let generatedElseBody = elseBody()
     self.init(
       leadingTrivia: leadingTrivia,
       conditions: conditions,
-      body: body(),
+      body: CodeBlockSyntax(statements: body()),
       elseKeyword: generatedElseBody == nil ? nil : Token.else.withLeadingTrivia(.space).withTrailingTrivia([]),
       elseBody: generatedElseBody.map { CodeBlock(statements: $0) }
     )

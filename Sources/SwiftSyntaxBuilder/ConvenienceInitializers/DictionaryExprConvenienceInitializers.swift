@@ -18,12 +18,12 @@ extension DictionaryExpr {
   public init(
     leftSquare: Token = .`leftSquareBracket`,
     rightSquare: Token = .`rightSquareBracket`,
-    @DictionaryElementListBuilder contentBuilder: () -> ExpressibleAsDictionaryElementList = { [] }
+    @DictionaryElementListBuilder contentBuilder: () -> DictionaryElementListSyntax = { DictionaryElementList([]) }
   ) {
-    let elementList = contentBuilder().createDictionaryElementList()
+    let elementList = contentBuilder()
     self.init(
       leftSquare: leftSquare,
-      content: elementList.elements.isEmpty ? Token.colon.withTrailingTrivia([]) : elementList,
+      content: elementList.isEmpty ? Syntax(Token.colon.withTrailingTrivia([])) : Syntax(elementList),
       rightSquare: rightSquare
     )
   }

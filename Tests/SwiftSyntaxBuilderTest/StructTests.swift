@@ -37,11 +37,11 @@ final class StructTests: XCTestCase {
       identifier: "NestedStruct",
       genericParameterClause: GenericParameterClause(rightAngleBracket: .rightAngle.withTrailingTrivia([])) {
         GenericParameter(name: "A")
-        GenericParameter(name: "B", colon: .colon, inheritedType: "C")
+        GenericParameter(name: "B", colon: .colon, inheritedType: Type("C"))
         GenericParameter(name: "D")
       },
       genericWhereClause: GenericWhereClause {
-        GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: "A", rightTypeIdentifier: "X"))
+        GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: Type("A"), rightTypeIdentifier: SimpleTypeIdentifier("X")))
         GenericRequirement(body: SameTypeRequirement(
             leftTypeIdentifier: "A.P", equalityToken: .spacedBinaryOperator("=="), rightTypeIdentifier: "D"))
       }
@@ -68,7 +68,7 @@ final class StructTests: XCTestCase {
           identifier: "CarriageReturnFormFeedsStruct"
         )
     let testStruct = StructDecl(
-      modifiers: [Token.public],
+      modifiers: [DeclModifier(name: .public)],
       identifier: "TestStruct"
     ) {
       nestedStruct
@@ -98,10 +98,10 @@ final class StructTests: XCTestCase {
     let myStruct = StructDecl(identifier: "MyStruct") {
       for i in 0..<5 {
         if i.isMultiple(of: 2) {
-           VariableDecl(letOrVarKeyword: .let) {
+          VariableDecl(letOrVarKeyword: .let) {
             PatternBinding(
               pattern: IdentifierPattern("var\(i)"),
-              typeAnnotation: "String"
+              typeAnnotation: TypeAnnotation(type: Type("String"))
             )
           }
         }

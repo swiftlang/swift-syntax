@@ -52,6 +52,19 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(syntax)
   }
 
+  public init(fromProtocol syntax: DeclSyntaxProtocol) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `DeclSyntax` node from a specialized optional syntax node.
+  public init?(fromProtocol syntax: DeclSyntaxProtocol?) {
+    guard let syntax = syntax else { return nil }
+    self.init(fromProtocol: syntax)
+  }
+
   /// Converts the given `Syntax` node to a `DeclSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
@@ -157,6 +170,19 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init?<S: ExprSyntaxProtocol>(_ syntax: S?) {
     guard let syntax = syntax else { return nil }
     self.init(syntax)
+  }
+
+  public init(fromProtocol syntax: ExprSyntaxProtocol) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `ExprSyntax` node from a specialized optional syntax node.
+  public init?(fromProtocol syntax: ExprSyntaxProtocol?) {
+    guard let syntax = syntax else { return nil }
+    self.init(fromProtocol: syntax)
   }
 
   /// Converts the given `Syntax` node to a `ExprSyntax` if possible. Returns
@@ -266,6 +292,19 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(syntax)
   }
 
+  public init(fromProtocol syntax: StmtSyntaxProtocol) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `StmtSyntax` node from a specialized optional syntax node.
+  public init?(fromProtocol syntax: StmtSyntaxProtocol?) {
+    guard let syntax = syntax else { return nil }
+    self.init(fromProtocol: syntax)
+  }
+
   /// Converts the given `Syntax` node to a `StmtSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
@@ -373,6 +412,19 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(syntax)
   }
 
+  public init(fromProtocol syntax: TypeSyntaxProtocol) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `TypeSyntax` node from a specialized optional syntax node.
+  public init?(fromProtocol syntax: TypeSyntaxProtocol?) {
+    guard let syntax = syntax else { return nil }
+    self.init(fromProtocol: syntax)
+  }
+
   /// Converts the given `Syntax` node to a `TypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
@@ -478,6 +530,19 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public init?<S: PatternSyntaxProtocol>(_ syntax: S?) {
     guard let syntax = syntax else { return nil }
     self.init(syntax)
+  }
+
+  public init(fromProtocol syntax: PatternSyntaxProtocol) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `PatternSyntax` node from a specialized optional syntax node.
+  public init?(fromProtocol syntax: PatternSyntaxProtocol?) {
+    guard let syntax = syntax else { return nil }
+    self.init(fromProtocol: syntax)
   }
 
   /// Converts the given `Syntax` node to a `PatternSyntax` if possible. Returns

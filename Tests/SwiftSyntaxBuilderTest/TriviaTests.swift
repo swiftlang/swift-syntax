@@ -18,12 +18,12 @@ final class TriviaTests: XCTestCase {
   func testLeadingTrivia() {
     let decl = VariableDecl(
       leadingTrivia: .docLineComment("/// A doc comment") + .newline,
-      modifiers: [Token.static.withLeadingTrivia(.blockComment("/* An inline comment */") + .space)],
+      modifiers: [DeclModifier(name: .static.withLeadingTrivia(.blockComment("/* An inline comment */") + .space))],
       letOrVarKeyword: .var
     ) {
       PatternBinding(
-        pattern: "test",
-        typeAnnotation: "String"
+        pattern: Pattern("test"),
+        typeAnnotation: TypeAnnotation(type: Type("String"))
       )
     }
 
@@ -44,11 +44,11 @@ final class TriviaTests: XCTestCase {
   func testAttachedTrivia() {
     let testCases: [UInt: (VariableDecl, String)] = [
       #line: (
-        VariableDecl(.let, name: "x", type: "Int").withLeadingTrivia(.space),
+        VariableDecl("let x: Int").withLeadingTrivia(.space),
         " let x: Int"
       ),
       #line: (
-        VariableDecl(.let, name: "x", type: "Int").withTrailingTrivia(.space),
+        VariableDecl("let x: Int").withTrailingTrivia(.space),
         "let x: Int "
       ),
     ]

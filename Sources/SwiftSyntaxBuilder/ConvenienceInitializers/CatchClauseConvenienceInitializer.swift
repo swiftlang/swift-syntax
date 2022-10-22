@@ -17,13 +17,13 @@ extension CatchClause {
   public init(
     leadingTrivia: Trivia = [],
     _ catchItems: CatchItemList,
-    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList
+    @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      catchKeyword: .catch.withTrailingTrivia(catchItems.elements.isEmpty ? [] : .space),
+      catchKeyword: .catch.withTrailingTrivia(catchItems.isEmpty ? [] : .space),
       catchItems: catchItems,
-      body: bodyBuilder()
+      body: CodeBlockSyntax(statements: bodyBuilder())
     )
   }
 }

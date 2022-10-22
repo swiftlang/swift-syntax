@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 extension BinaryOperatorExpr {
-  public init(_ text: String) {
+  public init(text: String) {
     self.init(operatorToken: .spacedBinaryOperator(text))
   }
 }

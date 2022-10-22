@@ -21,41 +21,15 @@ final class FunctionTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
     let input = ParameterClause {
-      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int")
+      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: Type("Int"))
     }
 
-    let ifCodeBlock = ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
-    
-    let signature = FunctionSignature(input: input, output: "Int")
+    let signature = FunctionSignature(input: input, output: ReturnClause(returnType: Type("Int")))
     
     let buildable = FunctionDecl(leadingTrivia: leadingTrivia, identifier: .identifier("fibonacci"), signature: signature) {
-      IfStmt(
-        conditions: ExprList {
-          IntegerLiteralExpr(digits: "n")
-          BinaryOperatorExpr("<=")
-          IntegerLiteralExpr(1)
-        },
-        body: ifCodeBlock)
+      CodeBlockItem(item: IfStmt("if n <= 1 { return n }"))
 
-      ReturnStmt(expression: SequenceExpr {
-        FunctionCallExpr(calledExpression: "fibonacci") {
-          SequenceExpr {
-            IntegerLiteralExpr(digits: "n")
-            BinaryOperatorExpr("-")
-            IntegerLiteralExpr(1)
-          }
-        }
-
-        BinaryOperatorExpr("+")
-
-        FunctionCallExpr(calledExpression: MemberAccessExpr(base: "self", name: "fibonacci")) {
-          SequenceExpr {
-            IntegerLiteralExpr(digits: "n")
-            BinaryOperatorExpr("-")
-            IntegerLiteralExpr(2)
-          }
-        }
-      })
+      CodeBlockItem(item: ReturnStmt("return fibonacci(n - 1) + self.fibonacci(n - 2)"))
     }
 
     AssertBuildResult(buildable, """
@@ -69,7 +43,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testArguments() {
-    let buildable = FunctionCallExpr(calledExpression: "test") {
+    let buildable = FunctionCallExpr(calledExpression: Expr("test")) {
       for param in (1...5) {
         TupleExprElement(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: "value\(param)")
       }
@@ -78,12 +52,12 @@ final class FunctionTests: XCTestCase {
   }
 
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
-    let buildable = FunctionCallExpr(calledExpression: "test")
+    let buildable = FunctionCallExpr(calledExpression: Expr("test"))
     AssertBuildResult(buildable, "test()")
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
-    let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: ClosureExpr()) {
+    let buildable = FunctionCallExpr(calledExpression: Expr("test"), trailingClosure: ClosureExpr()) {
       TupleExprElement(expression: "42")
     }
     AssertBuildResult(buildable, "test(42) {\n}")
@@ -91,11 +65,12 @@ final class FunctionTests: XCTestCase {
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
     let closure = ClosureExpr(statementsBuilder: {
-      FunctionCallExpr(calledExpression: "f") {
+      FunctionCallExpr(calledExpression: Expr("f")) {
         TupleExprElement(expression: "a")
       }
     })
-    let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: closure)
+    let buildable = FunctionCallExpr(calledExpression: Expr("test"), trailingClosure: closure)
+
     AssertBuildResult(
       buildable,
       """

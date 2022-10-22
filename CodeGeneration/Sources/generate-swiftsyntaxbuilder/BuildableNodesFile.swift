@@ -21,112 +21,74 @@ let buildableNodesFile = SourceFile {
     leadingTrivia: .docLineComment(copyrightHeader),
     path: "SwiftSyntax"
   )
-  ImportDecl(
-    trailingTrivia: .newline,
-    path: "SwiftBasicFormat"
-  )
-
-  let triviaSides = ["leading", "trailing"]
-  let trivias = triviaSides.map { "\($0)Trivia" }
 
   for node in SYNTAX_NODES where node.isBuildable {
     let type = node.type
-    let baseType = node.baseType
     let hasTrailingComma = node.traits.contains("WithTrailingComma")
-    let conformances = [baseType.buildableBaseName, type.expressibleAsBaseName] + (hasTrailingComma ? ["HasTrailingComma"] : [])
 
     // Generate node struct
-    StructDecl(
+    ExtensionDecl(
       leadingTrivia: node.documentation.isEmpty
         ? []
         : .docLineComment("/// \(node.documentation)") + .newline,
-      modifiers: [Token.public],
-      identifier: type.buildableBaseName,
-      inheritanceClause: createTypeInheritanceClause(conformances: conformances)
+      extendedType: type.shorthandName,
+      inheritanceClause: hasTrailingComma ? TypeInheritanceClause { InheritedType(typeName: "HasTrailingComma") } : nil
     ) {
-      StructDecl(identifier: "BuildableData") {
-        for (side, trivia) in zip(triviaSides, trivias) {
-          VariableDecl(
-            """
-            /// The \(side) trivia attached to this syntax node once built.
-            var \(trivia): Trivia
-            """
-          )
-        }
-
-        // Generate members
-        for child in node.children {
-          VariableDecl("var \(child.swiftName): \(child.type.buildable)")
-        }
-      }
-      EnumDecl(
-        """
-        enum Data {
-          case buildable(BuildableData)
-          case constructed(\(type.syntax))
-        }
-        """
-      )
-
-      VariableDecl("private var data: Data")
-      if hasTrailingComma {
-        createHasTrailingCommaVariable()
-      }
-
       // Generate initializers
-      createDefaultInitializer(node: node, trivias: trivias)
+      createDefaultInitializer(node: node)
       if let convenienceInit = createConvenienceInitializer(node: node) {
         convenienceInit
       }
-      createConstructedInitializer(node: node)
 
-      // Generate function declarations
-      createBuildFunction(node: node, trivias: trivias)
-      createBuildBaseTypeFunction(node: node)
-      createExpressibleAsCreateFunction(type: node.type)
-      createDisambiguatingExpressibleAsCreateFunction(type: node.type, baseType: node.baseType)
-      if baseType.baseName != "Syntax" {
-        createDisambiguatingExpressibleAsCreateFunction(type: node.baseType, baseType: .init(syntaxKind: "Syntax"))
-      }
       if hasTrailingComma {
-        createWithTrailingCommaFunction()
-      }
-      for trivia in trivias {
-        createWithTriviaFunction2(trivia: trivia)
+        VariableDecl(
+          """
+          var hasTrailingComma: Bool {
+            return trailingComma != nil
+          }
+          """
+        )
+
+        FunctionDecl(
+          """
+          /// Conformance to `HasTrailingComma`.
+          public func withTrailingComma(_ withComma: Bool) -> Self {
+            return withTrailingComma(withComma ? .commaToken() : nil)
+          }
+          """
+        )
       }
     }
   }
 }
 
-private func createHasTrailingCommaVariable() -> VariableDecl {
-  return VariableDecl(
-    """
-    var hasTrailingComma: Bool {
-      switch data {
-      case .buildable(let buildableData):
-        return buildableData.trailingComma != nil
-      case .constructed(let node):
-        return node.trailingComma != nil
-      }
-    }
-    """
-  )
+private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> ExprBuildable {
+  if child.type.isBaseType {
+    return FunctionCallExpr("\(child.type.syntaxBaseName)(fromProtocol: \(child.swiftName))")
+  } else {
+    return IdentifierExpr(child.swiftName)
+  }
 }
 
 /// Create the default initializer for the given node.
-private func createDefaultInitializer(node: Node, trivias: [String]) -> InitializerDecl {
+private func createDefaultInitializer(node: Node) -> InitializerDecl {
   let type = node.type
   return InitializerDecl(
     leadingTrivia: ([
-      "/// Creates a `\(type.buildableBaseName)` using the provided parameters.",
+      "/// Creates a `\(type.shorthandName)` using the provided parameters.",
       "/// - Parameters:",
     ] + node.children.map { child in
       "///   - \(child.swiftName): \(child.documentation)"
     }).map { .docLineComment($0) + .newline }.reduce([], +),
+    // FIXME: If all parameters are specified, the SwiftSyntaxBuilder initializer is ambigious
+    // with the memberwise initializer in SwiftSyntax.
+    // Hot-fix this by preferring the overload in SwiftSyntax. In the long term, consider sinking
+    // this initializer to SwiftSyntax.
+    attributes: AttributeList { CustomAttribute("_disfavoredOverload").withTrailingTrivia(.space) },
     modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
-        for trivia in trivias {
+        for trivia in ["leadingTrivia", "trailingTrivia"] {
           FunctionParameter(
             firstName: .identifier(trivia),
             colon: .colon,
@@ -138,7 +100,7 @@ private func createDefaultInitializer(node: Node, trivias: [String]) -> Initiali
           FunctionParameter(
             firstName: .identifier(child.swiftName),
             colon: .colon,
-            type: child.type.expressibleAs,
+            type: child.type.parameterType,
             defaultArgument: child.type.defaultInitialization
           )
         }
@@ -150,18 +112,17 @@ private func createDefaultInitializer(node: Node, trivias: [String]) -> Initiali
         assertStmt
       }
     }
-    let buildableData = FunctionCallExpr(calledExpression: "BuildableData") {
-      for trivia in trivias {
-        TupleExprElement(label: trivia, expression: trivia)
-      }
+    let nodeConstructorCall = FunctionCallExpr(calledExpression: type.syntaxBaseName) {
       for child in node.children {
         TupleExprElement(
-          label: child.swiftName,
-          expression: child.type.generateExprConvertParamTypeToStorageType(varName: child.swiftName)
+          label: child.isUnexpectedNodes ? nil : child.swiftName,
+          expression: convertFromSyntaxProtocolToSyntaxType(child: child)
         )
       }
     }
-    SequenceExpr("self.data = .buildable(\(buildableData))")
+    SequenceExpr("self = \(nodeConstructorCall)")
+    SequenceExpr("self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])")
+    SequenceExpr("self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])")
   }
 }
 
@@ -185,20 +146,29 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       // Allow initializing certain syntax collections with result builders
       shouldCreateInitializer = true
       let builderInitializableType = child.type.builderInitializableType
-      produceExpr = FunctionCallExpr(calledExpression: "\(child.swiftName)Builder")
+      if child.type.builderInitializableType != child.type {
+        let param = Node.from(type: child.type).singleNonDefaultedChild
+        if child.isOptional {
+          produceExpr = FunctionCallExpr("\(child.swiftName)Builder().map { \(child.type.syntaxBaseName)(\(param.swiftName): $0) }")
+        } else {
+          produceExpr = FunctionCallExpr("\(child.type.syntaxBaseName)(\(param.swiftName): \(child.swiftName)Builder())")
+        }
+      } else {
+        produceExpr = FunctionCallExpr("\(child.swiftName)Builder()")
+      }
       builderParameters.append(FunctionParameter(
         attributes: [CustomAttribute(attributeName: builderInitializableType.resultBuilderBaseName, argumentList: nil)],
         firstName: .identifier("\(child.swiftName)Builder").withLeadingTrivia(.space),
         colon: .colon,
         type: FunctionType(
           arguments: [],
-          returnType: builderInitializableType.expressibleAs
+          returnType: builderInitializableType.syntax
         ),
         defaultArgument: ClosureExpr {
           if child.type.isOptional {
             NilLiteralExpr()
           } else {
-            FunctionCallExpr("\(builderInitializableType.buildableBaseName)([])")
+            FunctionCallExpr("\(builderInitializableType.syntax)([])")
           }
         }
       ))
@@ -218,15 +188,15 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
         type: paramType
       ))
     } else {
-      produceExpr = child.swiftName
+      produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
       normalParameters.append(FunctionParameter(
         firstName: .identifier(child.swiftName),
         colon: .colon,
-        type: child.type.expressibleAs,
+        type: child.type.parameterType,
         defaultArgument: child.type.defaultInitialization
       ))
     }
-    delegatedInitArgs.append(TupleExprElement(label: child.swiftName, expression: produceExpr))
+    delegatedInitArgs.append(TupleExprElement(label: child.isUnexpectedNodes ? nil : child.swiftName, expression: produceExpr))
   }
 
   guard shouldCreateInitializer else {
@@ -239,6 +209,11 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       "///  - Initializing syntax collections using result builders",
       "///  - Initializing tokens without default text using strings",
     ].map { .docLineComment($0) + .newline }.reduce([], +),
+    // FIXME: If all parameters are specified, the SwiftSyntaxBuilder initializer is ambigious
+    // with the memberwise initializer in SwiftSyntax.
+    // Hot-fix this by preferring the overload in SwiftSyntax. In the long term, consider sinking
+    // this initializer to SwiftSyntax.
+    attributes: AttributeList { CustomAttribute("_disfavoredOverload").withTrailingTrivia(.space) },
     modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
@@ -255,157 +230,12 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
     )
   ) {
     FunctionCallExpr(calledExpression: MemberAccessExpr("self.init")) {
-      TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
       for arg in delegatedInitArgs {
         arg
       }
     }
+
+    SequenceExpr("self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])")
   }
 }
 
-private func createConstructedInitializer(node: Node) -> InitializerDecl {
-  return InitializerDecl(
-    """
-    public init(_ constructedNode: \(node.type.syntax)) {
-      self.data = .constructed(constructedNode)
-    }
-    """
-  )
-}
-
-/// Generate the function building the node syntax.
-private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl {
-  let type = node.type
-  let children = node.children
-  return FunctionDecl(
-    leadingTrivia: [
-      "/// Builds a `\(type.syntaxBaseName)`.",
-      "/// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.",
-      "/// - Returns: The built `\(type.syntaxBaseName)`.",
-    ].map { .docLineComment($0) + .newline }.reduce([], +),
-    identifier: .identifier("build\(type.baseName)"),
-    signature: FunctionSignature(
-      input: ParameterClause(),
-      output: type.syntax
-    )
-  ) {
-    SwitchStmt(expression: "data") {
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(calledExpression: MemberAccessExpr(name: "buildable")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .let,
-                      valuePattern: IdentifierPattern("buildableData")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        VariableDecl(
-          .var,
-          name: "result",
-          initializer: FunctionCallExpr(calledExpression: type.syntaxBaseName) {
-            for child in children {
-              TupleExprElement(
-                label: child.isUnexpectedNodes ? nil : child.swiftName,
-                expression: child.generateExprBuildSyntaxNode(
-                  varName: MemberAccessExpr(base: "buildableData", name: child.swiftName)
-                )
-              )
-            }
-          }
-        )
-        SequenceExpr("result.leadingTrivia = buildableData.leadingTrivia + (result.leadingTrivia ?? [])")
-        SequenceExpr("result.trailingTrivia = buildableData.trailingTrivia + (result.trailingTrivia ?? [])")
-        ReturnStmt("return result")
-      }
-      SwitchCase(
-        label: SwitchCaseLabel(
-          caseItems: CaseItem(
-            pattern: ExpressionPattern(
-              expression: FunctionCallExpr(calledExpression: MemberAccessExpr(name: "constructed")) {
-                TupleExprElement(
-                  expression: UnresolvedPatternExpr(
-                    pattern: ValueBindingPattern(
-                      letOrVarKeyword: .let,
-                      valuePattern: IdentifierPattern("node")
-                    )
-                  )
-                )
-              }
-            )
-          )
-        )
-      ) {
-        ReturnStmt("return node")
-      }
-    }
-  }
-}
-
-/// Generate the function building the base type.
-private func createBuildBaseTypeFunction(node: Node) -> FunctionDecl {
-  let type = node.type
-  let baseType = node.baseType
-  return FunctionDecl(
-    """
-    /// Conformance to `\(baseType.buildableBaseName)`.
-    public func build\(baseType.baseName)() -> \(baseType.syntax) {
-      let result = build\(type.baseName)()
-      return \(baseType.syntaxBaseName)(result)
-    }
-    """
-  )
-}
-
-/// Generate the `withTrailingComma` function.
-private func createWithTrailingCommaFunction() -> FunctionDecl {
-  return FunctionDecl(
-    """
-    /// Conformance to `HasTrailingComma`.
-    public func withTrailingComma(_ withComma: Bool) -> Self {
-      switch data {
-      case .buildable(var buildableData):
-        buildableData.trailingComma = withComma ? .comma : nil
-        var result = self
-        result.data = .buildable(buildableData)
-        return result
-      case .constructed(let node):
-        let withComma = node.withTrailingComma(withComma ? .commaToken() : nil)
-        var result = self
-        result.data = .constructed(withComma)
-        return result
-      }
-    }
-    """
-  )
-}
-
-/// Generate a `withATrivia` function.
-func createWithTriviaFunction2(trivia: String) -> FunctionDecl {
-  return FunctionDecl(
-    """
-    public func with\(trivia.withFirstCharacterUppercased)(_ \(trivia): Trivia) -> Self {
-      switch data {
-      case .buildable(var buildableData):
-        buildableData.\(trivia) = \(trivia)
-        var result = self
-        result.data = .buildable(buildableData)
-        return result
-      case .constructed(let node):
-        let withNewTrivia = node.with\(trivia.withFirstCharacterUppercased)(\(trivia))
-        var result = self
-        result.data = .constructed(withNewTrivia)
-        return result
-      }
-    }
-    """
-  )
-}

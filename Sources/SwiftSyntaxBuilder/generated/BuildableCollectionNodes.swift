@@ -14,3150 +14,381 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import SwiftBasicFormat
 
-/// `CodeBlockItemList` represents a collection of `CodeBlockItem`
-public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCodeBlockItemList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [CodeBlockItem]
-  /// Creates a `CodeBlockItemList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsCodeBlockItem`
-  public init (_ elements: [ExpressibleAsCodeBlockItem]) {
-    self.elements = elements.map { 
-      $0.createCodeBlockItem() 
-    }
-  }
-  /// Creates a new `CodeBlockItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCodeBlockItemList]) {
-    elements = lists.flatMap { 
-      $0.createCodeBlockItemList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsCodeBlockItem...) {
+/// `AccessPath` represents a collection of `AccessPathComponentSyntax`
+extension AccessPath: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: AccessPathComponent...) {
     self.init(elements)
   }
-  public func buildCodeBlockItemList() -> CodeBlockItemListSyntax {
-    
-    var result = CodeBlockItemListSyntax(elements.map { 
-      $0.buildCodeBlockItem() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildCodeBlockItemList())
-  }
-  /// Conformance to `ExpressibleAsCodeBlockItemList`.
-  public func createCodeBlockItemList() -> CodeBlockItemList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `CodeBlockItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
 }
-/// A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.
-public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsUnexpectedNodes {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [SyntaxBuildable]
-  /// Creates a `UnexpectedNodes` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map { 
-      $0.createSyntaxBuildable() 
-    }
-  }
-  /// Creates a new `UnexpectedNodes` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsUnexpectedNodes]) {
-    elements = lists.flatMap { 
-      $0.createUnexpectedNodes().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+
+/// `AccessorList` represents a collection of `AccessorDeclSyntax`
+extension AccessorList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: AccessorDecl...) {
     self.init(elements)
   }
-  public func buildUnexpectedNodes() -> UnexpectedNodesSyntax {
-    
-    var result = UnexpectedNodesSyntax(elements.map { 
-      $0.buildSyntax() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildUnexpectedNodes())
-  }
-  /// Conformance to `ExpressibleAsUnexpectedNodes`.
-  public func createUnexpectedNodes() -> UnexpectedNodes {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `UnexpectedNodes` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
 }
-extension Array: ExpressibleAsUnexpectedNodes where Element == ExpressibleAsSyntaxBuildable {
-  public func createUnexpectedNodes() -> UnexpectedNodes {
-    return UnexpectedNodes(self)
-  }
-}
-/// `TupleExprElementList` represents a collection of `TupleExprElement`
-public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTupleExprElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [TupleExprElement]
-  /// Creates a `TupleExprElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsTupleExprElement`
-  public init (_ elements: [ExpressibleAsTupleExprElement]) {
-    self.elements = elements.map { 
-      $0.createTupleExprElement() 
-    }
-  }
-  /// Creates a new `TupleExprElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTupleExprElementList]) {
-    elements = lists.flatMap { 
-      $0.createTupleExprElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsTupleExprElement...) {
+
+/// `ArrayElementList` represents a collection of `ArrayElementSyntax`
+extension ArrayElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: ArrayElement...) {
     self.init(elements)
   }
-  public func buildTupleExprElementList() -> TupleExprElementListSyntax {
-    
-    var result = TupleExprElementListSyntax(elements.map { 
-      $0.buildTupleExprElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildTupleExprElementList())
-  }
-  /// Conformance to `ExpressibleAsTupleExprElementList`.
-  public func createTupleExprElementList() -> TupleExprElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `TupleExprElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
 }
-extension Array: ExpressibleAsTupleExprElementList where Element == ExpressibleAsTupleExprElement {
-  public func createTupleExprElementList() -> TupleExprElementList {
-    return TupleExprElementList(self)
-  }
-}
-/// `ArrayElementList` represents a collection of `ArrayElement`
-public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsArrayElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [ArrayElement]
-  /// Creates a `ArrayElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsArrayElement`
-  public init (_ elements: [ExpressibleAsArrayElement]) {
-    self.elements = elements.map { 
-      $0.createArrayElement() 
-    }
-  }
-  /// Creates a new `ArrayElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsArrayElementList]) {
-    elements = lists.flatMap { 
-      $0.createArrayElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsArrayElement...) {
-    self.init(elements)
-  }
-  public func buildArrayElementList() -> ArrayElementListSyntax {
-    
-    var result = ArrayElementListSyntax(elements.map { 
-      $0.buildArrayElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildArrayElementList())
-  }
-  /// Conformance to `ExpressibleAsArrayElementList`.
-  public func createArrayElementList() -> ArrayElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ArrayElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-/// `DictionaryElementList` represents a collection of `DictionaryElement`
-public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDictionaryElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [DictionaryElement]
-  /// Creates a `DictionaryElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsDictionaryElement`
-  public init (_ elements: [ExpressibleAsDictionaryElement]) {
-    self.elements = elements.map { 
-      $0.createDictionaryElement() 
-    }
-  }
-  /// Creates a new `DictionaryElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDictionaryElementList]) {
-    elements = lists.flatMap { 
-      $0.createDictionaryElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsDictionaryElement...) {
-    self.init(elements)
-  }
-  public func buildDictionaryElementList() -> DictionaryElementListSyntax {
-    
-    var result = DictionaryElementListSyntax(elements.map { 
-      $0.buildDictionaryElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildDictionaryElementList())
-  }
-  /// Conformance to `ExpressibleAsDictionaryElementList`.
-  public func createDictionaryElementList() -> DictionaryElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `DictionaryElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsDictionaryElementList where Element == ExpressibleAsDictionaryElement {
-  public func createDictionaryElementList() -> DictionaryElementList {
-    return DictionaryElementList(self)
-  }
-}
-/// `StringLiteralSegments` represents a collection of `SyntaxBuildable`
-public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsStringLiteralSegments {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [SyntaxBuildable]
-  /// Creates a `StringLiteralSegments` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map { 
-      $0.createSyntaxBuildable() 
-    }
-  }
-  /// Creates a new `StringLiteralSegments` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsStringLiteralSegments]) {
-    elements = lists.flatMap { 
-      $0.createStringLiteralSegments().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
-    self.init(elements)
-  }
-  public func buildStringLiteralSegments() -> StringLiteralSegmentsSyntax {
-    
-    var result = StringLiteralSegmentsSyntax(elements.map { 
-      $0.buildSyntax() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildStringLiteralSegments())
-  }
-  /// Conformance to `ExpressibleAsStringLiteralSegments`.
-  public func createStringLiteralSegments() -> StringLiteralSegments {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `StringLiteralSegments` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsStringLiteralSegments where Element == ExpressibleAsSyntaxBuildable {
-  public func createStringLiteralSegments() -> StringLiteralSegments {
-    return StringLiteralSegments(self)
-  }
-}
-/// `DeclNameArgumentList` represents a collection of `DeclNameArgument`
-public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDeclNameArgumentList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [DeclNameArgument]
-  /// Creates a `DeclNameArgumentList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsDeclNameArgument`
-  public init (_ elements: [ExpressibleAsDeclNameArgument]) {
-    self.elements = elements.map { 
-      $0.createDeclNameArgument() 
-    }
-  }
-  /// Creates a new `DeclNameArgumentList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDeclNameArgumentList]) {
-    elements = lists.flatMap { 
-      $0.createDeclNameArgumentList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsDeclNameArgument...) {
-    self.init(elements)
-  }
-  public func buildDeclNameArgumentList() -> DeclNameArgumentListSyntax {
-    
-    var result = DeclNameArgumentListSyntax(elements.map { 
-      $0.buildDeclNameArgument() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildDeclNameArgumentList())
-  }
-  /// Conformance to `ExpressibleAsDeclNameArgumentList`.
-  public func createDeclNameArgumentList() -> DeclNameArgumentList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `DeclNameArgumentList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsDeclNameArgumentList where Element == ExpressibleAsDeclNameArgument {
-  public func createDeclNameArgumentList() -> DeclNameArgumentList {
-    return DeclNameArgumentList(self)
-  }
-}
-/// A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.
-public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsExprList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [ExprBuildable]
-  /// Creates a `ExprList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsExprBuildable`
-  public init (_ elements: [ExpressibleAsExprBuildable]) {
-    self.elements = elements.map { 
-      $0.createExprBuildable() 
-    }
-  }
-  /// Creates a new `ExprList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsExprList]) {
-    elements = lists.flatMap { 
-      $0.createExprList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsExprBuildable...) {
-    self.init(elements)
-  }
-  public func buildExprList() -> ExprListSyntax {
-    
-    var result = ExprListSyntax(elements.map { 
-      $0.buildExpr() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildExprList())
-  }
-  /// Conformance to `ExpressibleAsExprList`.
-  public func createExprList() -> ExprList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ExprList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-/// `ClosureCaptureItemList` represents a collection of `ClosureCaptureItem`
-public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsClosureCaptureItemList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [ClosureCaptureItem]
-  /// Creates a `ClosureCaptureItemList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsClosureCaptureItem`
-  public init (_ elements: [ExpressibleAsClosureCaptureItem]) {
-    self.elements = elements.map { 
-      $0.createClosureCaptureItem() 
-    }
-  }
-  /// Creates a new `ClosureCaptureItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsClosureCaptureItemList]) {
-    elements = lists.flatMap { 
-      $0.createClosureCaptureItemList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsClosureCaptureItem...) {
-    self.init(elements)
-  }
-  public func buildClosureCaptureItemList() -> ClosureCaptureItemListSyntax {
-    
-    var result = ClosureCaptureItemListSyntax(elements.map { 
-      $0.buildClosureCaptureItem() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildClosureCaptureItemList())
-  }
-  /// Conformance to `ExpressibleAsClosureCaptureItemList`.
-  public func createClosureCaptureItemList() -> ClosureCaptureItemList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ClosureCaptureItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsClosureCaptureItemList where Element == ExpressibleAsClosureCaptureItem {
-  public func createClosureCaptureItemList() -> ClosureCaptureItemList {
-    return ClosureCaptureItemList(self)
-  }
-}
-/// `ClosureParamList` represents a collection of `ClosureParam`
-public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsClosureParamList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [ClosureParam]
-  /// Creates a `ClosureParamList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsClosureParam`
-  public init (_ elements: [ExpressibleAsClosureParam]) {
-    self.elements = elements.map { 
-      $0.createClosureParam() 
-    }
-  }
-  /// Creates a new `ClosureParamList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsClosureParamList]) {
-    elements = lists.flatMap { 
-      $0.createClosureParamList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsClosureParam...) {
-    self.init(elements)
-  }
-  public func buildClosureParamList() -> ClosureParamListSyntax {
-    
-    var result = ClosureParamListSyntax(elements.map { 
-      $0.buildClosureParam() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildClosureParamList())
-  }
-  /// Conformance to `ExpressibleAsClosureParamList`.
-  public func createClosureParamList() -> ClosureParamList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ClosureParamList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsClosureParamList where Element == ExpressibleAsClosureParam {
-  public func createClosureParamList() -> ClosureParamList {
-    return ClosureParamList(self)
-  }
-}
-/// `MultipleTrailingClosureElementList` represents a collection of `MultipleTrailingClosureElement`
-public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsMultipleTrailingClosureElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [MultipleTrailingClosureElement]
-  /// Creates a `MultipleTrailingClosureElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsMultipleTrailingClosureElement`
-  public init (_ elements: [ExpressibleAsMultipleTrailingClosureElement]) {
-    self.elements = elements.map { 
-      $0.createMultipleTrailingClosureElement() 
-    }
-  }
-  /// Creates a new `MultipleTrailingClosureElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsMultipleTrailingClosureElementList]) {
-    elements = lists.flatMap { 
-      $0.createMultipleTrailingClosureElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsMultipleTrailingClosureElement...) {
-    self.init(elements)
-  }
-  public func buildMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementListSyntax {
-    
-    var result = MultipleTrailingClosureElementListSyntax(elements.map { 
-      $0.buildMultipleTrailingClosureElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildMultipleTrailingClosureElementList())
-  }
-  /// Conformance to `ExpressibleAsMultipleTrailingClosureElementList`.
-  public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `MultipleTrailingClosureElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsMultipleTrailingClosureElementList where Element == ExpressibleAsMultipleTrailingClosureElement {
-  public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
-    return MultipleTrailingClosureElementList(self)
-  }
-}
-/// `KeyPathComponentList` represents a collection of `KeyPathComponent`
-public struct KeyPathComponentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsKeyPathComponentList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [KeyPathComponent]
-  /// Creates a `KeyPathComponentList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsKeyPathComponent`
-  public init (_ elements: [ExpressibleAsKeyPathComponent]) {
-    self.elements = elements.map { 
-      $0.createKeyPathComponent() 
-    }
-  }
-  /// Creates a new `KeyPathComponentList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsKeyPathComponentList]) {
-    elements = lists.flatMap { 
-      $0.createKeyPathComponentList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsKeyPathComponent...) {
-    self.init(elements)
-  }
-  public func buildKeyPathComponentList() -> KeyPathComponentListSyntax {
-    
-    var result = KeyPathComponentListSyntax(elements.map { 
-      $0.buildKeyPathComponent() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildKeyPathComponentList())
-  }
-  /// Conformance to `ExpressibleAsKeyPathComponentList`.
-  public func createKeyPathComponentList() -> KeyPathComponentList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `KeyPathComponentList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsKeyPathComponentList where Element == ExpressibleAsKeyPathComponent {
-  public func createKeyPathComponentList() -> KeyPathComponentList {
-    return KeyPathComponentList(self)
-  }
-}
-/// `ObjcName` represents a collection of `ObjcNamePiece`
-public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsObjcName {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [ObjcNamePiece]
-  /// Creates a `ObjcName` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsObjcNamePiece`
-  public init (_ elements: [ExpressibleAsObjcNamePiece]) {
-    self.elements = elements.map { 
-      $0.createObjcNamePiece() 
-    }
-  }
-  /// Creates a new `ObjcName` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsObjcName]) {
-    elements = lists.flatMap { 
-      $0.createObjcName().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsObjcNamePiece...) {
-    self.init(elements)
-  }
-  public func buildObjcName() -> ObjcNameSyntax {
-    
-    var result = ObjcNameSyntax(elements.map { 
-      $0.buildObjcNamePiece() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildObjcName())
-  }
-  /// Conformance to `ExpressibleAsObjcName`.
-  public func createObjcName() -> ObjcName {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ObjcName` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsObjcName where Element == ExpressibleAsObjcNamePiece {
-  public func createObjcName() -> ObjcName {
-    return ObjcName(self)
-  }
-}
-/// `YieldExprList` represents a collection of `YieldExprListElement`
-public struct YieldExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsYieldExprList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [YieldExprListElement]
-  /// Creates a `YieldExprList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsYieldExprListElement`
-  public init (_ elements: [ExpressibleAsYieldExprListElement]) {
-    self.elements = elements.map { 
-      $0.createYieldExprListElement() 
-    }
-  }
-  /// Creates a new `YieldExprList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsYieldExprList]) {
-    elements = lists.flatMap { 
-      $0.createYieldExprList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsYieldExprListElement...) {
-    self.init(elements)
-  }
-  public func buildYieldExprList() -> YieldExprListSyntax {
-    
-    var result = YieldExprListSyntax(elements.map { 
-      $0.buildYieldExprListElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildYieldExprList())
-  }
-  /// Conformance to `ExpressibleAsYieldExprList`.
-  public func createYieldExprList() -> YieldExprList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `YieldExprList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsYieldExprList where Element == ExpressibleAsYieldExprListElement {
-  public func createYieldExprList() -> YieldExprList {
-    return YieldExprList(self)
-  }
-}
-/// `FunctionParameterList` represents a collection of `FunctionParameter`
-public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsFunctionParameterList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [FunctionParameter]
-  /// Creates a `FunctionParameterList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsFunctionParameter`
-  public init (_ elements: [ExpressibleAsFunctionParameter]) {
-    self.elements = elements.map { 
-      $0.createFunctionParameter() 
-    }
-  }
-  /// Creates a new `FunctionParameterList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsFunctionParameterList]) {
-    elements = lists.flatMap { 
-      $0.createFunctionParameterList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsFunctionParameter...) {
-    self.init(elements)
-  }
-  public func buildFunctionParameterList() -> FunctionParameterListSyntax {
-    
-    var result = FunctionParameterListSyntax(elements.map { 
-      $0.buildFunctionParameter() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildFunctionParameterList())
-  }
-  /// Conformance to `ExpressibleAsFunctionParameterList`.
-  public func createFunctionParameterList() -> FunctionParameterList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `FunctionParameterList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsFunctionParameterList where Element == ExpressibleAsFunctionParameter {
-  public func createFunctionParameterList() -> FunctionParameterList {
-    return FunctionParameterList(self)
-  }
-}
-/// `IfConfigClauseList` represents a collection of `IfConfigClause`
-public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsIfConfigClauseList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [IfConfigClause]
-  /// Creates a `IfConfigClauseList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsIfConfigClause`
-  public init (_ elements: [ExpressibleAsIfConfigClause]) {
-    self.elements = elements.map { 
-      $0.createIfConfigClause() 
-    }
-  }
-  /// Creates a new `IfConfigClauseList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsIfConfigClauseList]) {
-    elements = lists.flatMap { 
-      $0.createIfConfigClauseList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsIfConfigClause...) {
-    self.init(elements)
-  }
-  public func buildIfConfigClauseList() -> IfConfigClauseListSyntax {
-    
-    var result = IfConfigClauseListSyntax(elements.map { 
-      $0.buildIfConfigClause() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildIfConfigClauseList())
-  }
-  /// Conformance to `ExpressibleAsIfConfigClauseList`.
-  public func createIfConfigClauseList() -> IfConfigClauseList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `IfConfigClauseList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsIfConfigClauseList where Element == ExpressibleAsIfConfigClause {
-  public func createIfConfigClauseList() -> IfConfigClauseList {
-    return IfConfigClauseList(self)
-  }
-}
-/// `InheritedTypeList` represents a collection of `InheritedType`
-public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsInheritedTypeList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [InheritedType]
-  /// Creates a `InheritedTypeList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsInheritedType`
-  public init (_ elements: [ExpressibleAsInheritedType]) {
-    self.elements = elements.map { 
-      $0.createInheritedType() 
-    }
-  }
-  /// Creates a new `InheritedTypeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsInheritedTypeList]) {
-    elements = lists.flatMap { 
-      $0.createInheritedTypeList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsInheritedType...) {
-    self.init(elements)
-  }
-  public func buildInheritedTypeList() -> InheritedTypeListSyntax {
-    
-    var result = InheritedTypeListSyntax(elements.map { 
-      $0.buildInheritedType() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildInheritedTypeList())
-  }
-  /// Conformance to `ExpressibleAsInheritedTypeList`.
-  public func createInheritedTypeList() -> InheritedTypeList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `InheritedTypeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsInheritedTypeList where Element == ExpressibleAsInheritedType {
-  public func createInheritedTypeList() -> InheritedTypeList {
-    return InheritedTypeList(self)
-  }
-}
-/// `MemberDeclList` represents a collection of `MemberDeclListItem`
-public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsMemberDeclList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [MemberDeclListItem]
-  /// Creates a `MemberDeclList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsMemberDeclListItem`
-  public init (_ elements: [ExpressibleAsMemberDeclListItem]) {
-    self.elements = elements.map { 
-      $0.createMemberDeclListItem() 
-    }
-  }
-  /// Creates a new `MemberDeclList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsMemberDeclList]) {
-    elements = lists.flatMap { 
-      $0.createMemberDeclList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsMemberDeclListItem...) {
-    self.init(elements)
-  }
-  public func buildMemberDeclList() -> MemberDeclListSyntax {
-    
-    var result = MemberDeclListSyntax(elements.map { 
-      $0.buildMemberDeclListItem() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildMemberDeclList())
-  }
-  /// Conformance to `ExpressibleAsMemberDeclList`.
-  public func createMemberDeclList() -> MemberDeclList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `MemberDeclList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-/// `ModifierList` represents a collection of `DeclModifier`
-public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsModifierList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [DeclModifier]
-  /// Creates a `ModifierList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsDeclModifier`
-  public init (_ elements: [ExpressibleAsDeclModifier]) {
-    self.elements = elements.map { 
-      $0.createDeclModifier() 
-    }
-  }
-  /// Creates a new `ModifierList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsModifierList]) {
-    elements = lists.flatMap { 
-      $0.createModifierList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsDeclModifier...) {
-    self.init(elements)
-  }
-  public func buildModifierList() -> ModifierListSyntax {
-    
-    var result = ModifierListSyntax(elements.map { 
-      $0.buildDeclModifier() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildModifierList())
-  }
-  /// Conformance to `ExpressibleAsModifierList`.
-  public func createModifierList() -> ModifierList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ModifierList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsModifierList where Element == ExpressibleAsDeclModifier {
-  public func createModifierList() -> ModifierList {
-    return ModifierList(self)
-  }
-}
-/// `AccessPath` represents a collection of `AccessPathComponent`
-public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAccessPath {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [AccessPathComponent]
-  /// Creates a `AccessPath` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsAccessPathComponent`
-  public init (_ elements: [ExpressibleAsAccessPathComponent]) {
-    self.elements = elements.map { 
-      $0.createAccessPathComponent() 
-    }
-  }
-  /// Creates a new `AccessPath` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAccessPath]) {
-    elements = lists.flatMap { 
-      $0.createAccessPath().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsAccessPathComponent...) {
-    self.init(elements)
-  }
-  public func buildAccessPath() -> AccessPathSyntax {
-    
-    var result = AccessPathSyntax(elements.map { 
-      $0.buildAccessPathComponent() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildAccessPath())
-  }
-  /// Conformance to `ExpressibleAsAccessPath`.
-  public func createAccessPath() -> AccessPath {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `AccessPath` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsAccessPath where Element == ExpressibleAsAccessPathComponent {
-  public func createAccessPath() -> AccessPath {
-    return AccessPath(self)
-  }
-}
-/// `AccessorList` represents a collection of `AccessorDecl`
-public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAccessorList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [AccessorDecl]
-  /// Creates a `AccessorList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsAccessorDecl`
-  public init (_ elements: [ExpressibleAsAccessorDecl]) {
-    self.elements = elements.map { 
-      $0.createAccessorDecl() 
-    }
-  }
-  /// Creates a new `AccessorList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAccessorList]) {
-    elements = lists.flatMap { 
-      $0.createAccessorList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsAccessorDecl...) {
-    self.init(elements)
-  }
-  public func buildAccessorList() -> AccessorListSyntax {
-    
-    var result = AccessorListSyntax(elements.map { 
-      $0.buildAccessorDecl() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildAccessorList())
-  }
-  /// Conformance to `ExpressibleAsAccessorList`.
-  public func createAccessorList() -> AccessorList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `AccessorList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-/// `PatternBindingList` represents a collection of `PatternBinding`
-public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPatternBindingList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [PatternBinding]
-  /// Creates a `PatternBindingList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsPatternBinding`
-  public init (_ elements: [ExpressibleAsPatternBinding]) {
-    self.elements = elements.map { 
-      $0.createPatternBinding() 
-    }
-  }
-  /// Creates a new `PatternBindingList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPatternBindingList]) {
-    elements = lists.flatMap { 
-      $0.createPatternBindingList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsPatternBinding...) {
-    self.init(elements)
-  }
-  public func buildPatternBindingList() -> PatternBindingListSyntax {
-    
-    var result = PatternBindingListSyntax(elements.map { 
-      $0.buildPatternBinding() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildPatternBindingList())
-  }
-  /// Conformance to `ExpressibleAsPatternBindingList`.
-  public func createPatternBindingList() -> PatternBindingList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `PatternBindingList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsPatternBindingList where Element == ExpressibleAsPatternBinding {
-  public func createPatternBindingList() -> PatternBindingList {
-    return PatternBindingList(self)
-  }
-}
-/// A collection of 0 or more `EnumCaseElement`s.
-public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsEnumCaseElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [EnumCaseElement]
-  /// Creates a `EnumCaseElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsEnumCaseElement`
-  public init (_ elements: [ExpressibleAsEnumCaseElement]) {
-    self.elements = elements.map { 
-      $0.createEnumCaseElement() 
-    }
-  }
-  /// Creates a new `EnumCaseElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsEnumCaseElementList]) {
-    elements = lists.flatMap { 
-      $0.createEnumCaseElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsEnumCaseElement...) {
-    self.init(elements)
-  }
-  public func buildEnumCaseElementList() -> EnumCaseElementListSyntax {
-    
-    var result = EnumCaseElementListSyntax(elements.map { 
-      $0.buildEnumCaseElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildEnumCaseElementList())
-  }
-  /// Conformance to `ExpressibleAsEnumCaseElementList`.
-  public func createEnumCaseElementList() -> EnumCaseElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `EnumCaseElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsEnumCaseElementList where Element == ExpressibleAsEnumCaseElement {
-  public func createEnumCaseElementList() -> EnumCaseElementList {
-    return EnumCaseElementList(self)
-  }
-}
-/// `DesignatedTypeList` represents a collection of `DesignatedTypeElement`
-public struct DesignatedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDesignatedTypeList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [DesignatedTypeElement]
-  /// Creates a `DesignatedTypeList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsDesignatedTypeElement`
-  public init (_ elements: [ExpressibleAsDesignatedTypeElement]) {
-    self.elements = elements.map { 
-      $0.createDesignatedTypeElement() 
-    }
-  }
-  /// Creates a new `DesignatedTypeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDesignatedTypeList]) {
-    elements = lists.flatMap { 
-      $0.createDesignatedTypeList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsDesignatedTypeElement...) {
-    self.init(elements)
-  }
-  public func buildDesignatedTypeList() -> DesignatedTypeListSyntax {
-    
-    var result = DesignatedTypeListSyntax(elements.map { 
-      $0.buildDesignatedTypeElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildDesignatedTypeList())
-  }
-  /// Conformance to `ExpressibleAsDesignatedTypeList`.
-  public func createDesignatedTypeList() -> DesignatedTypeList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `DesignatedTypeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsDesignatedTypeList where Element == ExpressibleAsDesignatedTypeElement {
-  public func createDesignatedTypeList() -> DesignatedTypeList {
-    return DesignatedTypeList(self)
-  }
-}
-/// `PrecedenceGroupAttributeList` represents a collection of `SyntaxBuildable`
-public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrecedenceGroupAttributeList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [SyntaxBuildable]
-  /// Creates a `PrecedenceGroupAttributeList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map { 
-      $0.createSyntaxBuildable() 
-    }
-  }
-  /// Creates a new `PrecedenceGroupAttributeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPrecedenceGroupAttributeList]) {
-    elements = lists.flatMap { 
-      $0.createPrecedenceGroupAttributeList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
-    self.init(elements)
-  }
-  public func buildPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeListSyntax {
-    
-    var result = PrecedenceGroupAttributeListSyntax(elements.map { 
-      $0.buildSyntax() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildPrecedenceGroupAttributeList())
-  }
-  /// Conformance to `ExpressibleAsPrecedenceGroupAttributeList`.
-  public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `PrecedenceGroupAttributeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsPrecedenceGroupAttributeList where Element == ExpressibleAsSyntaxBuildable {
-  public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
-    return PrecedenceGroupAttributeList(self)
-  }
-}
-/// `PrecedenceGroupNameList` represents a collection of `PrecedenceGroupNameElement`
-public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrecedenceGroupNameList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [PrecedenceGroupNameElement]
-  /// Creates a `PrecedenceGroupNameList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsPrecedenceGroupNameElement`
-  public init (_ elements: [ExpressibleAsPrecedenceGroupNameElement]) {
-    self.elements = elements.map { 
-      $0.createPrecedenceGroupNameElement() 
-    }
-  }
-  /// Creates a new `PrecedenceGroupNameList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPrecedenceGroupNameList]) {
-    elements = lists.flatMap { 
-      $0.createPrecedenceGroupNameList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsPrecedenceGroupNameElement...) {
-    self.init(elements)
-  }
-  public func buildPrecedenceGroupNameList() -> PrecedenceGroupNameListSyntax {
-    
-    var result = PrecedenceGroupNameListSyntax(elements.map { 
-      $0.buildPrecedenceGroupNameElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildPrecedenceGroupNameList())
-  }
-  /// Conformance to `ExpressibleAsPrecedenceGroupNameList`.
-  public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `PrecedenceGroupNameList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsPrecedenceGroupNameList where Element == ExpressibleAsPrecedenceGroupNameElement {
-  public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
-    return PrecedenceGroupNameList(self)
-  }
-}
-/// `TokenList` represents a collection of `Token`
-public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTokenList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [Token]
-  /// Creates a `TokenList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `Token`
-  public init (_ elements: [Token]) {
-    self.elements = elements
-  }
-  /// Creates a new `TokenList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTokenList]) {
-    elements = lists.flatMap { 
-      $0.createTokenList().elements 
-    }
-  }
-  public init (arrayLiteral elements: Token...) {
-    self.init(elements)
-  }
-  public func buildTokenList() -> TokenListSyntax {
-    
-    var result = TokenListSyntax(elements.map { 
-      $0.buildToken() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildTokenList())
-  }
-  /// Conformance to `ExpressibleAsTokenList`.
-  public func createTokenList() -> TokenList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `TokenList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsTokenList where Element == Token {
-  public func createTokenList() -> TokenList {
-    return TokenList(self)
-  }
-}
-/// `NonEmptyTokenList` represents a collection of `Token`
-public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsNonEmptyTokenList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [Token]
-  /// Creates a `NonEmptyTokenList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `Token`
-  public init (_ elements: [Token]) {
-    self.elements = elements
-  }
-  /// Creates a new `NonEmptyTokenList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsNonEmptyTokenList]) {
-    elements = lists.flatMap { 
-      $0.createNonEmptyTokenList().elements 
-    }
-  }
-  public init (arrayLiteral elements: Token...) {
-    self.init(elements)
-  }
-  public func buildNonEmptyTokenList() -> NonEmptyTokenListSyntax {
-    
-    var result = NonEmptyTokenListSyntax(elements.map { 
-      $0.buildToken() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildNonEmptyTokenList())
-  }
-  /// Conformance to `ExpressibleAsNonEmptyTokenList`.
-  public func createNonEmptyTokenList() -> NonEmptyTokenList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `NonEmptyTokenList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsNonEmptyTokenList where Element == Token {
-  public func createNonEmptyTokenList() -> NonEmptyTokenList {
-    return NonEmptyTokenList(self)
-  }
-}
-/// `AttributeList` represents a collection of `SyntaxBuildable`
-public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAttributeList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [SyntaxBuildable]
+
+/// `AttributeList` represents a collection of `Syntax`
+extension AttributeList: ExpressibleByArrayLiteral {
   /// Creates a `AttributeList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map { 
-      $0.createSyntaxBuildable() 
-    }
+  ///   - elements: A list of `SyntaxProtocol`
+  public init (_ elements: [SyntaxProtocol]) {
+    self = AttributeListSyntax(elements.map { 
+      Syntax(fromProtocol: $0) 
+    })
   }
-  /// Creates a new `AttributeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAttributeList]) {
-    elements = lists.flatMap { 
-      $0.createAttributeList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init (arrayLiteral elements: SyntaxProtocol...) {
     self.init(elements)
   }
-  public func buildAttributeList() -> AttributeListSyntax {
-    
-    var result = AttributeListSyntax(elements.map { 
-      $0.buildSyntax() 
+}
+
+/// `AvailabilitySpecList` represents a collection of `AvailabilityArgumentSyntax`
+extension AvailabilitySpecList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: AvailabilityArgument...) {
+    self.init(elements)
+  }
+}
+
+/// `BackDeployVersionList` represents a collection of `BackDeployVersionArgumentSyntax`
+extension BackDeployVersionList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: BackDeployVersionArgument...) {
+    self.init(elements)
+  }
+}
+
+/// `CaseItemList` represents a collection of `CaseItemSyntax`
+extension CaseItemList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: CaseItem...) {
+    self.init(elements)
+  }
+}
+
+/// `CatchClauseList` represents a collection of `CatchClauseSyntax`
+extension CatchClauseList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: CatchClause...) {
+    self.init(elements)
+  }
+}
+
+/// `CatchItemList` represents a collection of `CatchItemSyntax`
+extension CatchItemList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: CatchItem...) {
+    self.init(elements)
+  }
+}
+
+/// `ClosureCaptureItemList` represents a collection of `ClosureCaptureItemSyntax`
+extension ClosureCaptureItemList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: ClosureCaptureItem...) {
+    self.init(elements)
+  }
+}
+
+/// `ClosureParamList` represents a collection of `ClosureParamSyntax`
+extension ClosureParamList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: ClosureParam...) {
+    self.init(elements)
+  }
+}
+
+/// `CodeBlockItemList` represents a collection of `CodeBlockItemSyntax`
+extension CodeBlockItemList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: CodeBlockItem...) {
+    self.init(elements)
+  }
+}
+
+/// `CompositionTypeElementList` represents a collection of `CompositionTypeElementSyntax`
+extension CompositionTypeElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: CompositionTypeElement...) {
+    self.init(elements)
+  }
+}
+
+/// `ConditionElementList` represents a collection of `ConditionElementSyntax`
+extension ConditionElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: ConditionElement...) {
+    self.init(elements)
+  }
+}
+
+/// `DeclNameArgumentList` represents a collection of `DeclNameArgumentSyntax`
+extension DeclNameArgumentList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: DeclNameArgument...) {
+    self.init(elements)
+  }
+}
+
+/// `DesignatedTypeList` represents a collection of `DesignatedTypeElementSyntax`
+extension DesignatedTypeList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: DesignatedTypeElement...) {
+    self.init(elements)
+  }
+}
+
+/// `DictionaryElementList` represents a collection of `DictionaryElementSyntax`
+extension DictionaryElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: DictionaryElement...) {
+    self.init(elements)
+  }
+}
+
+/// `DifferentiabilityParamList` represents a collection of `DifferentiabilityParamSyntax`
+extension DifferentiabilityParamList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: DifferentiabilityParam...) {
+    self.init(elements)
+  }
+}
+
+/// A collection of 0 or more `EnumCaseElement`s.
+extension EnumCaseElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: EnumCaseElement...) {
+    self.init(elements)
+  }
+}
+
+/// A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.
+extension ExprList: ExpressibleByArrayLiteral {
+  /// Creates a `ExprList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExprSyntaxProtocol`
+  public init (_ elements: [ExprSyntaxProtocol]) {
+    self = ExprListSyntax(elements.map { 
+      ExprSyntax(fromProtocol: $0) 
     })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
   }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildAttributeList())
-  }
-  /// Conformance to `ExpressibleAsAttributeList`.
-  public func createAttributeList() -> AttributeList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `AttributeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
+  public init (arrayLiteral elements: ExprSyntaxProtocol...) {
+    self.init(elements)
   }
 }
-extension Array: ExpressibleAsAttributeList where Element == ExpressibleAsSyntaxBuildable {
-  public func createAttributeList() -> AttributeList {
-    return AttributeList(self)
+
+/// `FunctionParameterList` represents a collection of `FunctionParameterSyntax`
+extension FunctionParameterList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: FunctionParameter...) {
+    self.init(elements)
   }
 }
+
+/// `GenericArgumentList` represents a collection of `GenericArgumentSyntax`
+extension GenericArgumentList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: GenericArgument...) {
+    self.init(elements)
+  }
+}
+
+/// `GenericParameterList` represents a collection of `GenericParameterSyntax`
+extension GenericParameterList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: GenericParameter...) {
+    self.init(elements)
+  }
+}
+
+/// `GenericRequirementList` represents a collection of `GenericRequirementSyntax`
+extension GenericRequirementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: GenericRequirement...) {
+    self.init(elements)
+  }
+}
+
+/// `IfConfigClauseList` represents a collection of `IfConfigClauseSyntax`
+extension IfConfigClauseList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: IfConfigClause...) {
+    self.init(elements)
+  }
+}
+
+/// `InheritedTypeList` represents a collection of `InheritedTypeSyntax`
+extension InheritedTypeList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: InheritedType...) {
+    self.init(elements)
+  }
+}
+
+/// `KeyPathComponentList` represents a collection of `KeyPathComponentSyntax`
+extension KeyPathComponentList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: KeyPathComponent...) {
+    self.init(elements)
+  }
+}
+
+/// `MemberDeclList` represents a collection of `MemberDeclListItemSyntax`
+extension MemberDeclList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: MemberDeclListItem...) {
+    self.init(elements)
+  }
+}
+
+/// `ModifierList` represents a collection of `DeclModifierSyntax`
+extension ModifierList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: DeclModifier...) {
+    self.init(elements)
+  }
+}
+
+/// `MultipleTrailingClosureElementList` represents a collection of `MultipleTrailingClosureElementSyntax`
+extension MultipleTrailingClosureElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: MultipleTrailingClosureElement...) {
+    self.init(elements)
+  }
+}
+
+/// `NonEmptyTokenList` represents a collection of `TokenSyntax`
+extension NonEmptyTokenList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: Token...) {
+    self.init(elements)
+  }
+}
+
+/// `ObjCSelector` represents a collection of `ObjCSelectorPieceSyntax`
+extension ObjCSelector: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: ObjCSelectorPiece...) {
+    self.init(elements)
+  }
+}
+
+/// `ObjcName` represents a collection of `ObjcNamePieceSyntax`
+extension ObjcName: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: ObjcNamePiece...) {
+    self.init(elements)
+  }
+}
+
+/// `PatternBindingList` represents a collection of `PatternBindingSyntax`
+extension PatternBindingList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: PatternBinding...) {
+    self.init(elements)
+  }
+}
+
+/// `PrecedenceGroupAttributeList` represents a collection of `Syntax`
+extension PrecedenceGroupAttributeList: ExpressibleByArrayLiteral {
+  /// Creates a `PrecedenceGroupAttributeList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `SyntaxProtocol`
+  public init (_ elements: [SyntaxProtocol]) {
+    self = PrecedenceGroupAttributeListSyntax(elements.map { 
+      Syntax(fromProtocol: $0) 
+    })
+  }
+  public init (arrayLiteral elements: SyntaxProtocol...) {
+    self.init(elements)
+  }
+}
+
+/// `PrecedenceGroupNameList` represents a collection of `PrecedenceGroupNameElementSyntax`
+extension PrecedenceGroupNameList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: PrecedenceGroupNameElement...) {
+    self.init(elements)
+  }
+}
+
+/// `PrimaryAssociatedTypeList` represents a collection of `PrimaryAssociatedTypeSyntax`
+extension PrimaryAssociatedTypeList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: PrimaryAssociatedType...) {
+    self.init(elements)
+  }
+}
+
 /// A collection of arguments for the `@_specialize` attribute
-public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsSpecializeAttributeSpecList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [SyntaxBuildable]
+extension SpecializeAttributeSpecList: ExpressibleByArrayLiteral {
   /// Creates a `SpecializeAttributeSpecList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map { 
-      $0.createSyntaxBuildable() 
-    }
+  ///   - elements: A list of `SyntaxProtocol`
+  public init (_ elements: [SyntaxProtocol]) {
+    self = SpecializeAttributeSpecListSyntax(elements.map { 
+      Syntax(fromProtocol: $0) 
+    })
   }
-  /// Creates a new `SpecializeAttributeSpecList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsSpecializeAttributeSpecList]) {
-    elements = lists.flatMap { 
-      $0.createSpecializeAttributeSpecList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init (arrayLiteral elements: SyntaxProtocol...) {
     self.init(elements)
   }
-  public func buildSpecializeAttributeSpecList() -> SpecializeAttributeSpecListSyntax {
-    
-    var result = SpecializeAttributeSpecListSyntax(elements.map { 
-      $0.buildSyntax() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildSpecializeAttributeSpecList())
-  }
-  /// Conformance to `ExpressibleAsSpecializeAttributeSpecList`.
-  public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `SpecializeAttributeSpecList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
 }
-extension Array: ExpressibleAsSpecializeAttributeSpecList where Element == ExpressibleAsSyntaxBuildable {
-  public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
-    return SpecializeAttributeSpecList(self)
-  }
-}
-/// `ObjCSelector` represents a collection of `ObjCSelectorPiece`
-public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsObjCSelector {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [ObjCSelectorPiece]
-  /// Creates a `ObjCSelector` with the provided list of elements.
+
+/// `StringLiteralSegments` represents a collection of `Syntax`
+extension StringLiteralSegments: ExpressibleByArrayLiteral {
+  /// Creates a `StringLiteralSegments` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsObjCSelectorPiece`
-  public init (_ elements: [ExpressibleAsObjCSelectorPiece]) {
-    self.elements = elements.map { 
-      $0.createObjCSelectorPiece() 
-    }
+  ///   - elements: A list of `SyntaxProtocol`
+  public init (_ elements: [SyntaxProtocol]) {
+    self = StringLiteralSegmentsSyntax(elements.map { 
+      Syntax(fromProtocol: $0) 
+    })
   }
-  /// Creates a new `ObjCSelector` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsObjCSelector]) {
-    elements = lists.flatMap { 
-      $0.createObjCSelector().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsObjCSelectorPiece...) {
+  public init (arrayLiteral elements: SyntaxProtocol...) {
     self.init(elements)
   }
-  public func buildObjCSelector() -> ObjCSelectorSyntax {
-    
-    var result = ObjCSelectorSyntax(elements.map { 
-      $0.buildObjCSelectorPiece() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildObjCSelector())
-  }
-  /// Conformance to `ExpressibleAsObjCSelector`.
-  public func createObjCSelector() -> ObjCSelector {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ObjCSelector` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
 }
-extension Array: ExpressibleAsObjCSelector where Element == ExpressibleAsObjCSelectorPiece {
-  public func createObjCSelector() -> ObjCSelector {
-    return ObjCSelector(self)
-  }
-}
-/// `DifferentiabilityParamList` represents a collection of `DifferentiabilityParam`
-public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDifferentiabilityParamList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [DifferentiabilityParam]
-  /// Creates a `DifferentiabilityParamList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsDifferentiabilityParam`
-  public init (_ elements: [ExpressibleAsDifferentiabilityParam]) {
-    self.elements = elements.map { 
-      $0.createDifferentiabilityParam() 
-    }
-  }
-  /// Creates a new `DifferentiabilityParamList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsDifferentiabilityParamList]) {
-    elements = lists.flatMap { 
-      $0.createDifferentiabilityParamList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsDifferentiabilityParam...) {
-    self.init(elements)
-  }
-  public func buildDifferentiabilityParamList() -> DifferentiabilityParamListSyntax {
-    
-    var result = DifferentiabilityParamListSyntax(elements.map { 
-      $0.buildDifferentiabilityParam() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildDifferentiabilityParamList())
-  }
-  /// Conformance to `ExpressibleAsDifferentiabilityParamList`.
-  public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `DifferentiabilityParamList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsDifferentiabilityParamList where Element == ExpressibleAsDifferentiabilityParam {
-  public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
-    return DifferentiabilityParamList(self)
-  }
-}
-/// `BackDeployVersionList` represents a collection of `BackDeployVersionArgument`
-public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsBackDeployVersionList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [BackDeployVersionArgument]
-  /// Creates a `BackDeployVersionList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsBackDeployVersionArgument`
-  public init (_ elements: [ExpressibleAsBackDeployVersionArgument]) {
-    self.elements = elements.map { 
-      $0.createBackDeployVersionArgument() 
-    }
-  }
-  /// Creates a new `BackDeployVersionList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsBackDeployVersionList]) {
-    elements = lists.flatMap { 
-      $0.createBackDeployVersionList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsBackDeployVersionArgument...) {
-    self.init(elements)
-  }
-  public func buildBackDeployVersionList() -> BackDeployVersionListSyntax {
-    
-    var result = BackDeployVersionListSyntax(elements.map { 
-      $0.buildBackDeployVersionArgument() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildBackDeployVersionList())
-  }
-  /// Conformance to `ExpressibleAsBackDeployVersionList`.
-  public func createBackDeployVersionList() -> BackDeployVersionList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `BackDeployVersionList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsBackDeployVersionList where Element == ExpressibleAsBackDeployVersionArgument {
-  public func createBackDeployVersionList() -> BackDeployVersionList {
-    return BackDeployVersionList(self)
-  }
-}
-/// `SwitchCaseList` represents a collection of `SyntaxBuildable`
-public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsSwitchCaseList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [SyntaxBuildable]
+
+/// `SwitchCaseList` represents a collection of `Syntax`
+extension SwitchCaseList: ExpressibleByArrayLiteral {
   /// Creates a `SwitchCaseList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
-  public init (_ elements: [ExpressibleAsSyntaxBuildable]) {
-    self.elements = elements.map { 
-      $0.createSyntaxBuildable() 
-    }
+  ///   - elements: A list of `SyntaxProtocol`
+  public init (_ elements: [SyntaxProtocol]) {
+    self = SwitchCaseListSyntax(elements.map { 
+      Syntax(fromProtocol: $0) 
+    })
   }
-  /// Creates a new `SwitchCaseList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsSwitchCaseList]) {
-    elements = lists.flatMap { 
-      $0.createSwitchCaseList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+  public init (arrayLiteral elements: SyntaxProtocol...) {
     self.init(elements)
   }
-  public func buildSwitchCaseList() -> SwitchCaseListSyntax {
-    
-    var result = SwitchCaseListSyntax(elements.map { 
-      $0.buildSyntax() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildSwitchCaseList())
-  }
-  /// Conformance to `ExpressibleAsSwitchCaseList`.
-  public func createSwitchCaseList() -> SwitchCaseList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `SwitchCaseList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
+}
+
+/// `TokenList` represents a collection of `TokenSyntax`
+extension TokenList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: Token...) {
+    self.init(elements)
   }
 }
-extension Array: ExpressibleAsSwitchCaseList where Element == ExpressibleAsSyntaxBuildable {
-  public func createSwitchCaseList() -> SwitchCaseList {
-    return SwitchCaseList(self)
+
+/// `TupleExprElementList` represents a collection of `TupleExprElementSyntax`
+extension TupleExprElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: TupleExprElement...) {
+    self.init(elements)
   }
 }
-/// `CatchClauseList` represents a collection of `CatchClause`
-public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCatchClauseList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [CatchClause]
-  /// Creates a `CatchClauseList` with the provided list of elements.
+
+/// `TuplePatternElementList` represents a collection of `TuplePatternElementSyntax`
+extension TuplePatternElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: TuplePatternElement...) {
+    self.init(elements)
+  }
+}
+
+/// `TupleTypeElementList` represents a collection of `TupleTypeElementSyntax`
+extension TupleTypeElementList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: TupleTypeElement...) {
+    self.init(elements)
+  }
+}
+
+/// A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.
+extension UnexpectedNodes: ExpressibleByArrayLiteral {
+  /// Creates a `UnexpectedNodes` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsCatchClause`
-  public init (_ elements: [ExpressibleAsCatchClause]) {
-    self.elements = elements.map { 
-      $0.createCatchClause() 
-    }
+  ///   - elements: A list of `SyntaxProtocol`
+  public init (_ elements: [SyntaxProtocol]) {
+    self = UnexpectedNodesSyntax(elements.map { 
+      Syntax(fromProtocol: $0) 
+    })
   }
-  /// Creates a new `CatchClauseList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCatchClauseList]) {
-    elements = lists.flatMap { 
-      $0.createCatchClauseList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsCatchClause...) {
+  public init (arrayLiteral elements: SyntaxProtocol...) {
     self.init(elements)
   }
-  public func buildCatchClauseList() -> CatchClauseListSyntax {
-    
-    var result = CatchClauseListSyntax(elements.map { 
-      $0.buildCatchClause() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildCatchClauseList())
-  }
-  /// Conformance to `ExpressibleAsCatchClauseList`.
-  public func createCatchClauseList() -> CatchClauseList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `CatchClauseList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
 }
-extension Array: ExpressibleAsCatchClauseList where Element == ExpressibleAsCatchClause {
-  public func createCatchClauseList() -> CatchClauseList {
-    return CatchClauseList(self)
-  }
-}
-/// `CaseItemList` represents a collection of `CaseItem`
-public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCaseItemList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [CaseItem]
-  /// Creates a `CaseItemList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsCaseItem`
-  public init (_ elements: [ExpressibleAsCaseItem]) {
-    self.elements = elements.map { 
-      $0.createCaseItem() 
-    }
-  }
-  /// Creates a new `CaseItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCaseItemList]) {
-    elements = lists.flatMap { 
-      $0.createCaseItemList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsCaseItem...) {
+
+/// `YieldExprList` represents a collection of `YieldExprListElementSyntax`
+extension YieldExprList: ExpressibleByArrayLiteral {
+  public init (arrayLiteral elements: YieldExprListElement...) {
     self.init(elements)
-  }
-  public func buildCaseItemList() -> CaseItemListSyntax {
-    
-    var result = CaseItemListSyntax(elements.map { 
-      $0.buildCaseItem() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildCaseItemList())
-  }
-  /// Conformance to `ExpressibleAsCaseItemList`.
-  public func createCaseItemList() -> CaseItemList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `CaseItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsCaseItemList where Element == ExpressibleAsCaseItem {
-  public func createCaseItemList() -> CaseItemList {
-    return CaseItemList(self)
-  }
-}
-/// `CatchItemList` represents a collection of `CatchItem`
-public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCatchItemList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [CatchItem]
-  /// Creates a `CatchItemList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsCatchItem`
-  public init (_ elements: [ExpressibleAsCatchItem]) {
-    self.elements = elements.map { 
-      $0.createCatchItem() 
-    }
-  }
-  /// Creates a new `CatchItemList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCatchItemList]) {
-    elements = lists.flatMap { 
-      $0.createCatchItemList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsCatchItem...) {
-    self.init(elements)
-  }
-  public func buildCatchItemList() -> CatchItemListSyntax {
-    
-    var result = CatchItemListSyntax(elements.map { 
-      $0.buildCatchItem() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildCatchItemList())
-  }
-  /// Conformance to `ExpressibleAsCatchItemList`.
-  public func createCatchItemList() -> CatchItemList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `CatchItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsCatchItemList where Element == ExpressibleAsCatchItem {
-  public func createCatchItemList() -> CatchItemList {
-    return CatchItemList(self)
-  }
-}
-/// `ConditionElementList` represents a collection of `ConditionElement`
-public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsConditionElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [ConditionElement]
-  /// Creates a `ConditionElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsConditionElement`
-  public init (_ elements: [ExpressibleAsConditionElement]) {
-    self.elements = elements.map { 
-      $0.createConditionElement() 
-    }
-  }
-  /// Creates a new `ConditionElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsConditionElementList]) {
-    elements = lists.flatMap { 
-      $0.createConditionElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsConditionElement...) {
-    self.init(elements)
-  }
-  public func buildConditionElementList() -> ConditionElementListSyntax {
-    
-    var result = ConditionElementListSyntax(elements.map { 
-      $0.buildConditionElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildConditionElementList())
-  }
-  /// Conformance to `ExpressibleAsConditionElementList`.
-  public func createConditionElementList() -> ConditionElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `ConditionElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsConditionElementList where Element == ExpressibleAsConditionElement {
-  public func createConditionElementList() -> ConditionElementList {
-    return ConditionElementList(self)
-  }
-}
-/// `GenericRequirementList` represents a collection of `GenericRequirement`
-public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericRequirementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [GenericRequirement]
-  /// Creates a `GenericRequirementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsGenericRequirement`
-  public init (_ elements: [ExpressibleAsGenericRequirement]) {
-    self.elements = elements.map { 
-      $0.createGenericRequirement() 
-    }
-  }
-  /// Creates a new `GenericRequirementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsGenericRequirementList]) {
-    elements = lists.flatMap { 
-      $0.createGenericRequirementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsGenericRequirement...) {
-    self.init(elements)
-  }
-  public func buildGenericRequirementList() -> GenericRequirementListSyntax {
-    
-    var result = GenericRequirementListSyntax(elements.map { 
-      $0.buildGenericRequirement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildGenericRequirementList())
-  }
-  /// Conformance to `ExpressibleAsGenericRequirementList`.
-  public func createGenericRequirementList() -> GenericRequirementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `GenericRequirementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsGenericRequirementList where Element == ExpressibleAsGenericRequirement {
-  public func createGenericRequirementList() -> GenericRequirementList {
-    return GenericRequirementList(self)
-  }
-}
-/// `GenericParameterList` represents a collection of `GenericParameter`
-public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericParameterList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [GenericParameter]
-  /// Creates a `GenericParameterList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsGenericParameter`
-  public init (_ elements: [ExpressibleAsGenericParameter]) {
-    self.elements = elements.map { 
-      $0.createGenericParameter() 
-    }
-  }
-  /// Creates a new `GenericParameterList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsGenericParameterList]) {
-    elements = lists.flatMap { 
-      $0.createGenericParameterList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsGenericParameter...) {
-    self.init(elements)
-  }
-  public func buildGenericParameterList() -> GenericParameterListSyntax {
-    
-    var result = GenericParameterListSyntax(elements.map { 
-      $0.buildGenericParameter() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildGenericParameterList())
-  }
-  /// Conformance to `ExpressibleAsGenericParameterList`.
-  public func createGenericParameterList() -> GenericParameterList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `GenericParameterList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsGenericParameterList where Element == ExpressibleAsGenericParameter {
-  public func createGenericParameterList() -> GenericParameterList {
-    return GenericParameterList(self)
-  }
-}
-/// `PrimaryAssociatedTypeList` represents a collection of `PrimaryAssociatedType`
-public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [PrimaryAssociatedType]
-  /// Creates a `PrimaryAssociatedTypeList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsPrimaryAssociatedType`
-  public init (_ elements: [ExpressibleAsPrimaryAssociatedType]) {
-    self.elements = elements.map { 
-      $0.createPrimaryAssociatedType() 
-    }
-  }
-  /// Creates a new `PrimaryAssociatedTypeList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsPrimaryAssociatedTypeList]) {
-    elements = lists.flatMap { 
-      $0.createPrimaryAssociatedTypeList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsPrimaryAssociatedType...) {
-    self.init(elements)
-  }
-  public func buildPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeListSyntax {
-    
-    var result = PrimaryAssociatedTypeListSyntax(elements.map { 
-      $0.buildPrimaryAssociatedType() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildPrimaryAssociatedTypeList())
-  }
-  /// Conformance to `ExpressibleAsPrimaryAssociatedTypeList`.
-  public func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `PrimaryAssociatedTypeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsPrimaryAssociatedTypeList where Element == ExpressibleAsPrimaryAssociatedType {
-  public func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
-    return PrimaryAssociatedTypeList(self)
-  }
-}
-/// `CompositionTypeElementList` represents a collection of `CompositionTypeElement`
-public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCompositionTypeElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [CompositionTypeElement]
-  /// Creates a `CompositionTypeElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsCompositionTypeElement`
-  public init (_ elements: [ExpressibleAsCompositionTypeElement]) {
-    self.elements = elements.map { 
-      $0.createCompositionTypeElement() 
-    }
-  }
-  /// Creates a new `CompositionTypeElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsCompositionTypeElementList]) {
-    elements = lists.flatMap { 
-      $0.createCompositionTypeElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsCompositionTypeElement...) {
-    self.init(elements)
-  }
-  public func buildCompositionTypeElementList() -> CompositionTypeElementListSyntax {
-    
-    var result = CompositionTypeElementListSyntax(elements.map { 
-      $0.buildCompositionTypeElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildCompositionTypeElementList())
-  }
-  /// Conformance to `ExpressibleAsCompositionTypeElementList`.
-  public func createCompositionTypeElementList() -> CompositionTypeElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `CompositionTypeElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsCompositionTypeElementList where Element == ExpressibleAsCompositionTypeElement {
-  public func createCompositionTypeElementList() -> CompositionTypeElementList {
-    return CompositionTypeElementList(self)
-  }
-}
-/// `TupleTypeElementList` represents a collection of `TupleTypeElement`
-public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTupleTypeElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [TupleTypeElement]
-  /// Creates a `TupleTypeElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsTupleTypeElement`
-  public init (_ elements: [ExpressibleAsTupleTypeElement]) {
-    self.elements = elements.map { 
-      $0.createTupleTypeElement() 
-    }
-  }
-  /// Creates a new `TupleTypeElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTupleTypeElementList]) {
-    elements = lists.flatMap { 
-      $0.createTupleTypeElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsTupleTypeElement...) {
-    self.init(elements)
-  }
-  public func buildTupleTypeElementList() -> TupleTypeElementListSyntax {
-    
-    var result = TupleTypeElementListSyntax(elements.map { 
-      $0.buildTupleTypeElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildTupleTypeElementList())
-  }
-  /// Conformance to `ExpressibleAsTupleTypeElementList`.
-  public func createTupleTypeElementList() -> TupleTypeElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `TupleTypeElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsTupleTypeElementList where Element == ExpressibleAsTupleTypeElement {
-  public func createTupleTypeElementList() -> TupleTypeElementList {
-    return TupleTypeElementList(self)
-  }
-}
-/// `GenericArgumentList` represents a collection of `GenericArgument`
-public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericArgumentList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [GenericArgument]
-  /// Creates a `GenericArgumentList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsGenericArgument`
-  public init (_ elements: [ExpressibleAsGenericArgument]) {
-    self.elements = elements.map { 
-      $0.createGenericArgument() 
-    }
-  }
-  /// Creates a new `GenericArgumentList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsGenericArgumentList]) {
-    elements = lists.flatMap { 
-      $0.createGenericArgumentList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsGenericArgument...) {
-    self.init(elements)
-  }
-  public func buildGenericArgumentList() -> GenericArgumentListSyntax {
-    
-    var result = GenericArgumentListSyntax(elements.map { 
-      $0.buildGenericArgument() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildGenericArgumentList())
-  }
-  /// Conformance to `ExpressibleAsGenericArgumentList`.
-  public func createGenericArgumentList() -> GenericArgumentList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `GenericArgumentList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsGenericArgumentList where Element == ExpressibleAsGenericArgument {
-  public func createGenericArgumentList() -> GenericArgumentList {
-    return GenericArgumentList(self)
-  }
-}
-/// `TuplePatternElementList` represents a collection of `TuplePatternElement`
-public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTuplePatternElementList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [TuplePatternElement]
-  /// Creates a `TuplePatternElementList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsTuplePatternElement`
-  public init (_ elements: [ExpressibleAsTuplePatternElement]) {
-    self.elements = elements.map { 
-      $0.createTuplePatternElement() 
-    }
-  }
-  /// Creates a new `TuplePatternElementList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsTuplePatternElementList]) {
-    elements = lists.flatMap { 
-      $0.createTuplePatternElementList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsTuplePatternElement...) {
-    self.init(elements)
-  }
-  public func buildTuplePatternElementList() -> TuplePatternElementListSyntax {
-    
-    var result = TuplePatternElementListSyntax(elements.map { 
-      $0.buildTuplePatternElement() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildTuplePatternElementList())
-  }
-  /// Conformance to `ExpressibleAsTuplePatternElementList`.
-  public func createTuplePatternElementList() -> TuplePatternElementList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `TuplePatternElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsTuplePatternElementList where Element == ExpressibleAsTuplePatternElement {
-  public func createTuplePatternElementList() -> TuplePatternElementList {
-    return TuplePatternElementList(self)
-  }
-}
-/// `AvailabilitySpecList` represents a collection of `AvailabilityArgument`
-public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAvailabilitySpecList {
-  /// The leading trivia attached to this syntax node once built.
-  var leadingTrivia: Trivia = []
-  /// The trailing trivia attached to this syntax node once built.
-  var trailingTrivia: Trivia = []
-  let elements: [AvailabilityArgument]
-  /// Creates a `AvailabilitySpecList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsAvailabilityArgument`
-  public init (_ elements: [ExpressibleAsAvailabilityArgument]) {
-    self.elements = elements.map { 
-      $0.createAvailabilityArgument() 
-    }
-  }
-  /// Creates a new `AvailabilitySpecList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsAvailabilitySpecList]) {
-    elements = lists.flatMap { 
-      $0.createAvailabilitySpecList().elements 
-    }
-  }
-  public init (arrayLiteral elements: ExpressibleAsAvailabilityArgument...) {
-    self.init(elements)
-  }
-  public func buildAvailabilitySpecList() -> AvailabilitySpecListSyntax {
-    
-    var result = AvailabilitySpecListSyntax(elements.map { 
-      $0.buildAvailabilityArgument() 
-    })
-    if !leadingTrivia.isEmpty {
-      let trivia = leadingTrivia + (result.leadingTrivia ?? [])
-      result = result.withLeadingTrivia(trivia)
-    }
-    if !trailingTrivia.isEmpty {
-      let trivia = trailingTrivia + (result.trailingTrivia ?? [])
-      result = result.withTrailingTrivia(trivia)
-    }
-    return result
-  }
-  public func buildSyntax() -> Syntax {
-    return Syntax(buildAvailabilitySpecList())
-  }
-  /// Conformance to `ExpressibleAsAvailabilitySpecList`.
-  public func createAvailabilitySpecList() -> AvailabilitySpecList {
-    return self
-  }
-  /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `AvailabilitySpecList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
-  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
-  public func createSyntaxBuildable() -> SyntaxBuildable {
-    return self
-  }
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    var result = self
-    result.leadingTrivia = leadingTrivia
-    return result
-  }
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    var result = self
-    result.trailingTrivia = trailingTrivia
-    return result
-  }
-}
-extension Array: ExpressibleAsAvailabilitySpecList where Element == ExpressibleAsAvailabilityArgument {
-  public func createAvailabilitySpecList() -> AvailabilitySpecList {
-    return AvailabilitySpecList(self)
   }
 }

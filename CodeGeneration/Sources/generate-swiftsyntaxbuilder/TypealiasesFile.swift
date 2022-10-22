@@ -10,11 +10,22 @@
 //
 //===----------------------------------------------------------------------===//
 
+import Foundation
 import SwiftSyntax
+import SwiftSyntaxBuilder
+import SyntaxSupport
+import Utils
+import SwiftBasicFormat
 
-extension SimpleTypeIdentifier {
-  public init(_ name: String) {
-    self.init(name: .identifier(name),
-              genericArgumentClause: nil)
+let typealiasesFile = SourceFile {
+  ImportDecl(
+    leadingTrivia: .docLineComment(copyrightHeader),
+    path: "SwiftSyntax"
+  )
+
+  TypealiasDecl("public typealias Token = TokenSyntax")
+  
+  for node in SYNTAX_NODES where !node.isUnknown && !node.isMissing {
+    TypealiasDecl("public typealias \(node.type.shorthandName) = \(node.type.syntaxBaseName)")
   }
 }

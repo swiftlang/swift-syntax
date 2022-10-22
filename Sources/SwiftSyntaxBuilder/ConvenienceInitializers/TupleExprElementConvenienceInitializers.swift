@@ -15,8 +15,8 @@ import SwiftSyntax
 public extension TupleExprElement {
   /// A convenience initializer that allows passing in label as an optional string.
   /// The presence of the colon will be inferred based on the presence of the label.
-  init(label: String? = nil, expression: ExpressibleAsExprBuildable) {
+  init(label: String? = nil, expression: ExprSyntax) {
     self.init(
-      label: label.map { Token.identifier($0) }, colon: label == nil ? nil : Token.colon, expression: expression)
+      label: label.map { Token.identifier($0) }, colon: label == nil ? nil : Token.colon, expression: expression, trailingComma: nil)
   }
 }

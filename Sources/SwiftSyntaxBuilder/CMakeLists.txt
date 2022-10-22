@@ -7,9 +7,9 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_library(SwiftSyntaxBuilder STATIC
-  BuildBuildable.swift
   HasTrailingComma.swift
   Indenter.swift
+  ResultBuilderExtensions.swift
   Syntax+StringInterpolation.swift
 
   ConvenienceInitializers/BinaryOperatorExprConvenienceInitializers.swift
@@ -19,25 +19,19 @@ add_library(SwiftSyntaxBuilder STATIC
   ConvenienceInitializers/DictionaryExprConvenienceInitializers.swift
   ConvenienceInitializers/FloatLiteralExprConvenienceInitializers.swift
   ConvenienceInitializers/FunctionCallExprConvenienceInitializers.swift
-  ConvenienceInitializers/IdentifierExprConvenienceInitializers.swift
-  ConvenienceInitializers/IdentifierPatternConvenienceInitializers.swift
   ConvenienceInitializers/IfStmtConvenienceInitializers.swift
   ConvenienceInitializers/IntegerLiteralExprConvenienceInitializers.swift
   ConvenienceInitializers/MemberAccessExprConvenienceInitializers.swift
-  ConvenienceInitializers/PrefixOperatorExprConvenienceInitializers.swift
-  ConvenienceInitializers/SimpleTypeIdentifierConvenienceInitializers.swift
-  ConvenienceInitializers/StringConvenienceInitializers.swift
   ConvenienceInitializers/StringLiteralExprConvenienceInitializers.swift
   ConvenienceInitializers/TernaryExprConvenienceInitializers.swift
   ConvenienceInitializers/TupleExprElementConvenienceInitializers.swift
-  ConvenienceInitializers/TypeAnnotationConvenienceInitializers.swift
   ConvenienceInitializers/VariableDeclConvenienceInitializers.swift
-  generated/BuildableBaseProtocols.swift
+
   generated/BuildableCollectionNodes.swift
   generated/BuildableNodes.swift
-  generated/ExpressibleAsProtocols.swift
-  generated/ResultBuildersFile.swift
+  generated/ResultBuilders.swift
   generated/Token.swift
+  generated/Typealiases.swift
   gyb_generated/SyntaxExpressibleByStringInterpolationConformances.swift
 )
 

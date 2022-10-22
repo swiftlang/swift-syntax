@@ -31,7 +31,7 @@ public extension Node {
   var documentation: String {
     let description = self.description ?? ""
     if description.isEmpty && isSyntaxCollection {
-      return "`\(syntaxKind)` represents a collection of `\(collectionElementType.buildableBaseName)`"
+      return "`\(syntaxKind)` represents a collection of `\(collectionElementType.syntaxBaseName)`"
     } else {
       return flattened(indentedDocumentation: description)
     }
@@ -51,9 +51,8 @@ public extension Node {
   }
 
   static func from(type: SyntaxBuildableType) -> Node {
-    let baseName = type.baseName
-    guard let node = SYNTAX_NODE_MAP[baseName] else {
-      fatalError("Base name \(baseName) does not have a syntax node")
+    guard let node = SYNTAX_NODE_MAP[type.syntaxKind] else {
+      fatalError("Base name \(type.syntaxKind) does not have a syntax node")
     }
     return node
   }

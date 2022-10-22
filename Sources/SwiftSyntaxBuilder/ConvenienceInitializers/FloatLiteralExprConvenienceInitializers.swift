@@ -10,13 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension FloatLiteralExpr {
+import SwiftSyntax
+
+extension FloatLiteralExprSyntax {
   public init(_ value: Float) {
     self.init(floatingDigits: String(value))
   }
 }
 
-extension FloatLiteralExpr: ExpressibleByFloatLiteral {
+extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
   public init(floatLiteral value: Float) {
     self.init(value)
   }

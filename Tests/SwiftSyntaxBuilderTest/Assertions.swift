@@ -10,11 +10,16 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
 import SwiftSyntaxBuilder
 import _SwiftSyntaxTestSupport
 
 import XCTest
 
-func AssertBuildResult<T: SyntaxBuildable>(_ buildable: T, _ expectedResult: String, file: StaticString = #file, line: UInt = #line) {
-  AssertStringsEqualWithDiff(buildable.build().description, expectedResult, file: file, line: line)
+func AssertBuildResult<T: SyntaxProtocol>(_ buildable: T, _ expectedResult: String, file: StaticString = #file, line: UInt = #line) {
+  AssertStringsEqualWithDiff(
+    buildable.formatted().description.trimmingTrailingWhitespace(),
+    expectedResult.trimmingTrailingWhitespace(),
+    file: file, line: line
+  )
 }

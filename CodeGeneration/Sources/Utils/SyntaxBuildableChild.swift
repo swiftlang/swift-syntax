@@ -32,18 +32,6 @@ public extension Child {
     flattened(indentedDocumentation: description ?? "")
   }
 
-  /// Generate a Swift expression that creates a proper SwiftSyntax node of type
-  /// `type.syntax` from a variable named `varName` of type `type.buildable` that
-  /// represents this child node.
-  func generateExprBuildSyntaxNode(varName: ExpressibleAsExprBuildable) -> ExpressibleAsExprBuildable {
-    if type.isToken {
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken"))
-    } else {
-      let expr = type.optionalChained(expr: varName)
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: expr, name: "build\(type.baseName)"))
-    }
-  }
-
   /// If this node is a token that can't contain arbitrary text, generate a Swift
   /// `assert` statement that verifies the variable with name var_name and of type
   /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.

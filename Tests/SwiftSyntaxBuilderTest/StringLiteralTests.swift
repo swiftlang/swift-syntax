@@ -34,24 +34,4 @@ final class StringLiteralTests: XCTestCase {
       AssertBuildResult(builder, expected, line: line)
     }
   }
-
-  func testStringLiteralConvenienceInitializers() {
-    let testCases: [UInt: (ExpressibleAsStringLiteralExpr, String)] = [
-      #line: (StringLiteralExpr(""), #""""#),
-      #line: (StringLiteralExpr("asdf"), #""asdf""#),
-      #line: ("", #""""#),
-      #line: ("asdf", #""asdf""#),
-      #line: (StringLiteralExpr(raw: "abc"), "#\"abc\"#"),
-      #line: (StringLiteralExpr(raw: #""quoted""#), ##"#""quoted""#"##),
-      #line: (StringLiteralExpr(raw: ##"#"rawquoted"#"##), ###"##"#"rawquoted"#"##"###),
-      #line: (StringLiteralExpr(raw: ####"###"unbalanced"####), #####"####"###"unbalanced"####"#####),
-      #line: (StringLiteralExpr(raw: ###"some "# string ##""###), ####"###"some "# string ##""###"####),
-      #line: (StringLiteralExpr(raw: ###"\##(abc) \(def)"###), ####"###"\##(abc) \(def)"###"####),
-    ]
-
-    for (line, testCase) in testCases {
-      let (builder, expected) = testCase
-      AssertBuildResult(builder.createStringLiteralExpr(), expected, line: line)
-    }
-  }
 }

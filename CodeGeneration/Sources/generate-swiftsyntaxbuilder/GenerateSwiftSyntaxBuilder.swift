@@ -26,12 +26,11 @@ struct GenerateSwiftSyntaxBuilder: ParsableCommand {
   func run() throws {
     try generateTemplates(
       templates: [
-        (buildableBaseProtocolsFile, "BuildableBaseProtocols.swift"),
         (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
         (buildableNodesFile, "BuildableNodes.swift"),
-        (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
-        (resultBuildersFile, "ResultBuildersFile.swift"),
+        (resultBuildersFile, "ResultBuilders.swift"),
         (tokenFile, "Token.swift"),
+        (typealiasesFile, "Typealiases.swift")
       ],
       destination: URL(fileURLWithPath: generatedPath),
       verbose: verbose

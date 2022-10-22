@@ -16,16 +16,16 @@ extension VariableDecl {
   /// Creates an optionally initialized property.
   public init(
     leadingTrivia: Trivia = [],
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
+    attributes: AttributeList? = nil,
+    modifiers: ModifierList? = nil,
     _ letOrVarKeyword: Token,
-    name: ExpressibleAsIdentifierPattern,
-    type: ExpressibleAsTypeAnnotation? = nil,
-    initializer: ExpressibleAsInitializerClause? = nil
+    name: IdentifierPattern,
+    type: TypeAnnotation? = nil,
+    initializer: InitializerClause? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes?.createAttributeList().withTrailingTrivia(.space),
+      attributes: attributes?.withTrailingTrivia(.space),
       modifiers: modifiers,
       letOrVarKeyword: letOrVarKeyword
     ) {
@@ -40,15 +40,15 @@ extension VariableDecl {
   /// Creates a computed property with the given accessor.
   public init(
     leadingTrivia: Trivia = [],
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    name: ExpressibleAsIdentifierPattern,
-    type: ExpressibleAsTypeAnnotation,
-    @CodeBlockItemListBuilder accessor: () -> ExpressibleAsCodeBlockItemList
+    attributes: AttributeList? = nil,
+    modifiers: ModifierList? = nil,
+    name: IdentifierPattern,
+    type: TypeAnnotation,
+    @CodeBlockItemListBuilder accessor: () -> CodeBlockItemList
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes?.createAttributeList().withTrailingTrivia(.space),
+      attributes: attributes?.withTrailingTrivia(.space),
       modifiers: modifiers,
       letOrVarKeyword: .var
     ) {

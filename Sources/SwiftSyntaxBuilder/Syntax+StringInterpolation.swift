@@ -90,11 +90,11 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     self.lastIndentation = nil
   }
 
-  public mutating func appendInterpolation<Buildable: SyntaxBuildable>(
+  public mutating func appendInterpolation<Buildable: SyntaxProtocol>(
     _ buildable: Buildable,
     format: BasicFormat = BasicFormat()
   ) {
-    self.appendInterpolation(buildable.build(format: format))
+    self.appendInterpolation(buildable.formatted(using: format))
   }
 }
 
@@ -178,5 +178,10 @@ extension SyntaxExpressibleByStringInterpolation {
     var interpolation = SyntaxStringInterpolation()
     interpolation.appendLiteral(value)
     try self.init(stringInterpolationOrThrow: interpolation)
+  }
+
+  /// Construct this node by parsing `source`. If parsing fails, raise a `fatalError`.
+  public init(_ source: String) {
+    self.init(stringLiteral: source)
   }
 }

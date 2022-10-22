@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import XCTest
+import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class DoStmtTests: XCTestCase {
@@ -21,21 +22,21 @@ final class DoStmtTests: XCTestCase {
       }),
       catchClauses: [
         CatchClause(CatchItemList {
-          CatchItem(pattern: "Error1")
-          CatchItem(pattern: "Error2")
+          CatchItem(pattern: Pattern("Error1"))
+          CatchItem(pattern: Pattern("Error2"))
         }) {
-          FunctionCallExpr(calledExpression: "print") {
-            TupleExprElement(expression: StringLiteralExpr("Known error"))
+          FunctionCallExpr(calledExpression: Expr("print")) {
+            TupleExprElement(expression: StringLiteralExpr(content: "Known error"))
           }
         },
         CatchClause(CatchItemList {
           CatchItem(
-            pattern: "Error3", whereClause: WhereClause(guardResult: MemberAccessExpr(base: "error", name: "isError4")))
+            pattern: Pattern("Error3"), whereClause: WhereClause(guardResult: MemberAccessExpr(base: "error", name: "isError4")))
         }) {
           ThrowStmt(expression: MemberAccessExpr(base: "Error4", name: "error3"))
         },
         CatchClause {
-          FunctionCallExpr(calledExpression: "print") {
+          FunctionCallExpr(calledExpression: Expr("print")) {
             TupleExprElement(expression: "error")
           }
         }

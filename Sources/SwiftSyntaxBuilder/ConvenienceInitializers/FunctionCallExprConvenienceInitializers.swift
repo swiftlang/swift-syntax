@@ -18,15 +18,15 @@ extension FunctionCallExpr {
   /// instead of having to wrap them in a `TupleExprElementList`.
   /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
   public init(
-    calledExpression: ExpressibleAsExprBuildable,
-    trailingClosure: ExpressibleAsClosureExpr? = nil,
+    calledExpression: ExprSyntaxProtocol,
+    trailingClosure: ClosureExprSyntax? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
-    @TupleExprElementListBuilder argumentList: () -> ExpressibleAsTupleExprElementList = { [] }
+    @TupleExprElementListBuilder argumentList: () -> TupleExprElementList = { [] }
   ) {
-    let argumentList = argumentList().createTupleExprElementList()
-    let shouldOmitParens = argumentList.elements.isEmpty && trailingClosure != nil
+    let argumentList = argumentList()
+    let shouldOmitParens = argumentList.isEmpty && trailingClosure != nil
     self.init(
-      calledExpression: calledExpression.createExprBuildable(),
+      calledExpression: calledExpression,
       leftParen: shouldOmitParens ? nil : .leftParen,
       argumentList: argumentList,
       rightParen: shouldOmitParens ? nil : .rightParen,

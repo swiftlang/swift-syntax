@@ -19,24 +19,24 @@ final class ExtensionDeclTests: XCTestCase {
     let keywords = ["associatedtype", "class"].map { keyword -> VariableDecl in
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(calledExpression: "TokenSyntax.\(keyword)Keyword")
+        FunctionCallExpr(calledExpression: MemberAccessExpr("TokenSyntax.\(keyword)Keyword"))
       }
 
       return VariableDecl(
-        modifiers: [Token.public],
+        modifiers: [DeclModifier(name: .public)],
         letOrVarKeyword: .var
       ) {
-        PatternBinding(pattern: "`\(keyword)`",
-                       typeAnnotation: "TokenSyntax",
+        PatternBinding(pattern: Pattern("`\(keyword)`"),
+                       typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
                        initializer: nil,
                        accessor: body)
 
       }
     }
-    let members = MemberDeclList(keywords)
+    let members = MemberDeclList(keywords.map { MemberDeclListItem(decl: $0) })
     let buildable = ExtensionDecl(modifiers: nil,
-                                  extendedType: "TokenSyntax",
-                                  members: members)
+                                  extendedType: Type("TokenSyntax"),
+                                  members: MemberDeclBlock(members: members))
 
     AssertBuildResult(buildable, """
     extension TokenSyntax {

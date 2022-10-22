@@ -153,7 +153,7 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testStringInterpolationInBuilder() {
-    let ext = ExtensionDecl(extendedType: "MyType") {
+    let ext = ExtensionDecl(extendedType: TypeSyntax("MyType")) {
       FunctionDecl(
       """
       ///
@@ -164,7 +164,7 @@ final class StringInterpolationTests: XCTestCase {
       """
       )
     }
-    AssertStringsEqualWithDiff(ext.build(format: TwoSpacesFormat()).description, """
+    AssertStringsEqualWithDiff(ext.formatted(using: TwoSpacesFormat()).description, """
       extension MyType {
         ///
         /// Satisfies conformance to `SyntaxBuildable`.

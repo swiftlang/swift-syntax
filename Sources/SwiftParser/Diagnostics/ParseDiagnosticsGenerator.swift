@@ -96,22 +96,19 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
     // Ignore `correctTokens` that are already present.
     let correctAndMissingTokens = correctTokens.filter({ $0.presence == .missing })
-    var changes = misplacedTokens.map(FixIt.Changes.makeMissing)
-    for correctToken in correctAndMissingTokens {
-      if misplacedTokens.count == 1, let misplacedToken = misplacedTokens.first,
-         misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken {
-        changes.append(FixIt.Changes.makePresent(
-          correctToken,
-          leadingTrivia: misplacedToken.leadingTrivia,
-          trailingTrivia: misplacedToken.trailingTrivia
-        ))
-      } else {
-        changes.append(FixIt.Changes.makePresent(
-          correctToken,
-          leadingTrivia: nil,
-          trailingTrivia: nil
-        ))
-      }
+    var changes: [FixIt.Changes] = []
+    if let misplacedToken = misplacedTokens.only, let correctToken = correctTokens.only,
+       misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken {
+      // We are exchanging two adjacent tokens, transfer the trivia from the incorrect token to the corrected token.
+      changes += misplacedTokens.map { FixIt.Changes.makeMissing($0, transferTrivia: false) }
+      changes.append(FixIt.Changes.makePresent(
+        correctToken,
+        leadingTrivia: misplacedToken.leadingTrivia,
+        trailingTrivia: misplacedToken.trailingTrivia
+      ))
+    } else {
+      changes += misplacedTokens.map { FixIt.Changes.makeMissing($0) }
+      changes += correctAndMissingTokens.map { FixIt.Changes.makePresent($0) }
     }
     var fixIts: [FixIt] = []
     if changes.count > 1 {
@@ -170,7 +167,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(node, TryCannotBeUsed(nextToken: nextToken))
     } else if let semicolons = node.onlyTokens(satisfying: { $0.tokenKind == .semicolon }) {
       addDiagnostic(node, .unexpectedSemicolon, fixIts: [
-        FixIt(message: RemoveNodesFixIt(semicolons), changes: semicolons.map(FixIt.Changes.makeMissing))
+        FixIt(message: RemoveNodesFixIt(semicolons), changes: semicolons.map { FixIt.Changes.makeMissing($0) })
       ])
     } else if node.first?.as(TokenSyntax.self)?.tokenKind.isIdentifier == true,
               let previousToken = node.previousToken(viewMode: .sourceAccurate),

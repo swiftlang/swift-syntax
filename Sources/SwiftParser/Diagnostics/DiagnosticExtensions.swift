@@ -32,13 +32,17 @@ extension FixIt {
 }
 
 extension FixIt.Changes {
-  /// Replaced a present token with a missing node
-  static func makeMissing(_ token: TokenSyntax) -> Self {
-    return makeMissing([token])
+  /// Replaced a present token with a missing node.
+  /// If `transferTrivia` is `true`, the leading and trailing trivia of the
+  /// removed node will be transferred to the trailing trivia of the previous token.
+  static func makeMissing(_ token: TokenSyntax, transferTrivia: Bool = true) -> Self {
+    return makeMissing([token], transferTrivia: transferTrivia)
   }
 
-  /// Replace present tokens with missing tokens
-  static func makeMissing(_ tokens: [TokenSyntax]) -> Self {
+  /// Replace present tokens with missing tokens.
+  /// If `transferTrivia` is `true`, the leading and trailing trivia of the
+  /// removed node will be transferred to the trailing trivia of the previous token.
+  static func makeMissing(_ tokens: [TokenSyntax], transferTrivia: Bool = true) -> Self {
     assert(!tokens.isEmpty)
     assert(tokens.allSatisfy({ $0.presence == .present }))
     var changes = tokens.map {
@@ -47,19 +51,20 @@ extension FixIt.Changes {
         newNode: Syntax(TokenSyntax($0.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
       )
     }
-    if let firstToken = tokens.first,
-       firstToken.leadingTrivia.isEmpty == false,
-       let nextToken = tokens.last?.nextToken(viewMode: .sourceAccurate),
-       !nextToken.leadingTrivia.contains(where: { $0.isNewline }) {
-      changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: firstToken.leadingTrivia))
+    if transferTrivia {
+      changes += FixIt.Changes.transferTriviaAtSides(from: tokens).changes
     }
     return FixIt.Changes(changes: changes)
   }
 
-  static func makeMissing<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> Self {
-    return FixIt.Changes(changes: [
-      .replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))
-    ])
+  /// If `transferTrivia` is `true`, the leading and trailing trivia of the
+  /// removed node will be transferred to the trailing trivia of the previous token.
+  static func makeMissing<SyntaxType: SyntaxProtocol>(_ node: SyntaxType, transferTrivia: Bool = true) -> Self {
+    var changes =  [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))]
+    if transferTrivia {
+      changes += FixIt.Changes.transferTriviaAtSides(from: [node]).changes
+    }
+    return FixIt.Changes(changes: changes)
   }
 
   /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
@@ -107,6 +112,76 @@ extension FixIt.Changes {
       ]
     } else {
       return .makePresent(token)
+    }
+  }
+
+  /// Transfers the leading and trivia trivia of `nodes` to the trailing trivia
+  /// of the previous token. While doing this, it tries to be smart, merging trivia
+  /// where it makes sense and refusing to add e.g. a space after punctuation,
+  /// where it usually doesn't make sense.
+  static func transferTriviaAtSides<SyntaxType: SyntaxProtocol>(from nodes: [SyntaxType]) -> Self {
+    let removedTriviaAtSides = Trivia.merged(nodes.first?.leadingTrivia ?? [], nodes.last?.trailingTrivia ?? [])
+    if !removedTriviaAtSides.isEmpty, let previousToken = nodes.first?.previousToken(viewMode: .sourceAccurate) {
+      let mergedTrivia = Trivia.merged(previousToken.trailingTrivia, removedTriviaAtSides)
+      if previousToken.tokenKind.isPunctuation, mergedTrivia.allSatisfy({ $0.isSpaceOrTab }) {
+        // Punctuation is generally not followed by spaces in Swift.
+        // If this action would only add spaces to the punctuation, drop it.
+        // This generally yields better results.
+        return []
+      }
+      return [.replaceTrailingTrivia(token: previousToken, newTrivia: mergedTrivia)]
+    } else {
+      return []
+    }
+  }
+}
+
+extension Trivia {
+  /// Decomposes the trivia into pieces that all have count 1
+  var decomposed: Trivia {
+    let pieces = self.flatMap({ (piece: TriviaPiece) -> [TriviaPiece] in
+      switch piece {
+      case .spaces(let count):
+        return Array(repeating: TriviaPiece.spaces(1), count: count)
+      case .tabs(let count):
+        return Array(repeating: TriviaPiece.tabs(1), count: count)
+      case .verticalTabs(let count):
+        return Array(repeating: TriviaPiece.verticalTabs(1), count: count)
+      case .formfeeds(let count):
+        return Array(repeating: TriviaPiece.formfeeds(1), count: count)
+      case .newlines(let count):
+        return Array(repeating: TriviaPiece.newlines(1), count: count)
+      case .carriageReturns(let count):
+        return Array(repeating: TriviaPiece.carriageReturns(1), count: count)
+      case .carriageReturnLineFeeds(let count):
+        return Array(repeating: TriviaPiece.carriageReturnLineFeeds(1), count: count)
+      case .lineComment, .blockComment, .docLineComment, .docBlockComment, .unexpectedText, .shebang:
+        return [piece]
+      }
+    })
+    return Trivia(pieces: pieces)
+  }
+
+  /// Concatenate `lhs` and `rhs`, merging an infix that is shared between both trivia pieces.
+  static func merged(_ lhs: Trivia, _ rhs: Trivia) -> Self {
+    let lhs = lhs.decomposed
+    let rhs = rhs.decomposed
+    for infixLength in (0...Swift.min(lhs.count, rhs.count)).reversed() {
+      if lhs.suffix(infixLength) == rhs.suffix(infixLength) {
+        return lhs + Trivia(pieces: Array(rhs.dropFirst(infixLength)))
+      }
+    }
+    return lhs + rhs
+  }
+}
+
+extension TriviaPiece {
+  var isSpaceOrTab: Bool {
+    switch self {
+    case .spaces, .tabs:
+      return true
+    default:
+      return false
     }
   }
 }

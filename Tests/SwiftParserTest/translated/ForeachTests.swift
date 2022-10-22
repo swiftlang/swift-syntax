@@ -50,7 +50,6 @@ final class ForeachTests: XCTestCase {
           sum = sum + i + j
         }
         // Parse errors
-        // FIXME: Bad diagnostics; should be just 'expected 'in' after for-each patter'.
         for i 1️⃣r { 
         }         
         for i in r 2️⃣sum = sum + i;3️⃣

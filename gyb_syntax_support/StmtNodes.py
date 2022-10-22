@@ -63,7 +63,7 @@ STMT_NODES = [
          traits=['WithCodeBlock'],
          children=[
              Child('GuardKeyword', kind='GuardToken'),
-             Child('Conditions', kind='ConditionElementList', name_for_diagnostics='conditions',
+             Child('Conditions', kind='ConditionElementList', name_for_diagnostics='condition',
                    collection_element_name='Condition'),
              Child('ElseKeyword', kind='ElseToken'),
              Child('Body', kind='CodeBlock', name_for_diagnostics='body'),

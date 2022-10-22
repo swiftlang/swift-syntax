@@ -1,6 +1,4 @@
-//// Automatically Generated From SyntaxNodes.swift.gyb.
-//// Do Not Edit Directly!
-//===------------ SyntaxNodes.swift - Syntax Node definitions -------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //

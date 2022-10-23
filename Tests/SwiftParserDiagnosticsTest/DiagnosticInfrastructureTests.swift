@@ -12,7 +12,7 @@
 
 import XCTest
 import SwiftDiagnostics
-import SwiftParser
+import SwiftParserDiagnostics
 
 public class DiagnosticInfrastructureTests: XCTestCase {
   public func testDiagnosticID() {

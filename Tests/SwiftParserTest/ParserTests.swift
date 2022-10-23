@@ -15,6 +15,7 @@ import Dispatch
 import XCTest
 import SwiftSyntax
 import SwiftParser
+import SwiftParserDiagnostics
 
 public class ParserTests: XCTestCase {
   /// Run a single parse test.

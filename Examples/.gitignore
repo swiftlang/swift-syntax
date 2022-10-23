@@ -1,2 +1,2 @@
-.DS_Store
-/.build
+# Ignore Data Xcode stores when opening the project directly
+/.swiftpm/xcode

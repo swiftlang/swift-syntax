@@ -36,7 +36,9 @@ add_library(SwiftSyntaxBuilder STATIC
 )
 
 target_link_libraries(SwiftSyntaxBuilder PUBLIC
+  SwiftBasicFormat
   SwiftParser
+  SwiftParserDiagnostics
   SwiftSyntax
   )
 

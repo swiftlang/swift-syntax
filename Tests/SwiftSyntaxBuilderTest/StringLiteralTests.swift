@@ -34,4 +34,10 @@ final class StringLiteralTests: XCTestCase {
       AssertBuildResult(builder, expected, line: line)
     }
   }
+
+  func testEscapeBackslash() {
+    AssertBuildResult(StringLiteralExpr(content: #"\"#), ##"""
+    #"\"#
+    """##)
+  }
 }

@@ -19,7 +19,7 @@ private let rawStringPotentialEscapesPattern = try! NSRegularExpression(
   pattern: [
     #""(#*)"#, // Match potential opening delimiters
     #"(#*)""#, // Match potential closing delimiters
-    #"\\(#*)\("#, // Match potential interpolations
+    #"\\(#*)"#, // Match potential interpolations
   ].joined(separator: "|")
 )
 

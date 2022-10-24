@@ -16,6 +16,13 @@ import SwiftSyntaxBuilder
 struct ColumnMacro: ExpressionMacro {
   static var name: String { "column" }
 
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByIntegerLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
@@ -28,6 +35,13 @@ struct ColumnMacro: ExpressionMacro {
 
 struct LineMacro: ExpressionMacro {
   static var name: String { "line" }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByIntegerLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -53,6 +67,13 @@ extension PatternBindingSyntax {
 
 struct FunctionMacro: ExpressionMacro {
   static var name: String { "function" }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   /// Form a function name.
   private static func formFunctionName(
@@ -159,6 +180,18 @@ struct FunctionMacro: ExpressionMacro {
 struct ColorLiteralMacro: ExpressionMacro {
   static var name: String { "colorLiteral" }
 
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByColorLiteral>
+     """
+
+  static var signature: TypeSyntax =
+     """
+     (
+      _colorLiteralRed red: Float, green: Float, blue: Float, alpha: Float
+     ) -> T
+     """
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
@@ -172,6 +205,14 @@ struct ColorLiteralMacro: ExpressionMacro {
 
 struct FileLiteralMacro: ExpressionMacro {
   static var name: String { "fileLiteral" }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+      """
+      <T: ExpressibleByFileReferenceLiteral>
+      """
+
+  static var signature: TypeSyntax =
+      "(fileReferenceLiteralResourceName path: String) -> T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -187,6 +228,14 @@ struct FileLiteralMacro: ExpressionMacro {
 struct ImageLiteralMacro: ExpressionMacro {
   static var name: String { "imageLiteral" }
 
+  static var genericSignature: GenericParameterClauseSyntax? =
+      """
+      <T: ExpressibleByImageLiteral>
+      """
+
+  static var signature: TypeSyntax =
+      "(imageLiteralResourceName path: String) -> T"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
@@ -200,6 +249,13 @@ struct ImageLiteralMacro: ExpressionMacro {
 
 struct FilePathMacro: ExpressionMacro {
   static var name: String { "filePath" }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -217,6 +273,13 @@ struct FilePathMacro: ExpressionMacro {
 
 struct FileIDMacro: ExpressionMacro {
   static var name: String { "fileID" }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -240,6 +303,13 @@ struct FileIDMacro: ExpressionMacro {
 
 struct FileMacro: ExpressionMacro {
   static var name: String { "file" }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext

@@ -11,7 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) import SwiftSyntax
 
 extension BinaryOperatorExpr {
   public init(text: String) {
@@ -110,6 +111,17 @@ extension FunctionCallExpr {
       trailingClosure: trailingClosure,
       additionalTrailingClosures: additionalTrailingClosures
     )
+  }
+}
+
+extension FunctionParameter {
+  public init(
+    _ source: String,
+    for subject: Parser.ParameterSubject
+  ) {
+    self = try! performParse(source: Array(source.utf8), parse: {
+      $0.parseFunctionParameter(for: subject).syntax
+    })
   }
 }
 

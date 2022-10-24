@@ -16,6 +16,30 @@ import SwiftParserDiagnostics
 import SwiftDiagnostics
 import SwiftBasicFormat
 
+func performParse<SyntaxType: SyntaxProtocol>(source: [UInt8], parse: (inout Parser) throws -> SyntaxType) throws -> SyntaxType {
+  return try source.withUnsafeBufferPointer { buffer in
+    var parser = Parser(buffer)
+    // FIXME: When the parser supports incremental parsing, put the
+    // interpolatedSyntaxNodes in so we don't have to parse them again.
+    return try parser.arena.assumingSingleThread {
+      let result = try parse(&parser)
+      if !parser.at(.eof) {
+        var remainingTokens: [TokenSyntax] = []
+        while !parser.at(.eof) {
+          remainingTokens.append(parser.consumeAnyToken().syntax)
+        }
+        throw SyntaxStringInterpolationError.didNotConsumeAllTokens(remainingTokens: remainingTokens)
+      }
+      if result.hasError {
+        let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
+        assert(!diagnostics.isEmpty)
+        throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(result))
+      }
+      return result
+    }
+  }
+}
+
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
   let node: Syntax
@@ -144,27 +168,7 @@ extension SyntaxExpressibleByStringInterpolation {
   }
 
   public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
-    self = try stringInterpolation.sourceText.withUnsafeBufferPointer { buffer in
-      var parser = Parser(buffer)
-      // FIXME: When the parser supports incremental parsing, put the
-      // interpolatedSyntaxNodes in so we don't have to parse them again.
-      return try parser.arena.assumingSingleThread {
-        let result = try Self.parse(from: &parser)
-        if !parser.at(.eof) {
-          var remainingTokens: [TokenSyntax] = []
-          while !parser.at(.eof) {
-            remainingTokens.append(parser.consumeAnyToken().syntax)
-          }
-          throw SyntaxStringInterpolationError.didNotConsumeAllTokens(remainingTokens: remainingTokens)
-        }
-        if result.hasError {
-          let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
-          assert(!diagnostics.isEmpty)
-          throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(result))
-        }
-        return result
-      }
-    }
+    self = try performParse(source: stringInterpolation.sourceText, parse: Self.parse)
   }
 
   @_transparent

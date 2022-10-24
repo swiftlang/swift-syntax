@@ -10,20 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
-import SwiftSyntaxBuilder
 
-final class ProtocolDeclTests: XCTestCase {
-  func testProtocolDecl() {
-    let buildable = ProtocolDecl("public protocol DeclListBuildable") {
-      FunctionDecl("func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]")
-    }
-
-    AssertBuildResult(buildable, """
-    public protocol DeclListBuildable {
-        func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
-    }
-    """)
+public extension SwitchCase {
+  init(_ label: String, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
+    self.init("\(label)")
+    self.statements = statementsBuilder()
   }
 }

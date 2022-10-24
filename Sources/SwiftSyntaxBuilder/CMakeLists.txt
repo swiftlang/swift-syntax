@@ -22,6 +22,8 @@ add_library(SwiftSyntaxBuilder STATIC
   ConvenienceInitializers/IfStmtConvenienceInitializers.swift
   ConvenienceInitializers/IntegerLiteralExprConvenienceInitializers.swift
   ConvenienceInitializers/MemberAccessExprConvenienceInitializers.swift
+  ConvenienceInitializers/SwitchCaseConvenienceInitializers.swift
+  ConvenienceInitializers/SyntaxNodeWithBody.swift
   ConvenienceInitializers/StringLiteralExprConvenienceInitializers.swift
   ConvenienceInitializers/TernaryExprConvenienceInitializers.swift
   ConvenienceInitializers/TupleExprElementConvenienceInitializers.swift

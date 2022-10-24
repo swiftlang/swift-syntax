@@ -14,15 +14,27 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class ProtocolDeclTests: XCTestCase {
-  func testProtocolDecl() {
-    let buildable = ProtocolDecl("public protocol DeclListBuildable") {
-      FunctionDecl("func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]")
+final class SwitchTests: XCTestCase {
+  func testSwitch() {
+    let syntax = SwitchStmt(expression: Expr("count")) {
+      for num in 1..<3 {
+        SwitchCase("case \(num):") {
+          Expr("print(count)")
+        }
+      }
+      SwitchCase("default:") {
+        BreakStmt("break")
+      }
     }
 
-    AssertBuildResult(buildable, """
-    public protocol DeclListBuildable {
-        func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
+    AssertBuildResult(syntax, """
+    switch count {
+    case 1:
+        print(count)
+    case 2:
+        print(count)
+    default:
+        break
     }
     """)
   }

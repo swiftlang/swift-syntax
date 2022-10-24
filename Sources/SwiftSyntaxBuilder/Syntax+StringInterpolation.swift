@@ -121,7 +121,9 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
     case .producedInvalidNodeType(expectedType: let expectedType, actualType: let actualType):
       return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"
     case .diagnostics(let diagnostics, let tree):
-      return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
+      // Start the diagnostc on a new line so it isn't prefixed with the file, which messes up the
+      // column-aligned message from `DiagnosticsFormatter`.
+      return "\n" + DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
     }
   }
 }

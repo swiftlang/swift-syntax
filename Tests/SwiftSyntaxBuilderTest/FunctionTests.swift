@@ -18,22 +18,14 @@ import _SwiftSyntaxTestSupport
 
 final class FunctionTests: XCTestCase {
   func testFibonacci() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-
-    let input = ParameterClause {
-      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: Type("Int"))
-    }
-
-    let signature = FunctionSignature(input: input, output: ReturnClause(returnType: Type("Int")))
-    
-    let buildable = FunctionDecl(leadingTrivia: leadingTrivia, identifier: .identifier("fibonacci"), signature: signature) {
+    let buildable = FunctionDecl("func fibonacci(_ n: Int) -> Int") {
       IfStmt("if n <= 1 { return n }")
 
       ReturnStmt("return fibonacci(n - 1) + self.fibonacci(n - 2)")
     }
 
     AssertBuildResult(buildable, """
-      ␣func fibonacci(_ n: Int) -> Int {
+      func fibonacci(_ n: Int) -> Int {
           if n <= 1 {
               return n
           }

@@ -19,7 +19,7 @@ import Utils
 let buildableNodesFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
-    path: "SwiftSyntax"
+    path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 
   for node in SYNTAX_NODES where node.isBuildable {
@@ -31,8 +31,8 @@ let buildableNodesFile = SourceFile {
       leadingTrivia: node.documentation.isEmpty
         ? []
         : .docLineComment("/// \(node.documentation)") + .newline,
-      extendedType: type.shorthandName,
-      inheritanceClause: hasTrailingComma ? TypeInheritanceClause { InheritedType(typeName: "HasTrailingComma") } : nil
+      extendedType: Type(type.shorthandName),
+      inheritanceClause: hasTrailingComma ? TypeInheritanceClause { InheritedType(typeName: Type("HasTrailingComma")) } : nil
     ) {
       // Generate initializers
       createDefaultInitializer(node: node)
@@ -62,11 +62,11 @@ let buildableNodesFile = SourceFile {
   }
 }
 
-private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> ExprBuildable {
+private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> Expr {
   if child.type.isBaseType {
-    return FunctionCallExpr("\(child.type.syntaxBaseName)(fromProtocol: \(child.swiftName))")
+    return Expr(FunctionCallExpr("\(child.type.syntaxBaseName)(fromProtocol: \(child.swiftName))"))
   } else {
-    return IdentifierExpr(child.swiftName)
+    return Expr(IdentifierExpr(child.swiftName))
   }
 }
 
@@ -85,15 +85,15 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
     // Hot-fix this by preferring the overload in SwiftSyntax. In the long term, consider sinking
     // this initializer to SwiftSyntax.
     attributes: AttributeList { CustomAttribute("_disfavoredOverload").withTrailingTrivia(.space) },
-    modifiers: [Token.public],
+    modifiers: [DeclModifier(name: .public)],
     signature: FunctionSignature(
       input: ParameterClause {
         for trivia in ["leadingTrivia", "trailingTrivia"] {
           FunctionParameter(
             firstName: .identifier(trivia),
             colon: .colon,
-            type: "Trivia",
-            defaultArgument: ArrayExpr()
+            type: Type("Trivia"),
+            defaultArgument: InitializerClause(value: ArrayExpr())
           )
         }
         for child in node.children {
@@ -101,7 +101,7 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
             firstName: .identifier(child.swiftName),
             colon: .colon,
             type: child.type.parameterType,
-            defaultArgument: child.type.defaultInitialization
+            defaultArgument: child.type.defaultInitialization.map { InitializerClause(value: $0) }
           )
         }
       }
@@ -112,7 +112,7 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
         assertStmt
       }
     }
-    let nodeConstructorCall = FunctionCallExpr(calledExpression: type.syntaxBaseName) {
+    let nodeConstructorCall = FunctionCallExpr(calledExpression: Expr(type.syntaxBaseName)) {
       for child in node.children {
         TupleExprElement(
           label: child.isUnexpectedNodes ? nil : child.swiftName,
@@ -141,7 +141,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
 
   for child in node.children {
     /// The expression that is used to call the default initializer defined above.
-    let produceExpr: ExpressibleAsExprBuildable
+    let produceExpr: Expr
     if child.type.isBuilderInitializable {
       // Allow initializing certain syntax collections with result builders
       shouldCreateInitializer = true
@@ -149,38 +149,38 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       if child.type.builderInitializableType != child.type {
         let param = Node.from(type: child.type).singleNonDefaultedChild
         if child.isOptional {
-          produceExpr = FunctionCallExpr("\(child.swiftName)Builder().map { \(child.type.syntaxBaseName)(\(param.swiftName): $0) }")
+          produceExpr = Expr(FunctionCallExpr("\(child.swiftName)Builder().map { \(child.type.syntaxBaseName)(\(param.swiftName): $0) }"))
         } else {
-          produceExpr = FunctionCallExpr("\(child.type.syntaxBaseName)(\(param.swiftName): \(child.swiftName)Builder())")
+          produceExpr = Expr(FunctionCallExpr("\(child.type.syntaxBaseName)(\(param.swiftName): \(child.swiftName)Builder())"))
         }
       } else {
-        produceExpr = FunctionCallExpr("\(child.swiftName)Builder()")
+        produceExpr = Expr(FunctionCallExpr("\(child.swiftName)Builder()"))
       }
       builderParameters.append(FunctionParameter(
-        attributes: [CustomAttribute(attributeName: builderInitializableType.resultBuilderBaseName, argumentList: nil)],
+        attributes: [CustomAttribute(attributeName: Type(builderInitializableType.resultBuilderBaseName), argumentList: nil)],
         firstName: .identifier("\(child.swiftName)Builder").withLeadingTrivia(.space),
         colon: .colon,
         type: FunctionType(
           arguments: [],
           returnType: builderInitializableType.syntax
         ),
-        defaultArgument: ClosureExpr {
+        defaultArgument: InitializerClause(value: ClosureExpr {
           if child.type.isOptional {
             NilLiteralExpr()
           } else {
             FunctionCallExpr("\(builderInitializableType.syntax)([])")
           }
-        }
+        })
       ))
     } else if let token = child.type.token, token.text == nil {
       // Allow initializing identifiers and other tokens without default text with a String
       shouldCreateInitializer = true
-      let paramType = child.type.optionalWrapped(type: "String")
+      let paramType = child.type.optionalWrapped(type: Type("String"))
       let tokenExpr = MemberAccessExpr("Token.\(token.swiftKind.withFirstCharacterLowercased.backticked)")
       if child.type.isOptional {
-        produceExpr = FunctionCallExpr("\(child.swiftName).map { \(tokenExpr)($0) }")
+        produceExpr = Expr(FunctionCallExpr("\(child.swiftName).map { \(tokenExpr)($0) }"))
       } else {
-        produceExpr = FunctionCallExpr("\(tokenExpr)(\(child.swiftName))")
+        produceExpr = Expr(FunctionCallExpr("\(tokenExpr)(\(child.swiftName))"))
       }
       normalParameters.append(FunctionParameter(
         firstName: .identifier(child.swiftName),
@@ -193,7 +193,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
         firstName: .identifier(child.swiftName),
         colon: .colon,
         type: child.type.parameterType,
-        defaultArgument: child.type.defaultInitialization
+        defaultArgument: child.type.defaultInitialization.map { InitializerClause(value: $0) }
       ))
     }
     delegatedInitArgs.append(TupleExprElement(label: child.isUnexpectedNodes ? nil : child.swiftName, expression: produceExpr))
@@ -214,14 +214,14 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
     // Hot-fix this by preferring the overload in SwiftSyntax. In the long term, consider sinking
     // this initializer to SwiftSyntax.
     attributes: AttributeList { CustomAttribute("_disfavoredOverload").withTrailingTrivia(.space) },
-    modifiers: [Token.public],
+    modifiers: [DeclModifier(name: .public)],
     signature: FunctionSignature(
       input: ParameterClause {
         FunctionParameter(
           firstName: .identifier("leadingTrivia"),
           colon: .colon,
-          type: "Trivia",
-          defaultArgument: ArrayExpr()
+          type: Type("Trivia"),
+          defaultArgument: InitializerClause(value: ArrayExpr())
         )
         for param in normalParameters + builderParameters {
           param

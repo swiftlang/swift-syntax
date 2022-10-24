@@ -76,7 +76,7 @@ public struct AccessPathBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -148,7 +148,7 @@ public struct AccessorListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -221,7 +221,7 @@ public struct ArrayElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -295,7 +295,7 @@ public struct AttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -367,7 +367,7 @@ public struct AvailabilitySpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -439,7 +439,7 @@ public struct BackDeployVersionListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -512,7 +512,7 @@ public struct CaseItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -586,7 +586,7 @@ public struct CatchClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -659,7 +659,7 @@ public struct CatchItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -734,7 +734,7 @@ public struct ClosureCaptureItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -809,7 +809,7 @@ public struct ClosureParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -883,7 +883,7 @@ public struct CodeBlockItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -955,7 +955,7 @@ public struct CompositionTypeElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -1028,7 +1028,7 @@ public struct ConditionElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1102,7 +1102,7 @@ public struct DeclNameArgumentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -1174,7 +1174,7 @@ public struct DesignatedTypeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -1247,7 +1247,7 @@ public struct DictionaryElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1322,7 +1322,7 @@ public struct DifferentiabilityParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1397,7 +1397,7 @@ public struct EnumCaseElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1471,7 +1471,7 @@ public struct ExprListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -1544,7 +1544,7 @@ public struct FunctionParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1619,7 +1619,7 @@ public struct GenericArgumentListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1694,7 +1694,7 @@ public struct GenericParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1769,7 +1769,7 @@ public struct GenericRequirementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1843,7 +1843,7 @@ public struct IfConfigClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -1916,7 +1916,7 @@ public struct InheritedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -1990,7 +1990,7 @@ public struct KeyPathComponentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2062,7 +2062,7 @@ public struct MemberDeclListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2134,7 +2134,7 @@ public struct ModifierListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2206,7 +2206,7 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2278,7 +2278,7 @@ public struct NonEmptyTokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2350,7 +2350,7 @@ public struct ObjCSelectorBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2422,7 +2422,7 @@ public struct ObjcNameBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2495,7 +2495,7 @@ public struct PatternBindingListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -2569,7 +2569,7 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2641,7 +2641,7 @@ public struct PrecedenceGroupNameListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2714,7 +2714,7 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -2788,7 +2788,7 @@ public struct SpecializeAttributeSpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2860,7 +2860,7 @@ public struct StringLiteralSegmentsBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -2932,7 +2932,7 @@ public struct SwitchCaseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -3004,7 +3004,7 @@ public struct TokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -3077,7 +3077,7 @@ public struct TupleExprElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -3152,7 +3152,7 @@ public struct TuplePatternElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -3227,7 +3227,7 @@ public struct TupleTypeElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in 
+    return .init (component.enumerated().map { index, source in 
       return index < lastIndex ? source.ensuringTrailingComma() : source
     })
   }
@@ -3301,7 +3301,7 @@ public struct UnexpectedNodesBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 
@@ -3373,7 +3373,7 @@ public struct YieldExprListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init (component)
   }
 }
 

@@ -19,15 +19,15 @@ import Utils
 let resultBuildersFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
-    path: "SwiftSyntax"
+    path: [AccessPathComponent(name: "SwiftSyntax")]
   )
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let type = SyntaxBuildableType(syntaxKind: node.syntaxKind)
     let elementType = node.collectionElementType
 
     StructDecl(
-      attributes: Token.identifier("@resultBuilder").withLeadingTrivia(.newlines(1)).withTrailingTrivia(.newlines(1)),
-      modifiers: Token.public,
+      attributes: [CustomAttribute(leadingTrivia: .newline, trailingTrivia: .newline, attributeName: Type("resultBuilder"))],
+      modifiers: [DeclModifier(name: .public)],
       identifier: "\(type.syntaxKind)Builder") {
         
         TypealiasDecl(
@@ -37,7 +37,7 @@ let resultBuildersFile = SourceFile {
           public typealias Expression = \(elementType.parameterType)
           """
         )
-        
+
         TypealiasDecl(
           """
           /// The type of a partial result, which will be carried through all of the
@@ -45,7 +45,7 @@ let resultBuildersFile = SourceFile {
           public typealias Component = [\(elementType.parameterType)]
           """
         )
-        
+
         TypealiasDecl(
           """
           /// The type of the final returned result, which defaults to Component if
@@ -53,7 +53,7 @@ let resultBuildersFile = SourceFile {
           public typealias FinalResult = \(type.buildable)
           """
         )
-        
+
         FunctionDecl(
           """
           /// Required by every result builder to build combined results from
@@ -63,7 +63,7 @@ let resultBuildersFile = SourceFile {
           }
           """
         )
-        
+
         FunctionDecl(
           """
           /// If declared, provides contextual type information for statement
@@ -73,7 +73,7 @@ let resultBuildersFile = SourceFile {
           }
           """
         )
-        
+
         FunctionDecl(
           """
           /// Add all the elements of `expression` to this result builder, effectively flattening them.
@@ -91,7 +91,7 @@ let resultBuildersFile = SourceFile {
           }
           """
         )
-                
+
         FunctionDecl(
           """
           /// With buildEither(second:), enables support for 'if-else' and 'switch'
@@ -101,7 +101,7 @@ let resultBuildersFile = SourceFile {
           }
           """
         )
-        
+
         FunctionDecl(
           """
           /// With buildEither(first:), enables support for 'if-else' and 'switch'
@@ -111,7 +111,7 @@ let resultBuildersFile = SourceFile {
           }
           """
         )
-                
+
         FunctionDecl(
           """
           /// Enables support for 'for..in' loops by combining the
@@ -121,7 +121,7 @@ let resultBuildersFile = SourceFile {
           }
           """
         )
-        
+
         FunctionDecl(
           """
           /// If declared, this will be called on the partial result of an 'if'
@@ -132,7 +132,7 @@ let resultBuildersFile = SourceFile {
           }
           """
         )
-        
+
         FunctionDecl(
           leadingTrivia: [
             .newlines(1),
@@ -140,7 +140,7 @@ let resultBuildersFile = SourceFile {
             .newlines(1),
             .docLineComment("/// block statement to produce the final returned result."),
             .newlines(1)],
-          modifiers: [Token.public, Token.static],
+          modifiers: [DeclModifier(name: .public), DeclModifier(name: .static)],
           identifier: .identifier("buildFinalResult"),
           signature: FunctionSignature(
             input: ParameterClause {
@@ -148,14 +148,14 @@ let resultBuildersFile = SourceFile {
                 firstName: .wildcard,
                 secondName: .identifier("component"),
                 colon: .colon,
-                type: "Component")
+                type: Type("Component"))
             },
-            output: "FinalResult")) {
+            output: ReturnClause(returnType: Type("FinalResult")))) {
               if elementType.isToken {
                 ReturnStmt("return .init(component)")
               } else if elementType.hasWithTrailingCommaTrait {
                 VariableDecl("let lastIndex = component.count - 1")
-                
+
                 ReturnStmt("""
                   return .init(component.enumerated().map { index, source in
                     return index < lastIndex ? source.ensuringTrailingComma() : source

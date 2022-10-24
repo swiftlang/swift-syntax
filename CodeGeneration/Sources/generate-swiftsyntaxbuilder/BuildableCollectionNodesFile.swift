@@ -20,7 +20,7 @@ import SwiftBasicFormat
 let buildableCollectionNodesFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
-    path: "SwiftSyntax"
+    path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 
   for node in SYNTAX_NODES where node.isSyntaxCollection {
@@ -31,8 +31,8 @@ let buildableCollectionNodesFile = SourceFile {
       leadingTrivia: node.documentation.isEmpty
         ? []
         : .docLineComment("/// \(node.documentation)") + .newline,
-      extendedType: node.type.shorthandName,
-      inheritanceClause: TypeInheritanceClause { InheritedType(typeName: "ExpressibleByArrayLiteral") }
+      extendedType: Type(node.type.shorthandName),
+      inheritanceClause: TypeInheritanceClause { InheritedType(typeName: Type("ExpressibleByArrayLiteral")) }
     ) {
       // Generate initializers
       if elementType.isBaseType {

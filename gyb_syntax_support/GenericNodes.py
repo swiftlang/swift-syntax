@@ -102,6 +102,7 @@ GENERIC_NODES = [
     # generic-parameter-clause -> '<' generic-parameter-list generic-where-clause? '>'
     Node('GenericParameterClause', name_for_diagnostics='generic parameter clause',
          kind='Syntax',
+         parser_function='parseGenericParameters',
          children=[
              Child('LeftAngleBracket', kind='LeftAngleToken'),
              Child('GenericParameterList', kind='GenericParameterList',

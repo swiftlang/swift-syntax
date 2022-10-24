@@ -20,7 +20,7 @@ extension PrecedenceGroup {
     self.syntax = syntax
 
     for attr in syntax.groupAttributes {
-      switch attr.as(SyntaxEnum.self) {
+      switch attr {
       // Relation (lowerThan, higherThan)
       case .precedenceGroupRelation(let relation):
         let isLowerThan = relation.higherThanOrLowerThan.text == "lowerThan"
@@ -52,9 +52,6 @@ extension PrecedenceGroup {
         default:
           break
         }
-
-      default:
-        break
       }
     }
   }

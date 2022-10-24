@@ -6129,6 +6129,35 @@ extension DeinitializerDeclSyntax: CustomReflectable {
 // MARK: - SubscriptDeclSyntax
 
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+  public enum Accessor: SyntaxChildChoices {
+    case `accessors`(AccessorBlockSyntax)
+    case `getter`(CodeBlockSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .accessors(let node): return node._syntaxNode
+      case .getter(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: AccessorBlockSyntax) {
+      self = .accessors(node)
+    }
+    public init(_ node: CodeBlockSyntax) {
+      self = .getter(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(AccessorBlockSyntax.self) {
+        self = .accessors(node)
+        return
+      }
+      if let node = syntaxNode.as(CodeBlockSyntax.self) {
+        self = .getter(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `SubscriptDeclSyntax` if possible. Returns
@@ -6162,7 +6191,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
-    accessor: Syntax?,
+    accessor: Accessor?,
     _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
@@ -6538,11 +6567,11 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return SubscriptDeclSyntax(newData)
   }
 
-  public var accessor: Syntax? {
+  public var accessor: Accessor? {
     get {
       let childData = data.child(at: 15, parent: Syntax(self))
       if childData == nil { return nil }
-      return Syntax(childData!)
+      return Accessor(childData!)
     }
     set(value) {
       self = withAccessor(value)
@@ -6553,7 +6582,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `accessor` to replace the node's
   ///                   current `accessor`, if present.
   public func withAccessor(
-    _ newChild: Syntax?) -> SubscriptDeclSyntax {
+    _ newChild: Accessor?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 15)
     return SubscriptDeclSyntax(newData)

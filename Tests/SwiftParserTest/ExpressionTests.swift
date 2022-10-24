@@ -109,14 +109,14 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(
         CodeBlockItemListSyntax([
           CodeBlockItemSyntax(
-            item: Syntax(
+            item: .init(
               KeyPathExprSyntax(
               backslash: .backslashToken(),
               root: nil,
               components: KeyPathComponentListSyntax([
                 KeyPathComponentSyntax(
                   period: .periodToken(),
-                  component: Syntax(
+                  component: .init(
                     KeyPathOptionalComponentSyntax(
                       questionOrExclamationMark: .postfixQuestionMarkToken()
                     )
@@ -124,7 +124,7 @@ final class ExpressionTests: XCTestCase {
                 ),
                 KeyPathComponentSyntax(
                   period: .periodToken(),
-                  component: Syntax(
+                  component: .init(
                     KeyPathPropertyComponentSyntax(
                       identifier: .identifier("foo"),
                       declNameArguments: nil,

@@ -18,7 +18,7 @@ final class DoStmtTests: XCTestCase {
   func testDoStmt() {
     let buildable = DoStmt(
       body: CodeBlock(statementsBuilder: {
-        CodeBlockItem(item: TryExpr(expression: FunctionCallExpr(calledExpression: MemberAccessExpr(base: "a", name: "b"))))
+        TryExpr(expression: FunctionCallExpr(calledExpression: MemberAccessExpr(base: "a", name: "b")))
       }),
       catchClauses: [
         CatchClause(CatchItemList {

@@ -29,7 +29,7 @@ final class ExtensionDeclTests: XCTestCase {
         PatternBinding(pattern: Pattern("`\(keyword)`"),
                        typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
                        initializer: nil,
-                       accessor: body)
+                       accessor: .getter(body))
 
       }
     }

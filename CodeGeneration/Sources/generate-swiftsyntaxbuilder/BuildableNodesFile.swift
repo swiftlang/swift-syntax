@@ -63,7 +63,7 @@ let buildableNodesFile = SourceFile {
 }
 
 private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> Expr {
-  if child.type.isBaseType {
+  if child.type.isBaseType && child.nodeChoices.isEmpty {
     return Expr(FunctionCallExpr("\(child.type.syntaxBaseName)(fromProtocol: \(child.swiftName))"))
   } else {
     return Expr(IdentifierExpr(child.swiftName))
@@ -100,7 +100,7 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
           FunctionParameter(
             firstName: .identifier(child.swiftName),
             colon: .colon,
-            type: child.type.parameterType,
+            type: child.parameterType,
             defaultArgument: child.type.defaultInitialization.map { InitializerClause(value: $0) }
           )
         }
@@ -192,7 +192,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       normalParameters.append(FunctionParameter(
         firstName: .identifier(child.swiftName),
         colon: .colon,
-        type: child.type.parameterType,
+        type: child.parameterType,
         defaultArgument: child.type.defaultInitialization.map { InitializerClause(value: $0) }
       ))
     }

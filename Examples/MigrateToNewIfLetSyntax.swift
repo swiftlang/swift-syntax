@@ -35,7 +35,7 @@ class MigrateToNewIfLetSyntax: SyntaxRewriter {
         if index != node.conditions.count - 1 {
           binding.pattern = binding.pattern.withoutTrailingTrivia()
         }
-        conditionCopy.condition = Syntax(binding)
+        conditionCopy.condition = .optionalBinding(binding)
       }
       return conditionCopy
     }

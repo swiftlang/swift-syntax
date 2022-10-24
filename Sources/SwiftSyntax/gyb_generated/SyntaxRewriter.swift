@@ -2010,6 +2010,10 @@ open class SyntaxRewriter {
     return visit(node.data)
   }
 
+  public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
+    return visit(Syntax(node)).cast(T.self)
+  }
+
   /// Visit any DeclSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node

@@ -35,25 +35,31 @@ let buildableCollectionNodesFile = SourceFile {
       inheritanceClause: TypeInheritanceClause { InheritedType(typeName: Type("ExpressibleByArrayLiteral")) }
     ) {
       // Generate initializers
-      if elementType.isBaseType {
+      if elementType.isBaseType && node.collectionElementChoices?.isEmpty ?? true {
         InitializerDecl(
           """
-          /// Creates a `\(node.type.shorthandName)` with the provided list of elements.
-          /// - Parameters:
-          ///   - elements: A list of `\(elementType.parameterType)`
           public init(_ elements: \(ArrayType(elementType: elementType.parameterType))) {
             self = \(node.type.syntaxBaseName)(elements.map { \(elementType.syntax)(fromProtocol: $0) })
           }
           """
         )
+
+        InitializerDecl(
+          """
+          public init(arrayLiteral elements: \(elementType.parameterType)...) {
+            self.init(elements)
+          }
+          """
+        )
+      } else {
+        InitializerDecl(
+          """
+          public init(arrayLiteral elements: Element...) {
+            self.init(elements)
+          }
+          """
+        )
       }
-      InitializerDecl(
-        """
-        public init(arrayLiteral elements: \(elementType.parameterType)...) {
-          self.init(elements)
-        }
-        """
-      )
     }
   }
 }

@@ -100,6 +100,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return tokenKind.text
   }
 
+  @_spi(RawSyntax)
+  public var rawTokenKind: RawTokenKind {
+    return tokenView.rawKind
+  }
+
   /// Returns a new TokenSyntax with its kind replaced
   /// by the provided token kind.
   public func withKind(_ tokenKind: TokenKind) -> TokenSyntax {

@@ -21,7 +21,7 @@ final class StatementTests: XCTestCase {
                 """,
                 substructure: Syntax(IfStmtSyntax(ifKeyword: .ifKeyword(),
                                                   conditions: ConditionElementListSyntax([
-                                                    ConditionElementSyntax(condition: Syntax(OptionalBindingConditionSyntax(
+                                                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
                                                       letOrVarKeyword: .letKeyword(),
                                                       pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("baz"))),
                                                       typeAnnotation: nil,
@@ -37,7 +37,7 @@ final class StatementTests: XCTestCase {
                 """,
                 substructure: Syntax(IfStmtSyntax(ifKeyword: .ifKeyword(),
                                                   conditions: ConditionElementListSyntax([
-                                                    ConditionElementSyntax(condition: Syntax(OptionalBindingConditionSyntax(
+                                                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
                                                       letOrVarKeyword: .letKeyword(),
                                                       pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .selfKeyword())),
                                                       typeAnnotation: nil,
@@ -371,7 +371,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(YieldStmtSyntax(
         yieldKeyword: .contextualKeyword("yield"),
-        yields: Syntax(InOutExprSyntax(
+        yields: .init(InOutExprSyntax(
           ampersand: .prefixAmpersandToken(),
           expression: ExprSyntax(IdentifierExprSyntax(
             identifier: .identifier("x"),
@@ -400,7 +400,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(YieldStmtSyntax(
         yieldKeyword: .contextualKeyword("yield"),
-        yields: Syntax(InOutExprSyntax(
+        yields: .init(InOutExprSyntax(
           ampersand: .prefixAmpersandToken(),
           expression: ExprSyntax(SubscriptExprSyntax(
             calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("native"), declNameArguments: nil)),

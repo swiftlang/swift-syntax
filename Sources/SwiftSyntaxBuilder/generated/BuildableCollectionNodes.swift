@@ -17,150 +17,139 @@ import SwiftSyntax
 
 /// `AccessPath` represents a collection of `AccessPathComponentSyntax`
 extension AccessPath: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: AccessPathComponent...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `AccessorList` represents a collection of `AccessorDeclSyntax`
 extension AccessorList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: AccessorDecl...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `ArrayElementList` represents a collection of `ArrayElementSyntax`
 extension ArrayElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: ArrayElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `AttributeList` represents a collection of `Syntax`
 extension AttributeList: ExpressibleByArrayLiteral {
-  /// Creates a `AttributeList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `SyntaxProtocol`
-  public init (_ elements: [SyntaxProtocol]) {
-    self = AttributeListSyntax(elements.map { 
-      Syntax(fromProtocol: $0) 
-    })
-  }
-  public init (arrayLiteral elements: SyntaxProtocol...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `AvailabilitySpecList` represents a collection of `AvailabilityArgumentSyntax`
 extension AvailabilitySpecList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: AvailabilityArgument...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `BackDeployVersionList` represents a collection of `BackDeployVersionArgumentSyntax`
 extension BackDeployVersionList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: BackDeployVersionArgument...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `CaseItemList` represents a collection of `CaseItemSyntax`
 extension CaseItemList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: CaseItem...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `CatchClauseList` represents a collection of `CatchClauseSyntax`
 extension CatchClauseList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: CatchClause...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `CatchItemList` represents a collection of `CatchItemSyntax`
 extension CatchItemList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: CatchItem...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `ClosureCaptureItemList` represents a collection of `ClosureCaptureItemSyntax`
 extension ClosureCaptureItemList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: ClosureCaptureItem...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `ClosureParamList` represents a collection of `ClosureParamSyntax`
 extension ClosureParamList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: ClosureParam...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `CodeBlockItemList` represents a collection of `CodeBlockItemSyntax`
 extension CodeBlockItemList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: CodeBlockItem...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `CompositionTypeElementList` represents a collection of `CompositionTypeElementSyntax`
 extension CompositionTypeElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: CompositionTypeElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `ConditionElementList` represents a collection of `ConditionElementSyntax`
 extension ConditionElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: ConditionElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `DeclNameArgumentList` represents a collection of `DeclNameArgumentSyntax`
 extension DeclNameArgumentList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: DeclNameArgument...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `DesignatedTypeList` represents a collection of `DesignatedTypeElementSyntax`
 extension DesignatedTypeList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: DesignatedTypeElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `DictionaryElementList` represents a collection of `DictionaryElementSyntax`
 extension DictionaryElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: DictionaryElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `DifferentiabilityParamList` represents a collection of `DifferentiabilityParamSyntax`
 extension DifferentiabilityParamList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: DifferentiabilityParam...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// A collection of 0 or more `EnumCaseElement`s.
 extension EnumCaseElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: EnumCaseElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.
 extension ExprList: ExpressibleByArrayLiteral {
-  /// Creates a `ExprList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `ExprSyntaxProtocol`
   public init (_ elements: [ExprSyntaxProtocol]) {
     self = ExprListSyntax(elements.map { 
       ExprSyntax(fromProtocol: $0) 
@@ -173,209 +162,174 @@ extension ExprList: ExpressibleByArrayLiteral {
 
 /// `FunctionParameterList` represents a collection of `FunctionParameterSyntax`
 extension FunctionParameterList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: FunctionParameter...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `GenericArgumentList` represents a collection of `GenericArgumentSyntax`
 extension GenericArgumentList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: GenericArgument...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `GenericParameterList` represents a collection of `GenericParameterSyntax`
 extension GenericParameterList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: GenericParameter...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `GenericRequirementList` represents a collection of `GenericRequirementSyntax`
 extension GenericRequirementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: GenericRequirement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `IfConfigClauseList` represents a collection of `IfConfigClauseSyntax`
 extension IfConfigClauseList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: IfConfigClause...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `InheritedTypeList` represents a collection of `InheritedTypeSyntax`
 extension InheritedTypeList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: InheritedType...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `KeyPathComponentList` represents a collection of `KeyPathComponentSyntax`
 extension KeyPathComponentList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: KeyPathComponent...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `MemberDeclList` represents a collection of `MemberDeclListItemSyntax`
 extension MemberDeclList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: MemberDeclListItem...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `ModifierList` represents a collection of `DeclModifierSyntax`
 extension ModifierList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: DeclModifier...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `MultipleTrailingClosureElementList` represents a collection of `MultipleTrailingClosureElementSyntax`
 extension MultipleTrailingClosureElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: MultipleTrailingClosureElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `NonEmptyTokenList` represents a collection of `TokenSyntax`
 extension NonEmptyTokenList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: Token...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `ObjCSelector` represents a collection of `ObjCSelectorPieceSyntax`
 extension ObjCSelector: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: ObjCSelectorPiece...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `ObjcName` represents a collection of `ObjcNamePieceSyntax`
 extension ObjcName: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: ObjcNamePiece...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `PatternBindingList` represents a collection of `PatternBindingSyntax`
 extension PatternBindingList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: PatternBinding...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `PrecedenceGroupAttributeList` represents a collection of `Syntax`
 extension PrecedenceGroupAttributeList: ExpressibleByArrayLiteral {
-  /// Creates a `PrecedenceGroupAttributeList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `SyntaxProtocol`
-  public init (_ elements: [SyntaxProtocol]) {
-    self = PrecedenceGroupAttributeListSyntax(elements.map { 
-      Syntax(fromProtocol: $0) 
-    })
-  }
-  public init (arrayLiteral elements: SyntaxProtocol...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `PrecedenceGroupNameList` represents a collection of `PrecedenceGroupNameElementSyntax`
 extension PrecedenceGroupNameList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: PrecedenceGroupNameElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `PrimaryAssociatedTypeList` represents a collection of `PrimaryAssociatedTypeSyntax`
 extension PrimaryAssociatedTypeList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: PrimaryAssociatedType...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// A collection of arguments for the `@_specialize` attribute
 extension SpecializeAttributeSpecList: ExpressibleByArrayLiteral {
-  /// Creates a `SpecializeAttributeSpecList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `SyntaxProtocol`
-  public init (_ elements: [SyntaxProtocol]) {
-    self = SpecializeAttributeSpecListSyntax(elements.map { 
-      Syntax(fromProtocol: $0) 
-    })
-  }
-  public init (arrayLiteral elements: SyntaxProtocol...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `StringLiteralSegments` represents a collection of `Syntax`
 extension StringLiteralSegments: ExpressibleByArrayLiteral {
-  /// Creates a `StringLiteralSegments` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `SyntaxProtocol`
-  public init (_ elements: [SyntaxProtocol]) {
-    self = StringLiteralSegmentsSyntax(elements.map { 
-      Syntax(fromProtocol: $0) 
-    })
-  }
-  public init (arrayLiteral elements: SyntaxProtocol...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `SwitchCaseList` represents a collection of `Syntax`
 extension SwitchCaseList: ExpressibleByArrayLiteral {
-  /// Creates a `SwitchCaseList` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `SyntaxProtocol`
-  public init (_ elements: [SyntaxProtocol]) {
-    self = SwitchCaseListSyntax(elements.map { 
-      Syntax(fromProtocol: $0) 
-    })
-  }
-  public init (arrayLiteral elements: SyntaxProtocol...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `TokenList` represents a collection of `TokenSyntax`
 extension TokenList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: Token...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `TupleExprElementList` represents a collection of `TupleExprElementSyntax`
 extension TupleExprElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: TupleExprElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `TuplePatternElementList` represents a collection of `TuplePatternElementSyntax`
 extension TuplePatternElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: TuplePatternElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// `TupleTypeElementList` represents a collection of `TupleTypeElementSyntax`
 extension TupleTypeElementList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: TupleTypeElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }
 
 /// A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.
 extension UnexpectedNodes: ExpressibleByArrayLiteral {
-  /// Creates a `UnexpectedNodes` with the provided list of elements.
-  /// - Parameters:
-  ///   - elements: A list of `SyntaxProtocol`
   public init (_ elements: [SyntaxProtocol]) {
     self = UnexpectedNodesSyntax(elements.map { 
       Syntax(fromProtocol: $0) 
@@ -388,7 +342,7 @@ extension UnexpectedNodes: ExpressibleByArrayLiteral {
 
 /// `YieldExprList` represents a collection of `YieldExprListElementSyntax`
 extension YieldExprList: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: YieldExprListElement...) {
+  public init (arrayLiteral elements: Element...) {
     self.init (elements)
   }
 }

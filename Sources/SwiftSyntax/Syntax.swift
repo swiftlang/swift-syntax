@@ -59,13 +59,13 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // Casting functions to specialized syntax nodes.
-extension Syntax {
+extension SyntaxProtocol {
   public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
 
   public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(self)
+    return S.init(self._syntaxNode)
   }
 
   func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
@@ -622,6 +622,16 @@ public extension SyntaxProtocol {
                          converter: converter, mark: mark, indentLevel: childIndentLevel)
       }
     }
+  }
+}
+
+/// Protocol for the enums nested inside `Syntax` nodes that enumerate all the
+/// possible types a child node might have.
+public protocol SyntaxChildChoices: SyntaxProtocol {}
+
+public extension SyntaxChildChoices {
+  func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return Syntax(self).childNameForDiagnostics(index)
   }
 }
 

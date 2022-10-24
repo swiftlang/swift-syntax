@@ -332,6 +332,12 @@ extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {
 
 extension PoundAssertStmtSyntax: SyntaxExpressibleByStringInterpolation {}
 
+extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {
+  public static func parse(from parser: inout Parser) -> Self {
+    return parser.parseGenericParameters().syntax
+  }
+}
+
 extension SimpleTypeIdentifierSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension MemberTypeIdentifierSyntax: SyntaxExpressibleByStringInterpolation {}

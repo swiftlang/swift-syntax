@@ -35,7 +35,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testArguments() {
-    let buildable = FunctionCallExpr(calledExpression: Expr("test")) {
+    let buildable = FunctionCallExpr(callee: "test") {
       for param in (1...5) {
         TupleExprElement(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: "value\(param)")
       }
@@ -44,12 +44,12 @@ final class FunctionTests: XCTestCase {
   }
 
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
-    let buildable = FunctionCallExpr(calledExpression: Expr("test"))
+    let buildable = FunctionCallExpr(callee: "test")
     AssertBuildResult(buildable, "test()")
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
-    let buildable = FunctionCallExpr(calledExpression: Expr("test"), trailingClosure: ClosureExpr()) {
+    let buildable = FunctionCallExpr(callee: "test", trailingClosure: ClosureExpr()) {
       TupleExprElement(expression: "42")
     }
     AssertBuildResult(buildable, "test(42) {\n}")
@@ -57,11 +57,11 @@ final class FunctionTests: XCTestCase {
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
     let closure = ClosureExpr(statementsBuilder: {
-      FunctionCallExpr(calledExpression: Expr("f")) {
+      FunctionCallExpr(callee: "f") {
         TupleExprElement(expression: "a")
       }
     })
-    let buildable = FunctionCallExpr(calledExpression: Expr("test"), trailingClosure: closure)
+    let buildable = FunctionCallExpr(callee: "test", trailingClosure: closure)
 
     AssertBuildResult(
       buildable,

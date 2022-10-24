@@ -27,9 +27,9 @@ final class FunctionTests: XCTestCase {
     let signature = FunctionSignature(input: input, output: ReturnClause(returnType: Type("Int")))
     
     let buildable = FunctionDecl(leadingTrivia: leadingTrivia, identifier: .identifier("fibonacci"), signature: signature) {
-      CodeBlockItem(item: IfStmt("if n <= 1 { return n }"))
+      IfStmt("if n <= 1 { return n }")
 
-      CodeBlockItem(item: ReturnStmt("return fibonacci(n - 1) + self.fibonacci(n - 2)"))
+      ReturnStmt("return fibonacci(n - 1) + self.fibonacci(n - 2)")
     }
 
     AssertBuildResult(buildable, """

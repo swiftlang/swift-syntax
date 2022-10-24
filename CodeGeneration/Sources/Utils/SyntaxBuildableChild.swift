@@ -26,6 +26,18 @@ public extension Child {
     )
   }
 
+  var parameterBaseType: String {
+    if !self.nodeChoices.isEmpty {
+      return self.name
+    } else {
+      return type.parameterBaseType
+    }
+  }
+
+  var parameterType: Type {
+    return self.type.optionalWrapped(type: Type(parameterBaseType))
+  }
+
   /// If the child node has documentation associated with it, return it as single
   /// line string. Otherwise return an empty string.
   var documentation: String {

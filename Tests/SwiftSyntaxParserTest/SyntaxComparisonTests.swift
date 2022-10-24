@@ -212,7 +212,7 @@ public class SyntaxComparisonTests: XCTestCase {
     var items = [CodeBlockItemSyntax]()
     for i in 0..<statementCount {
       let literal = IntegerLiteralExprSyntax(digits: .integerLiteral(String(i)))
-      items.append(CodeBlockItemSyntax(item: Syntax(literal), semicolon: nil, errorTokens: nil))
+      items.append(CodeBlockItemSyntax(item: .init(literal), semicolon: nil, errorTokens: nil))
     }
     let block = CodeBlockItemListSyntax(items)
     return CodeBlockSyntax(

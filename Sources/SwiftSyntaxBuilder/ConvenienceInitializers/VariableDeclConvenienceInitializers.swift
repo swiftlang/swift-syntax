@@ -55,7 +55,7 @@ extension VariableDecl {
       PatternBinding(
         pattern: name,
         typeAnnotation: type,
-        accessor: CodeBlock(statements: accessor())
+        accessor: .getter(CodeBlock(statements: accessor()))
       )
     }
   }

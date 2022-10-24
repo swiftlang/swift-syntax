@@ -589,7 +589,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if node.unknownAttr?.isMissingAllTokens != false && node.label.isMissingAllTokens {
       addDiagnostic(node.statements, .allStatmentsInSwitchMustBeCoveredByCase, fixIts: [
-        FixIt(message: InsertTokenFixIt(missingNodes: [node.label]), changes: .makePresent(node.label, leadingTrivia: .newline))
+        FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.label)]), changes: .makePresent(node.label, leadingTrivia: .newline))
       ], handledNodes: [node.label.id])
     }
     return .visitChildren

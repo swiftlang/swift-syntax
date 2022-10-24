@@ -28,7 +28,7 @@ final class StringLiteralTests: XCTestCase {
       let segment = StringSegment(content: string)
       let builder = StringLiteralExpr(leadingTrivia: leadingTrivia,
                                       openQuote: .stringQuote,
-                                      segments: StringLiteralSegments([segment]),
+                                      segments: StringLiteralSegments([.stringSegment(segment)]),
                                       closeQuote: .stringQuote)
 
       AssertBuildResult(builder, expected, line: line)

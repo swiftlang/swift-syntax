@@ -36,7 +36,7 @@ extension StringLiteralExpr {
   ) {
     let contentToken = Token.stringSegment(content)
     let segment = StringSegment(content: contentToken)
-    let segments = StringLiteralSegments([segment])
+    let segments = StringLiteralSegments([.stringSegment(segment)])
 
     var openDelimiter = openDelimiter
     var closeDelimiter = closeDelimiter

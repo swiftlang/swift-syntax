@@ -186,7 +186,7 @@ final class TrailingClosuresTests: XCTestCase {
           signature: nil,
           statements: CodeBlockItemListSyntax([
             CodeBlockItemSyntax(
-              item: Syntax(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>"))),
+              item: .init(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>"))),
               semicolon: nil,
               errorTokens: nil
             )

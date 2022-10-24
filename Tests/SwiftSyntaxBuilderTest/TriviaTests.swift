@@ -61,11 +61,16 @@ final class TriviaTests: XCTestCase {
   func testAttachedListTrivia() {
     let testCases: [UInt: (AttributeList, String)] = [
       #line: (
-        AttributeList([CustomAttribute("Test")]).withLeadingTrivia(.space),
+        AttributeList {
+          CustomAttribute("Test").withLeadingTrivia(.space)
+        },
         " @Test"
       ),
       #line: (
-        AttributeList([CustomAttribute("A").withTrailingTrivia(.space), CustomAttribute("B")]).withTrailingTrivia(.space),
+        AttributeList {
+          CustomAttribute("A").withTrailingTrivia(.space)
+          CustomAttribute("B").withTrailingTrivia(.space)
+        },
         "@A @B "
       ),
     ]

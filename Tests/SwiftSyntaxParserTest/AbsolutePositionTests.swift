@@ -80,7 +80,7 @@ public class AbsolutePositionTests: XCTestCase {
     let idx = 2000
     for _ in 0...idx {
       l.append(CodeBlockItemSyntax(
-        item: Syntax(
+        item: .init(
           ReturnStmtSyntax(
             returnKeyword: .returnKeyword(trailingTrivia: .newline),
             expression: nil
@@ -112,7 +112,7 @@ public class AbsolutePositionTests: XCTestCase {
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
     let items : [CodeBlockItemSyntax] =
     [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax(
-      item: Syntax(ReturnStmtSyntax(
+      item: .init(ReturnStmtSyntax(
         returnKeyword: .returnKeyword(
           leadingTrivia: AbsolutePositionTests.leadingTrivia,
           trailingTrivia: AbsolutePositionTests.trailingTrivia
@@ -182,7 +182,7 @@ public class AbsolutePositionTests: XCTestCase {
 
   public func testWithoutSourceFileRoot() {
     let item = CodeBlockItemSyntax(
-      item: Syntax(
+      item: .init(
         ReturnStmtSyntax(
           returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline),
           expression: nil)

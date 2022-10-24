@@ -533,7 +533,7 @@ final class IfconfigExprTests: XCTestCase {
           trailingClosure: nil,
           additionalTrailingClosures: nil
         )),
-        elements: Syntax(CodeBlockItemListSyntax([]))
+        elements: .init(CodeBlockItemListSyntax([]))
       ))
     )
   }

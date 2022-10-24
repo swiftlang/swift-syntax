@@ -41,9 +41,9 @@ final class StructTests: XCTestCase {
         GenericParameter(name: "D")
       },
       genericWhereClause: GenericWhereClause {
-        GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: Type("A"), rightTypeIdentifier: SimpleTypeIdentifier("X")))
-        GenericRequirement(body: SameTypeRequirement(
-            leftTypeIdentifier: "A.P", equalityToken: .spacedBinaryOperator("=="), rightTypeIdentifier: "D"))
+        GenericRequirement(body: .conformanceRequirement(ConformanceRequirement(leftTypeIdentifier: Type("A"), rightTypeIdentifier: SimpleTypeIdentifier("X"))))
+        GenericRequirement(body: .sameTypeRequirement(SameTypeRequirement(
+            leftTypeIdentifier: "A.P", equalityToken: .spacedBinaryOperator("=="), rightTypeIdentifier: "D")))
       }
     ) {}
     

@@ -52,6 +52,11 @@ public struct MacroSystem {
 
     macros[macro.name] = macro
   }
+
+  /// Look for a macro with the given name.
+  public func lookup(_ macroName: String) -> Macro.Type? {
+    return macros[macroName]
+  }
 }
 
 /// Syntax rewriter that evaluates any macros encountered along the way.

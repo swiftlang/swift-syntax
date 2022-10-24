@@ -11,8 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 import XCTest
+import IDEUtils
 import SwiftSyntax
 import SwiftParser
+import _SwiftSyntaxTestSupport
 
 public class ClassificationTests: XCTestCase {
 

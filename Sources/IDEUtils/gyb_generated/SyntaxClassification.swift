@@ -12,6 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+@_spi(RawSyntax) import SwiftSyntax
+
 public enum SyntaxClassification {
   /// The token should not receive syntax coloring. 
   case none

@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import IDEUtils
 import SwiftSyntax
 
 extension SyntaxClassification {

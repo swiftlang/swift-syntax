@@ -16,6 +16,10 @@ import SwiftSyntaxBuilder
 struct ColumnMacro: ExpressionMacro {
   static var name: String { "column" }
 
+  static var documentation: String {
+    "The column at which this macro is used"
+  }
+
   static var genericSignature: GenericParameterClauseSyntax? =
      """
      <T: ExpressibleByIntegerLiteral>
@@ -35,6 +39,10 @@ struct ColumnMacro: ExpressionMacro {
 
 struct LineMacro: ExpressionMacro {
   static var name: String { "line" }
+
+  static var documentation: String {
+    "The line at which this macro is used"
+  }
 
   static var genericSignature: GenericParameterClauseSyntax? =
      """
@@ -67,6 +75,10 @@ extension PatternBindingSyntax {
 
 struct FunctionMacro: ExpressionMacro {
   static var name: String { "function" }
+
+  static var documentation: String {
+    "The name of the function in which this macro is used"
+  }
 
   static var genericSignature: GenericParameterClauseSyntax? =
      """
@@ -180,6 +192,10 @@ struct FunctionMacro: ExpressionMacro {
 struct ColorLiteralMacro: ExpressionMacro {
   static var name: String { "colorLiteral" }
 
+  static var documentation: String {
+    "A color value expressed in terms of its RGBA components"
+  }
+
   static var genericSignature: GenericParameterClauseSyntax? =
      """
      <T: ExpressibleByColorLiteral>
@@ -206,6 +222,10 @@ struct ColorLiteralMacro: ExpressionMacro {
 struct FileLiteralMacro: ExpressionMacro {
   static var name: String { "fileLiteral" }
 
+  static var documentation: String {
+    "A file resource in the application bundle"
+  }
+
   static var genericSignature: GenericParameterClauseSyntax? =
       """
       <T: ExpressibleByFileReferenceLiteral>
@@ -228,6 +248,10 @@ struct FileLiteralMacro: ExpressionMacro {
 struct ImageLiteralMacro: ExpressionMacro {
   static var name: String { "imageLiteral" }
 
+  static var documentation: String {
+    "An image resource in the application bundle"
+  }
+
   static var genericSignature: GenericParameterClauseSyntax? =
       """
       <T: ExpressibleByImageLiteral>
@@ -249,6 +273,10 @@ struct ImageLiteralMacro: ExpressionMacro {
 
 struct FilePathMacro: ExpressionMacro {
   static var name: String { "filePath" }
+
+  static var documentation: String {
+    "The full path to the file in which this macro is used"
+  }
 
   static var genericSignature: GenericParameterClauseSyntax? =
      """
@@ -273,6 +301,10 @@ struct FilePathMacro: ExpressionMacro {
 
 struct FileIDMacro: ExpressionMacro {
   static var name: String { "fileID" }
+
+  static var documentation: String {
+    "The file in which this macro is used in the form ModuleName/FileName"
+  }
 
   static var genericSignature: GenericParameterClauseSyntax? =
      """
@@ -303,6 +335,10 @@ struct FileIDMacro: ExpressionMacro {
 
 struct FileMacro: ExpressionMacro {
   static var name: String { "file" }
+
+  static var documentation: String {
+    "The file in which this macro is used"
+  }
 
   static var genericSignature: GenericParameterClauseSyntax? =
      """

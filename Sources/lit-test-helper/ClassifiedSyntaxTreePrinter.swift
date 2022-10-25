@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import Foundation
 
 extension SyntaxClassification {
   var tag: String {

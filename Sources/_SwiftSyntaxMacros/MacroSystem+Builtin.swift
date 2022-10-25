@@ -177,6 +177,19 @@ struct FunctionMacro: ExpressionMacro {
   }
 }
 
+/// Replace the label of the first element in the tuple with the given
+/// new label.
+private func replaceFirstLabel(
+  of tuple: TupleExprElementListSyntax, with newLabel: String
+) -> TupleExprElementListSyntax{
+  guard let firstElement = tuple.first else {
+    return tuple
+  }
+
+  return tuple.replacing(
+    childAt: 0, with: firstElement.withLabel(.identifier(newLabel)))
+}
+
 struct ColorLiteralMacro: ExpressionMacro {
   static var name: String { "colorLiteral" }
 
@@ -188,14 +201,17 @@ struct ColorLiteralMacro: ExpressionMacro {
   static var signature: TypeSyntax =
      """
      (
-      _colorLiteralRed red: Float, green: Float, blue: Float, alpha: Float
+      red: Float, green: Float, blue: Float, alpha: Float
      ) -> T
      """
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
-    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    let argList = replaceFirstLabel(
+      of: macro.argumentList, with: "_colorLiteralRed"
+    )
+    let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
     }
@@ -212,12 +228,15 @@ struct FileLiteralMacro: ExpressionMacro {
       """
 
   static var signature: TypeSyntax =
-      "(fileReferenceLiteralResourceName path: String) -> T"
+      "(resourceName path: String) -> T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
-    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    let argList = replaceFirstLabel(
+      of: macro.argumentList, with: "fileReferenceLiteralResourceName"
+    )
+    let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
     }
@@ -234,12 +253,15 @@ struct ImageLiteralMacro: ExpressionMacro {
       """
 
   static var signature: TypeSyntax =
-      "(imageLiteralResourceName path: String) -> T"
+      "(resourceName path: String) -> T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
-    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    let argList = replaceFirstLabel(
+      of: macro.argumentList, with: "imageLiteralResourceName"
+    )
+    let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
     }

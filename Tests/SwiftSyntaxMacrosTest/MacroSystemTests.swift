@@ -39,7 +39,7 @@ final class MacroSystemTests: XCTestCase {
       1
       let a = (2)
       let b = (x + y, #"x + y"#)
-      .init(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
+      .init(_colorLiteralRed: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       let c = 9
       """
     )

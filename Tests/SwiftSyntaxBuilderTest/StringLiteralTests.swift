@@ -35,9 +35,23 @@ final class StringLiteralTests: XCTestCase {
     }
   }
 
+  func testEscapeLiteral() {
+    AssertBuildResult(
+      StringLiteralExpr(content: #""""foobar""#),
+      ##"#""""foobar""#"##
+    )
+  }
+
   func testEscapeBackslash() {
     AssertBuildResult(StringLiteralExpr(content: #"\"#), ##"""
     #"\"#
     """##)
+  }
+
+  func testEscapePounds() {
+    AssertBuildResult(
+      StringLiteralExpr(content: ###""foobar"##foobar"###),
+      #####"###""foobar"##foobar"###"#####
+    )
   }
 }

@@ -27,21 +27,21 @@ private func countPounds(_ string: String) -> Int {
     }
 
     if afterQuote {
-      maxPounds = max(maxPounds, consecutivePounds)
+      maxPounds = max(maxPounds, consecutivePounds + 1)
     }
   }
 
   for c in string {
     switch c {
     case #"""#:
-      maxPounds = max(maxPounds, consecutivePounds)
+      maxPounds = max(maxPounds, consecutivePounds + 1)
       afterQuote = true
       afterBackslash = false
       consecutivePounds = 0
 
     case #"\"#:
       if afterQuote {
-        maxPounds = max(maxPounds, consecutivePounds)
+        maxPounds = max(maxPounds, consecutivePounds + 1)
         afterQuote = false
       }
       afterBackslash = true

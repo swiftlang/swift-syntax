@@ -16,6 +16,12 @@ public protocol Macro {
   /// The name of this macro.
   static var name: String { get }
 
+  /// Documentation for this macro.
+  ///
+  /// This documentation should be written in the Markdown format used for
+  /// commenting Swift declarations.
+  static var documentation: String { get }
+
   /// The generic signature to use when describing the type of this macro.
   static var genericSignature: GenericParameterClauseSyntax? { get }
 
@@ -27,4 +33,9 @@ public protocol Macro {
   /// as `#line`) that does not. This is a syntactic distinction, not a
   /// semantic one.
   static var signature: TypeSyntax { get }
+}
+
+extension Macro {
+  /// Default, empty documentation string for macros.
+  public static var documentation: String { "" }
 }

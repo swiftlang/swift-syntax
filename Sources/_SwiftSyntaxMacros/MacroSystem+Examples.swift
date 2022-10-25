@@ -17,6 +17,10 @@ import SwiftSyntaxBuilder
 struct StringifyMacro: ExpressionMacro {
   static var name: String { "stringify" }
 
+  static var documentation: String {
+    "An example macro that produces the value of an expression and its source text"
+  }
+
   static var genericSignature: GenericParameterClauseSyntax? = "<T>"
 
   static var signature: TypeSyntax = "(T) -> (T, String)"

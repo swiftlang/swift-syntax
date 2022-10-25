@@ -909,7 +909,6 @@ extension Parser {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
   public enum ParameterSubject {
     case closure
     case enumCase
@@ -947,6 +946,103 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
+  public mutating func parseFunctionParameter(for subject: ParameterSubject) -> RawFunctionParameterSyntax {
+    // Parse any declaration attributes. The exception here is enum cases
+    // which only allow types, so we do not consume attributes to allow the
+    // type attribute grammar a chance to examine them.
+    let attrs: RawAttributeListSyntax?
+    if case .enumCase = subject {
+      attrs = nil
+    } else {
+      attrs = self.parseAttributeList()
+    }
+
+    let modifiers = parseParameterModifiers(for: subject)
+
+    var misplacedSpecifiers: [RawTokenSyntax] = []
+    while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
+      misplacedSpecifiers.append(specifier)
+    }
+
+    let unexpectedBeforeFirstName: RawUnexpectedNodesSyntax?
+    let firstName: RawTokenSyntax?
+    let unexpectedBeforeSecondName: RawUnexpectedNodesSyntax?
+    let secondName: RawTokenSyntax?
+    let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
+    let colon: RawTokenSyntax?
+    let shouldParseType: Bool
+
+    if self.withLookahead({ $0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
+      if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+        (unexpectedBeforeFirstName, firstName) = self.parseArgumentLabel()
+      } else {
+        unexpectedBeforeFirstName = nil
+        firstName = nil
+      }
+
+      if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+        (unexpectedBeforeSecondName, secondName) = self.parseArgumentLabel()
+      } else {
+        unexpectedBeforeSecondName = nil
+        secondName = nil
+      }
+      if subject.isClosure {
+        unexpectedBeforeColon = nil
+        colon = self.consume(if: .colon)
+        shouldParseType = (colon != nil)
+      } else {
+        (unexpectedBeforeColon, colon) = self.expect(.colon)
+        shouldParseType = true
+      }
+    } else {
+      unexpectedBeforeFirstName = nil
+      firstName = nil
+      unexpectedBeforeSecondName = nil
+      secondName = nil
+      unexpectedBeforeColon = nil
+      colon = nil
+      shouldParseType = true
+    }
+
+    let type: RawTypeSyntax?
+    if shouldParseType {
+      type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+    } else {
+      type = nil
+    }
+
+    let ellipsis: RawTokenSyntax?
+    if self.atContextualPunctuator("...") {
+      ellipsis = self.consumeAnyToken(remapping: .ellipsis)
+    } else {
+      ellipsis = nil
+    }
+
+    let defaultArgument: RawInitializerClauseSyntax?
+    if self.at(.equal) {
+      defaultArgument = self.parseDefaultArgument()
+    } else {
+      defaultArgument = nil
+    }
+
+    let trailingComma = self.consume(if: .comma)
+    return RawFunctionParameterSyntax(
+      attributes: attrs,
+      modifiers: modifiers,
+      RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirstName?.elements ?? []), arena: self.arena),
+      firstName: firstName,
+      unexpectedBeforeSecondName,
+      secondName: secondName,
+      unexpectedBeforeColon,
+      colon: colon,
+      type: type,
+      ellipsis: ellipsis,
+      defaultArgument: defaultArgument,
+      trailingComma: trailingComma,
+      arena: self.arena)
+  }
+
+  @_spi(RawSyntax)
   public mutating func parseParameterClause(for subject: ParameterSubject) -> RawParameterClauseSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawFunctionParameterSyntax]()
@@ -959,100 +1055,9 @@ extension Parser {
       while !self.at(any: [.eof, .rightParen])
               && keepGoing
               && loopProgress.evaluate(currentToken) {
-        // Parse any declaration attributes. The exception here is enum cases
-        // which only allow types, so we do not consume attributes to allow the
-        // type attribute grammar a chance to examine them.
-        let attrs: RawAttributeListSyntax?
-        if case .enumCase = subject {
-          attrs = nil
-        } else {
-          attrs = self.parseAttributeList()
-        }
-
-        let modifiers = parseParameterModifiers(for: subject)
-
-        var misplacedSpecifiers: [RawTokenSyntax] = []
-        while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
-          misplacedSpecifiers.append(specifier)
-        }
-
-        let unexpectedBeforeFirstName: RawUnexpectedNodesSyntax?
-        let firstName: RawTokenSyntax?
-        let unexpectedBeforeSecondName: RawUnexpectedNodesSyntax?
-        let secondName: RawTokenSyntax?
-        let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
-        let colon: RawTokenSyntax?
-        let shouldParseType: Bool
-
-        if self.withLookahead({ $0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
-          if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
-            (unexpectedBeforeFirstName, firstName) = self.parseArgumentLabel()
-          } else {
-            unexpectedBeforeFirstName = nil
-            firstName = nil
-          }
-
-          if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
-            (unexpectedBeforeSecondName, secondName) = self.parseArgumentLabel()
-          } else {
-            unexpectedBeforeSecondName = nil
-            secondName = nil
-          }
-          if subject.isClosure {
-            unexpectedBeforeColon = nil
-            colon = self.consume(if: .colon)
-            shouldParseType = (colon != nil)
-          } else {
-            (unexpectedBeforeColon, colon) = self.expect(.colon)
-            shouldParseType = true
-          }
-        } else {
-          unexpectedBeforeFirstName = nil
-          firstName = nil
-          unexpectedBeforeSecondName = nil
-          secondName = nil
-          unexpectedBeforeColon = nil
-          colon = nil
-          shouldParseType = true
-        }
-
-        let type: RawTypeSyntax?
-        if shouldParseType {
-          type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
-        } else {
-          type = nil
-        }
-
-        let ellipsis: RawTokenSyntax?
-        if self.atContextualPunctuator("...") {
-          ellipsis = self.consumeAnyToken(remapping: .ellipsis)
-        } else {
-          ellipsis = nil
-        }
-
-        let defaultArgument: RawInitializerClauseSyntax?
-        if self.at(.equal) {
-          defaultArgument = self.parseDefaultArgument()
-        } else {
-          defaultArgument = nil
-        }
-
-        let trailingComma = self.consume(if: .comma)
-        keepGoing = trailingComma != nil
-        elements.append(RawFunctionParameterSyntax(
-          attributes: attrs,
-          modifiers: modifiers,
-          RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirstName?.elements ?? []), arena: self.arena),
-          firstName: firstName,
-          unexpectedBeforeSecondName,
-          secondName: secondName,
-          unexpectedBeforeColon,
-          colon: colon,
-          type: type,
-          ellipsis: ellipsis,
-          defaultArgument: defaultArgument,
-          trailingComma: trailingComma,
-          arena: self.arena))
+        let parameter = parseFunctionParameter(for: subject)
+        keepGoing = parameter.trailingComma != nil
+        elements.append(parameter)
       }
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)

@@ -10,16 +10,32 @@
 //
 //===----------------------------------------------------------------------===//
 
+import XCTest
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
-extension IntegerLiteralExpr {
-  public init(_ value: Int) {
-    self.init(digits: String(value))
-  }
-}
+final class SwitchTests: XCTestCase {
+  func testSwitch() {
+    let syntax = SwitchStmt(expression: Expr("count")) {
+      for num in 1..<3 {
+        SwitchCase("case \(num):") {
+          Expr("print(count)")
+        }
+      }
+      SwitchCase("default:") {
+        BreakStmt("break")
+      }
+    }
 
-extension IntegerLiteralExpr: ExpressibleByIntegerLiteral {
-  public init(integerLiteral value: Int) {
-    self.init(value)
+    AssertBuildResult(syntax, """
+    switch count {
+    case 1:
+        print(count)
+    case 2:
+        print(count)
+    default:
+        break
+    }
+    """)
   }
 }

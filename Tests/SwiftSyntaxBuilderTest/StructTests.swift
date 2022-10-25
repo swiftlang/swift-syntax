@@ -26,26 +26,11 @@ final class StructTests: XCTestCase {
   }
 
   func testNestedStruct() {
-    let nestedStruct = StructDecl(
-      leadingTrivia: [
-        .docLineComment("/// A nested struct"),
-        .newlines(1),
-        .docLineComment("/// with multi line comment"),
-        .newlines(1)
-      ],
-      structKeyword: .struct,
-      identifier: "NestedStruct",
-      genericParameterClause: GenericParameterClause(rightAngleBracket: .rightAngle.withTrailingTrivia([])) {
-        GenericParameter(name: "A")
-        GenericParameter(name: "B", colon: .colon, inheritedType: Type("C"))
-        GenericParameter(name: "D")
-      },
-      genericWhereClause: GenericWhereClause {
-        GenericRequirement(body: .conformanceRequirement(ConformanceRequirement(leftTypeIdentifier: Type("A"), rightTypeIdentifier: SimpleTypeIdentifier("X"))))
-        GenericRequirement(body: .sameTypeRequirement(SameTypeRequirement(
-            leftTypeIdentifier: "A.P", equalityToken: .spacedBinaryOperator("=="), rightTypeIdentifier: "D")))
-      }
-    ) {}
+    let nestedStruct = StructDecl("""
+    /// A nested struct
+    /// with multi line comment
+    struct NestedStruct<A, B: C, D> where A: X, A.P == D
+    """) {}
     
     let carriateReturnsStruct = StructDecl(
         leadingTrivia: [
@@ -67,10 +52,7 @@ final class StructTests: XCTestCase {
           structKeyword: .struct,
           identifier: "CarriageReturnFormFeedsStruct"
         )
-    let testStruct = StructDecl(
-      modifiers: [DeclModifier(name: .public)],
-      identifier: "TestStruct"
-    ) {
+    let testStruct = StructDecl("public struct TestStruct") {
       nestedStruct
       carriateReturnsStruct
       carriageReturnFormFeedsStruct

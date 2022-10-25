@@ -14,11 +14,15 @@ import Foundation
 @_spi(RawSyntax) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
+// MARK: - BinaryOperatorExpr
+
 extension BinaryOperatorExpr {
   public init(text: String) {
     self.init(operatorToken: .spacedBinaryOperator(text))
   }
 }
+
+// MARK: - BooleanLiteralExpr
 
 extension BooleanLiteralExpr: ExpressibleByBooleanLiteral {
   public init(_ value: Bool) {
@@ -29,6 +33,8 @@ extension BooleanLiteralExpr: ExpressibleByBooleanLiteral {
     self.init(value)
   }
 }
+
+// MARK: - CatchClause
 
 extension CatchClause {
   /// A convenience initializer that calculates spacing around the `catch` keyword.
@@ -45,6 +51,8 @@ extension CatchClause {
     )
   }
 }
+
+// MARK: - CustomAttribute
 
 extension CustomAttribute {
   /// A convenience initializer that allows passing in arguments using a result builder
@@ -64,6 +72,8 @@ extension CustomAttribute {
   }
 }
 
+// MARK: - DictionaryExpr
+
 extension DictionaryExpr {
   /// A convenience initializer that allows passing in members using a result builder
   /// instead of having to wrap them in a `DictionaryElementList`.
@@ -81,6 +91,8 @@ extension DictionaryExpr {
   }
 }
 
+// MARK: - FloatLiteralExprSyntax
+
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
   public init(_ value: Float) {
     self.init(floatingDigits: String(value))
@@ -90,6 +102,8 @@ extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
     self.init(value)
   }
 }
+
+// MARK: - FunctionCallExpr
 
 extension FunctionCallExpr {
   /// A convenience initializer that allows passing in arguments using a result builder
@@ -114,6 +128,8 @@ extension FunctionCallExpr {
   }
 }
 
+// MARK: - FunctionParameter
+
 extension FunctionParameter {
   public init(
     _ source: String,
@@ -124,6 +140,8 @@ extension FunctionParameter {
     })
   }
 }
+
+// MARK: - IfStmt
 
 extension IfStmt {
   /// A convenience initializer that uses builder closures to express an
@@ -147,6 +165,8 @@ extension IfStmt {
 }
 
 
+// MARK: - IntegerLiteralExpr
+
 extension IntegerLiteralExpr: ExpressibleByIntegerLiteral {
   public init(_ value: Int) {
     self.init(digits: String(value))
@@ -156,6 +176,8 @@ extension IntegerLiteralExpr: ExpressibleByIntegerLiteral {
     self.init(value)
   }
 }
+
+// MARK: - MemberAccessExpr
 
 extension MemberAccessExpr {
   /// Creates a `MemberAccessExpr` using the provided parameters.
@@ -168,6 +190,8 @@ extension MemberAccessExpr {
     self.init(base: base, dot: dot, name: TokenSyntax.identifier(name), declNameArguments: declNameArguments)
   }
 }
+
+// MARK: - StringLiteralExpr
 
 extension StringLiteralExpr {
   private enum PoundState {
@@ -244,12 +268,16 @@ extension StringLiteralExpr {
   }
 }
 
+// MARK: - SwitchCase
+
 extension SwitchCase {
   public init(_ label: String, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
     self.init("\(label)")
     self.statements = statementsBuilder()
   }
 }
+
+// MARK: - TernaryExpr
 
 extension TernaryExpr {
   public init(
@@ -267,6 +295,8 @@ extension TernaryExpr {
   }
 }
 
+// MARK: - TupleExprElement
+
 extension TupleExprElement {
   /// A convenience initializer that allows passing in label as an optional string.
   /// The presence of the colon will be inferred based on the presence of the label.
@@ -275,6 +305,8 @@ extension TupleExprElement {
       label: label.map { Token.identifier($0) }, colon: label == nil ? nil : Token.colon, expression: expression, trailingComma: nil)
   }
 }
+
+// MARK: - VariableDecl
 
 extension VariableDecl {
   /// Creates an optionally initialized property.

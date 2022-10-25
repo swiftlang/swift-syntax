@@ -11,17 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import Foundation
-
-/// A regular expression matching sequences of `#`s with an adjacent quote or
-/// interpolation. Used to determine the number of `#`s for a raw string literal.
-private let rawStringPotentialEscapesPattern = try! NSRegularExpression(
-  pattern: [
-    #""(#*)"#, // Match potential opening delimiters
-    #"(#*)""#, // Match potential closing delimiters
-    #"\\(#*)"#, // Match potential interpolations
-  ].joined(separator: "|")
-)
 
 extension StringLiteralExpr {
   /// Creates a string literal, optionally specifying quotes and delimiters.
@@ -41,17 +30,12 @@ extension StringLiteralExpr {
     var openDelimiter = openDelimiter
     var closeDelimiter = closeDelimiter
     if openDelimiter == nil, closeDelimiter == nil {
-      // Match potential escapes in the string
-      let matches = rawStringPotentialEscapesPattern.matches(in: content, range: NSRange(content.startIndex..., in: content))
-
-      // Find longest sequence of `#`s by taking the maximum length over all captures
-      let poundCount = matches
-        .compactMap { match in (1..<match.numberOfRanges).map { match.range(at: $0).length + 1 }.max() }
-        .max() ?? 0
-
-      // Use a delimiter that is exactly one longer
-      openDelimiter = Token.rawStringDelimiter(String(repeating: "#", count: poundCount))
-      closeDelimiter = openDelimiter
+      let (requiresEscaping, poundCount) = requiresEscaping(content)
+      if requiresEscaping {
+        // Use a delimiter that is exactly one longer
+        openDelimiter = Token.rawStringDelimiter(String(repeating: "#", count: poundCount + 1))
+        closeDelimiter = openDelimiter
+      }
     }
 
     self.init(
@@ -62,4 +46,42 @@ extension StringLiteralExpr {
       closeDelimiter: closeDelimiter
     )
   }
+}
+
+private enum PoundState {
+  case afterQuote, afterBackslash, none
+}
+
+private func requiresEscaping(_ content: String) -> (Bool, poundCount: Int) {
+  var state: PoundState = .none
+  var consecutivePounds = 0
+  var maxPounds = 0
+  var requiresEscaping = false
+
+  for c in content {
+    switch c {
+    case "#":
+      consecutivePounds += 1
+    case "\"":
+      state = .afterQuote
+      consecutivePounds = 0
+    case "\\":
+      state = .afterBackslash
+      consecutivePounds = 0
+    case "(" where state == .afterBackslash:
+      maxPounds = max(maxPounds, consecutivePounds)
+      fallthrough
+    default:
+      consecutivePounds = 0
+      state = .none
+    }
+
+    if state == .afterQuote {
+      maxPounds = max(maxPounds, consecutivePounds)
+    }
+
+    requiresEscaping = requiresEscaping || state != .none
+  }
+
+  return (requiresEscaping, poundCount: maxPounds)
 }

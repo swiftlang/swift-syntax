@@ -7,27 +7,13 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_library(SwiftSyntaxBuilder STATIC
+  ConvenienceInitializers.swift
   HasTrailingComma.swift
   Indenter.swift
   ResultBuilderExtensions.swift
   Syntax+StringInterpolation.swift
+  SyntaxNodeWithBody.swift
 
-  ConvenienceInitializers/BinaryOperatorExprConvenienceInitializers.swift
-  ConvenienceInitializers/BooleanLiteralExprConvenienceInitializers.swift
-  ConvenienceInitializers/CatchClauseConvenienceInitializer.swift
-  ConvenienceInitializers/CustomAttributeConvenienceInitializers.swift
-  ConvenienceInitializers/DictionaryExprConvenienceInitializers.swift
-  ConvenienceInitializers/FloatLiteralExprConvenienceInitializers.swift
-  ConvenienceInitializers/FunctionCallExprConvenienceInitializers.swift
-  ConvenienceInitializers/IfStmtConvenienceInitializers.swift
-  ConvenienceInitializers/IntegerLiteralExprConvenienceInitializers.swift
-  ConvenienceInitializers/MemberAccessExprConvenienceInitializers.swift
-  ConvenienceInitializers/SwitchCaseConvenienceInitializers.swift
-  ConvenienceInitializers/SyntaxNodeWithBody.swift
-  ConvenienceInitializers/StringLiteralExprConvenienceInitializers.swift
-  ConvenienceInitializers/TernaryExprConvenienceInitializers.swift
-  ConvenienceInitializers/TupleExprElementConvenienceInitializers.swift
-  ConvenienceInitializers/VariableDeclConvenienceInitializers.swift
 
   generated/BuildableCollectionNodes.swift
   generated/BuildableNodes.swift

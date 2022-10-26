@@ -225,6 +225,10 @@ extension SyntaxProtocol {
     return _syntaxNode.data.raw
   }
 
+  public var kind: SyntaxKind {
+    return raw.kind
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return self.raw.kind.syntaxNodeType
   }

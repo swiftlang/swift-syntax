@@ -263,13 +263,14 @@ extension Parser {
   /// If so, return the token that we can recover to and a handle that can be
   /// used to consume the unexpected tokens and the token we recovered to.
   func canRecoverTo<Subset: RawTokenKindSubset>(
-    anyIn subset: Subset.Type
+    anyIn subset: Subset.Type,
+    recoveryPrecedence: TokenPrecedence? = nil
   ) -> (Subset, RecoveryConsumptionHandle)? {
     if let (kind, handle) = self.at(anyIn: subset) {
       return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
     }
     var lookahead = self.lookahead()
-    return lookahead.canRecoverTo(anyIn: subset)
+    return lookahead.canRecoverTo(anyIn: subset, recoveryPrecedence: recoveryPrecedence)
   }
 
   /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.

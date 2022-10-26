@@ -1215,6 +1215,86 @@ final class DeclarationTests: XCTestCase {
     // `actor` cannot recover from a missing identifier since it's contextual
     // based on the presence of the identifier.
   }
+
+  func testDontNestClassesIfTheyContainUnexpectedTokens() {
+    // There used to be a bug where `class B` was parsed as a nested class of A
+    // because recovery to the `class` keyword of B consumed the closing brace.
+    AssertParse(
+      """
+      class A {
+        1️⃣^2️⃣
+      }
+      class B {
+      }
+      """,
+      substructure: Syntax(CodeBlockItemListSyntax([
+          CodeBlockItemSyntax(
+            item: .init(ClassDeclSyntax(
+              attributes: nil,
+              modifiers: nil,
+              classKeyword: .classKeyword(),
+              identifier: .identifier("A"),
+              genericParameterClause: nil,
+              inheritanceClause: nil,
+              genericWhereClause: nil,
+              members: MemberDeclBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                members: MemberDeclListSyntax([
+                  MemberDeclListItemSyntax(
+                    decl: Decl(FunctionDeclSyntax(
+                      attributes: nil,
+                      modifiers: nil,
+                      funcKeyword: .funcKeyword(presence: .missing),
+                      identifier: .spacedBinaryOperator("^"),
+                      genericParameterClause: nil,
+                      signature: FunctionSignatureSyntax(
+                        input: ParameterClauseSyntax(
+                          leftParen: .leftParenToken(presence: .missing),
+                          parameterList: FunctionParameterListSyntax([]),
+                          rightParen: .rightParenToken(presence: .missing)
+                        ),
+                        asyncOrReasyncKeyword: nil,
+                        throwsOrRethrowsKeyword: nil,
+                        output: nil
+                      ),
+                      genericWhereClause: nil,
+                      body: nil
+                    )),
+                    semicolon: nil
+                  )
+                ]),
+                rightBrace: .rightBraceToken()
+              )
+            )),
+            semicolon: nil,
+            errorTokens: nil
+          ),
+          CodeBlockItemSyntax(
+            item: .init(ClassDeclSyntax(
+              attributes: nil,
+              modifiers: nil,
+              classKeyword: .classKeyword(),
+              identifier: .identifier("B"),
+              genericParameterClause: nil,
+              inheritanceClause: nil,
+              genericWhereClause: nil,
+              members: MemberDeclBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                members: MemberDeclListSyntax([]),
+                rightBrace: .rightBraceToken()
+              )
+            )),
+            semicolon: nil,
+            errorTokens: nil
+          )
+        ])
+      ),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+      ]
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

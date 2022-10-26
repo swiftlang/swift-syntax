@@ -23,6 +23,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_MACOSX_RPATH YES)
 
+find_package(dispatch QUIET)
+find_package(Foundation QUIET)
+
 add_subdirectory(Sources)
 
 export(EXPORT SwiftSyntaxTargets

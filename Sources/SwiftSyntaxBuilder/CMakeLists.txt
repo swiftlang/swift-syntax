@@ -27,8 +27,12 @@ target_link_libraries(SwiftSyntaxBuilder PUBLIC
   SwiftBasicFormat
   SwiftParser
   SwiftParserDiagnostics
-  SwiftSyntax
-  )
+  SwiftSyntax)
+if(TARGET Foundation AND TARGET dispatch)
+  target_link_libraries(SwiftSyntaxBuilder PRIVATE
+    $<$<NOT:$<PLATFORM_ID:Darwin>>:dispatch>
+    $<$<NOT:$<PLATFORM_ID:Darwin>>:Foundation>)
+endif()
 
 set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftSyntaxBuilder)
 

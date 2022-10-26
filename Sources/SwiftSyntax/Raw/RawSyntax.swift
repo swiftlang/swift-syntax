@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-typealias RawSyntaxBuffer = UnsafeBufferPointer<RawSyntax?>
+@_spi(RawSyntax) public typealias RawSyntaxBuffer = UnsafeBufferPointer<RawSyntax?>
 typealias RawTriviaPieceBuffer = UnsafeBufferPointer<RawTriviaPiece>
 
 fileprivate extension SyntaxKind {
@@ -148,7 +148,8 @@ extension RawSyntax {
   }
 
   /// Whether or not this node is a token one.
-  var isToken: Bool {
+  @_spi(RawSyntax)
+  public var isToken: Bool {
     kind == .token
   }
 
@@ -171,7 +172,7 @@ extension RawSyntax {
       }
       return recursiveFlags
     case .layout(let layoutView):
-      return layoutView.layoutData.recursiveFlags
+      return layoutView.recursiveFlags
     }
   }
 

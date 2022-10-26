@@ -55,7 +55,8 @@ extension UnknownSyntax: CustomReflectable {
 public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  var tokenView: RawSyntaxTokenView {
+  @_spi(RawSyntax)
+  public var tokenView: RawSyntaxTokenView {
     return raw.tokenView!
   }
 
@@ -100,7 +101,6 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return tokenKind.text
   }
 
-  @_spi(RawSyntax)
   public var rawTokenKind: RawTokenKind {
     return tokenView.rawKind
   }

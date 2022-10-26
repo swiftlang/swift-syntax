@@ -26,14 +26,9 @@ let buildableCollectionNodesFile = SourceFile {
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let elementType = node.collectionElementType
 
+    let docComment = node.documentation.isEmpty ? "" : "/// \(node.documentation)\n"
     // Generate collection node struct
-    ExtensionDecl(
-      leadingTrivia: node.documentation.isEmpty
-        ? []
-        : .docLineComment("/// \(node.documentation)") + .newline,
-      extendedType: Type(node.type.shorthandName),
-      inheritanceClause: TypeInheritanceClause { InheritedType(typeName: Type("ExpressibleByArrayLiteral")) }
-    ) {
+    ExtensionDecl("\(docComment)extension \(node.type.shorthandName): ExpressibleByArrayLiteral") {
       // Generate initializers
       if elementType.isBaseType && node.collectionElementChoices?.isEmpty ?? true {
         InitializerDecl(

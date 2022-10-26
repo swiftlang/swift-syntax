@@ -300,7 +300,7 @@ extension Syntax {
 }
 
 extension SyntaxKind {
-  var syntaxNodeType: SyntaxProtocol.Type {
+  public var syntaxNodeType: SyntaxProtocol.Type {
     switch self {
     case .token: return TokenSyntax.self
     case .unknown: return UnknownSyntax.self

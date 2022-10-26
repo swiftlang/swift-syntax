@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
 @_spi(RawSyntax) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 

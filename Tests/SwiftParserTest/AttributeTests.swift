@@ -85,7 +85,7 @@ final class AttributeTests: XCTestCase {
       """
       @objc(zeroArg)
       class A { }
-      
+
       @objc(:::::)
       func f(_: Int, _: Int, _: Int, _: Int, _: Int) { }
       """
@@ -304,6 +304,34 @@ final class AttributeTests: XCTestCase {
     }
     """)
     
+    
+    AssertParse("""
+    enum GoatAlbums {
+      case afterHours
+      case theLifeOfPablo
+      case toPimpAButterfly
+
+      @available(*, deprecated)
+      case graduation
+    }
+    
+    @ignoreDeprecation(GoatAlbums.graduation)
+    func printBestAlbum() {
+      print(GoatAlbums.graduation)
+    }
+    """)
+    
+    AssertParse("""
+    struct XStruct {
+      @available(*, deprecated)
+      var x: Int
+    }
+    
+    @ignoreDeprecation(XStruct.x)
+    extension XStruct {
+      func _example() -> Int { return x * 2 }
+    }
+    """)
   }
 
   func testObjcImplementationAttribute() throws {
@@ -315,5 +343,5 @@ final class AttributeTests: XCTestCase {
         func fn2() {}
       }
       """)
-    }
+  }
 }

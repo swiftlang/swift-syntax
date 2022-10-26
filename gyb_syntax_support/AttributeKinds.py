@@ -691,7 +691,13 @@ DECL_ATTR_KINDS = [
                         UserInaccessible,
                         NotSerialized,
                         ABIStableToAdd, ABIBreakingToRemove, APIStableToAdd, APIStableToRemove,
-                        code=138)
+                        code=138),
+                   
+    SimpleDeclAttribute('ignoreDeprecations', 'IgnoreDeprecations',
+                        OnGenericType, OnEnumElement, OnImport, OnExtension,
+                        OnSubscript, OnVar, OnFunc,
+                        ABIStableToAdd, ABIStableToRemove, APIStableToAdd, APIStableToRemove,
+                        code=139)
 ]
 
 # Schema for declaration modifiers:

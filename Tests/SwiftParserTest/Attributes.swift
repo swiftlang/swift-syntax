@@ -238,4 +238,19 @@ final class AttributeTests: XCTestCase {
         """
     )
   }
+  
+  func testIgnoreDeprecationAttribute() throws {
+    AssertParse("""
+    @available(*, deprecated)
+    class XClass {
+      var num: Int
+      init(_ num: Int) { self.num = num }
+    }
+    
+    @ignoreDeprecations(XClass)
+    func x() {
+      print(XClass(3))
+    }
+    """)
+  }
 }

@@ -78,7 +78,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
        ∣         ╰─ expected value and ')' to end function call
 
     """
-    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
   }
 
   func testTwoDiagnosticsAtSameLocation() throws {
@@ -91,6 +91,6 @@ final class DiagnosticsFormatterTests: XCTestCase {
     
     """
 
-    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
   }
 }

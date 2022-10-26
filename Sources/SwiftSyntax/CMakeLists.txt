@@ -18,7 +18,6 @@ add_library(SwiftSyntax STATIC
   Syntax.swift
   SyntaxArena.swift
   SyntaxChildren.swift
-  SyntaxClassifier.swift
   SyntaxData.swift
   SyntaxOtherNodes.swift
   SyntaxText.swift
@@ -37,7 +36,6 @@ add_library(SwiftSyntax STATIC
   gyb_generated/Misc.swift
   gyb_generated/SyntaxAnyVisitor.swift
   gyb_generated/SyntaxBaseNodes.swift
-  gyb_generated/SyntaxClassification.swift
   gyb_generated/SyntaxCollections.swift
   gyb_generated/SyntaxEnum.swift
   gyb_generated/SyntaxFactory.swift

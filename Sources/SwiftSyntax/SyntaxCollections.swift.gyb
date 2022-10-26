@@ -82,7 +82,8 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 

@@ -465,7 +465,7 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(RawTupleTypeElementSyntax(
             inOut: nil,
-            RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirst?.elements ?? []), arena: self.arena),
+            RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeFirst, arena: self.arena),
             name: first,
             unexpectedBeforeSecond,
             secondName: second,

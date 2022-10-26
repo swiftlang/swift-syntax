@@ -2061,7 +2061,7 @@ extension Parser {
       captures = RawClosureCaptureSignatureSyntax(
         leftSquare: lsquare,
         items: elements.isEmpty ? nil : RawClosureCaptureItemListSyntax(elements: elements, arena: self.arena),
-        unexpectedNodes.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena),
+        RawUnexpectedNodesSyntax(unexpectedNodes, arena: self.arena),
         rightSquare: rsquare, arena: self.arena)
     } else {
       captures = nil

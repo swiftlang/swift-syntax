@@ -726,7 +726,7 @@ extension Parser {
         // Continue through the comma-separated list.
         keepGoing = self.consume(if: .comma)
         elements.append(RawEnumCaseElementSyntax(
-          RawUnexpectedNodesSyntax([unexpectedPeriod.map(RawSyntax.init)] + (unexpectedBeforeName?.elements ?? []), arena: self.arena),
+          RawUnexpectedNodesSyntax(combining: unexpectedPeriod, unexpectedBeforeName, arena: self.arena),
           identifier: name,
           associatedValue: associatedValue,
           rawValue: rawValue,
@@ -1029,7 +1029,7 @@ extension Parser {
     return RawFunctionParameterSyntax(
       attributes: attrs,
       modifiers: modifiers,
-      RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirstName?.elements ?? []), arena: self.arena),
+      RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeFirstName, arena: self.arena),
       firstName: firstName,
       unexpectedBeforeSecondName,
       secondName: secondName,
@@ -1352,10 +1352,10 @@ extension Parser {
             pattern: .none
           )
           initializer = RawInitializerClauseSyntax(
-            RawUnexpectedNodesSyntax(
-              (typeAnnotationUnwrapped.unexpectedBeforeColon?.elements ?? []) +
-              [RawSyntax(typeAnnotationUnwrapped.colon)] +
-              (typeAnnotationUnwrapped.unexpectedBetweenColonAndType?.elements ?? []),
+            RawUnexpectedNodesSyntax(combining:
+              typeAnnotationUnwrapped.unexpectedBeforeColon,
+              typeAnnotationUnwrapped.colon,
+              typeAnnotationUnwrapped.unexpectedBetweenColonAndType,
               arena: self.arena
             ),
             equal: missingToken(.equal, text: nil),

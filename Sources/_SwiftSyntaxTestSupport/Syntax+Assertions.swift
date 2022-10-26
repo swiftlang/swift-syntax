@@ -1,4 +1,4 @@
-//===------------------- Syntax+Assertions.swift  -------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -80,7 +80,7 @@ public struct SubtreeMatcher {
   /// The syntax tree from parsing source *with markers removed*.
   private var actualTree: Syntax
 
-  public init(_ markedText: String, parse: (String) throws -> Syntax) throws {
+  public init(_ markedText: String, parse: (String) throws -> Syntax) rethrows {
     let (markers, text) = extractMarkers(markedText)
 
     self.markers = markers.isEmpty ? ["DEFAULT": 0] : markers

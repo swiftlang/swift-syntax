@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -6,48 +18,14 @@ import _SwiftSyntaxTestSupport
 
 final class FunctionTests: XCTestCase {
   func testFibonacci() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
+    let buildable = FunctionDecl("func fibonacci(_ n: Int) -> Int") {
+      IfStmt("if n <= 1 { return n }")
 
-    let input = ParameterClause {
-      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int")
-    }
-
-    let ifCodeBlock = ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
-    
-    let signature = FunctionSignature(input: input, output: "Int")
-    
-    let buildable = FunctionDecl(leadingTrivia: leadingTrivia, identifier: .identifier("fibonacci"), signature: signature) {
-      IfStmt(
-        conditions: ExprList {
-          IntegerLiteralExpr(digits: "n")
-          BinaryOperatorExpr("<=")
-          IntegerLiteralExpr(1)
-        },
-        body: ifCodeBlock)
-
-      ReturnStmt(expression: SequenceExpr {
-        FunctionCallExpr(calledExpression: "fibonacci") {
-          SequenceExpr {
-            IntegerLiteralExpr(digits: "n")
-            BinaryOperatorExpr("-")
-            IntegerLiteralExpr(1)
-          }
-        }
-
-        BinaryOperatorExpr("+")
-
-        FunctionCallExpr(calledExpression: MemberAccessExpr(base: "self", name: "fibonacci")) {
-          SequenceExpr {
-            IntegerLiteralExpr(digits: "n")
-            BinaryOperatorExpr("-")
-            IntegerLiteralExpr(2)
-          }
-        }
-      })
+      ReturnStmt("return fibonacci(n - 1) + self.fibonacci(n - 2)")
     }
 
     AssertBuildResult(buildable, """
-      ␣func fibonacci(_ n: Int) -> Int {
+      func fibonacci(_ n: Int) -> Int {
           if n <= 1 {
               return n
           }
@@ -57,7 +35,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testArguments() {
-    let buildable = FunctionCallExpr(calledExpression: "test") {
+    let buildable = FunctionCallExpr(callee: "test") {
       for param in (1...5) {
         TupleExprElement(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: "value\(param)")
       }
@@ -66,12 +44,12 @@ final class FunctionTests: XCTestCase {
   }
 
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
-    let buildable = FunctionCallExpr(calledExpression: "test")
+    let buildable = FunctionCallExpr(callee: "test")
     AssertBuildResult(buildable, "test()")
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
-    let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: ClosureExpr()) {
+    let buildable = FunctionCallExpr(callee: "test", trailingClosure: ClosureExpr()) {
       TupleExprElement(expression: "42")
     }
     AssertBuildResult(buildable, "test(42) {\n}")
@@ -79,12 +57,12 @@ final class FunctionTests: XCTestCase {
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
     let closure = ClosureExpr(statementsBuilder: {
-      FunctionCallExpr(calledExpression: "f") {
+      FunctionCallExpr(callee: "f") {
         TupleExprElement(expression: "a")
       }
     })
-    let buildable = FunctionCallExpr(calledExpression: "test", trailingClosure: closure)
-    let syntax = buildable.buildSyntax()
+    let buildable = FunctionCallExpr(callee: "test", trailingClosure: closure)
+
     AssertBuildResult(
       buildable,
       """

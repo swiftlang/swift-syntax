@@ -47,6 +47,70 @@ nodes whose base kind are that specified kind.
 /// ${line}
 %     end
 public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
+%     for child in node.children:
+%       if child.node_choices:
+  public enum ${child.name}: SyntaxChildChoices {
+%         for choice in child.node_choices:
+    case `${choice.swift_name}`(${choice.type_name})
+%         end
+    public var _syntaxNode: Syntax {
+      switch self {
+%         for choice in child.node_choices:
+      case .${choice.swift_name}(let node): return node._syntaxNode
+%         end
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+%         for choice in child.node_choices:
+%           choice_node = NODE_MAP.get(choice.syntax_kind)
+%           # We don't add 'init(_: TokenSyntax)' because we need to check the
+%           # token kind.
+%           if choice.is_token():
+%             pass
+%           elif choice_node and choice_node.is_base():
+    public init<Node: ${choice_node.name}Protocol>(_ node: Node) {
+      self = .${choice.swift_name}(${choice_node.name}(node))
+    }
+%           else:
+    public init(_ node: ${choice.type_name}) {
+      self = .${choice.swift_name}(node)
+    }
+%           end
+%         end
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+%         token_choices = []
+%         other_choices = []
+%         for choice in child.node_choices:
+%           if choice.is_token():
+%             token_choices += [choice]
+%           else:
+%             other_choices += [choice]
+%           end
+%         end
+%
+%         if token_choices:
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+%           for choice in token_choices:
+        case .${choice.token.swift_kind()}: self = .${choice.swift_name}(tok)
+%           end
+        default: return nil
+        }
+        return
+      }
+%         end
+%         for choice in other_choices:
+      if let node = syntaxNode.as(${choice.type_name}.self) {
+        self = .${choice.swift_name}(node)
+        return
+      }
+%         end
+      return nil
+    }
+  }
+
+%       end
+%     end
 %     # ==============
 %     # Initialization
 %     # ==============
@@ -71,7 +135,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   public init(
 %     for (index, child) in enumerate(node.children):
 %       comma = ',' if index != len(node.children) - 1 else ''
-%       param_type = child.type_name
+%       param_type = child.name if child.node_choices else child.type_name
 %       if child.is_optional:
 %         param_type = param_type + "?"
 %       if child.is_unexpected_nodes():
@@ -102,21 +166,21 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       # Children properties
 %       # ===================
 %
-%       ret_type = child.type_name
-%       if child.is_optional:
-%         ret_type += '?'
-%       end
+%       child_type = child.type_name
+%       if child.node_choices:
+%         child_type = child.name
+%       optional_mark = "?" if child.is_optional else ""
 
 %       for line in dedented_lines(child.description):
   /// ${line}
 %       end
-  public var ${child.swift_name}: ${ret_type} {
+  public var ${child.swift_name}: ${child_type}${optional_mark} {
     get {
       let childData = data.child(at: ${idx}, parent: Syntax(self))
 %       if child.is_optional:
       if childData == nil { return nil }
 %       end
-      return ${child.type_name}(childData!)
+      return ${child_type}(childData!)
     }
     set(value) {
       self = with${child.name}(value)
@@ -161,7 +225,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   /// - param newChild: The new `${child.swift_name}` to replace the node's
   ///                   current `${child.swift_name}`, if present.
   public func with${child.name}(
-    _ newChild: ${child.type_name}?) -> ${node.name} {
+    _ newChild: ${child_type}?) -> ${node.name} {
 %       if child.is_optional:
     let raw = newChild?.raw
 %       else:

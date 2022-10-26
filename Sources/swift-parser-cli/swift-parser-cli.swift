@@ -1,4 +1,4 @@
-//===--- swift-parser-cli.swift - Entry point for swift-parser-cli --------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -14,6 +14,7 @@ import SwiftDiagnostics
 import SwiftSyntax
 @_spi(Testing) import _SwiftSyntaxMacros
 import SwiftParser
+import SwiftParserDiagnostics
 import SwiftOperators
 import Foundation
 import ArgumentParser
@@ -216,8 +217,8 @@ class ExpandMacros: ParsableCommand {
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    try source.withUnsafeBufferPointer { sourceBuffer in
-      let tree = try Parser.parse(source: sourceBuffer)
+    source.withUnsafeBufferPointer { sourceBuffer in
+      let tree = Parser.parse(source: sourceBuffer)
 
       let resultTree: Syntax
       if foldSequences {

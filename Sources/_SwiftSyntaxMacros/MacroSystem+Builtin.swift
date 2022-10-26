@@ -1,8 +1,31 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
 struct ColumnMacro: ExpressionMacro {
   static var name: String { "column" }
+
+  static var documentation: String {
+    "The column at which this macro is used"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByIntegerLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -16,6 +39,17 @@ struct ColumnMacro: ExpressionMacro {
 
 struct LineMacro: ExpressionMacro {
   static var name: String { "line" }
+
+  static var documentation: String {
+    "The line at which this macro is used"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByIntegerLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -41,6 +75,17 @@ extension PatternBindingSyntax {
 
 struct FunctionMacro: ExpressionMacro {
   static var name: String { "function" }
+
+  static var documentation: String {
+    "The name of the function in which this macro is used"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   /// Form a function name.
   private static func formFunctionName(
@@ -144,13 +189,45 @@ struct FunctionMacro: ExpressionMacro {
   }
 }
 
+/// Replace the label of the first element in the tuple with the given
+/// new label.
+private func replaceFirstLabel(
+  of tuple: TupleExprElementListSyntax, with newLabel: String
+) -> TupleExprElementListSyntax{
+  guard let firstElement = tuple.first else {
+    return tuple
+  }
+
+  return tuple.replacing(
+    childAt: 0, with: firstElement.withLabel(.identifier(newLabel)))
+}
+
 struct ColorLiteralMacro: ExpressionMacro {
   static var name: String { "colorLiteral" }
+
+  static var documentation: String {
+    "A color value expressed in terms of its RGBA components"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByColorLiteral>
+     """
+
+  static var signature: TypeSyntax =
+     """
+     (
+      red: Float, green: Float, blue: Float, alpha: Float
+     ) -> T
+     """
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
-    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    let argList = replaceFirstLabel(
+      of: macro.argumentList, with: "_colorLiteralRed"
+    )
+    let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
     }
@@ -161,10 +238,25 @@ struct ColorLiteralMacro: ExpressionMacro {
 struct FileLiteralMacro: ExpressionMacro {
   static var name: String { "fileLiteral" }
 
+  static var documentation: String {
+    "A file resource in the application bundle"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+      """
+      <T: ExpressibleByFileReferenceLiteral>
+      """
+
+  static var signature: TypeSyntax =
+      "(resourceName path: String) -> T"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
-    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    let argList = replaceFirstLabel(
+      of: macro.argumentList, with: "fileReferenceLiteralResourceName"
+    )
+    let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
     }
@@ -175,10 +267,25 @@ struct FileLiteralMacro: ExpressionMacro {
 struct ImageLiteralMacro: ExpressionMacro {
   static var name: String { "imageLiteral" }
 
+  static var documentation: String {
+    "An image resource in the application bundle"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+      """
+      <T: ExpressibleByImageLiteral>
+      """
+
+  static var signature: TypeSyntax =
+      "(resourceName path: String) -> T"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
-    let initSyntax: ExprSyntax = ".init(\(macro.argumentList))"
+    let argList = replaceFirstLabel(
+      of: macro.argumentList, with: "imageLiteralResourceName"
+    )
+    let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
     }
@@ -188,6 +295,17 @@ struct ImageLiteralMacro: ExpressionMacro {
 
 struct FilePathMacro: ExpressionMacro {
   static var name: String { "filePath" }
+
+  static var documentation: String {
+    "The full path to the file in which this macro is used"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -205,6 +323,17 @@ struct FilePathMacro: ExpressionMacro {
 
 struct FileIDMacro: ExpressionMacro {
   static var name: String { "fileID" }
+
+  static var documentation: String {
+    "The file in which this macro is used in the form ModuleName/FileName"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -228,6 +357,17 @@ struct FileIDMacro: ExpressionMacro {
 
 struct FileMacro: ExpressionMacro {
   static var name: String { "file" }
+
+  static var documentation: String {
+    "The file in which this macro is used"
+  }
+
+  static var genericSignature: GenericParameterClauseSyntax? =
+     """
+     <T: ExpressibleByStringLiteral>
+     """
+
+  static var signature: TypeSyntax = "T"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext

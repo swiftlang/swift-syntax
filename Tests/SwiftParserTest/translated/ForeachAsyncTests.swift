@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 // This test file has been translated from swift/test/Parse/foreach_async.swift
 
 import XCTest
@@ -61,7 +73,6 @@ final class ForeachAsyncTests: XCTestCase {
           sum = sum + i + j
         }
         // Parse errors
-        // FIXME: Bad diagnostics; should be just 'expected 'in' after for-each patter'.
         for await i 1️⃣r { 
         }         
         for await i in r 2️⃣sum = sum + i;3️⃣

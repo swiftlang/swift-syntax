@@ -1,4 +1,4 @@
-//===------------------------- TopLevel.swift -----------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -37,12 +37,12 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseCodeBlockItemList(isAtTopLevel: Bool, stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
+  mutating func parseCodeBlockItemList(isAtTopLevel: Bool, allowInitDecl: Bool = true, stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
     while !stopCondition(&self), loopProgress.evaluate(currentToken) {
       let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
-      guard let newElement = self.parseCodeBlockItem(isAtTopLevel: isAtTopLevel) else {
+      guard let newElement = self.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) else {
         break
       }
       if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
@@ -68,11 +68,11 @@ extension Parser {
   ///
   /// This function is used when parsing places where function bodies are
   /// optional - like the function requirements in protocol declarations.
-  mutating func parseOptionalCodeBlock() -> RawCodeBlockSyntax? {
+  mutating func parseOptionalCodeBlock(allowInitDecl: Bool = true) -> RawCodeBlockSyntax? {
     guard self.at(.leftBrace) else {
       return nil
     }
-    return self.parseCodeBlock()
+    return self.parseCodeBlock(allowInitDecl: allowInitDecl)
   }
 
   /// Parse a code block.
@@ -85,9 +85,9 @@ extension Parser {
   /// `introducer` is the `while`, `if`, ... keyword that is the cause that the code block is being parsed.
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
-  mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil) -> RawCodeBlockSyntax {
+  mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let itemList = parseCodeBlockItemList(isAtTopLevel: false, stopCondition: { $0.at(.rightBrace) })
+    let itemList = parseCodeBlockItemList(isAtTopLevel: false, allowInitDecl: allowInitDecl, stopCondition: { $0.at(.rightBrace) })
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return .init(
@@ -118,7 +118,7 @@ extension Parser {
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
   @_spi(RawSyntax)
-  public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false) -> RawCodeBlockItemSyntax? {
+  public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax? {
     if self.at(any: [.caseKeyword, .defaultKeyword]) {
       // 'case' and 'default' are invalid in code block items.
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
@@ -134,7 +134,7 @@ extension Parser {
 
     // FIXME: It is unfortunate that the Swift book refers to these as
     // "statements" and not "items".
-    let item = self.parseItem(isAtTopLevel: isAtTopLevel)
+    let item = self.parseItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
     let semi = self.consume(if: .semicolon)
     var trailingSemis: [RawTokenSyntax] = []
     while let trailingSemi = self.consume(if: .semicolon) {
@@ -158,7 +158,7 @@ extension Parser {
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the
   /// wrapping declaration instead of being consumed by lookeahead.
-  private mutating func parseItem(isAtTopLevel: Bool = false) -> RawSyntax {
+  private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawSyntax {
     if self.at(.poundIfKeyword) {
       let directive = self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
@@ -174,13 +174,13 @@ extension Parser {
       return RawSyntax(directive)
     } else if self.at(.poundSourceLocationKeyword) {
       return RawSyntax(self.parsePoundSourceLocationDirective())
-    } else if self.atStartOfDeclaration() {
+    } else if self.atStartOfDeclaration(allowInitDecl: allowInitDecl) {
       return RawSyntax(self.parseDeclaration())
     } else if self.atStartOfStatement() {
       return RawSyntax(self.parseStatement())
     } else if self.atStartOfExpression() {
       return RawSyntax(self.parseExpression())
-    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowRecovery: true) {
+    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
       return RawSyntax(self.parseDeclaration())
     } else if self.atStartOfStatement(allowRecovery: true) {
       return RawSyntax(self.parseStatement())

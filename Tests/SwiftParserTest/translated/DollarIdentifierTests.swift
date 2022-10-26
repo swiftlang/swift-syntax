@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 // This test file has been translated from swift/test/Parse/dollar_identifier.swift
 
 import XCTest
@@ -17,17 +29,13 @@ final class DollarIdentifierTests: XCTestCase {
     AssertParse(
       """
       func dollarVar() {
-        var 2️⃣$ 3️⃣: Int = 42
+        var 1️⃣$ : Int = 42
         $ += 1
         print($)
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern in variable"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code in function"),
-        // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
-        // TODO: Old parser expected error on line 4: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
+        DiagnosticSpec(message: "'$' is not a valid identifier"),
       ]
     )
   }
@@ -41,8 +49,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 7 - 8 = '`$`'
-        DiagnosticSpec(message: "expected pattern in variable"),
+        DiagnosticSpec(message: "'$' is not a valid identifier"),
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
       ]
     )
@@ -56,9 +63,12 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
-        DiagnosticSpec(message: "expected identifier and member block in class"),
-      ]
+        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+      ], fixedSource: """
+      func dollarClass() {
+        class `$` {}
+      }
+      """
     )
   }
 
@@ -70,8 +80,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
-        DiagnosticSpec(message: "expected identifier and member block in enum"),
+        DiagnosticSpec(message: "'$' is not a valid identifier"),
       ]
     )
   }
@@ -84,31 +93,32 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(message: "expected identifier and member block in struct"),
+        DiagnosticSpec(message: "'$' is not a valid identifier"),
       ]
     )
   }
 
 
-  func testDollarIdentifier3() {
+  func testDollarIdentifier3a() {
     AssertParse(
       """
-      func dollarFunc() {
-        func 1️⃣$(2️⃣$ dollarParam: Int) {}
-        $($3️⃣: 24)
-      }
+      func 1️⃣$(2️⃣$ dollarParam: Int) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 8 - 9 = '`$`'
-        // TODO: Old parser expected error on line 2: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 10 - 11 = '`$`'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in function"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '$' before parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '$ dollarParam: Int' in parameter clause"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'$' is not a valid identifier"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'$' is not a valid identifier"),
+      ], fixedSource: "func `$`(`$` dollarParam: Int) {}"
+    )
+  }
+
+  func testDollarIdentifier3b() {
+    AssertParse(
+      """
+      $(1️⃣$: 24)
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
-        // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 5 - 6 = '`$`'
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ': 24' in function call"),
+        DiagnosticSpec(message: "'$' is not a valid identifier"),
       ]
     )
   }
@@ -215,28 +225,8 @@ final class DollarIdentifierTests: XCTestCase {
         higherThan: $Precedence 
       }
       infix operator **: $Precedence
-      1️⃣#$UnknownDirective()
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot declare entity named '$declareWithDollar'
-        // TODO: Old parser expected error on line 2: cannot declare entity named '$foo'
-        // TODO: Old parser expected error on line 4: cannot declare entity named '$value'
-        // TODO: Old parser expected error on line 6: cannot declare entity named '$bar'
-        // TODO: Old parser expected error on line 8: cannot declare entity named '$a'
-        // TODO: Old parser expected error on line 9: cannot declare entity named '$b'
-        // TODO: Old parser expected error on line 11: cannot declare entity named '$capture'
-        // TODO: Old parser expected error on line 12: inferred projection type 'Int' is not a property wrapper
-        // TODO: Old parser expected error on line 15: cannot declare entity named '$a'
-        // TODO: Old parser expected error on line 16: cannot declare entity named '$label'
-        // TODO: Old parser expected error on line 20: unknown attribute '$dollar'
-        // TODO: Old parser expected warning on line 23: unrecognized platform name '$Dummy'
-        // TODO: Old parser expected error on line 25: cannot declare entity named '$Class'; the '$' prefix is reserved
-        // TODO: Old parser expected error on line 26: cannot declare entity named '$Enum'; the '$' prefix is reserved
-        // TODO: Old parser expected error on line 27: cannot declare entity named '$Struct'; the '$' prefix is reserved
-        // TODO: Old parser expected error on line 32: cannot declare entity named '$Protocol'; the '$' prefix is reserved
-        // TODO: Old parser expected error on line 33: cannot declare entity named '$Precedence'; the '$' prefix is reserved
-        // TODO: Old parser expected error on line 37: use of unknown directive '#$UnknownDirective'
-      ]
+      #$UnknownDirective()
+      """
     )
   }
 

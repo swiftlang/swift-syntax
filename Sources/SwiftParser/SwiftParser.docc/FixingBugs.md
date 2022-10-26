@@ -4,7 +4,7 @@ Guide to write test cases in the parser’s test suite and how to debug failures
 
 The general approach to fixing bugs in the parser is to first write an automated test case that reproduces the test case in isolation. This allows you to invoke the parser with minimal dependencies and allows you to set breakpoints inside of it. 
 
-Once you’ve written a test case (see below), set a breakpoint in `Parser.parseSourceFile` and navigate the debugger to the place where the parser behaves unexpectedly. While the debugger is stopped at an instance function in <doc:SwiftParser/Parser>, `po self.currentToken` can show you the next token that will be parsed.
+Once you’ve written a test case (see below), set a breakpoint in `Parser.parseSourceFile` and navigate the debugger to the place where the parser behaves unexpectedly. While the debugger is stopped at an instance function in <doc:SwiftParser/Parser>, `po self.currentToken` can show you the next token that will be parsed. `po self.lexemes` can show the next tokens that will be parsed.
 
 ## Round-Trip Failure or Parser Crash
 

@@ -1,4 +1,4 @@
-//===-------------------------- Lexer.swift -------------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -22,7 +22,7 @@ public struct Lexer {
   /// A lexeme is the fundamental output unit of lexical analysis. Each lexeme
   /// represents a fully identified, meaningful part of the input text that
   /// will can be consumed by a ``Parser``.
-  public struct Lexeme {
+  public struct Lexeme: CustomDebugStringConvertible {
     public struct Flags: OptionSet {
       public var rawValue: UInt8
 
@@ -101,13 +101,17 @@ public struct Lexer {
       SyntaxText(baseAddress: start.advanced(by: leadingTriviaByteLength+textByteLength),
                  count: trailingTriviaByteLength)
     }
+
+    public var debugDescription: String {
+      return String(syntaxText: SyntaxText(baseAddress: start, count: byteLength))
+    }
   }
 }
 
 extension Lexer {
   /// A sequence of ``Lexer/Lexeme`` tokens starting from a ``Lexer/Cursor``
   /// that points into an input buffer.
-  public struct LexemeSequence: IteratorProtocol, Sequence {
+  public struct LexemeSequence: IteratorProtocol, Sequence, CustomDebugStringConvertible {
     fileprivate let start: Lexer.Cursor
     fileprivate var cursor: Lexer.Cursor
     fileprivate var nextToken: Lexer.Lexeme
@@ -153,6 +157,15 @@ extension Lexer {
 
     func peek() -> Lexer.Lexeme {
       return self.nextToken
+    }
+
+    public var debugDescription: String {
+      let remainingText = self.nextToken.debugDescription + String(syntaxText: SyntaxText(baseAddress: self.cursor.input.baseAddress, count: self.cursor.input.count))
+      if remainingText.count > 100 {
+        return remainingText.prefix(100) + "..."
+      } else {
+        return remainingText
+      }
     }
   }
 

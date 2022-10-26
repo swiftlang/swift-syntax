@@ -1,26 +1,66 @@
 import SwiftSyntaxBuilder
 
-/// This example will print the following example:
-///
-///```
-/// import Foundation
-/// import UIKit
-/// class SomeViewController{
-///    let tableView: UITableView
-/// }
-///```
-
-let source = SourceFile {
-  ImportDecl(path: "Foundation")
-  ImportDecl(path: "UIKit")
-  ClassDecl(identifier: "SomeViewController") {
-    VariableDecl(.let, name: "tableView", type: "UITableView")
+extension String {
+  func withFirstLetterUppercased() -> String {
+    if let firstLetter = self.first {
+      return firstLetter.uppercased() + self.dropFirst()
+    } else {
+      return self
+    }
   }
 }
 
-let syntax = source.buildSyntax(format: Format())
+/// This example will print the following code:
+///
+/// ```
+/// struct Person {
+/// var lastName: String
+/// func withLastName(_ lastName: String) -> Person {
+///     var result = self
+///     result.lastName = lastName
+///     return result
+/// }
+/// var firstName: String
+/// func withFirstName(_ firstName: String) -> Person {
+///     var result = self
+///     result.firstName = firstName
+///     return result
+/// }
+/// var age: Int
+/// func withAge(_ age: Int) -> Person {
+///     var result = self
+///     result.age = age
+///     return result
+/// }
+/// }
+/// ```
+///
+@main
+struct Main {
+  static func main() {
+    let properties = [
+      "firstName": "String",
+      "lastName": "String",
+      "age": "Int",
+    ]
 
-var text = ""
-syntax.write(to: &text)
+    let source = SourceFile {
+      StructDecl(identifier: "Person") {
+        for (propertyName, propertyType) in properties {
+          VariableDecl("var \(propertyName): \(propertyType)")
 
-print(text)
+          FunctionDecl("""
+            func with\(propertyName.withFirstLetterUppercased())(_ \(propertyName): \(propertyType)) -> Person {
+              var result = self
+              result.\(propertyName) = \(propertyName)
+              return result
+            }
+            """
+          )
+        }
+      }
+    }
+
+    print(source.formatted().description)
+  }
+}

@@ -1,4 +1,18 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 // This test file has been translated from swift/test/Parse/init_deinit.swift
+
+import SwiftSyntax
 
 import XCTest
 
@@ -154,7 +168,7 @@ final class InitDeinitTests: XCTestCase {
         DiagnosticSpec(message: "deinitializers cannot have parameters", fixIts: ["remove function signature"]),
       ], fixedSource: """
       class FooClassDeinitializerA {
-        deinit{}
+        deinit {}
       }
       """
     )
@@ -333,15 +347,9 @@ final class InitDeinitTests: XCTestCase {
     AssertParse(
       """
       class Aaron {
-        init(x: Int) {}
-        convenience init() { init(x: 1️⃣1) } 
+        convenience init() { init(x: 1) }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 24 - 24 = 'self.'
-        DiagnosticSpec(message: "expected type in parameter"),
-        DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
-      ]
+      """
     )
   }
 
@@ -350,15 +358,10 @@ final class InitDeinitTests: XCTestCase {
       """
       class Theodosia: Aaron {
         init() {
-          init(x: 1️⃣2) 
+          init(x: 2)
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'super.' at initializer invocation, Fix-It replacements: 5 - 5 = 'super.'
-        DiagnosticSpec(message: "expected type in parameter"),
-        DiagnosticSpec(message: "unexpected code '2' in parameter clause"),
-      ]
+      """
     )
   }
 
@@ -367,14 +370,9 @@ final class InitDeinitTests: XCTestCase {
       """
       struct AaronStruct {
         init(x: Int) {}
-        init() { init(x: 1️⃣1) } 
+        init() { init(x: 1) }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 12 - 12 = 'self.'
-        DiagnosticSpec(message: "expected type in parameter"),
-        DiagnosticSpec(message: "unexpected code '1' in parameter clause"),
-      ]
+      """
     )
   }
 
@@ -383,13 +381,9 @@ final class InitDeinitTests: XCTestCase {
       """
       enum AaronEnum: Int {
         case A = 1
-        init(x: Int) { init(rawValue: x)1️⃣! } 
+        init(x: Int) { init(rawValue: x)! }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: missing 'self.' at initializer invocation, Fix-It replacements: 18 - 18 = 'self.'
-        DiagnosticSpec(message: "unexpected code '!' in initializer"),
-      ]
+      """
     )
   }
 
@@ -400,7 +394,13 @@ final class InitDeinitTests: XCTestCase {
         deinit
         final func foo()
       }
-      """
+      """,
+      substructure: Syntax(DeinitializerDeclSyntax(
+        attributes: nil,
+        modifiers: nil,
+        deinitKeyword: .deinitKeyword(),
+        body: nil
+      ))
     )
   }
 }

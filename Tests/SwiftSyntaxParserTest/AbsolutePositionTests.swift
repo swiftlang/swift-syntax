@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxParser
@@ -40,7 +52,7 @@ public class AbsolutePositionTests: XCTestCase {
   public func testRename() {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      let renamed = FuncRenamer().visit(parsed).as(SourceFileSyntax.self)!
+      let renamed = FuncRenamer().visit(parsed)
       let renamedSource = renamed.description
       XCTAssertEqual(renamedSource.count, 
         renamed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
@@ -68,7 +80,7 @@ public class AbsolutePositionTests: XCTestCase {
     let idx = 2000
     for _ in 0...idx {
       l.append(CodeBlockItemSyntax(
-        item: Syntax(
+        item: .init(
           ReturnStmtSyntax(
             returnKeyword: .returnKeyword(trailingTrivia: .newline),
             expression: nil
@@ -100,7 +112,7 @@ public class AbsolutePositionTests: XCTestCase {
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
     let items : [CodeBlockItemSyntax] =
     [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax(
-      item: Syntax(ReturnStmtSyntax(
+      item: .init(ReturnStmtSyntax(
         returnKeyword: .returnKeyword(
           leadingTrivia: AbsolutePositionTests.leadingTrivia,
           trailingTrivia: AbsolutePositionTests.trailingTrivia
@@ -170,7 +182,7 @@ public class AbsolutePositionTests: XCTestCase {
 
   public func testWithoutSourceFileRoot() {
     let item = CodeBlockItemSyntax(
-      item: Syntax(
+      item: .init(
         ReturnStmtSyntax(
           returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline),
           expression: nil)

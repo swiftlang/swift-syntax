@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -27,7 +39,7 @@ final class MacroSystemTests: XCTestCase {
       1
       let a = (2)
       let b = (x + y, #"x + y"#)
-      .init(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
+      .init(_colorLiteralRed: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       let c = 9
       """
     )
@@ -127,5 +139,10 @@ final class MacroSystemTests: XCTestCase {
       let b = "MyModule/taylor.swift"
       """
     )
+  }
+
+  func testDocumentation() {
+    let macro = MacroSystem.builtinMacroSystem.lookup("line")!
+    XCTAssertEqual(macro.documentation, "The line at which this macro is used")
   }
 }

@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import SwiftSyntax
 import _SwiftSyntaxTestSupport
 import SwiftSyntaxParser
@@ -200,7 +212,7 @@ public class SyntaxComparisonTests: XCTestCase {
     var items = [CodeBlockItemSyntax]()
     for i in 0..<statementCount {
       let literal = IntegerLiteralExprSyntax(digits: .integerLiteral(String(i)))
-      items.append(CodeBlockItemSyntax(item: Syntax(literal), semicolon: nil, errorTokens: nil))
+      items.append(CodeBlockItemSyntax(item: .init(literal), semicolon: nil, errorTokens: nil))
     }
     let block = CodeBlockItemListSyntax(items)
     return CodeBlockSyntax(

@@ -1,4 +1,4 @@
-//===----------------------- Declarations.swift ---------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -31,6 +31,7 @@ extension DeclarationModifier {
 extension TokenConsumer {
   func atStartOfDeclaration(
     isAtTopLevel: Bool = false,
+    allowInitDecl: Bool = true,
     allowRecovery: Bool = false
   ) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
@@ -93,12 +94,14 @@ extension TokenConsumer {
       var lookahead = subparser.lookahead()
       repeat {
         lookahead.consumeAnyToken()
-      } while lookahead.atStartOfDeclaration()
+      } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl)
       return lookahead.at(.identifier)
     case .caseKeyword:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
+    case .initKeyword:
+      return allowInitDecl
     case .some(_):
       // All other decl start keywords unconditonally start a decl.
       return true
@@ -106,7 +109,7 @@ extension TokenConsumer {
       if subparser.at(anyIn: ContextualDeclKeyword.self)?.0 != nil {
         subparser.consumeAnyToken()
         return subparser.atStartOfDeclaration(
-          isAtTopLevel: isAtTopLevel, allowRecovery: allowRecovery)
+          isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: allowRecovery)
       }
       return false
     }
@@ -191,15 +194,15 @@ extension Parser {
     case (.importKeyword, let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.classKeyword, let handle)?:
-      return RawDeclSyntax(self.parseClassDeclaration(attrs, handle))
+      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle))
     case (.enumKeyword, let handle)?:
-      return RawDeclSyntax(self.parseEnumDeclaration(attrs, handle))
+      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle))
     case (.caseKeyword, let handle)?:
       return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
     case (.structKeyword, let handle)?:
-      return RawDeclSyntax(self.parseStructDeclaration(attrs, handle))
+      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle))
     case (.protocolKeyword, let handle)?:
-      return RawDeclSyntax(self.parseProtocolDeclaration(attrs, handle))
+      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle))
     case (.associatedtypeKeyword, let handle)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
     case (.typealiasKeyword, let handle)?:
@@ -221,7 +224,7 @@ extension Parser {
     case (.precedencegroupKeyword, let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
     case (.actorContextualKeyword, let handle)?:
-      return RawDeclSyntax(self.parseActorDeclaration(attrs, handle))
+      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
     case nil:
       if inMemberDeclList {
         let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().tokenKind.is(any: [.colon, .equal, .comma])
@@ -672,205 +675,6 @@ extension Parser {
 }
 
 extension Parser {
-  /// Parse a class declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     class-declaration → attributes? access-level-modifier? final? 'class' class-name generic-parameter-clause? type-inheritance-clause? generic-where-clause? class-body
-  ///     class-declaration → attributes? final access-level-modifier? 'class' class-name generic-parameter-clause? type-inheritance-clause? generic-where-clause? class-body
-  ///
-  ///     class-name → identifier
-  ///
-  ///     class-body → '{' class-members? '}'
-  ///
-  ///     class-members → class-member class-members?
-  ///     class-member → declaration | compiler-control-statement
-  @_spi(RawSyntax)
-  public mutating func parseClassDeclaration(
-    _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
-  ) -> RawClassDeclSyntax {
-    let (unexpectedBeforeClassKeyword, classKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
-    if unexpectedBeforeName == nil && name.isMissing {
-      return RawClassDeclSyntax(
-        attributes: attrs.attributes,
-        modifiers: attrs.modifiers,
-        unexpectedBeforeClassKeyword,
-        classKeyword: classKeyword,
-        unexpectedBeforeName,
-        identifier: name,
-        genericParameterClause: nil,
-        inheritanceClause: nil,
-        genericWhereClause: nil,
-        members: RawMemberDeclBlockSyntax(
-          leftBrace: RawTokenSyntax(missing: .leftBrace, arena: self.arena),
-          members: RawMemberDeclListSyntax(elements: [], arena: self.arena),
-          rightBrace: RawTokenSyntax(missing: .rightBrace, arena: self.arena),
-          arena: self.arena
-        ),
-        arena: self.arena)
-    }
-
-    let generics: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
-      generics = self.parseGenericParameters()
-    } else {
-      generics = nil
-    }
-
-    let inheritance: RawTypeInheritanceClauseSyntax?
-    if self.at(.colon) {
-      inheritance = self.parseInheritance()
-    } else {
-      inheritance = nil
-    }
-
-    // Parse a 'where' clause if present.
-    let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
-      whereClause = self.parseGenericWhereClause()
-    } else {
-      whereClause = nil
-    }
-
-    let members = self.parseMemberDeclList(introducer: classKeyword)
-    return RawClassDeclSyntax(
-      attributes: attrs.attributes,
-      modifiers: attrs.modifiers,
-      unexpectedBeforeClassKeyword,
-      classKeyword: classKeyword,
-      unexpectedBeforeName,
-      identifier: name,
-      genericParameterClause: generics,
-      inheritanceClause: inheritance,
-      genericWhereClause: whereClause,
-      members: members,
-      arena: self.arena)
-  }
-
-  /// Parse a class declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     type-inheritance-clause → ':' type-inheritance-list
-  ///     type-inheritance-list → attributes? type-identifier | attributes? type-identifier ',' type-inheritance-list
-  @_spi(RawSyntax)
-  public mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
-    let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    var elements = [RawInheritedTypeSyntax]()
-    do {
-      var keepGoing: RawTokenSyntax? = nil
-      var loopProgress = LoopProgressCondition()
-      repeat {
-        let type: RawTypeSyntax
-        if let classKeyword = self.consume(if: .classKeyword) {
-          type = RawTypeSyntax(RawClassRestrictionTypeSyntax(
-            classKeyword: classKeyword,
-            arena: self.arena
-          ))
-        } else {
-          type = self.parseType()
-        }
-
-        keepGoing = self.consume(if: .comma)
-        elements.append(RawInheritedTypeSyntax(
-          typeName: type, trailingComma: keepGoing, arena: self.arena))
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
-    }
-    return RawTypeInheritanceClauseSyntax(
-      unexpectedBeforeColon,
-      colon: colon,
-      inheritedTypeCollection: RawInheritedTypeListSyntax(elements: elements, arena: self.arena),
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  /// Parse an enum declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     enum-declaration → attributes? access-level-modifier? union-style-enum
-  ///     enum-declaration → attributes? access-level-modifier? raw-value-style-enum
-  ///
-  ///     union-style-enum → 'indirect'? 'enum' enum-name generic-parameter-clause? type-inheritance-clause? generic-where-clause?' '{' union-style-enum-members? '}'
-  ///     union-style-enum-members → union-style-enum-member union-style-enum-members?
-  ///     union-style-enum-member → declaration | union-style-enum-case-clause | compiler-control-statement
-  ///
-  ///     enum-name → identifier
-  ///     enum-case-name → identifier
-  ///
-  ///     raw-value-style-enum → 'enum' enum-name generic-parameter-clause? type-inheritance-clause generic-where-clause? '{' raw-value-style-enum-members '}'
-  ///     raw-value-style-enum-members → raw-value-style-enum-member raw-value-style-enum-members?
-  ///     raw-value-style-enum-member → declaration | raw-value-style-enum-case-clause | compiler-control-statement
-  @_spi(RawSyntax)
-  public mutating func parseEnumDeclaration(
-    _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
-  ) -> RawEnumDeclSyntax {
-    let (unexpectedBeforeEnumKeyword, enumKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
-    if unexpectedBeforeName == nil, name.isMissing {
-      return RawEnumDeclSyntax(
-        attributes: attrs.attributes,
-        modifiers: attrs.modifiers,
-        unexpectedBeforeEnumKeyword,
-        enumKeyword: enumKeyword,
-        unexpectedBeforeName,
-        identifier: name,
-        genericParameters: nil,
-        inheritanceClause: nil,
-        genericWhereClause: nil,
-        members: RawMemberDeclBlockSyntax(
-          leftBrace: RawTokenSyntax(missing: .leftBrace, arena: self.arena),
-          members: RawMemberDeclListSyntax(elements: [], arena: self.arena),
-          rightBrace: RawTokenSyntax(missing: .rightBrace, arena: self.arena),
-          arena: self.arena
-        ),
-        arena: self.arena)
-    }
-
-    let generics: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
-      generics = self.parseGenericParameters()
-    } else {
-      generics = nil
-    }
-
-    let inheritance: RawTypeInheritanceClauseSyntax?
-    if self.at(.colon) {
-      inheritance = self.parseInheritance()
-    } else {
-      inheritance = nil
-    }
-
-    // Parse a 'where' clause if present.
-    let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
-      whereClause = self.parseGenericWhereClause()
-    } else {
-      whereClause = nil
-    }
-
-    let members = self.parseMemberDeclList(introducer: enumKeyword)
-    return RawEnumDeclSyntax(
-      attributes: attrs.attributes, modifiers: attrs.modifiers,
-      unexpectedBeforeEnumKeyword,
-      enumKeyword: enumKeyword,
-      unexpectedBeforeName,
-      identifier: name,
-      genericParameters: generics,
-      inheritanceClause: inheritance,
-      genericWhereClause: whereClause,
-      members: members,
-      arena: self.arena)
-  }
-
   /// Parse an enum 'case' declaration.
   ///
   /// Grammar
@@ -938,200 +742,7 @@ extension Parser {
       elements: RawEnumCaseElementListSyntax(elements: elements, arena: self.arena),
       arena: self.arena)
   }
-}
 
-extension Parser {
-  /// Parse a struct declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     struct-declaration → attributes? access-level-modifier? struct struct-name generic-parameter-clause? type-inheritance-clause? generic-where-clause? struct-body
-  ///
-  ///     struct-name → identifier
-  ///
-  ///     struct-body → '{' struct-members? '}'
-  ///
-  ///     struct-members → struct-member struct-members?
-  ///     struct-member → declaration | compiler-control-statement
-  @_spi(RawSyntax)
-  public mutating func parseStructDeclaration(
-    _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
-  ) -> RawStructDeclSyntax {
-    let (unexpectedBeforeStructKeyword, structKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
-    if unexpectedBeforeName == nil && name.isMissing {
-      return RawStructDeclSyntax(
-        attributes: attrs.attributes,
-        modifiers: attrs.modifiers,
-        unexpectedBeforeStructKeyword,
-        structKeyword: structKeyword,
-        unexpectedBeforeName,
-        identifier: name,
-        genericParameterClause: nil,
-        inheritanceClause: nil,
-        genericWhereClause: nil,
-        members: RawMemberDeclBlockSyntax(
-          leftBrace: RawTokenSyntax(missing: .leftBrace, arena: self.arena),
-          members: RawMemberDeclListSyntax(elements: [], arena: self.arena),
-          rightBrace: RawTokenSyntax(missing: .rightBrace, arena: self.arena),
-          arena: self.arena
-        ),
-        arena: self.arena)
-    }
-
-    let generics: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
-      generics = self.parseGenericParameters()
-    } else {
-      generics = nil
-    }
-
-    let inheritance: RawTypeInheritanceClauseSyntax?
-    if self.at(.colon) {
-      inheritance = self.parseInheritance()
-    } else {
-      inheritance = nil
-    }
-
-    // Parse a 'where' clause if present.
-    let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
-      whereClause = self.parseGenericWhereClause()
-    } else {
-      whereClause = nil
-    }
-
-    let members = self.parseMemberDeclList(introducer: structKeyword)
-    return RawStructDeclSyntax(
-      attributes: attrs.attributes, modifiers: attrs.modifiers,
-      unexpectedBeforeStructKeyword,
-      structKeyword: structKeyword,
-      unexpectedBeforeName,
-      identifier: name,
-      genericParameterClause: generics,
-      inheritanceClause: inheritance,
-      genericWhereClause: whereClause,
-      members: members,
-      arena: self.arena)
-  }
-}
-
-extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {
-    let langle = self.consumeAnyToken(remapping: .leftAngle)
-    var associatedTypes = [RawPrimaryAssociatedTypeSyntax]()
-    do {
-      var keepGoing: RawTokenSyntax? = nil
-      var loopProgress = LoopProgressCondition()
-      repeat {
-        // Parse the name of the parameter.
-        let (unexpectedBeforeName, name) = self.expectIdentifier()
-        keepGoing = self.consume(if: .comma)
-        associatedTypes.append(RawPrimaryAssociatedTypeSyntax(
-          unexpectedBeforeName,
-          name: name,
-          trailingComma: keepGoing,
-          arena: self.arena))
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
-    }
-    let rangle = self.consumeAnyToken(remapping: .rightAngle)
-    return RawPrimaryAssociatedTypeClauseSyntax(
-      leftAngleBracket: langle,
-      primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
-      rightAngleBracket: rangle,
-      arena: self.arena)
-  }
-
-  /// Parse a protocol declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     protocol-declaration → attributes? access-level-modifier? 'protocol' protocol-name type-inheritance-clause? generic-where-clause? protocol-body
-  ///
-  ///     protocol-name → identifier
-  ///     protocol-body → '{' protocol-members? '}'
-  ///
-  ///     protocol-members → protocol-member protocol-members?
-  ///     protocol-member → protocol-member-declaration | compiler-control-statement
-  ///
-  ///     protocol-member-declaration → protocol-property-declaration
-  ///     protocol-member-declaration → protocol-method-declaration
-  ///     protocol-member-declaration → protocol-initializer-declaration
-  ///     protocol-member-declaration → protocol-subscript-declaration
-  ///     protocol-member-declaration → protocol-associated-type-declaration
-  ///     protocol-member-declaration → typealias-declaration
-  @_spi(RawSyntax)
-  public mutating func parseProtocolDeclaration(
-    _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
-  ) -> RawProtocolDeclSyntax {
-    let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
-    if unexpectedBeforeName == nil && name.isMissing {
-      return RawProtocolDeclSyntax(
-        attributes: attrs.attributes,
-        modifiers: attrs.modifiers,
-        unexpectedBeforeProtocolKeyword,
-        protocolKeyword: protocolKeyword,
-        unexpectedBeforeName,
-        identifier: name,
-        primaryAssociatedTypeClause: nil,
-        inheritanceClause: nil,
-        genericWhereClause: nil,
-        members: RawMemberDeclBlockSyntax(
-          leftBrace: RawTokenSyntax(missing: .leftBrace, arena: self.arena),
-          members: RawMemberDeclListSyntax(elements: [], arena: self.arena),
-          rightBrace: RawTokenSyntax(missing: .rightBrace, arena: self.arena),
-          arena: self.arena
-        ),
-        arena: self.arena)
-    }
-
-    let primaries: RawPrimaryAssociatedTypeClauseSyntax?
-    if self.currentToken.starts(with: "<") {
-      primaries = self.parsePrimaryAssociatedTypes()
-    } else {
-      primaries = nil
-    }
-
-
-    // Parse optional inheritance clause.
-    let inheritance: RawTypeInheritanceClauseSyntax?
-    if self.at(.colon) {
-      inheritance = self.parseInheritance()
-    } else {
-      inheritance = nil
-    }
-
-    // Parse a 'where' clause if present.
-    let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
-      whereClause = self.parseGenericWhereClause()
-    } else {
-      whereClause = nil
-    }
-
-    let members = self.parseMemberDeclList(introducer: protocolKeyword)
-
-    return RawProtocolDeclSyntax(
-      attributes: attrs.attributes, modifiers: attrs.modifiers,
-      unexpectedBeforeProtocolKeyword,
-      protocolKeyword: protocolKeyword,
-      unexpectedBeforeName,
-      identifier: name,
-      primaryAssociatedTypeClause: primaries,
-      inheritanceClause: inheritance,
-      genericWhereClause: whereClause,
-      members: members,
-      arena: self.arena)
-  }
-}
-
-extension Parser {
   /// Parse an associated type declaration.
   ///
   /// Grammar
@@ -1206,64 +817,6 @@ extension Parser {
 }
 
 extension Parser {
-  /// Parse an actor declaration.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     actor-declaration → attributes? access-level-modifier? 'actor' actor-name generic-parameter-clause? type-inheritance-clause? generic-where-clause? actor-body
-  ///     actor-name → identifier
-  ///     actor-body → '{' actor-members? '}'
-  ///     actor-members → actor-member actor-members?
-  ///     actor-member → declaration | compiler-control-statement
-  @_spi(RawSyntax)
-  public mutating func parseActorDeclaration(
-    _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
-  ) -> RawActorDeclSyntax {
-    let (unexpectedBeforeActorKeyword, actorKeyword) = self.eat(handle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
-
-    let generics: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
-      generics = self.parseGenericParameters()
-    } else {
-      generics = nil
-    }
-
-    // Parse optional inheritance clause.
-    let inheritance: RawTypeInheritanceClauseSyntax?
-    if self.at(.colon) {
-      inheritance = self.parseInheritance()
-    } else {
-      inheritance = nil
-    }
-
-    // Parse a 'where' clause if present.
-    let whereClause: RawGenericWhereClauseSyntax?
-    if self.at(.whereKeyword) {
-      whereClause = self.parseGenericWhereClause()
-    } else {
-      whereClause = nil
-    }
-
-    let members = self.parseMemberDeclList(introducer: actorKeyword)
-    return RawActorDeclSyntax(
-      attributes: attrs.attributes,
-      modifiers: attrs.modifiers,
-      unexpectedBeforeActorKeyword,
-      actorKeyword: actorKeyword,
-      unexpectedBeforeName,
-      identifier: name,
-      genericParameterClause: generics,
-      inheritanceClause: inheritance,
-      genericWhereClause: whereClause,
-      members: members,
-      arena: self.arena)
-  }
-}
-
-extension Parser {
   /// Parse an initializer declaration.
   ///
   /// Grammar
@@ -1310,7 +863,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let items = self.parseOptionalCodeBlock()
+    let items = self.parseOptionalCodeBlock(allowInitDecl: false)
 
     return RawInitializerDeclSyntax(
       attributes: attrs.attributes,
@@ -1356,7 +909,6 @@ extension Parser {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
   public enum ParameterSubject {
     case closure
     case enumCase
@@ -1394,105 +946,118 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
+  public mutating func parseFunctionParameter(for subject: ParameterSubject) -> RawFunctionParameterSyntax {
+    // Parse any declaration attributes. The exception here is enum cases
+    // which only allow types, so we do not consume attributes to allow the
+    // type attribute grammar a chance to examine them.
+    let attrs: RawAttributeListSyntax?
+    if case .enumCase = subject {
+      attrs = nil
+    } else {
+      attrs = self.parseAttributeList()
+    }
+
+    let modifiers = parseParameterModifiers(for: subject)
+
+    var misplacedSpecifiers: [RawTokenSyntax] = []
+    while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
+      misplacedSpecifiers.append(specifier)
+    }
+
+    let unexpectedBeforeFirstName: RawUnexpectedNodesSyntax?
+    let firstName: RawTokenSyntax?
+    let unexpectedBeforeSecondName: RawUnexpectedNodesSyntax?
+    let secondName: RawTokenSyntax?
+    let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
+    let colon: RawTokenSyntax?
+    let shouldParseType: Bool
+
+    if self.withLookahead({ $0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
+      if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+        (unexpectedBeforeFirstName, firstName) = self.parseArgumentLabel()
+      } else {
+        unexpectedBeforeFirstName = nil
+        firstName = nil
+      }
+
+      if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+        (unexpectedBeforeSecondName, secondName) = self.parseArgumentLabel()
+      } else {
+        unexpectedBeforeSecondName = nil
+        secondName = nil
+      }
+      if subject.isClosure {
+        unexpectedBeforeColon = nil
+        colon = self.consume(if: .colon)
+        shouldParseType = (colon != nil)
+      } else {
+        (unexpectedBeforeColon, colon) = self.expect(.colon)
+        shouldParseType = true
+      }
+    } else {
+      unexpectedBeforeFirstName = nil
+      firstName = nil
+      unexpectedBeforeSecondName = nil
+      secondName = nil
+      unexpectedBeforeColon = nil
+      colon = nil
+      shouldParseType = true
+    }
+
+    let type: RawTypeSyntax?
+    if shouldParseType {
+      type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+    } else {
+      type = nil
+    }
+
+    let ellipsis: RawTokenSyntax?
+    if self.atContextualPunctuator("...") {
+      ellipsis = self.consumeAnyToken(remapping: .ellipsis)
+    } else {
+      ellipsis = nil
+    }
+
+    let defaultArgument: RawInitializerClauseSyntax?
+    if self.at(.equal) {
+      defaultArgument = self.parseDefaultArgument()
+    } else {
+      defaultArgument = nil
+    }
+
+    let trailingComma = self.consume(if: .comma)
+    return RawFunctionParameterSyntax(
+      attributes: attrs,
+      modifiers: modifiers,
+      RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirstName?.elements ?? []), arena: self.arena),
+      firstName: firstName,
+      unexpectedBeforeSecondName,
+      secondName: secondName,
+      unexpectedBeforeColon,
+      colon: colon,
+      type: type,
+      ellipsis: ellipsis,
+      defaultArgument: defaultArgument,
+      trailingComma: trailingComma,
+      arena: self.arena)
+  }
+
+  @_spi(RawSyntax)
   public mutating func parseParameterClause(for subject: ParameterSubject) -> RawParameterClauseSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawFunctionParameterSyntax]()
     // If we are missing the left parenthesis and the next token doesn't appear
     // to be an argument label, don't parse any parameters.
-    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel || currentToken.isKeyword)
+    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightParen])
               && keepGoing
               && loopProgress.evaluate(currentToken) {
-        // Parse any declaration attributes. The exception here is enum cases
-        // which only allow types, so we do not consume attributes to allow the
-        // type attribute grammar a chance to examine them.
-        let attrs: RawAttributeListSyntax?
-        if case .enumCase = subject {
-          attrs = nil
-        } else {
-          attrs = self.parseAttributeList()
-        }
-
-        let modifiers = parseParameterModifiers(for: subject)
-
-        var misplacedSpecifiers: [RawTokenSyntax] = []
-        while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
-          misplacedSpecifiers.append(specifier)
-        }
-
-        let firstName: RawTokenSyntax?
-        let secondName: RawTokenSyntax?
-        let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
-        let colon: RawTokenSyntax?
-        let shouldParseType: Bool
-
-        if self.withLookahead({ $0.startsParameterName(isClosure: subject.isClosure, allowMisplacedSpecifierRecovery: false) }) {
-          if self.currentToken.canBeArgumentLabel {
-            firstName = self.parseArgumentLabel()
-          } else {
-            firstName = nil
-          }
-
-          if self.currentToken.canBeArgumentLabel {
-            secondName = self.parseArgumentLabel()
-          } else {
-            secondName = nil
-          }
-          if subject.isClosure {
-            unexpectedBeforeColon = nil
-            colon = self.consume(if: .colon)
-            shouldParseType = (colon != nil)
-          } else {
-            (unexpectedBeforeColon, colon) = self.expect(.colon)
-            shouldParseType = true
-          }
-        } else {
-          firstName = nil
-          secondName = nil
-          unexpectedBeforeColon = nil
-          colon = nil
-          shouldParseType = true
-        }
-
-        let type: RawTypeSyntax?
-        if shouldParseType {
-          type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
-        } else {
-          type = nil
-        }
-
-        let ellipsis: RawTokenSyntax?
-        if self.atContextualPunctuator("...") {
-          ellipsis = self.consumeAnyToken(remapping: .ellipsis)
-        } else {
-          ellipsis = nil
-        }
-
-        let defaultArgument: RawInitializerClauseSyntax?
-        if self.at(.equal) {
-          defaultArgument = self.parseDefaultArgument()
-        } else {
-          defaultArgument = nil
-        }
-
-        let trailingComma = self.consume(if: .comma)
-        keepGoing = trailingComma != nil
-        elements.append(RawFunctionParameterSyntax(
-          attributes: attrs,
-          modifiers: modifiers,
-          RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
-          firstName: firstName,
-          secondName: secondName,
-          unexpectedBeforeColon,
-          colon: colon,
-          type: type,
-          ellipsis: ellipsis,
-          defaultArgument: defaultArgument,
-          trailingComma: trailingComma,
-          arena: self.arena))
+        let parameter = parseFunctionParameter(for: subject)
+        keepGoing = parameter.trailingComma != nil
+        elements.append(parameter)
       }
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)

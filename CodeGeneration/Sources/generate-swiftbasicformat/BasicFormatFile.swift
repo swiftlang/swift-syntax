@@ -19,10 +19,10 @@ import Utils
 let basicFormatFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
-    path: "SwiftSyntax"
+    path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 
-  ClassDecl(modifiers: [Token.open], identifier: "BasicFormat", inheritanceClause: TypeInheritanceClause { InheritedType(typeName: "SyntaxRewriter") }) {
+  ClassDecl(modifiers: [DeclModifier(name: .open)], identifier: "BasicFormat", inheritanceClause: TypeInheritanceClause { InheritedType(typeName: Type("SyntaxRewriter")) }) {
     VariableDecl("public var indentationLevel: Int = 0")
     VariableDecl("open var indentation: TriviaPiece { .spaces(indentationLevel * 4) }")
     VariableDecl("public var indentedNewline: Trivia { Trivia(pieces: [.newlines(1), indentation]) }")
@@ -40,16 +40,31 @@ let basicFormatFile = SourceFile {
   }
 }
 
+private func createChildVisitCall(childType: SyntaxBuildableType, rewrittenExpr: ExprSyntaxProtocol) -> FunctionCallExpr {
+  let visitCall: FunctionCallExpr
+  if childType.isOptional {
+    visitCall = FunctionCallExpr("\(rewrittenExpr).map(self.visit)")
+  } else {
+    visitCall = FunctionCallExpr("self.visit(\(rewrittenExpr))")
+  }
+  if childType.baseType?.baseName != "Syntax", childType.baseType?.isSyntaxCollection != true, childType.baseType != nil {
+    let optionalChained = childType.optionalChained(expr: visitCall)
+    return FunctionCallExpr("\(optionalChained).cast(\(childType.syntaxBaseName).self)")
+  } else {
+    return visitCall
+  }
+}
+
 private func makeLayoutNodeRewriteFunc(node: Node) -> FunctionDecl {
   let rewriteResultType: String
-  if node.isSyntaxCollection {
-    rewriteResultType = "Syntax"
+  if node.type.baseType?.syntaxKind == "Syntax" && node.type.syntaxKind != "Missing" {
+    rewriteResultType = node.type.syntaxBaseName
   } else {
-    rewriteResultType = node.type.baseType?.syntaxBaseName ?? "Syntax"
+    rewriteResultType = node.type.baseType?.syntaxBaseName ?? node.type.syntaxBaseName
   }
   return FunctionDecl(
     leadingTrivia: .newline,
-    modifiers: [Token.open, Token(tokenSyntax: TokenSyntax.contextualKeyword("override", trailingTrivia: .space))],
+    modifiers: [DeclModifier(name: .open), DeclModifier(name: TokenSyntax.contextualKeyword("override", trailingTrivia: .space))],
     identifier: .identifier("visit"),
     signature: FunctionSignature(
       input: ParameterClause(parameterList: [
@@ -57,11 +72,11 @@ private func makeLayoutNodeRewriteFunc(node: Node) -> FunctionDecl {
           firstName: Token.wildcard,
           secondName: .identifier("node"),
           colon: .colon,
-          type: node.type.syntaxBaseName
+          type: Type(node.type.syntaxBaseName)
 
         )
       ]),
-      output: rewriteResultType
+      output: ReturnClause(returnType: Type(rewriteResultType))
     )
   ) {
     for child in node.children {
@@ -69,11 +84,7 @@ private func makeLayoutNodeRewriteFunc(node: Node) -> FunctionDecl {
         SequenceExpr("indentationLevel += 1")
       }
       let variableLetVar = child.requiresLeadingNewline ? "var" : "let"
-      if child.isOptional {
-        VariableDecl("\(variableLetVar) \(child.swiftName) = node.\(child.swiftName).map(self.visit)?.cast(\(child.type.syntaxBaseName).self)")
-      } else {
-        VariableDecl("\(variableLetVar) \(child.swiftName) = self.visit(node.\(child.swiftName)).cast(\(child.type.syntaxBaseName).self)")
-      }
+      VariableDecl("\(variableLetVar) \(child.swiftName) = \(createChildVisitCall(childType: child.type, rewrittenExpr: MemberAccessExpr("node.\(child.swiftName)")))")
       if child.requiresLeadingNewline {
         IfStmt(
           """
@@ -87,28 +98,27 @@ private func makeLayoutNodeRewriteFunc(node: Node) -> FunctionDecl {
         SequenceExpr("indentationLevel -= 1")
       }
     }
-    let reconstructed = FunctionCallExpr(calledExpression: "\(node.type.syntaxBaseName)") {
+    let reconstructed = FunctionCallExpr(calledExpression: Expr("\(node.type.syntaxBaseName)")) {
       for child in node.children {
         TupleExprElement(
           label: child.isUnexpectedNodes ? nil : child.swiftName,
-          expression: child.swiftName
+          expression: Expr(child.swiftName)
         )
       }
     }
-    ReturnStmt("return \(rewriteResultType)(\(reconstructed))")
+    if rewriteResultType != node.type.syntaxBaseName {
+      ReturnStmt("return \(rewriteResultType)(\(reconstructed))")
+    } else {
+      ReturnStmt("return \(reconstructed)")
+    }
   }
 }
 
 private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
-  let rewriteResultType: String
-  if node.isSyntaxCollection {
-    rewriteResultType = "Syntax"
-  } else {
-    rewriteResultType = node.type.baseType?.syntaxBaseName ?? "Syntax"
-  }
+  let rewriteResultType = node.type.syntaxBaseName
   return FunctionDecl(
     leadingTrivia: .newline,
-    modifiers: [Token.open, Token(tokenSyntax: TokenSyntax.contextualKeyword("override", trailingTrivia: .space))],
+    modifiers: [DeclModifier(name: .open), DeclModifier(name: TokenSyntax.contextualKeyword("override", trailingTrivia: .space))],
     identifier: .identifier("visit"),
     signature: FunctionSignature(
       input: ParameterClause(parameterList: [
@@ -116,18 +126,18 @@ private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
           firstName: Token.wildcard,
           secondName: .identifier("node"),
           colon: .colon,
-          type: node.type.syntaxBaseName
+          type: Type(node.type.syntaxBaseName)
 
         )
       ]),
-      output: rewriteResultType
+      output: ReturnClause(returnType: Type(rewriteResultType))
     )
   ) {
     let formattedChildrenVarLet = node.elementsSeparatedByNewline ? "var" : "let"
     VariableDecl(
       """
-      \(formattedChildrenVarLet) formattedChildren = node.children(viewMode: .all).map {
-        self.visit($0).cast(\(node.collectionElementType.syntaxBaseName).self)
+      \(formattedChildrenVarLet) formattedChildren = node.map {
+        \(createChildVisitCall(childType: node.collectionElementType, rewrittenExpr: IdentifierExpr(identifier: .dollarIdentifier("$0"))))
       }
       """
     )
@@ -144,14 +154,14 @@ private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
         """
       )
     }
-    ReturnStmt("return Syntax(\(node.type.syntaxBaseName)(formattedChildren))")
+    ReturnStmt("return \(node.type.syntaxBaseName)(formattedChildren)")
   }
 }
 
 private func createTokenFormatFunction() -> FunctionDecl {
   return FunctionDecl(
     leadingTrivia: .newline,
-    modifiers: [Token.open, Token(tokenSyntax: TokenSyntax.contextualKeyword("override", trailingTrivia: .space))],
+    modifiers: [DeclModifier(name: .open), DeclModifier(name: TokenSyntax.contextualKeyword("override", trailingTrivia: .space))],
     identifier: .identifier("visit"),
     signature: FunctionSignature(
       input: ParameterClause(parameterList: [
@@ -159,18 +169,18 @@ private func createTokenFormatFunction() -> FunctionDecl {
           firstName: Token.wildcard,
           secondName: .identifier("node"),
           colon: .colon,
-          type: "TokenSyntax"
+          type: Type("TokenSyntax")
 
         )
       ]),
-      output: "TokenSyntax"
+      output: ReturnClause(returnType: Type("TokenSyntax"))
     )
   ) {
     VariableDecl("var leadingTrivia = node.leadingTrivia")
     VariableDecl("var trailingTrivia = node.trailingTrivia")
     SwitchStmt(expression: MemberAccessExpr(base: "node", name: "tokenKind")) {
       for token in SYNTAX_TOKENS where token.name != "ContextualKeyword" {
-        SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: token.swiftKind))))) {
+        SwitchCase(label: SwitchCaseLabel(caseItems: [CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: token.swiftKind)))])) {
           if token.requiresLeadingSpace {
             IfStmt(
               """
@@ -194,10 +204,10 @@ private func createTokenFormatFunction() -> FunctionDecl {
           }
         }
       }
-      SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "eof"))))) {
+      SwitchCase(label: SwitchCaseLabel(caseItems: [CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "eof")))])) {
         BreakStmt("break")
       }
-      SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "contextualKeyword"))))) {
+      SwitchCase(label: SwitchCaseLabel(caseItems: [CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "contextualKeyword")))])) {
         SwitchStmt(
           """
           switch node.text {

@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 import SwiftSyntax
 
@@ -95,7 +107,7 @@ public class SyntaxCreationTests: XCTestCase {
     let string = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -119,7 +131,7 @@ public class SyntaxCreationTests: XCTestCase {
     let emptyString = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment(" ")))]),
+      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment(" ")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -145,7 +157,7 @@ public class SyntaxCreationTests: XCTestCase {
     let string = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -187,7 +199,7 @@ public class SyntaxCreationTests: XCTestCase {
     let expr = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -203,7 +215,7 @@ public class SyntaxCreationTests: XCTestCase {
     let expr = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(leadingTrivia: [.lineComment("// hello"), .newlines(1)]),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )

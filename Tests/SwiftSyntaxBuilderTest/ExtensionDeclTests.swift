@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -7,24 +19,24 @@ final class ExtensionDeclTests: XCTestCase {
     let keywords = ["associatedtype", "class"].map { keyword -> VariableDecl in
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(calledExpression: "TokenSyntax.\(keyword)Keyword")
+        FunctionCallExpr(callee: "TokenSyntax.\(keyword)Keyword")
       }
 
       return VariableDecl(
-        modifiers: [Token.public],
+        modifiers: [DeclModifier(name: .public)],
         letOrVarKeyword: .var
       ) {
-        PatternBinding(pattern: "`\(keyword)`",
-                       typeAnnotation: "TokenSyntax",
+        PatternBinding(pattern: Pattern("`\(keyword)`"),
+                       typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
                        initializer: nil,
-                       accessor: body)
+                       accessor: .getter(body))
 
       }
     }
-    let members = MemberDeclList(keywords)
+    let members = MemberDeclList(keywords.map { MemberDeclListItem(decl: $0) })
     let buildable = ExtensionDecl(modifiers: nil,
-                                  extendedType: "TokenSyntax",
-                                  members: members)
+                                  extendedType: Type("TokenSyntax"),
+                                  members: MemberDeclBlock(members: members))
 
     AssertBuildResult(buildable, """
     extension TokenSyntax {

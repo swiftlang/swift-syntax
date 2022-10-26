@@ -38,6 +38,48 @@ public protocol SyntaxCollection: SyntaxProtocol, Sequence {
 /// versions of the collection with different children.
 % end
 public struct ${node.name}: SyntaxCollection, SyntaxHashable {
+% if node.collection_element_choices:
+  public enum Element: SyntaxChildChoices {
+%   for choice_name in node.collection_element_choices:
+%     choice = NODE_MAP[choice_name]
+    case `${choice.swift_syntax_kind}`(${choice.name})
+%   end
+    public var _syntaxNode: Syntax {
+      switch self {
+%   for choice_name in node.collection_element_choices:
+%     choice = NODE_MAP[choice_name]
+      case .${choice.swift_syntax_kind}(let node): return node._syntaxNode
+%   end
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+%   for choice_name in node.collection_element_choices:
+%     choice_node = NODE_MAP.get(choice_name)
+%     if choice_node and choice_node.is_base():
+    public init<Node: ${choice_node.name}Protocol>(_ node: Node) {
+      self = .${choice_node.swift_syntax_kind}(${choice_node.name}(node))
+    }
+%     else:
+    public init(_ node: ${choice_node.name}) {
+      self = .${choice_node.swift_syntax_kind}(node)
+    }
+%     end
+%   end
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+%   for choice_name in node.collection_element_choices:
+%     choice = NODE_MAP[choice_name]
+      if let node = syntaxNode.as(${choice.name}.self) {
+        self = .${choice.swift_syntax_kind}(node)
+        return
+      }
+%   end
+      return nil
+    }
+  }
+% else:
+  public typealias Element = ${node.collection_element_type}
+% end
+
   public let _syntaxNode: Syntax
 
   var layoutView: RawSyntaxLayoutView {
@@ -59,7 +101,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public init(_ children: [${node.collection_element_type}]) {
+  public init(_ children: [Element]) {
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
       from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
@@ -87,8 +129,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   ///
   /// - Parameter syntax: The element to append.
   /// - Returns: A new `${node.name}` with that element appended to the end.
-  public func appending(
-    _ syntax: ${node.collection_element_type}) -> ${node.name} {
+  public func appending(_ syntax: Element) -> ${node.name} {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
@@ -100,8 +141,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   /// - Parameter syntax: The element to prepend.
   /// - Returns: A new `${node.name}` with that element prepended to the
   ///            beginning.
-  public func prepending(
-    _ syntax: ${node.collection_element_type}) -> ${node.name} {
+  public func prepending(_ syntax: Element) -> ${node.name} {
     return inserting(syntax, at: 0)
   }
 
@@ -113,8 +153,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   ///   - index: The index at which to insert the element in the collection.
   ///
   /// - Returns: A new `${node.name}` with that element appended to the end.
-  public func inserting(_ syntax: ${node.collection_element_type},
-                        at index: Int) -> ${node.name} {
+  public func inserting(_ syntax: Element, at index: Int) -> ${node.name} {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
@@ -131,8 +170,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   ///   - syntax: The element to replace with.
   ///
   /// - Returns: A new `${node.name}` with the new element at the provided index.
-  public func replacing(childAt index: Int,
-                        with syntax: ${node.collection_element_type}) -> ${node.name} {
+  public func replacing(childAt index: Int, with syntax: Element) -> ${node.name} {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
@@ -225,7 +263,6 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
 
 /// Conformance for `${node.name}` to the `BidirectionalCollection` protocol.
 extension ${node.name}: BidirectionalCollection {
-  public typealias Element = ${node.collection_element_type}
   public typealias Index = SyntaxChildrenIndex
 
   public struct Iterator: IteratorProtocol {
@@ -237,13 +274,13 @@ extension ${node.name}: BidirectionalCollection {
       self.iterator = rawChildren.makeIterator()
     }
 
-    public mutating func next() -> ${node.collection_element_type}? {
+    public mutating func next() -> Element? {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
       let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
-      return ${node.collection_element_type}(data)
+      return Element(data)
     }
   }
 
@@ -278,11 +315,11 @@ extension ${node.name}: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
 
-  public subscript(position: SyntaxChildrenIndex) -> ${node.collection_element_type} {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
-    return ${node.collection_element_type}(data)
+    return Element(data)
   }
 }
 %   end

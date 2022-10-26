@@ -1,8 +1,20 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 import SwiftSyntax
 
 public class VisitorTests: XCTestCase {
-  public func testVisitMissingNodes() throws {
+  public func testVisitMissingNodes() {
     let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax(
       attributes: nil,
       modifiers: nil
@@ -27,7 +39,7 @@ public class VisitorTests: XCTestCase {
     XCTAssertTrue(MissingDeclChecker.check(node, viewMode: .fixedUp))
   }
 
-  public func testVisitMissingToken() throws {
+  public func testVisitMissingToken() {
     let node = ReturnStmtSyntax(
       returnKeyword: .returnKeyword(presence: .missing),
       expression: nil
@@ -52,7 +64,7 @@ public class VisitorTests: XCTestCase {
     XCTAssertTrue(MissingTokenChecker.check(node, viewMode: .fixedUp))
   }
 
-  public func testVisitUnexpected() throws {
+  public func testVisitUnexpected() {
     // This is just bunch of unexpected
     let unexpectedReturnStmt = ReturnStmtSyntax(
       UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("starting")), Syntax(TokenSyntax.integerLiteral("unexpected"))]),

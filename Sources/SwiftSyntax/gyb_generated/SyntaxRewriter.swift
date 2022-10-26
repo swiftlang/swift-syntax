@@ -103,29 +103,29 @@ open class SyntaxRewriter {
   /// Visit a `CodeBlockItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CodeBlockItemSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
+    return Syntax(visitChildren(node)).cast(CodeBlockItemSyntax.self)
   }
 
   /// Visit a `CodeBlockItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CodeBlockItemListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
+    return Syntax(visitChildren(node)).cast(CodeBlockItemListSyntax.self)
   }
 
   /// Visit a `CodeBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CodeBlockSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CodeBlockSyntax) -> CodeBlockSyntax {
+    return Syntax(visitChildren(node)).cast(CodeBlockSyntax.self)
   }
 
   /// Visit a `UnexpectedNodesSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: UnexpectedNodesSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
+    return Syntax(visitChildren(node)).cast(UnexpectedNodesSyntax.self)
   }
 
   /// Visit a `InOutExprSyntax`.
@@ -145,29 +145,29 @@ open class SyntaxRewriter {
   /// Visit a `TupleExprElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TupleExprElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
+    return Syntax(visitChildren(node)).cast(TupleExprElementListSyntax.self)
   }
 
   /// Visit a `ArrayElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ArrayElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ArrayElementListSyntax) -> ArrayElementListSyntax {
+    return Syntax(visitChildren(node)).cast(ArrayElementListSyntax.self)
   }
 
   /// Visit a `DictionaryElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DictionaryElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DictionaryElementListSyntax) -> DictionaryElementListSyntax {
+    return Syntax(visitChildren(node)).cast(DictionaryElementListSyntax.self)
   }
 
   /// Visit a `StringLiteralSegmentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: StringLiteralSegmentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: StringLiteralSegmentsSyntax) -> StringLiteralSegmentsSyntax {
+    return Syntax(visitChildren(node)).cast(StringLiteralSegmentsSyntax.self)
   }
 
   /// Visit a `TryExprSyntax`.
@@ -194,22 +194,22 @@ open class SyntaxRewriter {
   /// Visit a `DeclNameArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DeclNameArgumentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DeclNameArgumentSyntax) -> DeclNameArgumentSyntax {
+    return Syntax(visitChildren(node)).cast(DeclNameArgumentSyntax.self)
   }
 
   /// Visit a `DeclNameArgumentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DeclNameArgumentListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DeclNameArgumentListSyntax) -> DeclNameArgumentListSyntax {
+    return Syntax(visitChildren(node)).cast(DeclNameArgumentListSyntax.self)
   }
 
   /// Visit a `DeclNameArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DeclNameArgumentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DeclNameArgumentsSyntax) -> DeclNameArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(DeclNameArgumentsSyntax.self)
   }
 
   /// Visit a `IdentifierExprSyntax`.
@@ -257,8 +257,8 @@ open class SyntaxRewriter {
   /// Visit a `ExprListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ExprListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ExprListSyntax) -> ExprListSyntax {
+    return Syntax(visitChildren(node)).cast(ExprListSyntax.self)
   }
 
   /// Visit a `PoundLineExprSyntax`.
@@ -369,22 +369,22 @@ open class SyntaxRewriter {
   /// Visit a `TupleExprElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TupleExprElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TupleExprElementSyntax) -> TupleExprElementSyntax {
+    return Syntax(visitChildren(node)).cast(TupleExprElementSyntax.self)
   }
 
   /// Visit a `ArrayElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ArrayElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ArrayElementSyntax) -> ArrayElementSyntax {
+    return Syntax(visitChildren(node)).cast(ArrayElementSyntax.self)
   }
 
   /// Visit a `DictionaryElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DictionaryElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DictionaryElementSyntax) -> DictionaryElementSyntax {
+    return Syntax(visitChildren(node)).cast(DictionaryElementSyntax.self)
   }
 
   /// Visit a `IntegerLiteralExprSyntax`.
@@ -460,43 +460,43 @@ open class SyntaxRewriter {
   /// Visit a `ClosureCaptureItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ClosureCaptureItemSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ClosureCaptureItemSyntax) -> ClosureCaptureItemSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureCaptureItemSyntax.self)
   }
 
   /// Visit a `ClosureCaptureItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ClosureCaptureItemListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ClosureCaptureItemListSyntax) -> ClosureCaptureItemListSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureCaptureItemListSyntax.self)
   }
 
   /// Visit a `ClosureCaptureSignatureSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ClosureCaptureSignatureSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ClosureCaptureSignatureSyntax) -> ClosureCaptureSignatureSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureCaptureSignatureSyntax.self)
   }
 
   /// Visit a `ClosureParamSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ClosureParamSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ClosureParamSyntax) -> ClosureParamSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureParamSyntax.self)
   }
 
   /// Visit a `ClosureParamListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ClosureParamListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ClosureParamListSyntax) -> ClosureParamListSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureParamListSyntax.self)
   }
 
   /// Visit a `ClosureSignatureSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ClosureSignatureSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
+    return Syntax(visitChildren(node)).cast(ClosureSignatureSyntax.self)
   }
 
   /// Visit a `ClosureExprSyntax`.
@@ -516,15 +516,15 @@ open class SyntaxRewriter {
   /// Visit a `MultipleTrailingClosureElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: MultipleTrailingClosureElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementSyntax {
+    return Syntax(visitChildren(node)).cast(MultipleTrailingClosureElementSyntax.self)
   }
 
   /// Visit a `MultipleTrailingClosureElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> MultipleTrailingClosureElementListSyntax {
+    return Syntax(visitChildren(node)).cast(MultipleTrailingClosureElementListSyntax.self)
   }
 
   /// Visit a `FunctionCallExprSyntax`.
@@ -572,15 +572,15 @@ open class SyntaxRewriter {
   /// Visit a `StringSegmentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: StringSegmentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: StringSegmentSyntax) -> StringSegmentSyntax {
+    return Syntax(visitChildren(node)).cast(StringSegmentSyntax.self)
   }
 
   /// Visit a `ExpressionSegmentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ExpressionSegmentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
+    return Syntax(visitChildren(node)).cast(ExpressionSegmentSyntax.self)
   }
 
   /// Visit a `StringLiteralExprSyntax`.
@@ -607,36 +607,36 @@ open class SyntaxRewriter {
   /// Visit a `KeyPathComponentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: KeyPathComponentListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: KeyPathComponentListSyntax) -> KeyPathComponentListSyntax {
+    return Syntax(visitChildren(node)).cast(KeyPathComponentListSyntax.self)
   }
 
   /// Visit a `KeyPathComponentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: KeyPathComponentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: KeyPathComponentSyntax) -> KeyPathComponentSyntax {
+    return Syntax(visitChildren(node)).cast(KeyPathComponentSyntax.self)
   }
 
   /// Visit a `KeyPathPropertyComponentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: KeyPathPropertyComponentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: KeyPathPropertyComponentSyntax) -> KeyPathPropertyComponentSyntax {
+    return Syntax(visitChildren(node)).cast(KeyPathPropertyComponentSyntax.self)
   }
 
   /// Visit a `KeyPathSubscriptComponentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: KeyPathSubscriptComponentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: KeyPathSubscriptComponentSyntax) -> KeyPathSubscriptComponentSyntax {
+    return Syntax(visitChildren(node)).cast(KeyPathSubscriptComponentSyntax.self)
   }
 
   /// Visit a `KeyPathOptionalComponentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: KeyPathOptionalComponentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: KeyPathOptionalComponentSyntax) -> KeyPathOptionalComponentSyntax {
+    return Syntax(visitChildren(node)).cast(KeyPathOptionalComponentSyntax.self)
   }
 
   /// Visit a `OldKeyPathExprSyntax`.
@@ -656,15 +656,15 @@ open class SyntaxRewriter {
   /// Visit a `ObjcNamePieceSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ObjcNamePieceSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ObjcNamePieceSyntax) -> ObjcNamePieceSyntax {
+    return Syntax(visitChildren(node)).cast(ObjcNamePieceSyntax.self)
   }
 
   /// Visit a `ObjcNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ObjcNameSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ObjcNameSyntax) -> ObjcNameSyntax {
+    return Syntax(visitChildren(node)).cast(ObjcNameSyntax.self)
   }
 
   /// Visit a `ObjcKeyPathExprSyntax`.
@@ -712,22 +712,22 @@ open class SyntaxRewriter {
   /// Visit a `YieldExprListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: YieldExprListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: YieldExprListSyntax) -> YieldExprListSyntax {
+    return Syntax(visitChildren(node)).cast(YieldExprListSyntax.self)
   }
 
   /// Visit a `YieldExprListElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: YieldExprListElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: YieldExprListElementSyntax) -> YieldExprListElementSyntax {
+    return Syntax(visitChildren(node)).cast(YieldExprListElementSyntax.self)
   }
 
   /// Visit a `TypeInitializerClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TypeInitializerClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
+    return Syntax(visitChildren(node)).cast(TypeInitializerClauseSyntax.self)
   }
 
   /// Visit a `TypealiasDeclSyntax`.
@@ -747,43 +747,43 @@ open class SyntaxRewriter {
   /// Visit a `FunctionParameterListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: FunctionParameterListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: FunctionParameterListSyntax) -> FunctionParameterListSyntax {
+    return Syntax(visitChildren(node)).cast(FunctionParameterListSyntax.self)
   }
 
   /// Visit a `ParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ParameterClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ParameterClauseSyntax) -> ParameterClauseSyntax {
+    return Syntax(visitChildren(node)).cast(ParameterClauseSyntax.self)
   }
 
   /// Visit a `ReturnClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ReturnClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ReturnClauseSyntax) -> ReturnClauseSyntax {
+    return Syntax(visitChildren(node)).cast(ReturnClauseSyntax.self)
   }
 
   /// Visit a `FunctionSignatureSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: FunctionSignatureSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: FunctionSignatureSyntax) -> FunctionSignatureSyntax {
+    return Syntax(visitChildren(node)).cast(FunctionSignatureSyntax.self)
   }
 
   /// Visit a `IfConfigClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: IfConfigClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: IfConfigClauseSyntax) -> IfConfigClauseSyntax {
+    return Syntax(visitChildren(node)).cast(IfConfigClauseSyntax.self)
   }
 
   /// Visit a `IfConfigClauseListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: IfConfigClauseListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: IfConfigClauseListSyntax) -> IfConfigClauseListSyntax {
+    return Syntax(visitChildren(node)).cast(IfConfigClauseListSyntax.self)
   }
 
   /// Visit a `IfConfigDeclSyntax`.
@@ -817,43 +817,43 @@ open class SyntaxRewriter {
   /// Visit a `PoundSourceLocationArgsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PoundSourceLocationArgsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PoundSourceLocationArgsSyntax) -> PoundSourceLocationArgsSyntax {
+    return Syntax(visitChildren(node)).cast(PoundSourceLocationArgsSyntax.self)
   }
 
   /// Visit a `DeclModifierDetailSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DeclModifierDetailSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DeclModifierDetailSyntax) -> DeclModifierDetailSyntax {
+    return Syntax(visitChildren(node)).cast(DeclModifierDetailSyntax.self)
   }
 
   /// Visit a `DeclModifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DeclModifierSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DeclModifierSyntax) -> DeclModifierSyntax {
+    return Syntax(visitChildren(node)).cast(DeclModifierSyntax.self)
   }
 
   /// Visit a `InheritedTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: InheritedTypeSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: InheritedTypeSyntax) -> InheritedTypeSyntax {
+    return Syntax(visitChildren(node)).cast(InheritedTypeSyntax.self)
   }
 
   /// Visit a `InheritedTypeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: InheritedTypeListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: InheritedTypeListSyntax) -> InheritedTypeListSyntax {
+    return Syntax(visitChildren(node)).cast(InheritedTypeListSyntax.self)
   }
 
   /// Visit a `TypeInheritanceClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TypeInheritanceClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TypeInheritanceClauseSyntax) -> TypeInheritanceClauseSyntax {
+    return Syntax(visitChildren(node)).cast(TypeInheritanceClauseSyntax.self)
   }
 
   /// Visit a `ClassDeclSyntax`.
@@ -894,50 +894,50 @@ open class SyntaxRewriter {
   /// Visit a `MemberDeclBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: MemberDeclBlockSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+    return Syntax(visitChildren(node)).cast(MemberDeclBlockSyntax.self)
   }
 
   /// Visit a `MemberDeclListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: MemberDeclListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: MemberDeclListSyntax) -> MemberDeclListSyntax {
+    return Syntax(visitChildren(node)).cast(MemberDeclListSyntax.self)
   }
 
   /// Visit a `MemberDeclListItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: MemberDeclListItemSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
+    return Syntax(visitChildren(node)).cast(MemberDeclListItemSyntax.self)
   }
 
   /// Visit a `SourceFileSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SourceFileSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: SourceFileSyntax) -> SourceFileSyntax {
+    return Syntax(visitChildren(node)).cast(SourceFileSyntax.self)
   }
 
   /// Visit a `InitializerClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: InitializerClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: InitializerClauseSyntax) -> InitializerClauseSyntax {
+    return Syntax(visitChildren(node)).cast(InitializerClauseSyntax.self)
   }
 
   /// Visit a `FunctionParameterSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: FunctionParameterSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: FunctionParameterSyntax) -> FunctionParameterSyntax {
+    return Syntax(visitChildren(node)).cast(FunctionParameterSyntax.self)
   }
 
   /// Visit a `ModifierListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ModifierListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ModifierListSyntax) -> ModifierListSyntax {
+    return Syntax(visitChildren(node)).cast(ModifierListSyntax.self)
   }
 
   /// Visit a `FunctionDeclSyntax`.
@@ -971,22 +971,22 @@ open class SyntaxRewriter {
   /// Visit a `AccessLevelModifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AccessLevelModifierSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AccessLevelModifierSyntax) -> AccessLevelModifierSyntax {
+    return Syntax(visitChildren(node)).cast(AccessLevelModifierSyntax.self)
   }
 
   /// Visit a `AccessPathComponentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AccessPathComponentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AccessPathComponentSyntax) -> AccessPathComponentSyntax {
+    return Syntax(visitChildren(node)).cast(AccessPathComponentSyntax.self)
   }
 
   /// Visit a `AccessPathSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AccessPathSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AccessPathSyntax) -> AccessPathSyntax {
+    return Syntax(visitChildren(node)).cast(AccessPathSyntax.self)
   }
 
   /// Visit a `ImportDeclSyntax`.
@@ -999,8 +999,8 @@ open class SyntaxRewriter {
   /// Visit a `AccessorParameterSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AccessorParameterSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AccessorParameterSyntax) -> AccessorParameterSyntax {
+    return Syntax(visitChildren(node)).cast(AccessorParameterSyntax.self)
   }
 
   /// Visit a `AccessorDeclSyntax`.
@@ -1013,29 +1013,29 @@ open class SyntaxRewriter {
   /// Visit a `AccessorListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AccessorListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AccessorListSyntax) -> AccessorListSyntax {
+    return Syntax(visitChildren(node)).cast(AccessorListSyntax.self)
   }
 
   /// Visit a `AccessorBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AccessorBlockSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AccessorBlockSyntax) -> AccessorBlockSyntax {
+    return Syntax(visitChildren(node)).cast(AccessorBlockSyntax.self)
   }
 
   /// Visit a `PatternBindingSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PatternBindingSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PatternBindingSyntax) -> PatternBindingSyntax {
+    return Syntax(visitChildren(node)).cast(PatternBindingSyntax.self)
   }
 
   /// Visit a `PatternBindingListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PatternBindingListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PatternBindingListSyntax) -> PatternBindingListSyntax {
+    return Syntax(visitChildren(node)).cast(PatternBindingListSyntax.self)
   }
 
   /// Visit a `VariableDeclSyntax`.
@@ -1048,15 +1048,15 @@ open class SyntaxRewriter {
   /// Visit a `EnumCaseElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: EnumCaseElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
+    return Syntax(visitChildren(node)).cast(EnumCaseElementSyntax.self)
   }
 
   /// Visit a `EnumCaseElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: EnumCaseElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: EnumCaseElementListSyntax) -> EnumCaseElementListSyntax {
+    return Syntax(visitChildren(node)).cast(EnumCaseElementListSyntax.self)
   }
 
   /// Visit a `EnumCaseDeclSyntax`.
@@ -1083,22 +1083,22 @@ open class SyntaxRewriter {
   /// Visit a `DesignatedTypeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DesignatedTypeListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DesignatedTypeListSyntax) -> DesignatedTypeListSyntax {
+    return Syntax(visitChildren(node)).cast(DesignatedTypeListSyntax.self)
   }
 
   /// Visit a `DesignatedTypeElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DesignatedTypeElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DesignatedTypeElementSyntax) -> DesignatedTypeElementSyntax {
+    return Syntax(visitChildren(node)).cast(DesignatedTypeElementSyntax.self)
   }
 
   /// Visit a `OperatorPrecedenceAndTypesSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
+    return Syntax(visitChildren(node)).cast(OperatorPrecedenceAndTypesSyntax.self)
   }
 
   /// Visit a `PrecedenceGroupDeclSyntax`.
@@ -1111,43 +1111,43 @@ open class SyntaxRewriter {
   /// Visit a `PrecedenceGroupAttributeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> PrecedenceGroupAttributeListSyntax {
+    return Syntax(visitChildren(node)).cast(PrecedenceGroupAttributeListSyntax.self)
   }
 
   /// Visit a `PrecedenceGroupRelationSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrecedenceGroupRelationSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrecedenceGroupRelationSyntax) -> PrecedenceGroupRelationSyntax {
+    return Syntax(visitChildren(node)).cast(PrecedenceGroupRelationSyntax.self)
   }
 
   /// Visit a `PrecedenceGroupNameListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrecedenceGroupNameListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrecedenceGroupNameListSyntax) -> PrecedenceGroupNameListSyntax {
+    return Syntax(visitChildren(node)).cast(PrecedenceGroupNameListSyntax.self)
   }
 
   /// Visit a `PrecedenceGroupNameElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrecedenceGroupNameElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameElementSyntax {
+    return Syntax(visitChildren(node)).cast(PrecedenceGroupNameElementSyntax.self)
   }
 
   /// Visit a `PrecedenceGroupAssignmentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> PrecedenceGroupAssignmentSyntax {
+    return Syntax(visitChildren(node)).cast(PrecedenceGroupAssignmentSyntax.self)
   }
 
   /// Visit a `PrecedenceGroupAssociativitySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> PrecedenceGroupAssociativitySyntax {
+    return Syntax(visitChildren(node)).cast(PrecedenceGroupAssociativitySyntax.self)
   }
 
   /// Visit a `MacroExpansionDeclSyntax`.
@@ -1160,197 +1160,197 @@ open class SyntaxRewriter {
   /// Visit a `TokenListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TokenListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TokenListSyntax) -> TokenListSyntax {
+    return Syntax(visitChildren(node)).cast(TokenListSyntax.self)
   }
 
   /// Visit a `NonEmptyTokenListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: NonEmptyTokenListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: NonEmptyTokenListSyntax) -> NonEmptyTokenListSyntax {
+    return Syntax(visitChildren(node)).cast(NonEmptyTokenListSyntax.self)
   }
 
   /// Visit a `CustomAttributeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CustomAttributeSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CustomAttributeSyntax) -> CustomAttributeSyntax {
+    return Syntax(visitChildren(node)).cast(CustomAttributeSyntax.self)
   }
 
   /// Visit a `AttributeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AttributeSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AttributeSyntax) -> AttributeSyntax {
+    return Syntax(visitChildren(node)).cast(AttributeSyntax.self)
   }
 
   /// Visit a `AttributeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AttributeListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
+    return Syntax(visitChildren(node)).cast(AttributeListSyntax.self)
   }
 
   /// Visit a `SpecializeAttributeSpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SpecializeAttributeSpecListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SpecializeAttributeSpecListSyntax {
+    return Syntax(visitChildren(node)).cast(SpecializeAttributeSpecListSyntax.self)
   }
 
   /// Visit a `AvailabilityEntrySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AvailabilityEntrySyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AvailabilityEntrySyntax) -> AvailabilityEntrySyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityEntrySyntax.self)
   }
 
   /// Visit a `LabeledSpecializeEntrySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: LabeledSpecializeEntrySyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: LabeledSpecializeEntrySyntax) -> LabeledSpecializeEntrySyntax {
+    return Syntax(visitChildren(node)).cast(LabeledSpecializeEntrySyntax.self)
   }
 
   /// Visit a `TargetFunctionEntrySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TargetFunctionEntrySyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TargetFunctionEntrySyntax) -> TargetFunctionEntrySyntax {
+    return Syntax(visitChildren(node)).cast(TargetFunctionEntrySyntax.self)
   }
 
   /// Visit a `NamedAttributeStringArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: NamedAttributeStringArgumentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
+    return Syntax(visitChildren(node)).cast(NamedAttributeStringArgumentSyntax.self)
   }
 
   /// Visit a `DeclNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DeclNameSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DeclNameSyntax) -> DeclNameSyntax {
+    return Syntax(visitChildren(node)).cast(DeclNameSyntax.self)
   }
 
   /// Visit a `ImplementsAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ImplementsAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(ImplementsAttributeArgumentsSyntax.self)
   }
 
   /// Visit a `ObjCSelectorPieceSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ObjCSelectorPieceSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ObjCSelectorPieceSyntax) -> ObjCSelectorPieceSyntax {
+    return Syntax(visitChildren(node)).cast(ObjCSelectorPieceSyntax.self)
   }
 
   /// Visit a `ObjCSelectorSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ObjCSelectorSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ObjCSelectorSyntax) -> ObjCSelectorSyntax {
+    return Syntax(visitChildren(node)).cast(ObjCSelectorSyntax.self)
   }
 
   /// Visit a `DifferentiableAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> DifferentiableAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(DifferentiableAttributeArgumentsSyntax.self)
   }
 
   /// Visit a `DifferentiabilityParamsClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DifferentiabilityParamsClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DifferentiabilityParamsClauseSyntax) -> DifferentiabilityParamsClauseSyntax {
+    return Syntax(visitChildren(node)).cast(DifferentiabilityParamsClauseSyntax.self)
   }
 
   /// Visit a `DifferentiabilityParamsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DifferentiabilityParamsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DifferentiabilityParamsSyntax) -> DifferentiabilityParamsSyntax {
+    return Syntax(visitChildren(node)).cast(DifferentiabilityParamsSyntax.self)
   }
 
   /// Visit a `DifferentiabilityParamListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DifferentiabilityParamListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DifferentiabilityParamListSyntax) -> DifferentiabilityParamListSyntax {
+    return Syntax(visitChildren(node)).cast(DifferentiabilityParamListSyntax.self)
   }
 
   /// Visit a `DifferentiabilityParamSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DifferentiabilityParamSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DifferentiabilityParamSyntax) -> DifferentiabilityParamSyntax {
+    return Syntax(visitChildren(node)).cast(DifferentiabilityParamSyntax.self)
   }
 
   /// Visit a `DerivativeRegistrationAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(DerivativeRegistrationAttributeArgumentsSyntax.self)
   }
 
   /// Visit a `QualifiedDeclNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: QualifiedDeclNameSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: QualifiedDeclNameSyntax) -> QualifiedDeclNameSyntax {
+    return Syntax(visitChildren(node)).cast(QualifiedDeclNameSyntax.self)
   }
 
   /// Visit a `FunctionDeclNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: FunctionDeclNameSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: FunctionDeclNameSyntax) -> FunctionDeclNameSyntax {
+    return Syntax(visitChildren(node)).cast(FunctionDeclNameSyntax.self)
   }
 
   /// Visit a `BackDeployAttributeSpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployAttributeSpecListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
+    return Syntax(visitChildren(node)).cast(BackDeployAttributeSpecListSyntax.self)
   }
 
   /// Visit a `BackDeployVersionListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployVersionListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: BackDeployVersionListSyntax) -> BackDeployVersionListSyntax {
+    return Syntax(visitChildren(node)).cast(BackDeployVersionListSyntax.self)
   }
 
   /// Visit a `BackDeployVersionArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployVersionArgumentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: BackDeployVersionArgumentSyntax) -> BackDeployVersionArgumentSyntax {
+    return Syntax(visitChildren(node)).cast(BackDeployVersionArgumentSyntax.self)
   }
 
   /// Visit a `OpaqueReturnTypeOfAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(OpaqueReturnTypeOfAttributeArgumentsSyntax.self)
   }
 
   /// Visit a `ConventionAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ConventionAttributeArgumentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ConventionAttributeArgumentsSyntax) -> ConventionAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(ConventionAttributeArgumentsSyntax.self)
   }
 
   /// Visit a `ConventionWitnessMethodAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    return Syntax(visitChildren(node)).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
   }
 
   /// Visit a `LabeledStmtSyntax`.
@@ -1391,8 +1391,8 @@ open class SyntaxRewriter {
   /// Visit a `SwitchCaseListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchCaseListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchCaseListSyntax.self)
   }
 
   /// Visit a `RepeatWhileStmtSyntax`.
@@ -1412,8 +1412,8 @@ open class SyntaxRewriter {
   /// Visit a `WhereClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: WhereClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: WhereClauseSyntax) -> WhereClauseSyntax {
+    return Syntax(visitChildren(node)).cast(WhereClauseSyntax.self)
   }
 
   /// Visit a `ForInStmtSyntax`.
@@ -1433,8 +1433,8 @@ open class SyntaxRewriter {
   /// Visit a `CatchClauseListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CatchClauseListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CatchClauseListSyntax) -> CatchClauseListSyntax {
+    return Syntax(visitChildren(node)).cast(CatchClauseListSyntax.self)
   }
 
   /// Visit a `DoStmtSyntax`.
@@ -1461,8 +1461,8 @@ open class SyntaxRewriter {
   /// Visit a `YieldListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: YieldListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: YieldListSyntax) -> YieldListSyntax {
+    return Syntax(visitChildren(node)).cast(YieldListSyntax.self)
   }
 
   /// Visit a `FallthroughStmtSyntax`.
@@ -1482,64 +1482,64 @@ open class SyntaxRewriter {
   /// Visit a `CaseItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CaseItemListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CaseItemListSyntax) -> CaseItemListSyntax {
+    return Syntax(visitChildren(node)).cast(CaseItemListSyntax.self)
   }
 
   /// Visit a `CatchItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CatchItemListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CatchItemListSyntax) -> CatchItemListSyntax {
+    return Syntax(visitChildren(node)).cast(CatchItemListSyntax.self)
   }
 
   /// Visit a `ConditionElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ConditionElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ConditionElementSyntax) -> ConditionElementSyntax {
+    return Syntax(visitChildren(node)).cast(ConditionElementSyntax.self)
   }
 
   /// Visit a `AvailabilityConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AvailabilityConditionSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AvailabilityConditionSyntax) -> AvailabilityConditionSyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityConditionSyntax.self)
   }
 
   /// Visit a `MatchingPatternConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: MatchingPatternConditionSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: MatchingPatternConditionSyntax) -> MatchingPatternConditionSyntax {
+    return Syntax(visitChildren(node)).cast(MatchingPatternConditionSyntax.self)
   }
 
   /// Visit a `OptionalBindingConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: OptionalBindingConditionSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: OptionalBindingConditionSyntax) -> OptionalBindingConditionSyntax {
+    return Syntax(visitChildren(node)).cast(OptionalBindingConditionSyntax.self)
   }
 
   /// Visit a `UnavailabilityConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: UnavailabilityConditionSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: UnavailabilityConditionSyntax) -> UnavailabilityConditionSyntax {
+    return Syntax(visitChildren(node)).cast(UnavailabilityConditionSyntax.self)
   }
 
   /// Visit a `HasSymbolConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: HasSymbolConditionSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: HasSymbolConditionSyntax) -> HasSymbolConditionSyntax {
+    return Syntax(visitChildren(node)).cast(HasSymbolConditionSyntax.self)
   }
 
   /// Visit a `ConditionElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ConditionElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ConditionElementListSyntax) -> ConditionElementListSyntax {
+    return Syntax(visitChildren(node)).cast(ConditionElementListSyntax.self)
   }
 
   /// Visit a `DeclarationStmtSyntax`.
@@ -1566,43 +1566,43 @@ open class SyntaxRewriter {
   /// Visit a `SwitchCaseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchCaseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: SwitchCaseSyntax) -> SwitchCaseSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchCaseSyntax.self)
   }
 
   /// Visit a `SwitchDefaultLabelSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchDefaultLabelSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchDefaultLabelSyntax.self)
   }
 
   /// Visit a `CaseItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CaseItemSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CaseItemSyntax) -> CaseItemSyntax {
+    return Syntax(visitChildren(node)).cast(CaseItemSyntax.self)
   }
 
   /// Visit a `CatchItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CatchItemSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CatchItemSyntax) -> CatchItemSyntax {
+    return Syntax(visitChildren(node)).cast(CatchItemSyntax.self)
   }
 
   /// Visit a `SwitchCaseLabelSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SwitchCaseLabelSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
+    return Syntax(visitChildren(node)).cast(SwitchCaseLabelSyntax.self)
   }
 
   /// Visit a `CatchClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CatchClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CatchClauseSyntax) -> CatchClauseSyntax {
+    return Syntax(visitChildren(node)).cast(CatchClauseSyntax.self)
   }
 
   /// Visit a `PoundAssertStmtSyntax`.
@@ -1615,85 +1615,85 @@ open class SyntaxRewriter {
   /// Visit a `GenericWhereClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericWhereClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericWhereClauseSyntax) -> GenericWhereClauseSyntax {
+    return Syntax(visitChildren(node)).cast(GenericWhereClauseSyntax.self)
   }
 
   /// Visit a `GenericRequirementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericRequirementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericRequirementListSyntax) -> GenericRequirementListSyntax {
+    return Syntax(visitChildren(node)).cast(GenericRequirementListSyntax.self)
   }
 
   /// Visit a `GenericRequirementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericRequirementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericRequirementSyntax) -> GenericRequirementSyntax {
+    return Syntax(visitChildren(node)).cast(GenericRequirementSyntax.self)
   }
 
   /// Visit a `SameTypeRequirementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SameTypeRequirementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: SameTypeRequirementSyntax) -> SameTypeRequirementSyntax {
+    return Syntax(visitChildren(node)).cast(SameTypeRequirementSyntax.self)
   }
 
   /// Visit a `LayoutRequirementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: LayoutRequirementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: LayoutRequirementSyntax) -> LayoutRequirementSyntax {
+    return Syntax(visitChildren(node)).cast(LayoutRequirementSyntax.self)
   }
 
   /// Visit a `GenericParameterListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericParameterListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericParameterListSyntax) -> GenericParameterListSyntax {
+    return Syntax(visitChildren(node)).cast(GenericParameterListSyntax.self)
   }
 
   /// Visit a `GenericParameterSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericParameterSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericParameterSyntax) -> GenericParameterSyntax {
+    return Syntax(visitChildren(node)).cast(GenericParameterSyntax.self)
   }
 
   /// Visit a `PrimaryAssociatedTypeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrimaryAssociatedTypeListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeListSyntax {
+    return Syntax(visitChildren(node)).cast(PrimaryAssociatedTypeListSyntax.self)
   }
 
   /// Visit a `PrimaryAssociatedTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrimaryAssociatedTypeSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeSyntax {
+    return Syntax(visitChildren(node)).cast(PrimaryAssociatedTypeSyntax.self)
   }
 
   /// Visit a `GenericParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericParameterClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericParameterClauseSyntax) -> GenericParameterClauseSyntax {
+    return Syntax(visitChildren(node)).cast(GenericParameterClauseSyntax.self)
   }
 
   /// Visit a `ConformanceRequirementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ConformanceRequirementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: ConformanceRequirementSyntax) -> ConformanceRequirementSyntax {
+    return Syntax(visitChildren(node)).cast(ConformanceRequirementSyntax.self)
   }
 
   /// Visit a `PrimaryAssociatedTypeClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+    return Syntax(visitChildren(node)).cast(PrimaryAssociatedTypeClauseSyntax.self)
   }
 
   /// Visit a `SimpleTypeIdentifierSyntax`.
@@ -1762,15 +1762,15 @@ open class SyntaxRewriter {
   /// Visit a `CompositionTypeElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CompositionTypeElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CompositionTypeElementSyntax) -> CompositionTypeElementSyntax {
+    return Syntax(visitChildren(node)).cast(CompositionTypeElementSyntax.self)
   }
 
   /// Visit a `CompositionTypeElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: CompositionTypeElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: CompositionTypeElementListSyntax) -> CompositionTypeElementListSyntax {
+    return Syntax(visitChildren(node)).cast(CompositionTypeElementListSyntax.self)
   }
 
   /// Visit a `CompositionTypeSyntax`.
@@ -1790,15 +1790,15 @@ open class SyntaxRewriter {
   /// Visit a `TupleTypeElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TupleTypeElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
+    return Syntax(visitChildren(node)).cast(TupleTypeElementSyntax.self)
   }
 
   /// Visit a `TupleTypeElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TupleTypeElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TupleTypeElementListSyntax) -> TupleTypeElementListSyntax {
+    return Syntax(visitChildren(node)).cast(TupleTypeElementListSyntax.self)
   }
 
   /// Visit a `TupleTypeSyntax`.
@@ -1825,22 +1825,22 @@ open class SyntaxRewriter {
   /// Visit a `GenericArgumentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericArgumentListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericArgumentListSyntax) -> GenericArgumentListSyntax {
+    return Syntax(visitChildren(node)).cast(GenericArgumentListSyntax.self)
   }
 
   /// Visit a `GenericArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericArgumentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericArgumentSyntax) -> GenericArgumentSyntax {
+    return Syntax(visitChildren(node)).cast(GenericArgumentSyntax.self)
   }
 
   /// Visit a `GenericArgumentClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GenericArgumentClauseSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: GenericArgumentClauseSyntax) -> GenericArgumentClauseSyntax {
+    return Syntax(visitChildren(node)).cast(GenericArgumentClauseSyntax.self)
   }
 
   /// Visit a `NamedOpaqueReturnTypeSyntax`.
@@ -1853,8 +1853,8 @@ open class SyntaxRewriter {
   /// Visit a `TypeAnnotationSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TypeAnnotationSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
+    return Syntax(visitChildren(node)).cast(TypeAnnotationSyntax.self)
   }
 
   /// Visit a `EnumCasePatternSyntax`.
@@ -1909,8 +1909,8 @@ open class SyntaxRewriter {
   /// Visit a `TuplePatternElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TuplePatternElementSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TuplePatternElementSyntax) -> TuplePatternElementSyntax {
+    return Syntax(visitChildren(node)).cast(TuplePatternElementSyntax.self)
   }
 
   /// Visit a `ExpressionPatternSyntax`.
@@ -1923,8 +1923,8 @@ open class SyntaxRewriter {
   /// Visit a `TuplePatternElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: TuplePatternElementListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: TuplePatternElementListSyntax) -> TuplePatternElementListSyntax {
+    return Syntax(visitChildren(node)).cast(TuplePatternElementListSyntax.self)
   }
 
   /// Visit a `ValueBindingPatternSyntax`.
@@ -1937,36 +1937,36 @@ open class SyntaxRewriter {
   /// Visit a `AvailabilitySpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AvailabilitySpecListSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AvailabilitySpecListSyntax) -> AvailabilitySpecListSyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilitySpecListSyntax.self)
   }
 
   /// Visit a `AvailabilityArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AvailabilityArgumentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AvailabilityArgumentSyntax) -> AvailabilityArgumentSyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityArgumentSyntax.self)
   }
 
   /// Visit a `AvailabilityLabeledArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityLabeledArgumentSyntax.self)
   }
 
   /// Visit a `AvailabilityVersionRestrictionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> AvailabilityVersionRestrictionSyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityVersionRestrictionSyntax.self)
   }
 
   /// Visit a `VersionTupleSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: VersionTupleSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
+  open func visit(_ node: VersionTupleSyntax) -> VersionTupleSyntax {
+    return Syntax(visitChildren(node)).cast(VersionTupleSyntax.self)
   }
 
 
@@ -2010,39 +2010,43 @@ open class SyntaxRewriter {
     return visit(node.data)
   }
 
+  public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
+    return visit(Syntax(node)).cast(T.self)
+  }
+
   /// Visit any DeclSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public func visit(_ node: DeclSyntax) -> Syntax {
-    return visit(node.data)
+  public func visit(_ node: DeclSyntax) -> DeclSyntax {
+    return visit(node.data).cast(DeclSyntax.self)
   }
 
   /// Visit any ExprSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public func visit(_ node: ExprSyntax) -> Syntax {
-    return visit(node.data)
+  public func visit(_ node: ExprSyntax) -> ExprSyntax {
+    return visit(node.data).cast(ExprSyntax.self)
   }
 
   /// Visit any PatternSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public func visit(_ node: PatternSyntax) -> Syntax {
-    return visit(node.data)
+  public func visit(_ node: PatternSyntax) -> PatternSyntax {
+    return visit(node.data).cast(PatternSyntax.self)
   }
 
   /// Visit any StmtSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public func visit(_ node: StmtSyntax) -> Syntax {
-    return visit(node.data)
+  public func visit(_ node: StmtSyntax) -> StmtSyntax {
+    return visit(node.data).cast(StmtSyntax.self)
   }
 
   /// Visit any TypeSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public func visit(_ node: TypeSyntax) -> Syntax {
-    return visit(node.data)
+  public func visit(_ node: TypeSyntax) -> TypeSyntax {
+    return visit(node.data).cast(TypeSyntax.self)
   }
 
 
@@ -2153,7 +2157,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2213,7 +2217,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2223,7 +2227,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2233,7 +2237,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2243,7 +2247,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2273,7 +2277,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2283,7 +2287,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2293,7 +2297,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2303,7 +2307,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2343,7 +2347,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2353,7 +2357,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2363,7 +2367,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2433,7 +2437,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2593,7 +2597,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2603,7 +2607,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2613,7 +2617,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2723,7 +2727,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2733,7 +2737,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2743,7 +2747,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2753,7 +2757,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2763,7 +2767,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2773,7 +2777,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2803,7 +2807,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2813,7 +2817,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2883,7 +2887,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2893,7 +2897,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2933,7 +2937,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2943,7 +2947,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2953,7 +2957,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2963,7 +2967,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -2973,7 +2977,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3003,7 +3007,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3013,7 +3017,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3083,7 +3087,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3093,7 +3097,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3103,7 +3107,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3133,7 +3137,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3143,7 +3147,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3153,7 +3157,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3163,7 +3167,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3173,7 +3177,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3183,7 +3187,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3233,7 +3237,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3243,7 +3247,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3253,7 +3257,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3263,7 +3267,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3273,7 +3277,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3283,7 +3287,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3343,7 +3347,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3353,7 +3357,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3363,7 +3367,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3373,7 +3377,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3383,7 +3387,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3393,7 +3397,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3403,7 +3407,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3453,7 +3457,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3463,7 +3467,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3473,7 +3477,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3493,7 +3497,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3513,7 +3517,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3523,7 +3527,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3533,7 +3537,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3543,7 +3547,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3563,7 +3567,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3573,7 +3577,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3613,7 +3617,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3623,7 +3627,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3633,7 +3637,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3653,7 +3657,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3663,7 +3667,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3673,7 +3677,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3683,7 +3687,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3693,7 +3697,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3703,7 +3707,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3723,7 +3727,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3733,7 +3737,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3743,7 +3747,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3753,7 +3757,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3763,7 +3767,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3773,7 +3777,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3783,7 +3787,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3793,7 +3797,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3803,7 +3807,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3813,7 +3817,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3823,7 +3827,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3833,7 +3837,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3843,7 +3847,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3853,7 +3857,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3863,7 +3867,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3873,7 +3877,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3883,7 +3887,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3893,7 +3897,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3903,7 +3907,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3913,7 +3917,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3923,7 +3927,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3933,7 +3937,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3943,7 +3947,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3953,7 +3957,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3963,7 +3967,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3973,7 +3977,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3983,7 +3987,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -3993,7 +3997,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4053,7 +4057,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4083,7 +4087,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4113,7 +4117,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4153,7 +4157,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4183,7 +4187,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4193,7 +4197,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4203,7 +4207,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4213,7 +4217,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4223,7 +4227,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4233,7 +4237,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4243,7 +4247,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4253,7 +4257,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4263,7 +4267,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4303,7 +4307,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4313,7 +4317,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4323,7 +4327,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4333,7 +4337,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4343,7 +4347,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4353,7 +4357,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4373,7 +4377,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4383,7 +4387,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4393,7 +4397,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4403,7 +4407,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4413,7 +4417,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4423,7 +4427,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4433,7 +4437,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4443,7 +4447,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4453,7 +4457,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4463,7 +4467,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4473,7 +4477,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4483,7 +4487,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4583,7 +4587,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4593,7 +4597,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4623,7 +4627,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4633,7 +4637,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4673,7 +4677,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4683,7 +4687,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4693,7 +4697,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4713,7 +4717,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4793,7 +4797,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4813,7 +4817,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4833,7 +4837,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4843,7 +4847,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4853,7 +4857,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4863,7 +4867,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4873,7 +4877,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return Syntax(visit(node))
   }
 
 

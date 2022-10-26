@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import _SwiftSyntaxTestSupport
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -13,7 +25,7 @@ class TwoSpacesFormat: BasicFormat {
 }
 
 final class StringInterpolationTests: XCTestCase {
-  func testDeclInterpolation() throws {
+  func testDeclInterpolation() {
     let funcSyntax: DeclSyntax =
       """
       func f(a: Int, b: Int) -> Int {
@@ -29,7 +41,7 @@ final class StringInterpolationTests: XCTestCase {
       """)
   }
 
-  func testExprInterpolation() throws {
+  func testExprInterpolation() {
     let exprSyntax: ExprSyntax =
       """
       f(x + g(y), y.z)
@@ -40,13 +52,13 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(addIt.is(SequenceExprSyntax.self))
   }
 
-  func testStmtSyntax() throws {
+  func testStmtSyntax() {
     let collection: ExprSyntax = "[1, 2, 3, 4, 5]"
     let stmtSyntax: StmtSyntax = "for x in \(collection) { }"
     XCTAssertTrue(stmtSyntax.is(ForInStmtSyntax.self))
   }
 
-  func testTypeInterpolation() throws {
+  func testTypeInterpolation() {
     let tupleSyntax: TypeSyntax = "(Int, name: String)"
     XCTAssertTrue(tupleSyntax.is(TupleTypeSyntax.self))
     XCTAssertEqual(tupleSyntax.description, "(Int, name: String)")
@@ -56,12 +68,12 @@ final class StringInterpolationTests: XCTestCase {
                    "(String) async throws -> (Int, name: String)")
   }
 
-  func testPatternInterpolation() throws {
+  func testPatternInterpolation() {
     let letPattern: PatternSyntax = "let x"
     XCTAssertTrue(letPattern.is(ValueBindingPatternSyntax.self))
   }
 
-  func testStructGenerator() throws {
+  func testStructGenerator() {
     let name = "Type"
     let id = 17
 
@@ -74,7 +86,7 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
 
-  func testSourceFile() throws {
+  func testSourceFile() {
     let _: SourceFileSyntax =
       """
       print("Hello, world!")
@@ -82,7 +94,7 @@ final class StringInterpolationTests: XCTestCase {
   }
 
 
-  func testRewriter() throws {
+  func testRewriter() {
     let sourceFile = Parser.parse(source: """
       class Foo {
         func method() {}
@@ -141,7 +153,7 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testStringInterpolationInBuilder() {
-    let ext = ExtensionDecl(extendedType: "MyType") {
+    let ext = ExtensionDecl(extendedType: TypeSyntax("MyType")) {
       FunctionDecl(
       """
       ///
@@ -152,7 +164,7 @@ final class StringInterpolationTests: XCTestCase {
       """
       )
     }
-    AssertStringsEqualWithDiff(ext.build(format: TwoSpacesFormat()).description, """
+    AssertStringsEqualWithDiff(ext.formatted(using: TwoSpacesFormat()).description, """
       extension MyType {
         ///
         /// Satisfies conformance to `SyntaxBuildable`.

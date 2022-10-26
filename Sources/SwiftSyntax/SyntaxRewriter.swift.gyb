@@ -33,9 +33,15 @@ open class SyntaxRewriter {
   /// Visit a `${node.name}`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
+%     if node.base_type == 'Syntax' and node.name != 'MissingSyntax':
+  open func visit(_ node: ${node.name}) -> ${node.name} {
+    return Syntax(visitChildren(node)).cast(${node.name}.self)
+  }
+%     else:
   open func visit(_ node: ${node.name}) -> ${node.base_type} {
     return ${node.base_type}(visitChildren(node))
   }
+%     end
 
 %   end
 % end
@@ -80,12 +86,16 @@ open class SyntaxRewriter {
     return visit(node.data)
   }
 
+  public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
+    return visit(Syntax(node)).cast(T.self)
+  }
+
 % for base_kind in [base_kind for base_kind in SYNTAX_BASE_KINDS if base_kind not in ['Syntax', 'SyntaxCollection']]:
   /// Visit any ${base_kind}Syntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public func visit(_ node: ${base_kind}Syntax) -> Syntax {
-    return visit(node.data)
+  public func visit(_ node: ${base_kind}Syntax) -> ${base_kind}Syntax {
+    return visit(node.data).cast(${base_kind}Syntax.self)
   }
 
 % end
@@ -106,11 +116,7 @@ open class SyntaxRewriter {
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
-%     if node.base_type == 'Syntax':
-      return visit(node)
-%     else:
       return Syntax(visit(node))
-%     end
 %   end
   }
 

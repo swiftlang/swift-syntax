@@ -1,4 +1,4 @@
-//===-------------------------- Types.swift -------------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -398,7 +398,9 @@ extension Parser {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
+        let unexpectedBeforeFirst: RawUnexpectedNodesSyntax?
         let first: RawTokenSyntax?
+        let unexpectedBeforeSecond: RawUnexpectedNodesSyntax?
         let second: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
         let colon: RawTokenSyntax?
@@ -407,34 +409,65 @@ extension Parser {
           while let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
             misplacedSpecifiers.append(specifier)
           }
-          first = self.parseArgumentLabel()
+          (unexpectedBeforeFirst, first) = self.parseArgumentLabel()
           if let parsedColon = self.consume(if: .colon) {
+            unexpectedBeforeSecond = nil
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon {
-            second = self.parseArgumentLabel()
+          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon {
+            (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {
+            unexpectedBeforeSecond = nil
             second = nil
             unexpectedBeforeColon = nil
             colon = RawTokenSyntax(missing: .colon, arena: self.arena)
           }
         } else {
+          unexpectedBeforeFirst = nil
           first = nil
+          unexpectedBeforeSecond = nil
           second = nil
           unexpectedBeforeColon = nil
           colon = nil
         }
+        
+        // In the case that the input is "(foo bar)" we have to decide whether we parse it as "(foo: bar)" or "(foo, bar)".
+        // As most people write identifiers lowercase and types capitalized, we decide on the first character of the first token
+        if let first = first,
+            second == nil,
+            colon?.isMissing == true,
+            first.tokenText.description.first?.isUppercase == true {
+          elements.append(RawTupleTypeElementSyntax(
+            inOut: nil,
+            name: nil,
+            secondName: nil,
+            unexpectedBeforeColon,
+            colon: nil,
+            type: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
+            ellipsis: nil,
+            initializer: nil,
+            trailingComma: self.missingToken(.comma),
+            arena: self.arena
+          ))
+          keepGoing = true
+          continue
+        }
         // Parse the type annotation.
         let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
         let ellipsis = self.currentToken.isEllipsis ? self.consumeAnyToken() : nil
-        let trailingComma = self.consume(if: .comma)
+        var trailingComma = self.consume(if: .comma)
+        if trailingComma == nil && self.withLookahead({ $0.canParseType() }) {
+          // If the next token does not close the tuple, it is very likely the user forgot the comma.
+          trailingComma = self.missingToken(.comma)
+        }
         keepGoing = trailingComma != nil
         elements.append(RawTupleTypeElementSyntax(
             inOut: nil,
-            RawUnexpectedNodesSyntax(misplacedSpecifiers, arena: self.arena),
+            RawUnexpectedNodesSyntax(misplacedSpecifiers.map(RawSyntax.init) + (unexpectedBeforeFirst?.elements ?? []), arena: self.arena),
             name: first,
+            unexpectedBeforeSecond,
             secondName: second,
             unexpectedBeforeColon,
             colon: colon,
@@ -600,7 +633,7 @@ extension Parser.Lookahead {
       // by a type annotation.
       if self.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) {
         self.consumeAnyToken()
-        if self.currentToken.canBeArgumentLabel {
+        if self.currentToken.canBeArgumentLabel() {
           self.consumeAnyToken()
           guard self.at(.colon) else {
             return false

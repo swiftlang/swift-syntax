@@ -1,4 +1,4 @@
-//===------------------------- Patterns.swift -----------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -50,6 +50,7 @@ extension Parser {
       case leftParen
       case wildcardKeyword
       case identifier
+      case dollarIdentifier // For recovery
       case letKeyword
       case varKeyword
 
@@ -58,6 +59,7 @@ extension Parser {
         case .leftParen: self = .leftParen
         case .wildcardKeyword: self = .wildcardKeyword
         case .identifier: self = .identifier
+        case .dollarIdentifier: self = .dollarIdentifier
         case .letKeyword: self = .letKeyword
         case .varKeyword: self = .varKeyword
         default: return nil
@@ -69,6 +71,7 @@ extension Parser {
         case .leftParen: return .leftParen
         case .wildcardKeyword: return .wildcardKeyword
         case .identifier: return .identifier
+        case .dollarIdentifier: return .dollarIdentifier
         case .letKeyword: return .letKeyword
         case .varKeyword: return .varKeyword
         }
@@ -98,6 +101,14 @@ extension Parser {
       let identifier = self.eat(handle)
       return RawPatternSyntax(RawIdentifierPatternSyntax(
         identifier: identifier,
+        arena: self.arena
+      ))
+    case (.dollarIdentifier, let handle)?:
+      let dollarIdent = self.eat(handle)
+      let unexpectedBeforeIdentifier = RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena)
+      return RawPatternSyntax(RawIdentifierPatternSyntax(
+        unexpectedBeforeIdentifier,
+        identifier: missingToken(.identifier),
         arena: self.arena
       ))
     case (.letKeyword, let handle)?,
@@ -324,7 +335,7 @@ extension Parser.Lookahead {
     }
 
     // To have a parameter name here, we need a name.
-    guard self.currentToken.canBeArgumentLabel else {
+    guard self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) else {
       return false
     }
 
@@ -335,7 +346,7 @@ extension Parser.Lookahead {
     }
 
     // If the next token can be an argument label, we might have a name.
-    if nextTok.canBeArgumentLabel {
+    if nextTok.canBeArgumentLabel(allowDollarIdentifier: true) {
       // If the first name wasn't "isolated", we're done.
       if !self.atContextualKeyword("isolated") &&
           !self.atContextualKeyword("some") &&
@@ -351,7 +362,7 @@ extension Parser.Lookahead {
           return true // isolated :
         }
         self.consumeAnyToken()
-        return self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon
+        return self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon
       }
     }
 

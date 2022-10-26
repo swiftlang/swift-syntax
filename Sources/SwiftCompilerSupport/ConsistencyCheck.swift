@@ -1,4 +1,4 @@
-//===-------------------------- ConsistencyCheck.swift --------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -12,6 +12,7 @@
 
 import SwiftOperators
 @_spi(Testing) @_spi(RawSyntax) import SwiftParser
+import SwiftParserDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Syntax {

@@ -45,8 +45,10 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
+    .library(name: "SwiftDiagnostics", type: .static, targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftOperators", type: .static, targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
+    .library(name: "SwiftParserDiagnostics", type: .static, targets: ["SwiftParserDiagnostics"]),
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
@@ -95,9 +97,9 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntaxBuilder",
-      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftParser"],
+      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics"],
       exclude: [
-        "gyb_helpers",
+        "CMakeLists.txt",
         "SyntaxExpressibleByStringInterpolationConformances.swift.gyb",
       ]
     ),
@@ -116,13 +118,20 @@ let package = Package(
     ),
     .target(
       name: "SwiftParser",
-      dependencies: ["SwiftBasicFormat", "SwiftDiagnostics", "SwiftSyntax"],
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax"],
       exclude: [
         "CMakeLists.txt",
         "README.md",
         "TypeAttribute.swift.gyb",
         "DeclarationModifier.swift.gyb",
         "DeclarationAttribute.swift.gyb",
+      ]
+    ),
+    .target(
+      name: "SwiftParserDiagnostics",
+      dependencies: ["SwiftBasicFormat", "SwiftDiagnostics", "SwiftParser", "SwiftSyntax"],
+      exclude: [
+        "CMakeLists.txt",
       ]
     ),
     .target(
@@ -134,8 +143,8 @@ let package = Package(
     ),
     .target(
       name: "SwiftCompilerSupport",
-      dependencies: [
-        "SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftOperators"],
+      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics",
+                     "SwiftDiagnostics", "SwiftOperators"],
       exclude: [
         "CMakeLists.txt",
         "SwiftCompilerSupport.h"
@@ -155,12 +164,12 @@ let package = Package(
     ),
     .executableTarget(
       name: "swift-parser-cli",
-      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftOperators", "_SwiftSyntaxMacros",
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics", "SwiftOperators", "_SwiftSyntaxMacros",
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .testTarget(
       name: "SwiftDiagnosticsTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftParserDiagnostics"]
     ),
     .testTarget(
       name: "SwiftSyntaxTest",
@@ -190,6 +199,10 @@ let package = Package(
       name: "SwiftParserTest",
       dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser",
                      "_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder"]
+    ),
+    .testTarget(
+      name: "SwiftParserDiagnosticsTest",
+      dependencies: ["SwiftDiagnostics", "SwiftParserDiagnostics"]
     ),
     .testTarget(
       name: "SwiftOperatorsTest",

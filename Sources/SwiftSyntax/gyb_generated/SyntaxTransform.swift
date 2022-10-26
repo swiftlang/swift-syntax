@@ -3389,6 +3389,10 @@ extension SyntaxTransformVisitor {
     visit(Syntax(node))
   }
 
+  public func visit<T: SyntaxChildChoices>(_ node: T) -> ResultType {
+    return visit(Syntax(node))
+  }
+
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)
     return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in

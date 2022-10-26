@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 
@@ -40,7 +52,7 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
 
 final class RawSyntaxTests: XCTestCase {
 
-  func testFactory() throws {
+  func testFactory() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual("\(structDecl.raw)",
@@ -51,7 +63,7 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
-  func testAccessor() throws {
+  func testAccessor() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(structDecl.identifier.tokenKind, .identifier)
@@ -66,7 +78,7 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
-  func testMaterializedToken() throws {
+  func testMaterializedToken() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier, text: arena.intern("foo"),
@@ -85,7 +97,7 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
-  func testParsedToken() throws {
+  func testParsedToken() {
     // Dummy trivia parsing function.
     func dummyParseToken(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
       // Emit a single `unexpectedText` trivia of the whole trivia text.

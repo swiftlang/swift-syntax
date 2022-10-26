@@ -8,6 +8,7 @@
 
 add_library(SwiftBasicFormat STATIC
   generated/BasicFormat.swift
+  SyntaxProtocol+Formatted.swift
   Trivia+Indented.swift
   Utils.swift
 )

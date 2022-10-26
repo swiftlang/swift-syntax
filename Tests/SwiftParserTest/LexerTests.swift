@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
@@ -19,7 +31,7 @@ private func lexeme(
 }
 
 public class LexerTests: XCTestCase {
-  func testIdentifiers() throws {
+  func testIdentifiers() {
     var data =
     """
     Hello World
@@ -34,7 +46,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testEscapedIdentifiers() throws {
+  func testEscapedIdentifiers() {
     var data =
     """
     `Hello` `World` `$`
@@ -50,7 +62,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testBlockComments() throws {
+  func testBlockComments() {
     do {
       var data =
       """
@@ -89,7 +101,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testDeepTupleAccess() throws {
+  func testDeepTupleAccess() {
     var data =
     #"""
     x.1.0
@@ -108,7 +120,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testUnicodeLiteral() throws {
+  func testUnicodeLiteral() {
     do {
       var data =
       #"""
@@ -141,7 +153,7 @@ public class LexerTests: XCTestCase {
   }
 
 
-  func testNumberLiterals() throws {
+  func testNumberLiterals() {
     var data =
     """
     1234567890
@@ -177,7 +189,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testRawStringLiterals() throws {
+  func testRawStringLiterals() {
     do {
       var data =
       """
@@ -237,7 +249,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testShebang() throws {
+  func testShebang() {
     var data =
     """
     #!/usr/bin/swiftc
@@ -255,7 +267,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testDocComment() throws {
+  func testDocComment() {
     var data =
     """
     /** hello */
@@ -274,7 +286,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testMain() throws {
+  func testMain() {
     var data =
     """
     /* TestApp */
@@ -309,7 +321,7 @@ public class LexerTests: XCTestCase {
     }
   }
 
-  func testRegexLexing() throws {
+  func testRegexLexing() {
     let fixtures: [(String, [Lexer.Lexeme])] = [
       ("/abc/", [
         lexeme(.regexLiteral, "/abc/"),

@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import SwiftBasicFormat
 @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -24,21 +36,21 @@ private class InitializerExprFormat: BasicFormat {
     return formattedChildren
   }
 
-  override func visit(_ node: TupleExprElementListSyntax) -> Syntax {
+  override func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
     let children = node.children(viewMode: .all)
     // If the function only takes a single argument, display it on the same line
     if children.count > 1 {
-      return Syntax(TupleExprElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: TupleExprElementSyntax.self)))
+      return TupleExprElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: TupleExprElementSyntax.self))
     } else {
       return super.visit(node)
     }
   }
 
-  override func visit(_ node: ArrayElementListSyntax) -> Syntax {
+  override func visit(_ node: ArrayElementListSyntax) -> ArrayElementListSyntax {
     let children = node.children(viewMode: .all)
     // Short array literals are presented on one line, list each element on a different line.
     if node.description.count > 30 {
-      return Syntax(ArrayElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self)))
+      return ArrayElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self))
     } else {
       return super.visit(node)
     }
@@ -46,12 +58,12 @@ private class InitializerExprFormat: BasicFormat {
 }
 
 private extension TriviaPiece {
-  var initializerExpr: ExprBuildable {
+  var initializerExpr: ExprSyntaxProtocol {
     let (label, value) = Mirror(reflecting: self).children.first!
     switch value {
     case let value as String:
       return FunctionCallExpr(calledExpression: MemberAccessExpr(name: label!)) {
-        TupleExprElement(expression: StringLiteralExpr(value))
+        TupleExprElement(expression: StringLiteralExpr(content: value))
       }
     case let value as Int:
       return FunctionCallExpr(calledExpression: MemberAccessExpr(name: label!)) {
@@ -64,7 +76,7 @@ private extension TriviaPiece {
 }
 
 private extension Trivia {
-  var initializerExpr: ExprBuildable {
+  var initializerExpr: ExprSyntaxProtocol {
     if pieces.count == 1 {
       switch pieces.first {
       case .spaces(1):
@@ -88,13 +100,13 @@ extension SyntaxProtocol {
   /// (or at least an expression that's very close to constructing this node, the addition of a few manual upcast by hand is still needed).
   /// The intended use case for this is to print a syntax tree and create a substructure assertion from the generated expression.
   public var debugInitCall: String {
-    return self.debugInitCallExpr.build(format: InitializerExprFormat()).description
+    return self.debugInitCallExpr.formatted(using: InitializerExprFormat()).description
   }
 
-  private var debugInitCallExpr: ExprBuildable {
+  private var debugInitCallExpr: ExprSyntaxProtocol {
     let mirror = Mirror(reflecting: self)
     if self.isCollection {
-      return FunctionCallExpr(calledExpression: "\(type(of: self))") {
+      return FunctionCallExpr(calledExpression: IdentifierExpr(String("\(type(of: self))"))) {
         TupleExprElement(
           expression: ArrayExpr() {
             for child in mirror.children {
@@ -122,7 +134,7 @@ extension SyntaxProtocol {
       return FunctionCallExpr(calledExpression: MemberAccessExpr(name: tokenInitializerName)) {
         if requiresExplicitText {
           TupleExprElement(
-            expression: StringLiteralExpr(token.text)
+            expression: StringLiteralExpr(content: token.text)
           )
         }
         if !token.leadingTrivia.isEmpty {
@@ -148,7 +160,7 @@ extension SyntaxProtocol {
         }
       }
     } else {
-      return FunctionCallExpr(calledExpression: "\(type(of: self))") {
+      return FunctionCallExpr(calledExpression: IdentifierExpr(String("\(type(of: self))"))) {
         for child in mirror.children {
           let label = child.label!
           let value = child.value as! SyntaxProtocol?

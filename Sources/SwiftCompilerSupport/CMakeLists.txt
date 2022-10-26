@@ -14,6 +14,7 @@ target_link_libraries(SwiftCompilerSupport PUBLIC
   SwiftSyntax
   SwiftDiagnostics
   SwiftParser
+  SwiftParserDiagnostics
   SwiftOperators
 )
 

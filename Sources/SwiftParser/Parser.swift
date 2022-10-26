@@ -1,4 +1,4 @@
-//===-------------------------- Parser.swift ------------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -149,7 +149,7 @@ public struct Parser: TokenConsumer {
   }
 
   @_spi(RawSyntax)
-  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) -> RawTokenSyntax {
+  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText? = nil) -> RawTokenSyntax {
     return RawTokenSyntax(missing: kind, text: text, arena: self.arena)
   }
 
@@ -327,7 +327,7 @@ extension Parser {
         if let remapping = remapping {
           return $0.missingToken(remapping, text: kind.defaultText)
         } else {
-          return $0.missingToken(kind, text: nil)
+          return $0.missingToken(kind)
         }
       }
     )
@@ -366,7 +366,7 @@ extension Parser {
     return expectImpl(
       consume: { $0.consume(ifAny: kinds, contextualKeywords: contextualKeywords) },
       canRecoverTo: { $0.canRecoverTo(kinds, contextualKeywords: contextualKeywords) },
-      makeMissing: { $0.missingToken(defaultKind, text: nil) }
+      makeMissing: { $0.missingToken(defaultKind) }
     )
   }
 
@@ -390,10 +390,10 @@ extension Parser {
     if let unknown = self.consume(if: .unknown) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(unknown)], arena: self.arena),
-        self.missingToken(.identifier, text: nil)
+        self.missingToken(.identifier)
       )
     }
-    if let number = self.consume(ifAny: [.integerLiteral, .floatingLiteral]) {
+    if let number = self.consume(ifAny: [.integerLiteral, .floatingLiteral, .dollarIdentifier]) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
         self.missingToken(.identifier, text: nil)
@@ -407,7 +407,7 @@ extension Parser {
     }
     return (
       nil,
-      self.missingToken(.identifier, text: nil)
+      self.missingToken(.identifier)
     )
   }
 
@@ -419,12 +419,12 @@ extension Parser {
     if let unknown = self.consume(if: .unknown) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(unknown)], arena: self.arena),
-        self.missingToken(.identifier, text: nil)
+        self.missingToken(.identifier)
       )
     }
     return (
       nil,
-      self.missingToken(.identifier, text: nil)
+      self.missingToken(.identifier)
     )
   }
 

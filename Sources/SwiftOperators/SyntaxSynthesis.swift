@@ -1,4 +1,4 @@
-//===------------------ SyntaxSynthesis.swift -----------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -74,12 +74,12 @@ extension PrecedenceGroup {
       TokenSyntax.identifier(name, leadingTrivia: .space)
     let leftBrace = TokenSyntax.leftBraceToken(leadingTrivia: .space)
 
-    var groupAttributes: [Syntax] = []
+    var groupAttributes: [PrecedenceGroupAttributeListSyntax.Element] = []
 
     switch associativity {
     case .left, .right:
       groupAttributes.append(
-        Syntax(
+        .init(
           PrecedenceGroupAssociativitySyntax(
             associativityKeyword:
                 .identifier(
@@ -99,7 +99,7 @@ extension PrecedenceGroup {
 
     if assignment {
       groupAttributes.append(
-        Syntax(
+        .init(
           PrecedenceGroupAssignmentSyntax(
             assignmentKeyword:
                 .identifier(
@@ -115,7 +115,7 @@ extension PrecedenceGroup {
 
     for relation in relations {
       groupAttributes.append(
-        Syntax(
+        .init(
           relation.synthesizedSyntax()
         )
       )

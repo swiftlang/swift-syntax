@@ -1,6 +1,4 @@
-//// Automatically Generated From SyntaxNodes.swift.gyb.
-//// Do Not Edit Directly!
-//===------------ SyntaxNodes.swift - Syntax Node definitions -------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -100,6 +98,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The text of the token as written in the source code.
   public var text: String {
     return tokenKind.text
+  }
+
+  @_spi(RawSyntax)
+  public var rawTokenKind: RawTokenKind {
+    return tokenView.rawKind
   }
 
   /// Returns a new TokenSyntax with its kind replaced

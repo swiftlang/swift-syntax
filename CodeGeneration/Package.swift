@@ -12,7 +12,7 @@ let package = Package(
     .executable(name: "generate-swiftsyntaxbuilder", targets: ["generate-swiftsyntaxbuilder"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax.git", revision: "108a09851eb34b855bd0f9ff3e52ea396b531b58"),
+    .package(url: "https://github.com/apple/swift-syntax.git", revision: "fa7ff05591294db031e3061e704994aa3b89d1bc"),
     .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "1.1.4")),
   ],
   targets: [
@@ -46,7 +46,6 @@ let package = Package(
         "Classification.swift.gyb",
         "CommonNodes.swift.gyb",
         "DeclNodes.swift.gyb",
-        "ExpressibleAsConformances.swift.gyb",
         "ExprNodes.swift.gyb",
         "GenericNodes.swift.gyb",
         "NodeSerializationCodes.swift.gyb",

@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import SwiftDiagnostics
 import SwiftSyntax
 
@@ -40,6 +52,11 @@ public struct MacroSystem {
 
     macros[macro.name] = macro
   }
+
+  /// Look for a macro with the given name.
+  public func lookup(_ macroName: String) -> Macro.Type? {
+    return macros[macroName]
+  }
 }
 
 /// Syntax rewriter that evaluates any macros encountered along the way.
@@ -68,7 +85,7 @@ class MacroApplication : SyntaxRewriter {
     )
   }
 
-  override func visit(_ node: CodeBlockItemListSyntax) -> Syntax {
+  override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
     var newItems: [CodeBlockItemSyntax] = []
     for item in node {
       // Recurse on the child node.
@@ -82,7 +99,7 @@ class MacroApplication : SyntaxRewriter {
       }
     }
 
-    return Syntax(CodeBlockItemListSyntax(newItems))
+    return CodeBlockItemListSyntax(newItems)
   }
 }
 

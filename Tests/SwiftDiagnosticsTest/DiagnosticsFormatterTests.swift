@@ -1,4 +1,4 @@
-//===------------------ DiagnosticsFormatterTests.swift -------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -14,16 +14,17 @@ import _SwiftSyntaxTestSupport
 import XCTest
 import SwiftDiagnostics
 import SwiftParser
+import SwiftParserDiagnostics
 
 final class DiagnosticsFormatterTests: XCTestCase {
   
-  func annotate(source: String) throws -> String {
+  func annotate(source: String) -> String {
     let tree = Parser.parse(source: source)
     let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
     return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags)
   }
   
-  func testSingleDiagnostic() throws {
+  func testSingleDiagnostic() {
     let source = """
     var foo = bar +
     """
@@ -32,10 +33,10 @@ final class DiagnosticsFormatterTests: XCTestCase {
       ∣                ╰─ expected expression in variable
     
     """
-    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
   }
   
-  func testMultipleDiagnosticsInOneLine() throws {
+  func testMultipleDiagnosticsInOneLine() {
     let source = """
     foo.[].[].[]
     """
@@ -46,10 +47,10 @@ final class DiagnosticsFormatterTests: XCTestCase {
       ∣     ╰─ expected name in member access
     
     """
-    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
   }
   
-  func testLineSkipping() throws {
+  func testLineSkipping() {
     let source = """
     var i = 1
     i = 2
@@ -77,7 +78,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
        ∣         ╰─ expected value and ')' to end function call
 
     """
-    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
   }
 
   func testTwoDiagnosticsAtSameLocation() throws {
@@ -90,6 +91,6 @@ final class DiagnosticsFormatterTests: XCTestCase {
     
     """
 
-    AssertStringsEqualWithDiff(expectedOutput, try annotate(source: source))
+    AssertStringsEqualWithDiff(expectedOutput, annotate(source: source))
   }
 }

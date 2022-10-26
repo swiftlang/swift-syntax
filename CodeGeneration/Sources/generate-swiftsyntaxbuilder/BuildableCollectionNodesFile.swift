@@ -20,176 +20,46 @@ import SwiftBasicFormat
 let buildableCollectionNodesFile = SourceFile {
   ImportDecl(
     leadingTrivia: .docLineComment(copyrightHeader),
-    path: "SwiftSyntax"
+    path: [AccessPathComponent(name: "SwiftSyntax")]
   )
-  ImportDecl(
-    trailingTrivia: .newline,
-    path: "SwiftBasicFormat"
-  )
-
-  let triviaSides = ["leading", "trailing"]
-  let trivias = triviaSides.map { "\($0)Trivia" }
 
   for node in SYNTAX_NODES where node.isSyntaxCollection {
-    let type = node.type
     let elementType = node.collectionElementType
-    let conformances = ["ExpressibleByArrayLiteral", "SyntaxBuildable", type.expressibleAsBaseName]
-    
+
     // Generate collection node struct
-    StructDecl(
+    ExtensionDecl(
       leadingTrivia: node.documentation.isEmpty
         ? []
         : .docLineComment("/// \(node.documentation)") + .newline,
-      modifiers: [Token.public],
-      identifier: type.buildableBaseName,
-      inheritanceClause: createTypeInheritanceClause(conformances: conformances)
+      extendedType: Type(node.type.shorthandName),
+      inheritanceClause: TypeInheritanceClause { InheritedType(typeName: Type("ExpressibleByArrayLiteral")) }
     ) {
-      for (side, trivia) in zip(triviaSides, trivias) {
-        VariableDecl(
+      // Generate initializers
+      if elementType.isBaseType && node.collectionElementChoices?.isEmpty ?? true {
+        InitializerDecl(
           """
-          /// The \(side) trivia attached to this syntax node once built.
-          var \(trivia): Trivia = []
+          public init(_ elements: \(ArrayType(elementType: elementType.parameterType))) {
+            self = \(node.type.syntaxBaseName)(elements.map { \(elementType.syntax)(fromProtocol: $0) })
+          }
           """
         )
-      }
 
-      VariableDecl(.let, name: "elements", type: ArrayType(elementType: elementType.buildable))
-
-      // Generate initializers
-      createArrayInitializer(node: node)
-      createCombiningInitializer(node: node)
-      createArrayLiteralInitializer(node: node)
-
-      // Generate function declarations
-      createBuildFunction(node: node, trivias: trivias)
-      createBuildSyntaxFunction(node: node)
-      createExpressibleAsCreateFunction(type: type)
-      createDisambiguatingExpressibleAsCreateFunction(type: type, baseType: .init(syntaxKind: "Syntax"))
-
-      for trivia in trivias {
-        createWithTriviaFunction(trivia: trivia)
-      }
-    }
-
-    // For nodes without expressible-as conformances, conform Array to the corresponding expressible-as
-    if type.generatedExpressibleAsConformances.isEmpty {
-      ExtensionDecl(
-        extendedType: "Array",
-        inheritanceClause: TypeInheritanceClause {
-          InheritedType(typeName: type.expressibleAs)
-        },
-        genericWhereClause: GenericWhereClause {
-          GenericRequirement(body: SameTypeRequirement(
-            leftTypeIdentifier: "Element",
-            equalityToken: .spacedBinaryOperator("=="),
-            rightTypeIdentifier: elementType.expressibleAs
-          ))
-        }
-      ) {
-        FunctionDecl(
+        InitializerDecl(
           """
-          public func create\(type.buildableBaseName)() -> \(type.buildable) {
-            return \(type.buildableBaseName)(self)
+          public init(arrayLiteral elements: \(elementType.parameterType)...) {
+            self.init(elements)
+          }
+          """
+        )
+      } else {
+        InitializerDecl(
+          """
+          public init(arrayLiteral elements: Element...) {
+            self.init(elements)
           }
           """
         )
       }
     }
   }
-}
-
-/// Helper for generating an initializer taking an array of elements.
-private func createArrayInitializer<ElementsInit: ExprBuildable>(
-  type: SyntaxBuildableType, elementType: SyntaxBuildableType,
-  elementsInit: ElementsInit
-) -> InitializerDecl {
-  return InitializerDecl(
-    """
-    /// Creates a `\(type.buildableBaseName)` with the provided list of elements.
-    /// - Parameters:
-    ///   - elements: A list of `\(elementType.expressibleAsBaseName)`
-    public init(_ elements: \(ArrayType(elementType: elementType.expressibleAs))) {
-      self.elements = \(elementsInit)
-    }
-    """
-  )
-}
-
-/// Generate an initializer taking an array of elements.
-private func createArrayInitializer(node: Node) -> InitializerDecl {
-  let type = node.type
-  let elementType = node.collectionElementType
-  let elementsInit = IdentifierExpr("elements")
-  if elementType.isToken {
-    return createArrayInitializer(
-      type: type, elementType: elementType, elementsInit: elementsInit
-    )
-  }
-
-  let elementsInitCall = FunctionCallExpr(
-    calledExpression: MemberAccessExpr(base: elementsInit, name: "map"),
-    trailingClosure: ClosureExpr(" { $0.create\(elementType.buildableBaseName)() }")
-  )
-  return createArrayInitializer(
-    type: type, elementType: elementType, elementsInit: elementsInitCall
-  )
-}
-
-/// Generate a flattening initializer taking an array of collections.
-private func createCombiningInitializer(node: Node) -> InitializerDecl {
-  let type = node.type
-  return InitializerDecl(
-    """
-    /// Creates a new `\(type.buildableBaseName)` by flattening the elements in `lists`
-    public init(combining lists: \(ArrayType(elementType: type.expressibleAs))) {
-      elements = lists.flatMap { $0.create\(type.buildableBaseName)().elements }
-    }
-    """
-  )
-}
-
-/// Generate the initializer for the `ExpressibleByArrayLiteral` conformance.
-private func createArrayLiteralInitializer(node: Node) -> InitializerDecl {
-  let elementType = node.collectionElementType
-  return InitializerDecl(
-    """
-    public init(arrayLiteral elements: \(elementType.expressibleAs)...) {
-      self.init(elements)
-    }
-    """
-  )
-}
-
-/// Generate the function building the collection syntax.
-private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl {
-  let type = node.type
-  let elementType = node.collectionElementType
-  let buildCall = elementType.isToken ? "buildToken" : "build\(elementType.baseName)"
-
-  let body = CodeBlockItemList {
-    VariableDecl("var result = \(type.syntaxBaseName)(elements.map { $0.\(buildCall)() })")
-    for trivia in trivias {
-      createTriviaAttachment(varName: IdentifierExpr("result"), triviaVarName: IdentifierExpr(trivia), trivia: trivia)
-    }
-    ReturnStmt("return result")
-  }.buildSyntax(format: Format(indentWidth: 2))
-
-  return FunctionDecl(
-    """
-    public func build\(type.baseName)() -> \(type.syntax) {
-      \(body)
-    }
-    """)
-}
-
-/// Generate the function building the syntax.
-private func createBuildSyntaxFunction(node: Node) -> FunctionDecl {
-  let type = node.type
-  return FunctionDecl(
-    """
-    public func buildSyntax() -> Syntax {
-      return Syntax(build\(type.baseName)())
-    }
-    """
-  )
 }

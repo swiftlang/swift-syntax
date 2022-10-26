@@ -11,12 +11,11 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftBasicFormat
 
 public func generateTemplates(templates: [(SourceFile, String)], destination: URL, verbose: Bool) throws {
-  let format = Format(indentWidth: 2)
-
   try FileManager.default.createDirectory(
     atPath: destination.path,
     withIntermediateDirectories: true,
@@ -28,7 +27,7 @@ public func generateTemplates(templates: [(SourceFile, String)], destination: UR
     if verbose {
       print("Generating \(fileURL.path)...")
     }
-    let syntax = sourceFile.buildSyntax(format: format)
+    let syntax = sourceFile.formatted(using: CodeGenerationFormat())
     try "\(syntax)\n".write(to: fileURL, atomically: true, encoding: .utf8)
   }
 }

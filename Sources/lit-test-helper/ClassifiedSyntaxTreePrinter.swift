@@ -1,4 +1,4 @@
-//===--- ClassifiedSyntaxTreePrinter.swift - Print Syntax colouring info --===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import Foundation
 
 extension SyntaxClassification {
   var tag: String {

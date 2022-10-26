@@ -393,7 +393,11 @@ DECL_ATTR_KINDS = [
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=70),
   # NOTE: 71 is unused
-  # NOTE: 72 is unused
+    DeclAttribute('_objcImplementation', 'ObjCImplementation',
+                  OnExtension,
+                  UserInaccessible,
+                  ABIBreakingToAdd, ABIBreakingToRemove, APIBreakingToAdd, APIBreakingToRemove,
+                  code=72),
     DeclAttribute('_optimize', 'Optimize',
                   OnAbstractFunction,  OnSubscript,  OnVar,
                   UserInaccessible,

@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -14,26 +26,11 @@ final class StructTests: XCTestCase {
   }
 
   func testNestedStruct() {
-    let nestedStruct = StructDecl(
-      leadingTrivia: [
-        .docLineComment("/// A nested struct"),
-        .newlines(1),
-        .docLineComment("/// with multi line comment"),
-        .newlines(1)
-      ],
-      structKeyword: .struct,
-      identifier: "NestedStruct",
-      genericParameterClause: GenericParameterClause(rightAngleBracket: .rightAngle.withTrailingTrivia([])) {
-        GenericParameter(name: "A")
-        GenericParameter(name: "B", colon: .colon, inheritedType: "C")
-        GenericParameter(name: "D")
-      },
-      genericWhereClause: GenericWhereClause {
-        GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: "A", rightTypeIdentifier: "X"))
-        GenericRequirement(body: SameTypeRequirement(
-            leftTypeIdentifier: "A.P", equalityToken: .spacedBinaryOperator("=="), rightTypeIdentifier: "D"))
-      }
-    ) {}
+    let nestedStruct = StructDecl("""
+    /// A nested struct
+    /// with multi line comment
+    struct NestedStruct<A, B: C, D> where A: X, A.P == D
+    """) {}
     
     let carriateReturnsStruct = StructDecl(
         leadingTrivia: [
@@ -55,10 +52,7 @@ final class StructTests: XCTestCase {
           structKeyword: .struct,
           identifier: "CarriageReturnFormFeedsStruct"
         )
-    let testStruct = StructDecl(
-      modifiers: [Token.public],
-      identifier: "TestStruct"
-    ) {
+    let testStruct = StructDecl("public struct TestStruct") {
       nestedStruct
       carriateReturnsStruct
       carriageReturnFormFeedsStruct
@@ -86,10 +80,10 @@ final class StructTests: XCTestCase {
     let myStruct = StructDecl(identifier: "MyStruct") {
       for i in 0..<5 {
         if i.isMultiple(of: 2) {
-           VariableDecl(letOrVarKeyword: .let) {
+          VariableDecl(letOrVarKeyword: .let) {
             PatternBinding(
               pattern: IdentifierPattern("var\(i)"),
-              typeAnnotation: "String"
+              typeAnnotation: TypeAnnotation(type: Type("String"))
             )
           }
         }

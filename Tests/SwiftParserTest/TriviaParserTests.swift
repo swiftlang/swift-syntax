@@ -1,10 +1,22 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
 
 final class TriviaParserTests: XCTestCase {
 
-  func testTriviaParsing() throws {
+  func testTriviaParsing() {
 
     XCTAssertEqual(
       TriviaParser.parseTrivia("""
@@ -126,7 +138,7 @@ final class TriviaParserTests: XCTestCase {
       ])
   }
 
-  func testRawSyntaxLazyTriviaPieces() throws {
+  func testRawSyntaxLazyTriviaPieces() {
     withParser(source: """
         /// Foo.
         func foo() {
@@ -153,7 +165,7 @@ final class TriviaParserTests: XCTestCase {
 
   }
 
-  func testSyntaxLazyTrivia() throws {
+  func testSyntaxLazyTrivia() {
     let source = """
       /* comment only */
 
@@ -165,7 +177,7 @@ final class TriviaParserTests: XCTestCase {
     ])
   }
 
-  func testUnexpectedSplitting() throws {
+  func testUnexpectedSplitting() {
     XCTAssertEqual(
       TriviaParser.parseTrivia("\u{fffe} ", position: .trailing),
       [

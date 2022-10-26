@@ -1,4 +1,4 @@
-//===----------------------- Expressions.swift ----------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -1041,7 +1041,7 @@ extension Parser {
         poundDsohandle: tok,
         arena: self.arena
       ))
-    case (.identifier, let handle)?, (.selfKeyword, let handle)?:
+    case (.identifier, let handle)?, (.selfKeyword, let handle)?, (.initKeyword, let handle)?:
       // If we have "case let x." or "case let x(", we parse x as a normal
       // name, not a binding, because it is the start of an enum pattern or
       // call pattern.
@@ -2185,8 +2185,17 @@ extension Parser {
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
-      let labelAndColon = self.consume(if: { $0.canBeArgumentLabel }, followedBy: { $0.tokenKind == .colon })
-      let (label, colon) = (labelAndColon?.0, labelAndColon?.1)
+      let unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
+      let label: RawTokenSyntax?
+      let colon: RawTokenSyntax?
+      if currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon {
+        (unexpectedBeforeLabel, label) = parseArgumentLabel()
+        colon = consumeAnyToken()
+      } else {
+        unexpectedBeforeLabel = nil
+        label = nil
+        colon = nil
+      }
 
       // See if we have an operator decl ref '(<op>)'. The operator token in
       // this case lexes as a binary operator because it neither leads nor
@@ -2202,6 +2211,7 @@ extension Parser {
       }
       keepGoing = self.consume(if: .comma)
       result.append(RawTupleExprElementSyntax(
+        unexpectedBeforeLabel,
         label: label,
         colon: colon,
         expression: expr,
@@ -2231,10 +2241,11 @@ extension Parser {
     var elements = [RawMultipleTrailingClosureElementSyntax]()
     var loopProgress = LoopProgressCondition()
     while self.lookahead().isStartOfLabelledTrailingClosure() && loopProgress.evaluate(currentToken) {
-      let label = self.parseArgumentLabel()
+      let (unexpectedBeforeLabel, label) = self.parseArgumentLabel()
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let closure = self.parseClosureExpression()
       elements.append(RawMultipleTrailingClosureElementSyntax(
+        unexpectedBeforeLabel,
         label: label,
         unexpectedBeforeColon,
         colon: colon,
@@ -2253,7 +2264,7 @@ extension Parser.Lookahead {
     // Fast path: the next two tokens must be a label and a colon.
     // But 'default:' is ambiguous with switch cases and we disallow it
     // (unless escaped) even outside of switches.
-    if !self.currentToken.canBeArgumentLabel
+    if !self.currentToken.canBeArgumentLabel()
         || self.at(.defaultKeyword)
         || self.peek().tokenKind != .colon {
       return false

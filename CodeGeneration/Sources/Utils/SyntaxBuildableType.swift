@@ -23,14 +23,21 @@ public struct SyntaxBuildableType: Hashable {
   public let tokenKind: String?
   public let isOptional: Bool
 
+  public init(syntaxKind: String, isOptional: Bool = false) {
+    self.isOptional = isOptional
+    if syntaxKind.hasSuffix("Token") {
+      // There are different token kinds but all of them are represented by `Token` in the Swift source (see `kind_to_type` in `gyb_syntax_support`).
+      self.syntaxKind = "Token"
+      self.tokenKind = syntaxKind
+    } else {
+      self.syntaxKind = syntaxKind
+      self.tokenKind = nil
+    }
+  }
+
   /// Whether this is a token.
   public var isToken: Bool {
     syntaxKind == "Token"
-  }
-
-  /// This type with `isOptional` set to false.
-  public var nonOptional: Self {
-    tokenKind.map { Self(syntaxKind: $0) } ?? Self(syntaxKind: syntaxKind)
   }
 
   /// The token if this is a token.
@@ -38,18 +45,22 @@ public struct SyntaxBuildableType: Hashable {
     tokenKind.flatMap { SYNTAX_TOKEN_MAP[$0] }
   }
 
+  public var isBaseType: Bool {
+    return SYNTAX_BASE_KINDS.contains(syntaxKind)
+  }
+
   /// If the type has a default value (because it is optional or a token
   /// with fixed test), return an expression of the form ` = defaultValue`
   /// that can be used as the default value for a function parameter.
   /// Otherwise, return the empty string.
-  public var defaultInitialization: ExpressibleAsExprBuildable? {
+  public var defaultInitialization: Expr? {
     if isOptional {
-      return NilLiteralExpr()
+      return Expr(NilLiteralExpr())
     } else if isToken {
       if let token = token, token.text != nil {
-        return MemberAccessExpr(base: "Token", name: lowercaseFirstWord(name: token.name).backticked)
+        return Expr(MemberAccessExpr(base: "Token", name: lowercaseFirstWord(name: token.name).backticked))
       } else if tokenKind == "EOFToken" {
-        return MemberAccessExpr(base: "Token", name: "eof")
+        return Expr(MemberAccessExpr(base: "Token", name: "eof"))
       }
     }
     return nil
@@ -75,52 +86,30 @@ public struct SyntaxBuildableType: Hashable {
   ///  - For base kinds: `<BaseKind>Buildable`, e.g. `ExprBuildable` (these are implemented as protocols)
   ///  - For token: `TokenSyntax` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
   /// If the type is optional, the type is wrapped in an `OptionalType`.
-  public var buildable: TypeBuildable {
-    optionalWrapped(type: buildableBaseName).createTypeBuildable()
+  public var buildable: Type {
+    optionalWrapped(type: Type(shorthandName))
   }
 
   /// Whether parameters of this type should be initializable by a result builder.
   /// Used for certain syntax collections and block-like structures (e.g. `CodeBlock`,
   /// `MemberDeclList`).
   public var isBuilderInitializable: Bool {
-    BUILDER_INITIALIZABLE_TYPES.keys.contains(buildableBaseName)
+    BUILDER_INITIALIZABLE_TYPES.keys.contains(syntaxKind)
   }
 
   /// A type suitable for initializing this type through a result builder (e.g.
   /// returns `CodeBlockItemList` for `CodeBlock`) and otherwise itself.
   public var builderInitializableType: Self {
     Self(
-      syntaxKind: BUILDER_INITIALIZABLE_TYPES[buildableBaseName].flatMap { $0 } ?? buildableBaseName,
+      syntaxKind: BUILDER_INITIALIZABLE_TYPES[shorthandName].flatMap { $0 } ?? shorthandName,
       isOptional: isOptional
     )
   }
 
-  /// The type from `buildable()` without any question marks attached.
-  /// This is used for the `create*` methods defined in the `ExpressibleAs*` protocols.
-  public var buildableBaseName: String {
-    if SYNTAX_BASE_KINDS.contains(syntaxKind) {
-      return "\(syntaxKind)Buildable"
-    } else {
-      return syntaxKind
-    }
-  }
-
-  /// The `ExpressibleAs*` Swift type for this syntax kind without any
-  /// question marks attached.
-  public var expressibleAsBaseName: String {
-    if isToken {
-      // Tokens don't have a dedicated ExpressibleAs type.
-      return buildableBaseName
-    } else {
-      return "ExpressibleAs\(buildableBaseName)"
-    }
-  }
-
-  /// The `ExpressibleAs*` Swift type for this syntax kind. Tokens don't
-  /// have an `ExpressibleAs*` type, so for those this method just returns
-  /// `TokenSyntax`. If the type is optional, this terminates with a `?`.
-  public var expressibleAs: TypeBuildable {
-    optionalWrapped(type: expressibleAsBaseName)
+  /// The type name without the `Syntax`. `SwiftSyntaxBuilder` declares typealiases
+  /// that map these to the corresponding `*Syntax` nodes.
+  public var shorthandName: String {
+    return syntaxKind
   }
 
   /// The corresponding `*Syntax` type defined in the `SwiftSyntax` module,
@@ -136,20 +125,22 @@ public struct SyntaxBuildableType: Hashable {
   /// The corresponding `*Syntax` type defined in the `SwiftSyntax` module,
   /// which will eventually get built from `SwiftSyntaxBuilder`. If the type
   /// is optional, this terminates with a `?`.
-  public var syntax: TypeBuildable {
-    optionalWrapped(type: syntaxBaseName)
+  public var syntax: TypeSyntax {
+    return optionalWrapped(type: TypeSyntax(syntaxBaseName))
   }
 
-  /// Assuming that this is a base kind, return the corresponding `*ListBuildable` type
-  /// without any question marks attached.
-  public var listBuildableBaseName: String {
-    assert(SYNTAX_BASE_KINDS.contains(syntaxKind), "ListBuildable types only exist for syntax base kinds")
-    return "\(syntaxKind)ListBuildable"
+  /// The type that is used for paramters in SwiftSyntaxBuilder that take this
+  /// type of syntax node.
+  public var parameterBaseType: String {
+    if isBaseType {
+      return "\(syntaxBaseName)Protocol"
+    } else {
+      return shorthandName
+    }
   }
 
-  /// Assuming that this is a base kind, return the corresponding `*ListBuildable` type.
-  public var listBuildable: TypeBuildable {
-    optionalWrapped(type: listBuildableBaseName)
+  public var parameterType: TypeSyntax {
+    return optionalWrapped(type: TypeSyntax(parameterBaseType))
   }
 
   /// Assuming that this is a collection type, the non-optional type of the result builder
@@ -158,118 +149,45 @@ public struct SyntaxBuildableType: Hashable {
     "\(syntaxKind)Builder"
   }
 
-  /// Assuming that this is a collection type, the type of the result builder
-  /// that can be used to build the collection.
-  public var resultBuilder: ExpressibleAsTypeBuildable {
-    optionalWrapped(type: resultBuilderBaseName)
-  }
-
-  /// The collection types in which this type occurs as an element.
-  /// We automatically make the `ExpressibleAs*` protocols conform to the
-  /// `ExpressibleAs*` protocol of the collection they occur in.
-  public var elementInCollections: [Self] {
-    SYNTAX_NODES
-      .filter { $0.isSyntaxCollection && $0.collectionElementType == self }
-      .map { $0.type }
-  }
-
   /// Whether this type has the `WithTrailingComma` trait.
   public var hasWithTrailingCommaTrait: Bool {
     SYNTAX_NODES.contains { $0.type == self && $0.traits.contains("WithTrailingComma") }
   }
 
-  /// Types that take a single non-optional parameter of this types
-  /// and to which this type is thus convertible. We automatically
-  /// make the `ExpressibleAs*` of this type conform to the `ExpressibleAs*`
-  /// protocol of the convertible types.
-  public var convertibleToTypes: [Self] {
-    (SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES[buildableBaseName] ?? [])
-      .map { Self(syntaxKind: $0) }
-  }
-
   /// If this type is not a base kind, its base type (see `SyntaxBuildableNode.base_type()`),
   /// otherwise `nil`.
   public var baseType: Self? {
-    if !SYNTAX_BASE_KINDS.contains(syntaxKind) && !isToken {
+    if !isBaseType && !isToken {
       return Node.from(type: self).baseType
     } else {
       return nil
     }
   }
 
-  /// The types to which this `ExpressibleAs*` type conforms to via
-  /// automatically generated conformances.
-  public var generatedExpressibleAsConformances: [Self] {
-    var conformances = elementInCollections + convertibleToTypes
-    if let baseType = baseType, baseType.baseName != "SyntaxCollection" {
-      conformances.append(baseType)
-    }
-    return conformances
-  }
-
-  /// The types to which this `ExpressibleAs*` type conforms to via
-  /// automatically generated conformances, including transitive conformances.
-  public var transitiveExpressibleAsConformances: [Self] {
-    generatedExpressibleAsConformances.flatMap { conformance in
-      [conformance] + conformance.transitiveExpressibleAsConformances
-    }
-  }
-
-  /// The types to which this `ExpressibleAs*` type implicitly conforms
-  /// to via transitive conformances. These conformances don't need to be
-  /// spelled out explicitly in the source code.
-  public var impliedExpressibleAsConformances: [Self] {
-    generatedExpressibleAsConformances.flatMap { conformance in
-      conformance.transitiveExpressibleAsConformances
-    }
-  }
-
-  public init(syntaxKind: String, isOptional: Bool = false) {
-    self.isOptional = isOptional
-    if syntaxKind.hasSuffix("Token") {
-      // There are different token kinds but all of them are represented by `Token` in the Swift source (see `kind_to_type` in `gyb_syntax_support`).
-      self.syntaxKind = "Token"
-      self.tokenKind = syntaxKind
-    } else {
-      self.syntaxKind = syntaxKind
-      self.tokenKind = nil
-    }
-  }
-
   /// Wraps a type in an optional depending on whether `isOptional` is true.
-  public func optionalWrapped(type: ExpressibleAsTypeBuildable) -> TypeBuildable {
+  public func optionalWrapped(type: TypeSyntaxProtocol) -> TypeSyntax {
     if isOptional {
-      return OptionalType(wrappedType: type)
+      return TypeSyntax(OptionalType(wrappedType: type))
     } else {
-      return type.createTypeBuildable()
+      return TypeSyntax(type)
     }
   }
 
   /// Wraps a type in an optional chaining depending on whether `isOptional` is true.
-  public func optionalChained(expr: ExpressibleAsExprBuildable) -> ExpressibleAsExprBuildable {
+  public func optionalChained(expr: ExprSyntaxProtocol) -> Expr {
     if isOptional {
-      return OptionalChainingExpr(expression: expr)
+      return Expr(OptionalChainingExpr(expression: expr))
     } else {
-      return expr
+      return Expr(expr)
     }
   }
 
   /// Wraps a type in a force unwrap expression depending on whether `isOptional` is true.
-  public func forceUnwrappedIfNeeded(expr: ExpressibleAsExprBuildable) -> ExpressibleAsExprBuildable {
+  public func forceUnwrappedIfNeeded(expr: ExprSyntaxProtocol) -> ExprSyntax {
     if isOptional {
-      return ForcedValueExpr(expression: expr)
+      return ExprSyntax(ForcedValueExpr(expression: expr))
     } else {
-      return expr
-    }
-  }
-
-  /// Generate an expression that converts a variable named `varName`
-  /// which is of `expressibleAs` type to an object of type `buildable`.
-  public func generateExprConvertParamTypeToStorageType(varName: String) -> ExpressibleAsExprBuildable {
-    if isToken {
-      return varName
-    } else {
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(base: optionalChained(expr: varName), name: "create\(buildableBaseName)"))
+      return ExprSyntax(expr)
     }
   }
 }

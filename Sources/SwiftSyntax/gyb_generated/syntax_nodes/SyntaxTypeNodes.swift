@@ -43,6 +43,11 @@ public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     default:
@@ -86,6 +91,11 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -245,6 +255,16 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return SimpleTypeIdentifierSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeName,
+      \Self.name,
+      \Self.unexpectedBetweenNameAndGenericArgumentClause,
+      \Self.genericArgumentClause,
+      \Self.unexpectedAfterGenericArgumentClause,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -511,6 +531,20 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return MemberTypeIdentifierSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeBaseType,
+      \Self.baseType,
+      \Self.unexpectedBetweenBaseTypeAndPeriod,
+      \Self.period,
+      \Self.unexpectedBetweenPeriodAndName,
+      \Self.name,
+      \Self.unexpectedBetweenNameAndGenericArgumentClause,
+      \Self.genericArgumentClause,
+      \Self.unexpectedAfterGenericArgumentClause,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -649,6 +683,14 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
     return ClassRestrictionTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeClassKeyword,
+      \Self.classKeyword,
+      \Self.unexpectedAfterClassKeyword,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -861,6 +903,18 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 6)
     return ArrayTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLeftSquareBracket,
+      \Self.leftSquareBracket,
+      \Self.unexpectedBetweenLeftSquareBracketAndElementType,
+      \Self.elementType,
+      \Self.unexpectedBetweenElementTypeAndRightSquareBracket,
+      \Self.rightSquareBracket,
+      \Self.unexpectedAfterRightSquareBracket,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1177,6 +1231,22 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return DictionaryTypeSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLeftSquareBracket,
+      \Self.leftSquareBracket,
+      \Self.unexpectedBetweenLeftSquareBracketAndKeyType,
+      \Self.keyType,
+      \Self.unexpectedBetweenKeyTypeAndColon,
+      \Self.colon,
+      \Self.unexpectedBetweenColonAndValueType,
+      \Self.valueType,
+      \Self.unexpectedBetweenValueTypeAndRightSquareBracket,
+      \Self.rightSquareBracket,
+      \Self.unexpectedAfterRightSquareBracket,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1413,6 +1483,18 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return MetatypeTypeSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeBaseType,
+      \Self.baseType,
+      \Self.unexpectedBetweenBaseTypeAndPeriod,
+      \Self.period,
+      \Self.unexpectedBetweenPeriodAndTypeOrProtocol,
+      \Self.typeOrProtocol,
+      \Self.unexpectedAfterTypeOrProtocol,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1592,6 +1674,16 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return OptionalTypeSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeWrappedType,
+      \Self.wrappedType,
+      \Self.unexpectedBetweenWrappedTypeAndQuestionMark,
+      \Self.questionMark,
+      \Self.unexpectedAfterQuestionMark,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1763,6 +1855,16 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return ConstrainedSugarTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeSomeOrAnySpecifier,
+      \Self.someOrAnySpecifier,
+      \Self.unexpectedBetweenSomeOrAnySpecifierAndBaseType,
+      \Self.baseType,
+      \Self.unexpectedAfterBaseType,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1938,6 +2040,16 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeWrappedType,
+      \Self.wrappedType,
+      \Self.unexpectedBetweenWrappedTypeAndExclamationMark,
+      \Self.exclamationMark,
+      \Self.unexpectedAfterExclamationMark,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2082,6 +2194,14 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
     return CompositionTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeElements,
+      \Self.elements,
+      \Self.unexpectedAfterElements,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2249,6 +2369,16 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return PackExpansionTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforePatternType,
+      \Self.patternType,
+      \Self.unexpectedBetweenPatternTypeAndEllipsis,
+      \Self.ellipsis,
+      \Self.unexpectedAfterEllipsis,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2485,6 +2615,18 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 6)
     return TupleTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLeftParen,
+      \Self.leftParen,
+      \Self.unexpectedBetweenLeftParenAndElements,
+      \Self.elements,
+      \Self.unexpectedBetweenElementsAndRightParen,
+      \Self.rightParen,
+      \Self.unexpectedAfterRightParen,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2911,6 +3053,26 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return FunctionTypeSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLeftParen,
+      \Self.leftParen,
+      \Self.unexpectedBetweenLeftParenAndArguments,
+      \Self.arguments,
+      \Self.unexpectedBetweenArgumentsAndRightParen,
+      \Self.rightParen,
+      \Self.unexpectedBetweenRightParenAndAsyncKeyword,
+      \Self.asyncKeyword,
+      \Self.unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword,
+      \Self.throwsOrRethrowsKeyword,
+      \Self.unexpectedBetweenThrowsOrRethrowsKeywordAndArrow,
+      \Self.arrow,
+      \Self.unexpectedBetweenArrowAndReturnType,
+      \Self.returnType,
+      \Self.unexpectedAfterReturnType,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3179,6 +3341,18 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return AttributedTypeSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeSpecifier,
+      \Self.specifier,
+      \Self.unexpectedBetweenSpecifierAndAttributes,
+      \Self.attributes,
+      \Self.unexpectedBetweenAttributesAndBaseType,
+      \Self.baseType,
+      \Self.unexpectedAfterBaseType,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3356,6 +3530,16 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return NamedOpaqueReturnTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeGenericParameters,
+      \Self.genericParameters,
+      \Self.unexpectedBetweenGenericParametersAndBaseType,
+      \Self.baseType,
+      \Self.unexpectedAfterBaseType,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {

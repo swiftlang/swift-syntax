@@ -12,9 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: SyntaxProtocol, Sequence {
+public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {
   /// The number of elements, `present` or `missing`, in this collection.
   var count: Int { get }
+}
+
+public extension SyntaxCollection {
+  static var structure: SyntaxNodeStructure {
+    return .collection(Element.self)
+  }
 }
 
 
@@ -1304,6 +1310,13 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
         return
       }
       return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(StringSegmentSyntax.self),
+        .node(ExpressionSegmentSyntax.self),
+      ])
     }
   }
 
@@ -6107,6 +6120,14 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       }
       return nil
     }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(PrecedenceGroupRelationSyntax.self),
+        .node(PrecedenceGroupAssignmentSyntax.self),
+        .node(PrecedenceGroupAssociativitySyntax.self),
+      ])
+    }
   }
 
   public let _syntaxNode: Syntax
@@ -7138,6 +7159,13 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       }
       return nil
     }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(AttributeSyntax.self),
+        .node(CustomAttributeSyntax.self),
+      ])
+    }
   }
 
   public let _syntaxNode: Syntax
@@ -7432,6 +7460,15 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
         return
       }
       return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(LabeledSpecializeEntrySyntax.self),
+        .node(AvailabilityEntrySyntax.self),
+        .node(TargetFunctionEntrySyntax.self),
+        .node(GenericWhereClauseSyntax.self),
+      ])
     }
   }
 
@@ -8463,6 +8500,13 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
         return
       }
       return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(SwitchCaseSyntax.self),
+        .node(IfConfigDeclSyntax.self),
+      ])
     }
   }
 

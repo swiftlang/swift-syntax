@@ -10,6 +10,44 @@
 //
 //===----------------------------------------------------------------------===//
 
+/// Describes the statically allowed structure of a syntax tree node.
+public enum SyntaxNodeStructure {
+  public enum SyntaxChoice {
+    case node(SyntaxProtocol.Type)
+    case token(TokenKind)
+  }
+
+  /// The node contains a fixed number of children which can be accessed by these key paths.
+  case layout([AnyKeyPath])
+
+  /// The node is a `SyntaxCollection` of the given type.
+  case collection(SyntaxProtocol.Type)
+
+  /// The node can contain a single node with one of the listed types.
+  case choices([SyntaxChoice])
+
+  public var isLayout: Bool {
+    switch self {
+    case .layout: return true
+    default: return false
+    }
+  }
+
+  public var isCollection: Bool {
+    switch self {
+    case .collection: return true
+    default: return false
+    }
+  }
+
+  public var isChoices: Bool {
+    switch self {
+    case .choices: return true
+    default: return false
+    }
+  }
+}
+
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
@@ -135,6 +173,9 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Converts the given `Syntax` node to this type. Returns `nil` if the
   /// conversion is not possible.
   init?(_ syntaxNode: Syntax)
+
+  /// The statically allowed structure of the syntax node.
+  static var structure: SyntaxNodeStructure { get }
 
   /// Return a name with which the child at the given `index` can be referred to
   /// in diagnostics.

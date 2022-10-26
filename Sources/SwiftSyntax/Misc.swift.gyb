@@ -43,6 +43,20 @@ extension Syntax {
     }
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownSyntax.self),
+      .node(TokenSyntax.self),
+% for node in NON_BASE_SYNTAX_NODES:
+%   if node.is_base():
+      .node(Unknown${node.name}.self),
+%   else:
+      .node(${node.name}.self),
+%   end
+% end
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch self.as(SyntaxEnum.self) {
     case .token(let node):

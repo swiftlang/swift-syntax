@@ -66,7 +66,7 @@ final class AttributeTests: XCTestCase {
       ]
     )
   }
-  
+
   func testMultipleInvalidSpecializeParams() {
     AssertParse(
       """
@@ -79,7 +79,7 @@ final class AttributeTests: XCTestCase {
       ]
     )
   }
-  
+
   func testObjCAttribute() {
     AssertParse(
       """
@@ -91,7 +91,7 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
-  
+
   func testRethrowsAttribute() {
     AssertParse(
       """
@@ -103,7 +103,7 @@ final class AttributeTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
   }
-  
+
   func testAutoclosureAttribute() {
     AssertParse(
       """
@@ -112,7 +112,7 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
-  
+
   func testDifferentiableAttribute() {
     AssertParse(
       """
@@ -121,14 +121,14 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
-  
+
   func testQualifiedAttribute() {
     AssertParse(
       """
       @_Concurrency.MainActor(unsafe) public struct Image : SwiftUI.View {}
       """)
   }
-  
+
   func testDerivativeAttribute() {
     AssertParse(
       """
@@ -140,7 +140,7 @@ final class AttributeTests: XCTestCase {
         map(body)
       }
       """)
-    
+
     AssertParse(
       """
       @inlinable
@@ -152,7 +152,7 @@ final class AttributeTests: XCTestCase {
         reduce(initialResult, nextPartialResult)
       }
       """)
-    
+
     AssertParse(
       """
       @inlinable
@@ -167,7 +167,7 @@ final class AttributeTests: XCTestCase {
       ) {}
       """)
   }
-  
+
   func testTransposeAttribute() {
     AssertParse(
       """
@@ -183,7 +183,7 @@ final class AttributeTests: XCTestCase {
         return (v, v)
       }
       """)
-    
+
     AssertParse(
       """
       @transpose(of: -, wrt: (0, 1))
@@ -191,7 +191,7 @@ final class AttributeTests: XCTestCase {
         return (v, -v)
       }
       """)
-    
+
     AssertParse(
       """
       @transpose(of: Float.-, wrt: (0, 1))
@@ -200,31 +200,31 @@ final class AttributeTests: XCTestCase {
       }
       """)
   }
-  
+
   func testImplementsAttribute() {
     AssertParse("""
       @_implements(P, f0())
       func g0() -> Int {
         return 10
       }
-      
+
       @_implements(P, f(x:y:))
       func g(x:Int, y:Int) -> Int {
         return 5
       }
-      
+
       @_implements(Q, f(x:y:))
       func h(x:Int, y:Int) -> Int {
         return 6
       }
-      
+
       @_implements(Equatable, ==(_:_:))
       public static func isEqual(_ lhs: S, _ rhs: S) -> Bool {
         return false
       }
       """)
   }
-  
+
   func testSemanticsAttribute() {
     AssertParse(
       """
@@ -232,14 +232,14 @@ final class AttributeTests: XCTestCase {
       func testRecursion(_ a: Int) -> Int {
         return a <= 0 ? 0 : testRecursion(a-1)
       }
-      
+
       @_semantics("test_driver")
       internal func interpretRecursion() -> Int {
         return testRecursion(10)
       }
       """)
   }
-  
+
   func testMissingDeclarationAfterAttributes() {
     AssertParse(
       "@resultBuilder1️⃣",
@@ -250,7 +250,7 @@ final class AttributeTests: XCTestCase {
         """
     )
   }
-  
+
   func testIgnoreDeprecationAttribute() throws {
     AssertParse("""
     @available(*, deprecated)
@@ -264,9 +264,50 @@ final class AttributeTests: XCTestCase {
       print(XClass(3))
     }
     """)
+
+    AssertParse("""
+    struct DeviceConf: Codable {
+
+      enum DeviceStatus: Codable {
+        case sandboxed
+        case partiallyEscaped
+        case fullyUnsandboxed
+      }
+
+      var isAMFIEnabled: Bool
+      var bootArgs: [String]
+
+      @available(*, deprecated)
+      var status: DeviceStatus
+
+      @ignoreDeprecation(status)
+      var canStartSession: Bool {
+        return status == .fullyUnsandboed
+      }
+    }
     
-    func testObjcImplementationAttribute() throws {
-      AssertParse("""
+    """)
+
+    AssertParse("""
+    
+    @available(*, deprecated)
+    func deprecatedFunction() -> Int32 {
+      return 3
+    }
+    
+    @ignoreDeprecation(deprecatedFunction)
+    class StateManager {
+    
+      func someFunction() {
+        print(deprecatedFunction())
+      }
+    }
+    """)
+    
+  }
+
+  func testObjcImplementationAttribute() throws {
+    AssertParse("""
       @_objcImplementation extension MyClass {
         func fn() {}
       }
@@ -275,5 +316,4 @@ final class AttributeTests: XCTestCase {
       }
       """)
     }
-  }
 }

@@ -87,6 +87,24 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self = syntax._syntaxNode
   }
 
+  /// Syntax nodes always conform to SyntaxProtocol. This API is just added
+  /// for consistency.
+  /// Note that this will incur an existential conversion.
+  @available(*, deprecated, message: "Expression always evaluates to true")
+  public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
+    return true
+  }
+
+  /// Return the non-type erased version of this syntax node.
+  /// Note that this will incur an existential conversion.
+  public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
+    return self.raw.kind.syntaxNodeType.init(self)!
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return self.raw.kind.syntaxNodeType.init(self)!.childNameForDiagnostics(index)
+  }
+
   public func hash(into hasher: inout Hasher) {
     return data.nodeId.hash(into: &hasher)
   }

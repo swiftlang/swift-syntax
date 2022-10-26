@@ -20,29 +20,6 @@
 //===----------------------------------------------------------------------===//
 
 extension Syntax {
-  /// Syntax nodes always conform to SyntaxProtocol. This API is just added
-  /// for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
-    switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node
-    case .unknown(let node):
-      return node
-% for node in NON_BASE_SYNTAX_NODES:
-    case .${node.swift_syntax_kind}(let node):
-      return node
-% end
-    }
-  }
-
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(UnknownSyntax.self),
@@ -55,19 +32,6 @@ extension Syntax {
 %   end
 % end
     ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknown(let node):
-      return node.childNameForDiagnostics(index)
-% for node in NON_BASE_SYNTAX_NODES:
-    case .${node.swift_syntax_kind}(let node):
-      return node.childNameForDiagnostics(index)
-% end
-    }
   }
 }
 

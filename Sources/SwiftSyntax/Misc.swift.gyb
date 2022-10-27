@@ -20,50 +20,45 @@
 //===----------------------------------------------------------------------===//
 
 extension Syntax {
-  /// Syntax nodes always conform to SyntaxProtocol. This API is just added
-  /// for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
-    switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node
-    case .unknown(let node):
-      return node
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownSyntax.self),
+      .node(TokenSyntax.self),
 % for node in NON_BASE_SYNTAX_NODES:
-    case .${node.swift_syntax_kind}(let node):
-      return node
+%   if node.is_base():
+      .node(Unknown${node.name}.self),
+%   else:
+      .node(${node.name}.self),
+%   end
 % end
-    }
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknown(let node):
-      return node.childNameForDiagnostics(index)
-% for node in NON_BASE_SYNTAX_NODES:
-    case .${node.swift_syntax_kind}(let node):
-      return node.childNameForDiagnostics(index)
-% end
-    }
+    ])
   }
 }
 
 extension SyntaxKind {
-  var syntaxNodeType: SyntaxProtocol.Type {
+  public var syntaxNodeType: SyntaxProtocol.Type {
     switch self {
     case .token: return TokenSyntax.self
     case .unknown: return UnknownSyntax.self
 % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}: return ${node.name}.self
+% end
+    }
+  }
+
+  public var nameForDiagnostics: String? {
+    switch self {
+    case .unknown:
+      return nil
+    case .token:
+      return "token"
+% for node in NON_BASE_SYNTAX_NODES:
+    case .${node.swift_syntax_kind}:
+%   if node.name_for_diagnostics:
+      return "${node.name_for_diagnostics}"
+%   else:
+      return nil
+%   end
 % end
     }
   }

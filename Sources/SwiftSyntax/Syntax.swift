@@ -10,6 +10,44 @@
 //
 //===----------------------------------------------------------------------===//
 
+/// Describes the statically allowed structure of a syntax tree node.
+public enum SyntaxNodeStructure {
+  public enum SyntaxChoice {
+    case node(SyntaxProtocol.Type)
+    case token(TokenKind)
+  }
+
+  /// The node contains a fixed number of children which can be accessed by these key paths.
+  case layout([AnyKeyPath])
+
+  /// The node is a `SyntaxCollection` of the given type.
+  case collection(SyntaxProtocol.Type)
+
+  /// The node can contain a single node with one of the listed types.
+  case choices([SyntaxChoice])
+
+  public var isLayout: Bool {
+    switch self {
+    case .layout: return true
+    default: return false
+    }
+  }
+
+  public var isCollection: Bool {
+    switch self {
+    case .collection: return true
+    default: return false
+    }
+  }
+
+  public var isChoices: Bool {
+    switch self {
+    case .choices: return true
+    default: return false
+    }
+  }
+}
+
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
@@ -47,6 +85,24 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   public init?(fromProtocol syntax: SyntaxProtocol?) {
     guard let syntax = syntax else { return nil }
     self = syntax._syntaxNode
+  }
+
+  /// Syntax nodes always conform to SyntaxProtocol. This API is just added
+  /// for consistency.
+  /// Note that this will incur an existential conversion.
+  @available(*, deprecated, message: "Expression always evaluates to true")
+  public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
+    return true
+  }
+
+  /// Return the non-type erased version of this syntax node.
+  /// Note that this will incur an existential conversion.
+  public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
+    return self.raw.kind.syntaxNodeType.init(self)!
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return self.raw.kind.syntaxNodeType.init(self)!.childNameForDiagnostics(index)
   }
 
   public func hash(into hasher: inout Hasher) {
@@ -136,6 +192,9 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// conversion is not possible.
   init?(_ syntaxNode: Syntax)
 
+  /// The statically allowed structure of the syntax node.
+  static var structure: SyntaxNodeStructure { get }
+
   /// Return a name with which the child at the given `index` can be referred to
   /// in diagnostics.
   /// Typically, you want to use `childNameInParent` on the child instead of
@@ -164,6 +223,10 @@ extension SyntaxProtocol {
   @_spi(RawSyntax)
   public var raw: RawSyntax {
     return _syntaxNode.data.raw
+  }
+
+  public var kind: SyntaxKind {
+    return raw.kind
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {

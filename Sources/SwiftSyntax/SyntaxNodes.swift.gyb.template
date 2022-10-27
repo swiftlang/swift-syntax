@@ -107,6 +107,20 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %         end
       return nil
     }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+%         for choice in child.node_choices:
+%           if choice.is_token() and choice.token.text:
+        .token(.${choice.token.swift_kind()}),
+%           elif choice.is_token() and not choice.token.text:
+        .token(.${choice.token.swift_kind()}("")),
+%           else:
+        .node(${choice.type_name}.self),
+%           end
+%         end
+      ])
+    }
   }
 
 %       end
@@ -235,6 +249,14 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     return ${node.name}(newData)
   }
 %     end
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+%     for (index, child) in enumerate(node.children):
+      \Self.${child.swift_name},
+%     end
+    ])
+  }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {

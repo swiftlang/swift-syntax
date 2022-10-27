@@ -18,9 +18,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: SyntaxProtocol, Sequence {
+public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {
   /// The number of elements, `present` or `missing`, in this collection.
   var count: Int { get }
+}
+
+public extension SyntaxCollection {
+  static var structure: SyntaxNodeStructure {
+    return .collection(Element.self)
+  }
 }
 
 % for node in SYNTAX_NODES:
@@ -74,6 +80,15 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
       }
 %   end
       return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+%         for choice_name in node.collection_element_choices:
+%           choice = NODE_MAP[choice_name]
+        .node(${choice.name}.self),
+%         end
+      ])
     }
   }
 % else:

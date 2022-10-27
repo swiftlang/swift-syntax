@@ -67,7 +67,7 @@ extension SyntaxProtocol {
     if !allowBlockNames && (syntax.is(CodeBlockSyntax.self) || syntax.is(MemberDeclBlockSyntax.self)) {
       return nil
     }
-    return syntax.as(SyntaxEnum.self).nameForDiagnostics
+    return syntax.kind.nameForDiagnostics
   }
 
   /// A short description of this node that can be displayed inline in a single line.

@@ -38,6 +38,10 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -198,6 +202,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The length of this node including all of its trivia.
   public var totalLength: SourceLength {
     return raw.totalLength
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {

@@ -138,6 +138,14 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
     return Syntax(self).asProtocol(${node.name}Protocol.self)!
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+%     for child_node in [child_node for child_node in SYNTAX_NODES if child_node.base_kind == node.syntax_kind]:
+      .node(${child_node.name}.self),
+%     end
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return Syntax(self).childNameForDiagnostics(index)
   }

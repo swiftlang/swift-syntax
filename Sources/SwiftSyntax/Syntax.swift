@@ -320,6 +320,25 @@ public extension SyntaxProtocol {
     return nil
   }
 
+  /// Find the syntax token at the given absolute position within this
+  /// syntax node or any of its children.
+  func token(at position: AbsolutePosition) -> TokenSyntax? {
+    // If the position isn't within this node at all, return early.
+    guard position >= self.position && position < self.endPosition else {
+      return nil
+    }
+
+    // If we are a token syntax, that's it!
+    if let token = Syntax(self).as(TokenSyntax.self) {
+      return token
+    }
+
+    // Otherwise, it must be one of our children.
+    return children(viewMode: .sourceAccurate).lazy.compactMap { child in
+      child.token(at: position)
+    }.first
+  }
+
   /// The absolute position of the starting point of this node. If the first token
   /// is with leading trivia, the position points to the start of the leading
   /// trivia.

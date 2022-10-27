@@ -31,10 +31,14 @@ public protocol Raw${node.name}NodeProtocol: Raw${node.base_type}NodeProtocol {}
 public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_type}NodeProtocol, RawSyntaxToSyntax {
 %   for child in node.children:
 %     if child.node_choices:
-  public enum ${child.name} {
+  public enum ${child.name}: RawSyntaxNodeProtocol {
 %       for choice in child.node_choices:
     case `${choice.swift_name}`(Raw${choice.type_name})
 %       end
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return ${" || ".join([f"Raw{choice.type_name}.isKindOf(raw)" for choice in child.node_choices])}
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -42,6 +46,16 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
       case .${choice.swift_name}(let node): return node.raw
 %       end
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+%       for choice in child.node_choices:
+      if let node = Raw${choice.type_name}(other) {
+        self = .${choice.swift_name}(node)
+        return
+      }
+%       end
+      return nil
     }
   }
 %     end

@@ -573,12 +573,16 @@ public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Item {
+  public enum Item: RawSyntaxNodeProtocol {
     case `decl`(RawDeclSyntax)
     case `stmt`(RawStmtSyntax)
     case `expr`(RawExprSyntax)
     case `tokenList`(RawTokenListSyntax)
     case `nonEmptyTokenList`(RawNonEmptyTokenListSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawDeclSyntax.isKindOf(raw) || RawStmtSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw) || RawNonEmptyTokenListSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -588,6 +592,30 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
       case .tokenList(let node): return node.raw
       case .nonEmptyTokenList(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawDeclSyntax(other) {
+        self = .decl(node)
+        return
+      }
+      if let node = RawStmtSyntax(other) {
+        self = .stmt(node)
+        return
+      }
+      if let node = RawExprSyntax(other) {
+        self = .expr(node)
+        return
+      }
+      if let node = RawTokenListSyntax(other) {
+        self = .tokenList(node)
+        return
+      }
+      if let node = RawNonEmptyTokenListSyntax(other) {
+        self = .nonEmptyTokenList(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -3063,15 +3091,31 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Content {
+  public enum Content: RawSyntaxNodeProtocol {
     case `colon`(RawTokenSyntax)
     case `elements`(RawDictionaryElementListSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawTokenSyntax.isKindOf(raw) || RawDictionaryElementListSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .colon(let node): return node.raw
       case .elements(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawTokenSyntax(other) {
+        self = .colon(node)
+        return
+      }
+      if let node = RawDictionaryElementListSyntax(other) {
+        self = .elements(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -4691,15 +4735,31 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Input {
+  public enum Input: RawSyntaxNodeProtocol {
     case `simpleInput`(RawClosureParamListSyntax)
     case `input`(RawParameterClauseSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawClosureParamListSyntax.isKindOf(raw) || RawParameterClauseSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .simpleInput(let node): return node.raw
       case .input(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawClosureParamListSyntax(other) {
+        self = .simpleInput(node)
+        return
+      }
+      if let node = RawParameterClauseSyntax(other) {
+        self = .input(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -6261,10 +6321,14 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Component {
+  public enum Component: RawSyntaxNodeProtocol {
     case `property`(RawKeyPathPropertyComponentSyntax)
     case `subscript`(RawKeyPathSubscriptComponentSyntax)
     case `optional`(RawKeyPathOptionalComponentSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawKeyPathPropertyComponentSyntax.isKindOf(raw) || RawKeyPathSubscriptComponentSyntax.isKindOf(raw) || RawKeyPathOptionalComponentSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -6272,6 +6336,22 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
       case .subscript(let node): return node.raw
       case .optional(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawKeyPathPropertyComponentSyntax(other) {
+        self = .property(node)
+        return
+      }
+      if let node = RawKeyPathSubscriptComponentSyntax(other) {
+        self = .subscript(node)
+        return
+      }
+      if let node = RawKeyPathOptionalComponentSyntax(other) {
+        self = .optional(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -6598,10 +6678,14 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum RootExpr {
+  public enum RootExpr: RawSyntaxNodeProtocol {
     case `identifierExpr`(RawIdentifierExprSyntax)
     case `specializeExpr`(RawSpecializeExprSyntax)
     case `optionalChainingExpr`(RawOptionalChainingExprSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawIdentifierExprSyntax.isKindOf(raw) || RawSpecializeExprSyntax.isKindOf(raw) || RawOptionalChainingExprSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -6609,6 +6693,22 @@ public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
       case .specializeExpr(let node): return node.raw
       case .optionalChainingExpr(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawIdentifierExprSyntax(other) {
+        self = .identifierExpr(node)
+        return
+      }
+      if let node = RawSpecializeExprSyntax(other) {
+        self = .specializeExpr(node)
+        return
+      }
+      if let node = RawOptionalChainingExprSyntax(other) {
+        self = .optionalChainingExpr(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -8369,12 +8469,16 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Elements {
+  public enum Elements: RawSyntaxNodeProtocol {
     case `statements`(RawCodeBlockItemListSyntax)
     case `switchCases`(RawSwitchCaseListSyntax)
     case `decls`(RawMemberDeclListSyntax)
     case `postfixExpression`(RawExprSyntax)
     case `attributes`(RawAttributeListSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawCodeBlockItemListSyntax.isKindOf(raw) || RawSwitchCaseListSyntax.isKindOf(raw) || RawMemberDeclListSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw) || RawAttributeListSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -8384,6 +8488,30 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
       case .postfixExpression(let node): return node.raw
       case .attributes(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawCodeBlockItemListSyntax(other) {
+        self = .statements(node)
+        return
+      }
+      if let node = RawSwitchCaseListSyntax(other) {
+        self = .switchCases(node)
+        return
+      }
+      if let node = RawMemberDeclListSyntax(other) {
+        self = .decls(node)
+        return
+      }
+      if let node = RawExprSyntax(other) {
+        self = .postfixExpression(node)
+        return
+      }
+      if let node = RawAttributeListSyntax(other) {
+        self = .attributes(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -11349,15 +11477,31 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Accessor {
+  public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
     case `getter`(RawCodeBlockSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawAccessorBlockSyntax.isKindOf(raw) || RawCodeBlockSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .accessors(let node): return node.raw
       case .getter(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawAccessorBlockSyntax(other) {
+        self = .accessors(node)
+        return
+      }
+      if let node = RawCodeBlockSyntax(other) {
+        self = .getter(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -12239,15 +12383,31 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Accessor {
+  public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
     case `getter`(RawCodeBlockSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawAccessorBlockSyntax.isKindOf(raw) || RawCodeBlockSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .accessors(let node): return node.raw
       case .getter(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawAccessorBlockSyntax(other) {
+        self = .accessors(node)
+        return
+      }
+      if let node = RawCodeBlockSyntax(other) {
+        self = .getter(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -14259,7 +14419,7 @@ public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Argument {
+  public enum Argument: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
     case `stringExpr`(RawStringLiteralExprSyntax)
     case `availability`(RawAvailabilitySpecListSyntax)
@@ -14274,6 +14434,10 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     case `conventionWitnessMethodArguments`(RawConventionWitnessMethodAttributeArgumentsSyntax)
     case `opaqueReturnTypeOfAttributeArguments`(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
     case `tokenList`(RawTokenListSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilitySpecListSyntax.isKindOf(raw) || RawSpecializeAttributeSpecListSyntax.isKindOf(raw) || RawObjCSelectorSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeRegistrationAttributeArgumentsSyntax.isKindOf(raw) || RawNamedAttributeStringArgumentSyntax.isKindOf(raw) || RawBackDeployAttributeSpecListSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -14292,6 +14456,66 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
       case .opaqueReturnTypeOfAttributeArguments(let node): return node.raw
       case .tokenList(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawTokenSyntax(other) {
+        self = .token(node)
+        return
+      }
+      if let node = RawStringLiteralExprSyntax(other) {
+        self = .stringExpr(node)
+        return
+      }
+      if let node = RawAvailabilitySpecListSyntax(other) {
+        self = .availability(node)
+        return
+      }
+      if let node = RawSpecializeAttributeSpecListSyntax(other) {
+        self = .specializeArguments(node)
+        return
+      }
+      if let node = RawObjCSelectorSyntax(other) {
+        self = .objCName(node)
+        return
+      }
+      if let node = RawImplementsAttributeArgumentsSyntax(other) {
+        self = .implementsArguments(node)
+        return
+      }
+      if let node = RawDifferentiableAttributeArgumentsSyntax(other) {
+        self = .differentiableArguments(node)
+        return
+      }
+      if let node = RawDerivativeRegistrationAttributeArgumentsSyntax(other) {
+        self = .derivativeRegistrationArguments(node)
+        return
+      }
+      if let node = RawNamedAttributeStringArgumentSyntax(other) {
+        self = .namedAttributeString(node)
+        return
+      }
+      if let node = RawBackDeployAttributeSpecListSyntax(other) {
+        self = .backDeployArguments(node)
+        return
+      }
+      if let node = RawConventionAttributeArgumentsSyntax(other) {
+        self = .conventionArguments(node)
+        return
+      }
+      if let node = RawConventionWitnessMethodAttributeArgumentsSyntax(other) {
+        self = .conventionWitnessMethodArguments(node)
+        return
+      }
+      if let node = RawOpaqueReturnTypeOfAttributeArgumentsSyntax(other) {
+        self = .opaqueReturnTypeOfAttributeArguments(node)
+        return
+      }
+      if let node = RawTokenListSyntax(other) {
+        self = .tokenList(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -14846,15 +15070,31 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum StringOrDeclname {
+  public enum StringOrDeclname: RawSyntaxNodeProtocol {
     case `string`(RawTokenSyntax)
     case `declname`(RawDeclNameSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawTokenSyntax.isKindOf(raw) || RawDeclNameSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .string(let node): return node.raw
       case .declname(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawTokenSyntax(other) {
+        self = .string(node)
+        return
+      }
+      if let node = RawDeclNameSyntax(other) {
+        self = .declname(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -15380,15 +15620,31 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol, 
 
 @_spi(RawSyntax)
 public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Parameters {
+  public enum Parameters: RawSyntaxNodeProtocol {
     case `parameter`(RawDifferentiabilityParamSyntax)
     case `parameterList`(RawDifferentiabilityParamsSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawDifferentiabilityParamSyntax.isKindOf(raw) || RawDifferentiabilityParamsSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .parameter(let node): return node.raw
       case .parameterList(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawDifferentiabilityParamSyntax(other) {
+        self = .parameter(node)
+        return
+      }
+      if let node = RawDifferentiabilityParamsSyntax(other) {
+        self = .parameterList(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -17842,15 +18098,31 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Yields {
+  public enum Yields: RawSyntaxNodeProtocol {
     case `yieldList`(RawYieldListSyntax)
     case `simpleYield`(RawExprSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawYieldListSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .yieldList(let node): return node.raw
       case .simpleYield(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawYieldListSyntax(other) {
+        self = .yieldList(node)
+        return
+      }
+      if let node = RawExprSyntax(other) {
+        self = .simpleYield(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -18245,13 +18517,17 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Condition {
+  public enum Condition: RawSyntaxNodeProtocol {
     case `expression`(RawExprSyntax)
     case `availability`(RawAvailabilityConditionSyntax)
     case `unavailability`(RawUnavailabilityConditionSyntax)
     case `matchingPattern`(RawMatchingPatternConditionSyntax)
     case `optionalBinding`(RawOptionalBindingConditionSyntax)
     case `hasSymbol`(RawHasSymbolConditionSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawExprSyntax.isKindOf(raw) || RawAvailabilityConditionSyntax.isKindOf(raw) || RawUnavailabilityConditionSyntax.isKindOf(raw) || RawMatchingPatternConditionSyntax.isKindOf(raw) || RawOptionalBindingConditionSyntax.isKindOf(raw) || RawHasSymbolConditionSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -18262,6 +18538,34 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
       case .optionalBinding(let node): return node.raw
       case .hasSymbol(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawExprSyntax(other) {
+        self = .expression(node)
+        return
+      }
+      if let node = RawAvailabilityConditionSyntax(other) {
+        self = .availability(node)
+        return
+      }
+      if let node = RawUnavailabilityConditionSyntax(other) {
+        self = .unavailability(node)
+        return
+      }
+      if let node = RawMatchingPatternConditionSyntax(other) {
+        self = .matchingPattern(node)
+        return
+      }
+      if let node = RawOptionalBindingConditionSyntax(other) {
+        self = .optionalBinding(node)
+        return
+      }
+      if let node = RawHasSymbolConditionSyntax(other) {
+        self = .hasSymbol(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -19066,15 +19370,31 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum ElseBody {
+  public enum ElseBody: RawSyntaxNodeProtocol {
     case `ifStmt`(RawIfStmtSyntax)
     case `codeBlock`(RawCodeBlockSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawIfStmtSyntax.isKindOf(raw) || RawCodeBlockSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .ifStmt(let node): return node.raw
       case .codeBlock(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawIfStmtSyntax(other) {
+        self = .ifStmt(node)
+        return
+      }
+      if let node = RawCodeBlockSyntax(other) {
+        self = .codeBlock(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -19202,15 +19522,31 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Label {
+  public enum Label: RawSyntaxNodeProtocol {
     case `default`(RawSwitchDefaultLabelSyntax)
     case `case`(RawSwitchCaseLabelSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawSwitchDefaultLabelSyntax.isKindOf(raw) || RawSwitchCaseLabelSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .default(let node): return node.raw
       case .case(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawSwitchDefaultLabelSyntax(other) {
+        self = .default(node)
+        return
+      }
+      if let node = RawSwitchCaseLabelSyntax(other) {
+        self = .case(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -20015,10 +20351,14 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Body {
+  public enum Body: RawSyntaxNodeProtocol {
     case `sameTypeRequirement`(RawSameTypeRequirementSyntax)
     case `conformanceRequirement`(RawConformanceRequirementSyntax)
     case `layoutRequirement`(RawLayoutRequirementSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawSameTypeRequirementSyntax.isKindOf(raw) || RawConformanceRequirementSyntax.isKindOf(raw) || RawLayoutRequirementSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -20026,6 +20366,22 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
       case .conformanceRequirement(let node): return node.raw
       case .layoutRequirement(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawSameTypeRequirementSyntax(other) {
+        self = .sameTypeRequirement(node)
+        return
+      }
+      if let node = RawConformanceRequirementSyntax(other) {
+        self = .conformanceRequirement(node)
+        return
+      }
+      if let node = RawLayoutRequirementSyntax(other) {
+        self = .layoutRequirement(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -23856,11 +24212,15 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Entry {
+  public enum Entry: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
     case `availabilityVersionRestriction`(RawAvailabilityVersionRestrictionSyntax)
     case `availabilityLabeledArgument`(RawAvailabilityLabeledArgumentSyntax)
     case `tokenList`(RawTokenListSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawTokenSyntax.isKindOf(raw) || RawAvailabilityVersionRestrictionSyntax.isKindOf(raw) || RawAvailabilityLabeledArgumentSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
@@ -23869,6 +24229,26 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
       case .availabilityLabeledArgument(let node): return node.raw
       case .tokenList(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawTokenSyntax(other) {
+        self = .token(node)
+        return
+      }
+      if let node = RawAvailabilityVersionRestrictionSyntax(other) {
+        self = .availabilityVersionRestriction(node)
+        return
+      }
+      if let node = RawAvailabilityLabeledArgumentSyntax(other) {
+        self = .availabilityLabeledArgument(node)
+        return
+      }
+      if let node = RawTokenListSyntax(other) {
+        self = .tokenList(node)
+        return
+      }
+      return nil
     }
   }
 
@@ -23948,15 +24328,31 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Value {
+  public enum Value: RawSyntaxNodeProtocol {
     case `string`(RawTokenSyntax)
     case `version`(RawVersionTupleSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawTokenSyntax.isKindOf(raw) || RawVersionTupleSyntax.isKindOf(raw)
+    }
 
     public var raw: RawSyntax {
       switch self {
       case .string(let node): return node.raw
       case .version(let node): return node.raw
       }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawTokenSyntax(other) {
+        self = .string(node)
+        return
+      }
+      if let node = RawVersionTupleSyntax(other) {
+        self = .version(node)
+        return
+      }
+      return nil
     }
   }
 

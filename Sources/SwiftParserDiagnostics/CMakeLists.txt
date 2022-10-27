@@ -17,8 +17,9 @@ add_library(SwiftParserDiagnostics STATIC
 
 target_link_libraries(SwiftParserDiagnostics PUBLIC
   SwiftBasicFormat
-  SwiftSyntax
-  SwiftDiagnostics)
+  SwiftDiagnostics
+  SwiftParser
+  SwiftSyntax)
 
 set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftParserDiagnostics)
 

@@ -56,6 +56,7 @@ ATTRIBUTE_NODES = [
                    node_choices=[
                        Child('Identifier', kind='IdentifierToken'),
                        Child('String', kind='StringLiteralToken'),
+                       Child('StringExpr', kind='StringLiteralExpr'),
                        Child('Integer', kind='IntegerLiteralToken'),
                        Child('Availability', kind='AvailabilitySpecList'),
                        Child('SpecializeArguments',
@@ -145,7 +146,8 @@ ATTRIBUTE_NODES = [
          ''',
          traits=['WithTrailingComma'],
          children=[
-             Child('Label', kind='IdentifierToken', name_for_diagnostics='label',
+             Child('Label', kind='Token', token_choices=['IdentifierToken', 'ContextualKeywordToken'],
+                   name_for_diagnostics='label',
                    description='The label of the argument'),
              Child('Colon', kind='ColonToken',
                    description='The colon separating the label and the value'),
@@ -269,7 +271,7 @@ ATTRIBUTE_NODES = [
          and an optional 'where' clause.
          ''',
          children=[
-             Child('DiffKind', kind='IdentifierToken',
+             Child('DiffKind', kind='ContextualKeywordToken',
                    text_choices=['forward', 'reverse', 'linear'],
                    is_optional=True),
              Child('DiffKindComma', kind='CommaToken', description='''
@@ -353,7 +355,7 @@ ATTRIBUTE_NODES = [
          optional differentiability parameter list.
          ''',
          children=[
-             Child('OfLabel', kind='IdentifierToken', text_choices=['of'],
+             Child('OfLabel', kind='ContextualKeywordToken', text_choices=['of'],
                    description='The "of" label.'),
              Child('Colon', kind='ColonToken', description='''
                    The colon separating the "of" label and the original

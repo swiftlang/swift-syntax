@@ -94,6 +94,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        tokenChoices: [
                          "StringLiteral"
                        ]),
+                 Child(name: "StringExpr",
+                       kind: "StringLiteralExpr"),
                  Child(name: "Integer",
                        kind: "IntegerLiteralToken",
                        tokenChoices: [
@@ -188,10 +190,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Label",
-               kind: "IdentifierToken",
+               kind: "Token",
                description: "The label of the argument",
                tokenChoices: [
-                 "Identifier"
+                 "Identifier",
+                 "ContextualKeyword"
                ]),
          Child(name: "Colon",
                kind: "ColonToken",
@@ -348,10 +351,10 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "DiffKind",
-               kind: "IdentifierToken",
+               kind: "ContextualKeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "Identifier"
+                 "ContextualKeyword"
                ],
                textChoices: [
                  "forward",
@@ -477,10 +480,10 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "OfLabel",
-               kind: "IdentifierToken",
+               kind: "ContextualKeywordToken",
                description: "The \"of\" label.",
                tokenChoices: [
-                 "Identifier"
+                 "ContextualKeyword"
                ],
                textChoices: [
                  "of"

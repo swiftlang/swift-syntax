@@ -24,11 +24,12 @@ AVAILABILITY_NODES = [
                        Child('Star', kind='SpacedBinaryOperatorToken',
                              text_choices=['*']),
                        Child('IdentifierRestriction',
-                             kind='IdentifierToken'),
+                             kind='ContextualKeywordToken'),
                        Child('AvailabilityVersionRestriction',
                              kind='AvailabilityVersionRestriction'),
                        Child('AvailabilityLabeledArgument',
                              kind='AvailabilityLabeledArgument'),
+                       Child('TokenList', kind='TokenList'),
                    ]),
              Child('TrailingComma', kind='CommaToken', is_optional=True,
                    description='''

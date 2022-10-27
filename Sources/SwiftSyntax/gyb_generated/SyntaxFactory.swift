@@ -5171,7 +5171,7 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .derivativeRegistrationAttributeArguments,
       from: [
       nil,
-      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: .default),
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default),
       nil,

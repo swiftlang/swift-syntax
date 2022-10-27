@@ -43,6 +43,7 @@ GENERIC_NODES = [
                        'UnspacedBinaryOperatorToken',
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
+                       'EqualToken',
                    ]),
              Child('RightTypeIdentifier', name_for_diagnostics='right-hand type', kind='Type'),
          ]),

@@ -11656,6 +11656,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Argument: SyntaxChildChoices {
     case `identifier`(TokenSyntax)
     case `string`(TokenSyntax)
+    case `stringExpr`(StringLiteralExprSyntax)
     case `integer`(TokenSyntax)
     case `availability`(AvailabilitySpecListSyntax)
     case `specializeArguments`(SpecializeAttributeSpecListSyntax)
@@ -11672,6 +11673,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       switch self {
       case .identifier(let node): return node._syntaxNode
       case .string(let node): return node._syntaxNode
+      case .stringExpr(let node): return node._syntaxNode
       case .integer(let node): return node._syntaxNode
       case .availability(let node): return node._syntaxNode
       case .specializeArguments(let node): return node._syntaxNode
@@ -11687,6 +11689,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: StringLiteralExprSyntax) {
+      self = .stringExpr(node)
+    }
     public init(_ node: AvailabilitySpecListSyntax) {
       self = .availability(node)
     }
@@ -11728,6 +11733,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         case .integerLiteral: self = .integer(tok)
         default: return nil
         }
+        return
+      }
+      if let node = syntaxNode.as(StringLiteralExprSyntax.self) {
+        self = .stringExpr(node)
         return
       }
       if let node = syntaxNode.as(AvailabilitySpecListSyntax.self) {
@@ -15147,7 +15156,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   ///                   current `ofLabel`, if present.
   public func withOfLabel(
     _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
@@ -24653,12 +24662,14 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     case `identifierRestriction`(TokenSyntax)
     case `availabilityVersionRestriction`(AvailabilityVersionRestrictionSyntax)
     case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
+    case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .star(let node): return node._syntaxNode
       case .identifierRestriction(let node): return node._syntaxNode
       case .availabilityVersionRestriction(let node): return node._syntaxNode
       case .availabilityLabeledArgument(let node): return node._syntaxNode
+      case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -24668,11 +24679,14 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     public init(_ node: AvailabilityLabeledArgumentSyntax) {
       self = .availabilityLabeledArgument(node)
     }
+    public init(_ node: TokenListSyntax) {
+      self = .tokenList(node)
+    }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
       if let tok = syntaxNode.as(TokenSyntax.self) {
         switch tok.rawTokenKind {
         case .spacedBinaryOperator: self = .star(tok)
-        case .identifier: self = .identifierRestriction(tok)
+        case .contextualKeyword: self = .identifierRestriction(tok)
         default: return nil
         }
         return
@@ -24683,6 +24697,10 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       }
       if let node = syntaxNode.as(AvailabilityLabeledArgumentSyntax.self) {
         self = .availabilityLabeledArgument(node)
+        return
+      }
+      if let node = syntaxNode.as(TokenListSyntax.self) {
+        self = .tokenList(node)
         return
       }
       return nil

@@ -316,15 +316,19 @@ public let TYPE_NODES: [Node] = [
                  "RightParen"
                ]),
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeyworkToken",
+               kind: "Token",
                isOptional: true,
-               textChoices: [
-                 "async"
+               tokenChoices: [
+                 "ContextualKeyword",
+                 "Throws",
+                 "Rethrows",
+                 "Throw"
                ]),
          Child(name: "ThrowsOrRethrowsKeyword",
                kind: "Token",
                isOptional: true,
                tokenChoices: [
+                 "ContextualKeyword",
                  "Throws",
                  "Rethrows",
                  "Throw"

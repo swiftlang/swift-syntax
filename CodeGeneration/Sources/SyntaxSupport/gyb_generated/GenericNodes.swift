@@ -70,7 +70,8 @@ public let GENERIC_NODES: [Node] = [
                  "SpacedBinaryOperator",
                  "UnspacedBinaryOperator",
                  "PrefixOperator",
-                 "PostfixOperator"
+                 "PostfixOperator",
+                 "Equal"
                ]),
          Child(name: "RightTypeIdentifier",
                kind: "Type")

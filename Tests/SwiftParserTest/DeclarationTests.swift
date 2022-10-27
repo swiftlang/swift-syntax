@@ -1215,6 +1215,16 @@ final class DeclarationTests: XCTestCase {
     // `actor` cannot recover from a missing identifier since it's contextual
     // based on the presence of the identifier.
   }
+
+  func testIssue1025() {
+    let source = """
+      struct Math {
+        public static let pi = 3.14
+        @available(*, unavailable) init() {}
+      }
+      """
+    dump(Parser.parse(source: source))
+  }
 }
 
 extension Parser.DeclAttributes {

@@ -36,14 +36,16 @@ public let AVAILABILITY_NODES: [Node] = [
                          "*"
                        ]),
                  Child(name: "IdentifierRestriction",
-                       kind: "IdentifierToken",
+                       kind: "ContextualKeywordToken",
                        tokenChoices: [
-                         "Identifier"
+                         "ContextualKeyword"
                        ]),
                  Child(name: "AvailabilityVersionRestriction",
                        kind: "AvailabilityVersionRestriction"),
                  Child(name: "AvailabilityLabeledArgument",
-                       kind: "AvailabilityLabeledArgument")
+                       kind: "AvailabilityLabeledArgument"),
+                 Child(name: "TokenList",
+                       kind: "TokenList")
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",

@@ -781,13 +781,11 @@ public let EXPR_NODES: [Node] = [
                        kind: "ParameterClause")
                ]),
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "Token",
                isOptional: true,
                tokenChoices: [
-                 "ContextualKeyword"
-               ],
-               textChoices: [
-                 "async"
+                 "ContextualKeyword",
+                 "Throws"
                ]),
          Child(name: "ThrowsTok",
                kind: "ThrowsToken",

@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
+import SwiftBasicFormat
 import SwiftSyntax
 
 extension FixIt {
@@ -91,6 +92,18 @@ extension FixIt.Changes {
         ),
         .replaceLeadingTrivia(token: nextToken, newTrivia: [])
       ]
+    } else if let firstToken = node.firstToken(viewMode: .all),
+              let previousToken = node.previousToken(viewMode: .fixedUp),
+              !firstToken.tokenKind.isPunctuation,
+              !previousToken.tokenKind.isPunctuation,
+              firstToken.leadingTrivia.isEmpty,
+              (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty {
+      /// If neither this nor the previous token are punctionation make sure they
+      /// are separated by a space.
+      return [.replace(
+        oldNode: Syntax(node),
+        newNode: Syntax(presentNode).withLeadingTrivia(.space)
+      )]
     } else {
       return [.replace(
         oldNode: Syntax(node),

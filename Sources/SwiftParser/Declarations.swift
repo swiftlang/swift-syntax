@@ -190,7 +190,12 @@ extension Parser {
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
       modifiers: self.parseModifierList())
-    switch self.canRecoverTo(anyIn: DeclarationStart.self) {
+
+    // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
+    // while recoverying to the declaration start.
+    let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
+    
+    switch self.canRecoverTo(anyIn: DeclarationStart.self, recoveryPrecedence: recoveryPrecedence) {
     case (.importKeyword, let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.classKeyword, let handle)?:

@@ -160,6 +160,8 @@ public class ParserTests: XCTestCase {
         || fileURL.absoluteString.contains("26773-swift-diagnosticengine-diagnose.swift")
         || fileURL.absoluteString.contains("parser-cutoff.swift")
         || fileURL.absoluteString.contains("26233-swift-iterabledeclcontext-getmembers.swift")
+        || fileURL.absoluteString.contains("26190-swift-iterabledeclcontext-getmembers.swift")
+        || fileURL.absoluteString.contains("26139-swift-abstractclosureexpr-setparams.swift")
       }
     )
   }

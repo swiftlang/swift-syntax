@@ -271,8 +271,11 @@ final class InvalidTests: XCTestCase {
   func testInvalid16a() {
     AssertParse(
       """
-      func f1_43591(a : inout inout Int) {}
-      """
+      func f1_43591(a : inout 1️⃣inout Int) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected 'inout' keyword in type")
+      ]
     )
   }
 

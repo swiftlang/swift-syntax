@@ -1,5 +1,6 @@
 %{
   from gyb_syntax_support import *
+  NODE_MAP = create_node_map()
   # -*- mode: Swift -*-
   # Ignore the following admonition; it applies to the resulting .swift file only
 }%
@@ -111,7 +112,16 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
 %     end
 %   elif node.is_syntax_collection():
     for (index, element) in layout.enumerated() {
+%       if node.collection_element_choices:
+      assertAnyHasNoError(kind, index, [
+%         for choice_name in node.collection_element_choices:
+%           choice = NODE_MAP[choice_name]
+        verify(element, as: Raw${choice.name}.self),
+%         end
+      ])
+%       else:
       assertNoError(kind, index, verify(element, as: Raw${node.collection_element_type}.self))
+%       end
     }
 %   end
     break

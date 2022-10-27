@@ -1128,6 +1128,34 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Element: RawSyntaxNodeProtocol {
+    case `stringSegment`(RawStringSegmentSyntax)
+    case `expressionSegment`(RawExpressionSegmentSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawStringSegmentSyntax.isKindOf(raw) || RawExpressionSegmentSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .stringSegment(let node): return node.raw
+      case .expressionSegment(let node): return node.raw
+      }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawStringSegmentSyntax(other) {
+        self = .stringSegment(node)
+        return
+      }
+      if let node = RawExpressionSegmentSyntax(other) {
+        self = .expressionSegment(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public typealias SyntaxType = StringLiteralSegmentsSyntax
 
   @_spi(RawSyntax)
@@ -1150,7 +1178,7 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
     self.init(raw: other.raw)
   }
 
-  public init(elements: [RawSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .stringLiteralSegments, uninitializedCount: elements.count, arena: arena) { layout in
       guard var ptr = layout.baseAddress else { return }
@@ -13461,6 +13489,40 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Element: RawSyntaxNodeProtocol {
+    case `precedenceGroupRelation`(RawPrecedenceGroupRelationSyntax)
+    case `precedenceGroupAssignment`(RawPrecedenceGroupAssignmentSyntax)
+    case `precedenceGroupAssociativity`(RawPrecedenceGroupAssociativitySyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawPrecedenceGroupRelationSyntax.isKindOf(raw) || RawPrecedenceGroupAssignmentSyntax.isKindOf(raw) || RawPrecedenceGroupAssociativitySyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .precedenceGroupRelation(let node): return node.raw
+      case .precedenceGroupAssignment(let node): return node.raw
+      case .precedenceGroupAssociativity(let node): return node.raw
+      }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawPrecedenceGroupRelationSyntax(other) {
+        self = .precedenceGroupRelation(node)
+        return
+      }
+      if let node = RawPrecedenceGroupAssignmentSyntax(other) {
+        self = .precedenceGroupAssignment(node)
+        return
+      }
+      if let node = RawPrecedenceGroupAssociativitySyntax(other) {
+        self = .precedenceGroupAssociativity(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public typealias SyntaxType = PrecedenceGroupAttributeListSyntax
 
   @_spi(RawSyntax)
@@ -13483,7 +13545,7 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol, RawS
     self.init(raw: other.raw)
   }
 
-  public init(elements: [RawSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupAttributeList, uninitializedCount: elements.count, arena: arena) { layout in
       guard var ptr = layout.baseAddress else { return }
@@ -14497,6 +14559,40 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Element: RawSyntaxNodeProtocol {
+    case `attribute`(RawAttributeSyntax)
+    case `customAttribute`(RawCustomAttributeSyntax)
+    case `ifConfigDecl`(RawIfConfigDeclSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawAttributeSyntax.isKindOf(raw) || RawCustomAttributeSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .attribute(let node): return node.raw
+      case .customAttribute(let node): return node.raw
+      case .ifConfigDecl(let node): return node.raw
+      }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawAttributeSyntax(other) {
+        self = .attribute(node)
+        return
+      }
+      if let node = RawCustomAttributeSyntax(other) {
+        self = .customAttribute(node)
+        return
+      }
+      if let node = RawIfConfigDeclSyntax(other) {
+        self = .ifConfigDecl(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public typealias SyntaxType = AttributeListSyntax
 
   @_spi(RawSyntax)
@@ -14519,7 +14615,7 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     self.init(raw: other.raw)
   }
 
-  public init(elements: [RawSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .attributeList, uninitializedCount: elements.count, arena: arena) { layout in
       guard var ptr = layout.baseAddress else { return }
@@ -14538,6 +14634,46 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Element: RawSyntaxNodeProtocol {
+    case `labeledSpecializeEntry`(RawLabeledSpecializeEntrySyntax)
+    case `availabilityEntry`(RawAvailabilityEntrySyntax)
+    case `targetFunctionEntry`(RawTargetFunctionEntrySyntax)
+    case `genericWhereClause`(RawGenericWhereClauseSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawLabeledSpecializeEntrySyntax.isKindOf(raw) || RawAvailabilityEntrySyntax.isKindOf(raw) || RawTargetFunctionEntrySyntax.isKindOf(raw) || RawGenericWhereClauseSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .labeledSpecializeEntry(let node): return node.raw
+      case .availabilityEntry(let node): return node.raw
+      case .targetFunctionEntry(let node): return node.raw
+      case .genericWhereClause(let node): return node.raw
+      }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawLabeledSpecializeEntrySyntax(other) {
+        self = .labeledSpecializeEntry(node)
+        return
+      }
+      if let node = RawAvailabilityEntrySyntax(other) {
+        self = .availabilityEntry(node)
+        return
+      }
+      if let node = RawTargetFunctionEntrySyntax(other) {
+        self = .targetFunctionEntry(node)
+        return
+      }
+      if let node = RawGenericWhereClauseSyntax(other) {
+        self = .genericWhereClause(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public typealias SyntaxType = SpecializeAttributeSpecListSyntax
 
   @_spi(RawSyntax)
@@ -14560,7 +14696,7 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSy
     self.init(raw: other.raw)
   }
 
-  public init(elements: [RawSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .specializeAttributeSpecList, uninitializedCount: elements.count, arena: arena) { layout in
       guard var ptr = layout.baseAddress else { return }
@@ -17030,6 +17166,34 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Element: RawSyntaxNodeProtocol {
+    case `switchCase`(RawSwitchCaseSyntax)
+    case `ifConfigDecl`(RawIfConfigDeclSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      return RawSwitchCaseSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .switchCase(let node): return node.raw
+      case .ifConfigDecl(let node): return node.raw
+      }
+    }
+
+    public init?<T>(_ other: T) where T : RawSyntaxNodeProtocol {
+      if let node = RawSwitchCaseSyntax(other) {
+        self = .switchCase(node)
+        return
+      }
+      if let node = RawIfConfigDeclSyntax(other) {
+        self = .ifConfigDecl(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public typealias SyntaxType = SwitchCaseListSyntax
 
   @_spi(RawSyntax)
@@ -17052,7 +17216,7 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
     self.init(raw: other.raw)
   }
 
-  public init(elements: [RawSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [Element], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .switchCaseList, uninitializedCount: elements.count, arena: arena) { layout in
       guard var ptr = layout.baseAddress else { return }

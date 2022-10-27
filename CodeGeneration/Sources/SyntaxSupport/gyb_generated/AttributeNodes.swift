@@ -137,7 +137,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "SyntaxCollection",
        element: "Syntax",
        elementName: "Attribute",
-       elementChoices: ["Attribute", "CustomAttribute"],
+       elementChoices: ["Attribute", "CustomAttribute", "IfConfigDecl"],
        omitWhenEmpty: true),
 
   Node(name: "SpecializeAttributeSpecList",

@@ -1480,7 +1480,7 @@ extension Parser {
   ) -> (RawStringLiteralSegmentsSyntax, SyntaxText.Index) {
     let allowsMultiline = closer.tokenKind == .multilineStringQuote
 
-    var segments = [RawSyntax]()
+    var segments = [RawStringLiteralSegmentsSyntax.Element]()
     var segment = text
     var stringLiteralSegmentStart = segment.startIndex
     while let slashIndex = segment.firstIndex(of: UInt8(ascii: "\\")), stringLiteralSegmentStart < segment.endIndex {
@@ -1508,7 +1508,7 @@ extension Parser {
         text: SyntaxText(rebasing: text[stringLiteralSegmentStart..<slashIndex]),
         presence: .present,
         arena: self.arena)
-      segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken, arena: self.arena)))
+      segments.append(.stringSegment(RawStringSegmentSyntax(content: segmentToken, arena: self.arena)))
 
       let content = SyntaxText(rebasing: text[contentStart...])
       let contentSize = content.withBuffer { buf in
@@ -1557,7 +1557,7 @@ extension Parser {
           }
           let rparen = subparser.expectWithoutRecovery(.rightParen)
 
-          segments.append(RawSyntax(RawExpressionSegmentSyntax(
+          segments.append(.expressionSegment(RawExpressionSegmentSyntax(
             backslash: slashToken,
             delimiter: delim,
             lunexpected,
@@ -1598,7 +1598,7 @@ extension Parser {
       text: SyntaxText(rebasing: segment),
       presence: .present,
       arena: self.arena)
-    segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken,
+    segments.append(.stringSegment(RawStringSegmentSyntax(content: segmentToken,
                                                      arena: self.arena)))
 
     return (RawStringLiteralSegmentsSyntax(elements: segments, arena: arena), segment.endIndex)

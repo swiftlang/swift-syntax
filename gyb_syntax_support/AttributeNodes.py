@@ -103,6 +103,7 @@ ATTRIBUTE_NODES = [
          element_choices=[
              'Attribute',
              'CustomAttribute',
+             'IfConfigDecl',
          ]),
 
     # The argument of '@_specialize(...)'

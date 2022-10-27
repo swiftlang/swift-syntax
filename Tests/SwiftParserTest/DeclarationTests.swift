@@ -1303,6 +1303,8 @@ final class DeclarationTests: XCTestCase {
         @available(*, unavailable) init() {}
       }
       """)
+
+    AssertParse("func foo(body: (isolated String) -> Int) {}")
   }
 }
 

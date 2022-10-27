@@ -675,16 +675,16 @@ extension Parser {
   /// this recovery is disabled.
   @_spi(RawSyntax)
   public mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
-    var elements = [RawSyntax]()
+    var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
     while !self.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
             && elementsProgress.evaluate(currentToken) {
       if self.lookahead().isAtStartOfSwitchCase(allowRecovery: false) {
-        elements.append(RawSyntax(self.parseSwitchCase()))
+        elements.append(.switchCase(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIfKeyword) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.
-        elements.append(RawSyntax(self.parsePoundIfDirective(
+        elements.append(.ifConfigDecl(self.parsePoundIfDirective(
           { $0.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
           syntax: { parser, cases in
             guard cases.count == 1, let firstCase = cases.first else {
@@ -696,7 +696,7 @@ extension Parser {
       } else if allowStandaloneStmtRecovery && (self.atStartOfExpression() || self.atStartOfStatement() || self.atStartOfDeclaration()) {
         // Synthesize a label for the stamenent or declaration that isn't coverd by a case right now.
         let statements = parseSwitchCaseBody()
-        elements.append(RawSyntax(RawSwitchCaseSyntax(
+        elements.append(.switchCase(RawSwitchCaseSyntax(
           unknownAttr: nil,
           label: .case(RawSwitchCaseLabelSyntax(
             caseKeyword: missingToken(.caseKeyword, text: nil),
@@ -718,7 +718,7 @@ extension Parser {
           arena: self.arena
         )))
       } else if self.lookahead().isAtStartOfSwitchCase(allowRecovery: true) {
-        elements.append(RawSyntax(self.parseSwitchCase()))
+        elements.append(.switchCase(self.parseSwitchCase()))
       } else {
         break
       }

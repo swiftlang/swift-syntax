@@ -189,7 +189,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     break
   case .stringLiteralSegments:
     for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawSyntax.self))
+      assertAnyHasNoError(kind, index, [
+        verify(element, as: RawStringSegmentSyntax.self),
+        verify(element, as: RawExpressionSegmentSyntax.self),
+      ])
     }
     break
   case .tryExpr:
@@ -1552,7 +1555,11 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     break
   case .precedenceGroupAttributeList:
     for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawSyntax.self))
+      assertAnyHasNoError(kind, index, [
+        verify(element, as: RawPrecedenceGroupRelationSyntax.self),
+        verify(element, as: RawPrecedenceGroupAssignmentSyntax.self),
+        verify(element, as: RawPrecedenceGroupAssociativitySyntax.self),
+      ])
     }
     break
   case .precedenceGroupRelation:
@@ -1673,12 +1680,21 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     break
   case .attributeList:
     for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawSyntax.self))
+      assertAnyHasNoError(kind, index, [
+        verify(element, as: RawAttributeSyntax.self),
+        verify(element, as: RawCustomAttributeSyntax.self),
+        verify(element, as: RawIfConfigDeclSyntax.self),
+      ])
     }
     break
   case .specializeAttributeSpecList:
     for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawSyntax.self))
+      assertAnyHasNoError(kind, index, [
+        verify(element, as: RawLabeledSpecializeEntrySyntax.self),
+        verify(element, as: RawAvailabilityEntrySyntax.self),
+        verify(element, as: RawTargetFunctionEntrySyntax.self),
+        verify(element, as: RawGenericWhereClauseSyntax.self),
+      ])
     }
     break
   case .availabilityEntry:
@@ -1952,7 +1968,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     break
   case .switchCaseList:
     for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawSyntax.self))
+      assertAnyHasNoError(kind, index, [
+        verify(element, as: RawSwitchCaseSyntax.self),
+        verify(element, as: RawIfConfigDeclSyntax.self),
+      ])
     }
     break
   case .repeatWhileStmt:

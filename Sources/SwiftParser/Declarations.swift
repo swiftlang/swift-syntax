@@ -1825,7 +1825,7 @@ extension Parser {
       case lowerThan = "lowerThan"
     }
 
-    var elements = [RawSyntax]()
+    var elements = [RawPrecedenceGroupAttributeListSyntax.Element]()
     do {
       var attributesProgress = LoopProgressCondition()
       LOOP: while !self.at(any: [.eof, .rightBrace]) && attributesProgress.evaluate(currentToken) {
@@ -1834,7 +1834,7 @@ extension Parser {
           let associativity = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let (unexpectedBeforeValue, value) = self.expectIdentifier()
-          elements.append(RawSyntax(RawPrecedenceGroupAssociativitySyntax(
+          elements.append(.precedenceGroupAssociativity(RawPrecedenceGroupAssociativitySyntax(
             associativityKeyword: associativity,
             unexpectedBeforeColon,
             colon: colon,
@@ -1852,7 +1852,7 @@ extension Parser {
           } else {
             unexpectedAfterFlag = nil
           }
-          elements.append(RawSyntax(RawPrecedenceGroupAssignmentSyntax(
+          elements.append(.precedenceGroupAssignment(RawPrecedenceGroupAssignmentSyntax(
             assignmentKeyword: assignmentKeyword,
             unexpectedBeforeColon,
             colon: colon,
@@ -1881,7 +1881,7 @@ extension Parser {
               ))
             } while keepGoing != nil && namesProgress.evaluate(currentToken)
           }
-          elements.append(RawSyntax(RawPrecedenceGroupRelationSyntax(
+          elements.append(.precedenceGroupRelation(RawPrecedenceGroupRelationSyntax(
             higherThanOrLowerThan: level,
             unexpectedBeforeColon,
             colon: colon,

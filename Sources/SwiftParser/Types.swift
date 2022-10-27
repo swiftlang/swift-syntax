@@ -48,7 +48,7 @@ extension Parser {
   }
 
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
-    let (specifier, attrList) = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
+    let (specifier, unexpectedBeforeAttrList, attrList) = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
     if self.lookahead().isAtFunctionTypeArrow() {
       let firstEffect = self.parseEffectsSpecifier()
@@ -97,9 +97,10 @@ extension Parser {
         arena: self.arena))
     }
 
-    if attrList != nil || specifier != nil {
+    if unexpectedBeforeAttrList != nil || specifier != nil || attrList != nil {
       return RawTypeSyntax(RawAttributedTypeSyntax(
         specifier: specifier,
+        unexpectedBeforeAttrList,
         attributes: attrList,
         baseType: base, arena: self.arena))
     } else {
@@ -821,34 +822,34 @@ extension Parser.Lookahead {
 
 extension Parser {
   @_spi(RawSyntax)
-  public mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (RawTokenSyntax?, RawAttributeListSyntax?) {
+  public mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (
+    specifier: RawTokenSyntax?, unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, attributes: RawAttributeListSyntax?
+  ) {
     var specifier: RawTokenSyntax? = self.consume(ifAnyIn: TypeSpecifier.self)
     // We can only stick one specifier on this type. Let's pick the first one
     if specifier == nil, let misplacedSpecifier = misplacedSpecifiers.first {
       specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
     }
-
-    if self.at(any: [.atSign, .inoutKeyword]) {
-      return (specifier, self.parseTypeAttributeListPresent())
-    }
-
-    if self.at(.identifier) {
-      if self.at(any: [], contextualKeywords: ["__shared", "__owned", "isolated", "_const"]) {
-        return (specifier, self.parseTypeAttributeListPresent())
-
+    var extraneousSpecifiers: [RawTokenSyntax] = []
+    while let extraSpecifier = self.consume(ifAny: [.inoutKeyword], contextualKeywords: ["__shared", "__owned", "isolated", "_const"]) {
+      if specifier == nil {
+        specifier = extraSpecifier
+      } else {
+        extraneousSpecifiers.append(extraSpecifier)
       }
     }
-    return (specifier, nil)
+    let unexpectedBeforeAttributeList = RawUnexpectedNodesSyntax(extraneousSpecifiers, arena: self.arena)
+
+    if self.at(any: [.atSign, .inoutKeyword]) {
+      return (specifier, unexpectedBeforeAttributeList, self.parseTypeAttributeListPresent())
+    }
+
+    return (specifier, unexpectedBeforeAttributeList, nil)
   }
 
   @_spi(RawSyntax)
   public mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
-    var elements = [RawSyntax]()
-    var modifiersProgress = LoopProgressCondition()
-    while let token = self.consume(ifAny: [.inoutKeyword], contextualKeywords: ["__shared", "__owned", "isolated", "_const"]), modifiersProgress.evaluate(currentToken) {
-      elements.append(RawSyntax(token))
-    }
-
+    var elements = [RawAttributeListSyntax.Element]()
     var attributeProgress = LoopProgressCondition()
     while self.at(.atSign) && attributeProgress.evaluate(currentToken) {
       elements.append(self.parseTypeAttribute())
@@ -857,14 +858,14 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseTypeAttribute() -> RawSyntax {
+  public mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
     guard let typeAttr = Parser.TypeAttribute(rawValue: self.peek().tokenText) else {
-      return RawSyntax(self.parseCustomAttribute())
+      return .customAttribute(self.parseCustomAttribute())
     }
 
     switch typeAttr {
     case .differentiable:
-      return RawSyntax(self.parseDifferentiableAttribute())
+      return .attribute(self.parseDifferentiableAttribute())
 
     case .convention:
       let (unexpectedBeforeAt, at) = self.expect(.atSign)
@@ -872,7 +873,7 @@ extension Parser {
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let arguments = self.parseConventionArguments()
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-      return RawSyntax(
+      return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAt,
           atSignToken: at,
@@ -893,7 +894,7 @@ extension Parser {
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let argument = self.parseOpaqueReturnTypeOfAttributeArguments()
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-      return RawSyntax(
+      return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAt,
           atSignToken: at,
@@ -911,7 +912,7 @@ extension Parser {
     default:
       let (unexpectedBeforeAt, at) = self.expect(.atSign)
       let ident = self.expectIdentifierWithoutRecovery()
-      return RawSyntax(
+      return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAt,
           atSignToken: at,

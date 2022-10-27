@@ -7135,10 +7135,12 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `attribute`(AttributeSyntax)
     case `customAttribute`(CustomAttributeSyntax)
+    case `ifConfigDecl`(IfConfigDeclSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .attribute(let node): return node._syntaxNode
       case .customAttribute(let node): return node._syntaxNode
+      case .ifConfigDecl(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -7147,6 +7149,9 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     }
     public init(_ node: CustomAttributeSyntax) {
       self = .customAttribute(node)
+    }
+    public init(_ node: IfConfigDeclSyntax) {
+      self = .ifConfigDecl(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
       if let node = syntaxNode.as(AttributeSyntax.self) {
@@ -7157,6 +7162,10 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
         self = .customAttribute(node)
         return
       }
+      if let node = syntaxNode.as(IfConfigDeclSyntax.self) {
+        self = .ifConfigDecl(node)
+        return
+      }
       return nil
     }
 
@@ -7164,6 +7173,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       return .choices([
         .node(AttributeSyntax.self),
         .node(CustomAttributeSyntax.self),
+        .node(IfConfigDeclSyntax.self),
       ])
     }
   }

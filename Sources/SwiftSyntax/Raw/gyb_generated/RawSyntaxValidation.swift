@@ -1625,7 +1625,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .declName:
     assert(layout.count == 5)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[1], as: RawSyntax.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawDeclNameArgumentsSyntax?.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
@@ -1697,7 +1697,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .differentiabilityParam:
     assert(layout.count == 5)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[1], as: RawSyntax.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawTokenSyntax?.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
@@ -1735,7 +1735,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .functionDeclName:
     assert(layout.count == 5)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[1], as: RawSyntax.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawDeclNameArgumentsSyntax?.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
@@ -2611,7 +2611,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .versionTuple:
     assert(layout.count == 7)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[1], as: RawSyntax.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawTokenSyntax?.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)

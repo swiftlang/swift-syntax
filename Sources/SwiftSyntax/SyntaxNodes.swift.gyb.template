@@ -63,11 +63,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
 %         for choice in child.node_choices:
 %           choice_node = NODE_MAP.get(choice.syntax_kind)
-%           # We don't add 'init(_: TokenSyntax)' because we need to check the
-%           # token kind.
-%           if choice.is_token():
-%             pass
-%           elif choice_node and choice_node.is_base():
+%           if choice_node and choice_node.is_base():
     public init<Node: ${choice_node.name}Protocol>(_ node: Node) {
       self = .${choice.swift_name}(${choice_node.name}(node))
     }
@@ -78,28 +74,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %           end
 %         end
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-%         token_choices = []
-%         other_choices = []
 %         for choice in child.node_choices:
-%           if choice.is_token():
-%             token_choices += [choice]
-%           else:
-%             other_choices += [choice]
-%           end
-%         end
-%
-%         if token_choices:
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-%           for choice in token_choices:
-        case .${choice.token.swift_kind()}: self = .${choice.swift_name}(tok)
-%           end
-        default: return nil
-        }
-        return
-      }
-%         end
-%         for choice in other_choices:
       if let node = syntaxNode.as(${choice.type_name}.self) {
         self = .${choice.swift_name}(node)
         return
@@ -111,13 +86,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     public static var structure: SyntaxNodeStructure {
       return .choices([
 %         for choice in child.node_choices:
-%           if choice.is_token() and choice.token.text:
-        .token(.${choice.token.swift_kind()}),
-%           elif choice.is_token() and not choice.token.text:
-        .token(.${choice.token.swift_kind()}("")),
-%           else:
         .node(${choice.type_name}.self),
-%           end
 %         end
       ])
     }

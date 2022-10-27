@@ -268,7 +268,7 @@ extension Parser {
       // If no opening '(' for parameter list, parse a single parameter.
       let param = self.parseDifferentiabilityParameter()
                   ?? RawDifferentiabilityParamSyntax(
-                    parameter: .name(missingToken(.identifier)),
+                    parameter: missingToken(.identifier),
                     trailingComma: nil,
                     arena: self.arena
                   )
@@ -338,17 +338,17 @@ extension Parser {
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityParamSyntax(
-        parameter: .name(token), trailingComma: comma, arena: self.arena)
+        parameter: token, trailingComma: comma, arena: self.arena)
     case (.integerLiteral, let handle)?:
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityParamSyntax(
-        parameter: .index(token), trailingComma: comma, arena: self.arena)
+        parameter: token, trailingComma: comma, arena: self.arena)
     case (.selfKeyword, let handle)?:
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityParamSyntax(
-        parameter: .self(token),
+        parameter: token,
         trailingComma: comma,
         arena: self.arena
       )
@@ -546,7 +546,7 @@ extension Parser {
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (targetFunction, args) = self.parseDeclNameRef([ .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators ])
         let declName = RawDeclNameSyntax(
-          declBaseName: .identifier(targetFunction),
+          declBaseName: targetFunction,
           declNameArguments: args,
           arena: self.arena)
         let comma = self.consume(if: .comma)
@@ -701,7 +701,7 @@ extension Parser {
         .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
       ])
     }
-    let method = RawDeclNameSyntax(declBaseName: .identifier(base), declNameArguments: args, arena: self.arena)
+    let method = RawDeclNameSyntax(declBaseName: base, declNameArguments: args, arena: self.arena)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
@@ -739,7 +739,7 @@ extension Parser {
       attributeName: spiToken,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      argument: .identifier(label),
+      argument: .token(label),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,

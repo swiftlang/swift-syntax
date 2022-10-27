@@ -84,23 +84,15 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The arguments of the attribute. In case the attributetakes multiple arguments, they are gather in theappropriate takes first.",
                isOptional: true,
                nodeChoices: [
-                 Child(name: "Identifier",
-                       kind: "IdentifierToken",
+                 Child(name: "Token",
+                       kind: "Token",
                        tokenChoices: [
-                         "Identifier"
-                       ]),
-                 Child(name: "String",
-                       kind: "StringLiteralToken",
-                       tokenChoices: [
-                         "StringLiteral"
+                         "Identifier",
+                         "StringLiteral",
+                         "IntegerLiteral"
                        ]),
                  Child(name: "StringExpr",
                        kind: "StringLiteralExpr"),
-                 Child(name: "Integer",
-                       kind: "IntegerLiteralToken",
-                       tokenChoices: [
-                         "IntegerLiteral"
-                       ]),
                  Child(name: "Availability",
                        kind: "AvailabilitySpecList"),
                  Child(name: "SpecializeArguments",
@@ -279,19 +271,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "DeclBaseName",
-               kind: "Syntax",
+               kind: "Token",
                description: "The base name of the protocol's requirement.",
-               nodeChoices: [
-                 Child(name: "Identifier",
-                       kind: "IdentifierToken",
-                       tokenChoices: [
-                         "Identifier"
-                       ]),
-                 Child(name: "Operator",
-                       kind: "PrefixOperatorToken",
-                       tokenChoices: [
-                         "PrefixOperator"
-                       ])
+               tokenChoices: [
+                 "Identifier",
+                 "PrefixOperator"
                ]),
          Child(name: "DeclNameArguments",
                kind: "DeclNameArguments",
@@ -449,23 +433,11 @@ public let ATTRIBUTE_NODES: [Node] = [
        ],
        children: [
          Child(name: "Parameter",
-               kind: "Syntax",
-               nodeChoices: [
-                 Child(name: "Self",
-                       kind: "SelfToken",
-                       tokenChoices: [
-                         "Self"
-                       ]),
-                 Child(name: "Name",
-                       kind: "IdentifierToken",
-                       tokenChoices: [
-                         "Identifier"
-                       ]),
-                 Child(name: "Index",
-                       kind: "IntegerLiteralToken",
-                       tokenChoices: [
-                         "IntegerLiteral"
-                       ])
+               kind: "Token",
+               tokenChoices: [
+                 "Self",
+                 "Identifier",
+                 "IntegerLiteral"
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",
@@ -565,24 +537,12 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Name",
-               kind: "Syntax",
+               kind: "Token",
                description: "The base name of the referenced function.",
-               nodeChoices: [
-                 Child(name: "Identifier",
-                       kind: "IdentifierToken",
-                       tokenChoices: [
-                         "Identifier"
-                       ]),
-                 Child(name: "PrefixOperator",
-                       kind: "PrefixOperatorToken",
-                       tokenChoices: [
-                         "PrefixOperator"
-                       ]),
-                 Child(name: "SpacedBinaryOperator",
-                       kind: "SpacedBinaryOperatorToken",
-                       tokenChoices: [
-                         "SpacedBinaryOperator"
-                       ])
+               tokenChoices: [
+                 "Identifier",
+                 "PrefixOperator",
+                 "SpacedBinaryOperator"
                ]),
          Child(name: "Arguments",
                kind: "DeclNameArguments",

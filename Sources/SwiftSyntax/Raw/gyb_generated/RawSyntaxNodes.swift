@@ -14260,10 +14260,8 @@ public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 @_spi(RawSyntax)
 public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public enum Argument {
-    case `identifier`(RawTokenSyntax)
-    case `string`(RawTokenSyntax)
+    case `token`(RawTokenSyntax)
     case `stringExpr`(RawStringLiteralExprSyntax)
-    case `integer`(RawTokenSyntax)
     case `availability`(RawAvailabilitySpecListSyntax)
     case `specializeArguments`(RawSpecializeAttributeSpecListSyntax)
     case `objCName`(RawObjCSelectorSyntax)
@@ -14279,10 +14277,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
     public var raw: RawSyntax {
       switch self {
-      case .identifier(let node): return node.raw
-      case .string(let node): return node.raw
+      case .token(let node): return node.raw
       case .stringExpr(let node): return node.raw
-      case .integer(let node): return node.raw
       case .availability(let node): return node.raw
       case .specializeArguments(let node): return node.raw
       case .objCName(let node): return node.raw
@@ -14954,17 +14950,6 @@ public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawS
 
 @_spi(RawSyntax)
 public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum DeclBaseName {
-    case `identifier`(RawTokenSyntax)
-    case `operator`(RawTokenSyntax)
-
-    public var raw: RawSyntax {
-      switch self {
-      case .identifier(let node): return node.raw
-      case .operator(let node): return node.raw
-      }
-    }
-  }
 
   public typealias SyntaxType = DeclNameSyntax
 
@@ -14990,7 +14975,7 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
   public init(
     _ unexpectedBeforeDeclBaseName: RawUnexpectedNodesSyntax? = nil,
-    declBaseName: DeclBaseName,
+    declBaseName: RawTokenSyntax,
     _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     _ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
@@ -15014,10 +14999,10 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public func withUnexpectedBeforeDeclBaseName(_ unexpectedBeforeDeclBaseName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameSyntax {
     return layoutView.replacingChild(at: 0, with: unexpectedBeforeDeclBaseName.map(RawSyntax.init), arena: arena).as(RawDeclNameSyntax.self)!
   }
-  public var declBaseName: RawSyntax {
-    layoutView.children[1]!
+  public var declBaseName: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withDeclBaseName(_ declBaseName: RawSyntax, arena: SyntaxArena) -> RawDeclNameSyntax {
+  public func withDeclBaseName(_ declBaseName: RawTokenSyntax, arena: SyntaxArena) -> RawDeclNameSyntax {
     return layoutView.replacingChild(at: 1, with: RawSyntax(declBaseName), arena: arena).as(RawDeclNameSyntax.self)!
   }
   public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
@@ -15634,19 +15619,6 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol, RawSyn
 
 @_spi(RawSyntax)
 public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Parameter {
-    case `self`(RawTokenSyntax)
-    case `name`(RawTokenSyntax)
-    case `index`(RawTokenSyntax)
-
-    public var raw: RawSyntax {
-      switch self {
-      case .self(let node): return node.raw
-      case .name(let node): return node.raw
-      case .index(let node): return node.raw
-      }
-    }
-  }
 
   public typealias SyntaxType = DifferentiabilityParamSyntax
 
@@ -15672,7 +15644,7 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
   public init(
     _ unexpectedBeforeParameter: RawUnexpectedNodesSyntax? = nil,
-    parameter: Parameter,
+    parameter: RawTokenSyntax,
     _ unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
@@ -15696,10 +15668,10 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxT
   public func withUnexpectedBeforeParameter(_ unexpectedBeforeParameter: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
     return layoutView.replacingChild(at: 0, with: unexpectedBeforeParameter.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamSyntax.self)!
   }
-  public var parameter: RawSyntax {
-    layoutView.children[1]!
+  public var parameter: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withParameter(_ parameter: RawSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
+  public func withParameter(_ parameter: RawTokenSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
     return layoutView.replacingChild(at: 1, with: RawSyntax(parameter), arena: arena).as(RawDifferentiabilityParamSyntax.self)!
   }
   public var unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? {
@@ -15990,19 +15962,6 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum Name {
-    case `identifier`(RawTokenSyntax)
-    case `prefixOperator`(RawTokenSyntax)
-    case `spacedBinaryOperator`(RawTokenSyntax)
-
-    public var raw: RawSyntax {
-      switch self {
-      case .identifier(let node): return node.raw
-      case .prefixOperator(let node): return node.raw
-      case .spacedBinaryOperator(let node): return node.raw
-      }
-    }
-  }
 
   public typealias SyntaxType = FunctionDeclNameSyntax
 
@@ -16028,7 +15987,7 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
   public init(
     _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
-    name: Name,
+    name: RawTokenSyntax,
     _ unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawDeclNameArgumentsSyntax?,
     _ unexpectedAfterArguments: RawUnexpectedNodesSyntax? = nil,
@@ -16052,10 +16011,10 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
     return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawFunctionDeclNameSyntax.self)!
   }
-  public var name: RawSyntax {
-    layoutView.children[1]!
+  public var name: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withName(_ name: RawSyntax, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
+  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
     return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawFunctionDeclNameSyntax.self)!
   }
   public var unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? {
@@ -23898,16 +23857,14 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 @_spi(RawSyntax)
 public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public enum Entry {
-    case `star`(RawTokenSyntax)
-    case `identifierRestriction`(RawTokenSyntax)
+    case `token`(RawTokenSyntax)
     case `availabilityVersionRestriction`(RawAvailabilityVersionRestrictionSyntax)
     case `availabilityLabeledArgument`(RawAvailabilityLabeledArgumentSyntax)
     case `tokenList`(RawTokenListSyntax)
 
     public var raw: RawSyntax {
       switch self {
-      case .star(let node): return node.raw
-      case .identifierRestriction(let node): return node.raw
+      case .token(let node): return node.raw
       case .availabilityVersionRestriction(let node): return node.raw
       case .availabilityLabeledArgument(let node): return node.raw
       case .tokenList(let node): return node.raw
@@ -24172,17 +24129,6 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol, Ra
 
 @_spi(RawSyntax)
 public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public enum MajorMinor {
-    case `major`(RawTokenSyntax)
-    case `majorMinor`(RawTokenSyntax)
-
-    public var raw: RawSyntax {
-      switch self {
-      case .major(let node): return node.raw
-      case .majorMinor(let node): return node.raw
-      }
-    }
-  }
 
   public typealias SyntaxType = VersionTupleSyntax
 
@@ -24208,7 +24154,7 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
   public init(
     _ unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax? = nil,
-    majorMinor: MajorMinor,
+    majorMinor: RawTokenSyntax,
     _ unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? = nil,
     patchPeriod: RawTokenSyntax?,
     _ unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax? = nil,
@@ -24236,10 +24182,10 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public func withUnexpectedBeforeMajorMinor(_ unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVersionTupleSyntax {
     return layoutView.replacingChild(at: 0, with: unexpectedBeforeMajorMinor.map(RawSyntax.init), arena: arena).as(RawVersionTupleSyntax.self)!
   }
-  public var majorMinor: RawSyntax {
-    layoutView.children[1]!
+  public var majorMinor: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withMajorMinor(_ majorMinor: RawSyntax, arena: SyntaxArena) -> RawVersionTupleSyntax {
+  public func withMajorMinor(_ majorMinor: RawTokenSyntax, arena: SyntaxArena) -> RawVersionTupleSyntax {
     return layoutView.replacingChild(at: 1, with: RawSyntax(majorMinor), arena: arena).as(RawVersionTupleSyntax.self)!
   }
   public var unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? {

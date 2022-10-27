@@ -84,7 +84,7 @@ extension Parser {
     let platform = self.consumeAnyToken()
     var keepGoing: RawTokenSyntax? = self.consume(if: .comma)
     elements.append(RawAvailabilityArgumentSyntax(
-      entry: .identifierRestriction(platform), trailingComma: keepGoing, arena: self.arena))
+      entry: .token(platform), trailingComma: keepGoing, arena: self.arena))
 
     do {
       var loopProgressCondition = LoopProgressCondition()
@@ -128,14 +128,14 @@ extension Parser {
               arena: self.arena
             ))
           } else {
-            entry = .identifierRestriction(argumentLabel)
+            entry = .token(argumentLabel)
           }
         case (.unavailable, let handle)?,
             (.noasync, let handle)?:
           let argument = self.eat(handle)
           // FIXME: Can we model this in SwiftSyntax by making the
           // 'labeled' argument part optional?
-          entry = .identifierRestriction(argument)
+          entry = .token(argument)
         case nil:
           // Not sure what this label is but, let's just eat it and
           // keep going.
@@ -165,7 +165,7 @@ extension Parser {
     if let star = self.consumeIfContextualPunctuator("*") {
       // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
       // doesn't expect it.
-      return .star(star)
+      return .token(star)
     }
 
     if self.at(any: [.identifier, .wildcardKeyword]) {
@@ -245,7 +245,7 @@ extension Parser {
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
     if let major = self.consume(if: .integerLiteral) {
       return RawVersionTupleSyntax(
-        majorMinor: .major(major), patchPeriod: nil, patchVersion: nil,
+        majorMinor: major, patchPeriod: nil, patchVersion: nil,
         arena: self.arena)
     }
 
@@ -260,7 +260,7 @@ extension Parser {
     }
 
     return RawVersionTupleSyntax(
-      majorMinor: .majorMinor(majorMinor), patchPeriod: period, patchVersion: patch,
+      majorMinor: majorMinor, patchPeriod: period, patchVersion: patch,
       arena: self.arena)
   }
 }

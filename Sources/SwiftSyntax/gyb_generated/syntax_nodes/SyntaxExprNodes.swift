@@ -4284,15 +4284,15 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: TokenSyntax) {
+      self = .colon(node)
+    }
     public init(_ node: DictionaryElementListSyntax) {
       self = .elements(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .colon: self = .colon(tok)
-        default: return nil
-        }
+      if let node = syntaxNode.as(TokenSyntax.self) {
+        self = .colon(node)
         return
       }
       if let node = syntaxNode.as(DictionaryElementListSyntax.self) {
@@ -4304,7 +4304,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .token(.colon),
+        .node(TokenSyntax.self),
         .node(DictionaryElementListSyntax.self),
       ])
     }

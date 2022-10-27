@@ -146,12 +146,12 @@ extension Parser {
 
     // The else branch, if any, is outside of the scope of the condition.
     let elseKeyword = self.consume(if: .elseKeyword)
-    let elseBody: RawSyntax?
+    let elseBody: RawIfStmtSyntax.ElseBody?
     if elseKeyword != nil {
       if self.at(.ifKeyword) {
-        elseBody = RawSyntax(self.parseIfStatement(ifHandle: .constant(.ifKeyword)))
+        elseBody = .ifStmt(self.parseIfStatement(ifHandle: .constant(.ifKeyword)))
       } else {
-        elseBody = RawSyntax(self.parseCodeBlock(introducer: ifKeyword))
+        elseBody = .codeBlock(self.parseCodeBlock(introducer: ifKeyword))
       }
     } else {
       elseBody = nil
@@ -211,7 +211,7 @@ extension Parser {
       let condition = self.parseConditionElement()
       keepGoing = self.consume(if: .comma)
       elements.append(RawConditionElementSyntax(
-        condition: RawSyntax(condition), trailingComma: keepGoing,
+        condition: condition, trailingComma: keepGoing,
         arena: self.arena))
     } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
@@ -228,7 +228,7 @@ extension Parser {
   ///     case-condition → 'case' pattern initializer
   ///     optional-binding-condition → 'let' pattern initializer? | 'var' pattern initializer?
   @_spi(RawSyntax)
-  public mutating func parseConditionElement() -> RawSyntax {
+  public mutating func parseConditionElement() -> RawConditionElementSyntax.Condition {
     // Parse a leading #available/#unavailable condition if present.
     if self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]) {
       return self.parsePoundAvailableConditionElement()
@@ -236,7 +236,7 @@ extension Parser {
     
     // Parse a #_hasSymbol condition if present.
     if self.at(.poundHasSymbolKeyword) {
-      return self.parsePoundHasSymbolConditionElement()
+      return .hasSymbol(self.parsePoundHasSymbolConditionElement())
     }
 
     // Parse the basic expression case.  If we have a leading let/var/case
@@ -254,7 +254,7 @@ extension Parser {
       // another clause, so parse it as an expression.  This also avoids
       // lookahead + backtracking on simple if conditions that are obviously
       // boolean conditions.
-      return RawSyntax(self.parseExpression(.basic))
+      return .expression(self.parseExpression(.basic))
     }
 
     // We're parsing a conditional binding.
@@ -304,14 +304,14 @@ extension Parser {
 
     switch kind {
     case let .optional(letOrVar, pattern):
-      return RawSyntax(RawOptionalBindingConditionSyntax(
+      return .optionalBinding(RawOptionalBindingConditionSyntax(
         letOrVarKeyword: letOrVar,
         pattern: pattern,
         typeAnnotation: annotation,
         initializer: initializer,
         arena: self.arena))
     case let .pattern(caseKeyword, pattern):
-      return RawSyntax(RawMatchingPatternConditionSyntax(
+      return .matchingPattern(RawMatchingPatternConditionSyntax(
         caseKeyword: caseKeyword,
         pattern: pattern,
         typeAnnotation: annotation,
@@ -332,7 +332,7 @@ extension Parser {
   ///     availability-condition → '#available' '(' availability-arguments ')'
   ///     availability-condition → '#unavailable' '(' availability-arguments ')'
   @_spi(RawSyntax)
-  public mutating func parsePoundAvailableConditionElement() -> RawSyntax {
+  public mutating func parsePoundAvailableConditionElement() -> RawConditionElementSyntax.Condition {
     assert(self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]))
     let kind: AvailabilitySpecSource = self.at(.poundAvailableKeyword) ? .available : .unavailable
     let keyword = self.consumeAnyToken()
@@ -341,7 +341,7 @@ extension Parser {
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     switch kind {
     case .available:
-      return RawSyntax(RawAvailabilityConditionSyntax(
+      return .availability(RawAvailabilityConditionSyntax(
         poundAvailableKeyword: keyword,
         unexpectedBeforeLParen,
         leftParen: lparen,
@@ -350,7 +350,7 @@ extension Parser {
         rightParen: rparen,
         arena: self.arena))
     case .unavailable:
-      return RawSyntax(RawUnavailabilityConditionSyntax(
+      return .unavailability(RawUnavailabilityConditionSyntax(
         poundUnavailableKeyword: keyword,
         unexpectedBeforeLParen,
         leftParen: lparen,
@@ -370,12 +370,12 @@ extension Parser {
   ///
   ///     has-symbol-condition → '#_hasSymbol' '(' expr ')'
   @_spi(RawSyntax)
-  public mutating func parsePoundHasSymbolConditionElement() -> RawSyntax {
+  public mutating func parsePoundHasSymbolConditionElement() -> RawHasSymbolConditionSyntax {
     let (unexpectedBeforeKeyword, keyword) = self.expect(.poundHasSymbolKeyword)
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let expr = self.parseExpression()
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    return RawSyntax(RawHasSymbolConditionSyntax(
+    return RawHasSymbolConditionSyntax(
       unexpectedBeforeKeyword,
       hasSymbolKeyword: keyword,
       unexpectedBeforeLParen,
@@ -383,7 +383,7 @@ extension Parser {
       expression: expr,
       unexpectedBeforeRParen,
       rightParen: rparen,
-      arena: self.arena)
+      arena: self.arena
     )
   }
 }
@@ -689,16 +689,16 @@ extension Parser {
           syntax: { parser, cases in
             guard cases.count == 1, let firstCase = cases.first else {
               assert(cases.isEmpty)
-              return RawSyntax(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
+              return .switchCases(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
             }
-            return RawSyntax(firstCase)
+            return .switchCases(firstCase)
           })))
       } else if allowStandaloneStmtRecovery && (self.atStartOfExpression() || self.atStartOfStatement() || self.atStartOfDeclaration()) {
         // Synthesize a label for the stamenent or declaration that isn't coverd by a case right now.
         let statements = parseSwitchCaseBody()
         elements.append(RawSyntax(RawSwitchCaseSyntax(
           unknownAttr: nil,
-          label: RawSyntax(RawSwitchCaseLabelSyntax(
+          label: .case(RawSwitchCaseLabelSyntax(
             caseKeyword: missingToken(.caseKeyword, text: nil),
             caseItems: RawCaseItemListSyntax(elements: [
               RawCaseItemSyntax(
@@ -773,14 +773,26 @@ extension Parser {
       unknownAttr = nil
     }
 
-    let label: RawSyntax
+    let label: RawSwitchCaseSyntax.Label
     switch self.canRecoverTo(anyIn: SwitchCaseStart.self) {
     case (.caseKeyword, let handle)?:
-      label = RawSyntax(self.parseSwitchCaseLabel(handle))
+      label = .case(self.parseSwitchCaseLabel(handle))
     case (.defaultKeyword, let handle)?:
-      label = RawSyntax(self.parseSwitchDefaultLabel(handle))
+      label = .default(self.parseSwitchDefaultLabel(handle))
     case nil:
-      label = RawSyntax(RawMissingSyntax(arena: self.arena))
+      label = .case(RawSwitchCaseLabelSyntax(
+        caseKeyword: missingToken(.caseKeyword),
+        caseItems: RawCaseItemListSyntax(elements: [
+          RawCaseItemSyntax(
+            pattern: RawPatternSyntax(RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena)),
+            whereClause: nil,
+            trailingComma: nil,
+            arena: self.arena
+          )
+        ], arena: self.arena),
+        colon: missingToken(.colon),
+        arena: self.arena
+      ))
     }
 
 
@@ -953,7 +965,7 @@ extension Parser {
   public mutating func parseYieldStatement(yieldHandle: RecoveryConsumptionHandle) -> RawYieldStmtSyntax {
     let (unexpectedBeforeYield, yield) = self.eat(yieldHandle)
 
-    let yields: RawSyntax
+    let yields: RawYieldStmtSyntax.Yields
     if let lparen = self.consume(if: .leftParen) {
       let exprList: RawYieldExprListSyntax
       do {
@@ -973,14 +985,14 @@ extension Parser {
         exprList = RawYieldExprListSyntax(elements: elementList, arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      yields = RawSyntax(RawYieldListSyntax(
+      yields = .yieldList(RawYieldListSyntax(
         leftParen: lparen,
         elementList: exprList,
         unexpectedBeforeRParen,
         rightParen: rparen,
         arena: self.arena))
     } else {
-      yields = RawSyntax(self.parseExpression())
+      yields = .simpleYield(self.parseExpression())
     }
 
     return RawYieldStmtSyntax(

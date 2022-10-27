@@ -94,6 +94,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        tokenChoices: [
                          "StringLiteral"
                        ]),
+                 Child(name: "StringExpr",
+                       kind: "StringLiteralExpr"),
                  Child(name: "Integer",
                        kind: "IntegerLiteralToken",
                        tokenChoices: [
@@ -119,6 +121,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        kind: "ConventionAttributeArguments"),
                  Child(name: "ConventionWitnessMethodArguments",
                        kind: "ConventionWitnessMethodAttributeArguments"),
+                 Child(name: "OpaqueReturnTypeOfAttributeArguments",
+                       kind: "OpaqueReturnTypeOfAttributeArguments"),
                  Child(name: "TokenList",
                        kind: "TokenList",
                        collectionElementName: "Token")

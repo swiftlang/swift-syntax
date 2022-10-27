@@ -592,10 +592,10 @@ extension Parser {
       // TODO: diagnose and skip the remaining token in the current clause.
       return result
     }
-  syntax: { (parser, elements) -> RawSyntax? in
+  syntax: { (parser, elements) -> RawIfConfigClauseSyntax.Elements? in
     switch elements.count {
     case 0: return nil
-    case 1: return RawSyntax(elements.first!)
+    case 1: return .postfixExpression(elements.first!)
     default: fatalError("Postfix #if should only have one element")
     }
   }
@@ -841,7 +841,7 @@ extension Parser {
 
       components.append(RawKeyPathComponentSyntax(
         period: period,
-        component: RawSyntax(RawKeyPathOptionalComponentSyntax(
+        component: .optional(RawKeyPathOptionalComponentSyntax(
           questionOrExclamationMark: questionOrExclaim, arena: self.arena)),
         arena: self.arena))
     }
@@ -906,7 +906,7 @@ extension Parser {
 
         components.append(RawKeyPathComponentSyntax(
           period: period,
-          component: RawSyntax(RawKeyPathSubscriptComponentSyntax(
+          component: .subscript(RawKeyPathSubscriptComponentSyntax(
             leftBracket: lsquare,
             argumentList: RawTupleExprElementListSyntax(
               elements: args, arena: self.arena),
@@ -936,7 +936,7 @@ extension Parser {
         let (period, name, declNameArgs, generics) = parseDottedExpressionSuffix()
         components.append(RawKeyPathComponentSyntax(
           period: period,
-          component: RawSyntax(RawKeyPathPropertyComponentSyntax(
+          component: .property(RawKeyPathPropertyComponentSyntax(
             identifier: name, declNameArguments: declNameArgs,
             genericArgumentClause: generics, arena: self.arena)),
           arena: self.arena))
@@ -1773,7 +1773,7 @@ extension Parser {
       return RawExprSyntax(RawDictionaryExprSyntax(
         unexpectedBeforeLSquare,
         leftSquare: lsquare,
-        content: RawSyntax(colon),
+        content: .colon(colon),
         rightSquare: rsquare,
         arena: self.arena
       ))
@@ -1841,7 +1841,7 @@ extension Parser {
     case .dictionary:
       return RawExprSyntax(RawDictionaryExprSyntax(
         leftSquare: lsquare,
-        content: RawSyntax(RawDictionaryElementListSyntax(elements: elements.map {
+        content: .elements(RawDictionaryElementListSyntax(elements: elements.map {
           $0.as(RawDictionaryElementSyntax.self)!
         }, arena: self.arena)),
         unexpectedBeforeRSquare,
@@ -2067,14 +2067,14 @@ extension Parser {
       captures = nil
     }
 
-    var input: RawSyntax?
+    var input: RawClosureSignatureSyntax.Input?
     var asyncKeyword: RawTokenSyntax? = nil
     var throwsTok: RawTokenSyntax? = nil
     var output: RawReturnClauseSyntax? = nil
     if !self.at(.inKeyword) {
       if self.at(.leftParen) {
         // Parse the closure arguments.
-        input = RawSyntax(self.parseParameterClause(for: .closure))
+        input = .input(self.parseParameterClause(for: .closure))
       } else {
         var params = [RawClosureParamSyntax]()
         var loopProgress = LoopProgressCondition()
@@ -2096,7 +2096,7 @@ extension Parser {
           } while keepGoing != nil && loopProgress.evaluate(currentToken)
         }
 
-        input = RawSyntax(RawClosureParamListSyntax(elements: params, arena: self.arena))
+        input = .simpleInput(RawClosureParamListSyntax(elements: params, arena: self.arena))
       }
 
       asyncKeyword = self.parseEffectsSpecifier()

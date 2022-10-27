@@ -125,7 +125,7 @@ extension Parser {
       let switchCase = self.parseSwitchCase()
       return RawCodeBlockItemSyntax(
         RawUnexpectedNodesSyntax(elements: [RawSyntax(switchCase)], arena: self.arena),
-        item: RawSyntax(RawMissingExprSyntax(arena: self.arena)),
+        item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
         semicolon: nil,
         errorTokens: nil,
         arena: self.arena
@@ -141,7 +141,7 @@ extension Parser {
       trailingSemis.append(trailingSemi)
     }
 
-    if item.isEmpty && semi == nil && trailingSemis.isEmpty {
+    if item.raw.isEmpty && semi == nil && trailingSemis.isEmpty {
       return nil
     }
     return RawCodeBlockItemSyntax(
@@ -158,7 +158,7 @@ extension Parser {
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the
   /// wrapping declaration instead of being consumed by lookeahead.
-  private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawSyntax {
+  private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax.Item {
     if self.at(.poundIfKeyword) {
       let directive = self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
@@ -169,23 +169,23 @@ extension Parser {
           return nil
         }
       } syntax: { parser, items  in
-        return RawSyntax(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
+        return .statements(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
       }
-      return RawSyntax(directive)
+      return .decl(RawDeclSyntax(directive))
     } else if self.at(.poundSourceLocationKeyword) {
-      return RawSyntax(self.parsePoundSourceLocationDirective())
+      return .decl(RawDeclSyntax(self.parsePoundSourceLocationDirective()))
     } else if self.atStartOfDeclaration(allowInitDecl: allowInitDecl) {
-      return RawSyntax(self.parseDeclaration())
+      return .decl(self.parseDeclaration())
     } else if self.atStartOfStatement() {
-      return RawSyntax(self.parseStatement())
+      return .stmt(self.parseStatement())
     } else if self.atStartOfExpression() {
-      return RawSyntax(self.parseExpression())
+      return .expr(self.parseExpression())
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
-      return RawSyntax(self.parseDeclaration())
+      return .decl(self.parseDeclaration())
     } else if self.atStartOfStatement(allowRecovery: true) {
-      return RawSyntax(self.parseStatement())
+      return .stmt(self.parseStatement())
     } else {
-      return RawSyntax(RawMissingExprSyntax(arena: self.arena))
+      return .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena)))
     }
   }
 }

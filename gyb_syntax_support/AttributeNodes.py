@@ -56,6 +56,7 @@ ATTRIBUTE_NODES = [
                    node_choices=[
                        Child('Identifier', kind='IdentifierToken'),
                        Child('String', kind='StringLiteralToken'),
+                       Child('StringExpr', kind='StringLiteralExpr'),
                        Child('Integer', kind='IntegerLiteralToken'),
                        Child('Availability', kind='AvailabilitySpecList'),
                        Child('SpecializeArguments',
@@ -74,7 +75,9 @@ ATTRIBUTE_NODES = [
                        Child('ConventionArguments',
                              kind='ConventionAttributeArguments'),
                        Child('ConventionWitnessMethodArguments',
-                             kind='ConventionWitnessMethodAttributeArguments'),
+                             kind='ConventionWitnessMethodAttributeArguments'), 
+                       Child('OpaqueReturnTypeOfAttributeArguments',
+                             kind='OpaqueReturnTypeOfAttributeArguments'),
                        # TokenList for custom effects which are parsed by
                        # `FunctionEffects.parse()` in swift.
                        Child('TokenList', kind='TokenList',

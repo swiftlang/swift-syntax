@@ -29,6 +29,7 @@ AVAILABILITY_NODES = [
                              kind='AvailabilityVersionRestriction'),
                        Child('AvailabilityLabeledArgument',
                              kind='AvailabilityLabeledArgument'),
+                       Child('TokenList', kind='TokenList'),
                    ]),
              Child('TrailingComma', kind='CommaToken', is_optional=True,
                    description='''

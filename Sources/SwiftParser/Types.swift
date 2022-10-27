@@ -900,7 +900,7 @@ extension Parser {
           attributeName: ident,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
-          argument: RawSyntax(argument),
+          argument: .opaqueReturnTypeOfAttributeArguments(argument),
           unexpectedBeforeRightParen,
           rightParen: rightParen,
           tokenList: nil,

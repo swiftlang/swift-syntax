@@ -26,6 +26,7 @@ public protocol RawPatternSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
 
 @_spi(RawSyntax)
 public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeclSyntax
 
   @_spi(RawSyntax)
@@ -58,6 +59,7 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ExprSyntax
 
   @_spi(RawSyntax)
@@ -90,6 +92,7 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = StmtSyntax
 
   @_spi(RawSyntax)
@@ -122,6 +125,7 @@ public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TypeSyntax
 
   @_spi(RawSyntax)
@@ -154,6 +158,7 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PatternSyntax
 
   @_spi(RawSyntax)
@@ -186,6 +191,7 @@ public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawUnknownDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnknownDeclSyntax
 
   @_spi(RawSyntax)
@@ -212,6 +218,7 @@ public struct RawUnknownDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawUnknownExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnknownExprSyntax
 
   @_spi(RawSyntax)
@@ -238,6 +245,7 @@ public struct RawUnknownExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawUnknownStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnknownStmtSyntax
 
   @_spi(RawSyntax)
@@ -264,6 +272,7 @@ public struct RawUnknownStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawUnknownTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnknownTypeSyntax
 
   @_spi(RawSyntax)
@@ -290,6 +299,7 @@ public struct RawUnknownTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawUnknownPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnknownPatternSyntax
 
   @_spi(RawSyntax)
@@ -316,6 +326,7 @@ public struct RawUnknownPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawMissingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MissingSyntax
 
   @_spi(RawSyntax)
@@ -349,6 +360,7 @@ public struct RawMissingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MissingDeclSyntax
 
   @_spi(RawSyntax)
@@ -425,6 +437,7 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MissingExprSyntax
 
   @_spi(RawSyntax)
@@ -458,6 +471,7 @@ public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MissingStmtSyntax
 
   @_spi(RawSyntax)
@@ -491,6 +505,7 @@ public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MissingTypeSyntax
 
   @_spi(RawSyntax)
@@ -524,6 +539,7 @@ public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MissingPatternSyntax
 
   @_spi(RawSyntax)
@@ -557,6 +573,24 @@ public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Item {
+    case `decl`(RawDeclSyntax)
+    case `stmt`(RawStmtSyntax)
+    case `expr`(RawExprSyntax)
+    case `tokenList`(RawTokenListSyntax)
+    case `nonEmptyTokenList`(RawNonEmptyTokenListSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .decl(let node): return node.raw
+      case .stmt(let node): return node.raw
+      case .expr(let node): return node.raw
+      case .tokenList(let node): return node.raw
+      case .nonEmptyTokenList(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = CodeBlockItemSyntax
 
   @_spi(RawSyntax)
@@ -581,7 +615,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
   public init(
     _ unexpectedBeforeItem: RawUnexpectedNodesSyntax? = nil,
-    item: RawSyntax,
+    item: Item,
     _ unexpectedBetweenItemAndSemicolon: RawUnexpectedNodesSyntax? = nil,
     semicolon: RawTokenSyntax?,
     _ unexpectedBetweenSemicolonAndErrorTokens: RawUnexpectedNodesSyntax? = nil,
@@ -649,6 +683,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CodeBlockItemListSyntax
 
   @_spi(RawSyntax)
@@ -690,6 +725,7 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CodeBlockSyntax
 
   @_spi(RawSyntax)
@@ -782,6 +818,7 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnexpectedNodesSyntax
 
   @_spi(RawSyntax)
@@ -823,6 +860,7 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = InOutExprSyntax
 
   @_spi(RawSyntax)
@@ -899,6 +937,7 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawPoundColumnExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundColumnExprSyntax
 
   @_spi(RawSyntax)
@@ -959,6 +998,7 @@ public struct RawPoundColumnExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TupleExprElementListSyntax
 
   @_spi(RawSyntax)
@@ -1000,6 +1040,7 @@ public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ArrayElementListSyntax
 
   @_spi(RawSyntax)
@@ -1041,6 +1082,7 @@ public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DictionaryElementListSyntax
 
   @_spi(RawSyntax)
@@ -1082,6 +1124,7 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = StringLiteralSegmentsSyntax
 
   @_spi(RawSyntax)
@@ -1123,6 +1166,7 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TryExprSyntax
 
   @_spi(RawSyntax)
@@ -1215,6 +1259,7 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AwaitExprSyntax
 
   @_spi(RawSyntax)
@@ -1291,6 +1336,7 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MoveExprSyntax
 
   @_spi(RawSyntax)
@@ -1367,6 +1413,7 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeclNameArgumentSyntax
 
   @_spi(RawSyntax)
@@ -1443,6 +1490,7 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeclNameArgumentListSyntax
 
   @_spi(RawSyntax)
@@ -1484,6 +1532,7 @@ public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeclNameArgumentsSyntax
 
   @_spi(RawSyntax)
@@ -1576,6 +1625,7 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = IdentifierExprSyntax
 
   @_spi(RawSyntax)
@@ -1652,6 +1702,7 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SuperRefExprSyntax
 
   @_spi(RawSyntax)
@@ -1712,6 +1763,7 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = NilLiteralExprSyntax
 
   @_spi(RawSyntax)
@@ -1772,6 +1824,7 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DiscardAssignmentExprSyntax
 
   @_spi(RawSyntax)
@@ -1832,6 +1885,7 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AssignmentExprSyntax
 
   @_spi(RawSyntax)
@@ -1892,6 +1946,7 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SequenceExprSyntax
 
   @_spi(RawSyntax)
@@ -1952,6 +2007,7 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ExprListSyntax
 
   @_spi(RawSyntax)
@@ -1993,6 +2049,7 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawPoundLineExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundLineExprSyntax
 
   @_spi(RawSyntax)
@@ -2053,6 +2110,7 @@ public struct RawPoundLineExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawPoundFileExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundFileExprSyntax
 
   @_spi(RawSyntax)
@@ -2113,6 +2171,7 @@ public struct RawPoundFileExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawPoundFileIDExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundFileIDExprSyntax
 
   @_spi(RawSyntax)
@@ -2173,6 +2232,7 @@ public struct RawPoundFileIDExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawPoundFilePathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundFilePathExprSyntax
 
   @_spi(RawSyntax)
@@ -2233,6 +2293,7 @@ public struct RawPoundFilePathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawPoundFunctionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundFunctionExprSyntax
 
   @_spi(RawSyntax)
@@ -2293,6 +2354,7 @@ public struct RawPoundFunctionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawPoundDsohandleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundDsohandleExprSyntax
 
   @_spi(RawSyntax)
@@ -2353,6 +2415,7 @@ public struct RawPoundDsohandleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawSymbolicReferenceExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SymbolicReferenceExprSyntax
 
   @_spi(RawSyntax)
@@ -2429,6 +2492,7 @@ public struct RawSymbolicReferenceExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrefixOperatorExprSyntax
 
   @_spi(RawSyntax)
@@ -2505,6 +2569,7 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = BinaryOperatorExprSyntax
 
   @_spi(RawSyntax)
@@ -2565,6 +2630,7 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ArrowExprSyntax
 
   @_spi(RawSyntax)
@@ -2657,6 +2723,7 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = InfixOperatorExprSyntax
 
   @_spi(RawSyntax)
@@ -2749,6 +2816,7 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FloatLiteralExprSyntax
 
   @_spi(RawSyntax)
@@ -2809,6 +2877,7 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TupleExprSyntax
 
   @_spi(RawSyntax)
@@ -2901,6 +2970,7 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ArrayExprSyntax
 
   @_spi(RawSyntax)
@@ -2993,6 +3063,18 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Content {
+    case `colon`(RawTokenSyntax)
+    case `elements`(RawDictionaryElementListSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .colon(let node): return node.raw
+      case .elements(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = DictionaryExprSyntax
 
   @_spi(RawSyntax)
@@ -3019,7 +3101,7 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
     _ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? = nil,
     leftSquare: RawTokenSyntax,
     _ unexpectedBetweenLeftSquareAndContent: RawUnexpectedNodesSyntax? = nil,
-    content: RawSyntax,
+    content: Content,
     _ unexpectedBetweenContentAndRightSquare: RawUnexpectedNodesSyntax? = nil,
     rightSquare: RawTokenSyntax,
     _ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? = nil,
@@ -3085,6 +3167,7 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TupleExprElementSyntax
 
   @_spi(RawSyntax)
@@ -3193,6 +3276,7 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawArrayElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ArrayElementSyntax
 
   @_spi(RawSyntax)
@@ -3269,6 +3353,7 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DictionaryElementSyntax
 
   @_spi(RawSyntax)
@@ -3377,6 +3462,7 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = IntegerLiteralExprSyntax
 
   @_spi(RawSyntax)
@@ -3437,6 +3523,7 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = BooleanLiteralExprSyntax
 
   @_spi(RawSyntax)
@@ -3497,6 +3584,7 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnresolvedTernaryExprSyntax
 
   @_spi(RawSyntax)
@@ -3589,6 +3677,7 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TernaryExprSyntax
 
   @_spi(RawSyntax)
@@ -3713,6 +3802,7 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MemberAccessExprSyntax
 
   @_spi(RawSyntax)
@@ -3821,6 +3911,7 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnresolvedIsExprSyntax
 
   @_spi(RawSyntax)
@@ -3881,6 +3972,7 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = IsExprSyntax
 
   @_spi(RawSyntax)
@@ -3973,6 +4065,7 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnresolvedAsExprSyntax
 
   @_spi(RawSyntax)
@@ -4049,6 +4142,7 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AsExprSyntax
 
   @_spi(RawSyntax)
@@ -4157,6 +4251,7 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TypeExprSyntax
 
   @_spi(RawSyntax)
@@ -4217,6 +4312,7 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClosureCaptureItemSyntax
 
   @_spi(RawSyntax)
@@ -4341,6 +4437,7 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClosureCaptureItemListSyntax
 
   @_spi(RawSyntax)
@@ -4382,6 +4479,7 @@ public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClosureCaptureSignatureSyntax
 
   @_spi(RawSyntax)
@@ -4474,6 +4572,7 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawClosureParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClosureParamSyntax
 
   @_spi(RawSyntax)
@@ -4550,6 +4649,7 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClosureParamListSyntax
 
   @_spi(RawSyntax)
@@ -4591,6 +4691,18 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Input {
+    case `simpleInput`(RawClosureParamListSyntax)
+    case `input`(RawParameterClauseSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .simpleInput(let node): return node.raw
+      case .input(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = ClosureSignatureSyntax
 
   @_spi(RawSyntax)
@@ -4619,7 +4731,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
     _ unexpectedBetweenAttributesAndCapture: RawUnexpectedNodesSyntax? = nil,
     capture: RawClosureCaptureSignatureSyntax?,
     _ unexpectedBetweenCaptureAndInput: RawUnexpectedNodesSyntax? = nil,
-    input: RawSyntax?,
+    input: Input?,
     _ unexpectedBetweenInputAndAsyncKeyword: RawUnexpectedNodesSyntax? = nil,
     asyncKeyword: RawTokenSyntax?,
     _ unexpectedBetweenAsyncKeywordAndThrowsTok: RawUnexpectedNodesSyntax? = nil,
@@ -4747,6 +4859,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClosureExprSyntax
 
   @_spi(RawSyntax)
@@ -4855,6 +4968,7 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnresolvedPatternExprSyntax
 
   @_spi(RawSyntax)
@@ -4915,6 +5029,7 @@ public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MultipleTrailingClosureElementSyntax
 
   @_spi(RawSyntax)
@@ -5007,6 +5122,7 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol, Ra
 
 @_spi(RawSyntax)
 public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MultipleTrailingClosureElementListSyntax
 
   @_spi(RawSyntax)
@@ -5048,6 +5164,7 @@ public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol
 
 @_spi(RawSyntax)
 public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FunctionCallExprSyntax
 
   @_spi(RawSyntax)
@@ -5188,6 +5305,7 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SubscriptExprSyntax
 
   @_spi(RawSyntax)
@@ -5328,6 +5446,7 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = OptionalChainingExprSyntax
 
   @_spi(RawSyntax)
@@ -5404,6 +5523,7 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ForcedValueExprSyntax
 
   @_spi(RawSyntax)
@@ -5480,6 +5600,7 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PostfixUnaryExprSyntax
 
   @_spi(RawSyntax)
@@ -5556,6 +5677,7 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SpecializeExprSyntax
 
   @_spi(RawSyntax)
@@ -5632,6 +5754,7 @@ public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = StringSegmentSyntax
 
   @_spi(RawSyntax)
@@ -5692,6 +5815,7 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ExpressionSegmentSyntax
 
   @_spi(RawSyntax)
@@ -5816,6 +5940,7 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = StringLiteralExprSyntax
 
   @_spi(RawSyntax)
@@ -5940,6 +6065,7 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = RegexLiteralExprSyntax
 
   @_spi(RawSyntax)
@@ -6000,6 +6126,7 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = KeyPathExprSyntax
 
   @_spi(RawSyntax)
@@ -6092,6 +6219,7 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = KeyPathComponentListSyntax
 
   @_spi(RawSyntax)
@@ -6133,6 +6261,20 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Component {
+    case `property`(RawKeyPathPropertyComponentSyntax)
+    case `subscript`(RawKeyPathSubscriptComponentSyntax)
+    case `optional`(RawKeyPathOptionalComponentSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .property(let node): return node.raw
+      case .subscript(let node): return node.raw
+      case .optional(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = KeyPathComponentSyntax
 
   @_spi(RawSyntax)
@@ -6159,7 +6301,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
     _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax? = nil,
     period: RawTokenSyntax?,
     _ unexpectedBetweenPeriodAndComponent: RawUnexpectedNodesSyntax? = nil,
-    component: RawSyntax,
+    component: Component,
     _ unexpectedAfterComponent: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -6209,6 +6351,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = KeyPathPropertyComponentSyntax
 
   @_spi(RawSyntax)
@@ -6301,6 +6444,7 @@ public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = KeyPathSubscriptComponentSyntax
 
   @_spi(RawSyntax)
@@ -6393,6 +6537,7 @@ public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = KeyPathOptionalComponentSyntax
 
   @_spi(RawSyntax)
@@ -6453,6 +6598,20 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum RootExpr {
+    case `identifierExpr`(RawIdentifierExprSyntax)
+    case `specializeExpr`(RawSpecializeExprSyntax)
+    case `optionalChainingExpr`(RawOptionalChainingExprSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .identifierExpr(let node): return node.raw
+      case .specializeExpr(let node): return node.raw
+      case .optionalChainingExpr(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = OldKeyPathExprSyntax
 
   @_spi(RawSyntax)
@@ -6479,7 +6638,7 @@ public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
     _ unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? = nil,
     backslash: RawTokenSyntax,
     _ unexpectedBetweenBackslashAndRootExpr: RawUnexpectedNodesSyntax? = nil,
-    rootExpr: RawExprSyntax?,
+    rootExpr: RootExpr?,
     _ unexpectedBetweenRootExprAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
@@ -6545,6 +6704,7 @@ public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawKeyPathBaseExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = KeyPathBaseExprSyntax
 
   @_spi(RawSyntax)
@@ -6605,6 +6765,7 @@ public struct RawKeyPathBaseExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawObjcNamePieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ObjcNamePieceSyntax
 
   @_spi(RawSyntax)
@@ -6681,6 +6842,7 @@ public struct RawObjcNamePieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawObjcNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ObjcNameSyntax
 
   @_spi(RawSyntax)
@@ -6722,6 +6884,7 @@ public struct RawObjcNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawObjcKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ObjcKeyPathExprSyntax
 
   @_spi(RawSyntax)
@@ -6830,6 +6993,7 @@ public struct RawObjcKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ObjcSelectorExprSyntax
 
   @_spi(RawSyntax)
@@ -6970,6 +7134,7 @@ public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MacroExpansionExprSyntax
 
   @_spi(RawSyntax)
@@ -7126,6 +7291,7 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PostfixIfConfigExprSyntax
 
   @_spi(RawSyntax)
@@ -7202,6 +7368,7 @@ public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = EditorPlaceholderExprSyntax
 
   @_spi(RawSyntax)
@@ -7262,6 +7429,7 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ObjectLiteralExprSyntax
 
   @_spi(RawSyntax)
@@ -7370,6 +7538,7 @@ public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = YieldExprListSyntax
 
   @_spi(RawSyntax)
@@ -7411,6 +7580,7 @@ public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = YieldExprListElementSyntax
 
   @_spi(RawSyntax)
@@ -7487,6 +7657,7 @@ public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TypeInitializerClauseSyntax
 
   @_spi(RawSyntax)
@@ -7563,6 +7734,7 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TypealiasDeclSyntax
 
   @_spi(RawSyntax)
@@ -7719,6 +7891,7 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AssociatedtypeDeclSyntax
 
   @_spi(RawSyntax)
@@ -7875,6 +8048,7 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FunctionParameterListSyntax
 
   @_spi(RawSyntax)
@@ -7916,6 +8090,7 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ParameterClauseSyntax
 
   @_spi(RawSyntax)
@@ -8008,6 +8183,7 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ReturnClauseSyntax
 
   @_spi(RawSyntax)
@@ -8084,6 +8260,7 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FunctionSignatureSyntax
 
   @_spi(RawSyntax)
@@ -8192,6 +8369,24 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Elements {
+    case `statements`(RawCodeBlockItemListSyntax)
+    case `switchCases`(RawSwitchCaseListSyntax)
+    case `decls`(RawMemberDeclListSyntax)
+    case `postfixExpression`(RawExprSyntax)
+    case `attributes`(RawAttributeListSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .statements(let node): return node.raw
+      case .switchCases(let node): return node.raw
+      case .decls(let node): return node.raw
+      case .postfixExpression(let node): return node.raw
+      case .attributes(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = IfConfigClauseSyntax
 
   @_spi(RawSyntax)
@@ -8220,7 +8415,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
     _ unexpectedBetweenPoundKeywordAndCondition: RawUnexpectedNodesSyntax? = nil,
     condition: RawExprSyntax?,
     _ unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax? = nil,
-    elements: RawSyntax?,
+    elements: Elements?,
     _ unexpectedAfterElements: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -8284,6 +8479,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = IfConfigClauseListSyntax
 
   @_spi(RawSyntax)
@@ -8325,6 +8521,7 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = IfConfigDeclSyntax
 
   @_spi(RawSyntax)
@@ -8401,6 +8598,7 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawPoundErrorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundErrorDeclSyntax
 
   @_spi(RawSyntax)
@@ -8509,6 +8707,7 @@ public struct RawPoundErrorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawPoundWarningDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundWarningDeclSyntax
 
   @_spi(RawSyntax)
@@ -8617,6 +8816,7 @@ public struct RawPoundWarningDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundSourceLocationSyntax
 
   @_spi(RawSyntax)
@@ -8725,6 +8925,7 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundSourceLocationArgsSyntax
 
   @_spi(RawSyntax)
@@ -8881,6 +9082,7 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeclModifierDetailSyntax
 
   @_spi(RawSyntax)
@@ -8973,6 +9175,7 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeclModifierSyntax
 
   @_spi(RawSyntax)
@@ -9049,6 +9252,7 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = InheritedTypeSyntax
 
   @_spi(RawSyntax)
@@ -9125,6 +9329,7 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = InheritedTypeListSyntax
 
   @_spi(RawSyntax)
@@ -9166,6 +9371,7 @@ public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TypeInheritanceClauseSyntax
 
   @_spi(RawSyntax)
@@ -9242,6 +9448,7 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClassDeclSyntax
 
   @_spi(RawSyntax)
@@ -9414,6 +9621,7 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ActorDeclSyntax
 
   @_spi(RawSyntax)
@@ -9586,6 +9794,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = StructDeclSyntax
 
   @_spi(RawSyntax)
@@ -9758,6 +9967,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ProtocolDeclSyntax
 
   @_spi(RawSyntax)
@@ -9930,6 +10140,7 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ExtensionDeclSyntax
 
   @_spi(RawSyntax)
@@ -10086,6 +10297,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MemberDeclBlockSyntax
 
   @_spi(RawSyntax)
@@ -10178,6 +10390,7 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MemberDeclListSyntax
 
   @_spi(RawSyntax)
@@ -10219,6 +10432,7 @@ public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MemberDeclListItemSyntax
 
   @_spi(RawSyntax)
@@ -10295,6 +10509,7 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawSourceFileSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SourceFileSyntax
 
   @_spi(RawSyntax)
@@ -10371,6 +10586,7 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = InitializerClauseSyntax
 
   @_spi(RawSyntax)
@@ -10447,6 +10663,7 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FunctionParameterSyntax
 
   @_spi(RawSyntax)
@@ -10635,6 +10852,7 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawModifierListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ModifierListSyntax
 
   @_spi(RawSyntax)
@@ -10676,6 +10894,7 @@ public struct RawModifierListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FunctionDeclSyntax
 
   @_spi(RawSyntax)
@@ -10848,6 +11067,7 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = InitializerDeclSyntax
 
   @_spi(RawSyntax)
@@ -11020,6 +11240,7 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeinitializerDeclSyntax
 
   @_spi(RawSyntax)
@@ -11128,6 +11349,18 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Accessor {
+    case `accessors`(RawAccessorBlockSyntax)
+    case `getter`(RawCodeBlockSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .accessors(let node): return node.raw
+      case .getter(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = SubscriptDeclSyntax
 
   @_spi(RawSyntax)
@@ -11166,7 +11399,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
     _ unexpectedBetweenResultAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndAccessor: RawUnexpectedNodesSyntax? = nil,
-    accessor: RawSyntax?,
+    accessor: Accessor?,
     _ unexpectedAfterAccessor: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -11300,6 +11533,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawAccessLevelModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AccessLevelModifierSyntax
 
   @_spi(RawSyntax)
@@ -11376,6 +11610,7 @@ public struct RawAccessLevelModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AccessPathComponentSyntax
 
   @_spi(RawSyntax)
@@ -11452,6 +11687,7 @@ public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawAccessPathSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AccessPathSyntax
 
   @_spi(RawSyntax)
@@ -11493,6 +11729,7 @@ public struct RawAccessPathSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ImportDeclSyntax
 
   @_spi(RawSyntax)
@@ -11617,6 +11854,7 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AccessorParameterSyntax
 
   @_spi(RawSyntax)
@@ -11709,6 +11947,7 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AccessorDeclSyntax
 
   @_spi(RawSyntax)
@@ -11865,6 +12104,7 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawAccessorListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AccessorListSyntax
 
   @_spi(RawSyntax)
@@ -11906,6 +12146,7 @@ public struct RawAccessorListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AccessorBlockSyntax
 
   @_spi(RawSyntax)
@@ -11998,6 +12239,18 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Accessor {
+    case `accessors`(RawAccessorBlockSyntax)
+    case `getter`(RawCodeBlockSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .accessors(let node): return node.raw
+      case .getter(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = PatternBindingSyntax
 
   @_spi(RawSyntax)
@@ -12028,7 +12281,7 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
     _ unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? = nil,
     initializer: RawInitializerClauseSyntax?,
     _ unexpectedBetweenInitializerAndAccessor: RawUnexpectedNodesSyntax? = nil,
-    accessor: RawSyntax?,
+    accessor: Accessor?,
     _ unexpectedBetweenAccessorAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
@@ -12122,6 +12375,7 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PatternBindingListSyntax
 
   @_spi(RawSyntax)
@@ -12163,6 +12417,7 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = VariableDeclSyntax
 
   @_spi(RawSyntax)
@@ -12271,6 +12526,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = EnumCaseElementSyntax
 
   @_spi(RawSyntax)
@@ -12379,6 +12635,7 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = EnumCaseElementListSyntax
 
   @_spi(RawSyntax)
@@ -12420,6 +12677,7 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = EnumCaseDeclSyntax
 
   @_spi(RawSyntax)
@@ -12528,6 +12786,7 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = EnumDeclSyntax
 
   @_spi(RawSyntax)
@@ -12700,6 +12959,7 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = OperatorDeclSyntax
 
   @_spi(RawSyntax)
@@ -12824,6 +13084,7 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DesignatedTypeListSyntax
 
   @_spi(RawSyntax)
@@ -12865,6 +13126,7 @@ public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DesignatedTypeElementSyntax
 
   @_spi(RawSyntax)
@@ -12941,6 +13203,7 @@ public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = OperatorPrecedenceAndTypesSyntax
 
   @_spi(RawSyntax)
@@ -13033,6 +13296,7 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol, RawSyn
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrecedenceGroupDeclSyntax
 
   @_spi(RawSyntax)
@@ -13189,6 +13453,7 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrecedenceGroupAttributeListSyntax
 
   @_spi(RawSyntax)
@@ -13230,6 +13495,7 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol, RawS
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrecedenceGroupRelationSyntax
 
   @_spi(RawSyntax)
@@ -13322,6 +13588,7 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrecedenceGroupNameListSyntax
 
   @_spi(RawSyntax)
@@ -13363,6 +13630,7 @@ public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrecedenceGroupNameElementSyntax
 
   @_spi(RawSyntax)
@@ -13439,6 +13707,7 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol, RawSyn
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrecedenceGroupAssignmentSyntax
 
   @_spi(RawSyntax)
@@ -13531,6 +13800,7 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrecedenceGroupAssociativitySyntax
 
   @_spi(RawSyntax)
@@ -13623,6 +13893,7 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol, RawS
 
 @_spi(RawSyntax)
 public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MacroExpansionDeclSyntax
 
   @_spi(RawSyntax)
@@ -13779,6 +14050,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TokenListSyntax
 
   @_spi(RawSyntax)
@@ -13820,6 +14092,7 @@ public struct RawTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawNonEmptyTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = NonEmptyTokenListSyntax
 
   @_spi(RawSyntax)
@@ -13861,6 +14134,7 @@ public struct RawNonEmptyTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CustomAttributeSyntax
 
   @_spi(RawSyntax)
@@ -13985,6 +14259,46 @@ public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Argument {
+    case `identifier`(RawTokenSyntax)
+    case `string`(RawTokenSyntax)
+    case `stringExpr`(RawStringLiteralExprSyntax)
+    case `integer`(RawTokenSyntax)
+    case `availability`(RawAvailabilitySpecListSyntax)
+    case `specializeArguments`(RawSpecializeAttributeSpecListSyntax)
+    case `objCName`(RawObjCSelectorSyntax)
+    case `implementsArguments`(RawImplementsAttributeArgumentsSyntax)
+    case `differentiableArguments`(RawDifferentiableAttributeArgumentsSyntax)
+    case `derivativeRegistrationArguments`(RawDerivativeRegistrationAttributeArgumentsSyntax)
+    case `namedAttributeString`(RawNamedAttributeStringArgumentSyntax)
+    case `backDeployArguments`(RawBackDeployAttributeSpecListSyntax)
+    case `conventionArguments`(RawConventionAttributeArgumentsSyntax)
+    case `conventionWitnessMethodArguments`(RawConventionWitnessMethodAttributeArgumentsSyntax)
+    case `opaqueReturnTypeOfAttributeArguments`(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
+    case `tokenList`(RawTokenListSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .identifier(let node): return node.raw
+      case .string(let node): return node.raw
+      case .stringExpr(let node): return node.raw
+      case .integer(let node): return node.raw
+      case .availability(let node): return node.raw
+      case .specializeArguments(let node): return node.raw
+      case .objCName(let node): return node.raw
+      case .implementsArguments(let node): return node.raw
+      case .differentiableArguments(let node): return node.raw
+      case .derivativeRegistrationArguments(let node): return node.raw
+      case .namedAttributeString(let node): return node.raw
+      case .backDeployArguments(let node): return node.raw
+      case .conventionArguments(let node): return node.raw
+      case .conventionWitnessMethodArguments(let node): return node.raw
+      case .opaqueReturnTypeOfAttributeArguments(let node): return node.raw
+      case .tokenList(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = AttributeSyntax
 
   @_spi(RawSyntax)
@@ -14015,7 +14329,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     _ unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax?,
     _ unexpectedBetweenLeftParenAndArgument: RawUnexpectedNodesSyntax? = nil,
-    argument: RawSyntax?,
+    argument: Argument?,
     _ unexpectedBetweenArgumentAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax?,
     _ unexpectedBetweenRightParenAndTokenList: RawUnexpectedNodesSyntax? = nil,
@@ -14125,6 +14439,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AttributeListSyntax
 
   @_spi(RawSyntax)
@@ -14166,6 +14481,7 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SpecializeAttributeSpecListSyntax
 
   @_spi(RawSyntax)
@@ -14207,6 +14523,7 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSy
 
 @_spi(RawSyntax)
 public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AvailabilityEntrySyntax
 
   @_spi(RawSyntax)
@@ -14315,6 +14632,7 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = LabeledSpecializeEntrySyntax
 
   @_spi(RawSyntax)
@@ -14423,6 +14741,7 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TargetFunctionEntrySyntax
 
   @_spi(RawSyntax)
@@ -14531,6 +14850,18 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum StringOrDeclname {
+    case `string`(RawTokenSyntax)
+    case `declname`(RawDeclNameSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .string(let node): return node.raw
+      case .declname(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = NamedAttributeStringArgumentSyntax
 
   @_spi(RawSyntax)
@@ -14559,7 +14890,7 @@ public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawS
     _ unexpectedBetweenNameTokAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
     _ unexpectedBetweenColonAndStringOrDeclname: RawUnexpectedNodesSyntax? = nil,
-    stringOrDeclname: RawSyntax,
+    stringOrDeclname: StringOrDeclname,
     _ unexpectedAfterStringOrDeclname: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -14623,6 +14954,18 @@ public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawS
 
 @_spi(RawSyntax)
 public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum DeclBaseName {
+    case `identifier`(RawTokenSyntax)
+    case `operator`(RawTokenSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .identifier(let node): return node.raw
+      case .operator(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = DeclNameSyntax
 
   @_spi(RawSyntax)
@@ -14647,7 +14990,7 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
   public init(
     _ unexpectedBeforeDeclBaseName: RawUnexpectedNodesSyntax? = nil,
-    declBaseName: RawSyntax,
+    declBaseName: DeclBaseName,
     _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     _ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
@@ -14699,6 +15042,7 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ImplementsAttributeArgumentsSyntax
 
   @_spi(RawSyntax)
@@ -14807,6 +15151,7 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawS
 
 @_spi(RawSyntax)
 public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ObjCSelectorPieceSyntax
 
   @_spi(RawSyntax)
@@ -14883,6 +15228,7 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ObjCSelectorSyntax
 
   @_spi(RawSyntax)
@@ -14924,6 +15270,7 @@ public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DifferentiableAttributeArgumentsSyntax
 
   @_spi(RawSyntax)
@@ -15048,6 +15395,18 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol, 
 
 @_spi(RawSyntax)
 public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Parameters {
+    case `parameter`(RawDifferentiabilityParamSyntax)
+    case `parameterList`(RawDifferentiabilityParamsSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .parameter(let node): return node.raw
+      case .parameterList(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = DifferentiabilityParamsClauseSyntax
 
   @_spi(RawSyntax)
@@ -15076,7 +15435,7 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, Raw
     _ unexpectedBetweenWrtLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
     _ unexpectedBetweenColonAndParameters: RawUnexpectedNodesSyntax? = nil,
-    parameters: RawSyntax,
+    parameters: Parameters,
     _ unexpectedAfterParameters: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -15140,6 +15499,7 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, Raw
 
 @_spi(RawSyntax)
 public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DifferentiabilityParamsSyntax
 
   @_spi(RawSyntax)
@@ -15232,6 +15592,7 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DifferentiabilityParamListSyntax
 
   @_spi(RawSyntax)
@@ -15273,6 +15634,20 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol, RawSyn
 
 @_spi(RawSyntax)
 public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Parameter {
+    case `self`(RawTokenSyntax)
+    case `name`(RawTokenSyntax)
+    case `index`(RawTokenSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .self(let node): return node.raw
+      case .name(let node): return node.raw
+      case .index(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = DifferentiabilityParamSyntax
 
   @_spi(RawSyntax)
@@ -15297,7 +15672,7 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
   public init(
     _ unexpectedBeforeParameter: RawUnexpectedNodesSyntax? = nil,
-    parameter: RawSyntax,
+    parameter: Parameter,
     _ unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
@@ -15349,6 +15724,7 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DerivativeRegistrationAttributeArgumentsSyntax
 
   @_spi(RawSyntax)
@@ -15505,6 +15881,7 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
 
 @_spi(RawSyntax)
 public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = QualifiedDeclNameSyntax
 
   @_spi(RawSyntax)
@@ -15613,6 +15990,20 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Name {
+    case `identifier`(RawTokenSyntax)
+    case `prefixOperator`(RawTokenSyntax)
+    case `spacedBinaryOperator`(RawTokenSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .identifier(let node): return node.raw
+      case .prefixOperator(let node): return node.raw
+      case .spacedBinaryOperator(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = FunctionDeclNameSyntax
 
   @_spi(RawSyntax)
@@ -15637,7 +16028,7 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
   public init(
     _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
-    name: RawSyntax,
+    name: Name,
     _ unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawDeclNameArgumentsSyntax?,
     _ unexpectedAfterArguments: RawUnexpectedNodesSyntax? = nil,
@@ -15689,6 +16080,7 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = BackDeployAttributeSpecListSyntax
 
   @_spi(RawSyntax)
@@ -15781,6 +16173,7 @@ public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSy
 
 @_spi(RawSyntax)
 public struct RawBackDeployVersionListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = BackDeployVersionListSyntax
 
   @_spi(RawSyntax)
@@ -15822,6 +16215,7 @@ public struct RawBackDeployVersionListSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawBackDeployVersionArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = BackDeployVersionArgumentSyntax
 
   @_spi(RawSyntax)
@@ -15898,6 +16292,7 @@ public struct RawBackDeployVersionArgumentSyntax: RawSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = OpaqueReturnTypeOfAttributeArgumentsSyntax
 
   @_spi(RawSyntax)
@@ -15990,6 +16385,7 @@ public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtoc
 
 @_spi(RawSyntax)
 public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ConventionAttributeArgumentsSyntax
 
   @_spi(RawSyntax)
@@ -16114,6 +16510,7 @@ public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawS
 
 @_spi(RawSyntax)
 public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ConventionWitnessMethodAttributeArgumentsSyntax
 
   @_spi(RawSyntax)
@@ -16206,6 +16603,7 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
 
 @_spi(RawSyntax)
 public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = LabeledStmtSyntax
 
   @_spi(RawSyntax)
@@ -16298,6 +16696,7 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ContinueStmtSyntax
 
   @_spi(RawSyntax)
@@ -16374,6 +16773,7 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = WhileStmtSyntax
 
   @_spi(RawSyntax)
@@ -16466,6 +16866,7 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeferStmtSyntax
 
   @_spi(RawSyntax)
@@ -16542,6 +16943,7 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ExpressionStmtSyntax
 
   @_spi(RawSyntax)
@@ -16602,6 +17004,7 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SwitchCaseListSyntax
 
   @_spi(RawSyntax)
@@ -16643,6 +17046,7 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = RepeatWhileStmtSyntax
 
   @_spi(RawSyntax)
@@ -16751,6 +17155,7 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GuardStmtSyntax
 
   @_spi(RawSyntax)
@@ -16859,6 +17264,7 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = WhereClauseSyntax
 
   @_spi(RawSyntax)
@@ -16935,6 +17341,7 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ForInStmtSyntax
 
   @_spi(RawSyntax)
@@ -17139,6 +17546,7 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SwitchStmtSyntax
 
   @_spi(RawSyntax)
@@ -17263,6 +17671,7 @@ public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CatchClauseListSyntax
 
   @_spi(RawSyntax)
@@ -17304,6 +17713,7 @@ public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DoStmtSyntax
 
   @_spi(RawSyntax)
@@ -17396,6 +17806,7 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ReturnStmtSyntax
 
   @_spi(RawSyntax)
@@ -17472,6 +17883,18 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Yields {
+    case `yieldList`(RawYieldListSyntax)
+    case `simpleYield`(RawExprSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .yieldList(let node): return node.raw
+      case .simpleYield(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = YieldStmtSyntax
 
   @_spi(RawSyntax)
@@ -17498,7 +17921,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
     _ unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? = nil,
     yieldKeyword: RawTokenSyntax,
     _ unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax? = nil,
-    yields: RawSyntax,
+    yields: Yields,
     _ unexpectedAfterYields: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -17548,6 +17971,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawYieldListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = YieldListSyntax
 
   @_spi(RawSyntax)
@@ -17640,6 +18064,7 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FallthroughStmtSyntax
 
   @_spi(RawSyntax)
@@ -17700,6 +18125,7 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = BreakStmtSyntax
 
   @_spi(RawSyntax)
@@ -17776,6 +18202,7 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CaseItemListSyntax
 
   @_spi(RawSyntax)
@@ -17817,6 +18244,7 @@ public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CatchItemListSyntax
 
   @_spi(RawSyntax)
@@ -17858,6 +18286,26 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Condition {
+    case `expression`(RawExprSyntax)
+    case `availability`(RawAvailabilityConditionSyntax)
+    case `unavailability`(RawUnavailabilityConditionSyntax)
+    case `matchingPattern`(RawMatchingPatternConditionSyntax)
+    case `optionalBinding`(RawOptionalBindingConditionSyntax)
+    case `hasSymbol`(RawHasSymbolConditionSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .expression(let node): return node.raw
+      case .availability(let node): return node.raw
+      case .unavailability(let node): return node.raw
+      case .matchingPattern(let node): return node.raw
+      case .optionalBinding(let node): return node.raw
+      case .hasSymbol(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = ConditionElementSyntax
 
   @_spi(RawSyntax)
@@ -17882,7 +18330,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
   public init(
     _ unexpectedBeforeCondition: RawUnexpectedNodesSyntax? = nil,
-    condition: RawSyntax,
+    condition: Condition,
     _ unexpectedBetweenConditionAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
@@ -17934,6 +18382,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AvailabilityConditionSyntax
 
   @_spi(RawSyntax)
@@ -18042,6 +18491,7 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MatchingPatternConditionSyntax
 
   @_spi(RawSyntax)
@@ -18150,6 +18600,7 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = OptionalBindingConditionSyntax
 
   @_spi(RawSyntax)
@@ -18258,6 +18709,7 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = UnavailabilityConditionSyntax
 
   @_spi(RawSyntax)
@@ -18366,6 +18818,7 @@ public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawHasSymbolConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = HasSymbolConditionSyntax
 
   @_spi(RawSyntax)
@@ -18474,6 +18927,7 @@ public struct RawHasSymbolConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ConditionElementListSyntax
 
   @_spi(RawSyntax)
@@ -18515,6 +18969,7 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawDeclarationStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DeclarationStmtSyntax
 
   @_spi(RawSyntax)
@@ -18575,6 +19030,7 @@ public struct RawDeclarationStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ThrowStmtSyntax
 
   @_spi(RawSyntax)
@@ -18651,6 +19107,18 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum ElseBody {
+    case `ifStmt`(RawIfStmtSyntax)
+    case `codeBlock`(RawCodeBlockSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .ifStmt(let node): return node.raw
+      case .codeBlock(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = IfStmtSyntax
 
   @_spi(RawSyntax)
@@ -18683,7 +19151,7 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
     _ unexpectedBetweenBodyAndElseKeyword: RawUnexpectedNodesSyntax? = nil,
     elseKeyword: RawTokenSyntax?,
     _ unexpectedBetweenElseKeywordAndElseBody: RawUnexpectedNodesSyntax? = nil,
-    elseBody: RawSyntax?,
+    elseBody: ElseBody?,
     _ unexpectedAfterElseBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -18775,6 +19243,18 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Label {
+    case `default`(RawSwitchDefaultLabelSyntax)
+    case `case`(RawSwitchCaseLabelSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .default(let node): return node.raw
+      case .case(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = SwitchCaseSyntax
 
   @_spi(RawSyntax)
@@ -18801,7 +19281,7 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     _ unexpectedBeforeUnknownAttr: RawUnexpectedNodesSyntax? = nil,
     unknownAttr: RawAttributeSyntax?,
     _ unexpectedBetweenUnknownAttrAndLabel: RawUnexpectedNodesSyntax? = nil,
-    label: RawSyntax,
+    label: Label,
     _ unexpectedBetweenLabelAndStatements: RawUnexpectedNodesSyntax? = nil,
     statements: RawCodeBlockItemListSyntax,
     _ unexpectedAfterStatements: RawUnexpectedNodesSyntax? = nil,
@@ -18867,6 +19347,7 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SwitchDefaultLabelSyntax
 
   @_spi(RawSyntax)
@@ -18943,6 +19424,7 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawCaseItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CaseItemSyntax
 
   @_spi(RawSyntax)
@@ -19035,6 +19517,7 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawCatchItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CatchItemSyntax
 
   @_spi(RawSyntax)
@@ -19127,6 +19610,7 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SwitchCaseLabelSyntax
 
   @_spi(RawSyntax)
@@ -19219,6 +19703,7 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CatchClauseSyntax
 
   @_spi(RawSyntax)
@@ -19311,6 +19796,7 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawPoundAssertStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PoundAssertStmtSyntax
 
   @_spi(RawSyntax)
@@ -19451,6 +19937,7 @@ public struct RawPoundAssertStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericWhereClauseSyntax
 
   @_spi(RawSyntax)
@@ -19527,6 +20014,7 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericRequirementListSyntax
 
   @_spi(RawSyntax)
@@ -19568,6 +20056,20 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Body {
+    case `sameTypeRequirement`(RawSameTypeRequirementSyntax)
+    case `conformanceRequirement`(RawConformanceRequirementSyntax)
+    case `layoutRequirement`(RawLayoutRequirementSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .sameTypeRequirement(let node): return node.raw
+      case .conformanceRequirement(let node): return node.raw
+      case .layoutRequirement(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = GenericRequirementSyntax
 
   @_spi(RawSyntax)
@@ -19592,7 +20094,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
   public init(
     _ unexpectedBeforeBody: RawUnexpectedNodesSyntax? = nil,
-    body: RawSyntax,
+    body: Body,
     _ unexpectedBetweenBodyAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
@@ -19644,6 +20146,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SameTypeRequirementSyntax
 
   @_spi(RawSyntax)
@@ -19736,6 +20239,7 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = LayoutRequirementSyntax
 
   @_spi(RawSyntax)
@@ -19908,6 +20412,7 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 
 @_spi(RawSyntax)
 public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericParameterListSyntax
 
   @_spi(RawSyntax)
@@ -19949,6 +20454,7 @@ public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericParameterSyntax
 
   @_spi(RawSyntax)
@@ -20089,6 +20595,7 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrimaryAssociatedTypeListSyntax
 
   @_spi(RawSyntax)
@@ -20130,6 +20637,7 @@ public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrimaryAssociatedTypeSyntax
 
   @_spi(RawSyntax)
@@ -20206,6 +20714,7 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericParameterClauseSyntax
 
   @_spi(RawSyntax)
@@ -20314,6 +20823,7 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ConformanceRequirementSyntax
 
   @_spi(RawSyntax)
@@ -20406,6 +20916,7 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PrimaryAssociatedTypeClauseSyntax
 
   @_spi(RawSyntax)
@@ -20498,6 +21009,7 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol, RawSy
 
 @_spi(RawSyntax)
 public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = SimpleTypeIdentifierSyntax
 
   @_spi(RawSyntax)
@@ -20574,6 +21086,7 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MemberTypeIdentifierSyntax
 
   @_spi(RawSyntax)
@@ -20682,6 +21195,7 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ClassRestrictionTypeSyntax
 
   @_spi(RawSyntax)
@@ -20742,6 +21256,7 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ArrayTypeSyntax
 
   @_spi(RawSyntax)
@@ -20834,6 +21349,7 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = DictionaryTypeSyntax
 
   @_spi(RawSyntax)
@@ -20958,6 +21474,7 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = MetatypeTypeSyntax
 
   @_spi(RawSyntax)
@@ -21050,6 +21567,7 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = OptionalTypeSyntax
 
   @_spi(RawSyntax)
@@ -21126,6 +21644,7 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ConstrainedSugarTypeSyntax
 
   @_spi(RawSyntax)
@@ -21202,6 +21721,7 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ImplicitlyUnwrappedOptionalTypeSyntax
 
   @_spi(RawSyntax)
@@ -21278,6 +21798,7 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
 
 @_spi(RawSyntax)
 public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CompositionTypeElementSyntax
 
   @_spi(RawSyntax)
@@ -21354,6 +21875,7 @@ public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CompositionTypeElementListSyntax
 
   @_spi(RawSyntax)
@@ -21395,6 +21917,7 @@ public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyn
 
 @_spi(RawSyntax)
 public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = CompositionTypeSyntax
 
   @_spi(RawSyntax)
@@ -21455,6 +21978,7 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = PackExpansionTypeSyntax
 
   @_spi(RawSyntax)
@@ -21531,6 +22055,7 @@ public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TupleTypeElementSyntax
 
   @_spi(RawSyntax)
@@ -21703,6 +22228,7 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TupleTypeElementListSyntax
 
   @_spi(RawSyntax)
@@ -21744,6 +22270,7 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TupleTypeSyntax
 
   @_spi(RawSyntax)
@@ -21836,6 +22363,7 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
 
 @_spi(RawSyntax)
 public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = FunctionTypeSyntax
 
   @_spi(RawSyntax)
@@ -21992,6 +22520,7 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
 
 @_spi(RawSyntax)
 public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AttributedTypeSyntax
 
   @_spi(RawSyntax)
@@ -22084,6 +22613,7 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyn
 
 @_spi(RawSyntax)
 public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericArgumentListSyntax
 
   @_spi(RawSyntax)
@@ -22125,6 +22655,7 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericArgumentSyntax
 
   @_spi(RawSyntax)
@@ -22201,6 +22732,7 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 
 @_spi(RawSyntax)
 public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = GenericArgumentClauseSyntax
 
   @_spi(RawSyntax)
@@ -22293,6 +22825,7 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 
 @_spi(RawSyntax)
 public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = NamedOpaqueReturnTypeSyntax
 
   @_spi(RawSyntax)
@@ -22369,6 +22902,7 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynt
 
 @_spi(RawSyntax)
 public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TypeAnnotationSyntax
 
   @_spi(RawSyntax)
@@ -22445,6 +22979,7 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 
 @_spi(RawSyntax)
 public struct RawEnumCasePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = EnumCasePatternSyntax
 
   @_spi(RawSyntax)
@@ -22553,6 +23088,7 @@ public struct RawEnumCasePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = IsTypePatternSyntax
 
   @_spi(RawSyntax)
@@ -22629,6 +23165,7 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawOptionalPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = OptionalPatternSyntax
 
   @_spi(RawSyntax)
@@ -22705,6 +23242,7 @@ public struct RawOptionalPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = IdentifierPatternSyntax
 
   @_spi(RawSyntax)
@@ -22765,6 +23303,7 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawAsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AsTypePatternSyntax
 
   @_spi(RawSyntax)
@@ -22857,6 +23396,7 @@ public struct RawAsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TuplePatternSyntax
 
   @_spi(RawSyntax)
@@ -22949,6 +23489,7 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = WildcardPatternSyntax
 
   @_spi(RawSyntax)
@@ -23025,6 +23566,7 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
 
 @_spi(RawSyntax)
 public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TuplePatternElementSyntax
 
   @_spi(RawSyntax)
@@ -23133,6 +23675,7 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 
 @_spi(RawSyntax)
 public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ExpressionPatternSyntax
 
   @_spi(RawSyntax)
@@ -23193,6 +23736,7 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol, RawSynta
 
 @_spi(RawSyntax)
 public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = TuplePatternElementListSyntax
 
   @_spi(RawSyntax)
@@ -23234,6 +23778,7 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol, RawSyntax
 
 @_spi(RawSyntax)
 public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = ValueBindingPatternSyntax
 
   @_spi(RawSyntax)
@@ -23310,6 +23855,7 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyn
 
 @_spi(RawSyntax)
 public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AvailabilitySpecListSyntax
 
   @_spi(RawSyntax)
@@ -23351,6 +23897,24 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Entry {
+    case `star`(RawTokenSyntax)
+    case `identifierRestriction`(RawTokenSyntax)
+    case `availabilityVersionRestriction`(RawAvailabilityVersionRestrictionSyntax)
+    case `availabilityLabeledArgument`(RawAvailabilityLabeledArgumentSyntax)
+    case `tokenList`(RawTokenListSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .star(let node): return node.raw
+      case .identifierRestriction(let node): return node.raw
+      case .availabilityVersionRestriction(let node): return node.raw
+      case .availabilityLabeledArgument(let node): return node.raw
+      case .tokenList(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = AvailabilityArgumentSyntax
 
   @_spi(RawSyntax)
@@ -23375,7 +23939,7 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
   public init(
     _ unexpectedBeforeEntry: RawUnexpectedNodesSyntax? = nil,
-    entry: RawSyntax,
+    entry: Entry,
     _ unexpectedBetweenEntryAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
@@ -23427,6 +23991,18 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 
 @_spi(RawSyntax)
 public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum Value {
+    case `string`(RawTokenSyntax)
+    case `version`(RawVersionTupleSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .string(let node): return node.raw
+      case .version(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = AvailabilityLabeledArgumentSyntax
 
   @_spi(RawSyntax)
@@ -23455,7 +24031,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSy
     _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
     _ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? = nil,
-    value: RawSyntax,
+    value: Value,
     _ unexpectedAfterValue: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -23519,6 +24095,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSy
 
 @_spi(RawSyntax)
 public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+
   public typealias SyntaxType = AvailabilityVersionRestrictionSyntax
 
   @_spi(RawSyntax)
@@ -23595,6 +24172,18 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol, Ra
 
 @_spi(RawSyntax)
 public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+  public enum MajorMinor {
+    case `major`(RawTokenSyntax)
+    case `majorMinor`(RawTokenSyntax)
+
+    public var raw: RawSyntax {
+      switch self {
+      case .major(let node): return node.raw
+      case .majorMinor(let node): return node.raw
+      }
+    }
+  }
+
   public typealias SyntaxType = VersionTupleSyntax
 
   @_spi(RawSyntax)
@@ -23619,7 +24208,7 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 
   public init(
     _ unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax? = nil,
-    majorMinor: RawSyntax,
+    majorMinor: MajorMinor,
     _ unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? = nil,
     patchPeriod: RawTokenSyntax?,
     _ unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax? = nil,

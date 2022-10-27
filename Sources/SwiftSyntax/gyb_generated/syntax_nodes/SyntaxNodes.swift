@@ -6010,12 +6010,14 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     case `switchCases`(SwitchCaseListSyntax)
     case `decls`(MemberDeclListSyntax)
     case `postfixExpression`(ExprSyntax)
+    case `attributes`(AttributeListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .statements(let node): return node._syntaxNode
       case .switchCases(let node): return node._syntaxNode
       case .decls(let node): return node._syntaxNode
       case .postfixExpression(let node): return node._syntaxNode
+      case .attributes(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -6030,6 +6032,9 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init<Node: ExprSyntaxProtocol>(_ node: Node) {
       self = .postfixExpression(ExprSyntax(node))
+    }
+    public init(_ node: AttributeListSyntax) {
+      self = .attributes(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
       if let node = syntaxNode.as(CodeBlockItemListSyntax.self) {
@@ -6046,6 +6051,10 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       }
       if let node = syntaxNode.as(ExprSyntax.self) {
         self = .postfixExpression(node)
+        return
+      }
+      if let node = syntaxNode.as(AttributeListSyntax.self) {
+        self = .attributes(node)
         return
       }
       return nil
@@ -12286,6 +12295,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Argument: SyntaxChildChoices {
     case `identifier`(TokenSyntax)
     case `string`(TokenSyntax)
+    case `stringExpr`(StringLiteralExprSyntax)
     case `integer`(TokenSyntax)
     case `availability`(AvailabilitySpecListSyntax)
     case `specializeArguments`(SpecializeAttributeSpecListSyntax)
@@ -12297,11 +12307,13 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `backDeployArguments`(BackDeployAttributeSpecListSyntax)
     case `conventionArguments`(ConventionAttributeArgumentsSyntax)
     case `conventionWitnessMethodArguments`(ConventionWitnessMethodAttributeArgumentsSyntax)
+    case `opaqueReturnTypeOfAttributeArguments`(OpaqueReturnTypeOfAttributeArgumentsSyntax)
     case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .identifier(let node): return node._syntaxNode
       case .string(let node): return node._syntaxNode
+      case .stringExpr(let node): return node._syntaxNode
       case .integer(let node): return node._syntaxNode
       case .availability(let node): return node._syntaxNode
       case .specializeArguments(let node): return node._syntaxNode
@@ -12313,10 +12325,14 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       case .backDeployArguments(let node): return node._syntaxNode
       case .conventionArguments(let node): return node._syntaxNode
       case .conventionWitnessMethodArguments(let node): return node._syntaxNode
+      case .opaqueReturnTypeOfAttributeArguments(let node): return node._syntaxNode
       case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: StringLiteralExprSyntax) {
+      self = .stringExpr(node)
+    }
     public init(_ node: AvailabilitySpecListSyntax) {
       self = .availability(node)
     }
@@ -12347,6 +12363,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public init(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
       self = .conventionWitnessMethodArguments(node)
     }
+    public init(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
+      self = .opaqueReturnTypeOfAttributeArguments(node)
+    }
     public init(_ node: TokenListSyntax) {
       self = .tokenList(node)
     }
@@ -12358,6 +12377,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         case .integerLiteral: self = .integer(tok)
         default: return nil
         }
+        return
+      }
+      if let node = syntaxNode.as(StringLiteralExprSyntax.self) {
+        self = .stringExpr(node)
         return
       }
       if let node = syntaxNode.as(AvailabilitySpecListSyntax.self) {
@@ -12398,6 +12421,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       }
       if let node = syntaxNode.as(ConventionWitnessMethodAttributeArgumentsSyntax.self) {
         self = .conventionWitnessMethodArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
+        self = .opaqueReturnTypeOfAttributeArguments(node)
         return
       }
       if let node = syntaxNode.as(TokenListSyntax.self) {
@@ -25997,12 +26024,14 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     case `identifierRestriction`(TokenSyntax)
     case `availabilityVersionRestriction`(AvailabilityVersionRestrictionSyntax)
     case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
+    case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .star(let node): return node._syntaxNode
       case .identifierRestriction(let node): return node._syntaxNode
       case .availabilityVersionRestriction(let node): return node._syntaxNode
       case .availabilityLabeledArgument(let node): return node._syntaxNode
+      case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -26011,6 +26040,9 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: AvailabilityLabeledArgumentSyntax) {
       self = .availabilityLabeledArgument(node)
+    }
+    public init(_ node: TokenListSyntax) {
+      self = .tokenList(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
       if let tok = syntaxNode.as(TokenSyntax.self) {
@@ -26027,6 +26059,10 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       }
       if let node = syntaxNode.as(AvailabilityLabeledArgumentSyntax.self) {
         self = .availabilityLabeledArgument(node)
+        return
+      }
+      if let node = syntaxNode.as(TokenListSyntax.self) {
+        self = .tokenList(node)
         return
       }
       return nil

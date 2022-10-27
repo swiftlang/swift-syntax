@@ -29,6 +29,24 @@ public protocol Raw${node.name}NodeProtocol: Raw${node.base_type}NodeProtocol {}
 
 @_spi(RawSyntax)
 public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_type}NodeProtocol, RawSyntaxToSyntax {
+%   for child in node.children:
+%     if child.node_choices:
+  public enum ${child.name} {
+%       for choice in child.node_choices:
+    case `${choice.swift_name}`(Raw${choice.type_name})
+%       end
+
+    public var raw: RawSyntax {
+      switch self {
+%       for choice in child.node_choices:
+      case .${choice.swift_name}(let node): return node.raw
+%       end
+      }
+    }
+  }
+%     end
+%   end
+
   public typealias SyntaxType = ${node.name}
 
   @_spi(RawSyntax)
@@ -88,7 +106,7 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
 %     for child in node.children:
 %       param_label = "_ " if child.is_unexpected_nodes() else ""
 %       optional_mark = "?" if child.is_optional else ""
-%       param_type = "Raw" + child.type_name + optional_mark
+%       param_type = (child.name if child.node_choices else "Raw" + child.type_name) + optional_mark
 %       param_default = " = nil" if child.is_unexpected_nodes() else ""
     ${param_label}${child.swift_name}: ${param_type}${param_default},
 %     end

@@ -172,7 +172,7 @@ extension Parser {
           return nil
         }
       } syntax: { parser, elements in
-        return RawSyntax(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
+        return .decls(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
       }
       return RawDeclSyntax(directive)
     case (.poundWarningKeyword, _)?, (.poundErrorKeyword, _)?:
@@ -484,7 +484,12 @@ extension Parser {
         guard !firstType.is(RawMissingTypeSyntax.self) else {
           keepGoing = self.consume(if: .comma)
           elements.append(RawGenericRequirementSyntax(
-            body: RawSyntax(RawMissingSyntax(arena: self.arena)),
+            body: .sameTypeRequirement(RawSameTypeRequirementSyntax(
+              leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              equalityToken: missingToken(.equal),
+              rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              arena: self.arena
+            )),
             trailingComma: keepGoing,
             arena: self.arena
           ))
@@ -520,7 +525,7 @@ extension Parser {
           }
         }
 
-        let requirement: RawSyntax
+        let requirement: RawGenericRequirementSyntax.Body
         switch self.at(anyIn: ExpectedTokenKind.self) {
         case (.colon, let handle)?:
           let colon = self.eat(handle)
@@ -558,7 +563,7 @@ extension Parser {
               rightParen = nil
             }
 
-            requirement = RawSyntax(RawLayoutRequirementSyntax(
+            requirement = .layoutRequirement(RawLayoutRequirementSyntax(
               typeIdentifier: firstType,
               colon: colon,
               layoutConstraint: constraint,
@@ -573,7 +578,7 @@ extension Parser {
           } else {
             // Parse the protocol or composition.
             let secondType = self.parseType()
-            requirement = RawSyntax(RawConformanceRequirementSyntax(
+            requirement = .conformanceRequirement(RawConformanceRequirementSyntax(
               leftTypeIdentifier: firstType,
               colon: colon,
               rightTypeIdentifier: secondType,
@@ -585,13 +590,13 @@ extension Parser {
           (.prefixOperator, let handle)?:
           let equal = self.eat(handle)
           let secondType = self.parseType()
-          requirement = RawSyntax(RawSameTypeRequirementSyntax(
+          requirement = .sameTypeRequirement(RawSameTypeRequirementSyntax(
             leftTypeIdentifier: firstType,
             equalityToken: equal,
             rightTypeIdentifier: secondType,
             arena: self.arena))
         case nil:
-          requirement = RawSyntax(RawSameTypeRequirementSyntax(
+          requirement = .sameTypeRequirement(RawSameTypeRequirementSyntax(
             leftTypeIdentifier: firstType,
             equalityToken: RawTokenSyntax(missing: .equal, arena: self.arena),
             rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
@@ -1263,7 +1268,7 @@ extension Parser {
     }
 
     // Parse getter and setter.
-    let accessor: RawSyntax?
+    let accessor: RawSubscriptDeclSyntax.Accessor?
     if self.at(.leftBrace) || self.at(anyIn: AccessorKind.self) != nil {
       accessor = self.parseGetSet()
     } else {
@@ -1371,9 +1376,14 @@ extension Parser {
           initializer = nil
         }
 
-        let accessor: RawSyntax?
+        let accessor: RawPatternBindingSyntax.Accessor?
         if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorKind.self) != nil) {
-          accessor = self.parseGetSet()
+          switch self.parseGetSet() {
+          case .accessors(let accessors):
+            accessor = .accessors(accessors)
+          case .getter(let getter):
+            accessor = .getter(getter)
+          }
         } else {
           accessor = nil
         }
@@ -1490,7 +1500,7 @@ extension Parser {
   ///     willSet-clause → attributes opt willSet setter-name opt code-block
   ///     didSet-clause → attributes opt didSet setter-name opt code-block
   @_spi(RawSyntax)
-  public mutating func parseGetSet() -> RawSyntax {
+  public mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessor {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
     let lbrace: RawTokenSyntax
@@ -1510,7 +1520,7 @@ extension Parser {
           // seen before this one.
           guard elements.isEmpty else {
             let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-            return RawSyntax(RawAccessorBlockSyntax(
+            return .accessors(RawAccessorBlockSyntax(
               unexpectedBeforeLBrace,
               leftBrace: lbrace,
               accessors: RawAccessorListSyntax(elements: elements, arena: self.arena),
@@ -1527,7 +1537,7 @@ extension Parser {
             body.append(newItem)
           }
           let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-          return RawSyntax(RawCodeBlockSyntax(
+          return .getter(RawCodeBlockSyntax(
             unexpectedBeforeLBrace,
             leftBrace: lbrace,
             statements: RawCodeBlockItemListSyntax(elements: body, arena: self.arena),
@@ -1583,7 +1593,7 @@ extension Parser {
     }
 
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-    return RawSyntax(RawAccessorBlockSyntax(
+    return .accessors(RawAccessorBlockSyntax(
       unexpectedBeforeLBrace,
       leftBrace: lbrace,
       accessors: RawAccessorListSyntax(elements: elements, arena: self.arena),

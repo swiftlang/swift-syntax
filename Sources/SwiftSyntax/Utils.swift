@@ -119,3 +119,17 @@ extension UInt8 {
   static var asciiRightAngleBracket: UInt8 { return 62 /* > */ }
   static var asciiPound: UInt8 { return 35 /* # */ }
 }
+
+extension RawUnexpectedNodesSyntax {
+  public init(elements: [RawSyntax], isMaximumNestingLevelOverflow: Bool, arena: __shared SyntaxArena) {
+    let raw = RawSyntax.makeLayout(
+      kind: .unexpectedNodes, uninitializedCount: elements.count, isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
+    self.init(raw: raw)
+  }
+}

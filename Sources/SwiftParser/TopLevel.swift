@@ -13,6 +13,27 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
+  /// Consumes and returns all remaining tokens in the source file.
+  mutating func consumeRemainingTokens() -> [RawSyntax] {
+    var extraneousTokens = [RawSyntax]()
+    while !self.at(.eof) {
+      extraneousTokens.append(RawSyntax(consumeAnyToken()))
+    }
+    return extraneousTokens
+  }
+
+  /// If the maximum nesting level has been reached, return the remaining tokens in the source file
+  /// as unexpected nodes that have the `isMaximumNestingLevelOverflow` bit set.
+  /// Check this in places that are likely to cause deep recursion and if this returns non-nil, abort parsing.
+  mutating func remainingTokensIfMaximumNestingLevelReached() -> RawUnexpectedNodesSyntax? {
+    if nestingLevel > self.maximumNestingLevel && self.currentToken.tokenKind != .eof {
+      let remainingTokens = self.consumeRemainingTokens()
+      return RawUnexpectedNodesSyntax(elements: remainingTokens, isMaximumNestingLevelOverflow: true, arena: self.arena)
+    } else {
+      return nil
+    }
+  }
+
   /// Parse the top level items in a file into a source file.
   ///
   /// This function is the true parsing entrypoint that the high-level
@@ -26,13 +47,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
-    var extraneousTokens = [RawSyntax]()
-    while !self.at(.eof) {
-      extraneousTokens.append(RawSyntax(consumeAnyToken()))
-    }
-    let unexpectedBeforeEof = extraneousTokens.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: extraneousTokens, arena: self.arena)
+    let unexpectedBeforeEof = consumeRemainingTokens()
     let eof = self.consume(if: .eof)!
-    return .init(statements: items, unexpectedBeforeEof, eofToken: eof, arena: self.arena)
+    return .init(
+      statements: items,
+      RawUnexpectedNodesSyntax(unexpectedBeforeEof, arena: self.arena),
+      eofToken: eof,
+      arena: self.arena
+    )
   }
 }
 
@@ -119,6 +141,15 @@ extension Parser {
   ///     statements → statement statements?
   @_spi(RawSyntax)
   public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax? {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawCodeBlockItemSyntax(
+        remainingTokens,
+        item: RawSyntax(RawMissingExprSyntax(arena: self.arena)),
+        semicolon: nil,
+        errorTokens: nil,
+        arena: self.arena
+      )
+    }
     if self.at(any: [.caseKeyword, .defaultKeyword]) {
       // 'case' and 'default' are invalid in code block items.
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.

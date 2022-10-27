@@ -363,8 +363,18 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseGenericParameters() -> RawGenericParameterClauseSyntax {
-    assert(self.currentToken.starts(with: "<"))
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawGenericParameterClauseSyntax(
+        remainingTokens,
+        leftAngleBracket: missingToken(.leftAngle),
+        genericParameterList: RawGenericParameterListSyntax(elements: [], arena: self.arena),
+        genericWhereClause: nil,
+        rightAngleBracket: missingToken(.rightAngle),
+        arena: self.arena
+      )
+    }
 
+    assert(self.currentToken.starts(with: "<"))
     let langle = self.consumeAnyToken(remapping: .leftAngle)
     var elements = [RawGenericParameterSyntax]()
     do {
@@ -616,6 +626,16 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseMemberDeclListItem() -> RawMemberDeclListItemSyntax? {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      let item = RawMemberDeclListItemSyntax(
+        remainingTokens,
+        decl: RawDeclSyntax(RawMissingDeclSyntax(attributes: nil, modifiers: nil, arena: self.arena)),
+        semicolon: nil,
+        arena: self.arena
+      )
+      return item
+    }
+
     let decl: RawDeclSyntax
     if self.at(.poundSourceLocationKeyword) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())

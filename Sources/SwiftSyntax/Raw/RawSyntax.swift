@@ -26,6 +26,7 @@ struct RecursiveRawSyntaxFlags: OptionSet {
   /// Whether the tree contained by this layout has any missing or unexpected nodes.
   static let hasError = RecursiveRawSyntaxFlags(rawValue: 1 << 0)
   static let hasSequenceExpr = RecursiveRawSyntaxFlags(rawValue: 1 << 1)
+  static let hasMaximumNestingLevelOverflow = RecursiveRawSyntaxFlags(rawValue: 1 << 2)
 }
 
 /// Node data for RawSyntax tree. Tagged union plus common data.
@@ -633,6 +634,7 @@ extension RawSyntax {
   public static func makeLayout(
     kind: SyntaxKind,
     uninitializedCount count: Int,
+    isMaximumNestingLevelOverflow: Bool = false,
     arena: SyntaxArena,
     initializingWith initializer: (UnsafeMutableBufferPointer<RawSyntax?>) -> Void
   ) -> RawSyntax {
@@ -655,6 +657,9 @@ extension RawSyntax {
     }
     if kind == .sequenceExpr {
       recursiveFlags.insert(.hasSequenceExpr)
+    }
+    if isMaximumNestingLevelOverflow {
+      recursiveFlags.insert(.hasMaximumNestingLevelOverflow)
     }
     return .layout(
       kind: kind,

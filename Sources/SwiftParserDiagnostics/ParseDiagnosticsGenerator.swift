@@ -21,6 +21,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   /// method and that should thus not be visited.
   private var handledNodes: [SyntaxIdentifier] = []
 
+  /// When set to `true`, no more diagnostics will be emitted.
+  /// Useful to stop any diagnostics after a maximum nesting level overflow was detected.
+  private var suppressRemainingDiagnostics: Bool = false
+
   private init() {
     super.init(viewMode: .all)
   }
@@ -61,6 +65,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     fixIts: [FixIt] = [],
     handledNodes: [SyntaxIdentifier] = []
   ) {
+    if suppressRemainingDiagnostics {
+      return
+    }
     diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
     diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, notes: notes, fixIts: fixIts))
     self.handledNodes.append(contentsOf: handledNodes)
@@ -160,6 +167,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.allSatisfy({ handledNodes.contains($0.id) }) {
+      return .skipChildren
+    }
+    if node.hasMaximumNestingLevelOverflow {
+      addDiagnostic(node, .maximumNestingLevelOverflow)
+      suppressRemainingDiagnostics = true
       return .skipChildren
     }
     if let tryKeyword = node.onlyToken(where: { $0.tokenKind == .tryKeyword }),

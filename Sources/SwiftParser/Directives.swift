@@ -70,6 +70,15 @@ extension Parser {
     addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element? = { _, _, _ in nil },
     syntax: (inout Parser, [Element]) -> RawSyntax?
   ) -> RawIfConfigDeclSyntax {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawIfConfigDeclSyntax(
+        remainingTokens,
+        clauses: RawIfConfigClauseListSyntax(elements: [], arena: self.arena),
+        poundEndif: missingToken(.poundEndifKeyword),
+        arena: self.arena
+      )
+    }
+
     var clauses = [RawIfConfigClauseSyntax]()
     do {
       var firstIteration = true

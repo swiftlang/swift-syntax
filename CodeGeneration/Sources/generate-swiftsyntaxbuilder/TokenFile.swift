@@ -22,7 +22,7 @@ let tokenFile = SourceFile {
     path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 
-  ExtensionDecl(modifiers: [DeclModifier(name: .public)], extendedType: Type("TokenSyntax")) {
+  ExtensionDecl("public extension TokenSyntax") {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {
         VariableDecl("""

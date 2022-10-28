@@ -13,7 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-@_spi(RawSyntax)
 public enum SyntaxKind {
   case token
   case unknown

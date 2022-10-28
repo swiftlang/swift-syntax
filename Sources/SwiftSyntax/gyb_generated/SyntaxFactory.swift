@@ -4893,7 +4893,7 @@ public enum SyntaxFactory {
     return NamedAttributeStringArgumentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeclNameSyntax")
-  public static func makeDeclName(_ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: Syntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?, _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil) -> DeclNameSyntax {
+  public static func makeDeclName(_ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: TokenSyntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?, _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil) -> DeclNameSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeDeclBaseName?.raw,
       declBaseName.raw,
@@ -4912,7 +4912,7 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .declName,
       from: [
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
       nil,
       nil,
       nil,
@@ -5115,7 +5115,7 @@ public enum SyntaxFactory {
     return DifferentiabilityParamListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DifferentiabilityParamSyntax")
-  public static func makeDifferentiabilityParam(_ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil, parameter: Syntax, _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> DifferentiabilityParamSyntax {
+  public static func makeDifferentiabilityParam(_ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil, parameter: TokenSyntax, _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> DifferentiabilityParamSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeParameter?.raw,
       parameter.raw,
@@ -5134,7 +5134,7 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .differentiabilityParam,
       from: [
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.selfKeyword, arena: .default),
       nil,
       nil,
       nil,
@@ -5224,7 +5224,7 @@ public enum SyntaxFactory {
     return QualifiedDeclNameSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionDeclNameSyntax")
-  public static func makeFunctionDeclName(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: Syntax, _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?, _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil) -> FunctionDeclNameSyntax {
+  public static func makeFunctionDeclName(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?, _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil) -> FunctionDeclNameSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeName?.raw,
       name.raw,
@@ -5243,7 +5243,7 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .functionDeclName,
       from: [
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
       nil,
       nil,
       nil,
@@ -7940,7 +7940,7 @@ public enum SyntaxFactory {
     return AvailabilityVersionRestrictionSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on VersionTupleSyntax")
-  public static func makeVersionTuple(_ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil, majorMinor: Syntax, _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, patchPeriod: TokenSyntax?, _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil, patchVersion: TokenSyntax?, _ unexpectedAfterPatchVersion: UnexpectedNodesSyntax? = nil) -> VersionTupleSyntax {
+  public static func makeVersionTuple(_ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil, majorMinor: TokenSyntax, _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, patchPeriod: TokenSyntax?, _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil, patchVersion: TokenSyntax?, _ unexpectedAfterPatchVersion: UnexpectedNodesSyntax? = nil) -> VersionTupleSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeMajorMinor?.raw,
       majorMinor.raw,
@@ -7961,7 +7961,7 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .versionTuple,
       from: [
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: .default),
       nil,
       nil,
       nil,

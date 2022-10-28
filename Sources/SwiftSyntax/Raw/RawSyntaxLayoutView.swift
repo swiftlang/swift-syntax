@@ -13,7 +13,8 @@
 extension RawSyntax {
   /// A view into the `RawSyntax` that exposes functionality that's specific to layout nodes.
   /// The token's payload must be a layout, otherwise this traps.
-  var layoutView: RawSyntaxLayoutView? {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView? {
     switch raw.payload {
     case .parsedToken, .materializedToken:
       return nil
@@ -24,7 +25,8 @@ extension RawSyntax {
 }
 
 /// A view into `RawSyntax` that exposes functionality that only applies to layout nodes.
-struct RawSyntaxLayoutView {
+@_spi(RawSyntax)
+public struct RawSyntaxLayoutView {
   private let raw: RawSyntax
 
   fileprivate init(raw: RawSyntax) {
@@ -37,7 +39,7 @@ struct RawSyntaxLayoutView {
     }
   }
 
-  var layoutData: RawSyntaxData.Layout {
+  private var layoutData: RawSyntaxData.Layout {
     switch raw.rawData.payload {
     case .parsedToken(_),
         .materializedToken(_):
@@ -47,8 +49,13 @@ struct RawSyntaxLayoutView {
     }
   }
 
+  var recursiveFlags: RecursiveRawSyntaxFlags {
+    return layoutData.recursiveFlags
+  }
+
   /// Creates a new node of the same kind but with children replaced by `elements`.
-  func replacingLayout<C: Collection>(
+  @_spi(RawSyntax)
+  public func replacingLayout<C: Collection>(
     with elements: C,
     arena: SyntaxArena
   ) -> RawSyntax where C.Element == RawSyntax? {
@@ -60,7 +67,8 @@ struct RawSyntaxLayoutView {
     }
   }
 
-  func insertingChild(
+  @_spi(RawSyntax)
+  public func insertingChild(
     _ newChild: RawSyntax?,
     at index: Int,
     arena: SyntaxArena
@@ -78,7 +86,8 @@ struct RawSyntaxLayoutView {
     }
   }
 
-  func removingChild(
+  @_spi(RawSyntax)
+  public func removingChild(
     at index: Int,
     arena: SyntaxArena
   ) -> RawSyntax {
@@ -101,11 +110,13 @@ struct RawSyntaxLayoutView {
     }
   }
 
-  func appending(_ newChild: RawSyntax?, arena: SyntaxArena) -> RawSyntax {
+  @_spi(RawSyntax)
+  public func appending(_ newChild: RawSyntax?, arena: SyntaxArena) -> RawSyntax {
     insertingChild(newChild, at: children.count, arena: arena)
   }
 
-  func replacingChildSubrange<C: Collection>(
+  @_spi(RawSyntax)
+  public func replacingChildSubrange<C: Collection>(
     _ range: Range<Int>,
     with elements: C,
     arena: SyntaxArena
@@ -130,7 +141,8 @@ struct RawSyntaxLayoutView {
     }
   }
 
-  func replacingChild(
+  @_spi(RawSyntax)
+  public func replacingChild(
     at index: Int,
     with newChild: RawSyntax?,
     arena: SyntaxArena
@@ -144,17 +156,20 @@ struct RawSyntaxLayoutView {
     }
   }
 
-  func formLayoutArray() -> [RawSyntax?] {
+  @_spi(RawSyntax)
+  public func formLayoutArray() -> [RawSyntax?] {
     Array(children)
   }
 
   /// Child nodes.
-  var children: RawSyntaxBuffer {
+  @_spi(RawSyntax)
+  public var children: RawSyntaxBuffer {
     layoutData.layout
   }
 
   /// The number of children, `present` or `missing`, in this node.
-  var numberOfChildren: Int {
+  @_spi(RawSyntax)
+  public var numberOfChildren: Int {
     return children.count
   }
 }

@@ -26,12 +26,11 @@ let resultBuildersFile = SourceFile {
     let elementType = node.collectionElementType
     let expressionType: Type = (node.collectionElementChoices?.isEmpty ?? true) ? elementType.parameterType : Type(MemberTypeIdentifier("\(type.buildable).Element"))
 
-    StructDecl(
-      attributes: [CustomAttribute(trailingTrivia: .newline, attributeName: Type("resultBuilder"))],
-      modifiers: [DeclModifier(name: .public)],
-      identifier: "\(type.syntaxKind)Builder") {
-        
-        TypealiasDecl(
+    StructDecl("""
+      @resultBuilder
+      public struct \(type.syntaxKind)Builder
+      """) {
+      TypealiasDecl(
           """
           /// The type of individual statement expressions in the transformed function,
           /// which defaults to Component if buildExpression() is not provided.
@@ -146,38 +145,26 @@ let resultBuildersFile = SourceFile {
           """
         )
 
-        FunctionDecl(
-          leadingTrivia: [
-            .newlines(1),
-            .docLineComment("/// If declared, this will be called on the partial result from the outermost"),
-            .newlines(1),
-            .docLineComment("/// block statement to produce the final returned result."),
-            .newlines(1)],
-          modifiers: [DeclModifier(name: .public), DeclModifier(name: .static)],
-          identifier: .identifier("buildFinalResult"),
-          signature: FunctionSignature(
-            input: ParameterClause {
-              FunctionParameter(
-                firstName: .wildcard,
-                secondName: .identifier("component"),
-                colon: .colon,
-                type: Type("Component"))
-            },
-            output: ReturnClause(returnType: Type("FinalResult")))) {
-              if elementType.isToken {
-                ReturnStmt("return .init(component)")
-              } else if elementType.hasWithTrailingCommaTrait {
-                VariableDecl("let lastIndex = component.count - 1")
+        FunctionDecl("""
+          
+          /// If declared, this will be called on the partial result from the outermost
+          /// block statement to produce the final returned result.
+          public static func buildFinalResult(_ component: Component) -> FinalResult
+          """) {
+          if elementType.isToken {
+            ReturnStmt("return .init(component)")
+          } else if elementType.hasWithTrailingCommaTrait {
+            VariableDecl("let lastIndex = component.count - 1")
 
-                ReturnStmt("""
-                  return .init(component.enumerated().map { index, source in
-                    return index < lastIndex ? source.ensuringTrailingComma() : source
-                  })
-                  """)
-              } else {
-                ReturnStmt("return .init(component)")
-              }
-            }
+            ReturnStmt("""
+              return .init(component.enumerated().map { index, source in
+                return index < lastIndex ? source.ensuringTrailingComma() : source
+              })
+              """)
+          } else {
+            ReturnStmt("return .init(component)")
+          }
+        }
       }
       
     ExtensionDecl(

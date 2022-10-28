@@ -13,6 +13,27 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
+  /// Consumes and returns all remaining tokens in the source file.
+  mutating func consumeRemainingTokens() -> [RawSyntax] {
+    var extraneousTokens = [RawSyntax]()
+    while !self.at(.eof) {
+      extraneousTokens.append(RawSyntax(consumeAnyToken()))
+    }
+    return extraneousTokens
+  }
+
+  /// If the maximum nesting level has been reached, return the remaining tokens in the source file
+  /// as unexpected nodes that have the `isMaximumNestingLevelOverflow` bit set.
+  /// Check this in places that are likely to cause deep recursion and if this returns non-nil, abort parsing.
+  mutating func remainingTokensIfMaximumNestingLevelReached() -> RawUnexpectedNodesSyntax? {
+    if nestingLevel > self.maximumNestingLevel && self.currentToken.tokenKind != .eof {
+      let remainingTokens = self.consumeRemainingTokens()
+      return RawUnexpectedNodesSyntax(elements: remainingTokens, isMaximumNestingLevelOverflow: true, arena: self.arena)
+    } else {
+      return nil
+    }
+  }
+
   /// Parse the top level items in a file into a source file.
   ///
   /// This function is the true parsing entrypoint that the high-level
@@ -26,13 +47,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
-    var extraneousTokens = [RawSyntax]()
-    while !self.at(.eof) {
-      extraneousTokens.append(RawSyntax(consumeAnyToken()))
-    }
-    let unexpectedBeforeEof = extraneousTokens.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: extraneousTokens, arena: self.arena)
+    let unexpectedBeforeEof = consumeRemainingTokens()
     let eof = self.consume(if: .eof)!
-    return .init(statements: items, unexpectedBeforeEof, eofToken: eof, arena: self.arena)
+    return .init(
+      statements: items,
+      RawUnexpectedNodesSyntax(unexpectedBeforeEof, arena: self.arena),
+      eofToken: eof,
+      arena: self.arena
+    )
   }
 }
 
@@ -119,13 +141,22 @@ extension Parser {
   ///     statements → statement statements?
   @_spi(RawSyntax)
   public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax? {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawCodeBlockItemSyntax(
+        remainingTokens,
+        item: RawSyntax(RawMissingExprSyntax(arena: self.arena)),
+        semicolon: nil,
+        errorTokens: nil,
+        arena: self.arena
+      )
+    }
     if self.at(any: [.caseKeyword, .defaultKeyword]) {
       // 'case' and 'default' are invalid in code block items.
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
       let switchCase = self.parseSwitchCase()
       return RawCodeBlockItemSyntax(
         RawUnexpectedNodesSyntax(elements: [RawSyntax(switchCase)], arena: self.arena),
-        item: RawSyntax(RawMissingExprSyntax(arena: self.arena)),
+        item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
         semicolon: nil,
         errorTokens: nil,
         arena: self.arena
@@ -141,7 +172,7 @@ extension Parser {
       trailingSemis.append(trailingSemi)
     }
 
-    if item.isEmpty && semi == nil && trailingSemis.isEmpty {
+    if item.raw.isEmpty && semi == nil && trailingSemis.isEmpty {
       return nil
     }
     return RawCodeBlockItemSyntax(
@@ -158,7 +189,7 @@ extension Parser {
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the
   /// wrapping declaration instead of being consumed by lookeahead.
-  private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawSyntax {
+  private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax.Item {
     if self.at(.poundIfKeyword) {
       let directive = self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
@@ -169,23 +200,23 @@ extension Parser {
           return nil
         }
       } syntax: { parser, items  in
-        return RawSyntax(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
+        return .statements(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
       }
-      return RawSyntax(directive)
+      return .decl(RawDeclSyntax(directive))
     } else if self.at(.poundSourceLocationKeyword) {
-      return RawSyntax(self.parsePoundSourceLocationDirective())
+      return .decl(RawDeclSyntax(self.parsePoundSourceLocationDirective()))
     } else if self.atStartOfDeclaration(allowInitDecl: allowInitDecl) {
-      return RawSyntax(self.parseDeclaration())
+      return .decl(self.parseDeclaration())
     } else if self.atStartOfStatement() {
-      return RawSyntax(self.parseStatement())
+      return .stmt(self.parseStatement())
     } else if self.atStartOfExpression() {
-      return RawSyntax(self.parseExpression())
+      return .expr(self.parseExpression())
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
-      return RawSyntax(self.parseDeclaration())
+      return .decl(self.parseDeclaration())
     } else if self.atStartOfStatement(allowRecovery: true) {
-      return RawSyntax(self.parseStatement())
+      return .stmt(self.parseStatement())
     } else {
-      return RawSyntax(RawMissingExprSyntax(arena: self.arena))
+      return .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena)))
     }
   }
 }

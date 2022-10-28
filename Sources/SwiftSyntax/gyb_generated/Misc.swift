@@ -13,1149 +13,294 @@
 //===----------------------------------------------------------------------===//
 
 extension Syntax {
-  /// Syntax nodes always conform to SyntaxProtocol. This API is just added
-  /// for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
-    switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node
-    case .unknown(let node):
-      return node
-    case .unknownDecl(let node):
-      return node
-    case .unknownExpr(let node):
-      return node
-    case .unknownStmt(let node):
-      return node
-    case .unknownType(let node):
-      return node
-    case .unknownPattern(let node):
-      return node
-    case .missing(let node):
-      return node
-    case .missingDecl(let node):
-      return node
-    case .missingExpr(let node):
-      return node
-    case .missingStmt(let node):
-      return node
-    case .missingType(let node):
-      return node
-    case .missingPattern(let node):
-      return node
-    case .codeBlockItem(let node):
-      return node
-    case .codeBlockItemList(let node):
-      return node
-    case .codeBlock(let node):
-      return node
-    case .unexpectedNodes(let node):
-      return node
-    case .inOutExpr(let node):
-      return node
-    case .poundColumnExpr(let node):
-      return node
-    case .tupleExprElementList(let node):
-      return node
-    case .arrayElementList(let node):
-      return node
-    case .dictionaryElementList(let node):
-      return node
-    case .stringLiteralSegments(let node):
-      return node
-    case .tryExpr(let node):
-      return node
-    case .awaitExpr(let node):
-      return node
-    case .moveExpr(let node):
-      return node
-    case .declNameArgument(let node):
-      return node
-    case .declNameArgumentList(let node):
-      return node
-    case .declNameArguments(let node):
-      return node
-    case .identifierExpr(let node):
-      return node
-    case .superRefExpr(let node):
-      return node
-    case .nilLiteralExpr(let node):
-      return node
-    case .discardAssignmentExpr(let node):
-      return node
-    case .assignmentExpr(let node):
-      return node
-    case .sequenceExpr(let node):
-      return node
-    case .exprList(let node):
-      return node
-    case .poundLineExpr(let node):
-      return node
-    case .poundFileExpr(let node):
-      return node
-    case .poundFileIDExpr(let node):
-      return node
-    case .poundFilePathExpr(let node):
-      return node
-    case .poundFunctionExpr(let node):
-      return node
-    case .poundDsohandleExpr(let node):
-      return node
-    case .symbolicReferenceExpr(let node):
-      return node
-    case .prefixOperatorExpr(let node):
-      return node
-    case .binaryOperatorExpr(let node):
-      return node
-    case .arrowExpr(let node):
-      return node
-    case .infixOperatorExpr(let node):
-      return node
-    case .floatLiteralExpr(let node):
-      return node
-    case .tupleExpr(let node):
-      return node
-    case .arrayExpr(let node):
-      return node
-    case .dictionaryExpr(let node):
-      return node
-    case .tupleExprElement(let node):
-      return node
-    case .arrayElement(let node):
-      return node
-    case .dictionaryElement(let node):
-      return node
-    case .integerLiteralExpr(let node):
-      return node
-    case .booleanLiteralExpr(let node):
-      return node
-    case .unresolvedTernaryExpr(let node):
-      return node
-    case .ternaryExpr(let node):
-      return node
-    case .memberAccessExpr(let node):
-      return node
-    case .unresolvedIsExpr(let node):
-      return node
-    case .isExpr(let node):
-      return node
-    case .unresolvedAsExpr(let node):
-      return node
-    case .asExpr(let node):
-      return node
-    case .typeExpr(let node):
-      return node
-    case .closureCaptureItem(let node):
-      return node
-    case .closureCaptureItemList(let node):
-      return node
-    case .closureCaptureSignature(let node):
-      return node
-    case .closureParam(let node):
-      return node
-    case .closureParamList(let node):
-      return node
-    case .closureSignature(let node):
-      return node
-    case .closureExpr(let node):
-      return node
-    case .unresolvedPatternExpr(let node):
-      return node
-    case .multipleTrailingClosureElement(let node):
-      return node
-    case .multipleTrailingClosureElementList(let node):
-      return node
-    case .functionCallExpr(let node):
-      return node
-    case .subscriptExpr(let node):
-      return node
-    case .optionalChainingExpr(let node):
-      return node
-    case .forcedValueExpr(let node):
-      return node
-    case .postfixUnaryExpr(let node):
-      return node
-    case .specializeExpr(let node):
-      return node
-    case .stringSegment(let node):
-      return node
-    case .expressionSegment(let node):
-      return node
-    case .stringLiteralExpr(let node):
-      return node
-    case .regexLiteralExpr(let node):
-      return node
-    case .keyPathExpr(let node):
-      return node
-    case .keyPathComponentList(let node):
-      return node
-    case .keyPathComponent(let node):
-      return node
-    case .keyPathPropertyComponent(let node):
-      return node
-    case .keyPathSubscriptComponent(let node):
-      return node
-    case .keyPathOptionalComponent(let node):
-      return node
-    case .oldKeyPathExpr(let node):
-      return node
-    case .keyPathBaseExpr(let node):
-      return node
-    case .objcNamePiece(let node):
-      return node
-    case .objcName(let node):
-      return node
-    case .objcKeyPathExpr(let node):
-      return node
-    case .objcSelectorExpr(let node):
-      return node
-    case .macroExpansionExpr(let node):
-      return node
-    case .postfixIfConfigExpr(let node):
-      return node
-    case .editorPlaceholderExpr(let node):
-      return node
-    case .objectLiteralExpr(let node):
-      return node
-    case .yieldExprList(let node):
-      return node
-    case .yieldExprListElement(let node):
-      return node
-    case .typeInitializerClause(let node):
-      return node
-    case .typealiasDecl(let node):
-      return node
-    case .associatedtypeDecl(let node):
-      return node
-    case .functionParameterList(let node):
-      return node
-    case .parameterClause(let node):
-      return node
-    case .returnClause(let node):
-      return node
-    case .functionSignature(let node):
-      return node
-    case .ifConfigClause(let node):
-      return node
-    case .ifConfigClauseList(let node):
-      return node
-    case .ifConfigDecl(let node):
-      return node
-    case .poundErrorDecl(let node):
-      return node
-    case .poundWarningDecl(let node):
-      return node
-    case .poundSourceLocation(let node):
-      return node
-    case .poundSourceLocationArgs(let node):
-      return node
-    case .declModifierDetail(let node):
-      return node
-    case .declModifier(let node):
-      return node
-    case .inheritedType(let node):
-      return node
-    case .inheritedTypeList(let node):
-      return node
-    case .typeInheritanceClause(let node):
-      return node
-    case .classDecl(let node):
-      return node
-    case .actorDecl(let node):
-      return node
-    case .structDecl(let node):
-      return node
-    case .protocolDecl(let node):
-      return node
-    case .extensionDecl(let node):
-      return node
-    case .memberDeclBlock(let node):
-      return node
-    case .memberDeclList(let node):
-      return node
-    case .memberDeclListItem(let node):
-      return node
-    case .sourceFile(let node):
-      return node
-    case .initializerClause(let node):
-      return node
-    case .functionParameter(let node):
-      return node
-    case .modifierList(let node):
-      return node
-    case .functionDecl(let node):
-      return node
-    case .initializerDecl(let node):
-      return node
-    case .deinitializerDecl(let node):
-      return node
-    case .subscriptDecl(let node):
-      return node
-    case .accessLevelModifier(let node):
-      return node
-    case .accessPathComponent(let node):
-      return node
-    case .accessPath(let node):
-      return node
-    case .importDecl(let node):
-      return node
-    case .accessorParameter(let node):
-      return node
-    case .accessorDecl(let node):
-      return node
-    case .accessorList(let node):
-      return node
-    case .accessorBlock(let node):
-      return node
-    case .patternBinding(let node):
-      return node
-    case .patternBindingList(let node):
-      return node
-    case .variableDecl(let node):
-      return node
-    case .enumCaseElement(let node):
-      return node
-    case .enumCaseElementList(let node):
-      return node
-    case .enumCaseDecl(let node):
-      return node
-    case .enumDecl(let node):
-      return node
-    case .operatorDecl(let node):
-      return node
-    case .designatedTypeList(let node):
-      return node
-    case .designatedTypeElement(let node):
-      return node
-    case .operatorPrecedenceAndTypes(let node):
-      return node
-    case .precedenceGroupDecl(let node):
-      return node
-    case .precedenceGroupAttributeList(let node):
-      return node
-    case .precedenceGroupRelation(let node):
-      return node
-    case .precedenceGroupNameList(let node):
-      return node
-    case .precedenceGroupNameElement(let node):
-      return node
-    case .precedenceGroupAssignment(let node):
-      return node
-    case .precedenceGroupAssociativity(let node):
-      return node
-    case .macroExpansionDecl(let node):
-      return node
-    case .tokenList(let node):
-      return node
-    case .nonEmptyTokenList(let node):
-      return node
-    case .customAttribute(let node):
-      return node
-    case .attribute(let node):
-      return node
-    case .attributeList(let node):
-      return node
-    case .specializeAttributeSpecList(let node):
-      return node
-    case .availabilityEntry(let node):
-      return node
-    case .labeledSpecializeEntry(let node):
-      return node
-    case .targetFunctionEntry(let node):
-      return node
-    case .namedAttributeStringArgument(let node):
-      return node
-    case .declName(let node):
-      return node
-    case .implementsAttributeArguments(let node):
-      return node
-    case .objCSelectorPiece(let node):
-      return node
-    case .objCSelector(let node):
-      return node
-    case .differentiableAttributeArguments(let node):
-      return node
-    case .differentiabilityParamsClause(let node):
-      return node
-    case .differentiabilityParams(let node):
-      return node
-    case .differentiabilityParamList(let node):
-      return node
-    case .differentiabilityParam(let node):
-      return node
-    case .derivativeRegistrationAttributeArguments(let node):
-      return node
-    case .qualifiedDeclName(let node):
-      return node
-    case .functionDeclName(let node):
-      return node
-    case .backDeployAttributeSpecList(let node):
-      return node
-    case .backDeployVersionList(let node):
-      return node
-    case .backDeployVersionArgument(let node):
-      return node
-    case .opaqueReturnTypeOfAttributeArguments(let node):
-      return node
-    case .conventionAttributeArguments(let node):
-      return node
-    case .conventionWitnessMethodAttributeArguments(let node):
-      return node
-    case .labeledStmt(let node):
-      return node
-    case .continueStmt(let node):
-      return node
-    case .whileStmt(let node):
-      return node
-    case .deferStmt(let node):
-      return node
-    case .expressionStmt(let node):
-      return node
-    case .switchCaseList(let node):
-      return node
-    case .repeatWhileStmt(let node):
-      return node
-    case .guardStmt(let node):
-      return node
-    case .whereClause(let node):
-      return node
-    case .forInStmt(let node):
-      return node
-    case .switchStmt(let node):
-      return node
-    case .catchClauseList(let node):
-      return node
-    case .doStmt(let node):
-      return node
-    case .returnStmt(let node):
-      return node
-    case .yieldStmt(let node):
-      return node
-    case .yieldList(let node):
-      return node
-    case .fallthroughStmt(let node):
-      return node
-    case .breakStmt(let node):
-      return node
-    case .caseItemList(let node):
-      return node
-    case .catchItemList(let node):
-      return node
-    case .conditionElement(let node):
-      return node
-    case .availabilityCondition(let node):
-      return node
-    case .matchingPatternCondition(let node):
-      return node
-    case .optionalBindingCondition(let node):
-      return node
-    case .unavailabilityCondition(let node):
-      return node
-    case .hasSymbolCondition(let node):
-      return node
-    case .conditionElementList(let node):
-      return node
-    case .declarationStmt(let node):
-      return node
-    case .throwStmt(let node):
-      return node
-    case .ifStmt(let node):
-      return node
-    case .switchCase(let node):
-      return node
-    case .switchDefaultLabel(let node):
-      return node
-    case .caseItem(let node):
-      return node
-    case .catchItem(let node):
-      return node
-    case .switchCaseLabel(let node):
-      return node
-    case .catchClause(let node):
-      return node
-    case .poundAssertStmt(let node):
-      return node
-    case .genericWhereClause(let node):
-      return node
-    case .genericRequirementList(let node):
-      return node
-    case .genericRequirement(let node):
-      return node
-    case .sameTypeRequirement(let node):
-      return node
-    case .layoutRequirement(let node):
-      return node
-    case .genericParameterList(let node):
-      return node
-    case .genericParameter(let node):
-      return node
-    case .primaryAssociatedTypeList(let node):
-      return node
-    case .primaryAssociatedType(let node):
-      return node
-    case .genericParameterClause(let node):
-      return node
-    case .conformanceRequirement(let node):
-      return node
-    case .primaryAssociatedTypeClause(let node):
-      return node
-    case .simpleTypeIdentifier(let node):
-      return node
-    case .memberTypeIdentifier(let node):
-      return node
-    case .classRestrictionType(let node):
-      return node
-    case .arrayType(let node):
-      return node
-    case .dictionaryType(let node):
-      return node
-    case .metatypeType(let node):
-      return node
-    case .optionalType(let node):
-      return node
-    case .constrainedSugarType(let node):
-      return node
-    case .implicitlyUnwrappedOptionalType(let node):
-      return node
-    case .compositionTypeElement(let node):
-      return node
-    case .compositionTypeElementList(let node):
-      return node
-    case .compositionType(let node):
-      return node
-    case .packExpansionType(let node):
-      return node
-    case .tupleTypeElement(let node):
-      return node
-    case .tupleTypeElementList(let node):
-      return node
-    case .tupleType(let node):
-      return node
-    case .functionType(let node):
-      return node
-    case .attributedType(let node):
-      return node
-    case .genericArgumentList(let node):
-      return node
-    case .genericArgument(let node):
-      return node
-    case .genericArgumentClause(let node):
-      return node
-    case .namedOpaqueReturnType(let node):
-      return node
-    case .typeAnnotation(let node):
-      return node
-    case .enumCasePattern(let node):
-      return node
-    case .isTypePattern(let node):
-      return node
-    case .optionalPattern(let node):
-      return node
-    case .identifierPattern(let node):
-      return node
-    case .asTypePattern(let node):
-      return node
-    case .tuplePattern(let node):
-      return node
-    case .wildcardPattern(let node):
-      return node
-    case .tuplePatternElement(let node):
-      return node
-    case .expressionPattern(let node):
-      return node
-    case .tuplePatternElementList(let node):
-      return node
-    case .valueBindingPattern(let node):
-      return node
-    case .availabilitySpecList(let node):
-      return node
-    case .availabilityArgument(let node):
-      return node
-    case .availabilityLabeledArgument(let node):
-      return node
-    case .availabilityVersionRestriction(let node):
-      return node
-    case .versionTuple(let node):
-      return node
-    }
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknown(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknownDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknownExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknownStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknownType(let node):
-      return node.childNameForDiagnostics(index)
-    case .unknownPattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .missing(let node):
-      return node.childNameForDiagnostics(index)
-    case .missingDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .missingExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .missingStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .missingType(let node):
-      return node.childNameForDiagnostics(index)
-    case .missingPattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .codeBlockItem(let node):
-      return node.childNameForDiagnostics(index)
-    case .codeBlockItemList(let node):
-      return node.childNameForDiagnostics(index)
-    case .codeBlock(let node):
-      return node.childNameForDiagnostics(index)
-    case .unexpectedNodes(let node):
-      return node.childNameForDiagnostics(index)
-    case .inOutExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundColumnExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .tupleExprElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .arrayElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .dictionaryElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .stringLiteralSegments(let node):
-      return node.childNameForDiagnostics(index)
-    case .tryExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .awaitExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .moveExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .declNameArgument(let node):
-      return node.childNameForDiagnostics(index)
-    case .declNameArgumentList(let node):
-      return node.childNameForDiagnostics(index)
-    case .declNameArguments(let node):
-      return node.childNameForDiagnostics(index)
-    case .identifierExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .superRefExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .nilLiteralExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .discardAssignmentExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .assignmentExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .sequenceExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .exprList(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundLineExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundFileExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundFileIDExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundFilePathExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundFunctionExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundDsohandleExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .symbolicReferenceExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .prefixOperatorExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .binaryOperatorExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .arrowExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .infixOperatorExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .floatLiteralExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .tupleExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .arrayExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .dictionaryExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .tupleExprElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .arrayElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .dictionaryElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .integerLiteralExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .booleanLiteralExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .unresolvedTernaryExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .ternaryExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .memberAccessExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .unresolvedIsExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .isExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .unresolvedAsExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .asExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .typeExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .closureCaptureItem(let node):
-      return node.childNameForDiagnostics(index)
-    case .closureCaptureItemList(let node):
-      return node.childNameForDiagnostics(index)
-    case .closureCaptureSignature(let node):
-      return node.childNameForDiagnostics(index)
-    case .closureParam(let node):
-      return node.childNameForDiagnostics(index)
-    case .closureParamList(let node):
-      return node.childNameForDiagnostics(index)
-    case .closureSignature(let node):
-      return node.childNameForDiagnostics(index)
-    case .closureExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .unresolvedPatternExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .multipleTrailingClosureElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .multipleTrailingClosureElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .functionCallExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .subscriptExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .optionalChainingExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .forcedValueExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .postfixUnaryExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .specializeExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .stringSegment(let node):
-      return node.childNameForDiagnostics(index)
-    case .expressionSegment(let node):
-      return node.childNameForDiagnostics(index)
-    case .stringLiteralExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .regexLiteralExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .keyPathExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .keyPathComponentList(let node):
-      return node.childNameForDiagnostics(index)
-    case .keyPathComponent(let node):
-      return node.childNameForDiagnostics(index)
-    case .keyPathPropertyComponent(let node):
-      return node.childNameForDiagnostics(index)
-    case .keyPathSubscriptComponent(let node):
-      return node.childNameForDiagnostics(index)
-    case .keyPathOptionalComponent(let node):
-      return node.childNameForDiagnostics(index)
-    case .oldKeyPathExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .keyPathBaseExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .objcNamePiece(let node):
-      return node.childNameForDiagnostics(index)
-    case .objcName(let node):
-      return node.childNameForDiagnostics(index)
-    case .objcKeyPathExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .objcSelectorExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .macroExpansionExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .postfixIfConfigExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .editorPlaceholderExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .objectLiteralExpr(let node):
-      return node.childNameForDiagnostics(index)
-    case .yieldExprList(let node):
-      return node.childNameForDiagnostics(index)
-    case .yieldExprListElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .typeInitializerClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .typealiasDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .associatedtypeDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .functionParameterList(let node):
-      return node.childNameForDiagnostics(index)
-    case .parameterClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .returnClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .functionSignature(let node):
-      return node.childNameForDiagnostics(index)
-    case .ifConfigClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .ifConfigClauseList(let node):
-      return node.childNameForDiagnostics(index)
-    case .ifConfigDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundErrorDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundWarningDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundSourceLocation(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundSourceLocationArgs(let node):
-      return node.childNameForDiagnostics(index)
-    case .declModifierDetail(let node):
-      return node.childNameForDiagnostics(index)
-    case .declModifier(let node):
-      return node.childNameForDiagnostics(index)
-    case .inheritedType(let node):
-      return node.childNameForDiagnostics(index)
-    case .inheritedTypeList(let node):
-      return node.childNameForDiagnostics(index)
-    case .typeInheritanceClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .classDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .actorDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .structDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .protocolDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .extensionDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .memberDeclBlock(let node):
-      return node.childNameForDiagnostics(index)
-    case .memberDeclList(let node):
-      return node.childNameForDiagnostics(index)
-    case .memberDeclListItem(let node):
-      return node.childNameForDiagnostics(index)
-    case .sourceFile(let node):
-      return node.childNameForDiagnostics(index)
-    case .initializerClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .functionParameter(let node):
-      return node.childNameForDiagnostics(index)
-    case .modifierList(let node):
-      return node.childNameForDiagnostics(index)
-    case .functionDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .initializerDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .deinitializerDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .subscriptDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .accessLevelModifier(let node):
-      return node.childNameForDiagnostics(index)
-    case .accessPathComponent(let node):
-      return node.childNameForDiagnostics(index)
-    case .accessPath(let node):
-      return node.childNameForDiagnostics(index)
-    case .importDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .accessorParameter(let node):
-      return node.childNameForDiagnostics(index)
-    case .accessorDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .accessorList(let node):
-      return node.childNameForDiagnostics(index)
-    case .accessorBlock(let node):
-      return node.childNameForDiagnostics(index)
-    case .patternBinding(let node):
-      return node.childNameForDiagnostics(index)
-    case .patternBindingList(let node):
-      return node.childNameForDiagnostics(index)
-    case .variableDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .enumCaseElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .enumCaseElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .enumCaseDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .enumDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .operatorDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .designatedTypeList(let node):
-      return node.childNameForDiagnostics(index)
-    case .designatedTypeElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .operatorPrecedenceAndTypes(let node):
-      return node.childNameForDiagnostics(index)
-    case .precedenceGroupDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .precedenceGroupAttributeList(let node):
-      return node.childNameForDiagnostics(index)
-    case .precedenceGroupRelation(let node):
-      return node.childNameForDiagnostics(index)
-    case .precedenceGroupNameList(let node):
-      return node.childNameForDiagnostics(index)
-    case .precedenceGroupNameElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .precedenceGroupAssignment(let node):
-      return node.childNameForDiagnostics(index)
-    case .precedenceGroupAssociativity(let node):
-      return node.childNameForDiagnostics(index)
-    case .macroExpansionDecl(let node):
-      return node.childNameForDiagnostics(index)
-    case .tokenList(let node):
-      return node.childNameForDiagnostics(index)
-    case .nonEmptyTokenList(let node):
-      return node.childNameForDiagnostics(index)
-    case .customAttribute(let node):
-      return node.childNameForDiagnostics(index)
-    case .attribute(let node):
-      return node.childNameForDiagnostics(index)
-    case .attributeList(let node):
-      return node.childNameForDiagnostics(index)
-    case .specializeAttributeSpecList(let node):
-      return node.childNameForDiagnostics(index)
-    case .availabilityEntry(let node):
-      return node.childNameForDiagnostics(index)
-    case .labeledSpecializeEntry(let node):
-      return node.childNameForDiagnostics(index)
-    case .targetFunctionEntry(let node):
-      return node.childNameForDiagnostics(index)
-    case .namedAttributeStringArgument(let node):
-      return node.childNameForDiagnostics(index)
-    case .declName(let node):
-      return node.childNameForDiagnostics(index)
-    case .implementsAttributeArguments(let node):
-      return node.childNameForDiagnostics(index)
-    case .objCSelectorPiece(let node):
-      return node.childNameForDiagnostics(index)
-    case .objCSelector(let node):
-      return node.childNameForDiagnostics(index)
-    case .differentiableAttributeArguments(let node):
-      return node.childNameForDiagnostics(index)
-    case .differentiabilityParamsClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .differentiabilityParams(let node):
-      return node.childNameForDiagnostics(index)
-    case .differentiabilityParamList(let node):
-      return node.childNameForDiagnostics(index)
-    case .differentiabilityParam(let node):
-      return node.childNameForDiagnostics(index)
-    case .derivativeRegistrationAttributeArguments(let node):
-      return node.childNameForDiagnostics(index)
-    case .qualifiedDeclName(let node):
-      return node.childNameForDiagnostics(index)
-    case .functionDeclName(let node):
-      return node.childNameForDiagnostics(index)
-    case .backDeployAttributeSpecList(let node):
-      return node.childNameForDiagnostics(index)
-    case .backDeployVersionList(let node):
-      return node.childNameForDiagnostics(index)
-    case .backDeployVersionArgument(let node):
-      return node.childNameForDiagnostics(index)
-    case .opaqueReturnTypeOfAttributeArguments(let node):
-      return node.childNameForDiagnostics(index)
-    case .conventionAttributeArguments(let node):
-      return node.childNameForDiagnostics(index)
-    case .conventionWitnessMethodAttributeArguments(let node):
-      return node.childNameForDiagnostics(index)
-    case .labeledStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .continueStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .whileStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .deferStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .expressionStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .switchCaseList(let node):
-      return node.childNameForDiagnostics(index)
-    case .repeatWhileStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .guardStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .whereClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .forInStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .switchStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .catchClauseList(let node):
-      return node.childNameForDiagnostics(index)
-    case .doStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .returnStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .yieldStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .yieldList(let node):
-      return node.childNameForDiagnostics(index)
-    case .fallthroughStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .breakStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .caseItemList(let node):
-      return node.childNameForDiagnostics(index)
-    case .catchItemList(let node):
-      return node.childNameForDiagnostics(index)
-    case .conditionElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .availabilityCondition(let node):
-      return node.childNameForDiagnostics(index)
-    case .matchingPatternCondition(let node):
-      return node.childNameForDiagnostics(index)
-    case .optionalBindingCondition(let node):
-      return node.childNameForDiagnostics(index)
-    case .unavailabilityCondition(let node):
-      return node.childNameForDiagnostics(index)
-    case .hasSymbolCondition(let node):
-      return node.childNameForDiagnostics(index)
-    case .conditionElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .declarationStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .throwStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .ifStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .switchCase(let node):
-      return node.childNameForDiagnostics(index)
-    case .switchDefaultLabel(let node):
-      return node.childNameForDiagnostics(index)
-    case .caseItem(let node):
-      return node.childNameForDiagnostics(index)
-    case .catchItem(let node):
-      return node.childNameForDiagnostics(index)
-    case .switchCaseLabel(let node):
-      return node.childNameForDiagnostics(index)
-    case .catchClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .poundAssertStmt(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericWhereClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericRequirementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericRequirement(let node):
-      return node.childNameForDiagnostics(index)
-    case .sameTypeRequirement(let node):
-      return node.childNameForDiagnostics(index)
-    case .layoutRequirement(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericParameterList(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericParameter(let node):
-      return node.childNameForDiagnostics(index)
-    case .primaryAssociatedTypeList(let node):
-      return node.childNameForDiagnostics(index)
-    case .primaryAssociatedType(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericParameterClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .conformanceRequirement(let node):
-      return node.childNameForDiagnostics(index)
-    case .primaryAssociatedTypeClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .simpleTypeIdentifier(let node):
-      return node.childNameForDiagnostics(index)
-    case .memberTypeIdentifier(let node):
-      return node.childNameForDiagnostics(index)
-    case .classRestrictionType(let node):
-      return node.childNameForDiagnostics(index)
-    case .arrayType(let node):
-      return node.childNameForDiagnostics(index)
-    case .dictionaryType(let node):
-      return node.childNameForDiagnostics(index)
-    case .metatypeType(let node):
-      return node.childNameForDiagnostics(index)
-    case .optionalType(let node):
-      return node.childNameForDiagnostics(index)
-    case .constrainedSugarType(let node):
-      return node.childNameForDiagnostics(index)
-    case .implicitlyUnwrappedOptionalType(let node):
-      return node.childNameForDiagnostics(index)
-    case .compositionTypeElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .compositionTypeElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .compositionType(let node):
-      return node.childNameForDiagnostics(index)
-    case .packExpansionType(let node):
-      return node.childNameForDiagnostics(index)
-    case .tupleTypeElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .tupleTypeElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .tupleType(let node):
-      return node.childNameForDiagnostics(index)
-    case .functionType(let node):
-      return node.childNameForDiagnostics(index)
-    case .attributedType(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericArgumentList(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericArgument(let node):
-      return node.childNameForDiagnostics(index)
-    case .genericArgumentClause(let node):
-      return node.childNameForDiagnostics(index)
-    case .namedOpaqueReturnType(let node):
-      return node.childNameForDiagnostics(index)
-    case .typeAnnotation(let node):
-      return node.childNameForDiagnostics(index)
-    case .enumCasePattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .isTypePattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .optionalPattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .identifierPattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .asTypePattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .tuplePattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .wildcardPattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .tuplePatternElement(let node):
-      return node.childNameForDiagnostics(index)
-    case .expressionPattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .tuplePatternElementList(let node):
-      return node.childNameForDiagnostics(index)
-    case .valueBindingPattern(let node):
-      return node.childNameForDiagnostics(index)
-    case .availabilitySpecList(let node):
-      return node.childNameForDiagnostics(index)
-    case .availabilityArgument(let node):
-      return node.childNameForDiagnostics(index)
-    case .availabilityLabeledArgument(let node):
-      return node.childNameForDiagnostics(index)
-    case .availabilityVersionRestriction(let node):
-      return node.childNameForDiagnostics(index)
-    case .versionTuple(let node):
-      return node.childNameForDiagnostics(index)
-    }
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownSyntax.self),
+      .node(TokenSyntax.self),
+      .node(UnknownDeclSyntax.self),
+      .node(UnknownExprSyntax.self),
+      .node(UnknownStmtSyntax.self),
+      .node(UnknownTypeSyntax.self),
+      .node(UnknownPatternSyntax.self),
+      .node(MissingSyntax.self),
+      .node(MissingDeclSyntax.self),
+      .node(MissingExprSyntax.self),
+      .node(MissingStmtSyntax.self),
+      .node(MissingTypeSyntax.self),
+      .node(MissingPatternSyntax.self),
+      .node(CodeBlockItemSyntax.self),
+      .node(CodeBlockItemListSyntax.self),
+      .node(CodeBlockSyntax.self),
+      .node(UnexpectedNodesSyntax.self),
+      .node(InOutExprSyntax.self),
+      .node(PoundColumnExprSyntax.self),
+      .node(TupleExprElementListSyntax.self),
+      .node(ArrayElementListSyntax.self),
+      .node(DictionaryElementListSyntax.self),
+      .node(StringLiteralSegmentsSyntax.self),
+      .node(TryExprSyntax.self),
+      .node(AwaitExprSyntax.self),
+      .node(MoveExprSyntax.self),
+      .node(DeclNameArgumentSyntax.self),
+      .node(DeclNameArgumentListSyntax.self),
+      .node(DeclNameArgumentsSyntax.self),
+      .node(IdentifierExprSyntax.self),
+      .node(SuperRefExprSyntax.self),
+      .node(NilLiteralExprSyntax.self),
+      .node(DiscardAssignmentExprSyntax.self),
+      .node(AssignmentExprSyntax.self),
+      .node(SequenceExprSyntax.self),
+      .node(ExprListSyntax.self),
+      .node(PoundLineExprSyntax.self),
+      .node(PoundFileExprSyntax.self),
+      .node(PoundFileIDExprSyntax.self),
+      .node(PoundFilePathExprSyntax.self),
+      .node(PoundFunctionExprSyntax.self),
+      .node(PoundDsohandleExprSyntax.self),
+      .node(SymbolicReferenceExprSyntax.self),
+      .node(PrefixOperatorExprSyntax.self),
+      .node(BinaryOperatorExprSyntax.self),
+      .node(ArrowExprSyntax.self),
+      .node(InfixOperatorExprSyntax.self),
+      .node(FloatLiteralExprSyntax.self),
+      .node(TupleExprSyntax.self),
+      .node(ArrayExprSyntax.self),
+      .node(DictionaryExprSyntax.self),
+      .node(TupleExprElementSyntax.self),
+      .node(ArrayElementSyntax.self),
+      .node(DictionaryElementSyntax.self),
+      .node(IntegerLiteralExprSyntax.self),
+      .node(BooleanLiteralExprSyntax.self),
+      .node(UnresolvedTernaryExprSyntax.self),
+      .node(TernaryExprSyntax.self),
+      .node(MemberAccessExprSyntax.self),
+      .node(UnresolvedIsExprSyntax.self),
+      .node(IsExprSyntax.self),
+      .node(UnresolvedAsExprSyntax.self),
+      .node(AsExprSyntax.self),
+      .node(TypeExprSyntax.self),
+      .node(ClosureCaptureItemSyntax.self),
+      .node(ClosureCaptureItemListSyntax.self),
+      .node(ClosureCaptureSignatureSyntax.self),
+      .node(ClosureParamSyntax.self),
+      .node(ClosureParamListSyntax.self),
+      .node(ClosureSignatureSyntax.self),
+      .node(ClosureExprSyntax.self),
+      .node(UnresolvedPatternExprSyntax.self),
+      .node(MultipleTrailingClosureElementSyntax.self),
+      .node(MultipleTrailingClosureElementListSyntax.self),
+      .node(FunctionCallExprSyntax.self),
+      .node(SubscriptExprSyntax.self),
+      .node(OptionalChainingExprSyntax.self),
+      .node(ForcedValueExprSyntax.self),
+      .node(PostfixUnaryExprSyntax.self),
+      .node(SpecializeExprSyntax.self),
+      .node(StringSegmentSyntax.self),
+      .node(ExpressionSegmentSyntax.self),
+      .node(StringLiteralExprSyntax.self),
+      .node(RegexLiteralExprSyntax.self),
+      .node(KeyPathExprSyntax.self),
+      .node(KeyPathComponentListSyntax.self),
+      .node(KeyPathComponentSyntax.self),
+      .node(KeyPathPropertyComponentSyntax.self),
+      .node(KeyPathSubscriptComponentSyntax.self),
+      .node(KeyPathOptionalComponentSyntax.self),
+      .node(OldKeyPathExprSyntax.self),
+      .node(KeyPathBaseExprSyntax.self),
+      .node(ObjcNamePieceSyntax.self),
+      .node(ObjcNameSyntax.self),
+      .node(ObjcKeyPathExprSyntax.self),
+      .node(ObjcSelectorExprSyntax.self),
+      .node(MacroExpansionExprSyntax.self),
+      .node(PostfixIfConfigExprSyntax.self),
+      .node(EditorPlaceholderExprSyntax.self),
+      .node(ObjectLiteralExprSyntax.self),
+      .node(YieldExprListSyntax.self),
+      .node(YieldExprListElementSyntax.self),
+      .node(TypeInitializerClauseSyntax.self),
+      .node(TypealiasDeclSyntax.self),
+      .node(AssociatedtypeDeclSyntax.self),
+      .node(FunctionParameterListSyntax.self),
+      .node(ParameterClauseSyntax.self),
+      .node(ReturnClauseSyntax.self),
+      .node(FunctionSignatureSyntax.self),
+      .node(IfConfigClauseSyntax.self),
+      .node(IfConfigClauseListSyntax.self),
+      .node(IfConfigDeclSyntax.self),
+      .node(PoundErrorDeclSyntax.self),
+      .node(PoundWarningDeclSyntax.self),
+      .node(PoundSourceLocationSyntax.self),
+      .node(PoundSourceLocationArgsSyntax.self),
+      .node(DeclModifierDetailSyntax.self),
+      .node(DeclModifierSyntax.self),
+      .node(InheritedTypeSyntax.self),
+      .node(InheritedTypeListSyntax.self),
+      .node(TypeInheritanceClauseSyntax.self),
+      .node(ClassDeclSyntax.self),
+      .node(ActorDeclSyntax.self),
+      .node(StructDeclSyntax.self),
+      .node(ProtocolDeclSyntax.self),
+      .node(ExtensionDeclSyntax.self),
+      .node(MemberDeclBlockSyntax.self),
+      .node(MemberDeclListSyntax.self),
+      .node(MemberDeclListItemSyntax.self),
+      .node(SourceFileSyntax.self),
+      .node(InitializerClauseSyntax.self),
+      .node(FunctionParameterSyntax.self),
+      .node(ModifierListSyntax.self),
+      .node(FunctionDeclSyntax.self),
+      .node(InitializerDeclSyntax.self),
+      .node(DeinitializerDeclSyntax.self),
+      .node(SubscriptDeclSyntax.self),
+      .node(AccessLevelModifierSyntax.self),
+      .node(AccessPathComponentSyntax.self),
+      .node(AccessPathSyntax.self),
+      .node(ImportDeclSyntax.self),
+      .node(AccessorParameterSyntax.self),
+      .node(AccessorDeclSyntax.self),
+      .node(AccessorListSyntax.self),
+      .node(AccessorBlockSyntax.self),
+      .node(PatternBindingSyntax.self),
+      .node(PatternBindingListSyntax.self),
+      .node(VariableDeclSyntax.self),
+      .node(EnumCaseElementSyntax.self),
+      .node(EnumCaseElementListSyntax.self),
+      .node(EnumCaseDeclSyntax.self),
+      .node(EnumDeclSyntax.self),
+      .node(OperatorDeclSyntax.self),
+      .node(DesignatedTypeListSyntax.self),
+      .node(DesignatedTypeElementSyntax.self),
+      .node(OperatorPrecedenceAndTypesSyntax.self),
+      .node(PrecedenceGroupDeclSyntax.self),
+      .node(PrecedenceGroupAttributeListSyntax.self),
+      .node(PrecedenceGroupRelationSyntax.self),
+      .node(PrecedenceGroupNameListSyntax.self),
+      .node(PrecedenceGroupNameElementSyntax.self),
+      .node(PrecedenceGroupAssignmentSyntax.self),
+      .node(PrecedenceGroupAssociativitySyntax.self),
+      .node(MacroExpansionDeclSyntax.self),
+      .node(TokenListSyntax.self),
+      .node(NonEmptyTokenListSyntax.self),
+      .node(CustomAttributeSyntax.self),
+      .node(AttributeSyntax.self),
+      .node(AttributeListSyntax.self),
+      .node(SpecializeAttributeSpecListSyntax.self),
+      .node(AvailabilityEntrySyntax.self),
+      .node(LabeledSpecializeEntrySyntax.self),
+      .node(TargetFunctionEntrySyntax.self),
+      .node(NamedAttributeStringArgumentSyntax.self),
+      .node(DeclNameSyntax.self),
+      .node(ImplementsAttributeArgumentsSyntax.self),
+      .node(ObjCSelectorPieceSyntax.self),
+      .node(ObjCSelectorSyntax.self),
+      .node(DifferentiableAttributeArgumentsSyntax.self),
+      .node(DifferentiabilityParamsClauseSyntax.self),
+      .node(DifferentiabilityParamsSyntax.self),
+      .node(DifferentiabilityParamListSyntax.self),
+      .node(DifferentiabilityParamSyntax.self),
+      .node(DerivativeRegistrationAttributeArgumentsSyntax.self),
+      .node(QualifiedDeclNameSyntax.self),
+      .node(FunctionDeclNameSyntax.self),
+      .node(BackDeployAttributeSpecListSyntax.self),
+      .node(BackDeployVersionListSyntax.self),
+      .node(BackDeployVersionArgumentSyntax.self),
+      .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self),
+      .node(ConventionAttributeArgumentsSyntax.self),
+      .node(ConventionWitnessMethodAttributeArgumentsSyntax.self),
+      .node(LabeledStmtSyntax.self),
+      .node(ContinueStmtSyntax.self),
+      .node(WhileStmtSyntax.self),
+      .node(DeferStmtSyntax.self),
+      .node(ExpressionStmtSyntax.self),
+      .node(SwitchCaseListSyntax.self),
+      .node(RepeatWhileStmtSyntax.self),
+      .node(GuardStmtSyntax.self),
+      .node(WhereClauseSyntax.self),
+      .node(ForInStmtSyntax.self),
+      .node(SwitchStmtSyntax.self),
+      .node(CatchClauseListSyntax.self),
+      .node(DoStmtSyntax.self),
+      .node(ReturnStmtSyntax.self),
+      .node(YieldStmtSyntax.self),
+      .node(YieldListSyntax.self),
+      .node(FallthroughStmtSyntax.self),
+      .node(BreakStmtSyntax.self),
+      .node(CaseItemListSyntax.self),
+      .node(CatchItemListSyntax.self),
+      .node(ConditionElementSyntax.self),
+      .node(AvailabilityConditionSyntax.self),
+      .node(MatchingPatternConditionSyntax.self),
+      .node(OptionalBindingConditionSyntax.self),
+      .node(UnavailabilityConditionSyntax.self),
+      .node(HasSymbolConditionSyntax.self),
+      .node(ConditionElementListSyntax.self),
+      .node(DeclarationStmtSyntax.self),
+      .node(ThrowStmtSyntax.self),
+      .node(IfStmtSyntax.self),
+      .node(SwitchCaseSyntax.self),
+      .node(SwitchDefaultLabelSyntax.self),
+      .node(CaseItemSyntax.self),
+      .node(CatchItemSyntax.self),
+      .node(SwitchCaseLabelSyntax.self),
+      .node(CatchClauseSyntax.self),
+      .node(PoundAssertStmtSyntax.self),
+      .node(GenericWhereClauseSyntax.self),
+      .node(GenericRequirementListSyntax.self),
+      .node(GenericRequirementSyntax.self),
+      .node(SameTypeRequirementSyntax.self),
+      .node(LayoutRequirementSyntax.self),
+      .node(GenericParameterListSyntax.self),
+      .node(GenericParameterSyntax.self),
+      .node(PrimaryAssociatedTypeListSyntax.self),
+      .node(PrimaryAssociatedTypeSyntax.self),
+      .node(GenericParameterClauseSyntax.self),
+      .node(ConformanceRequirementSyntax.self),
+      .node(PrimaryAssociatedTypeClauseSyntax.self),
+      .node(SimpleTypeIdentifierSyntax.self),
+      .node(MemberTypeIdentifierSyntax.self),
+      .node(ClassRestrictionTypeSyntax.self),
+      .node(ArrayTypeSyntax.self),
+      .node(DictionaryTypeSyntax.self),
+      .node(MetatypeTypeSyntax.self),
+      .node(OptionalTypeSyntax.self),
+      .node(ConstrainedSugarTypeSyntax.self),
+      .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
+      .node(CompositionTypeElementSyntax.self),
+      .node(CompositionTypeElementListSyntax.self),
+      .node(CompositionTypeSyntax.self),
+      .node(PackExpansionTypeSyntax.self),
+      .node(TupleTypeElementSyntax.self),
+      .node(TupleTypeElementListSyntax.self),
+      .node(TupleTypeSyntax.self),
+      .node(FunctionTypeSyntax.self),
+      .node(AttributedTypeSyntax.self),
+      .node(GenericArgumentListSyntax.self),
+      .node(GenericArgumentSyntax.self),
+      .node(GenericArgumentClauseSyntax.self),
+      .node(NamedOpaqueReturnTypeSyntax.self),
+      .node(TypeAnnotationSyntax.self),
+      .node(EnumCasePatternSyntax.self),
+      .node(IsTypePatternSyntax.self),
+      .node(OptionalPatternSyntax.self),
+      .node(IdentifierPatternSyntax.self),
+      .node(AsTypePatternSyntax.self),
+      .node(TuplePatternSyntax.self),
+      .node(WildcardPatternSyntax.self),
+      .node(TuplePatternElementSyntax.self),
+      .node(ExpressionPatternSyntax.self),
+      .node(TuplePatternElementListSyntax.self),
+      .node(ValueBindingPatternSyntax.self),
+      .node(AvailabilitySpecListSyntax.self),
+      .node(AvailabilityArgumentSyntax.self),
+      .node(AvailabilityLabeledArgumentSyntax.self),
+      .node(AvailabilityVersionRestrictionSyntax.self),
+      .node(VersionTupleSyntax.self),
+    ])
   }
 }
 
 extension SyntaxKind {
-  var syntaxNodeType: SyntaxProtocol.Type {
+  public var syntaxNodeType: SyntaxProtocol.Type {
     switch self {
     case .token: return TokenSyntax.self
     case .unknown: return UnknownSyntax.self
@@ -1437,6 +582,571 @@ extension SyntaxKind {
     case .availabilityLabeledArgument: return AvailabilityLabeledArgumentSyntax.self
     case .availabilityVersionRestriction: return AvailabilityVersionRestrictionSyntax.self
     case .versionTuple: return VersionTupleSyntax.self
+    }
+  }
+
+  public var nameForDiagnostics: String? {
+    switch self {
+    case .unknown:
+      return nil
+    case .token:
+      return "token"
+    case .unknownDecl:
+      return "declaration"
+    case .unknownExpr:
+      return "expression"
+    case .unknownStmt:
+      return "statement"
+    case .unknownType:
+      return "type"
+    case .unknownPattern:
+      return "pattern"
+    case .missing:
+      return nil
+    case .missingDecl:
+      return "declaration"
+    case .missingExpr:
+      return "expression"
+    case .missingStmt:
+      return "statement"
+    case .missingType:
+      return "type"
+    case .missingPattern:
+      return "pattern"
+    case .codeBlockItem:
+      return nil
+    case .codeBlockItemList:
+      return nil
+    case .codeBlock:
+      return "code block"
+    case .unexpectedNodes:
+      return nil
+    case .inOutExpr:
+      return "inout expression"
+    case .poundColumnExpr:
+      return nil
+    case .tupleExprElementList:
+      return nil
+    case .arrayElementList:
+      return nil
+    case .dictionaryElementList:
+      return nil
+    case .stringLiteralSegments:
+      return nil
+    case .tryExpr:
+      return "'try' expression"
+    case .awaitExpr:
+      return "'await' expression"
+    case .moveExpr:
+      return "'_move' expression"
+    case .declNameArgument:
+      return nil
+    case .declNameArgumentList:
+      return nil
+    case .declNameArguments:
+      return nil
+    case .identifierExpr:
+      return nil
+    case .superRefExpr:
+      return nil
+    case .nilLiteralExpr:
+      return nil
+    case .discardAssignmentExpr:
+      return nil
+    case .assignmentExpr:
+      return nil
+    case .sequenceExpr:
+      return nil
+    case .exprList:
+      return nil
+    case .poundLineExpr:
+      return nil
+    case .poundFileExpr:
+      return nil
+    case .poundFileIDExpr:
+      return nil
+    case .poundFilePathExpr:
+      return nil
+    case .poundFunctionExpr:
+      return nil
+    case .poundDsohandleExpr:
+      return nil
+    case .symbolicReferenceExpr:
+      return nil
+    case .prefixOperatorExpr:
+      return "prefix operator expression"
+    case .binaryOperatorExpr:
+      return nil
+    case .arrowExpr:
+      return nil
+    case .infixOperatorExpr:
+      return nil
+    case .floatLiteralExpr:
+      return "floating literal"
+    case .tupleExpr:
+      return "tuple"
+    case .arrayExpr:
+      return "array"
+    case .dictionaryExpr:
+      return "dictionary"
+    case .tupleExprElement:
+      return nil
+    case .arrayElement:
+      return "array element"
+    case .dictionaryElement:
+      return "dictionary element"
+    case .integerLiteralExpr:
+      return "integer literal"
+    case .booleanLiteralExpr:
+      return "bool literal"
+    case .unresolvedTernaryExpr:
+      return nil
+    case .ternaryExpr:
+      return "ternay expression"
+    case .memberAccessExpr:
+      return "member access"
+    case .unresolvedIsExpr:
+      return nil
+    case .isExpr:
+      return "'is' expression"
+    case .unresolvedAsExpr:
+      return nil
+    case .asExpr:
+      return "'as' expression"
+    case .typeExpr:
+      return nil
+    case .closureCaptureItem:
+      return "closure capture item"
+    case .closureCaptureItemList:
+      return nil
+    case .closureCaptureSignature:
+      return "closure capture signature"
+    case .closureParam:
+      return "closure parameter"
+    case .closureParamList:
+      return nil
+    case .closureSignature:
+      return "closure signature"
+    case .closureExpr:
+      return "closure"
+    case .unresolvedPatternExpr:
+      return nil
+    case .multipleTrailingClosureElement:
+      return "trailing closure"
+    case .multipleTrailingClosureElementList:
+      return nil
+    case .functionCallExpr:
+      return "function call"
+    case .subscriptExpr:
+      return "subscript"
+    case .optionalChainingExpr:
+      return "optional chaining"
+    case .forcedValueExpr:
+      return "force unwrap"
+    case .postfixUnaryExpr:
+      return "postfix expression"
+    case .specializeExpr:
+      return nil
+    case .stringSegment:
+      return nil
+    case .expressionSegment:
+      return nil
+    case .stringLiteralExpr:
+      return "string literal"
+    case .regexLiteralExpr:
+      return "regex literal"
+    case .keyPathExpr:
+      return "key path"
+    case .keyPathComponentList:
+      return nil
+    case .keyPathComponent:
+      return "key path component"
+    case .keyPathPropertyComponent:
+      return "key path property component"
+    case .keyPathSubscriptComponent:
+      return "key path subscript component"
+    case .keyPathOptionalComponent:
+      return "key path optional component"
+    case .oldKeyPathExpr:
+      return "key path"
+    case .keyPathBaseExpr:
+      return nil
+    case .objcNamePiece:
+      return nil
+    case .objcName:
+      return nil
+    case .objcKeyPathExpr:
+      return "'#keyPath' expression"
+    case .objcSelectorExpr:
+      return "'#selector' expression"
+    case .macroExpansionExpr:
+      return "pound literal expression"
+    case .postfixIfConfigExpr:
+      return nil
+    case .editorPlaceholderExpr:
+      return "editor placeholder"
+    case .objectLiteralExpr:
+      return "object literal"
+    case .yieldExprList:
+      return "yield list"
+    case .yieldExprListElement:
+      return nil
+    case .typeInitializerClause:
+      return nil
+    case .typealiasDecl:
+      return "typealias declaration"
+    case .associatedtypeDecl:
+      return "associatedtype declaration"
+    case .functionParameterList:
+      return "parameter list"
+    case .parameterClause:
+      return "parameter clause"
+    case .returnClause:
+      return nil
+    case .functionSignature:
+      return "function signature"
+    case .ifConfigClause:
+      return "conditional compilation clause"
+    case .ifConfigClauseList:
+      return nil
+    case .ifConfigDecl:
+      return "conditional compilation block"
+    case .poundErrorDecl:
+      return "'#error' directive"
+    case .poundWarningDecl:
+      return "'#warning' directive"
+    case .poundSourceLocation:
+      return "'#sourceLocation' directive"
+    case .poundSourceLocationArgs:
+      return "'#sourceLocation' arguments"
+    case .declModifierDetail:
+      return nil
+    case .declModifier:
+      return "modifier"
+    case .inheritedType:
+      return "type"
+    case .inheritedTypeList:
+      return nil
+    case .typeInheritanceClause:
+      return "inheritance clause"
+    case .classDecl:
+      return "class"
+    case .actorDecl:
+      return "actor"
+    case .structDecl:
+      return "struct"
+    case .protocolDecl:
+      return "protocol"
+    case .extensionDecl:
+      return "extension"
+    case .memberDeclBlock:
+      return "member block"
+    case .memberDeclList:
+      return nil
+    case .memberDeclListItem:
+      return nil
+    case .sourceFile:
+      return "source file"
+    case .initializerClause:
+      return nil
+    case .functionParameter:
+      return "parameter"
+    case .modifierList:
+      return nil
+    case .functionDecl:
+      return "function"
+    case .initializerDecl:
+      return "initializer"
+    case .deinitializerDecl:
+      return "deinitializer"
+    case .subscriptDecl:
+      return "subscript"
+    case .accessLevelModifier:
+      return "access level modifier"
+    case .accessPathComponent:
+      return nil
+    case .accessPath:
+      return nil
+    case .importDecl:
+      return "import"
+    case .accessorParameter:
+      return nil
+    case .accessorDecl:
+      return "accessor"
+    case .accessorList:
+      return nil
+    case .accessorBlock:
+      return nil
+    case .patternBinding:
+      return nil
+    case .patternBindingList:
+      return nil
+    case .variableDecl:
+      return "variable"
+    case .enumCaseElement:
+      return nil
+    case .enumCaseElementList:
+      return nil
+    case .enumCaseDecl:
+      return "enum case"
+    case .enumDecl:
+      return "enum"
+    case .operatorDecl:
+      return "operator declaration"
+    case .designatedTypeList:
+      return nil
+    case .designatedTypeElement:
+      return nil
+    case .operatorPrecedenceAndTypes:
+      return nil
+    case .precedenceGroupDecl:
+      return "precedencegroup"
+    case .precedenceGroupAttributeList:
+      return nil
+    case .precedenceGroupRelation:
+      return "'relation' property of precedencegroup"
+    case .precedenceGroupNameList:
+      return nil
+    case .precedenceGroupNameElement:
+      return nil
+    case .precedenceGroupAssignment:
+      return "'assignment' property of precedencegroup"
+    case .precedenceGroupAssociativity:
+      return "'associativity' property of precedencegroup"
+    case .macroExpansionDecl:
+      return "pound literal declaration"
+    case .tokenList:
+      return "token list"
+    case .nonEmptyTokenList:
+      return "token list"
+    case .customAttribute:
+      return "attribute"
+    case .attribute:
+      return "attribute"
+    case .attributeList:
+      return "attributes"
+    case .specializeAttributeSpecList:
+      return "argument to '@_specialize"
+    case .availabilityEntry:
+      return "availability entry"
+    case .labeledSpecializeEntry:
+      return "attribute argument"
+    case .targetFunctionEntry:
+      return "attribute argument"
+    case .namedAttributeStringArgument:
+      return "attribute argument"
+    case .declName:
+      return "declaration name"
+    case .implementsAttributeArguments:
+      return "@_implements arguemnts"
+    case .objCSelectorPiece:
+      return "Objective-C selector piece"
+    case .objCSelector:
+      return "Objective-C selector"
+    case .differentiableAttributeArguments:
+      return "'@differentiable' arguments"
+    case .differentiabilityParamsClause:
+      return "'@differentiable' argument"
+    case .differentiabilityParams:
+      return "differentiability parameters"
+    case .differentiabilityParamList:
+      return "differentiability parameters"
+    case .differentiabilityParam:
+      return "differentiability parameter"
+    case .derivativeRegistrationAttributeArguments:
+      return "attribute arguments"
+    case .qualifiedDeclName:
+      return "declaration name"
+    case .functionDeclName:
+      return "function declaration name"
+    case .backDeployAttributeSpecList:
+      return "'@_backDeploy' arguments"
+    case .backDeployVersionList:
+      return "version list"
+    case .backDeployVersionArgument:
+      return "version"
+    case .opaqueReturnTypeOfAttributeArguments:
+      return "opaque return type arguments"
+    case .conventionAttributeArguments:
+      return "@convention(...) arguments"
+    case .conventionWitnessMethodAttributeArguments:
+      return "@convention(...) arguments for witness methods"
+    case .labeledStmt:
+      return "labeled statement"
+    case .continueStmt:
+      return "'continue' statement"
+    case .whileStmt:
+      return "'while' statement"
+    case .deferStmt:
+      return "'defer' statement"
+    case .expressionStmt:
+      return "expression"
+    case .switchCaseList:
+      return nil
+    case .repeatWhileStmt:
+      return "'repeat' statement"
+    case .guardStmt:
+      return "'guard' statement"
+    case .whereClause:
+      return "'where' clause"
+    case .forInStmt:
+      return "'for' statement"
+    case .switchStmt:
+      return "'switch' statement"
+    case .catchClauseList:
+      return "'catch' clause"
+    case .doStmt:
+      return "'do' statement"
+    case .returnStmt:
+      return "'return' statement"
+    case .yieldStmt:
+      return "'yield' statement"
+    case .yieldList:
+      return nil
+    case .fallthroughStmt:
+      return "'fallthrough' statement"
+    case .breakStmt:
+      return "'break' statement"
+    case .caseItemList:
+      return nil
+    case .catchItemList:
+      return nil
+    case .conditionElement:
+      return nil
+    case .availabilityCondition:
+      return "'#availabile' condition"
+    case .matchingPatternCondition:
+      return "pattern matching"
+    case .optionalBindingCondition:
+      return "optional binding"
+    case .unavailabilityCondition:
+      return "'#unavailable' condition"
+    case .hasSymbolCondition:
+      return "'#_hasSymbol' condition"
+    case .conditionElementList:
+      return nil
+    case .declarationStmt:
+      return "declaration"
+    case .throwStmt:
+      return "'throw' statement"
+    case .ifStmt:
+      return "'if' statement"
+    case .switchCase:
+      return "switch case"
+    case .switchDefaultLabel:
+      return nil
+    case .caseItem:
+      return nil
+    case .catchItem:
+      return nil
+    case .switchCaseLabel:
+      return nil
+    case .catchClause:
+      return "'catch' clause"
+    case .poundAssertStmt:
+      return "'#assert' directive"
+    case .genericWhereClause:
+      return "'where' clause"
+    case .genericRequirementList:
+      return nil
+    case .genericRequirement:
+      return nil
+    case .sameTypeRequirement:
+      return "same type requirement"
+    case .layoutRequirement:
+      return "layout requirement"
+    case .genericParameterList:
+      return nil
+    case .genericParameter:
+      return "generic parameter"
+    case .primaryAssociatedTypeList:
+      return nil
+    case .primaryAssociatedType:
+      return nil
+    case .genericParameterClause:
+      return "generic parameter clause"
+    case .conformanceRequirement:
+      return "conformance requirement"
+    case .primaryAssociatedTypeClause:
+      return "primary associated type clause"
+    case .simpleTypeIdentifier:
+      return "type"
+    case .memberTypeIdentifier:
+      return "member type"
+    case .classRestrictionType:
+      return nil
+    case .arrayType:
+      return "array type"
+    case .dictionaryType:
+      return "dictionary type"
+    case .metatypeType:
+      return "metatype"
+    case .optionalType:
+      return "optional type"
+    case .constrainedSugarType:
+      return "type"
+    case .implicitlyUnwrappedOptionalType:
+      return "implicitly unwrapped optional type"
+    case .compositionTypeElement:
+      return nil
+    case .compositionTypeElementList:
+      return nil
+    case .compositionType:
+      return "type composition"
+    case .packExpansionType:
+      return "variadic expansion"
+    case .tupleTypeElement:
+      return nil
+    case .tupleTypeElementList:
+      return nil
+    case .tupleType:
+      return "tuple type"
+    case .functionType:
+      return "function type"
+    case .attributedType:
+      return "type"
+    case .genericArgumentList:
+      return nil
+    case .genericArgument:
+      return "generic argument"
+    case .genericArgumentClause:
+      return "generic argument clause"
+    case .namedOpaqueReturnType:
+      return "named opaque return type"
+    case .typeAnnotation:
+      return "type annotation"
+    case .enumCasePattern:
+      return "enum case pattern"
+    case .isTypePattern:
+      return "'is' pattern"
+    case .optionalPattern:
+      return "optional pattern"
+    case .identifierPattern:
+      return "pattern"
+    case .asTypePattern:
+      return "'as' pattern"
+    case .tuplePattern:
+      return "tuple pattern"
+    case .wildcardPattern:
+      return "wildcard pattern"
+    case .tuplePatternElement:
+      return nil
+    case .expressionPattern:
+      return "pattern"
+    case .tuplePatternElementList:
+      return nil
+    case .valueBindingPattern:
+      return "value binding pattern"
+    case .availabilitySpecList:
+      return "'@availability' arguments"
+    case .availabilityArgument:
+      return "'@available' argument"
+    case .availabilityLabeledArgument:
+      return "'@available' argument"
+    case .availabilityVersionRestriction:
+      return "'@available' argument"
+    case .versionTuple:
+      return "version tuple"
     }
   }
 }

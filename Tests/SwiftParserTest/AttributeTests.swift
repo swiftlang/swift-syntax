@@ -47,7 +47,7 @@ final class AttributeTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end attribute", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
-        @differentiable(reverse wrt: <#syntax#>,where T = <#type#>)
+        @differentiable(reverse wrt: <#identifier#>,where T = <#type#>)
         func podcastPlaybackSpeed() {
         }
         """

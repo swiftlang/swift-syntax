@@ -192,7 +192,9 @@ public let DECL_NODES: [Node] = [
                  Child(name: "Decls",
                        kind: "MemberDeclList"),
                  Child(name: "PostfixExpression",
-                       kind: "Expr")
+                       kind: "Expr"),
+                 Child(name: "Attributes",
+                       kind: "AttributeList")
                ])
        ]),
 

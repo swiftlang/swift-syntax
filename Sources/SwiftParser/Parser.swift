@@ -26,11 +26,16 @@ extension Parser {
   }
 
   /// Parse the source code in the given string as Swift source file.
+  /// If `maximumNestingLevel` is set, the parser will stop if a nesting level
+  /// that is greater than this value is reached to avoid overflowing the stack.
+  /// The nesting level is increased whenever a bracketed expression like `(`
+  /// or `{` is stared.
   public static func parse(
     source: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil
   ) -> SourceFileSyntax {
-    var parser = Parser(source)
+    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel)
     // Extended lifetime is required because `SyntaxArena` in the parser must
     // be alive until `Syntax(raw:)` retains the arena.
     return withExtendedLifetime(parser) {
@@ -122,6 +127,23 @@ public struct Parser: TokenConsumer {
   @_spi(RawSyntax)
   public var currentToken: Lexer.Lexeme
 
+  /// The current nesting level, i.e. the number of tokens that
+  /// `startNestingLevel` minus the number of tokens that `endNestingLevel`
+  /// which have been consumed so far.
+  public var nestingLevel: Int = 0
+
+  /// When this nesting level is exceeded, the parser should stop parsing.
+  public let maximumNestingLevel: Int
+
+  /// A default maximum nesting level that is used if the client didn't
+  /// explicitly specify one. Debug builds of the parser comume a lot more stack
+  /// space and thus have a lower default maximum nesting level.
+  #if DEBUG
+  public static let defaultMaximumNestingLevel = 25
+  #else
+  public static let defaultMaximumNestingLevel = 256
+  #endif
+
   /// Initializes a Parser from the given input buffer.
   ///
   /// The lexer will copy any string data it needs from the resulting buffer
@@ -133,7 +155,9 @@ public struct Parser: TokenConsumer {
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be the registered source
   ///            buffer of `arena` or a slice of the source buffer.
-  public init(_ input: UnsafeBufferPointer<UInt8>, arena: SyntaxArena? = nil) {
+  public init(_ input: UnsafeBufferPointer<UInt8>, maximumNestingLevel: Int? = nil, arena: SyntaxArena? = nil) {
+    self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
+
     var sourceBuffer: UnsafeBufferPointer<UInt8>
     if let arena = arena {
       self.arena = arena
@@ -150,6 +174,7 @@ public struct Parser: TokenConsumer {
 
   @_spi(RawSyntax)
   public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText? = nil) -> RawTokenSyntax {
+    adjustNestingLevel(for: kind)
     return RawTokenSyntax(missing: kind, text: text, arena: self.arena)
   }
 
@@ -158,6 +183,12 @@ public struct Parser: TokenConsumer {
   /// - Returns: The token that was consumed.
   @_spi(RawSyntax)
   public mutating func consumeAnyToken() -> RawTokenSyntax {
+    adjustNestingLevel(for: self.currentToken.tokenKind)
+    return self.consumeAnyTokenWithoutAdjustingNestingLevel()
+  }
+
+  @_spi(RawSyntax)
+  public mutating func consumeAnyTokenWithoutAdjustingNestingLevel() -> RawTokenSyntax {
     let tok = self.currentToken
     self.currentToken = self.lexemes.advance()
     return RawTokenSyntax(
@@ -167,6 +198,17 @@ public struct Parser: TokenConsumer {
       presence: .present,
       arena: arena
     )
+  }
+
+  private mutating func adjustNestingLevel(for tokenKind: RawTokenKind) {
+    switch tokenKind {
+    case .leftAngle, .leftBrace, .leftParen, .leftSquareBracket, .poundIfKeyword:
+      nestingLevel += 1
+    case .rightAngle, .rightBrace, .rightParen, .rightSquareBracket, .poundEndifKeyword:
+      nestingLevel -= 1
+    default:
+      break
+    }
   }
 }
 
@@ -263,13 +305,14 @@ extension Parser {
   /// If so, return the token that we can recover to and a handle that can be
   /// used to consume the unexpected tokens and the token we recovered to.
   func canRecoverTo<Subset: RawTokenKindSubset>(
-    anyIn subset: Subset.Type
+    anyIn subset: Subset.Type,
+    recoveryPrecedence: TokenPrecedence? = nil
   ) -> (Subset, RecoveryConsumptionHandle)? {
     if let (kind, handle) = self.at(anyIn: subset) {
       return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
     }
     var lookahead = self.lookahead()
-    return lookahead.canRecoverTo(anyIn: subset)
+    return lookahead.canRecoverTo(anyIn: subset, recoveryPrecedence: recoveryPrecedence)
   }
 
   /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.
@@ -278,7 +321,7 @@ extension Parser {
     if handle.unexpectedTokens > 0 {
       var unexpectedTokens = [RawSyntax]()
       for _ in 0..<handle.unexpectedTokens {
-        unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
+        unexpectedTokens.append(RawSyntax(self.consumeAnyTokenWithoutAdjustingNestingLevel()))
       }
       unexpectedNodes = RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena)
     } else {
@@ -510,6 +553,8 @@ extension Parser {
       presence: .present,
       arena: self.arena
     )
+
+    self.adjustNestingLevel(for: tokenKind)
 
     // ... or a multi-character token with the first N characters being the one
     // that we want to consume as a separate token.

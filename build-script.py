@@ -17,6 +17,7 @@ PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.dirname(PACKAGE_DIR)
 EXAMPLES_DIR = os.path.join(PACKAGE_DIR, "Examples")
 SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
+IDEUTILS_DIR = os.path.join(SOURCES_DIR, "IDEUtils")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAX_DOCUMENTATION_DIR = \
         os.path.join(SWIFTSYNTAX_DIR, "Documentation.docc")
@@ -300,6 +301,7 @@ def generate_syntax_node_template_gyb_files(
 def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
     source_dirs = [
         SYNTAXSUPPORT_DIR,
+        IDEUTILS_DIR,
         SWIFTSYNTAX_DIR,
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAXBUILDER_DIR,

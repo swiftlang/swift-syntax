@@ -12,9 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: SyntaxProtocol, Sequence {
+public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {
   /// The number of elements, `present` or `missing`, in this collection.
   var count: Int { get }
+}
+
+public extension SyntaxCollection {
+  static var structure: SyntaxNodeStructure {
+    return .collection(Element.self)
+  }
 }
 
 
@@ -27,7 +33,8 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -277,7 +284,8 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -527,7 +535,8 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -777,7 +786,8 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -1027,7 +1037,8 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -1300,11 +1311,19 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
       }
       return nil
     }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(StringSegmentSyntax.self),
+        .node(ExpressionSegmentSyntax.self),
+      ])
+    }
   }
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -1554,7 +1573,8 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -1804,7 +1824,8 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -2054,7 +2075,8 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -2304,7 +2326,8 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -2554,7 +2577,8 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -2804,7 +2828,8 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -3054,7 +3079,8 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -3304,7 +3330,8 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -3554,7 +3581,8 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -3804,7 +3832,8 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -4054,7 +4083,8 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -4304,7 +4334,8 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -4554,7 +4585,8 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -4804,7 +4836,8 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -5054,7 +5087,8 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -5304,7 +5338,8 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -5551,7 +5586,8 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -5801,7 +5837,8 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -6083,11 +6120,20 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       }
       return nil
     }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(PrecedenceGroupRelationSyntax.self),
+        .node(PrecedenceGroupAssignmentSyntax.self),
+        .node(PrecedenceGroupAssociativitySyntax.self),
+      ])
+    }
   }
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -6337,7 +6383,8 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -6587,7 +6634,8 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -6837,7 +6885,8 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -7086,10 +7135,12 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `attribute`(AttributeSyntax)
     case `customAttribute`(CustomAttributeSyntax)
+    case `ifConfigDecl`(IfConfigDeclSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .attribute(let node): return node._syntaxNode
       case .customAttribute(let node): return node._syntaxNode
+      case .ifConfigDecl(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -7098,6 +7149,9 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     }
     public init(_ node: CustomAttributeSyntax) {
       self = .customAttribute(node)
+    }
+    public init(_ node: IfConfigDeclSyntax) {
+      self = .ifConfigDecl(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
       if let node = syntaxNode.as(AttributeSyntax.self) {
@@ -7108,13 +7162,26 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
         self = .customAttribute(node)
         return
       }
+      if let node = syntaxNode.as(IfConfigDeclSyntax.self) {
+        self = .ifConfigDecl(node)
+        return
+      }
       return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(AttributeSyntax.self),
+        .node(CustomAttributeSyntax.self),
+        .node(IfConfigDeclSyntax.self),
+      ])
     }
   }
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -7404,11 +7471,21 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
       }
       return nil
     }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(LabeledSpecializeEntrySyntax.self),
+        .node(AvailabilityEntrySyntax.self),
+        .node(TargetFunctionEntrySyntax.self),
+        .node(GenericWhereClauseSyntax.self),
+      ])
+    }
   }
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -7658,7 +7735,8 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -7908,7 +7986,8 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -8158,7 +8237,8 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -8431,11 +8511,19 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       }
       return nil
     }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(SwitchCaseSyntax.self),
+        .node(IfConfigDeclSyntax.self),
+      ])
+    }
   }
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -8685,7 +8773,8 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -8935,7 +9024,8 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -9185,7 +9275,8 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -9435,7 +9526,8 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -9685,7 +9777,8 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -9935,7 +10028,8 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -10185,7 +10279,8 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -10435,7 +10530,8 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -10685,7 +10781,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -10935,7 +11032,8 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -11185,7 +11283,8 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
@@ -11435,7 +11534,8 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  var layoutView: RawSyntaxLayoutView {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 

@@ -54,9 +54,9 @@ ATTRIBUTE_NODES = [
                    '''),
              Child('Argument', kind='Syntax', is_optional=True,
                    node_choices=[
-                       Child('Identifier', kind='IdentifierToken'),
-                       Child('String', kind='StringLiteralToken'),
-                       Child('Integer', kind='IntegerLiteralToken'),
+                       Child('Token', kind='Token', 
+                             token_choices=['IdentifierToken', 'StringLiteralToken', 'IntegerLiteralToken']),
+                       Child('StringExpr', kind='StringLiteralExpr'),
                        Child('Availability', kind='AvailabilitySpecList'),
                        Child('SpecializeArguments',
                              kind='SpecializeAttributeSpecList'),
@@ -74,7 +74,9 @@ ATTRIBUTE_NODES = [
                        Child('ConventionArguments',
                              kind='ConventionAttributeArguments'),
                        Child('ConventionWitnessMethodArguments',
-                             kind='ConventionWitnessMethodAttributeArguments'),
+                             kind='ConventionWitnessMethodAttributeArguments'), 
+                       Child('OpaqueReturnTypeOfAttributeArguments',
+                             kind='OpaqueReturnTypeOfAttributeArguments'),
                        # TokenList for custom effects which are parsed by
                        # `FunctionEffects.parse()` in swift.
                        Child('TokenList', kind='TokenList',
@@ -101,6 +103,7 @@ ATTRIBUTE_NODES = [
          element_choices=[
              'Attribute',
              'CustomAttribute',
+             'IfConfigDecl',
          ]),
 
     # The argument of '@_specialize(...)'
@@ -199,13 +202,11 @@ ATTRIBUTE_NODES = [
              ]),
          ]),
     Node('DeclName', name_for_diagnostics='declaration name', kind='Syntax', children=[
-         Child('DeclBaseName', kind='Syntax', name_for_diagnostics='base name', description='''
+         Child('DeclBaseName', kind='Token', name_for_diagnostics='base name', 
+               token_choices=['IdentifierToken', 'PrefixOperatorToken'],
+               description='''
                The base name of the protocol\'s requirement.
-               ''',
-               node_choices=[
-                   Child('Identifier', kind='IdentifierToken'),
-                   Child('Operator', kind='PrefixOperatorToken'),
-               ]),
+               '''),
          Child('DeclNameArguments', kind='DeclNameArguments', name_for_diagnostics='arguments',
                is_optional=True, description='''
                The argument labels of the protocol\'s requirement if it
@@ -329,12 +330,7 @@ ATTRIBUTE_NODES = [
          ''',
          traits=['WithTrailingComma'],
          children=[
-             Child('Parameter', kind='Syntax',
-                   node_choices=[
-                       Child('Self', kind='SelfToken'),
-                       Child('Name', kind='IdentifierToken'),
-                       Child('Index', kind='IntegerLiteralToken'),
-                   ]),
+             Child('Parameter', kind='Token', token_choices=['SelfToken', 'IdentifierToken', 'IntegerLiteralToken']),
              Child('TrailingComma', kind='CommaToken', is_optional=True),
          ]),
 
@@ -422,15 +418,11 @@ ATTRIBUTE_NODES = [
          name_for_diagnostics='function declaration name',
          description='A function declaration name (e.g. `foo(_:_:)`).',
          children=[
-             Child('Name', kind='Syntax', name_for_diagnostics='base name', description='''
+             Child('Name', kind='Token', name_for_diagnostics='base name', 
+                  token_choices=['IdentifierToken', 'PrefixOperatorToken', 'SpacedBinaryOperatorToken'],
+                   description='''
                    The base name of the referenced function.
-                   ''',
-                   node_choices=[
-                       Child('Identifier', kind='IdentifierToken'),
-                       Child('PrefixOperator', kind='PrefixOperatorToken'),
-                       Child('SpacedBinaryOperator',
-                             kind='SpacedBinaryOperatorToken'),
-                   ]),
+                   '''),
              Child('Arguments', name_for_diagnostics='arguments', kind='DeclNameArguments',
                    is_optional=True, description='''
                    The argument labels of the referenced function, optionally

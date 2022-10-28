@@ -38,6 +38,10 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
@@ -55,7 +59,8 @@ extension UnknownSyntax: CustomReflectable {
 public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  var tokenView: RawSyntaxTokenView {
+  @_spi(RawSyntax)
+  public var tokenView: RawSyntaxTokenView {
     return raw.tokenView!
   }
 
@@ -100,7 +105,6 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return tokenKind.text
   }
 
-  @_spi(RawSyntax)
   public var rawTokenKind: RawTokenKind {
     return tokenView.rawKind
   }
@@ -198,6 +202,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The length of this node including all of its trivia.
   public var totalLength: SourceLength {
     return raw.totalLength
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {

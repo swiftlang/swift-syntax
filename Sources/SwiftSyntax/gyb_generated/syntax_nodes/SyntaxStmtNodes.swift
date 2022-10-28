@@ -43,6 +43,11 @@ public struct UnknownStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     default:
@@ -86,6 +91,11 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -291,6 +301,18 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return LabeledStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeLabelName,
+      \Self.labelName,
+      \Self.unexpectedBetweenLabelNameAndLabelColon,
+      \Self.labelColon,
+      \Self.unexpectedBetweenLabelColonAndStatement,
+      \Self.statement,
+      \Self.unexpectedAfterStatement,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -469,6 +491,16 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return ContinueStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeContinueKeyword,
+      \Self.continueKeyword,
+      \Self.unexpectedBetweenContinueKeywordAndLabel,
+      \Self.label,
+      \Self.unexpectedAfterLabel,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -707,6 +739,18 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return WhileStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeWhileKeyword,
+      \Self.whileKeyword,
+      \Self.unexpectedBetweenWhileKeywordAndConditions,
+      \Self.conditions,
+      \Self.unexpectedBetweenConditionsAndBody,
+      \Self.body,
+      \Self.unexpectedAfterBody,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -886,6 +930,16 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return DeferStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeDeferKeyword,
+      \Self.deferKeyword,
+      \Self.unexpectedBetweenDeferKeywordAndBody,
+      \Self.body,
+      \Self.unexpectedAfterBody,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -1012,6 +1066,14 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
     return ExpressionStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeExpression,
+      \Self.expression,
+      \Self.unexpectedAfterExpression,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1269,6 +1331,20 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 8)
     return RepeatWhileStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeRepeatKeyword,
+      \Self.repeatKeyword,
+      \Self.unexpectedBetweenRepeatKeywordAndBody,
+      \Self.body,
+      \Self.unexpectedBetweenBodyAndWhileKeyword,
+      \Self.whileKeyword,
+      \Self.unexpectedBetweenWhileKeywordAndCondition,
+      \Self.condition,
+      \Self.unexpectedAfterCondition,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1562,6 +1638,20 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 8)
     return GuardStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeGuardKeyword,
+      \Self.guardKeyword,
+      \Self.unexpectedBetweenGuardKeywordAndConditions,
+      \Self.conditions,
+      \Self.unexpectedBetweenConditionsAndElseKeyword,
+      \Self.elseKeyword,
+      \Self.unexpectedBetweenElseKeywordAndBody,
+      \Self.body,
+      \Self.unexpectedAfterBody,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2114,6 +2204,32 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return ForInStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeForKeyword,
+      \Self.forKeyword,
+      \Self.unexpectedBetweenForKeywordAndTryKeyword,
+      \Self.tryKeyword,
+      \Self.unexpectedBetweenTryKeywordAndAwaitKeyword,
+      \Self.awaitKeyword,
+      \Self.unexpectedBetweenAwaitKeywordAndCaseKeyword,
+      \Self.caseKeyword,
+      \Self.unexpectedBetweenCaseKeywordAndPattern,
+      \Self.pattern,
+      \Self.unexpectedBetweenPatternAndTypeAnnotation,
+      \Self.typeAnnotation,
+      \Self.unexpectedBetweenTypeAnnotationAndInKeyword,
+      \Self.inKeyword,
+      \Self.unexpectedBetweenInKeywordAndSequenceExpr,
+      \Self.sequenceExpr,
+      \Self.unexpectedBetweenSequenceExprAndWhereClause,
+      \Self.whereClause,
+      \Self.unexpectedBetweenWhereClauseAndBody,
+      \Self.body,
+      \Self.unexpectedAfterBody,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2488,6 +2604,22 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return SwitchStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeSwitchKeyword,
+      \Self.switchKeyword,
+      \Self.unexpectedBetweenSwitchKeywordAndExpression,
+      \Self.expression,
+      \Self.unexpectedBetweenExpressionAndLeftBrace,
+      \Self.leftBrace,
+      \Self.unexpectedBetweenLeftBraceAndCases,
+      \Self.cases,
+      \Self.unexpectedBetweenCasesAndRightBrace,
+      \Self.rightBrace,
+      \Self.unexpectedAfterRightBrace,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2743,6 +2875,18 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return DoStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeDoKeyword,
+      \Self.doKeyword,
+      \Self.unexpectedBetweenDoKeywordAndBody,
+      \Self.body,
+      \Self.unexpectedBetweenBodyAndCatchClauses,
+      \Self.catchClauses,
+      \Self.unexpectedAfterCatchClauses,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2923,6 +3067,16 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return ReturnStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeReturnKeyword,
+      \Self.returnKeyword,
+      \Self.unexpectedBetweenReturnKeywordAndExpression,
+      \Self.expression,
+      \Self.unexpectedAfterExpression,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -2982,6 +3136,13 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
         return
       }
       return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(YieldListSyntax.self),
+        .node(ExprSyntax.self),
+      ])
     }
   }
 
@@ -3125,6 +3286,16 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return YieldStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeYieldKeyword,
+      \Self.yieldKeyword,
+      \Self.unexpectedBetweenYieldKeywordAndYields,
+      \Self.yields,
+      \Self.unexpectedAfterYields,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3251,6 +3422,14 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
     return FallthroughStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeFallthroughKeyword,
+      \Self.fallthroughKeyword,
+      \Self.unexpectedAfterFallthroughKeyword,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3421,6 +3600,16 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return BreakStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeBreakKeyword,
+      \Self.breakKeyword,
+      \Self.unexpectedBetweenBreakKeywordAndLabel,
+      \Self.label,
+      \Self.unexpectedAfterLabel,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3547,6 +3736,14 @@ public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 2)
     return DeclarationStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeDeclaration,
+      \Self.declaration,
+      \Self.unexpectedAfterDeclaration,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3716,6 +3913,16 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return ThrowStmtSyntax(newData)
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeThrowKeyword,
+      \Self.throwKeyword,
+      \Self.unexpectedBetweenThrowKeywordAndExpression,
+      \Self.expression,
+      \Self.unexpectedAfterExpression,
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     switch index.data?.indexInParent {
     case 0:
@@ -3775,6 +3982,13 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
         return
       }
       return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(IfStmtSyntax.self),
+        .node(CodeBlockSyntax.self),
+      ])
     }
   }
 
@@ -4071,6 +4285,22 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 10)
     return IfStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeIfKeyword,
+      \Self.ifKeyword,
+      \Self.unexpectedBetweenIfKeywordAndConditions,
+      \Self.conditions,
+      \Self.unexpectedBetweenConditionsAndBody,
+      \Self.body,
+      \Self.unexpectedBetweenBodyAndElseKeyword,
+      \Self.elseKeyword,
+      \Self.unexpectedBetweenElseKeywordAndElseBody,
+      \Self.elseBody,
+      \Self.unexpectedAfterElseBody,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -4447,6 +4677,24 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 12)
     return PoundAssertStmtSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforePoundAssert,
+      \Self.poundAssert,
+      \Self.unexpectedBetweenPoundAssertAndLeftParen,
+      \Self.leftParen,
+      \Self.unexpectedBetweenLeftParenAndCondition,
+      \Self.condition,
+      \Self.unexpectedBetweenConditionAndComma,
+      \Self.comma,
+      \Self.unexpectedBetweenCommaAndMessage,
+      \Self.message,
+      \Self.unexpectedBetweenMessageAndRightParen,
+      \Self.rightParen,
+      \Self.unexpectedAfterRightParen,
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {

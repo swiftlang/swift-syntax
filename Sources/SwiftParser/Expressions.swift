@@ -1757,6 +1757,16 @@ extension Parser {
   ///     dictionary-literal-items → dictionary-literal-item ','? | dictionary-literal-item ',' dictionary-literal-items
   @_spi(RawSyntax)
   public mutating func parseCollectionLiteral() -> RawExprSyntax {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawExprSyntax(RawArrayExprSyntax(
+        remainingTokens,
+        leftSquare: missingToken(.leftSquareBracket),
+        elements: RawArrayElementListSyntax(elements: [], arena: self.arena),
+        rightSquare: missingToken(.rightSquareBracket),
+        arena: self.arena
+      ))
+    }
+
     let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquareBracket)
 
     if let rsquare = self.consume(if: .rightSquareBracket) {
@@ -2177,6 +2187,17 @@ extension Parser {
   ///     tuple-element → expression | identifier ':' expression
   @_spi(RawSyntax)
   public mutating func parseArgumentListElements(pattern: PatternContext) -> [RawTupleExprElementSyntax] {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return [RawTupleExprElementSyntax(
+        remainingTokens,
+        label: nil,
+        colon: nil,
+        expression: RawExprSyntax(RawMissingExprSyntax(arena: self.arena)),
+        trailingComma: nil,
+        arena: self.arena
+      )]
+    }
+
     guard !self.at(.rightParen) else {
       return []
     }

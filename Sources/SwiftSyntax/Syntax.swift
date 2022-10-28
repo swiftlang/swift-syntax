@@ -278,6 +278,10 @@ public extension SyntaxProtocol {
     return raw.recursiveFlags.contains(.hasSequenceExpr)
   }
 
+  var hasMaximumNestingLevelOverflow: Bool {
+    return raw.recursiveFlags.contains(.hasMaximumNestingLevelOverflow)
+  }
+
   /// The parent of this syntax node, or `nil` if this node is the root.
   var parent: Syntax? {
     return data.parent.map(Syntax.init(_:))

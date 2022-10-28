@@ -393,6 +393,16 @@ extension Parser {
   ///     element-name → identifier
   @_spi(RawSyntax)
   public mutating func parseTupleTypeBody() -> RawTupleTypeSyntax {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawTupleTypeSyntax(
+        remainingTokens,
+        leftParen: missingToken(.leftParen),
+        elements: RawTupleTypeElementListSyntax(elements: [], arena: self.arena),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+    }
+
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawTupleTypeElementSyntax]()
     do {
@@ -502,6 +512,16 @@ extension Parser {
   ///     dictionary-type → '[' type ':' type ']'
   @_spi(RawSyntax)
   public mutating func parseCollectionType() -> RawTypeSyntax {
+    if let remaingingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawTypeSyntax(RawArrayTypeSyntax(
+        remaingingTokens,
+        leftSquareBracket: missingToken(.leftSquareBracket),
+        elementType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+        rightSquareBracket: missingToken(.rightSquareBracket),
+        arena: self.arena
+      ))
+    }
+
     let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquareBracket)
     let firstType = self.parseType()
     if let colon = self.consume(if: .colon) {

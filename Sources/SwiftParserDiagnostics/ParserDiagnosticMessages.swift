@@ -143,6 +143,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var standaloneSemicolonStatement: Self {
     .init("standalone ';' statements are not allowed")
   }
+  public static var maximumNestingLevelOverflow: Self {
+    .init("parsing has exceeded the maximum nesting level")
+  }
   public static var subscriptsCannotHaveNames: Self {
     .init("subscripts cannot have a name")
   }

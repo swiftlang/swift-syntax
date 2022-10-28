@@ -817,7 +817,6 @@ DECL_MODIFIER_KINDS = [
     ContextualDeclAttributeAlias('open', 'AccessControl'),
     DeclAttribute('__setter_access', 'SetterAccess',
                   OnVar,  OnSubscript,
-                  UserInaccessible,
                   DeclModifier,  RejectByParser,
                   NotSerialized,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,

@@ -320,7 +320,7 @@ final class AttributeTests: XCTestCase {
       print(GoatAlbums.graduation)
     }
     """)
-    
+
     AssertParse("""
     struct XStruct {
       @available(*, deprecated)

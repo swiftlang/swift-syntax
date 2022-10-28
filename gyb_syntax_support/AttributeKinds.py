@@ -698,8 +698,8 @@ DECL_ATTR_KINDS = [
                         code=138),
                    
     SimpleDeclAttribute('ignoreDeprecations', 'IgnoreDeprecations',
-                        OnGenericType, OnEnumElement, OnImport, OnExtension,
-                        OnSubscript, OnVar, OnFunc,
+                        OnGenericType, OnEnumElement, OnExtension,
+                        OnVar, OnFunc,
                         ABIStableToAdd, ABIStableToRemove, APIStableToAdd, APIStableToRemove,
                         code=139)
 ]

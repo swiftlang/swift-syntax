@@ -12,6 +12,8 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+// MARK: - Unexpected nodes
+
 extension RawUnexpectedNodesSyntax {
   /// Returns `true` if this contains a token that satisfies `condition`.
   func containsToken(where condition: (RawTokenSyntax) -> Bool) -> Bool {
@@ -40,6 +42,47 @@ extension RawUnexpectedNodesSyntax {
     self.init(nodes.compactMap({ $0 }), arena: arena)
   }
 }
+
+// MARK: Combining unexpected nodes
+
+/// Implementation detail of `RawUnexpectedNodesSyntax.init(combining:arena)`.
+protocol UnexpectedNodesCombinable {
+  var elements: [RawSyntax] { get }
+}
+
+extension Array: UnexpectedNodesCombinable where Element: UnexpectedNodesCombinable {
+  var elements: [RawSyntax] { self.flatMap { $0.elements } }
+}
+
+extension Optional: UnexpectedNodesCombinable where Wrapped: UnexpectedNodesCombinable {
+  var elements: [RawSyntax] {
+    if let self = self {
+      return self.elements
+    } else {
+      return []
+    }
+  }
+}
+
+extension RawTokenSyntax: UnexpectedNodesCombinable {
+  var elements: [RawSyntax] {
+    return [RawSyntax(self)]
+  }
+}
+
+extension RawUnexpectedNodesSyntax: UnexpectedNodesCombinable {}
+
+extension RawUnexpectedNodesSyntax {
+  init?<T1: UnexpectedNodesCombinable, T2: UnexpectedNodesCombinable>(combining syntax1: T1, _ syntax2: T2, arena: SyntaxArena) {
+    self.init(syntax1.elements + syntax2.elements, arena: arena)
+  }
+
+  init?<T1: UnexpectedNodesCombinable, T2: UnexpectedNodesCombinable, T3: UnexpectedNodesCombinable>(combining syntax1: T1, _ syntax2: T2, _ syntax3: T3, arena: SyntaxArena) {
+    self.init(syntax1.elements + syntax2.elements + syntax3.elements, arena: arena)
+  }
+}
+
+// MARK: - Misc
 
 extension SyntaxText {
   var isEditorPlaceholder: Bool {

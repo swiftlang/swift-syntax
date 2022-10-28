@@ -48,6 +48,18 @@ final class LinkageTest: XCTestCase {
       .library("-lswift_Concurrency"),
       .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
     ])
+
+    try assertLinkage(of: "SwiftSyntaxBuilder", in: baseURL, assertions: [
+      .library("-lobjc"),
+      .library("-lswiftCompatibility51", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+      .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+      .library("-lswiftCompatibilityConcurrency"),
+      .library("-lswiftCore"),
+      .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
+      .library("-lswift_Concurrency"),
+      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+    ])
+
   }
 }
 

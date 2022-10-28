@@ -119,6 +119,36 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownDeclSyntax.self),
+      .node(MissingDeclSyntax.self),
+      .node(TypealiasDeclSyntax.self),
+      .node(AssociatedtypeDeclSyntax.self),
+      .node(IfConfigDeclSyntax.self),
+      .node(PoundErrorDeclSyntax.self),
+      .node(PoundWarningDeclSyntax.self),
+      .node(PoundSourceLocationSyntax.self),
+      .node(ClassDeclSyntax.self),
+      .node(ActorDeclSyntax.self),
+      .node(StructDeclSyntax.self),
+      .node(ProtocolDeclSyntax.self),
+      .node(ExtensionDeclSyntax.self),
+      .node(FunctionDeclSyntax.self),
+      .node(InitializerDeclSyntax.self),
+      .node(DeinitializerDeclSyntax.self),
+      .node(SubscriptDeclSyntax.self),
+      .node(ImportDeclSyntax.self),
+      .node(AccessorDeclSyntax.self),
+      .node(VariableDeclSyntax.self),
+      .node(EnumCaseDeclSyntax.self),
+      .node(EnumDeclSyntax.self),
+      .node(OperatorDeclSyntax.self),
+      .node(PrecedenceGroupDeclSyntax.self),
+      .node(MacroExpansionDeclSyntax.self),
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return Syntax(self).childNameForDiagnostics(index)
   }
@@ -237,6 +267,68 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// Note that this will incur an existential conversion.
   public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
     return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownExprSyntax.self),
+      .node(MissingExprSyntax.self),
+      .node(InOutExprSyntax.self),
+      .node(PoundColumnExprSyntax.self),
+      .node(TryExprSyntax.self),
+      .node(AwaitExprSyntax.self),
+      .node(MoveExprSyntax.self),
+      .node(IdentifierExprSyntax.self),
+      .node(SuperRefExprSyntax.self),
+      .node(NilLiteralExprSyntax.self),
+      .node(DiscardAssignmentExprSyntax.self),
+      .node(AssignmentExprSyntax.self),
+      .node(SequenceExprSyntax.self),
+      .node(PoundLineExprSyntax.self),
+      .node(PoundFileExprSyntax.self),
+      .node(PoundFileIDExprSyntax.self),
+      .node(PoundFilePathExprSyntax.self),
+      .node(PoundFunctionExprSyntax.self),
+      .node(PoundDsohandleExprSyntax.self),
+      .node(SymbolicReferenceExprSyntax.self),
+      .node(PrefixOperatorExprSyntax.self),
+      .node(BinaryOperatorExprSyntax.self),
+      .node(ArrowExprSyntax.self),
+      .node(InfixOperatorExprSyntax.self),
+      .node(FloatLiteralExprSyntax.self),
+      .node(TupleExprSyntax.self),
+      .node(ArrayExprSyntax.self),
+      .node(DictionaryExprSyntax.self),
+      .node(IntegerLiteralExprSyntax.self),
+      .node(BooleanLiteralExprSyntax.self),
+      .node(UnresolvedTernaryExprSyntax.self),
+      .node(TernaryExprSyntax.self),
+      .node(MemberAccessExprSyntax.self),
+      .node(UnresolvedIsExprSyntax.self),
+      .node(IsExprSyntax.self),
+      .node(UnresolvedAsExprSyntax.self),
+      .node(AsExprSyntax.self),
+      .node(TypeExprSyntax.self),
+      .node(ClosureExprSyntax.self),
+      .node(UnresolvedPatternExprSyntax.self),
+      .node(FunctionCallExprSyntax.self),
+      .node(SubscriptExprSyntax.self),
+      .node(OptionalChainingExprSyntax.self),
+      .node(ForcedValueExprSyntax.self),
+      .node(PostfixUnaryExprSyntax.self),
+      .node(SpecializeExprSyntax.self),
+      .node(StringLiteralExprSyntax.self),
+      .node(RegexLiteralExprSyntax.self),
+      .node(KeyPathExprSyntax.self),
+      .node(OldKeyPathExprSyntax.self),
+      .node(KeyPathBaseExprSyntax.self),
+      .node(ObjcKeyPathExprSyntax.self),
+      .node(ObjcSelectorExprSyntax.self),
+      .node(MacroExpansionExprSyntax.self),
+      .node(PostfixIfConfigExprSyntax.self),
+      .node(EditorPlaceholderExprSyntax.self),
+      .node(ObjectLiteralExprSyntax.self),
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -359,6 +451,31 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownStmtSyntax.self),
+      .node(MissingStmtSyntax.self),
+      .node(LabeledStmtSyntax.self),
+      .node(ContinueStmtSyntax.self),
+      .node(WhileStmtSyntax.self),
+      .node(DeferStmtSyntax.self),
+      .node(ExpressionStmtSyntax.self),
+      .node(RepeatWhileStmtSyntax.self),
+      .node(GuardStmtSyntax.self),
+      .node(ForInStmtSyntax.self),
+      .node(SwitchStmtSyntax.self),
+      .node(DoStmtSyntax.self),
+      .node(ReturnStmtSyntax.self),
+      .node(YieldStmtSyntax.self),
+      .node(FallthroughStmtSyntax.self),
+      .node(BreakStmtSyntax.self),
+      .node(DeclarationStmtSyntax.self),
+      .node(ThrowStmtSyntax.self),
+      .node(IfStmtSyntax.self),
+      .node(PoundAssertStmtSyntax.self),
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return Syntax(self).childNameForDiagnostics(index)
   }
@@ -479,6 +596,28 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
   }
 
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownTypeSyntax.self),
+      .node(MissingTypeSyntax.self),
+      .node(SimpleTypeIdentifierSyntax.self),
+      .node(MemberTypeIdentifierSyntax.self),
+      .node(ClassRestrictionTypeSyntax.self),
+      .node(ArrayTypeSyntax.self),
+      .node(DictionaryTypeSyntax.self),
+      .node(MetatypeTypeSyntax.self),
+      .node(OptionalTypeSyntax.self),
+      .node(ConstrainedSugarTypeSyntax.self),
+      .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
+      .node(CompositionTypeSyntax.self),
+      .node(PackExpansionTypeSyntax.self),
+      .node(TupleTypeSyntax.self),
+      .node(FunctionTypeSyntax.self),
+      .node(AttributedTypeSyntax.self),
+      .node(NamedOpaqueReturnTypeSyntax.self),
+    ])
+  }
+
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return Syntax(self).childNameForDiagnostics(index)
   }
@@ -597,6 +736,22 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// Note that this will incur an existential conversion.
   public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol {
     return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .choices([
+      .node(UnknownPatternSyntax.self),
+      .node(MissingPatternSyntax.self),
+      .node(EnumCasePatternSyntax.self),
+      .node(IsTypePatternSyntax.self),
+      .node(OptionalPatternSyntax.self),
+      .node(IdentifierPatternSyntax.self),
+      .node(AsTypePatternSyntax.self),
+      .node(TuplePatternSyntax.self),
+      .node(WildcardPatternSyntax.self),
+      .node(ExpressionPatternSyntax.self),
+      .node(ValueBindingPatternSyntax.self),
+    ])
   }
 
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {

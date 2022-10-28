@@ -21,14 +21,13 @@ AVAILABILITY_NODES = [
              Child('Entry', kind='Syntax',
                    description='The actual argument',
                    node_choices=[
-                       Child('Star', kind='SpacedBinaryOperatorToken',
-                             text_choices=['*']),
-                       Child('IdentifierRestriction',
-                             kind='IdentifierToken'),
+                       Child('Token', kind='Token', 
+                             token_choices=['SpacedBinaryOperatorToken', 'IdentifierToken']),
                        Child('AvailabilityVersionRestriction',
                              kind='AvailabilityVersionRestriction'),
                        Child('AvailabilityLabeledArgument',
                              kind='AvailabilityLabeledArgument'),
+                       Child('TokenList', kind='TokenList'),
                    ]),
              Child('TrailingComma', kind='CommaToken', is_optional=True,
                    description='''
@@ -85,11 +84,8 @@ AVAILABILITY_NODES = [
          and patch part may be omitted.
          ''',
          children=[
-             Child('MajorMinor', kind='Syntax',
-                   node_choices=[
-                       Child('Major', kind='IntegerLiteralToken'),
-                       Child('MajorMinor', kind='FloatingLiteralToken')
-                   ], description='''
+             Child('MajorMinor', kind='Token', token_choices=['IntegerLiteralToken', 'FloatingLiteralToken'], 
+                  description='''
                    In case the version consists only of the major version, an
                    integer literal that specifies the major version. In case
                    the version consists of major and minor version number, a

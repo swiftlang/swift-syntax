@@ -28,7 +28,8 @@ public enum SyntaxTreeViewMode {
   case all
 
   /// Returns whether this traversal node should visit `node` or ignore it.
-  func shouldTraverse(node: RawSyntax) -> Bool {
+  @_spi(RawSyntax)
+  public func shouldTraverse(node: RawSyntax) -> Bool {
     switch self {
     case .sourceAccurate:
       if let tokenView = node.tokenView {

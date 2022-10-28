@@ -45,8 +45,8 @@ extension TreeDifference: CustomDebugStringConvertible {
   public var debugDescription: String {
     let includeTrivia = reason == .trivia
 
-    let expectedConverter = SourceLocationConverter(file: "Baseline.swift", source: baseline.description)
-    let actualConverter = SourceLocationConverter(file: "Actual.swift", source: node.description)
+    let expectedConverter = SourceLocationConverter(file: "Baseline.swift", tree: baseline.root)
+    let actualConverter = SourceLocationConverter(file: "Actual.swift", tree: node.root)
 
     let expectedDesc = baseline.debugDescription(includeTrivia: includeTrivia, converter: expectedConverter)
     let actualDesc = node.debugDescription(includeTrivia: includeTrivia, converter: actualConverter)

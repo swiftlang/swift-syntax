@@ -30,23 +30,6 @@ public enum SyntaxEnum {
   case ${node.swift_syntax_kind}(${node.name})
 %   end
 % end
-
-  public var nameForDiagnostics: String? {
-    switch self {
-    case .unknown:
-      return nil
-    case .token:
-      return "token"
-% for node in NON_BASE_SYNTAX_NODES:
-    case .${node.swift_syntax_kind}:
-%   if node.name_for_diagnostics:
-      return "${node.name_for_diagnostics}"
-%   else:
-      return nil
-%   end
-% end
-    }
-  }
 }
 
 public extension Syntax {

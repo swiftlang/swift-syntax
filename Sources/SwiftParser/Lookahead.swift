@@ -335,9 +335,7 @@ extension Parser.Lookahead {
 
 extension Parser.Lookahead {
   mutating func skipUntil(_ t1: RawTokenKind, _ t2: RawTokenKind) {
-    while !self.at(any: [.eof, t1, t2, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword]) {
-      self.skipSingle()
-    }
+    return skip(initialState: .skipUntil(t1, t2))
   }
 
   mutating func skipUntilEndOfLine() {
@@ -347,70 +345,99 @@ extension Parser.Lookahead {
   }
 
   mutating func skipSingle() {
-    enum BracketedTokens: RawTokenKindSubset {
-      case leftParen
-      case leftBrace
-      case leftSquareBracket
-      case poundIfKeyword
-      case poundElseKeyword
-      case poundElseifKeyword
+    return skip(initialState: .skipSingle)
+  }
 
-      init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.tokenKind {
-        case .leftParen: self = .leftParen
-        case .leftBrace: self = .leftBrace
-        case .leftSquareBracket: self = .leftSquareBracket
-        case .poundIfKeyword: self = .poundIfKeyword
-        case .poundElseKeyword: self = .poundElseKeyword
-        case .poundElseifKeyword: self = .poundElseifKeyword
-        default: return nil
-        }
-      }
+  private enum BracketedTokens: RawTokenKindSubset {
+    case leftParen
+    case leftBrace
+    case leftSquareBracket
+    case poundIfKeyword
+    case poundElseKeyword
+    case poundElseifKeyword
 
-      var rawTokenKind: RawTokenKind {
-        switch self {
-        case .leftParen: return .leftParen
-        case .leftBrace: return .leftBrace
-        case .leftSquareBracket: return .leftSquareBracket
-        case .poundIfKeyword: return .poundIfKeyword
-        case .poundElseKeyword: return .poundElseKeyword
-        case .poundElseifKeyword: return .poundElseifKeyword
-        }
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme.tokenKind {
+      case .leftParen: self = .leftParen
+      case .leftBrace: self = .leftBrace
+      case .leftSquareBracket: self = .leftSquareBracket
+      case .poundIfKeyword: self = .poundIfKeyword
+      case .poundElseKeyword: self = .poundElseKeyword
+      case .poundElseifKeyword: self = .poundElseifKeyword
+      default: return nil
       }
     }
 
-    switch self.at(anyIn: BracketedTokens.self) {
-    case (.leftParen, let handle)?:
-      self.eat(handle)
-      self.skipUntil(.rightParen, .rightBrace)
-      self.consume(if: .rightParen)
-      return
-    case (.leftBrace, let handle)?:
-      self.eat(handle)
-      self.skipUntil(.rightBrace, .rightBrace)
-      self.consume(if: .rightBrace)
-      return
-    case (.leftSquareBracket, let handle)?:
-      self.eat(handle)
-      self.skipUntil(.rightSquareBracket, .rightSquareBracket)
-      self.consume(if: .rightSquareBracket)
-      return
-    case (.poundIfKeyword, let handle)?,
-        (.poundElseKeyword, let handle)?,
-        (.poundElseifKeyword, let handle)?:
-      self.eat(handle)
-      // skipUntil also implicitly stops at tok::pound_endif.
-      self.skipUntil(.poundElseKeyword, .poundElseifKeyword)
-
-      if self.at(any: [.poundElseKeyword, .poundElseifKeyword]) {
-        self.skipSingle()
-      } else {
-        self.consume(if: .poundElseifKeyword)
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case .leftParen: return .leftParen
+      case .leftBrace: return .leftBrace
+      case .leftSquareBracket: return .leftSquareBracket
+      case .poundIfKeyword: return .poundIfKeyword
+      case .poundElseKeyword: return .poundElseKeyword
+      case .poundElseifKeyword: return .poundElseifKeyword
       }
-      return
-    case nil:
-      self.consumeAnyToken()
-      return
+    }
+  }
+
+  private enum SkippingState {
+    /// Equivalent to a call to `skipSingle`. Skip a single token.
+    /// If that token is bracketed, skip until the closing bracket
+    case skipSingle
+    /// Execute code after skipping bracketed tokens detected from `skipSingle`.
+    case skipSinglePost(start: BracketedTokens)
+    /// Skip until either `t1` or `t2`.
+    case skipUntil(_ t1: RawTokenKind, _ t2: RawTokenKind)
+  }
+
+  /// A non-recursie function to skip tokens.
+  private mutating func skip(initialState: SkippingState) {
+    var stack: [SkippingState] = [initialState]
+
+    while let state = stack.popLast() {
+      switch state {
+      case .skipSingle:
+        let t = self.at(anyIn: BracketedTokens.self)
+        switch t {
+        case (.leftParen, let handle)?:
+          self.eat(handle)
+          stack += [.skipSinglePost(start: .leftParen), .skipUntil(.rightParen, .rightBrace)]
+        case (.leftBrace, let handle)?:
+          self.eat(handle)
+          stack += [.skipSinglePost(start: .leftBrace), .skipUntil(.rightBrace, .rightBrace)]
+        case (.leftSquareBracket, let handle)?:
+          self.eat(handle)
+          stack += [.skipSinglePost(start: .leftSquareBracket), .skipUntil(.rightSquareBracket, .rightSquareBracket)]
+        case (.poundIfKeyword, let handle)?,
+            (.poundElseKeyword, let handle)?,
+            (.poundElseifKeyword, let handle)?:
+          self.eat(handle)
+          // skipUntil also implicitly stops at tok::pound_endif.
+          stack += [.skipSinglePost(start: t!.0), .skipUntil(.poundElseKeyword, .poundElseifKeyword)]
+        case nil:
+          self.consumeAnyToken()
+        }
+      case .skipSinglePost(start: let start):
+        switch start {
+        case .leftParen:
+          self.consume(if: .rightParen)
+        case .leftBrace:
+          self.consume(if: .rightBrace)
+        case .leftSquareBracket:
+          self.consume(if: .rightSquareBracket)
+        case .poundIfKeyword, .poundElseKeyword, .poundElseifKeyword:
+          if self.at(any: [.poundElseKeyword, .poundElseifKeyword]) {
+            stack += [.skipSingle]
+          } else {
+            self.consume(if: .poundElseifKeyword)
+          }
+          return
+        }
+      case .skipUntil(let t1, let t2):
+        if !self.at(any: [.eof, t1, t2, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword]) {
+          stack += [.skipUntil(t1, t2), .skipSingle]
+        }
+      }
     }
   }
 }

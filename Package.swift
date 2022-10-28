@@ -45,6 +45,7 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
+    .library(name: "IDEUtils", type: .static, targets: ["IDEUtils"]),
     .library(name: "SwiftDiagnostics", type: .static, targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftOperators", type: .static, targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
@@ -79,7 +80,6 @@ let package = Package(
         "Raw/RawSyntaxValidation.swift.gyb",
         "SyntaxAnyVisitor.swift.gyb",
         "SyntaxBaseNodes.swift.gyb",
-        "SyntaxClassification.swift.gyb",
         "SyntaxCollections.swift.gyb",
         "SyntaxEnum.swift.gyb",
         "SyntaxFactory.swift.gyb",
@@ -115,6 +115,13 @@ let package = Package(
     .target(
       name: "_SwiftSyntaxTestSupport",
       dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder"]
+    ),
+    .target(
+      name: "IDEUtils",
+      dependencies: ["SwiftSyntax"],
+      exclude: [
+        "SyntaxClassification.swift.gyb",
+      ]
     ),
     .target(
       name: "SwiftParser",
@@ -160,13 +167,14 @@ let package = Package(
       ]),
     .executableTarget(
       name: "lit-test-helper",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
+      dependencies: ["IDEUtils", "SwiftSyntax", "SwiftSyntaxParser"]
     ),
     .executableTarget(
       name: "swift-parser-cli",
       dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics", "SwiftOperators", "_SwiftSyntaxMacros",
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
+    .testTarget(name: "IDEUtilsTest", dependencies: ["_SwiftSyntaxTestSupport", "SwiftParser", "SwiftSyntax", "IDEUtils"]),
     .testTarget(
       name: "SwiftDiagnosticsTest",
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftParserDiagnostics"]
@@ -192,7 +200,7 @@ let package = Package(
     ),
     .testTarget(
       name: "PerformanceTest",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxParser", "SwiftParser"],
+      dependencies: ["IDEUtils", "SwiftSyntax", "SwiftSyntaxParser", "SwiftParser"],
       exclude: ["Inputs"]
     ),
     .testTarget(

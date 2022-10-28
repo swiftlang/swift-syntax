@@ -68,8 +68,17 @@ extension Parser {
   public mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (inout Parser) -> Element?,
     addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element? = { _, _, _ in nil },
-    syntax: (inout Parser, [Element]) -> RawSyntax?
+    syntax: (inout Parser, [Element]) -> RawIfConfigClauseSyntax.Elements?
   ) -> RawIfConfigDeclSyntax {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawIfConfigDeclSyntax(
+        remainingTokens,
+        clauses: RawIfConfigClauseListSyntax(elements: [], arena: self.arena),
+        poundEndif: missingToken(.poundEndifKeyword),
+        arena: self.arena
+      )
+    }
+
     var clauses = [RawIfConfigClauseSyntax]()
     do {
       var firstIteration = true

@@ -592,10 +592,10 @@ extension Parser {
       // TODO: diagnose and skip the remaining token in the current clause.
       return result
     }
-  syntax: { (parser, elements) -> RawSyntax? in
+  syntax: { (parser, elements) -> RawIfConfigClauseSyntax.Elements? in
     switch elements.count {
     case 0: return nil
-    case 1: return RawSyntax(elements.first!)
+    case 1: return .postfixExpression(elements.first!)
     default: fatalError("Postfix #if should only have one element")
     }
   }
@@ -841,7 +841,7 @@ extension Parser {
 
       components.append(RawKeyPathComponentSyntax(
         period: period,
-        component: RawSyntax(RawKeyPathOptionalComponentSyntax(
+        component: .optional(RawKeyPathOptionalComponentSyntax(
           questionOrExclamationMark: questionOrExclaim, arena: self.arena)),
         arena: self.arena))
     }
@@ -906,7 +906,7 @@ extension Parser {
 
         components.append(RawKeyPathComponentSyntax(
           period: period,
-          component: RawSyntax(RawKeyPathSubscriptComponentSyntax(
+          component: .subscript(RawKeyPathSubscriptComponentSyntax(
             leftBracket: lsquare,
             argumentList: RawTupleExprElementListSyntax(
               elements: args, arena: self.arena),
@@ -936,7 +936,7 @@ extension Parser {
         let (period, name, declNameArgs, generics) = parseDottedExpressionSuffix()
         components.append(RawKeyPathComponentSyntax(
           period: period,
-          component: RawSyntax(RawKeyPathPropertyComponentSyntax(
+          component: .property(RawKeyPathPropertyComponentSyntax(
             identifier: name, declNameArguments: declNameArgs,
             genericArgumentClause: generics, arena: self.arena)),
           arena: self.arena))
@@ -1480,7 +1480,7 @@ extension Parser {
   ) -> (RawStringLiteralSegmentsSyntax, SyntaxText.Index) {
     let allowsMultiline = closer.tokenKind == .multilineStringQuote
 
-    var segments = [RawSyntax]()
+    var segments = [RawStringLiteralSegmentsSyntax.Element]()
     var segment = text
     var stringLiteralSegmentStart = segment.startIndex
     while let slashIndex = segment.firstIndex(of: UInt8(ascii: "\\")), stringLiteralSegmentStart < segment.endIndex {
@@ -1508,7 +1508,7 @@ extension Parser {
         text: SyntaxText(rebasing: text[stringLiteralSegmentStart..<slashIndex]),
         presence: .present,
         arena: self.arena)
-      segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken, arena: self.arena)))
+      segments.append(.stringSegment(RawStringSegmentSyntax(content: segmentToken, arena: self.arena)))
 
       let content = SyntaxText(rebasing: text[contentStart...])
       let contentSize = content.withBuffer { buf in
@@ -1557,7 +1557,7 @@ extension Parser {
           }
           let rparen = subparser.expectWithoutRecovery(.rightParen)
 
-          segments.append(RawSyntax(RawExpressionSegmentSyntax(
+          segments.append(.expressionSegment(RawExpressionSegmentSyntax(
             backslash: slashToken,
             delimiter: delim,
             lunexpected,
@@ -1598,7 +1598,7 @@ extension Parser {
       text: SyntaxText(rebasing: segment),
       presence: .present,
       arena: self.arena)
-    segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken,
+    segments.append(.stringSegment(RawStringSegmentSyntax(content: segmentToken,
                                                      arena: self.arena)))
 
     return (RawStringLiteralSegmentsSyntax(elements: segments, arena: arena), segment.endIndex)
@@ -1757,6 +1757,16 @@ extension Parser {
   ///     dictionary-literal-items → dictionary-literal-item ','? | dictionary-literal-item ',' dictionary-literal-items
   @_spi(RawSyntax)
   public mutating func parseCollectionLiteral() -> RawExprSyntax {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawExprSyntax(RawArrayExprSyntax(
+        remainingTokens,
+        leftSquare: missingToken(.leftSquareBracket),
+        elements: RawArrayElementListSyntax(elements: [], arena: self.arena),
+        rightSquare: missingToken(.rightSquareBracket),
+        arena: self.arena
+      ))
+    }
+
     let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquareBracket)
 
     if let rsquare = self.consume(if: .rightSquareBracket) {
@@ -1773,7 +1783,7 @@ extension Parser {
       return RawExprSyntax(RawDictionaryExprSyntax(
         unexpectedBeforeLSquare,
         leftSquare: lsquare,
-        content: RawSyntax(colon),
+        content: .colon(colon),
         rightSquare: rsquare,
         arena: self.arena
       ))
@@ -1841,7 +1851,7 @@ extension Parser {
     case .dictionary:
       return RawExprSyntax(RawDictionaryExprSyntax(
         leftSquare: lsquare,
-        content: RawSyntax(RawDictionaryElementListSyntax(elements: elements.map {
+        content: .elements(RawDictionaryElementListSyntax(elements: elements.map {
           $0.as(RawDictionaryElementSyntax.self)!
         }, arena: self.arena)),
         unexpectedBeforeRSquare,
@@ -2061,20 +2071,20 @@ extension Parser {
       captures = RawClosureCaptureSignatureSyntax(
         leftSquare: lsquare,
         items: elements.isEmpty ? nil : RawClosureCaptureItemListSyntax(elements: elements, arena: self.arena),
-        unexpectedNodes.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena),
+        RawUnexpectedNodesSyntax(unexpectedNodes, arena: self.arena),
         rightSquare: rsquare, arena: self.arena)
     } else {
       captures = nil
     }
 
-    var input: RawSyntax?
+    var input: RawClosureSignatureSyntax.Input?
     var asyncKeyword: RawTokenSyntax? = nil
     var throwsTok: RawTokenSyntax? = nil
     var output: RawReturnClauseSyntax? = nil
     if !self.at(.inKeyword) {
       if self.at(.leftParen) {
         // Parse the closure arguments.
-        input = RawSyntax(self.parseParameterClause(for: .closure))
+        input = .input(self.parseParameterClause(for: .closure))
       } else {
         var params = [RawClosureParamSyntax]()
         var loopProgress = LoopProgressCondition()
@@ -2096,7 +2106,7 @@ extension Parser {
           } while keepGoing != nil && loopProgress.evaluate(currentToken)
         }
 
-        input = RawSyntax(RawClosureParamListSyntax(elements: params, arena: self.arena))
+        input = .simpleInput(RawClosureParamListSyntax(elements: params, arena: self.arena))
       }
 
       asyncKeyword = self.parseEffectsSpecifier()
@@ -2177,6 +2187,17 @@ extension Parser {
   ///     tuple-element → expression | identifier ':' expression
   @_spi(RawSyntax)
   public mutating func parseArgumentListElements(pattern: PatternContext) -> [RawTupleExprElementSyntax] {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return [RawTupleExprElementSyntax(
+        remainingTokens,
+        label: nil,
+        colon: nil,
+        expression: RawExprSyntax(RawMissingExprSyntax(arena: self.arena)),
+        trailingComma: nil,
+        arena: self.arena
+      )]
+    }
+
     guard !self.at(.rightParen) else {
       return []
     }

@@ -10,6 +10,44 @@
 //
 //===----------------------------------------------------------------------===//
 
+/// Describes the statically allowed structure of a syntax tree node.
+public enum SyntaxNodeStructure {
+  public enum SyntaxChoice {
+    case node(SyntaxProtocol.Type)
+    case token(TokenKind)
+  }
+
+  /// The node contains a fixed number of children which can be accessed by these key paths.
+  case layout([AnyKeyPath])
+
+  /// The node is a `SyntaxCollection` of the given type.
+  case collection(SyntaxProtocol.Type)
+
+  /// The node can contain a single node with one of the listed types.
+  case choices([SyntaxChoice])
+
+  public var isLayout: Bool {
+    switch self {
+    case .layout: return true
+    default: return false
+    }
+  }
+
+  public var isCollection: Bool {
+    switch self {
+    case .collection: return true
+    default: return false
+    }
+  }
+
+  public var isChoices: Bool {
+    switch self {
+    case .choices: return true
+    default: return false
+    }
+  }
+}
+
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
@@ -47,6 +85,24 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   public init?(fromProtocol syntax: SyntaxProtocol?) {
     guard let syntax = syntax else { return nil }
     self = syntax._syntaxNode
+  }
+
+  /// Syntax nodes always conform to SyntaxProtocol. This API is just added
+  /// for consistency.
+  /// Note that this will incur an existential conversion.
+  @available(*, deprecated, message: "Expression always evaluates to true")
+  public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
+    return true
+  }
+
+  /// Return the non-type erased version of this syntax node.
+  /// Note that this will incur an existential conversion.
+  public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
+    return self.raw.kind.syntaxNodeType.init(self)!
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    return self.raw.kind.syntaxNodeType.init(self)!.childNameForDiagnostics(index)
   }
 
   public func hash(into hasher: inout Hasher) {
@@ -136,6 +192,9 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// conversion is not possible.
   init?(_ syntaxNode: Syntax)
 
+  /// The statically allowed structure of the syntax node.
+  static var structure: SyntaxNodeStructure { get }
+
   /// Return a name with which the child at the given `index` can be referred to
   /// in diagnostics.
   /// Typically, you want to use `childNameInParent` on the child instead of
@@ -164,6 +223,10 @@ extension SyntaxProtocol {
   @_spi(RawSyntax)
   public var raw: RawSyntax {
     return _syntaxNode.data.raw
+  }
+
+  public var kind: SyntaxKind {
+    return raw.kind
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -213,6 +276,10 @@ public extension SyntaxProtocol {
   /// Whether this tree contains a missing token or unexpected node.
   var hasSequenceExpr: Bool {
     return raw.recursiveFlags.contains(.hasSequenceExpr)
+  }
+
+  var hasMaximumNestingLevelOverflow: Bool {
+    return raw.recursiveFlags.contains(.hasMaximumNestingLevelOverflow)
   }
 
   /// The parent of this syntax node, or `nil` if this node is the root.
@@ -318,6 +385,25 @@ public extension SyntaxProtocol {
       }
     }
     return nil
+  }
+
+  /// Find the syntax token at the given absolute position within this
+  /// syntax node or any of its children.
+  func token(at position: AbsolutePosition) -> TokenSyntax? {
+    // If the position isn't within this node at all, return early.
+    guard position >= self.position && position < self.endPosition else {
+      return nil
+    }
+
+    // If we are a token syntax, that's it!
+    if let token = Syntax(self).as(TokenSyntax.self) {
+      return token
+    }
+
+    // Otherwise, it must be one of our children.
+    return children(viewMode: .sourceAccurate).lazy.compactMap { child in
+      child.token(at: position)
+    }.first
   }
 
   /// The absolute position of the starting point of this node. If the first token
@@ -454,56 +540,6 @@ public extension SyntaxProtocol {
   /// Sequence of tokens that are part of this Syntax node.
   func tokens(viewMode: SyntaxTreeViewMode) -> TokenSequence {
     return TokenSequence(_syntaxNode, viewMode: viewMode)
-  }
-
-  /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
-  ///
-  /// The provided classified ranges are consecutive and cover the full source
-  /// text of the node. The ranges may also span multiple tokens, if multiple
-  /// consecutive tokens would have the same classification then a single classified
-  /// range is provided for all of them.
-  var classifications: SyntaxClassifications {
-    let fullRange = ByteSourceRange(offset: 0, length: byteSize)
-    return SyntaxClassifications(_syntaxNode, in: fullRange)
-  }
-
-  /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
-  /// a relative range.
-  ///
-  /// The provided classified ranges may extend beyond the provided `range`.
-  /// Active classifications (non-`none`) will extend the range to include the
-  /// full classified range (e.g. from the beginning of the comment block), while
-  /// `none` classified ranges will extend to the beginning or end of the token
-  /// that the `range` touches.
-  /// It is guaranteed that no classified range will be provided that doesn't
-  /// intersect the provided `range`.
-  ///
-  /// - Parameters:
-  ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
-  /// - Returns: Sequence of `SyntaxClassifiedRange`s.
-  func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
-    return SyntaxClassifications(_syntaxNode, in: range)
-  }
-
-  /// The `SyntaxClassifiedRange` for a relative byte offset.
-  /// - Parameters:
-  ///   - at: The relative to the node byte offset.
-  /// - Returns: The `SyntaxClassifiedRange` for the offset or nil if the source text
-  ///   at the given offset is unclassified.
-  func classification(at offset: Int) -> SyntaxClassifiedRange? {
-    let classifications = SyntaxClassifications(_syntaxNode, in: ByteSourceRange(offset: offset, length: 1))
-    var iterator = classifications.makeIterator()
-    return iterator.next()
-  }
-
-  /// The `SyntaxClassifiedRange` for an absolute position.
-  /// - Parameters:
-  ///   - at: The absolute position.
-  /// - Returns: The `SyntaxClassifiedRange` for the position or nil if the source text
-  ///   at the given position is unclassified.
-  func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
-    let relativeOffset = position.utf8Offset - self.position.utf8Offset
-    return self.classification(at: relativeOffset)
   }
 
   /// Returns a value representing the unique identity of the node.

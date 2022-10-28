@@ -179,6 +179,18 @@ extension Parser {
   ///     tuple-pattern-element-list → tuple-pattern-element | tuple-pattern-element ',' tuple-pattern-element-list
   ///     tuple-pattern-element → pattern | identifier ':' pattern
   mutating func parsePatternTupleElements() -> RawTuplePatternElementListSyntax {
+    if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
+      return RawTuplePatternElementListSyntax(elements: [
+        RawTuplePatternElementSyntax(
+          remainingTokens,
+          labelName: nil,
+          labelColon: nil,
+          pattern: RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena)),
+          trailingComma: nil,
+          arena: self.arena
+        )
+      ], arena: self.arena)
+    }
     var elements = [RawTuplePatternElementSyntax]()
     do {
       var keepGoing = true

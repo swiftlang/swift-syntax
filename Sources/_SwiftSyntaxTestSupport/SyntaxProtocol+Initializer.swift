@@ -62,11 +62,11 @@ private extension TriviaPiece {
     let (label, value) = Mirror(reflecting: self).children.first!
     switch value {
     case let value as String:
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(name: label!)) {
+      return FunctionCallExpr(callee: ".\(label!)") {
         TupleExprElement(expression: StringLiteralExpr(content: value))
       }
     case let value as Int:
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(name: label!)) {
+      return FunctionCallExpr(callee: ".\(label!)") {
         TupleExprElement(expression: IntegerLiteralExpr(value))
       }
     default:
@@ -106,7 +106,7 @@ extension SyntaxProtocol {
   private var debugInitCallExpr: ExprSyntaxProtocol {
     let mirror = Mirror(reflecting: self)
     if self.isCollection {
-      return FunctionCallExpr(calledExpression: IdentifierExpr(String("\(type(of: self))"))) {
+      return FunctionCallExpr(callee: "\(type(of: self))") {
         TupleExprElement(
           expression: ArrayExpr() {
             for child in mirror.children {
@@ -131,7 +131,7 @@ extension SyntaxProtocol {
         tokenInitializerName = String(tokenKindStr[..<tokenKindStr.firstIndex(of: "(")!])
         requiresExplicitText = true
       }
-      return FunctionCallExpr(calledExpression: MemberAccessExpr(name: tokenInitializerName)) {
+      return FunctionCallExpr(callee: ".\(tokenInitializerName)") {
         if requiresExplicitText {
           TupleExprElement(
             expression: StringLiteralExpr(content: token.text)
@@ -160,7 +160,7 @@ extension SyntaxProtocol {
         }
       }
     } else {
-      return FunctionCallExpr(calledExpression: IdentifierExpr(String("\(type(of: self))"))) {
+      return FunctionCallExpr(callee: "\(type(of: self))") {
         for child in mirror.children {
           let label = child.label!
           let value = child.value as! SyntaxProtocol?

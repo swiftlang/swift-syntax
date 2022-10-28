@@ -35,6 +35,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+@_spi(RawSyntax) import SwiftSyntax
+
 public enum SyntaxClassification {
 % for classification in SYNTAX_CLASSIFICATIONS:
 %   for line in dedented_lines(classification.description):

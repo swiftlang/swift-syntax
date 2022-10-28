@@ -33,11 +33,11 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var availablityArgumentProgress = LoopProgressCondition()
       repeat {
-        let entry: RawSyntax
+        let entry: RawAvailabilityArgumentSyntax.Entry
         switch source {
         case .available where self.at(.identifier),
             .unavailable where self.at(.identifier):
-          entry = RawSyntax(self.parseAvailabilityMacro())
+          entry = .availabilityVersionRestriction(self.parseAvailabilityMacro())
         default:
           entry = self.parseAvailabilitySpec()
         }
@@ -59,7 +59,7 @@ extension Parser {
           let syntax = RawTokenListSyntax(elements: tokens, arena: self.arena)
           keepGoing = self.consume(if: .comma)
           elements.append(RawAvailabilityArgumentSyntax(
-            entry: RawSyntax(syntax), trailingComma: keepGoing, arena: self.arena))
+            entry: .tokenList(syntax), trailingComma: keepGoing, arena: self.arena))
         }
       } while keepGoing != nil && availablityArgumentProgress.evaluate(currentToken)
     }
@@ -84,12 +84,12 @@ extension Parser {
     let platform = self.consumeAnyToken()
     var keepGoing: RawTokenSyntax? = self.consume(if: .comma)
     elements.append(RawAvailabilityArgumentSyntax(
-      entry: RawSyntax(platform), trailingComma: keepGoing, arena: self.arena))
+      entry: .token(platform), trailingComma: keepGoing, arena: self.arena))
 
     do {
       var loopProgressCondition = LoopProgressCondition()
       while keepGoing != nil && loopProgressCondition.evaluate(currentToken) {
-        let entry: RawSyntax
+        let entry: RawAvailabilityArgumentSyntax.Entry
         switch self.at(anyIn: AvailabilityArgumentKind.self) {
         case (.message, let handle)?,
             (.renamed, let handle)?:
@@ -98,11 +98,11 @@ extension Parser {
           // FIXME: Make sure this is a string literal with no interpolation.
           let stringValue = self.consumeAnyToken()
 
-          entry = RawSyntax(RawAvailabilityLabeledArgumentSyntax(
+          entry = .availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax(
             label: argumentLabel,
             unexpectedBeforeColon,
             colon: colon,
-            value: RawSyntax(stringValue),
+            value: .string(stringValue),
             arena: self.arena
           ))
         case (.introduced, let handle)?,
@@ -110,32 +110,32 @@ extension Parser {
           let argumentLabel = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let version = self.parseVersionTuple()
-          entry = RawSyntax(RawAvailabilityLabeledArgumentSyntax(
+          entry = .availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax(
             label: argumentLabel,
             unexpectedBeforeColon,
             colon: colon,
-            value: RawSyntax(version),
+            value: .version(version),
             arena: self.arena
           ))
         case (.deprecated, let handle)?:
           let argumentLabel = self.eat(handle)
           if let colon = self.consume(if: .colon) {
             let version = self.parseVersionTuple()
-            entry = RawSyntax(RawAvailabilityLabeledArgumentSyntax(
+            entry = .availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax(
               label: argumentLabel,
               colon: colon,
-              value: RawSyntax(version),
+              value: .version(version),
               arena: self.arena
             ))
           } else {
-            entry = RawSyntax(argumentLabel)
+            entry = .token(argumentLabel)
           }
         case (.unavailable, let handle)?,
             (.noasync, let handle)?:
           let argument = self.eat(handle)
           // FIXME: Can we model this in SwiftSyntax by making the
           // 'labeled' argument part optional?
-          entry = RawSyntax(argument)
+          entry = .token(argument)
         case nil:
           // Not sure what this label is but, let's just eat it and
           // keep going.
@@ -143,7 +143,7 @@ extension Parser {
           while !self.at(any: [.eof, .comma, .rightParen]) {
             tokens.append(self.consumeAnyToken())
           }
-          entry = RawSyntax(RawNonEmptyTokenListSyntax(elements: tokens, arena: self.arena))
+          entry = .tokenList(RawTokenListSyntax(elements: tokens, arena: self.arena))
         }
 
         keepGoing = self.consume(if: .comma)
@@ -161,20 +161,20 @@ extension Parser {
   ///
   ///     availability-argument → platform-name platform-version
   ///     availability-argument → *
-  mutating func parseAvailabilitySpec() -> RawSyntax {
+  mutating func parseAvailabilitySpec() -> RawAvailabilityArgumentSyntax.Entry {
     if let star = self.consumeIfContextualPunctuator("*") {
       // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
       // doesn't expect it.
-      return RawSyntax(star)
+      return .token(star)
     }
 
     if self.at(any: [.identifier, .wildcardKeyword]) {
       if self.atContextualKeyword("swift") || self.atContextualKeyword("_PackageDescription") {
-        return RawSyntax(self.parsePlatformAgnosticVersionConstraintSpec())
+        return .availabilityVersionRestriction(self.parsePlatformAgnosticVersionConstraintSpec())
       }
     }
 
-    return RawSyntax(self.parsePlatformVersionConstraintSpec())
+    return .availabilityVersionRestriction(self.parsePlatformVersionConstraintSpec())
   }
 
   mutating func parsePlatformAgnosticVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
@@ -243,10 +243,9 @@ extension Parser {
   ///     platform-version → decimal-digits '.' decimal-digits
   ///     platform-version → decimal-digits '.' decimal-digits '.' decimal-digits
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
-    if self.at(.integerLiteral) {
-      let majorMinor = self.consumeAnyToken()
+    if let major = self.consume(if: .integerLiteral) {
       return RawVersionTupleSyntax(
-        majorMinor: RawSyntax(majorMinor), patchPeriod: nil, patchVersion: nil,
+        majorMinor: major, patchPeriod: nil, patchVersion: nil,
         arena: self.arena)
     }
 
@@ -261,7 +260,7 @@ extension Parser {
     }
 
     return RawVersionTupleSyntax(
-      majorMinor: RawSyntax(majorMinor), patchPeriod: period, patchVersion: patch,
+      majorMinor: majorMinor, patchPeriod: period, patchVersion: patch,
       arena: self.arena)
   }
 }

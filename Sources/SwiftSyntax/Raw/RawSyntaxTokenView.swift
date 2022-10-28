@@ -13,7 +13,8 @@
 extension RawSyntax {
   /// A view into the `RawSyntax` that exposes functionality that's specific to tokens.
   /// The token's payload must be a token, otherwise this traps.
-  var tokenView: RawSyntaxTokenView? {
+  @_spi(RawSyntax)
+  public var tokenView: RawSyntaxTokenView? {
     switch raw.payload {
     case .parsedToken, .materializedToken:
       return RawSyntaxTokenView(raw: self)
@@ -24,7 +25,8 @@ extension RawSyntax {
 }
 
 /// A view into `RawSyntax` that exposes functionality that only applies to tokens.
-struct RawSyntaxTokenView {
+@_spi(RawSyntax)
+public struct RawSyntaxTokenView {
   let raw: RawSyntax
 
   fileprivate init(raw: RawSyntax) {
@@ -38,7 +40,8 @@ struct RawSyntaxTokenView {
   }
 
   /// Token kind of this node.
-  var rawKind: RawTokenKind {
+  @_spi(RawSyntax)
+  public var rawKind: RawTokenKind {
     switch raw.rawData.payload {
     case .materializedToken(let dat):
       return dat.tokenKind
@@ -50,7 +53,8 @@ struct RawSyntaxTokenView {
   }
 
   /// Token text of this node.
-  var rawText: SyntaxText {
+  @_spi(RawSyntax)
+  public var rawText: SyntaxText {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return dat.tokenText
@@ -62,7 +66,8 @@ struct RawSyntaxTokenView {
   }
 
   /// The UTF-8 byte length of the leading trivia.
-  var leadingTriviaByteLength: Int {
+  @_spi(RawSyntax)
+  public var leadingTriviaByteLength: Int {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return dat.leadingTriviaText.count
@@ -74,7 +79,8 @@ struct RawSyntaxTokenView {
   }
 
   /// The UTF-8 byte length of the trailing trivia.
-  var trailingTriviaByteLength: Int {
+  @_spi(RawSyntax)
+  public var trailingTriviaByteLength: Int {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return dat.trailingTriviaText.count
@@ -85,7 +91,8 @@ struct RawSyntaxTokenView {
     }
   }
 
-  var leadingRawTriviaPieces: [RawTriviaPiece] {
+  @_spi(RawSyntax)
+  public var leadingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return raw.arena.parseTrivia(source: dat.leadingTriviaText, position: .leading)
@@ -96,7 +103,8 @@ struct RawSyntaxTokenView {
     }
   }
 
-  var trailingRawTriviaPieces: [RawTriviaPiece] {
+  @_spi(RawSyntax)
+  public var trailingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return raw.arena.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
@@ -108,28 +116,33 @@ struct RawSyntaxTokenView {
   }
 
   /// Returns the leading `Trivia` length.
-  var leadingTriviaLength: SourceLength {
+  @_spi(RawSyntax)
+  public var leadingTriviaLength: SourceLength {
     return SourceLength(utf8Length: leadingTriviaByteLength)
   }
 
   /// Returns the trailing `Trivia` length.
-  var trailingTriviaLength: SourceLength {
+  @_spi(RawSyntax)
+  public var trailingTriviaLength: SourceLength {
     return SourceLength(utf8Length: trailingTriviaByteLength)
   }
 
   /// Returns the leading `Trivia`.
-  func formLeadingTrivia() -> Trivia {
+  @_spi(RawSyntax)
+  public func formLeadingTrivia() -> Trivia {
     return Trivia(pieces: leadingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
   /// Returns the trailing `Trivia`.
   /// - Returns: nil if called on a layout node.
-  func formTrailingTrivia() -> Trivia {
+  @_spi(RawSyntax)
+  public func formTrailingTrivia() -> Trivia {
     return Trivia(pieces: trailingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
   /// Calls `body` with the token text. The token text value must not escape the closure.
-  func withUnsafeTokenText<Result>(
+  @_spi(RawSyntax)
+  public func withUnsafeTokenText<Result>(
     _ body: (SyntaxText?) -> Result
   ) -> Result {
     body(rawText)
@@ -137,7 +150,8 @@ struct RawSyntaxTokenView {
 
   /// Returns a `RawSyntax` node with the same source text but with the token
   /// kind changed to `newValue`.
-  func withKind(_ newValue: TokenKind) -> RawSyntax {
+  @_spi(RawSyntax)
+  public func withKind(_ newValue: TokenKind) -> RawSyntax {
     switch raw.rawData.payload {
     case .parsedToken(_):
       // The wholeText can't be continuous anymore. Make a materialized token.
@@ -162,7 +176,8 @@ struct RawSyntaxTokenView {
 
   /// The length of the token without leading or trailing trivia, assuming this
   /// is a token node.
-  var textByteLength: Int {
+  @_spi(RawSyntax)
+  public var textByteLength: Int {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return dat.tokenText.count
@@ -173,11 +188,13 @@ struct RawSyntaxTokenView {
     }
   }
 
-  var contentLength: SourceLength {
+  @_spi(RawSyntax)
+  public var contentLength: SourceLength {
     SourceLength(utf8Length: textByteLength)
   }
 
-  func formKind() -> TokenKind {
+  @_spi(RawSyntax)
+  public func formKind() -> TokenKind {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return TokenKind.fromRaw(kind: dat.tokenKind, text: String(syntaxText: dat.tokenText))
@@ -188,7 +205,8 @@ struct RawSyntaxTokenView {
     }
   }
 
-  var presence: SourcePresence {
+  @_spi(RawSyntax)
+  public var presence: SourcePresence {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
       return dat.presence
@@ -198,5 +216,4 @@ struct RawSyntaxTokenView {
       preconditionFailure("'presence' is a token-only property")
     }
   }
-
 }

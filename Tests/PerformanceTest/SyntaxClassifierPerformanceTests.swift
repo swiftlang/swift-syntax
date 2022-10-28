@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import XCTest
+import IDEUtils
 import SwiftSyntax
 import SwiftSyntaxParser
 

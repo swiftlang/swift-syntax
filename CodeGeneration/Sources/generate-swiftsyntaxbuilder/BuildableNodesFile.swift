@@ -26,11 +26,9 @@ let buildableNodesFile = SourceFile {
     let type = node.type
     let hasTrailingComma = node.traits.contains("WithTrailingComma")
 
-    // Generate node struct
+    let docComment: SwiftSyntax.Trivia = node.documentation.isEmpty ? [] : .docLineComment("/// \(node.documentation)") + .newline
     ExtensionDecl(
-      leadingTrivia: node.documentation.isEmpty
-        ? []
-        : .docLineComment("/// \(node.documentation)") + .newline,
+      leadingTrivia: docComment,
       extendedType: Type(type.shorthandName),
       inheritanceClause: hasTrailingComma ? TypeInheritanceClause { InheritedType(typeName: Type("HasTrailingComma")) } : nil
     ) {
@@ -89,12 +87,7 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
     signature: FunctionSignature(
       input: ParameterClause {
         for trivia in ["leadingTrivia", "trailingTrivia"] {
-          FunctionParameter(
-            firstName: .identifier(trivia),
-            colon: .colon,
-            type: Type("Trivia"),
-            defaultArgument: InitializerClause(value: ArrayExpr())
-          )
+          FunctionParameter("\(trivia): Trivia = []", for: .functionParameters)
         }
         for child in node.children {
           FunctionParameter(
@@ -112,7 +105,7 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
         assertStmt
       }
     }
-    let nodeConstructorCall = FunctionCallExpr(calledExpression: Expr(type.syntaxBaseName)) {
+    let nodeConstructorCall = FunctionCallExpr(callee: type.syntaxBaseName) {
       for child in node.children {
         TupleExprElement(
           label: child.isUnexpectedNodes ? nil : child.swiftName,
@@ -156,21 +149,16 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       } else {
         produceExpr = Expr(FunctionCallExpr("\(child.swiftName)Builder()"))
       }
+      let defaultArgument = ClosureExpr {
+        if child.type.isOptional {
+          NilLiteralExpr()
+        } else {
+          FunctionCallExpr("\(builderInitializableType.syntax)([])")
+        }
+      }
       builderParameters.append(FunctionParameter(
-        attributes: [CustomAttribute(attributeName: Type(builderInitializableType.resultBuilderBaseName), argumentList: nil)],
-        firstName: .identifier("\(child.swiftName)Builder").withLeadingTrivia(.space),
-        colon: .colon,
-        type: FunctionType(
-          arguments: [],
-          returnType: builderInitializableType.syntax
-        ),
-        defaultArgument: InitializerClause(value: ClosureExpr {
-          if child.type.isOptional {
-            NilLiteralExpr()
-          } else {
-            FunctionCallExpr("\(builderInitializableType.syntax)([])")
-          }
-        })
+        "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () -> \(builderInitializableType.syntax) = \(defaultArgument)",
+        for: .functionParameters
       ))
     } else if let token = child.type.token, token.text == nil {
       // Allow initializing identifiers and other tokens without default text with a String
@@ -182,11 +170,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       } else {
         produceExpr = Expr(FunctionCallExpr("\(tokenExpr)(\(child.swiftName))"))
       }
-      normalParameters.append(FunctionParameter(
-        firstName: .identifier(child.swiftName),
-        colon: .colon,
-        type: paramType
-      ))
+      normalParameters.append(FunctionParameter("\(child.swiftName): \(paramType)", for: .functionParameters))
     } else {
       produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
       normalParameters.append(FunctionParameter(
@@ -217,19 +201,14 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
     modifiers: [DeclModifier(name: .public)],
     signature: FunctionSignature(
       input: ParameterClause {
-        FunctionParameter(
-          firstName: .identifier("leadingTrivia"),
-          colon: .colon,
-          type: Type("Trivia"),
-          defaultArgument: InitializerClause(value: ArrayExpr())
-        )
+        FunctionParameter("leadingTrivia: Trivia = []", for: .functionParameters)
         for param in normalParameters + builderParameters {
           param
         }
       }
     )
   ) {
-    FunctionCallExpr(calledExpression: MemberAccessExpr("self.init")) {
+    FunctionCallExpr(callee: "self.init") {
       for arg in delegatedInitArgs {
         arg
       }

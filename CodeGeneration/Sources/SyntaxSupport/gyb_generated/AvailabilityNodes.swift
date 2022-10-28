@@ -27,23 +27,18 @@ public let AVAILABILITY_NODES: [Node] = [
                kind: "Syntax",
                description: "The actual argument",
                nodeChoices: [
-                 Child(name: "Star",
-                       kind: "SpacedBinaryOperatorToken",
+                 Child(name: "Token",
+                       kind: "Token",
                        tokenChoices: [
-                         "SpacedBinaryOperator"
-                       ],
-                       textChoices: [
-                         "*"
-                       ]),
-                 Child(name: "IdentifierRestriction",
-                       kind: "IdentifierToken",
-                       tokenChoices: [
+                         "SpacedBinaryOperator",
                          "Identifier"
                        ]),
                  Child(name: "AvailabilityVersionRestriction",
                        kind: "AvailabilityVersionRestriction"),
                  Child(name: "AvailabilityLabeledArgument",
-                       kind: "AvailabilityLabeledArgument")
+                       kind: "AvailabilityLabeledArgument"),
+                 Child(name: "TokenList",
+                       kind: "TokenList")
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",
@@ -108,19 +103,11 @@ public let AVAILABILITY_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "MajorMinor",
-               kind: "Syntax",
+               kind: "Token",
                description: "In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version.",
-               nodeChoices: [
-                 Child(name: "Major",
-                       kind: "IntegerLiteralToken",
-                       tokenChoices: [
-                         "IntegerLiteral"
-                       ]),
-                 Child(name: "MajorMinor",
-                       kind: "FloatingLiteralToken",
-                       tokenChoices: [
-                         "FloatingLiteral"
-                       ])
+               tokenChoices: [
+                 "IntegerLiteral",
+                 "FloatingLiteral"
                ]),
          Child(name: "PatchPeriod",
                kind: "PeriodToken",

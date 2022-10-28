@@ -22,7 +22,9 @@ public class ParserTests: XCTestCase {
   func runParseTest(fileURL: URL, checkDiagnostics: Bool) throws {
     let fileContents = try Data(contentsOf: fileURL)
     let parsed = fileContents.withUnsafeBytes({ buffer in
-      Parser.parse(source: buffer.bindMemory(to: UInt8.self))
+      // Release builds are fine with the default maximum nesting level of 256.
+      // Debug builds overflow with any stack size bigger than 25-ish.
+      Parser.parse(source: buffer.bindMemory(to: UInt8.self), maximumNestingLevel: 25)
     })
     AssertDataEqualWithDiff(Data(parsed.syntaxTextBytes), fileContents,
                             additionalInfo: "Failed in file \(fileURL)")
@@ -103,14 +105,7 @@ public class ParserTests: XCTestCase {
       .appendingPathComponent("swift")
       .appendingPathComponent("test")
     runParserTests(
-      name: "Swift tests", path: testDir, checkDiagnostics: false,
-      shouldExclude: { fileURL in
-        false
-
-        // These tests overflow the parser.
-        || fileURL.absoluteString.contains("_overflow")
-        || fileURL.absoluteString.contains("parser-cutoff.swift")
-      }
+      name: "Swift tests", path: testDir, checkDiagnostics: false
     )
   }
 
@@ -127,40 +122,7 @@ public class ParserTests: XCTestCase {
       .appendingPathComponent("swift")
       .appendingPathComponent("validation-test")
     runParserTests(
-      name: "Swift validation tests", path: testDir, checkDiagnostics: false,
-      shouldExclude: { fileURL in
-        false
-
-        // Crashes due to deep recursion in the parser.
-        || fileURL.absoluteString.contains("swift-lexer-leximpl.swift")
-        || fileURL.absoluteString.contains("swift-inflightdiagnostic.swift")
-        || fileURL.absoluteString.contains("swift-lexer-kindofidentifier.swift")
-        || fileURL.absoluteString.contains("swift-lexer-lexidentifier.swift")
-        || fileURL.absoluteString.contains("swift-parser-skipsingle.swift")
-        || fileURL.absoluteString.contains("swift-lexer-kindofidentifier.swift")
-        || fileURL.absoluteString.contains("swift-lexer-lexstringliteral.swift")
-        || fileURL.absoluteString.contains("swift-lexer-lexoperatoridentifier.swift")
-        || fileURL.absoluteString.contains("26089-swift-constraints-constraintsystem-getconstraintlocator.swift")
-        || fileURL.absoluteString.contains("28616-swift-parser-parseexprsequence-swift-diag-bool-bool.swift")
-        || fileURL.absoluteString.contains("26205-swift-lexer-leximpl.swift")
-        || fileURL.absoluteString.contains("28686-swift-typebase-getcanonicaltype.swift")
-        || fileURL.absoluteString.contains(
-          "28591-swift-constraints-constraintsystem-solvesimplified-llvm-smallvectorimpl-swift-co.swift")
-        || fileURL.absoluteString.contains("28678-result-case-not-implemented.swift")
-        || fileURL.absoluteString.contains("28685-unreachable-executed-at-swift-lib-ast-type-cpp-1344.swift")
-        || fileURL.absoluteString.contains(
-          "28651-swift-cleanupillformedexpressionraii-doit-swift-expr-swift-astcontext-cleanupill.swift")
-        || fileURL.absoluteString.contains("28681-swift-typebase-getcanonicaltype.swift")
-        || fileURL.absoluteString.contains(
-          "28684-isactuallycanonicalornull-forming-a-cantype-out-of-a-non-canonical-type.swift")
-        || fileURL.absoluteString.contains("26659-swift-genericsignature-getcanonicalmanglingsignature.swift")
-        || fileURL.absoluteString.contains("26162-swift-constraints-constraintsystem-getconstraintlocator.swift")
-        || fileURL.absoluteString.contains("26161-swift-patternbindingdecl-setpattern.swift")
-        || fileURL.absoluteString.contains("26101-swift-parser-parsenewdeclattribute.swift")
-        || fileURL.absoluteString.contains("26773-swift-diagnosticengine-diagnose.swift")
-        || fileURL.absoluteString.contains("parser-cutoff.swift")
-        || fileURL.absoluteString.contains("26233-swift-iterabledeclcontext-getmembers.swift")
-      }
+      name: "Swift validation tests", path: testDir, checkDiagnostics: false
     )
   }
 }

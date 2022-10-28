@@ -68,7 +68,8 @@ extension RawSyntax: RawSyntaxNodeProtocol {
 public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
   public typealias SyntaxType = TokenSyntax
 
-  var tokenView: RawSyntaxTokenView {
+  @_spi(RawSyntax)
+  public var tokenView: RawSyntaxTokenView {
     return raw.tokenView!
   }
 

@@ -64,11 +64,16 @@ class Child(object):
         assert len(self.node_choices) != 1
 
         # Check node choices are well-formed
+        existing_type_names = set()
         for choice in self.node_choices:
             assert not choice.is_optional, \
                 "node choice %s cannot be optional" % choice.name
             assert not choice.node_choices, \
                 "node choice %s cannot have further choices" % choice.name
+
+            assert not choice.type_name in existing_type_names, \
+                f"{name} cannot have multiple node choices of type {choice.type_name}"
+            existing_type_names.add(choice.type_name)
 
     def is_token(self):
         """

@@ -10,10 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension SyntaxData {
+@_spi(RawSyntax) import SwiftSyntax
+
+fileprivate extension SyntaxProtocol {
   var contextualClassification: (SyntaxClassification, Bool)? {
     var contextualClassif: (SyntaxClassification, Bool)? = nil
-    var curData = self
+    var curData = Syntax(self)
     repeat {
       guard let parent = curData.parent else { break }
       contextualClassif = SyntaxClassification.classify(parentKind: parent.raw.kind,
@@ -27,10 +29,10 @@ extension SyntaxData {
 extension TokenSyntax {
   /// The `SyntaxClassifiedRange` for the token text, excluding trivia.
   public var tokenClassification: SyntaxClassifiedRange {
-    let contextualClassification = self.data.contextualClassification
-    let relativeOffset = tokenView.leadingTriviaLength.utf8Length
+    let contextualClassification = self.contextualClassification
+    let relativeOffset = leadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    return TokenKindAndText(kind: tokenView.rawKind, text: tokenView.rawText).classify(
+    return TokenKindAndText(kind: rawTokenKind, text: tokenView.rawText).classify(
       offset: absoluteOffset, contextualClassification: contextualClassification)
   }
 }
@@ -122,7 +124,7 @@ private struct ClassificationVisitor {
       _ = self.visit(Descriptor(
         node: node.raw,
         byteOffset: node.position.utf8Offset,
-        contextualClassification: node.data.contextualClassification))
+        contextualClassification: node.contextualClassification))
     }
   }
 

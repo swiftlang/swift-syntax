@@ -23,6 +23,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_MACOSX_RPATH YES)
 
+add_compile_options(
+  $<$<COMPILE_LANGUAGE:Swift>:-Xfrontend>
+  $<$<COMPILE_LANGUAGE:Swift>:-disable-implicit-string-processing-module-import>)
+
 add_subdirectory(Sources)
 
 export(EXPORT SwiftSyntaxTargets

@@ -1295,6 +1295,17 @@ final class DeclarationTests: XCTestCase {
       ]
     )
   }
+
+  func testIssue1025() {
+    AssertParse("""
+      struct Math {
+        public static let pi = 3.14
+        @available(*, unavailable) init() {}
+      }
+      """)
+
+    AssertParse("func foo(body: (isolated String) -> Int) {}")
+  }
 }
 
 extension Parser.DeclAttributes {

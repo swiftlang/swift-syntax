@@ -6010,12 +6010,14 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     case `switchCases`(SwitchCaseListSyntax)
     case `decls`(MemberDeclListSyntax)
     case `postfixExpression`(ExprSyntax)
+    case `attributes`(AttributeListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .statements(let node): return node._syntaxNode
       case .switchCases(let node): return node._syntaxNode
       case .decls(let node): return node._syntaxNode
       case .postfixExpression(let node): return node._syntaxNode
+      case .attributes(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -6030,6 +6032,9 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init<Node: ExprSyntaxProtocol>(_ node: Node) {
       self = .postfixExpression(ExprSyntax(node))
+    }
+    public init(_ node: AttributeListSyntax) {
+      self = .attributes(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
       if let node = syntaxNode.as(CodeBlockItemListSyntax.self) {
@@ -6048,6 +6053,10 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
         self = .postfixExpression(node)
         return
       }
+      if let node = syntaxNode.as(AttributeListSyntax.self) {
+        self = .attributes(node)
+        return
+      }
       return nil
     }
 
@@ -6057,6 +6066,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
         .node(SwitchCaseListSyntax.self),
         .node(MemberDeclListSyntax.self),
         .node(ExprSyntax.self),
+        .node(AttributeListSyntax.self),
       ])
     }
   }
@@ -12284,9 +12294,8 @@ extension CustomAttributeSyntax: CustomReflectable {
 /// 
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Argument: SyntaxChildChoices {
-    case `identifier`(TokenSyntax)
-    case `string`(TokenSyntax)
-    case `integer`(TokenSyntax)
+    case `token`(TokenSyntax)
+    case `stringExpr`(StringLiteralExprSyntax)
     case `availability`(AvailabilitySpecListSyntax)
     case `specializeArguments`(SpecializeAttributeSpecListSyntax)
     case `objCName`(ObjCSelectorSyntax)
@@ -12297,12 +12306,12 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `backDeployArguments`(BackDeployAttributeSpecListSyntax)
     case `conventionArguments`(ConventionAttributeArgumentsSyntax)
     case `conventionWitnessMethodArguments`(ConventionWitnessMethodAttributeArgumentsSyntax)
+    case `opaqueReturnTypeOfAttributeArguments`(OpaqueReturnTypeOfAttributeArgumentsSyntax)
     case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
-      case .identifier(let node): return node._syntaxNode
-      case .string(let node): return node._syntaxNode
-      case .integer(let node): return node._syntaxNode
+      case .token(let node): return node._syntaxNode
+      case .stringExpr(let node): return node._syntaxNode
       case .availability(let node): return node._syntaxNode
       case .specializeArguments(let node): return node._syntaxNode
       case .objCName(let node): return node._syntaxNode
@@ -12313,10 +12322,17 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       case .backDeployArguments(let node): return node._syntaxNode
       case .conventionArguments(let node): return node._syntaxNode
       case .conventionWitnessMethodArguments(let node): return node._syntaxNode
+      case .opaqueReturnTypeOfAttributeArguments(let node): return node._syntaxNode
       case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: TokenSyntax) {
+      self = .token(node)
+    }
+    public init(_ node: StringLiteralExprSyntax) {
+      self = .stringExpr(node)
+    }
     public init(_ node: AvailabilitySpecListSyntax) {
       self = .availability(node)
     }
@@ -12347,17 +12363,19 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     public init(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
       self = .conventionWitnessMethodArguments(node)
     }
+    public init(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
+      self = .opaqueReturnTypeOfAttributeArguments(node)
+    }
     public init(_ node: TokenListSyntax) {
       self = .tokenList(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .identifier: self = .identifier(tok)
-        case .stringLiteral: self = .string(tok)
-        case .integerLiteral: self = .integer(tok)
-        default: return nil
-        }
+      if let node = syntaxNode.as(TokenSyntax.self) {
+        self = .token(node)
+        return
+      }
+      if let node = syntaxNode.as(StringLiteralExprSyntax.self) {
+        self = .stringExpr(node)
         return
       }
       if let node = syntaxNode.as(AvailabilitySpecListSyntax.self) {
@@ -12400,6 +12418,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .conventionWitnessMethodArguments(node)
         return
       }
+      if let node = syntaxNode.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
+        self = .opaqueReturnTypeOfAttributeArguments(node)
+        return
+      }
       if let node = syntaxNode.as(TokenListSyntax.self) {
         self = .tokenList(node)
         return
@@ -12409,9 +12431,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
 
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .token(.identifier("")),
-        .token(.stringLiteral("")),
-        .token(.integerLiteral("")),
+        .node(TokenSyntax.self),
+        .node(StringLiteralExprSyntax.self),
         .node(AvailabilitySpecListSyntax.self),
         .node(SpecializeAttributeSpecListSyntax.self),
         .node(ObjCSelectorSyntax.self),
@@ -12422,6 +12443,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         .node(BackDeployAttributeSpecListSyntax.self),
         .node(ConventionAttributeArgumentsSyntax.self),
         .node(ConventionWitnessMethodAttributeArgumentsSyntax.self),
+        .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self),
         .node(TokenListSyntax.self),
       ])
     }
@@ -13785,15 +13807,15 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: TokenSyntax) {
+      self = .string(node)
+    }
     public init(_ node: DeclNameSyntax) {
       self = .declname(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .stringLiteral: self = .string(tok)
-        default: return nil
-        }
+      if let node = syntaxNode.as(TokenSyntax.self) {
+        self = .string(node)
         return
       }
       if let node = syntaxNode.as(DeclNameSyntax.self) {
@@ -13805,7 +13827,7 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
 
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .token(.stringLiteral("")),
+        .node(TokenSyntax.self),
         .node(DeclNameSyntax.self),
       ])
     }
@@ -14049,36 +14071,6 @@ extension NamedAttributeStringArgumentSyntax: CustomReflectable {
 // MARK: - DeclNameSyntax
 
 public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum DeclBaseName: SyntaxChildChoices {
-    case `identifier`(TokenSyntax)
-    case `operator`(TokenSyntax)
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .identifier(let node): return node._syntaxNode
-      case .operator(let node): return node._syntaxNode
-      }
-    }
-    init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .identifier: self = .identifier(tok)
-        case .prefixOperator: self = .operator(tok)
-        default: return nil
-        }
-        return
-      }
-      return nil
-    }
-
-    public static var structure: SyntaxNodeStructure {
-      return .choices([
-        .token(.identifier("")),
-        .token(.prefixOperator("")),
-      ])
-    }
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DeclNameSyntax` if possible. Returns
@@ -14098,7 +14090,7 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil,
-    declBaseName: DeclBaseName,
+    declBaseName: TokenSyntax,
     _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
     declNameArguments: DeclNameArgumentsSyntax?,
     _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil
@@ -14140,10 +14132,10 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// 
   /// The base name of the protocol's requirement.
   /// 
-  public var declBaseName: DeclBaseName {
+  public var declBaseName: TokenSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return DeclBaseName(childData!)
+      return TokenSyntax(childData!)
     }
     set(value) {
       self = withDeclBaseName(value)
@@ -14154,8 +14146,8 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `declBaseName` to replace the node's
   ///                   current `declBaseName`, if present.
   public func withDeclBaseName(
-    _ newChild: DeclBaseName?) -> DeclNameSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
+    _ newChild: TokenSyntax?) -> DeclNameSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return DeclNameSyntax(newData)
   }
@@ -15664,40 +15656,6 @@ extension DifferentiabilityParamsSyntax: CustomReflectable {
 /// parameter name, or a function parameter index.
 /// 
 public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Parameter: SyntaxChildChoices {
-    case `self`(TokenSyntax)
-    case `name`(TokenSyntax)
-    case `index`(TokenSyntax)
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .self(let node): return node._syntaxNode
-      case .name(let node): return node._syntaxNode
-      case .index(let node): return node._syntaxNode
-      }
-    }
-    init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .selfKeyword: self = .self(tok)
-        case .identifier: self = .name(tok)
-        case .integerLiteral: self = .index(tok)
-        default: return nil
-        }
-        return
-      }
-      return nil
-    }
-
-    public static var structure: SyntaxNodeStructure {
-      return .choices([
-        .token(.selfKeyword),
-        .token(.identifier("")),
-        .token(.integerLiteral("")),
-      ])
-    }
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DifferentiabilityParamSyntax` if possible. Returns
@@ -15717,7 +15675,7 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil,
-    parameter: Parameter,
+    parameter: TokenSyntax,
     _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil
@@ -15756,10 +15714,10 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
     return DifferentiabilityParamSyntax(newData)
   }
 
-  public var parameter: Parameter {
+  public var parameter: TokenSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Parameter(childData!)
+      return TokenSyntax(childData!)
     }
     set(value) {
       self = withParameter(value)
@@ -15770,8 +15728,8 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `parameter` to replace the node's
   ///                   current `parameter`, if present.
   public func withParameter(
-    _ newChild: Parameter?) -> DifferentiabilityParamSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
+    _ newChild: TokenSyntax?) -> DifferentiabilityParamSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.selfKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return DifferentiabilityParamSyntax(newData)
   }
@@ -16657,40 +16615,6 @@ extension QualifiedDeclNameSyntax: CustomReflectable {
 
 /// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Name: SyntaxChildChoices {
-    case `identifier`(TokenSyntax)
-    case `prefixOperator`(TokenSyntax)
-    case `spacedBinaryOperator`(TokenSyntax)
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .identifier(let node): return node._syntaxNode
-      case .prefixOperator(let node): return node._syntaxNode
-      case .spacedBinaryOperator(let node): return node._syntaxNode
-      }
-    }
-    init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .identifier: self = .identifier(tok)
-        case .prefixOperator: self = .prefixOperator(tok)
-        case .spacedBinaryOperator: self = .spacedBinaryOperator(tok)
-        default: return nil
-        }
-        return
-      }
-      return nil
-    }
-
-    public static var structure: SyntaxNodeStructure {
-      return .choices([
-        .token(.identifier("")),
-        .token(.prefixOperator("")),
-        .token(.spacedBinaryOperator("")),
-      ])
-    }
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `FunctionDeclNameSyntax` if possible. Returns
@@ -16710,7 +16634,7 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
-    name: Name,
+    name: TokenSyntax,
     _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
     arguments: DeclNameArgumentsSyntax?,
     _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil
@@ -16752,10 +16676,10 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// 
   /// The base name of the referenced function.
   /// 
-  public var name: Name {
+  public var name: TokenSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Name(childData!)
+      return TokenSyntax(childData!)
     }
     set(value) {
       self = withName(value)
@@ -16766,8 +16690,8 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
   public func withName(
-    _ newChild: Name?) -> FunctionDeclNameSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
+    _ newChild: TokenSyntax?) -> FunctionDeclNameSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return FunctionDeclNameSyntax(newData)
   }
@@ -25993,32 +25917,34 @@ extension TuplePatternElementSyntax: CustomReflectable {
 /// 
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Entry: SyntaxChildChoices {
-    case `star`(TokenSyntax)
-    case `identifierRestriction`(TokenSyntax)
+    case `token`(TokenSyntax)
     case `availabilityVersionRestriction`(AvailabilityVersionRestrictionSyntax)
     case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
+    case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
-      case .star(let node): return node._syntaxNode
-      case .identifierRestriction(let node): return node._syntaxNode
+      case .token(let node): return node._syntaxNode
       case .availabilityVersionRestriction(let node): return node._syntaxNode
       case .availabilityLabeledArgument(let node): return node._syntaxNode
+      case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: TokenSyntax) {
+      self = .token(node)
+    }
     public init(_ node: AvailabilityVersionRestrictionSyntax) {
       self = .availabilityVersionRestriction(node)
     }
     public init(_ node: AvailabilityLabeledArgumentSyntax) {
       self = .availabilityLabeledArgument(node)
     }
+    public init(_ node: TokenListSyntax) {
+      self = .tokenList(node)
+    }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .spacedBinaryOperator: self = .star(tok)
-        case .identifier: self = .identifierRestriction(tok)
-        default: return nil
-        }
+      if let node = syntaxNode.as(TokenSyntax.self) {
+        self = .token(node)
         return
       }
       if let node = syntaxNode.as(AvailabilityVersionRestrictionSyntax.self) {
@@ -26029,15 +25955,19 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
         self = .availabilityLabeledArgument(node)
         return
       }
+      if let node = syntaxNode.as(TokenListSyntax.self) {
+        self = .tokenList(node)
+        return
+      }
       return nil
     }
 
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .token(.spacedBinaryOperator("")),
-        .token(.identifier("")),
+        .node(TokenSyntax.self),
         .node(AvailabilityVersionRestrictionSyntax.self),
         .node(AvailabilityLabeledArgumentSyntax.self),
+        .node(TokenListSyntax.self),
       ])
     }
   }
@@ -26245,15 +26175,15 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: TokenSyntax) {
+      self = .string(node)
+    }
     public init(_ node: VersionTupleSyntax) {
       self = .version(node)
     }
     public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .stringLiteral: self = .string(tok)
-        default: return nil
-        }
+      if let node = syntaxNode.as(TokenSyntax.self) {
+        self = .string(node)
         return
       }
       if let node = syntaxNode.as(VersionTupleSyntax.self) {
@@ -26265,7 +26195,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
 
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .token(.stringLiteral("")),
+        .node(TokenSyntax.self),
         .node(VersionTupleSyntax.self),
       ])
     }
@@ -26707,36 +26637,6 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
 /// and patch part may be omitted.
 /// 
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum MajorMinor: SyntaxChildChoices {
-    case `major`(TokenSyntax)
-    case `majorMinor`(TokenSyntax)
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .major(let node): return node._syntaxNode
-      case .majorMinor(let node): return node._syntaxNode
-      }
-    }
-    init(_ data: SyntaxData) { self.init(Syntax(data))! }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let tok = syntaxNode.as(TokenSyntax.self) {
-        switch tok.rawTokenKind {
-        case .integerLiteral: self = .major(tok)
-        case .floatingLiteral: self = .majorMinor(tok)
-        default: return nil
-        }
-        return
-      }
-      return nil
-    }
-
-    public static var structure: SyntaxNodeStructure {
-      return .choices([
-        .token(.integerLiteral("")),
-        .token(.floatingLiteral("")),
-      ])
-    }
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `VersionTupleSyntax` if possible. Returns
@@ -26756,7 +26656,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil,
-    majorMinor: MajorMinor,
+    majorMinor: TokenSyntax,
     _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil,
     patchPeriod: TokenSyntax?,
     _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil,
@@ -26806,10 +26706,10 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   /// floating literal in which the decimal part is interpreted
   /// as the minor version.
   /// 
-  public var majorMinor: MajorMinor {
+  public var majorMinor: TokenSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return MajorMinor(childData!)
+      return TokenSyntax(childData!)
     }
     set(value) {
       self = withMajorMinor(value)
@@ -26820,8 +26720,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `majorMinor` to replace the node's
   ///                   current `majorMinor`, if present.
   public func withMajorMinor(
-    _ newChild: MajorMinor?) -> VersionTupleSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
+    _ newChild: TokenSyntax?) -> VersionTupleSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return VersionTupleSyntax(newData)
   }

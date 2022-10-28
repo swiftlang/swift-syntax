@@ -1228,7 +1228,7 @@ extension DeclName {
   ///   - declBaseName: The base name of the protocol's requirement.
   ///   - unexpectedBetweenDeclBaseNameAndDeclNameArguments: 
   ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeDeclBaseName: UnexpectedNodes? = nil, declBaseName: DeclBaseName, unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes? = nil, declNameArguments: DeclNameArguments? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeDeclBaseName: UnexpectedNodes? = nil, declBaseName: Token, unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes? = nil, declNameArguments: DeclNameArguments? = nil) {
     self = DeclNameSyntax(unexpectedBeforeDeclBaseName, declBaseName: declBaseName, unexpectedBetweenDeclBaseNameAndDeclNameArguments, declNameArguments: declNameArguments)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
     self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
@@ -1438,7 +1438,7 @@ extension DifferentiabilityParam: HasTrailingComma {
   ///   - parameter: 
   ///   - unexpectedBetweenParameterAndTrailingComma: 
   ///   - trailingComma: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeParameter: UnexpectedNodes? = nil, parameter: Parameter, unexpectedBetweenParameterAndTrailingComma: UnexpectedNodes? = nil, trailingComma: Token? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeParameter: UnexpectedNodes? = nil, parameter: Token, unexpectedBetweenParameterAndTrailingComma: UnexpectedNodes? = nil, trailingComma: Token? = nil) {
     assert(trailingComma == nil || trailingComma!.text == ",")
     self = DifferentiabilityParamSyntax(unexpectedBeforeParameter, parameter: parameter, unexpectedBetweenParameterAndTrailingComma, trailingComma: trailingComma)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
@@ -1941,7 +1941,7 @@ extension FunctionDeclName {
   ///   - name: The base name of the referenced function.
   ///   - unexpectedBetweenNameAndArguments: 
   ///   - arguments: The argument labels of the referenced function, optionallyspecified.
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeName: UnexpectedNodes? = nil, name: Name, unexpectedBetweenNameAndArguments: UnexpectedNodes? = nil, arguments: DeclNameArguments? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeName: UnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndArguments: UnexpectedNodes? = nil, arguments: DeclNameArguments? = nil) {
     self = FunctionDeclNameSyntax(unexpectedBeforeName, name: name, unexpectedBetweenNameAndArguments, arguments: arguments)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
     self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
@@ -4901,7 +4901,7 @@ extension VersionTuple {
   ///   - patchPeriod: If the version contains a patch number, the periodseparating the minor from the patch number.
   ///   - unexpectedBetweenPatchPeriodAndPatchVersion: 
   ///   - patchVersion: The patch version if specified.
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeMajorMinor: UnexpectedNodes? = nil, majorMinor: MajorMinor, unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodes? = nil, patchPeriod: Token? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodes? = nil, patchVersion: Token? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeMajorMinor: UnexpectedNodes? = nil, majorMinor: Token, unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodes? = nil, patchPeriod: Token? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodes? = nil, patchVersion: Token? = nil) {
     assert(patchPeriod == nil || patchPeriod!.text == ".")
     self = VersionTupleSyntax(unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
@@ -4910,7 +4910,7 @@ extension VersionTuple {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforeMajorMinor: UnexpectedNodes? = nil, majorMinor: MajorMinor, unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodes? = nil, patchPeriod: Token? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodes? = nil, patchVersion: String?) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforeMajorMinor: UnexpectedNodes? = nil, majorMinor: Token, unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodes? = nil, patchPeriod: Token? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodes? = nil, patchVersion: String?) {
     self.init (unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion.map { 
       Token.`integerLiteral`($0) 
     })

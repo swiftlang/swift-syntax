@@ -121,6 +121,8 @@ func nodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ nodes: [Synta
      missingSyntaxNodes.contains(Syntax(lastToken)) {
     if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
       return (commonAncestor, nodeTypeName)
+    } else if let nodeTypeName = commonAncestor.childNameInParent {
+      return (commonAncestor, nodeTypeName)
     }
   }
 

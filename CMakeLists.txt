@@ -23,9 +23,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_MACOSX_RPATH YES)
 
+# Ensure that we do not link the _StringProcessing module.
 add_compile_options(
   $<$<COMPILE_LANGUAGE:Swift>:-Xfrontend>
   $<$<COMPILE_LANGUAGE:Swift>:-disable-implicit-string-processing-module-import>)
+
+# Force single-threaded builds to eliminate the Darwin dependency.
+add_compile_definitions(
+  $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED>
+)
 
 add_subdirectory(Sources)
 

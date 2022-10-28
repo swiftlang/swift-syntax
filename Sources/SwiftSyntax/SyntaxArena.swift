@@ -28,15 +28,19 @@ public class SyntaxArena {
   private var hasParent: Bool
   private var parseTriviaFunction: ParseTriviaFunction
 
+  #if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
   /// Thread safe guard.
   private let lock: PlatformMutex
   private var singleThreadMode: Bool
+  #endif
 
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
     self.allocator = BumpPtrAllocator()
+#if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
     self.lock = PlatformMutex(allocator: self.allocator)
     self.singleThreadMode = false
+#endif
     self.children = []
     self.sourceBuffer = .init(start: nil, count: 0)
     self.hasParent = false
@@ -44,9 +48,11 @@ public class SyntaxArena {
   }
 
   deinit {
+#if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
     // Make sure we give the platform lock a chance to deinitialize any
     // memory it used.
     lock.deinitialize()
+#endif
   }
 
   public convenience init() {
@@ -54,17 +60,23 @@ public class SyntaxArena {
   }
 
   private func withGuard<R>(_ body: () throws -> R) rethrows -> R {
+#if SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
+    return try body()
+#else
     if self.singleThreadMode {
       return try body()
     } else {
       return try self.lock.withGuard(body: body)
     }
+#endif
   }
 
   public func assumingSingleThread<R>(body: () throws -> R) rethrows -> R {
+#if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
     let oldValue = self.singleThreadMode
     defer { self.singleThreadMode = oldValue }
     self.singleThreadMode = true
+#endif
     return try body()
   }
 

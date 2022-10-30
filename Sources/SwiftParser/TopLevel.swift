@@ -144,7 +144,7 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawCodeBlockItemSyntax(
         remainingTokens,
-        item: RawSyntax(RawMissingExprSyntax(arena: self.arena)),
+        item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
         semicolon: nil,
         errorTokens: nil,
         arena: self.arena

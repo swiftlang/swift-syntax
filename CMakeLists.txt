@@ -23,6 +23,31 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_MACOSX_RPATH YES)
 
+# Ensure that we do not link the _StringProcessing module. But we can
+# only pass this flag for new-enough compilers that support it.
+file(WRITE "${CMAKE_BINARY_DIR}/tmp/empty-check-string-processing.swift" "")
+execute_process(
+  COMMAND
+    "${CMAKE_Swift_COMPILER}"
+    -Xfrontend -disable-implicit-string-processing-module-import
+    -c - -o /dev/null
+  INPUT_FILE
+    "${CMAKE_BINARY_DIR}/tmp/empty-check-string-processing.swift"
+  OUTPUT_QUIET ERROR_QUIET
+  RESULT_VARIABLE
+    SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
+if (NOT SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
+  add_compile_options(
+    $<$<COMPILE_LANGUAGE:Swift>:-Xfrontend>
+    $<$<COMPILE_LANGUAGE:Swift>:-disable-implicit-string-processing-module-import>)
+endif()
+
+# Force single-threaded-only syntax trees to eliminate the Darwin
+# dependency in the compiler.
+add_compile_definitions(
+  $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED>
+)
+
 add_subdirectory(Sources)
 
 export(EXPORT SwiftSyntaxTargets

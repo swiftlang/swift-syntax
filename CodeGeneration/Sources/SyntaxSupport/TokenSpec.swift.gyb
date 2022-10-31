@@ -25,7 +25,7 @@ public class TokenSpec {
   public let nameForDiagnostics: String
   public let unprefixedKind: String
   public let text: String?
-  public let classification: String
+  public let classification: SyntaxClassification?
   public let isKeyword: Bool
   public let requiresLeadingSpace: Bool
   public let requiresTrailingSpace: Bool
@@ -60,7 +60,7 @@ public class TokenSpec {
       self.unprefixedKind = kind
     }
     self.text = text
-    self.classification = classification
+    self.classification = classificationByName(classification)
     self.isKeyword = isKeyword
     self.requiresLeadingSpace = requiresLeadingSpace
     self.requiresTrailingSpace = requiresTrailingSpace
@@ -209,6 +209,7 @@ public class MiscSpec: TokenSpec { }
 public let SYNTAX_TOKENS: [TokenSpec] = [
 % for token in SYNTAX_TOKENS:
 %   class_name = type(token).__name__
+%   classification = "classification: \"%s\"" % token.classification.name if token.classification.name not in ['None', 'Keyword', 'ObjectLiteral', 'PoundDirectiveKeyword'] or class_name == 'Misc' and token.classification.name != 'None' else None
 %   parameters = ["name: \"%s\"" % token.name]
 %   if class_name in ['Keyword', 'SwiftKeyword', 'DeclKeyword', 'StmtKeyword', 'ExprKeyword', 'PatternKeyword', 'SilKeyword']:
 %     parameters += ["text: \"%s\"" % token.text]
@@ -222,8 +223,15 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
 %     if token.text:
 %       parameters += ["text: \"%s\"" % token.text]
 %     end
+%     if classification:
+%       parameters += [classification]
+%     end
 %   elif class_name == 'PoundObjectLiteral':
-%     parameters += ["kind: \"%s\"" % token.kind, "text: \"%s\"" % token.text, "nameForDiagnostics: \"%s\"" % token.name_for_diagnostics, "protocol: \"%s\"" % token.protocol]
+%     parameters += ["kind: \"%s\"" % token.kind, "text: \"%s\"" % token.text]
+%     if classification:
+%       parameters += [classification]
+%     end
+%     parameters += ["nameForDiagnostics: \"%s\"" % token.name_for_diagnostics, "protocol: \"%s\"" % token.protocol]
 %   else:
 %     print("Unknown token `%s`", (token.name), file=sys.stderr)
 %     sys.exit(1)

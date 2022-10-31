@@ -9,6 +9,7 @@ let package = Package(
     ],
   products: [
     .executable(name: "generate-swiftbasicformat", targets: ["generate-swiftbasicformat"]),
+    .executable(name: "generate-swiftideutils", targets: ["generate-swiftideutils"]),
     .executable(name: "generate-swiftsyntaxbuilder", targets: ["generate-swiftsyntaxbuilder"]),
   ],
   dependencies: [
@@ -18,6 +19,16 @@ let package = Package(
   targets: [
     .executableTarget(
       name: "generate-swiftbasicformat",
+      dependencies: [
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        "SyntaxSupport",
+        "Utils"
+      ]
+    ),
+    .executableTarget(
+      name: "generate-swiftideutils",
       dependencies: [
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),

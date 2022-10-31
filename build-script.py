@@ -26,8 +26,6 @@ SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftParser")
 
 CODE_GENERATION_DIR = os.path.join(PACKAGE_DIR, "CodeGeneration")
-GENERATESWIFTSYNTAXBUILDER_DIR = \
-        os.path.join(CODE_GENERATION_DIR, "Sources", "generate-swiftsyntaxbuilder")
 SYNTAXSUPPORT_DIR = \
         os.path.join(CODE_GENERATION_DIR, "Sources", "SyntaxSupport")
 
@@ -300,7 +298,6 @@ def generate_syntax_node_template_gyb_files(
 def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
     source_dirs = [
         SYNTAXSUPPORT_DIR,
-        IDEUTILS_DIR,
         SWIFTSYNTAX_DIR,
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAXBUILDER_DIR,
@@ -345,6 +342,7 @@ def generate_gyb_files(
 
 
 def run_code_generation(
+    swiftideutils_destination: str,
     swiftbasicformat_destination: str,
     swiftsyntaxbuilder_destination: str,
     toolchain: str,
@@ -353,6 +351,7 @@ def run_code_generation(
     print("** Running code generation **")
 
     target_to_dest_dir = {
+        "generate-swiftideutils": swiftideutils_destination,
         "generate-swiftbasicformat": swiftbasicformat_destination,
         "generate-swiftsyntaxbuilder": swiftsyntaxbuilder_destination,
     }
@@ -509,6 +508,9 @@ def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
 def verify_code_generated_files(
     toolchain: str, verbose: bool
 ) -> None:
+    user_swiftideutils_generated_dir = os.path.join(
+        IDEUTILS_DIR, "generated"
+    )
     user_swiftbasicformat_generated_dir = os.path.join(
         SWIFTBASICFORMAT_DIR, "generated"
     )
@@ -516,11 +518,13 @@ def verify_code_generated_files(
         SWIFTSYNTAXBUILDER_DIR, "generated"
     )
 
+    self_swiftideutils_generated_dir = tempfile.mkdtemp()
     self_swiftbasicformat_generated_dir = tempfile.mkdtemp()
     self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
 
     try:
         run_code_generation(
+            swiftideutils_destination=self_swiftideutils_generated_dir,
             swiftbasicformat_destination=self_swiftsyntaxbuilder_generated_dir,
             swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
             toolchain=toolchain,
@@ -534,6 +538,10 @@ def verify_code_generated_files(
 
     print("** Verifing code generated files **")
 
+    check_generated_files_match(
+        self_swiftideutils_generated_dir,
+        user_swiftideutils_generated_dir
+    )
     check_generated_files_match(
         self_swiftbasicformat_generated_dir,
         user_swiftbasicformat_generated_dir
@@ -711,11 +719,14 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
 
     try:
         if not args.gyb_only:
+            swiftideutils_destination = \
+                os.path.join(IDEUTILS_DIR, "generated")
             swiftbasicformat_destination = \
                 os.path.join(SWIFTBASICFORMAT_DIR, "generated")
             swiftsyntaxbuilder_destination = \
                 os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
             run_code_generation(
+                swiftideutils_destination=swiftideutils_destination,
                 swiftbasicformat_destination=swiftbasicformat_destination,
                 swiftsyntaxbuilder_destination=swiftsyntaxbuilder_destination,
                 toolchain=args.toolchain,

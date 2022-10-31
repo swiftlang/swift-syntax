@@ -9,10 +9,16 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
 import SwiftSyntax
+#if canImport(_CompilerPluginSupport)
+import _CompilerPluginSupport
+#else
+public typealias _CompilerPlugin = Any
+#endif
 
 /// Describes a macro.
-public protocol Macro {
+public protocol Macro: _CompilerPlugin {
   /// The name of this macro.
   static var name: String { get }
 
@@ -39,3 +45,16 @@ extension Macro {
   /// Default, empty documentation string for macros.
   public static var documentation: String { "" }
 }
+
+#if canImport(_CompilerPluginSupport)
+extension Macro {
+  public static func _name() -> (UnsafePointer<UInt8>, count: Int) {
+    var name = name
+    return name.withUTF8 { buffer in
+      let result = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.count)
+      result.initialize(from: buffer.baseAddress!, count: buffer.count)
+      return (UnsafePointer(result), count: buffer.count)
+    }
+  }
+}
+#endif

@@ -490,7 +490,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let (pattern, whereClause) = self.parseGuardedPattern(.catch)
+        let (pattern, whereClause) = self.parseGuardedCatchPattern()
         keepGoing = self.consume(if: .comma)
         catchItems.append(RawCatchItemSyntax(
           pattern: pattern, whereClause: whereClause, trailingComma: keepGoing,
@@ -504,6 +504,38 @@ extension Parser {
       catchItems: catchItems.isEmpty ? nil : RawCatchItemListSyntax(elements: catchItems, arena:  self.arena),
       body: body,
       arena: self.arena)
+  }
+
+  /// Parse a pattern-matching clause for a catch statement,
+  /// including the guard expression.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     catch-pattern → pattern where-clause?
+  private mutating func parseGuardedCatchPattern() -> (RawPatternSyntax?, RawWhereClauseSyntax?) {
+    // If this is a 'catch' clause and we have "catch {" or "catch where...",
+    // then we get an implicit "let error" pattern.
+    let pattern: RawPatternSyntax?
+    if self.at(any: [ .leftBrace, .whereKeyword ]) {
+      pattern = nil
+    } else {
+      pattern = self.parseMatchingPattern(context: .matching)
+    }
+
+    // Parse the optional 'where' guard.
+    let whereClause: RawWhereClauseSyntax?
+    if let whereKeyword = self.consume(if: .whereKeyword) {
+      let guardExpr = self.parseExpression(.basic)
+      whereClause = RawWhereClauseSyntax(
+        whereKeyword: whereKeyword,
+        guardResult: guardExpr,
+        arena: self.arena
+      )
+    } else {
+      whereClause = nil
+    }
+    return (pattern, whereClause)
   }
 }
 
@@ -821,7 +853,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let (pattern, whereClause) = self.parseGuardedPattern(.case)
+        let (pattern, whereClause) = self.parseGuardedCasePattern()
         keepGoing = self.consume(if: .comma)
         caseItems.append(RawCaseItemSyntax(
           pattern: pattern, whereClause: whereClause, trailingComma: keepGoing,
@@ -859,39 +891,21 @@ extension Parser {
     )
   }
 
-  enum GuardedPatternContext {
-    case `case`
-    case `catch`
-  }
-
-  /// Parse a pattern-matching clause for a case or catch statement,
+  /// Parse a pattern-matching clause for a case statement,
   /// including the guard expression.
   ///
   /// Grammar
   /// =======
   ///
   ///     case-item     → pattern where-clause?
-  ///     catch-pattern → pattern where-clause?
-  mutating func parseGuardedPattern(
-    _ context: GuardedPatternContext
-  ) -> (RawPatternSyntax, RawWhereClauseSyntax?) {
-    let flavor: ExprFlavor
-    switch context {
-    // 'case' is terminated with a colon and so allows a trailing closure.
-    case .`case`:
-      flavor = .trailingClosure
-    // 'catch' is terminated with a brace and so cannot.
-    case .`catch`:
-      flavor = .basic
-    }
-
+  mutating func parseGuardedCasePattern() -> (RawPatternSyntax, RawWhereClauseSyntax?) {
     let pattern = self.parseMatchingPattern(context: .matching)
 
     // Parse the optional 'where' guard, with this particular pattern's bound
     // vars in scope.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .whereKeyword) {
-      let guardExpr = self.parseExpression(flavor)
+      let guardExpr = self.parseExpression(.trailingClosure)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
         guardResult: guardExpr,

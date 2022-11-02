@@ -416,7 +416,7 @@ def get_swiftpm_invocation(
     if release:
         swiftpm_call.extend(["--configuration", "release"])
     if build_dir:
-        swiftpm_call.extend(["--build-path", build_dir])
+        swiftpm_call.extend(["--scratch-path", build_dir])
     if multiroot_data_file:
         swiftpm_call.extend(["--multiroot-data-file", multiroot_data_file])
 

@@ -6,7 +6,7 @@
 
 1. Change the binary target in `Package.swift` to point to your personal GitHub repo
 2. Update to Latest Package Versions in Xcode
-4. Run tests
+3. Run tests
 
 ## Smoke test on Linux
 

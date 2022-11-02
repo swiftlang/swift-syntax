@@ -58,7 +58,7 @@ extension Macro {
   }
 
   public static func _genericSignature() -> (UnsafePointer<UInt8>?, count: Int) {
-    guard let genericSignature else {
+    guard let genericSignature = genericSignature else {
       return (nil, count: 0)
     }
     var signature = "\(genericSignature)"

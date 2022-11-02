@@ -182,6 +182,9 @@ class PrintTree: ParsableCommand {
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
 
+  @Flag(name: .long, help: "Include trivia in the output")
+  var includeTrivia: Bool = false
+
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
@@ -195,7 +198,7 @@ class PrintTree: ParsableCommand {
         resultTree = Syntax(tree)
       }
 
-      print(resultTree.recursiveDescription)
+      print(resultTree.debugDescription(includeChildren: true, includeTrivia: includeTrivia))
     }
   }
 }

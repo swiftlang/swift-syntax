@@ -105,6 +105,12 @@ final class StatementTests: XCTestCase {
        }
        """
     )
+
+    AssertParse(
+      """
+      do {}
+      catch where (error as NSError) == NSError() {}
+      """)
   }
 
   func testReturn() {

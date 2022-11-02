@@ -4,6 +4,9 @@
 // RUN: %validate-incrparse %s --test-case UNWRAP_CLASS
 // RUN: %validate-incrparse %s --test-case NEXT_TOKEN_CALCULATION
 
+// https://github.com/apple/swift-syntax/issues/1045
+// XFAIL: *
+
 func start() {}
 
 <reparse ADD_PROPERTY>struct Foo {</reparse ADD_PROPERTY>

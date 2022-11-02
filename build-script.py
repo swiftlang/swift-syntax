@@ -24,7 +24,6 @@ SWIFTSYNTAX_DOCUMENTATION_DIR = \
 SWIFTBASICFORMAT_DIR = os.path.join(SOURCES_DIR, "SwiftBasicFormat")
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftParser")
-SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
 
 CODE_GENERATION_DIR = os.path.join(PACKAGE_DIR, "CodeGeneration")
 GENERATESWIFTSYNTAXBUILDER_DIR = \
@@ -305,7 +304,6 @@ def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
         SWIFTSYNTAX_DIR,
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAXBUILDER_DIR,
-        SWIFTSYNTAXPARSER_DIR,
         SWIFTSYNTAX_DOCUMENTATION_DIR,
         SWIFTPARSER_DIR,
     ]

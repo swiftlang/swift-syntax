@@ -14,12 +14,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_implementationOnly import _InternalSwiftSyntaxParser
 import Foundation
 @_spi(RawSyntax) import SwiftSyntax
+@_implementationOnly import SwiftParser
 
 /// A list of possible errors that could be encountered while parsing a
 /// Syntax tree.
+@available(*, deprecated, message: "The Swift parser does not throw errors")
 public enum ParserError: Error, CustomStringConvertible {
   /// Parser created an invalid syntax data. That should never occur under
   /// normal circumstances, and it should be reported as a bug.
@@ -27,8 +28,7 @@ public enum ParserError: Error, CustomStringConvertible {
 
   /// The SwiftSyntax parser library isn't compatible with this SwiftSyntax version.
   ///
-  /// Incompatibility can occur if the loaded `lib_InternalSwiftSyntaxParser.dylib/.so`
-  /// is from a toolchain that is not compatible with this version of SwiftSyntax.
+  /// This can never happen, because there is no SwiftSyntax library any more.
   case parserCompatibilityCheckFailed
 
   public var description: String {
@@ -36,21 +36,13 @@ public enum ParserError: Error, CustomStringConvertible {
     case .invalidSyntaxData:
       return "parser created invalid syntax data"
     case .parserCompatibilityCheckFailed:
-      return "The loaded '_InternalSwiftSyntaxParser' library is from a toolchain that is not compatible with this version of SwiftSyntax"
+      return "Incompatible nonexistent library"
     }
   }
 }
 
 /// Namespace for functions to parse swift source and retrieve a syntax tree.
 public enum SyntaxParser {
-
-  /// True if the parser library is compatible with this SwiftSyntax version;
-  /// false otherwise.
-  ///
-  /// Incompatibility can occur if the loaded `lib_InternalSwiftSyntaxParser.dylib/.so`
-  /// is from a toolchain that is not compatible with this version of SwiftSyntax.
-  fileprivate static var nodeHashVerifyResult: Bool = verifyNodeDeclarationHash()
-
   /// Parses the string into a full-fidelity Syntax tree.
   ///
   /// - Parameters:
@@ -76,9 +68,6 @@ public enum SyntaxParser {
     enableBareSlashRegexLiteral: Bool? = nil,
     diagnosticHandler: ((Diagnostic) -> Void)? = nil
   ) throws -> SourceFileSyntax {
-    guard nodeHashVerifyResult else {
-      throw ParserError.parserCompatibilityCheckFailed
-    }
     // Get a native UTF8 string for efficient indexing with UTF8 byte offsets.
     // If the string is backed by an NSString then such indexing will become
     // extremely slow.
@@ -133,131 +122,7 @@ public enum SyntaxParser {
     enableBareSlashRegexLiteral: Bool?,
     diagnosticHandler: ((Diagnostic) -> Void)?
   ) throws -> SourceFileSyntax {
-    precondition(source.isContiguousUTF8)
-    let c_parser = swiftparse_parser_create()
-    defer {
-      swiftparse_parser_dispose(c_parser)
-    }
-    var source = source
-    let arena = SyntaxArena()
-    let sourceBuffer = source.withUTF8 { arena.internSourceBuffer($0) }
-
-#if compiler(>=5.7)
-    if let languageVersion = languageVersion {
-      languageVersion.withCString { languageVersionCString in
-        swiftparse_parser_set_language_version(c_parser, languageVersionCString)
-      }
-    }
-    if let enableBareSlashRegexLiteral = enableBareSlashRegexLiteral {
-      swiftparse_parser_set_enable_bare_slash_regex_literal(c_parser, enableBareSlashRegexLiteral)
-    }
-#endif
-
-    let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
-      RawSyntax.getOpaqueFromCNode(cnode, in: sourceBuffer, arena: arena)
-    }
-    swiftparse_parser_set_node_handler(c_parser, nodeHandler);
-
-    if let parseTransition = parseTransition {
-      var parseLookup = IncrementalParseLookup(transition: parseTransition)
-      let nodeLookup = {
-            (offset: Int, kind: CSyntaxKind) -> CParseLookupResult in
-        guard let foundNode =
-            parseLookup.lookUp(offset, kind: SyntaxKind(serializationCode: kind)) else {
-          return CParseLookupResult(length: 0, node: nil)
-        }
-        let lengthToSkip = foundNode.byteSize
-        let opaqueNode = foundNode.raw.toOpaque()
-        return CParseLookupResult(
-          length: lengthToSkip,
-          node: UnsafeMutableRawPointer(mutating: opaqueNode))
-      }
-      swiftparse_parser_set_node_lookup(c_parser, nodeLookup);
-    }
-
-    var pendingDiag : Diagnostic?
-    var pendingNotes: [Note] = []
-    defer {
-      // Consume the pending diagnostic if  present
-      if let diagnosticHandler = diagnosticHandler {
-        if let pendingDiag = pendingDiag {
-          diagnosticHandler(Diagnostic(pendingDiag, pendingNotes))
-        }
-      }
-    }
-    // Set up diagnostics consumer if requested by the caller.
-    if let diagnosticHandler = diagnosticHandler {
-      let converter = SourceLocationConverter(file: filenameForDiagnostics, source: source)
-      let diagHandler = { (diag: CDiagnostic!) in
-        // If the coming diagnostic is a note, we cache the pending note
-        if swiftparse_diagnostic_get_severity(diag) ==
-            SWIFTPARSER_DIAGNOSTIC_SEVERITY_NOTE {
-          pendingNotes.append(Note(Diagnostic(diag: diag, using: converter)))
-        } else {
-          // Cosume the pending diagnostic
-          if let pendingDiag = pendingDiag {
-            diagnosticHandler(Diagnostic(pendingDiag, pendingNotes))
-            // Clear pending notes
-            pendingNotes = []
-          }
-          // Cache the new coming diagnostic and wait for further notes.
-          pendingDiag = Diagnostic(diag: diag, using: converter)
-        }
-      }
-      swiftparse_parser_set_diagnostic_handler(c_parser, diagHandler)
-    }
-
-    let c_top = sourceBuffer.withMemoryRebound(to: CChar.self) { sourceBuffer in
-      return swiftparse_parse_string(c_parser, sourceBuffer.baseAddress, sourceBuffer.count)
-    }
-    let base = Syntax(raw: RawSyntax.fromOpaque(c_top!))
-    guard let file = base.as(SourceFileSyntax.self) else {
-      throw ParserError.invalidSyntaxData
-    }
-    return file
-  }
-}
-
-extension SourceRange {
-  init(_ range: CRange, _ converter: SourceLocationConverter?) {
-    let start = SourceLocation(offset: Int(range.offset), converter: converter)
-    let end = SourceLocation(offset: Int(range.offset + range.length),
-                             converter: converter)
-    self.init(start: start, end: end)
-  }
-}
-
-extension Diagnostic.Message {
-  init(_ diag: CDiagnostic) {
-    let message = String(cString: swiftparse_diagnostic_get_message(diag))
-    switch swiftparse_diagnostic_get_severity(diag) {
-    case SWIFTPARSER_DIAGNOSTIC_SEVERITY_ERROR:
-      self.init(.error, message)
-    case SWIFTPARSER_DIAGNOSTIC_SEVERITY_WARNING:
-      self.init(.warning, message)
-    case SWIFTPARSER_DIAGNOSTIC_SEVERITY_NOTE:
-      self.init(.note, message)
-    default:
-      fatalError("unrecognized diagnostic level")
-    }
-  }
-}
-
-extension FixIt {
-  init(_ cfixit: CFixit, _ converter: SourceLocationConverter?) {
-    let replacement = String(cString: cfixit.text)
-    let range = SourceRange(cfixit.range, converter)
-    if cfixit.range.length == 0 {
-      // Insert
-      self = .insert(SourceLocation(offset: Int(cfixit.range.offset),
-                                    converter: converter), replacement)
-    } else if replacement.isEmpty {
-      // Remove
-      self = .remove(range)
-    } else {
-      // Replace
-      self = .replace(range, replacement)
-    }
+    return Parser.parse(source: source, parseTransition: parseTransition)
   }
 }
 
@@ -269,21 +134,6 @@ extension Note {
 }
 
 extension Diagnostic {
-  init(diag: CDiagnostic, using converter: SourceLocationConverter?) {
-    // Collect highlighted ranges
-    let highlights = (0..<swiftparse_diagnostic_get_range_count(diag)).map {
-      return SourceRange(swiftparse_diagnostic_get_range(diag, $0), converter)
-    }
-    // Collect fixits
-    let fixits = (0..<swiftparse_diagnostic_get_fixit_count(diag)).map {
-      return FixIt(swiftparse_diagnostic_get_fixit(diag, $0), converter)
-    }
-    self.init(message: Diagnostic.Message(diag),
-      location: SourceLocation(offset: Int(swiftparse_diagnostic_get_source_loc(diag)),
-                               converter: converter),
-      notes: [], highlights: highlights, fixIts: fixits)
-  }
-
   init(_ diag: Diagnostic, _ notes: [Note]) {
     self.init(message: diag.message, location: diag.location, notes: notes,
               highlights: diag.highlights, fixIts: diag.fixIts)

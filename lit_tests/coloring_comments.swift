@@ -196,7 +196,7 @@ func emptyDocBlockComment3() {}
 
 /**/
 func malformedBlockComment(f : () throws -> ()) rethrows {}
-// CHECK: <doc-comment-block>/**/</doc-comment-block>
+// CHECK: <comment-block>/**/</comment-block>
 
 // CHECK: <kw>func</kw> <id>malformedBlockComment</id>(<id>f</id> : () <kw>throws</kw> -> ()) <kw>rethrows</kw> {}
 

@@ -28,7 +28,9 @@ public class IncrementalParsingTests: XCTestCase {
     XCTAssertEqual("\(tree)", step.0)
   }
 
-  public func testReusedNode() {
+  public func testReusedNode() throws {
+    throw XCTSkip("Swift parser does not handle node reuse yet")
+
     let original = "struct A {}\nstruct B {}\n"
     let step: (String, (Int, Int, String)) =
       ("struct AA {}\nstruct B {}\n", (8, 0, "A"))

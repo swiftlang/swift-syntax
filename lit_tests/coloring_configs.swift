@@ -1,5 +1,8 @@
 // RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
+// https://github.com/apple/swift-syntax/issues/1044
+// XFAIL: *
+
 // CHECK: <kw>var</kw> <id>f</id> : <type>Int</type>
 var f : Int
 

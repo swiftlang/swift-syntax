@@ -1,5 +1,8 @@
 // RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
+// https://github.com/apple/swift-syntax/issues/829
+// XFAIL: *
+
 enum List<T> {
   case Nil
   // rdar://21927124

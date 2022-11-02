@@ -122,7 +122,7 @@ public enum SyntaxParser {
     enableBareSlashRegexLiteral: Bool?,
     diagnosticHandler: ((Diagnostic) -> Void)?
   ) throws -> SourceFileSyntax {
-    return try Parser.parse(source: source, parseTransition: parseTransition)
+    return Parser.parse(source: source, parseTransition: parseTransition)
   }
 }
 

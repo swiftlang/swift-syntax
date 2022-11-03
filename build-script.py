@@ -766,7 +766,6 @@ def build_command(args: argparse.Namespace) -> None:
         # Build examples
         builder.buildExample("AddOneToIntegerLiterals")
         builder.buildExample("CodeGenerationUsingSwiftSyntaxBuilder")
-        builder.buildExample("MigrateToNewIfLetSyntax")
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 

@@ -4,7 +4,6 @@ Each example can be executed by navigating into this folder and running `swift r
 
 - [AddOneToIntegerLiterals](AddOneToIntegerLiterals.swift): Command line tool to add 1 to every integer literal in a source file
 - [CodeGenerationUsingSwiftSyntaxBuilder](CodeGenerationUsingSwiftSyntaxBuilder.swift): Code-generate a simple source file using SwiftSyntaxBuilder
-- [MigrateToNewIfLetSyntax](MigrateToNewIfLetSyntax.swift): Command line tool to transform optional bindings in `if` statements to the new shorthand syntax
 
 ## Some Example Usages
 

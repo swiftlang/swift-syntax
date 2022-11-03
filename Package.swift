@@ -41,6 +41,7 @@ let package = Package(
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
     .library(name: "_SwiftSyntaxMacros", type: .static, targets: ["_SwiftSyntaxMacros"]),
+    .library(name: "SwiftRefactor", type: .static, targets: ["SwiftRefactor"]),
   ],
   targets: [
     .target(
@@ -147,6 +148,11 @@ let package = Package(
       exclude: [
         "CMakeLists.txt",
       ]),
+    .target(
+      name: "SwiftRefactor",
+      dependencies: [
+        "SwiftSyntax", "SwiftParser",
+      ]),
     .executableTarget(
       name: "lit-test-helper",
       dependencies: ["IDEUtils", "SwiftSyntax", "SwiftSyntaxParser"]
@@ -199,6 +205,11 @@ let package = Package(
       dependencies: ["SwiftOperators", "_SwiftSyntaxTestSupport",
                      "SwiftParser"]
     ),
+    .testTarget(
+      name: "SwiftRefactorTest",
+      dependencies: [
+        "SwiftRefactor", "SwiftSyntaxBuilder", "_SwiftSyntaxTestSupport",
+      ]),
   ]
 )
 

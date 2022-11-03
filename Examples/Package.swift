@@ -10,7 +10,6 @@ let package = Package(
     products: [
         .executable(name: "AddOneToIntegerLiterals", targets: ["AddOneToIntegerLiterals"]),
         .executable(name: "CodeGenerationUsingSwiftSyntaxBuilder", targets: ["CodeGenerationUsingSwiftSyntaxBuilder"]),
-        .executable(name: "MigrateToNewIfLetSyntax", targets: ["MigrateToNewIfLetSyntax"]),
     ],
     dependencies: [
         .package(path: "../"),
@@ -23,7 +22,7 @@ let package = Package(
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
             ],
             path: ".",
-            exclude: ["README.md", "CodeGenerationUsingSwiftSyntaxBuilder.swift", "MigrateToNewIfLetSyntax.swift"]
+            exclude: ["README.md", "CodeGenerationUsingSwiftSyntaxBuilder.swift"]
         ),
         .executableTarget(
             name: "CodeGenerationUsingSwiftSyntaxBuilder",
@@ -31,16 +30,7 @@ let package = Package(
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
             ],
             path: ".",
-            exclude: ["README.md", "AddOneToIntegerLiterals.swift", "MigrateToNewIfLetSyntax.swift"]
-        ),
-        .executableTarget(
-            name: "MigrateToNewIfLetSyntax",
-            dependencies: [
-                .product(name: "SwiftParser", package: "swift-syntax"),
-                .product(name: "SwiftSyntax", package: "swift-syntax"),
-            ],
-            path: ".",
-            exclude: ["README.md", "CodeGenerationUsingSwiftSyntaxBuilder.swift", "AddOneToIntegerLiterals.swift"]
+            exclude: ["README.md", "AddOneToIntegerLiterals.swift"]
         ),
     ]
 )

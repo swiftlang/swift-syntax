@@ -482,13 +482,13 @@ public extension SyntaxProtocol {
   /// Returns a new syntax node with its leading trivia replaced
   /// by the provided trivia.
   func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    return Self(Syntax(data.withLeadingTrivia(leadingTrivia)))!
+    return Self(Syntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena())))!
   }
 
   /// Returns a new syntax node with its trailing trivia replaced
   /// by the provided trivia.
   func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    return Self(Syntax(data.withTrailingTrivia(trailingTrivia)))!
+    return Self(Syntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena())))!
   }
 
   /// Returns a new syntax node with its leading trivia removed.

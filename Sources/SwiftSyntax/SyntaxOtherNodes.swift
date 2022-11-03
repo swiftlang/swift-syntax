@@ -32,9 +32,11 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(tokens: [TokenSyntax]) {
-    let raw = RawSyntax.makeLayout(kind: .unknown,
-      from: tokens.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: .unknown,
+        from: tokens.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -85,14 +87,16 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     trailingTrivia: Trivia = [],
     presence: SourcePresence
   ) {
-    let raw = RawSyntax.makeMaterializedToken(
-      kind: kind,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence,
-      arena: .default
-    )
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeMaterializedToken(
+        kind: kind,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia,
+        presence: presence,
+        arena: arena
+      )
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -115,8 +119,9 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = tokenView.withKind(tokenKind)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = tokenView.withKind(tokenKind, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return TokenSyntax(newData)
   }
 
@@ -126,7 +131,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    return TokenSyntax(data.withLeadingTrivia(leadingTrivia))
+    return TokenSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new TokenSyntax with its trailing trivia replaced
@@ -135,7 +140,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    return TokenSyntax(data.withTrailingTrivia(trailingTrivia))
+    return TokenSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new TokenSyntax with its leading trivia removed.

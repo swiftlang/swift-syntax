@@ -124,7 +124,7 @@ def make_missing_swift_child(child):
         if not token or not token.text:
             tok_kind += '("")'
         return f'RawSyntax.makeMissingToken(kind: TokenKind.{tok_kind}, ' + \
-            'arena: .default)'
+            'arena: arena)'
     else:
         if child.syntax_kind == "Syntax":
             missing_kind = "unknown"
@@ -133,7 +133,7 @@ def make_missing_swift_child(child):
         else:
             missing_kind = child.swift_syntax_kind
         return f'RawSyntax.makeEmptyLayout(kind: SyntaxKind.{missing_kind}, ' + \
-            'arena: .default)'
+            'arena: arena)'
 
 
 def create_node_map():

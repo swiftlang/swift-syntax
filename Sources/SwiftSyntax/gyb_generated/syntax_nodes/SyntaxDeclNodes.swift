@@ -37,9 +37,11 @@ public struct UnknownDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unknownDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unknownDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -97,9 +99,11 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers?.raw,
       unexpectedAfterModifiers?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -117,10 +121,10 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -143,23 +147,24 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> MissingDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> MissingDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> MissingDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -177,10 +182,10 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -203,23 +208,24 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> MissingDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> MissingDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> MissingDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -237,10 +243,10 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterModifiers` replaced.
   /// - param newChild: The new `unexpectedAfterModifiers` to replace the node's
   ///                   current `unexpectedAfterModifiers`, if present.
-  public func withUnexpectedAfterModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
+  public func withUnexpectedAfterModifiers(_ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -338,9 +344,11 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedAfterGenericWhereClause?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typealiasDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.typealiasDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -358,10 +366,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -384,23 +392,24 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> TypealiasDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> TypealiasDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -418,10 +427,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -444,23 +453,24 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> TypealiasDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> TypealiasDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -478,10 +488,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndTypealiasKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndTypealiasKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndTypealiasKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndTypealiasKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndTypealiasKeyword(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -498,10 +508,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `typealiasKeyword` replaced.
   /// - param newChild: The new `typealiasKeyword` to replace the node's
   ///                   current `typealiasKeyword`, if present.
-  public func withTypealiasKeyword(
-    _ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.typealiasKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withTypealiasKeyword(_ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.typealiasKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -519,10 +529,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenTypealiasKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenTypealiasKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenTypealiasKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenTypealiasKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedBetweenTypealiasKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -539,10 +549,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -560,10 +570,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndGenericParameterClause` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndGenericParameterClause` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndGenericParameterClause`, if present.
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -581,10 +591,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
   /// - param newChild: The new `genericParameterClause` to replace the node's
   ///                   current `genericParameterClause`, if present.
-  public func withGenericParameterClause(
-    _ newChild: GenericParameterClauseSyntax?) -> TypealiasDeclSyntax {
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -602,10 +612,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndInitializer` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndInitializer` to replace the node's
   ///                   current `unexpectedBetweenGenericParameterClauseAndInitializer`, if present.
-  public func withUnexpectedBetweenGenericParameterClauseAndInitializer(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedBetweenGenericParameterClauseAndInitializer(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -622,10 +632,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `initializer` replaced.
   /// - param newChild: The new `initializer` to replace the node's
   ///                   current `initializer`, if present.
-  public func withInitializer(
-    _ newChild: TypeInitializerClauseSyntax?) -> TypealiasDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.typeInitializerClause, arena: .default)
-    let newData = data.replacingChild(raw, at: 11)
+  public func withInitializer(_ newChild: TypeInitializerClauseSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.typeInitializerClause, arena: arena)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -643,10 +653,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInitializerAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInitializerAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInitializerAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInitializerAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedBetweenInitializerAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -664,10 +674,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -685,10 +695,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedAfterGenericWhereClause` to replace the node's
   ///                   current `unexpectedAfterGenericWhereClause`, if present.
-  public func withUnexpectedAfterGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+  public func withUnexpectedAfterGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -826,9 +836,11 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericWhereClause?.raw,
       unexpectedAfterGenericWhereClause?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.associatedtypeDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.associatedtypeDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -846,10 +858,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -872,23 +884,24 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AssociatedtypeDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -906,10 +919,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -932,23 +945,24 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> AssociatedtypeDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -966,10 +980,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndAssociatedtypeKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndAssociatedtypeKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndAssociatedtypeKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndAssociatedtypeKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndAssociatedtypeKeyword(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -986,10 +1000,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `associatedtypeKeyword` replaced.
   /// - param newChild: The new `associatedtypeKeyword` to replace the node's
   ///                   current `associatedtypeKeyword`, if present.
-  public func withAssociatedtypeKeyword(
-    _ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.associatedtypeKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withAssociatedtypeKeyword(_ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.associatedtypeKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1007,10 +1021,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAssociatedtypeKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenAssociatedtypeKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenAssociatedtypeKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenAssociatedtypeKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedBetweenAssociatedtypeKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1027,10 +1041,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1048,10 +1062,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndInheritanceClause` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndInheritanceClause` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndInheritanceClause`, if present.
-  public func withUnexpectedBetweenIdentifierAndInheritanceClause(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1069,10 +1083,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
   /// - param newChild: The new `inheritanceClause` to replace the node's
   ///                   current `inheritanceClause`, if present.
-  public func withInheritanceClause(
-    _ newChild: TypeInheritanceClauseSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1090,10 +1104,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInheritanceClauseAndInitializer` replaced.
   /// - param newChild: The new `unexpectedBetweenInheritanceClauseAndInitializer` to replace the node's
   ///                   current `unexpectedBetweenInheritanceClauseAndInitializer`, if present.
-  public func withUnexpectedBetweenInheritanceClauseAndInitializer(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedBetweenInheritanceClauseAndInitializer(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1111,10 +1125,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `initializer` replaced.
   /// - param newChild: The new `initializer` to replace the node's
   ///                   current `initializer`, if present.
-  public func withInitializer(
-    _ newChild: TypeInitializerClauseSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withInitializer(_ newChild: TypeInitializerClauseSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1132,10 +1146,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInitializerAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInitializerAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInitializerAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInitializerAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedBetweenInitializerAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1153,10 +1167,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1174,10 +1188,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedAfterGenericWhereClause` to replace the node's
   ///                   current `unexpectedAfterGenericWhereClause`, if present.
-  public func withUnexpectedAfterGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+  public func withUnexpectedAfterGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1295,9 +1309,11 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       poundEndif.raw,
       unexpectedAfterPoundEndif?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -1315,10 +1331,10 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeClauses` replaced.
   /// - param newChild: The new `unexpectedBeforeClauses` to replace the node's
   ///                   current `unexpectedBeforeClauses`, if present.
-  public func withUnexpectedBeforeClauses(
-    _ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
+  public func withUnexpectedBeforeClauses(_ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1340,23 +1356,24 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `clauses` collection.
   public func addClause(_ element: IfConfigClauseSyntax) -> IfConfigDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `clauses` replaced.
   /// - param newChild: The new `clauses` to replace the node's
   ///                   current `clauses`, if present.
-  public func withClauses(
-    _ newChild: IfConfigClauseListSyntax?) -> IfConfigDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.ifConfigClauseList, arena: .default)
-    let newData = data.replacingChild(raw, at: 1)
+  public func withClauses(_ newChild: IfConfigClauseListSyntax?) -> IfConfigDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.ifConfigClauseList, arena: arena)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1374,10 +1391,10 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenClausesAndPoundEndif` replaced.
   /// - param newChild: The new `unexpectedBetweenClausesAndPoundEndif` to replace the node's
   ///                   current `unexpectedBetweenClausesAndPoundEndif`, if present.
-  public func withUnexpectedBetweenClausesAndPoundEndif(
-    _ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
+  public func withUnexpectedBetweenClausesAndPoundEndif(_ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1394,10 +1411,10 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundEndif` replaced.
   /// - param newChild: The new `poundEndif` to replace the node's
   ///                   current `poundEndif`, if present.
-  public func withPoundEndif(
-    _ newChild: TokenSyntax?) -> IfConfigDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundEndifKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 3)
+  public func withPoundEndif(_ newChild: TokenSyntax?) -> IfConfigDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundEndifKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1415,10 +1432,10 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterPoundEndif` replaced.
   /// - param newChild: The new `unexpectedAfterPoundEndif` to replace the node's
   ///                   current `unexpectedAfterPoundEndif`, if present.
-  public func withUnexpectedAfterPoundEndif(
-    _ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
+  public func withUnexpectedAfterPoundEndif(_ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1504,9 +1521,11 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       rightParen.raw,
       unexpectedAfterRightParen?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundErrorDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundErrorDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -1524,10 +1543,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforePoundError` replaced.
   /// - param newChild: The new `unexpectedBeforePoundError` to replace the node's
   ///                   current `unexpectedBeforePoundError`, if present.
-  public func withUnexpectedBeforePoundError(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+  public func withUnexpectedBeforePoundError(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1544,10 +1563,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundError` replaced.
   /// - param newChild: The new `poundError` to replace the node's
   ///                   current `poundError`, if present.
-  public func withPoundError(
-    _ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundErrorKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 1)
+  public func withPoundError(_ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundErrorKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1565,10 +1584,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenPoundErrorAndLeftParen` replaced.
   /// - param newChild: The new `unexpectedBetweenPoundErrorAndLeftParen` to replace the node's
   ///                   current `unexpectedBetweenPoundErrorAndLeftParen`, if present.
-  public func withUnexpectedBetweenPoundErrorAndLeftParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+  public func withUnexpectedBetweenPoundErrorAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1585,10 +1604,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(
-    _ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
-    let newData = data.replacingChild(raw, at: 3)
+  public func withLeftParen(_ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1606,10 +1625,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndMessage` replaced.
   /// - param newChild: The new `unexpectedBetweenLeftParenAndMessage` to replace the node's
   ///                   current `unexpectedBetweenLeftParenAndMessage`, if present.
-  public func withUnexpectedBetweenLeftParenAndMessage(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+  public func withUnexpectedBetweenLeftParenAndMessage(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1626,10 +1645,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `message` replaced.
   /// - param newChild: The new `message` to replace the node's
   ///                   current `message`, if present.
-  public func withMessage(
-    _ newChild: StringLiteralExprSyntax?) -> PoundErrorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withMessage(_ newChild: StringLiteralExprSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1647,10 +1666,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenMessageAndRightParen` replaced.
   /// - param newChild: The new `unexpectedBetweenMessageAndRightParen` to replace the node's
   ///                   current `unexpectedBetweenMessageAndRightParen`, if present.
-  public func withUnexpectedBetweenMessageAndRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+  public func withUnexpectedBetweenMessageAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1667,10 +1686,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(
-    _ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withRightParen(_ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1688,10 +1707,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
   /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
   ///                   current `unexpectedAfterRightParen`, if present.
-  public func withUnexpectedAfterRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1793,9 +1812,11 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       rightParen.raw,
       unexpectedAfterRightParen?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundWarningDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundWarningDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -1813,10 +1834,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforePoundWarning` replaced.
   /// - param newChild: The new `unexpectedBeforePoundWarning` to replace the node's
   ///                   current `unexpectedBeforePoundWarning`, if present.
-  public func withUnexpectedBeforePoundWarning(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+  public func withUnexpectedBeforePoundWarning(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1833,10 +1854,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundWarning` replaced.
   /// - param newChild: The new `poundWarning` to replace the node's
   ///                   current `poundWarning`, if present.
-  public func withPoundWarning(
-    _ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundWarningKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 1)
+  public func withPoundWarning(_ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundWarningKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1854,10 +1875,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenPoundWarningAndLeftParen` replaced.
   /// - param newChild: The new `unexpectedBetweenPoundWarningAndLeftParen` to replace the node's
   ///                   current `unexpectedBetweenPoundWarningAndLeftParen`, if present.
-  public func withUnexpectedBetweenPoundWarningAndLeftParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+  public func withUnexpectedBetweenPoundWarningAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1874,10 +1895,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(
-    _ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
-    let newData = data.replacingChild(raw, at: 3)
+  public func withLeftParen(_ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1895,10 +1916,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndMessage` replaced.
   /// - param newChild: The new `unexpectedBetweenLeftParenAndMessage` to replace the node's
   ///                   current `unexpectedBetweenLeftParenAndMessage`, if present.
-  public func withUnexpectedBetweenLeftParenAndMessage(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+  public func withUnexpectedBetweenLeftParenAndMessage(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1915,10 +1936,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `message` replaced.
   /// - param newChild: The new `message` to replace the node's
   ///                   current `message`, if present.
-  public func withMessage(
-    _ newChild: StringLiteralExprSyntax?) -> PoundWarningDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withMessage(_ newChild: StringLiteralExprSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1936,10 +1957,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenMessageAndRightParen` replaced.
   /// - param newChild: The new `unexpectedBetweenMessageAndRightParen` to replace the node's
   ///                   current `unexpectedBetweenMessageAndRightParen`, if present.
-  public func withUnexpectedBetweenMessageAndRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+  public func withUnexpectedBetweenMessageAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1956,10 +1977,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(
-    _ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withRightParen(_ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1977,10 +1998,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
   /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
   ///                   current `unexpectedAfterRightParen`, if present.
-  public func withUnexpectedAfterRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -2082,9 +2103,11 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       rightParen.raw,
       unexpectedAfterRightParen?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundSourceLocation,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundSourceLocation,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -2102,10 +2125,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforePoundSourceLocation` replaced.
   /// - param newChild: The new `unexpectedBeforePoundSourceLocation` to replace the node's
   ///                   current `unexpectedBeforePoundSourceLocation`, if present.
-  public func withUnexpectedBeforePoundSourceLocation(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+  public func withUnexpectedBeforePoundSourceLocation(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2122,10 +2145,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundSourceLocation` replaced.
   /// - param newChild: The new `poundSourceLocation` to replace the node's
   ///                   current `poundSourceLocation`, if present.
-  public func withPoundSourceLocation(
-    _ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundSourceLocationKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 1)
+  public func withPoundSourceLocation(_ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundSourceLocationKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2143,10 +2166,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenPoundSourceLocationAndLeftParen` replaced.
   /// - param newChild: The new `unexpectedBetweenPoundSourceLocationAndLeftParen` to replace the node's
   ///                   current `unexpectedBetweenPoundSourceLocationAndLeftParen`, if present.
-  public func withUnexpectedBetweenPoundSourceLocationAndLeftParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+  public func withUnexpectedBetweenPoundSourceLocationAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2163,10 +2186,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(
-    _ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
-    let newData = data.replacingChild(raw, at: 3)
+  public func withLeftParen(_ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2184,10 +2207,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndArgs` replaced.
   /// - param newChild: The new `unexpectedBetweenLeftParenAndArgs` to replace the node's
   ///                   current `unexpectedBetweenLeftParenAndArgs`, if present.
-  public func withUnexpectedBetweenLeftParenAndArgs(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+  public func withUnexpectedBetweenLeftParenAndArgs(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2205,10 +2228,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `args` replaced.
   /// - param newChild: The new `args` to replace the node's
   ///                   current `args`, if present.
-  public func withArgs(
-    _ newChild: PoundSourceLocationArgsSyntax?) -> PoundSourceLocationSyntax {
+  public func withArgs(_ newChild: PoundSourceLocationArgsSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 5)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2226,10 +2249,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenArgsAndRightParen` replaced.
   /// - param newChild: The new `unexpectedBetweenArgsAndRightParen` to replace the node's
   ///                   current `unexpectedBetweenArgsAndRightParen`, if present.
-  public func withUnexpectedBetweenArgsAndRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+  public func withUnexpectedBetweenArgsAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2246,10 +2269,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(
-    _ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withRightParen(_ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2267,10 +2290,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
   /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
   ///                   current `unexpectedAfterRightParen`, if present.
-  public func withUnexpectedAfterRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2388,9 +2411,11 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       members.raw,
       unexpectedAfterMembers?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.classDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.classDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -2408,10 +2433,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2434,23 +2459,24 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ClassDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> ClassDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2468,10 +2494,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2494,23 +2520,24 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ClassDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> ClassDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2528,10 +2555,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndClassKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndClassKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndClassKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndClassKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndClassKeyword(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2548,10 +2575,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `classKeyword` replaced.
   /// - param newChild: The new `classKeyword` to replace the node's
   ///                   current `classKeyword`, if present.
-  public func withClassKeyword(
-    _ newChild: TokenSyntax?) -> ClassDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.classKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withClassKeyword(_ newChild: TokenSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.classKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2569,10 +2596,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenClassKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenClassKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenClassKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenClassKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBetweenClassKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2589,10 +2616,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> ClassDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2610,10 +2637,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndGenericParameterClause` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndGenericParameterClause` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndGenericParameterClause`, if present.
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2631,10 +2658,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
   /// - param newChild: The new `genericParameterClause` to replace the node's
   ///                   current `genericParameterClause`, if present.
-  public func withGenericParameterClause(
-    _ newChild: GenericParameterClauseSyntax?) -> ClassDeclSyntax {
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2652,10 +2679,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndInheritanceClause` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndInheritanceClause` to replace the node's
   ///                   current `unexpectedBetweenGenericParameterClauseAndInheritanceClause`, if present.
-  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2673,10 +2700,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
   /// - param newChild: The new `inheritanceClause` to replace the node's
   ///                   current `inheritanceClause`, if present.
-  public func withInheritanceClause(
-    _ newChild: TypeInheritanceClauseSyntax?) -> ClassDeclSyntax {
+  public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2694,10 +2721,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInheritanceClauseAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInheritanceClauseAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2715,10 +2742,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> ClassDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2736,10 +2763,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndMembers` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndMembers` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndMembers`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2756,10 +2783,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `members` replaced.
   /// - param newChild: The new `members` to replace the node's
   ///                   current `members`, if present.
-  public func withMembers(
-    _ newChild: MemberDeclBlockSyntax?) -> ClassDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: 15)
+  public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2777,10 +2804,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
   /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
   ///                   current `unexpectedAfterMembers`, if present.
-  public func withUnexpectedAfterMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+  public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2930,9 +2957,11 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       members.raw,
       unexpectedAfterMembers?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.actorDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.actorDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -2950,10 +2979,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -2976,23 +3005,24 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ActorDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> ActorDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3010,10 +3040,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3036,23 +3066,24 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ActorDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> ActorDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3070,10 +3101,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndActorKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndActorKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndActorKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndActorKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndActorKeyword(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3090,10 +3121,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `actorKeyword` replaced.
   /// - param newChild: The new `actorKeyword` to replace the node's
   ///                   current `actorKeyword`, if present.
-  public func withActorKeyword(
-    _ newChild: TokenSyntax?) -> ActorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withActorKeyword(_ newChild: TokenSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3111,10 +3142,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenActorKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenActorKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenActorKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenActorKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBetweenActorKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3131,10 +3162,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> ActorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3152,10 +3183,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndGenericParameterClause` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndGenericParameterClause` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndGenericParameterClause`, if present.
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3173,10 +3204,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
   /// - param newChild: The new `genericParameterClause` to replace the node's
   ///                   current `genericParameterClause`, if present.
-  public func withGenericParameterClause(
-    _ newChild: GenericParameterClauseSyntax?) -> ActorDeclSyntax {
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3194,10 +3225,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndInheritanceClause` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndInheritanceClause` to replace the node's
   ///                   current `unexpectedBetweenGenericParameterClauseAndInheritanceClause`, if present.
-  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3215,10 +3246,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
   /// - param newChild: The new `inheritanceClause` to replace the node's
   ///                   current `inheritanceClause`, if present.
-  public func withInheritanceClause(
-    _ newChild: TypeInheritanceClauseSyntax?) -> ActorDeclSyntax {
+  public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3236,10 +3267,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInheritanceClauseAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInheritanceClauseAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3257,10 +3288,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> ActorDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3278,10 +3309,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndMembers` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndMembers` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndMembers`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3298,10 +3329,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `members` replaced.
   /// - param newChild: The new `members` to replace the node's
   ///                   current `members`, if present.
-  public func withMembers(
-    _ newChild: MemberDeclBlockSyntax?) -> ActorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: 15)
+  public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3319,10 +3350,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
   /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
   ///                   current `unexpectedAfterMembers`, if present.
-  public func withUnexpectedAfterMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+  public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3472,9 +3503,11 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       members.raw,
       unexpectedAfterMembers?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.structDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.structDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -3492,10 +3525,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3518,23 +3551,24 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> StructDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return StructDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> StructDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3552,10 +3586,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3578,23 +3612,24 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> StructDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return StructDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> StructDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3612,10 +3647,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndStructKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndStructKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndStructKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndStructKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndStructKeyword(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3632,10 +3667,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `structKeyword` replaced.
   /// - param newChild: The new `structKeyword` to replace the node's
   ///                   current `structKeyword`, if present.
-  public func withStructKeyword(
-    _ newChild: TokenSyntax?) -> StructDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.structKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withStructKeyword(_ newChild: TokenSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.structKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3653,10 +3688,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenStructKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenStructKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenStructKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenStructKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBetweenStructKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3673,10 +3708,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> StructDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3694,10 +3729,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndGenericParameterClause` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndGenericParameterClause` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndGenericParameterClause`, if present.
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3715,10 +3750,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
   /// - param newChild: The new `genericParameterClause` to replace the node's
   ///                   current `genericParameterClause`, if present.
-  public func withGenericParameterClause(
-    _ newChild: GenericParameterClauseSyntax?) -> StructDeclSyntax {
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3736,10 +3771,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndInheritanceClause` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndInheritanceClause` to replace the node's
   ///                   current `unexpectedBetweenGenericParameterClauseAndInheritanceClause`, if present.
-  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3757,10 +3792,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
   /// - param newChild: The new `inheritanceClause` to replace the node's
   ///                   current `inheritanceClause`, if present.
-  public func withInheritanceClause(
-    _ newChild: TypeInheritanceClauseSyntax?) -> StructDeclSyntax {
+  public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3778,10 +3813,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInheritanceClauseAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInheritanceClauseAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3799,10 +3834,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> StructDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3820,10 +3855,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndMembers` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndMembers` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndMembers`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3840,10 +3875,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `members` replaced.
   /// - param newChild: The new `members` to replace the node's
   ///                   current `members`, if present.
-  public func withMembers(
-    _ newChild: MemberDeclBlockSyntax?) -> StructDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: 15)
+  public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3861,10 +3896,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
   /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
   ///                   current `unexpectedAfterMembers`, if present.
-  public func withUnexpectedAfterMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+  public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -4014,9 +4049,11 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       members.raw,
       unexpectedAfterMembers?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.protocolDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.protocolDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -4034,10 +4071,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4060,23 +4097,24 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> ProtocolDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4094,10 +4132,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4120,23 +4158,24 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> ProtocolDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4154,10 +4193,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndProtocolKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndProtocolKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndProtocolKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndProtocolKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndProtocolKeyword(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4174,10 +4213,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `protocolKeyword` replaced.
   /// - param newChild: The new `protocolKeyword` to replace the node's
   ///                   current `protocolKeyword`, if present.
-  public func withProtocolKeyword(
-    _ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.protocolKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withProtocolKeyword(_ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.protocolKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4195,10 +4234,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenProtocolKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenProtocolKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenProtocolKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenProtocolKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBetweenProtocolKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4215,10 +4254,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4236,10 +4275,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause`, if present.
-  public func withUnexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4257,10 +4296,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `primaryAssociatedTypeClause` replaced.
   /// - param newChild: The new `primaryAssociatedTypeClause` to replace the node's
   ///                   current `primaryAssociatedTypeClause`, if present.
-  public func withPrimaryAssociatedTypeClause(
-    _ newChild: PrimaryAssociatedTypeClauseSyntax?) -> ProtocolDeclSyntax {
+  public func withPrimaryAssociatedTypeClause(_ newChild: PrimaryAssociatedTypeClauseSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4278,10 +4317,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause` replaced.
   /// - param newChild: The new `unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause` to replace the node's
   ///                   current `unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause`, if present.
-  public func withUnexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4299,10 +4338,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
   /// - param newChild: The new `inheritanceClause` to replace the node's
   ///                   current `inheritanceClause`, if present.
-  public func withInheritanceClause(
-    _ newChild: TypeInheritanceClauseSyntax?) -> ProtocolDeclSyntax {
+  public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4320,10 +4359,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInheritanceClauseAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInheritanceClauseAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4341,10 +4380,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> ProtocolDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4362,10 +4401,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndMembers` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndMembers` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndMembers`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4382,10 +4421,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `members` replaced.
   /// - param newChild: The new `members` to replace the node's
   ///                   current `members`, if present.
-  public func withMembers(
-    _ newChild: MemberDeclBlockSyntax?) -> ProtocolDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: 15)
+  public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4403,10 +4442,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
   /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
   ///                   current `unexpectedAfterMembers`, if present.
-  public func withUnexpectedAfterMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+  public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4552,9 +4591,11 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       members.raw,
       unexpectedAfterMembers?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.extensionDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.extensionDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -4572,10 +4613,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4598,23 +4639,24 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> ExtensionDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4632,10 +4674,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4658,23 +4700,24 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> ExtensionDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4692,10 +4735,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndExtensionKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndExtensionKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndExtensionKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndExtensionKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndExtensionKeyword(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4712,10 +4755,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `extensionKeyword` replaced.
   /// - param newChild: The new `extensionKeyword` to replace the node's
   ///                   current `extensionKeyword`, if present.
-  public func withExtensionKeyword(
-    _ newChild: TokenSyntax?) -> ExtensionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.extensionKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withExtensionKeyword(_ newChild: TokenSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.extensionKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4733,10 +4776,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenExtensionKeywordAndExtendedType` replaced.
   /// - param newChild: The new `unexpectedBetweenExtensionKeywordAndExtendedType` to replace the node's
   ///                   current `unexpectedBetweenExtensionKeywordAndExtendedType`, if present.
-  public func withUnexpectedBetweenExtensionKeywordAndExtendedType(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedBetweenExtensionKeywordAndExtendedType(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4753,10 +4796,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `extendedType` replaced.
   /// - param newChild: The new `extendedType` to replace the node's
   ///                   current `extendedType`, if present.
-  public func withExtendedType(
-    _ newChild: TypeSyntax?) -> ExtensionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withExtendedType(_ newChild: TypeSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4774,10 +4817,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenExtendedTypeAndInheritanceClause` replaced.
   /// - param newChild: The new `unexpectedBetweenExtendedTypeAndInheritanceClause` to replace the node's
   ///                   current `unexpectedBetweenExtendedTypeAndInheritanceClause`, if present.
-  public func withUnexpectedBetweenExtendedTypeAndInheritanceClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedBetweenExtendedTypeAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4795,10 +4838,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
   /// - param newChild: The new `inheritanceClause` to replace the node's
   ///                   current `inheritanceClause`, if present.
-  public func withInheritanceClause(
-    _ newChild: TypeInheritanceClauseSyntax?) -> ExtensionDeclSyntax {
+  public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4816,10 +4859,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInheritanceClauseAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInheritanceClauseAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4837,10 +4880,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> ExtensionDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4858,10 +4901,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndMembers` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndMembers` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndMembers`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4878,10 +4921,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `members` replaced.
   /// - param newChild: The new `members` to replace the node's
   ///                   current `members`, if present.
-  public func withMembers(
-    _ newChild: MemberDeclBlockSyntax?) -> ExtensionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: 13)
+  public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4899,10 +4942,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
   /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
   ///                   current `unexpectedAfterMembers`, if present.
-  public func withUnexpectedAfterMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+  public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -5044,9 +5087,11 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       body?.raw,
       unexpectedAfterBody?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -5064,10 +5109,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5090,23 +5135,24 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> FunctionDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5124,10 +5170,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5150,23 +5196,24 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> FunctionDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5184,10 +5231,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndFuncKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndFuncKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndFuncKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndFuncKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndFuncKeyword(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5204,10 +5251,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `funcKeyword` replaced.
   /// - param newChild: The new `funcKeyword` to replace the node's
   ///                   current `funcKeyword`, if present.
-  public func withFuncKeyword(
-    _ newChild: TokenSyntax?) -> FunctionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.funcKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withFuncKeyword(_ newChild: TokenSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.funcKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5225,10 +5272,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenFuncKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenFuncKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenFuncKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenFuncKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBetweenFuncKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5245,10 +5292,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> FunctionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5266,10 +5313,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndGenericParameterClause` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndGenericParameterClause` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndGenericParameterClause`, if present.
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5287,10 +5334,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
   /// - param newChild: The new `genericParameterClause` to replace the node's
   ///                   current `genericParameterClause`, if present.
-  public func withGenericParameterClause(
-    _ newChild: GenericParameterClauseSyntax?) -> FunctionDeclSyntax {
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5308,10 +5355,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndSignature` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndSignature` to replace the node's
   ///                   current `unexpectedBetweenGenericParameterClauseAndSignature`, if present.
-  public func withUnexpectedBetweenGenericParameterClauseAndSignature(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBetweenGenericParameterClauseAndSignature(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5328,10 +5375,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `signature` replaced.
   /// - param newChild: The new `signature` to replace the node's
   ///                   current `signature`, if present.
-  public func withSignature(
-    _ newChild: FunctionSignatureSyntax?) -> FunctionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: .default)
-    let newData = data.replacingChild(raw, at: 11)
+  public func withSignature(_ newChild: FunctionSignatureSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: arena)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5349,10 +5396,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenSignatureAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenSignatureAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenSignatureAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenSignatureAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBetweenSignatureAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5370,10 +5417,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> FunctionDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5391,10 +5438,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndBody` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndBody` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndBody`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndBody(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndBody(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5412,10 +5459,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `body` replaced.
   /// - param newChild: The new `body` to replace the node's
   ///                   current `body`, if present.
-  public func withBody(
-    _ newChild: CodeBlockSyntax?) -> FunctionDeclSyntax {
+  public func withBody(_ newChild: CodeBlockSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 15)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5433,10 +5480,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
   /// - param newChild: The new `unexpectedAfterBody` to replace the node's
   ///                   current `unexpectedAfterBody`, if present.
-  public func withUnexpectedAfterBody(
-    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+  public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5586,9 +5633,11 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       body?.raw,
       unexpectedAfterBody?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.initializerDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.initializerDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -5606,10 +5655,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5632,23 +5681,24 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> InitializerDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5666,10 +5716,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5692,23 +5742,24 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> InitializerDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5726,10 +5777,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndInitKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndInitKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndInitKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndInitKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndInitKeyword(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5746,10 +5797,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `initKeyword` replaced.
   /// - param newChild: The new `initKeyword` to replace the node's
   ///                   current `initKeyword`, if present.
-  public func withInitKeyword(
-    _ newChild: TokenSyntax?) -> InitializerDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.initKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withInitKeyword(_ newChild: TokenSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.initKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5767,10 +5818,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInitKeywordAndOptionalMark` replaced.
   /// - param newChild: The new `unexpectedBetweenInitKeywordAndOptionalMark` to replace the node's
   ///                   current `unexpectedBetweenInitKeywordAndOptionalMark`, if present.
-  public func withUnexpectedBetweenInitKeywordAndOptionalMark(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBetweenInitKeywordAndOptionalMark(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5788,10 +5839,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `optionalMark` replaced.
   /// - param newChild: The new `optionalMark` to replace the node's
   ///                   current `optionalMark`, if present.
-  public func withOptionalMark(
-    _ newChild: TokenSyntax?) -> InitializerDeclSyntax {
+  public func withOptionalMark(_ newChild: TokenSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5809,10 +5860,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenOptionalMarkAndGenericParameterClause` replaced.
   /// - param newChild: The new `unexpectedBetweenOptionalMarkAndGenericParameterClause` to replace the node's
   ///                   current `unexpectedBetweenOptionalMarkAndGenericParameterClause`, if present.
-  public func withUnexpectedBetweenOptionalMarkAndGenericParameterClause(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBetweenOptionalMarkAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5830,10 +5881,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
   /// - param newChild: The new `genericParameterClause` to replace the node's
   ///                   current `genericParameterClause`, if present.
-  public func withGenericParameterClause(
-    _ newChild: GenericParameterClauseSyntax?) -> InitializerDeclSyntax {
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5851,10 +5902,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndSignature` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndSignature` to replace the node's
   ///                   current `unexpectedBetweenGenericParameterClauseAndSignature`, if present.
-  public func withUnexpectedBetweenGenericParameterClauseAndSignature(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBetweenGenericParameterClauseAndSignature(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5871,10 +5922,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `signature` replaced.
   /// - param newChild: The new `signature` to replace the node's
   ///                   current `signature`, if present.
-  public func withSignature(
-    _ newChild: FunctionSignatureSyntax?) -> InitializerDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: .default)
-    let newData = data.replacingChild(raw, at: 11)
+  public func withSignature(_ newChild: FunctionSignatureSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: arena)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5892,10 +5943,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenSignatureAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenSignatureAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenSignatureAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenSignatureAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBetweenSignatureAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5913,10 +5964,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> InitializerDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5934,10 +5985,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndBody` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndBody` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndBody`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndBody(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndBody(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5955,10 +6006,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `body` replaced.
   /// - param newChild: The new `body` to replace the node's
   ///                   current `body`, if present.
-  public func withBody(
-    _ newChild: CodeBlockSyntax?) -> InitializerDeclSyntax {
+  public func withBody(_ newChild: CodeBlockSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 15)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5976,10 +6027,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
   /// - param newChild: The new `unexpectedAfterBody` to replace the node's
   ///                   current `unexpectedAfterBody`, if present.
-  public func withUnexpectedAfterBody(
-    _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+  public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -6113,9 +6164,11 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       body?.raw,
       unexpectedAfterBody?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.deinitializerDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.deinitializerDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -6133,10 +6186,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6159,23 +6212,24 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> DeinitializerDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6193,10 +6247,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6219,23 +6273,24 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> DeinitializerDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6253,10 +6308,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndDeinitKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndDeinitKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndDeinitKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndDeinitKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndDeinitKeyword(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6273,10 +6328,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `deinitKeyword` replaced.
   /// - param newChild: The new `deinitKeyword` to replace the node's
   ///                   current `deinitKeyword`, if present.
-  public func withDeinitKeyword(
-    _ newChild: TokenSyntax?) -> DeinitializerDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.deinitKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withDeinitKeyword(_ newChild: TokenSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.deinitKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6294,10 +6349,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenDeinitKeywordAndBody` replaced.
   /// - param newChild: The new `unexpectedBetweenDeinitKeywordAndBody` to replace the node's
   ///                   current `unexpectedBetweenDeinitKeywordAndBody`, if present.
-  public func withUnexpectedBetweenDeinitKeywordAndBody(
-    _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+  public func withUnexpectedBetweenDeinitKeywordAndBody(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6315,10 +6370,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `body` replaced.
   /// - param newChild: The new `body` to replace the node's
   ///                   current `body`, if present.
-  public func withBody(
-    _ newChild: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
+  public func withBody(_ newChild: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6336,10 +6391,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
   /// - param newChild: The new `unexpectedAfterBody` to replace the node's
   ///                   current `unexpectedAfterBody`, if present.
-  public func withUnexpectedAfterBody(
-    _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+  public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6493,9 +6548,11 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       accessor?.raw,
       unexpectedAfterAccessor?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.subscriptDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.subscriptDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -6513,10 +6570,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6539,23 +6596,24 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> SubscriptDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6573,10 +6631,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6599,23 +6657,24 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> SubscriptDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6633,10 +6692,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndSubscriptKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndSubscriptKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndSubscriptKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndSubscriptKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndSubscriptKeyword(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6653,10 +6712,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `subscriptKeyword` replaced.
   /// - param newChild: The new `subscriptKeyword` to replace the node's
   ///                   current `subscriptKeyword`, if present.
-  public func withSubscriptKeyword(
-    _ newChild: TokenSyntax?) -> SubscriptDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.subscriptKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withSubscriptKeyword(_ newChild: TokenSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.subscriptKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6674,10 +6733,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenSubscriptKeywordAndGenericParameterClause` replaced.
   /// - param newChild: The new `unexpectedBetweenSubscriptKeywordAndGenericParameterClause` to replace the node's
   ///                   current `unexpectedBetweenSubscriptKeywordAndGenericParameterClause`, if present.
-  public func withUnexpectedBetweenSubscriptKeywordAndGenericParameterClause(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBetweenSubscriptKeywordAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6695,10 +6754,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
   /// - param newChild: The new `genericParameterClause` to replace the node's
   ///                   current `genericParameterClause`, if present.
-  public func withGenericParameterClause(
-    _ newChild: GenericParameterClauseSyntax?) -> SubscriptDeclSyntax {
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6716,10 +6775,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndIndices` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndIndices` to replace the node's
   ///                   current `unexpectedBetweenGenericParameterClauseAndIndices`, if present.
-  public func withUnexpectedBetweenGenericParameterClauseAndIndices(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBetweenGenericParameterClauseAndIndices(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6736,10 +6795,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `indices` replaced.
   /// - param newChild: The new `indices` to replace the node's
   ///                   current `indices`, if present.
-  public func withIndices(
-    _ newChild: ParameterClauseSyntax?) -> SubscriptDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.parameterClause, arena: .default)
-    let newData = data.replacingChild(raw, at: 9)
+  public func withIndices(_ newChild: ParameterClauseSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.parameterClause, arena: arena)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6757,10 +6816,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIndicesAndResult` replaced.
   /// - param newChild: The new `unexpectedBetweenIndicesAndResult` to replace the node's
   ///                   current `unexpectedBetweenIndicesAndResult`, if present.
-  public func withUnexpectedBetweenIndicesAndResult(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBetweenIndicesAndResult(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6777,10 +6836,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `result` replaced.
   /// - param newChild: The new `result` to replace the node's
   ///                   current `result`, if present.
-  public func withResult(
-    _ newChild: ReturnClauseSyntax?) -> SubscriptDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.returnClause, arena: .default)
-    let newData = data.replacingChild(raw, at: 11)
+  public func withResult(_ newChild: ReturnClauseSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.returnClause, arena: arena)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6798,10 +6857,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenResultAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenResultAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenResultAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenResultAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBetweenResultAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6819,10 +6878,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> SubscriptDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6840,10 +6899,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndAccessor` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndAccessor` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndAccessor`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndAccessor(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndAccessor(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6861,10 +6920,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `accessor` replaced.
   /// - param newChild: The new `accessor` to replace the node's
   ///                   current `accessor`, if present.
-  public func withAccessor(
-    _ newChild: Accessor?) -> SubscriptDeclSyntax {
+  public func withAccessor(_ newChild: Accessor?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 15)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6882,10 +6941,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterAccessor` replaced.
   /// - param newChild: The new `unexpectedAfterAccessor` to replace the node's
   ///                   current `unexpectedAfterAccessor`, if present.
-  public func withUnexpectedAfterAccessor(
-    _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+  public func withUnexpectedAfterAccessor(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -7023,9 +7082,11 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       path.raw,
       unexpectedAfterPath?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.importDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.importDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -7043,10 +7104,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7069,23 +7130,24 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ImportDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> ImportDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7103,10 +7165,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7129,23 +7191,24 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> ImportDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7163,10 +7226,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndImportTok` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndImportTok` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndImportTok`, if present.
-  public func withUnexpectedBetweenModifiersAndImportTok(
-    _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndImportTok(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7183,10 +7246,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `importTok` replaced.
   /// - param newChild: The new `importTok` to replace the node's
   ///                   current `importTok`, if present.
-  public func withImportTok(
-    _ newChild: TokenSyntax?) -> ImportDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.importKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withImportTok(_ newChild: TokenSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.importKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7204,10 +7267,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenImportTokAndImportKind` replaced.
   /// - param newChild: The new `unexpectedBetweenImportTokAndImportKind` to replace the node's
   ///                   current `unexpectedBetweenImportTokAndImportKind`, if present.
-  public func withUnexpectedBetweenImportTokAndImportKind(
-    _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+  public func withUnexpectedBetweenImportTokAndImportKind(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7225,10 +7288,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `importKind` replaced.
   /// - param newChild: The new `importKind` to replace the node's
   ///                   current `importKind`, if present.
-  public func withImportKind(
-    _ newChild: TokenSyntax?) -> ImportDeclSyntax {
+  public func withImportKind(_ newChild: TokenSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7246,10 +7309,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenImportKindAndPath` replaced.
   /// - param newChild: The new `unexpectedBetweenImportKindAndPath` to replace the node's
   ///                   current `unexpectedBetweenImportKindAndPath`, if present.
-  public func withUnexpectedBetweenImportKindAndPath(
-    _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+  public func withUnexpectedBetweenImportKindAndPath(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7271,23 +7334,24 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `path` collection.
   public func addPathComponent(_ element: AccessPathComponentSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[9] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 9)
+    let newData = data.replacingChild(collection, at: 9, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `path` replaced.
   /// - param newChild: The new `path` to replace the node's
   ///                   current `path`, if present.
-  public func withPath(
-    _ newChild: AccessPathSyntax?) -> ImportDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.accessPath, arena: .default)
-    let newData = data.replacingChild(raw, at: 9)
+  public func withPath(_ newChild: AccessPathSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.accessPath, arena: arena)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7305,10 +7369,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterPath` replaced.
   /// - param newChild: The new `unexpectedAfterPath` to replace the node's
   ///                   current `unexpectedAfterPath`, if present.
-  public func withUnexpectedAfterPath(
-    _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+  public func withUnexpectedAfterPath(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7430,9 +7494,11 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       body?.raw,
       unexpectedAfterBody?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -7450,10 +7516,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7476,23 +7542,24 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AccessorDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> AccessorDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7510,10 +7577,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifier` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifier` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifier`, if present.
-  public func withUnexpectedBetweenAttributesAndModifier(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifier(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7531,10 +7598,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `modifier` replaced.
   /// - param newChild: The new `modifier` to replace the node's
   ///                   current `modifier`, if present.
-  public func withModifier(
-    _ newChild: DeclModifierSyntax?) -> AccessorDeclSyntax {
+  public func withModifier(_ newChild: DeclModifierSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7552,10 +7619,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifierAndAccessorKind` replaced.
   /// - param newChild: The new `unexpectedBetweenModifierAndAccessorKind` to replace the node's
   ///                   current `unexpectedBetweenModifierAndAccessorKind`, if present.
-  public func withUnexpectedBetweenModifierAndAccessorKind(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedBetweenModifierAndAccessorKind(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7572,10 +7639,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `accessorKind` replaced.
   /// - param newChild: The new `accessorKind` to replace the node's
   ///                   current `accessorKind`, if present.
-  public func withAccessorKind(
-    _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withAccessorKind(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7593,10 +7660,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAccessorKindAndParameter` replaced.
   /// - param newChild: The new `unexpectedBetweenAccessorKindAndParameter` to replace the node's
   ///                   current `unexpectedBetweenAccessorKindAndParameter`, if present.
-  public func withUnexpectedBetweenAccessorKindAndParameter(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedBetweenAccessorKindAndParameter(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7614,10 +7681,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `parameter` replaced.
   /// - param newChild: The new `parameter` to replace the node's
   ///                   current `parameter`, if present.
-  public func withParameter(
-    _ newChild: AccessorParameterSyntax?) -> AccessorDeclSyntax {
+  public func withParameter(_ newChild: AccessorParameterSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7635,10 +7702,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenParameterAndAsyncKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenParameterAndAsyncKeyword` to replace the node's
   ///                   current `unexpectedBetweenParameterAndAsyncKeyword`, if present.
-  public func withUnexpectedBetweenParameterAndAsyncKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedBetweenParameterAndAsyncKeyword(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7656,10 +7723,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `asyncKeyword` replaced.
   /// - param newChild: The new `asyncKeyword` to replace the node's
   ///                   current `asyncKeyword`, if present.
-  public func withAsyncKeyword(
-    _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+  public func withAsyncKeyword(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7677,10 +7744,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAsyncKeywordAndThrowsKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenAsyncKeywordAndThrowsKeyword` to replace the node's
   ///                   current `unexpectedBetweenAsyncKeywordAndThrowsKeyword`, if present.
-  public func withUnexpectedBetweenAsyncKeywordAndThrowsKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedBetweenAsyncKeywordAndThrowsKeyword(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7698,10 +7765,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `throwsKeyword` replaced.
   /// - param newChild: The new `throwsKeyword` to replace the node's
   ///                   current `throwsKeyword`, if present.
-  public func withThrowsKeyword(
-    _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+  public func withThrowsKeyword(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7719,10 +7786,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenThrowsKeywordAndBody` replaced.
   /// - param newChild: The new `unexpectedBetweenThrowsKeywordAndBody` to replace the node's
   ///                   current `unexpectedBetweenThrowsKeywordAndBody`, if present.
-  public func withUnexpectedBetweenThrowsKeywordAndBody(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedBetweenThrowsKeywordAndBody(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7740,10 +7807,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `body` replaced.
   /// - param newChild: The new `body` to replace the node's
   ///                   current `body`, if present.
-  public func withBody(
-    _ newChild: CodeBlockSyntax?) -> AccessorDeclSyntax {
+  public func withBody(_ newChild: CodeBlockSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7761,10 +7828,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterBody` replaced.
   /// - param newChild: The new `unexpectedAfterBody` to replace the node's
   ///                   current `unexpectedAfterBody`, if present.
-  public func withUnexpectedAfterBody(
-    _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+  public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7890,9 +7957,11 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       bindings.raw,
       unexpectedAfterBindings?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.variableDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.variableDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -7910,10 +7979,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -7936,23 +8005,24 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> VariableDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> VariableDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -7970,10 +8040,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -7996,23 +8066,24 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> VariableDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8030,10 +8101,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndLetOrVarKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndLetOrVarKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndLetOrVarKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndLetOrVarKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndLetOrVarKeyword(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8050,10 +8121,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `letOrVarKeyword` replaced.
   /// - param newChild: The new `letOrVarKeyword` to replace the node's
   ///                   current `letOrVarKeyword`, if present.
-  public func withLetOrVarKeyword(
-    _ newChild: TokenSyntax?) -> VariableDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withLetOrVarKeyword(_ newChild: TokenSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8071,10 +8142,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenLetOrVarKeywordAndBindings` replaced.
   /// - param newChild: The new `unexpectedBetweenLetOrVarKeywordAndBindings` to replace the node's
   ///                   current `unexpectedBetweenLetOrVarKeywordAndBindings`, if present.
-  public func withUnexpectedBetweenLetOrVarKeywordAndBindings(
-    _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+  public func withUnexpectedBetweenLetOrVarKeywordAndBindings(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8096,23 +8167,24 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `bindings` collection.
   public func addBinding(_ element: PatternBindingSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[7] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 7)
+    let newData = data.replacingChild(collection, at: 7, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `bindings` replaced.
   /// - param newChild: The new `bindings` to replace the node's
   ///                   current `bindings`, if present.
-  public func withBindings(
-    _ newChild: PatternBindingListSyntax?) -> VariableDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.patternBindingList, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withBindings(_ newChild: PatternBindingListSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.patternBindingList, arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8130,10 +8202,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterBindings` replaced.
   /// - param newChild: The new `unexpectedAfterBindings` to replace the node's
   ///                   current `unexpectedAfterBindings`, if present.
-  public func withUnexpectedAfterBindings(
-    _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+  public func withUnexpectedAfterBindings(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8240,9 +8312,11 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       elements.raw,
       unexpectedAfterElements?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -8260,10 +8334,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8289,23 +8363,24 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> EnumCaseDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8323,10 +8398,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8352,23 +8427,24 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> EnumCaseDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8386,10 +8462,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndCaseKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndCaseKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndCaseKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndCaseKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndCaseKeyword(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8407,10 +8483,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `caseKeyword` replaced.
   /// - param newChild: The new `caseKeyword` to replace the node's
   ///                   current `caseKeyword`, if present.
-  public func withCaseKeyword(
-    _ newChild: TokenSyntax?) -> EnumCaseDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withCaseKeyword(_ newChild: TokenSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8428,10 +8504,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenCaseKeywordAndElements` replaced.
   /// - param newChild: The new `unexpectedBetweenCaseKeywordAndElements` to replace the node's
   ///                   current `unexpectedBetweenCaseKeywordAndElements`, if present.
-  public func withUnexpectedBetweenCaseKeywordAndElements(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+  public func withUnexpectedBetweenCaseKeywordAndElements(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8454,23 +8530,24 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: EnumCaseElementSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[7] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 7)
+    let newData = data.replacingChild(collection, at: 7, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `elements` replaced.
   /// - param newChild: The new `elements` to replace the node's
   ///                   current `elements`, if present.
-  public func withElements(
-    _ newChild: EnumCaseElementListSyntax?) -> EnumCaseDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.enumCaseElementList, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withElements(_ newChild: EnumCaseElementListSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.enumCaseElementList, arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8488,10 +8565,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterElements` replaced.
   /// - param newChild: The new `unexpectedAfterElements` to replace the node's
   ///                   current `unexpectedAfterElements`, if present.
-  public func withUnexpectedAfterElements(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+  public func withUnexpectedAfterElements(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8610,9 +8687,11 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       members.raw,
       unexpectedAfterMembers?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -8630,10 +8709,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8659,23 +8738,24 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> EnumDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> EnumDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8693,10 +8773,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8722,23 +8802,24 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> EnumDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> EnumDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8756,10 +8837,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndEnumKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndEnumKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndEnumKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndEnumKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndEnumKeyword(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8779,10 +8860,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `enumKeyword` replaced.
   /// - param newChild: The new `enumKeyword` to replace the node's
   ///                   current `enumKeyword`, if present.
-  public func withEnumKeyword(
-    _ newChild: TokenSyntax?) -> EnumDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.enumKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withEnumKeyword(_ newChild: TokenSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.enumKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8800,10 +8881,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenEnumKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenEnumKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenEnumKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenEnumKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBetweenEnumKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8823,10 +8904,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> EnumDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8844,10 +8925,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndGenericParameters` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndGenericParameters` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndGenericParameters`, if present.
-  public func withUnexpectedBetweenIdentifierAndGenericParameters(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndGenericParameters(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8868,10 +8949,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericParameters` replaced.
   /// - param newChild: The new `genericParameters` to replace the node's
   ///                   current `genericParameters`, if present.
-  public func withGenericParameters(
-    _ newChild: GenericParameterClauseSyntax?) -> EnumDeclSyntax {
+  public func withGenericParameters(_ newChild: GenericParameterClauseSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8889,10 +8970,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericParametersAndInheritanceClause` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericParametersAndInheritanceClause` to replace the node's
   ///                   current `unexpectedBetweenGenericParametersAndInheritanceClause`, if present.
-  public func withUnexpectedBetweenGenericParametersAndInheritanceClause(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBetweenGenericParametersAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8914,10 +8995,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
   /// - param newChild: The new `inheritanceClause` to replace the node's
   ///                   current `inheritanceClause`, if present.
-  public func withInheritanceClause(
-    _ newChild: TypeInheritanceClauseSyntax?) -> EnumDeclSyntax {
+  public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8935,10 +9016,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenInheritanceClauseAndGenericWhereClause` replaced.
   /// - param newChild: The new `unexpectedBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
   ///                   current `unexpectedBetweenInheritanceClauseAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8960,10 +9041,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
   /// - param newChild: The new `genericWhereClause` to replace the node's
   ///                   current `genericWhereClause`, if present.
-  public func withGenericWhereClause(
-    _ newChild: GenericWhereClauseSyntax?) -> EnumDeclSyntax {
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8981,10 +9062,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndMembers` replaced.
   /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndMembers` to replace the node's
   ///                   current `unexpectedBetweenGenericWhereClauseAndMembers`, if present.
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9004,10 +9085,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `members` replaced.
   /// - param newChild: The new `members` to replace the node's
   ///                   current `members`, if present.
-  public func withMembers(
-    _ newChild: MemberDeclBlockSyntax?) -> EnumDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: 15)
+  public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
+    let newData = data.replacingChild(raw, at: 15, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9025,10 +9106,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterMembers` replaced.
   /// - param newChild: The new `unexpectedAfterMembers` to replace the node's
   ///                   current `unexpectedAfterMembers`, if present.
-  public func withUnexpectedAfterMembers(
-    _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+  public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16)
+    let newData = data.replacingChild(raw, at: 16, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9167,9 +9248,11 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       operatorPrecedenceAndTypes?.raw,
       unexpectedAfterOperatorPrecedenceAndTypes?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -9187,10 +9270,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9216,23 +9299,24 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> OperatorDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> OperatorDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9250,10 +9334,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9280,23 +9364,24 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> OperatorDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> OperatorDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9314,10 +9399,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndOperatorKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndOperatorKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndOperatorKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndOperatorKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndOperatorKeyword(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9334,10 +9419,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `operatorKeyword` replaced.
   /// - param newChild: The new `operatorKeyword` to replace the node's
   ///                   current `operatorKeyword`, if present.
-  public func withOperatorKeyword(
-    _ newChild: TokenSyntax?) -> OperatorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.operatorKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withOperatorKeyword(_ newChild: TokenSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.operatorKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9355,10 +9440,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenOperatorKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenOperatorKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenOperatorKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenOperatorKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+  public func withUnexpectedBetweenOperatorKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9375,10 +9460,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> OperatorDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unspacedBinaryOperator(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unspacedBinaryOperator(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9396,10 +9481,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes`, if present.
-  public func withUnexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes(
-    _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9420,10 +9505,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `operatorPrecedenceAndTypes` replaced.
   /// - param newChild: The new `operatorPrecedenceAndTypes` to replace the node's
   ///                   current `operatorPrecedenceAndTypes`, if present.
-  public func withOperatorPrecedenceAndTypes(
-    _ newChild: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
+  public func withOperatorPrecedenceAndTypes(_ newChild: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9441,10 +9526,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterOperatorPrecedenceAndTypes` replaced.
   /// - param newChild: The new `unexpectedAfterOperatorPrecedenceAndTypes` to replace the node's
   ///                   current `unexpectedAfterOperatorPrecedenceAndTypes`, if present.
-  public func withUnexpectedAfterOperatorPrecedenceAndTypes(
-    _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+  public func withUnexpectedAfterOperatorPrecedenceAndTypes(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9567,9 +9652,11 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       rightBrace.raw,
       unexpectedAfterRightBrace?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -9587,10 +9674,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
   /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
   ///                   current `unexpectedBeforeAttributes`, if present.
-  public func withUnexpectedBeforeAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9616,23 +9703,24 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1)
+    let newData = data.replacingChild(collection, at: 1, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `attributes` replaced.
   /// - param newChild: The new `attributes` to replace the node's
   ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9650,10 +9738,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
   /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
   ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
-  public func withUnexpectedBetweenAttributesAndModifiers(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9680,23 +9768,24 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3)
+    let newData = data.replacingChild(collection, at: 3, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `modifiers` replaced.
   /// - param newChild: The new `modifiers` to replace the node's
   ///                   current `modifiers`, if present.
-  public func withModifiers(
-    _ newChild: ModifierListSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9714,10 +9803,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndPrecedencegroupKeyword` replaced.
   /// - param newChild: The new `unexpectedBetweenModifiersAndPrecedencegroupKeyword` to replace the node's
   ///                   current `unexpectedBetweenModifiersAndPrecedencegroupKeyword`, if present.
-  public func withUnexpectedBetweenModifiersAndPrecedencegroupKeyword(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedBetweenModifiersAndPrecedencegroupKeyword(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9734,10 +9823,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `precedencegroupKeyword` replaced.
   /// - param newChild: The new `precedencegroupKeyword` to replace the node's
   ///                   current `precedencegroupKeyword`, if present.
-  public func withPrecedencegroupKeyword(
-    _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.precedencegroupKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+  public func withPrecedencegroupKeyword(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.precedencegroupKeyword, arena: arena)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9755,10 +9844,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenPrecedencegroupKeywordAndIdentifier` replaced.
   /// - param newChild: The new `unexpectedBetweenPrecedencegroupKeywordAndIdentifier` to replace the node's
   ///                   current `unexpectedBetweenPrecedencegroupKeywordAndIdentifier`, if present.
-  public func withUnexpectedBetweenPrecedencegroupKeywordAndIdentifier(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedBetweenPrecedencegroupKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9778,10 +9867,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `identifier` replaced.
   /// - param newChild: The new `identifier` to replace the node's
   ///                   current `identifier`, if present.
-  public func withIdentifier(
-    _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withIdentifier(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9799,10 +9888,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndLeftBrace` replaced.
   /// - param newChild: The new `unexpectedBetweenIdentifierAndLeftBrace` to replace the node's
   ///                   current `unexpectedBetweenIdentifierAndLeftBrace`, if present.
-  public func withUnexpectedBetweenIdentifierAndLeftBrace(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedBetweenIdentifierAndLeftBrace(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9819,10 +9908,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftBrace` replaced.
   /// - param newChild: The new `leftBrace` to replace the node's
   ///                   current `leftBrace`, if present.
-  public func withLeftBrace(
-    _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: .default)
-    let newData = data.replacingChild(raw, at: 9)
+  public func withLeftBrace(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: arena)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9840,10 +9929,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenLeftBraceAndGroupAttributes` replaced.
   /// - param newChild: The new `unexpectedBetweenLeftBraceAndGroupAttributes` to replace the node's
   ///                   current `unexpectedBetweenLeftBraceAndGroupAttributes`, if present.
-  public func withUnexpectedBetweenLeftBraceAndGroupAttributes(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedBetweenLeftBraceAndGroupAttributes(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9868,23 +9957,24 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `groupAttributes` collection.
   public func addGroupAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[11] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 11)
+    let newData = data.replacingChild(collection, at: 11, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `groupAttributes` replaced.
   /// - param newChild: The new `groupAttributes` to replace the node's
   ///                   current `groupAttributes`, if present.
-  public func withGroupAttributes(
-    _ newChild: PrecedenceGroupAttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.precedenceGroupAttributeList, arena: .default)
-    let newData = data.replacingChild(raw, at: 11)
+  public func withGroupAttributes(_ newChild: PrecedenceGroupAttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.precedenceGroupAttributeList, arena: arena)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9902,10 +9992,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenGroupAttributesAndRightBrace` replaced.
   /// - param newChild: The new `unexpectedBetweenGroupAttributesAndRightBrace` to replace the node's
   ///                   current `unexpectedBetweenGroupAttributesAndRightBrace`, if present.
-  public func withUnexpectedBetweenGroupAttributesAndRightBrace(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedBetweenGroupAttributesAndRightBrace(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9922,10 +10012,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightBrace` replaced.
   /// - param newChild: The new `rightBrace` to replace the node's
   ///                   current `rightBrace`, if present.
-  public func withRightBrace(
-    _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: .default)
-    let newData = data.replacingChild(raw, at: 13)
+  public func withRightBrace(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: arena)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9943,10 +10033,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterRightBrace` replaced.
   /// - param newChild: The new `unexpectedAfterRightBrace` to replace the node's
   ///                   current `unexpectedAfterRightBrace`, if present.
-  public func withUnexpectedAfterRightBrace(
-    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+  public func withUnexpectedAfterRightBrace(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -10084,9 +10174,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       additionalTrailingClosures?.raw,
       unexpectedAfterAdditionalTrailingClosures?.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroExpansionDecl,
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroExpansionDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -10104,10 +10196,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBeforePoundToken` replaced.
   /// - param newChild: The new `unexpectedBeforePoundToken` to replace the node's
   ///                   current `unexpectedBeforePoundToken`, if present.
-  public func withUnexpectedBeforePoundToken(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedBeforePoundToken(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0)
+    let newData = data.replacingChild(raw, at: 0, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10125,10 +10217,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `poundToken` replaced.
   /// - param newChild: The new `poundToken` to replace the node's
   ///                   current `poundToken`, if present.
-  public func withPoundToken(
-    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.pound, arena: .default)
-    let newData = data.replacingChild(raw, at: 1)
+  public func withPoundToken(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.pound, arena: arena)
+    let newData = data.replacingChild(raw, at: 1, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10146,10 +10238,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenPoundTokenAndMacro` replaced.
   /// - param newChild: The new `unexpectedBetweenPoundTokenAndMacro` to replace the node's
   ///                   current `unexpectedBetweenPoundTokenAndMacro`, if present.
-  public func withUnexpectedBetweenPoundTokenAndMacro(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedBetweenPoundTokenAndMacro(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 2, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10166,10 +10258,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `macro` replaced.
   /// - param newChild: The new `macro` to replace the node's
   ///                   current `macro`, if present.
-  public func withMacro(
-    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: 3)
+  public func withMacro(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(raw, at: 3, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10187,10 +10279,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenMacroAndLeftParen` replaced.
   /// - param newChild: The new `unexpectedBetweenMacroAndLeftParen` to replace the node's
   ///                   current `unexpectedBetweenMacroAndLeftParen`, if present.
-  public func withUnexpectedBetweenMacroAndLeftParen(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedBetweenMacroAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 4, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10208,10 +10300,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `leftParen` replaced.
   /// - param newChild: The new `leftParen` to replace the node's
   ///                   current `leftParen`, if present.
-  public func withLeftParen(
-    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+  public func withLeftParen(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 5)
+    let newData = data.replacingChild(raw, at: 5, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10229,10 +10321,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndArgumentList` replaced.
   /// - param newChild: The new `unexpectedBetweenLeftParenAndArgumentList` to replace the node's
   ///                   current `unexpectedBetweenLeftParenAndArgumentList`, if present.
-  public func withUnexpectedBetweenLeftParenAndArgumentList(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedBetweenLeftParenAndArgumentList(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
+    let newData = data.replacingChild(raw, at: 6, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10254,23 +10346,24 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `argumentList` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[7] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 7)
+    let newData = data.replacingChild(collection, at: 7, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `argumentList` replaced.
   /// - param newChild: The new `argumentList` to replace the node's
   ///                   current `argumentList`, if present.
-  public func withArgumentList(
-    _ newChild: TupleExprElementListSyntax?) -> MacroExpansionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
-    let newData = data.replacingChild(raw, at: 7)
+  public func withArgumentList(_ newChild: TupleExprElementListSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: arena)
+    let newData = data.replacingChild(raw, at: 7, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10288,10 +10381,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenArgumentListAndRightParen` replaced.
   /// - param newChild: The new `unexpectedBetweenArgumentListAndRightParen` to replace the node's
   ///                   current `unexpectedBetweenArgumentListAndRightParen`, if present.
-  public func withUnexpectedBetweenArgumentListAndRightParen(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedBetweenArgumentListAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8)
+    let newData = data.replacingChild(raw, at: 8, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10309,10 +10402,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `rightParen` replaced.
   /// - param newChild: The new `rightParen` to replace the node's
   ///                   current `rightParen`, if present.
-  public func withRightParen(
-    _ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+  public func withRightParen(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9)
+    let newData = data.replacingChild(raw, at: 9, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10330,10 +10423,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenRightParenAndTrailingClosure` replaced.
   /// - param newChild: The new `unexpectedBetweenRightParenAndTrailingClosure` to replace the node's
   ///                   current `unexpectedBetweenRightParenAndTrailingClosure`, if present.
-  public func withUnexpectedBetweenRightParenAndTrailingClosure(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedBetweenRightParenAndTrailingClosure(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10)
+    let newData = data.replacingChild(raw, at: 10, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10351,10 +10444,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `trailingClosure` replaced.
   /// - param newChild: The new `trailingClosure` to replace the node's
   ///                   current `trailingClosure`, if present.
-  public func withTrailingClosure(
-    _ newChild: ClosureExprSyntax?) -> MacroExpansionDeclSyntax {
+  public func withTrailingClosure(_ newChild: ClosureExprSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11)
+    let newData = data.replacingChild(raw, at: 11, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10372,10 +10465,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures` replaced.
   /// - param newChild: The new `unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures` to replace the node's
   ///                   current `unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures`, if present.
-  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12)
+    let newData = data.replacingChild(raw, at: 12, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10398,23 +10491,24 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `additionalTrailingClosures` collection.
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[13] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 13)
+    let newData = data.replacingChild(collection, at: 13, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
   /// Returns a copy of the receiver with its `additionalTrailingClosures` replaced.
   /// - param newChild: The new `additionalTrailingClosures` to replace the node's
   ///                   current `additionalTrailingClosures`, if present.
-  public func withAdditionalTrailingClosures(
-    _ newChild: MultipleTrailingClosureElementListSyntax?) -> MacroExpansionDeclSyntax {
+  public func withAdditionalTrailingClosures(_ newChild: MultipleTrailingClosureElementListSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13)
+    let newData = data.replacingChild(raw, at: 13, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10432,10 +10526,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `unexpectedAfterAdditionalTrailingClosures` replaced.
   /// - param newChild: The new `unexpectedAfterAdditionalTrailingClosures` to replace the node's
   ///                   current `unexpectedAfterAdditionalTrailingClosures`, if present.
-  public func withUnexpectedAfterAdditionalTrailingClosures(
-    _ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+  public func withUnexpectedAfterAdditionalTrailingClosures(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
+    let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14)
+    let newData = data.replacingChild(raw, at: 14, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 

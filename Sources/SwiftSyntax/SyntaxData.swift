@@ -322,15 +322,16 @@ struct SyntaxData {
 
   /// Creates a copy of `self` and recursively creates `SyntaxData` nodes up to
   /// the root.
-  /// - parameter newRaw: The new RawSyntax that will back the new `Data`
-  /// - returns: A tuple of both the new root node and the new data with the raw
+  /// - Parameters:
+  ///   - newRaw: The new RawSyntax that will back the new `Data`
+  ///   - arena: SyntaxArena to the result RawSyntax node data resides.
+  /// - Returns: A tuple of both the new root node and the new data with the raw
   ///            layout replaced.
-  func replacingSelf(
-    _ newRaw: RawSyntax) -> SyntaxData {
+  func replacingSelf(_ newRaw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent = parent {
-      let parentData = parent.replacingChild(newRaw, at: indexInParent)
+      let parentData = parent.replacingChild(newRaw, at: indexInParent, arena: arena)
       let newParent = Syntax(parentData)
       return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
     } else {
@@ -346,25 +347,26 @@ struct SyntaxData {
   ///   - child: The raw syntax for the new child to replace.
   ///   - index: The index pointing to where in the raw layout to place this
   ///            child.
+  ///   - arena: SyntaxArena to the result RawSyntax node data resides.
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(_ child: RawSyntax?, at index: Int) -> SyntaxData {
-    let newRaw = raw.layoutView!.replacingChild(at: index, with: child, arena: .default)
-    return replacingSelf(newRaw)
+  func replacingChild(_ child: RawSyntax?, at index: Int, arena: SyntaxArena) -> SyntaxData {
+    let newRaw = raw.layoutView!.replacingChild(at: index, with: child, arena: arena)
+    return replacingSelf(newRaw, arena: arena)
   }
 
-  func withLeadingTrivia(_ leadingTrivia: Trivia) -> SyntaxData {
-    if let raw = raw.withLeadingTrivia(leadingTrivia) {
-      return replacingSelf(raw)
+  func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> SyntaxData {
+    if let raw = raw.withLeadingTrivia(leadingTrivia, arena: arena) {
+      return replacingSelf(raw, arena: arena)
     } else {
       return self
     }
   }
 
-  func withTrailingTrivia(_ trailingTrivia: Trivia) -> SyntaxData {
-    if let raw = raw.withTrailingTrivia(trailingTrivia) {
-      return replacingSelf(raw)
+  func withTrailingTrivia(_ trailingTrivia: Trivia, arena: SyntaxArena) -> SyntaxData {
+    if let raw = raw.withTrailingTrivia(trailingTrivia, arena: arena) {
+      return replacingSelf(raw, arena: arena)
     } else {
       return self
     }

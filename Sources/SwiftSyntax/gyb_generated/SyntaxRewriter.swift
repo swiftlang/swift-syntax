@@ -6137,9 +6137,10 @@ open class SyntaxRewriter {
       // Sanity check, ensure the new children are the same length.
       assert(newLayout.count == node.raw.layoutView!.children.count)
 
-      let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: .default)
+      let arena = SyntaxArena()
+      let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
       // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
-      return withExtendedLifetime(rewrittens) {
+      return withExtendedLifetime((arena, rewrittens)) {
         SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
       }
     } else {

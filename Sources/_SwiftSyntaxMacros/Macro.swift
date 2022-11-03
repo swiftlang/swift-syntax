@@ -56,5 +56,26 @@ extension Macro {
       return (UnsafePointer(result), count: buffer.count)
     }
   }
+
+  public static func _genericSignature() -> (UnsafePointer<UInt8>?, count: Int) {
+    guard let genericSignature = genericSignature else {
+      return (nil, count: 0)
+    }
+    var signature = "\(genericSignature)"
+    return signature.withUTF8 { buffer in
+      let result = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.count)
+      result.initialize(from: buffer.baseAddress!, count: buffer.count)
+      return (UnsafePointer(result), count: buffer.count)
+    }
+  }
+
+  public static func _typeSignature() -> (UnsafePointer<UInt8>, count: Int) {
+    var signature = "\(signature)"
+    return signature.withUTF8 { buffer in
+      let result = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.count)
+      result.initialize(from: buffer.baseAddress!, count: buffer.count)
+      return (UnsafePointer(result), count: buffer.count)
+    }
+  }
 }
 #endif

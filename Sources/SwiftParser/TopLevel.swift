@@ -68,7 +68,15 @@ extension Parser {
         break
       }
       if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
-        elements[elements.count - 1] = lastItem.withSemicolon(missingToken(.semicolon, text: nil), arena: self.arena)
+        elements[elements.count - 1] = RawCodeBlockItemSyntax(
+          lastItem.unexpectedBeforeItem,
+          item: .init(lastItem.item)!,
+          lastItem.unexpectedBetweenItemAndSemicolon,
+          semicolon: self.missingToken(.semicolon, text: nil),
+          lastItem.unexpectedBetweenSemicolonAndErrorTokens,
+          errorTokens: lastItem.errorTokens,
+          lastItem.unexpectedAfterErrorTokens,
+          arena: self.arena)
       }
       elements.append(newElement)
     }
@@ -195,7 +203,15 @@ extension Parser {
         $0.parseCodeBlockItem()
       } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
         if lastElement.semicolon == nil && !newItemAtStartOfLine {
-          return lastElement.withSemicolon(parser.missingToken(.semicolon, text: nil), arena: parser.arena)
+          return RawCodeBlockItemSyntax(
+            lastElement.unexpectedBeforeItem,
+            item: .init(lastElement.item)!,
+            lastElement.unexpectedBetweenItemAndSemicolon,
+            semicolon: parser.missingToken(.semicolon, text: nil),
+            lastElement.unexpectedBetweenSemicolonAndErrorTokens,
+            errorTokens: lastElement.errorTokens,
+            lastElement.unexpectedAfterErrorTokens,
+            arena: parser.arena)
         } else {
           return nil
         }

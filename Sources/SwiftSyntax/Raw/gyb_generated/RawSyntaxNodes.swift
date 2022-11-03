@@ -394,32 +394,17 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMissingDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawMissingDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawMissingDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawMissingDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMissingDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawMissingDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawMissingDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawMissingDeclSyntax.self)!
-  }
   public var unexpectedAfterModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterModifiers(_ unexpectedAfterModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMissingDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterModifiers.map(RawSyntax.init), arena: arena).as(RawMissingDeclSyntax.self)!
   }
 }
 
@@ -652,44 +637,23 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeItem: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeItem(_ unexpectedBeforeItem: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockItemSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeItem.map(RawSyntax.init), arena: arena).as(RawCodeBlockItemSyntax.self)!
-  }
   public var item: RawSyntax {
     layoutView.children[1]!
-  }
-  public func withItem(_ item: RawSyntax, arena: SyntaxArena) -> RawCodeBlockItemSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(item), arena: arena).as(RawCodeBlockItemSyntax.self)!
   }
   public var unexpectedBetweenItemAndSemicolon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenItemAndSemicolon(_ unexpectedBetweenItemAndSemicolon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockItemSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenItemAndSemicolon.map(RawSyntax.init), arena: arena).as(RawCodeBlockItemSyntax.self)!
-  }
   public var semicolon: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withSemicolon(_ semicolon: RawTokenSyntax?, arena: SyntaxArena) -> RawCodeBlockItemSyntax {
-    return layoutView.replacingChild(at: 3, with: semicolon.map(RawSyntax.init), arena: arena).as(RawCodeBlockItemSyntax.self)!
   }
   public var unexpectedBetweenSemicolonAndErrorTokens: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSemicolonAndErrorTokens(_ unexpectedBetweenSemicolonAndErrorTokens: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockItemSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenSemicolonAndErrorTokens.map(RawSyntax.init), arena: arena).as(RawCodeBlockItemSyntax.self)!
-  }
   public var errorTokens: RawSyntax? {
     layoutView.children[5]
   }
-  public func withErrorTokens(_ errorTokens: RawSyntax?, arena: SyntaxArena) -> RawCodeBlockItemSyntax {
-    return layoutView.replacingChild(at: 5, with: errorTokens.map(RawSyntax.init), arena: arena).as(RawCodeBlockItemSyntax.self)!
-  }
   public var unexpectedAfterErrorTokens: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterErrorTokens(_ unexpectedAfterErrorTokens: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockItemSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterErrorTokens.map(RawSyntax.init), arena: arena).as(RawCodeBlockItemSyntax.self)!
   }
 }
 
@@ -785,44 +749,23 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftBrace(_ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftBrace.map(RawSyntax.init), arena: arena).as(RawCodeBlockSyntax.self)!
-  }
   public var leftBrace: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBrace(_ leftBrace: RawTokenSyntax, arena: SyntaxArena) -> RawCodeBlockSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftBrace), arena: arena).as(RawCodeBlockSyntax.self)!
   }
   public var unexpectedBetweenLeftBraceAndStatements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBraceAndStatements(_ unexpectedBetweenLeftBraceAndStatements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftBraceAndStatements.map(RawSyntax.init), arena: arena).as(RawCodeBlockSyntax.self)!
-  }
   public var statements: RawCodeBlockItemListSyntax {
     layoutView.children[3].map(RawCodeBlockItemListSyntax.init(raw:))!
-  }
-  public func withStatements(_ statements: RawCodeBlockItemListSyntax, arena: SyntaxArena) -> RawCodeBlockSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(statements), arena: arena).as(RawCodeBlockSyntax.self)!
   }
   public var unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenStatementsAndRightBrace(_ unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenStatementsAndRightBrace.map(RawSyntax.init), arena: arena).as(RawCodeBlockSyntax.self)!
-  }
   public var rightBrace: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightBrace(_ rightBrace: RawTokenSyntax, arena: SyntaxArena) -> RawCodeBlockSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightBrace), arena: arena).as(RawCodeBlockSyntax.self)!
-  }
   public var unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightBrace(_ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCodeBlockSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightBrace.map(RawSyntax.init), arena: arena).as(RawCodeBlockSyntax.self)!
   }
 }
 
@@ -914,32 +857,17 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeAmpersand: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAmpersand(_ unexpectedBeforeAmpersand: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInOutExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAmpersand.map(RawSyntax.init), arena: arena).as(RawInOutExprSyntax.self)!
-  }
   public var ampersand: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAmpersand(_ ampersand: RawTokenSyntax, arena: SyntaxArena) -> RawInOutExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(ampersand), arena: arena).as(RawInOutExprSyntax.self)!
   }
   public var unexpectedBetweenAmpersandAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAmpersandAndExpression(_ unexpectedBetweenAmpersandAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInOutExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAmpersandAndExpression.map(RawSyntax.init), arena: arena).as(RawInOutExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawInOutExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(expression), arena: arena).as(RawInOutExprSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInOutExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawInOutExprSyntax.self)!
   }
 }
 
@@ -986,20 +914,11 @@ public struct RawPoundColumnExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforePoundColumn: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundColumn(_ unexpectedBeforePoundColumn: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundColumnExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundColumn.map(RawSyntax.init), arena: arena).as(RawPoundColumnExprSyntax.self)!
-  }
   public var poundColumn: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundColumn(_ poundColumn: RawTokenSyntax, arena: SyntaxArena) -> RawPoundColumnExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundColumn), arena: arena).as(RawPoundColumnExprSyntax.self)!
-  }
   public var unexpectedAfterPoundColumn: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundColumn(_ unexpectedAfterPoundColumn: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundColumnExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPoundColumn.map(RawSyntax.init), arena: arena).as(RawPoundColumnExprSyntax.self)!
   }
 }
 
@@ -1246,44 +1165,23 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeTryKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeTryKeyword(_ unexpectedBeforeTryKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTryExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeTryKeyword.map(RawSyntax.init), arena: arena).as(RawTryExprSyntax.self)!
-  }
   public var tryKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withTryKeyword(_ tryKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawTryExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(tryKeyword), arena: arena).as(RawTryExprSyntax.self)!
   }
   public var unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTryKeywordAndQuestionOrExclamationMark(_ unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTryExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenTryKeywordAndQuestionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawTryExprSyntax.self)!
-  }
   public var questionOrExclamationMark: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withQuestionOrExclamationMark(_ questionOrExclamationMark: RawTokenSyntax?, arena: SyntaxArena) -> RawTryExprSyntax {
-    return layoutView.replacingChild(at: 3, with: questionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawTryExprSyntax.self)!
   }
   public var unexpectedBetweenQuestionOrExclamationMarkAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenQuestionOrExclamationMarkAndExpression(_ unexpectedBetweenQuestionOrExclamationMarkAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTryExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenQuestionOrExclamationMarkAndExpression.map(RawSyntax.init), arena: arena).as(RawTryExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawTryExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(expression), arena: arena).as(RawTryExprSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTryExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawTryExprSyntax.self)!
   }
 }
 
@@ -1334,32 +1232,17 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeAwaitKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAwaitKeyword(_ unexpectedBeforeAwaitKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAwaitExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAwaitKeyword.map(RawSyntax.init), arena: arena).as(RawAwaitExprSyntax.self)!
-  }
   public var awaitKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAwaitKeyword(_ awaitKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawAwaitExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(awaitKeyword), arena: arena).as(RawAwaitExprSyntax.self)!
   }
   public var unexpectedBetweenAwaitKeywordAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAwaitKeywordAndExpression(_ unexpectedBetweenAwaitKeywordAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAwaitExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAwaitKeywordAndExpression.map(RawSyntax.init), arena: arena).as(RawAwaitExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawAwaitExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(expression), arena: arena).as(RawAwaitExprSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAwaitExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawAwaitExprSyntax.self)!
   }
 }
 
@@ -1410,32 +1293,17 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeMoveKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeMoveKeyword(_ unexpectedBeforeMoveKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMoveExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeMoveKeyword.map(RawSyntax.init), arena: arena).as(RawMoveExprSyntax.self)!
-  }
   public var moveKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withMoveKeyword(_ moveKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawMoveExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(moveKeyword), arena: arena).as(RawMoveExprSyntax.self)!
   }
   public var unexpectedBetweenMoveKeywordAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMoveKeywordAndExpression(_ unexpectedBetweenMoveKeywordAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMoveExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenMoveKeywordAndExpression.map(RawSyntax.init), arena: arena).as(RawMoveExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawMoveExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(expression), arena: arena).as(RawMoveExprSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMoveExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawMoveExprSyntax.self)!
   }
 }
 
@@ -1486,32 +1354,17 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameArgumentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawDeclNameArgumentSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawDeclNameArgumentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawDeclNameArgumentSyntax.self)!
   }
   public var unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndColon(_ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameArgumentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndColon.map(RawSyntax.init), arena: arena).as(RawDeclNameArgumentSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawDeclNameArgumentSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawDeclNameArgumentSyntax.self)!
-  }
   public var unexpectedAfterColon: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterColon(_ unexpectedAfterColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameArgumentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterColon.map(RawSyntax.init), arena: arena).as(RawDeclNameArgumentSyntax.self)!
   }
 }
 
@@ -1607,44 +1460,23 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameArgumentsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawDeclNameArgumentsSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawDeclNameArgumentsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawDeclNameArgumentsSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArguments(_ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameArgumentsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndArguments.map(RawSyntax.init), arena: arena).as(RawDeclNameArgumentsSyntax.self)!
-  }
   public var arguments: RawDeclNameArgumentListSyntax {
     layoutView.children[3].map(RawDeclNameArgumentListSyntax.init(raw:))!
-  }
-  public func withArguments(_ arguments: RawDeclNameArgumentListSyntax, arena: SyntaxArena) -> RawDeclNameArgumentsSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(arguments), arena: arena).as(RawDeclNameArgumentsSyntax.self)!
   }
   public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentsAndRightParen(_ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameArgumentsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenArgumentsAndRightParen.map(RawSyntax.init), arena: arena).as(RawDeclNameArgumentsSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawDeclNameArgumentsSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawDeclNameArgumentsSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameArgumentsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawDeclNameArgumentsSyntax.self)!
   }
 }
 
@@ -1695,32 +1527,17 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIdentifier(_ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIdentifierExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIdentifier.map(RawSyntax.init), arena: arena).as(RawIdentifierExprSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawIdentifierExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(identifier), arena: arena).as(RawIdentifierExprSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndDeclNameArguments(_ unexpectedBetweenIdentifierAndDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIdentifierExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenIdentifierAndDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawIdentifierExprSyntax.self)!
-  }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     layoutView.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
   }
-  public func withDeclNameArguments(_ declNameArguments: RawDeclNameArgumentsSyntax?, arena: SyntaxArena) -> RawIdentifierExprSyntax {
-    return layoutView.replacingChild(at: 3, with: declNameArguments.map(RawSyntax.init), arena: arena).as(RawIdentifierExprSyntax.self)!
-  }
   public var unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDeclNameArguments(_ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIdentifierExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawIdentifierExprSyntax.self)!
   }
 }
 
@@ -1767,20 +1584,11 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeSuperKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeSuperKeyword(_ unexpectedBeforeSuperKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSuperRefExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeSuperKeyword.map(RawSyntax.init), arena: arena).as(RawSuperRefExprSyntax.self)!
-  }
   public var superKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withSuperKeyword(_ superKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawSuperRefExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(superKeyword), arena: arena).as(RawSuperRefExprSyntax.self)!
-  }
   public var unexpectedAfterSuperKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterSuperKeyword(_ unexpectedAfterSuperKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSuperRefExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterSuperKeyword.map(RawSyntax.init), arena: arena).as(RawSuperRefExprSyntax.self)!
   }
 }
 
@@ -1827,20 +1635,11 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeNilKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeNilKeyword(_ unexpectedBeforeNilKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNilLiteralExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeNilKeyword.map(RawSyntax.init), arena: arena).as(RawNilLiteralExprSyntax.self)!
-  }
   public var nilKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withNilKeyword(_ nilKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawNilLiteralExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(nilKeyword), arena: arena).as(RawNilLiteralExprSyntax.self)!
-  }
   public var unexpectedAfterNilKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterNilKeyword(_ unexpectedAfterNilKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNilLiteralExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterNilKeyword.map(RawSyntax.init), arena: arena).as(RawNilLiteralExprSyntax.self)!
   }
 }
 
@@ -1887,20 +1686,11 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWildcard(_ unexpectedBeforeWildcard: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDiscardAssignmentExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWildcard.map(RawSyntax.init), arena: arena).as(RawDiscardAssignmentExprSyntax.self)!
-  }
   public var wildcard: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withWildcard(_ wildcard: RawTokenSyntax, arena: SyntaxArena) -> RawDiscardAssignmentExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(wildcard), arena: arena).as(RawDiscardAssignmentExprSyntax.self)!
-  }
   public var unexpectedAfterWildcard: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterWildcard(_ unexpectedAfterWildcard: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDiscardAssignmentExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterWildcard.map(RawSyntax.init), arena: arena).as(RawDiscardAssignmentExprSyntax.self)!
   }
 }
 
@@ -1947,20 +1737,11 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAssignToken(_ unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssignmentExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAssignToken.map(RawSyntax.init), arena: arena).as(RawAssignmentExprSyntax.self)!
-  }
   public var assignToken: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withAssignToken(_ assignToken: RawTokenSyntax, arena: SyntaxArena) -> RawAssignmentExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(assignToken), arena: arena).as(RawAssignmentExprSyntax.self)!
-  }
   public var unexpectedAfterAssignToken: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAssignToken(_ unexpectedAfterAssignToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssignmentExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterAssignToken.map(RawSyntax.init), arena: arena).as(RawAssignmentExprSyntax.self)!
   }
 }
 
@@ -2007,20 +1788,11 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeElements: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeElements(_ unexpectedBeforeElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSequenceExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeElements.map(RawSyntax.init), arena: arena).as(RawSequenceExprSyntax.self)!
-  }
   public var elements: RawExprListSyntax {
     layoutView.children[1].map(RawExprListSyntax.init(raw:))!
   }
-  public func withElements(_ elements: RawExprListSyntax, arena: SyntaxArena) -> RawSequenceExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(elements), arena: arena).as(RawSequenceExprSyntax.self)!
-  }
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterElements(_ unexpectedAfterElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSequenceExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterElements.map(RawSyntax.init), arena: arena).as(RawSequenceExprSyntax.self)!
   }
 }
 
@@ -2108,20 +1880,11 @@ public struct RawPoundLineExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforePoundLine: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundLine(_ unexpectedBeforePoundLine: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundLineExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundLine.map(RawSyntax.init), arena: arena).as(RawPoundLineExprSyntax.self)!
-  }
   public var poundLine: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundLine(_ poundLine: RawTokenSyntax, arena: SyntaxArena) -> RawPoundLineExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundLine), arena: arena).as(RawPoundLineExprSyntax.self)!
-  }
   public var unexpectedAfterPoundLine: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundLine(_ unexpectedAfterPoundLine: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundLineExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPoundLine.map(RawSyntax.init), arena: arena).as(RawPoundLineExprSyntax.self)!
   }
 }
 
@@ -2168,20 +1931,11 @@ public struct RawPoundFileExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforePoundFile: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundFile(_ unexpectedBeforePoundFile: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFileExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundFile.map(RawSyntax.init), arena: arena).as(RawPoundFileExprSyntax.self)!
-  }
   public var poundFile: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundFile(_ poundFile: RawTokenSyntax, arena: SyntaxArena) -> RawPoundFileExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundFile), arena: arena).as(RawPoundFileExprSyntax.self)!
-  }
   public var unexpectedAfterPoundFile: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundFile(_ unexpectedAfterPoundFile: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFileExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPoundFile.map(RawSyntax.init), arena: arena).as(RawPoundFileExprSyntax.self)!
   }
 }
 
@@ -2228,20 +1982,11 @@ public struct RawPoundFileIDExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforePoundFileID: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundFileID(_ unexpectedBeforePoundFileID: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFileIDExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundFileID.map(RawSyntax.init), arena: arena).as(RawPoundFileIDExprSyntax.self)!
-  }
   public var poundFileID: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundFileID(_ poundFileID: RawTokenSyntax, arena: SyntaxArena) -> RawPoundFileIDExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundFileID), arena: arena).as(RawPoundFileIDExprSyntax.self)!
-  }
   public var unexpectedAfterPoundFileID: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundFileID(_ unexpectedAfterPoundFileID: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFileIDExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPoundFileID.map(RawSyntax.init), arena: arena).as(RawPoundFileIDExprSyntax.self)!
   }
 }
 
@@ -2288,20 +2033,11 @@ public struct RawPoundFilePathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforePoundFilePath: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundFilePath(_ unexpectedBeforePoundFilePath: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFilePathExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundFilePath.map(RawSyntax.init), arena: arena).as(RawPoundFilePathExprSyntax.self)!
-  }
   public var poundFilePath: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundFilePath(_ poundFilePath: RawTokenSyntax, arena: SyntaxArena) -> RawPoundFilePathExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundFilePath), arena: arena).as(RawPoundFilePathExprSyntax.self)!
-  }
   public var unexpectedAfterPoundFilePath: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundFilePath(_ unexpectedAfterPoundFilePath: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFilePathExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPoundFilePath.map(RawSyntax.init), arena: arena).as(RawPoundFilePathExprSyntax.self)!
   }
 }
 
@@ -2348,20 +2084,11 @@ public struct RawPoundFunctionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforePoundFunction: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundFunction(_ unexpectedBeforePoundFunction: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFunctionExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundFunction.map(RawSyntax.init), arena: arena).as(RawPoundFunctionExprSyntax.self)!
-  }
   public var poundFunction: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundFunction(_ poundFunction: RawTokenSyntax, arena: SyntaxArena) -> RawPoundFunctionExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundFunction), arena: arena).as(RawPoundFunctionExprSyntax.self)!
-  }
   public var unexpectedAfterPoundFunction: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundFunction(_ unexpectedAfterPoundFunction: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundFunctionExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPoundFunction.map(RawSyntax.init), arena: arena).as(RawPoundFunctionExprSyntax.self)!
   }
 }
 
@@ -2408,20 +2135,11 @@ public struct RawPoundDsohandleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforePoundDsohandle: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundDsohandle(_ unexpectedBeforePoundDsohandle: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundDsohandleExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundDsohandle.map(RawSyntax.init), arena: arena).as(RawPoundDsohandleExprSyntax.self)!
-  }
   public var poundDsohandle: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundDsohandle(_ poundDsohandle: RawTokenSyntax, arena: SyntaxArena) -> RawPoundDsohandleExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundDsohandle), arena: arena).as(RawPoundDsohandleExprSyntax.self)!
-  }
   public var unexpectedAfterPoundDsohandle: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundDsohandle(_ unexpectedAfterPoundDsohandle: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundDsohandleExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPoundDsohandle.map(RawSyntax.init), arena: arena).as(RawPoundDsohandleExprSyntax.self)!
   }
 }
 
@@ -2472,32 +2190,17 @@ public struct RawSymbolicReferenceExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIdentifier(_ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSymbolicReferenceExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIdentifier.map(RawSyntax.init), arena: arena).as(RawSymbolicReferenceExprSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawSymbolicReferenceExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(identifier), arena: arena).as(RawSymbolicReferenceExprSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndGenericArgumentClause(_ unexpectedBetweenIdentifierAndGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSymbolicReferenceExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenIdentifierAndGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSymbolicReferenceExprSyntax.self)!
-  }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
     layoutView.children[3].map(RawGenericArgumentClauseSyntax.init(raw:))
   }
-  public func withGenericArgumentClause(_ genericArgumentClause: RawGenericArgumentClauseSyntax?, arena: SyntaxArena) -> RawSymbolicReferenceExprSyntax {
-    return layoutView.replacingChild(at: 3, with: genericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSymbolicReferenceExprSyntax.self)!
-  }
   public var unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGenericArgumentClause(_ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSymbolicReferenceExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSymbolicReferenceExprSyntax.self)!
   }
 }
 
@@ -2548,32 +2251,17 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeOperatorToken(_ unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrefixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeOperatorToken.map(RawSyntax.init), arena: arena).as(RawPrefixOperatorExprSyntax.self)!
-  }
   public var operatorToken: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withOperatorToken(_ operatorToken: RawTokenSyntax?, arena: SyntaxArena) -> RawPrefixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 1, with: operatorToken.map(RawSyntax.init), arena: arena).as(RawPrefixOperatorExprSyntax.self)!
   }
   public var unexpectedBetweenOperatorTokenAndPostfixExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOperatorTokenAndPostfixExpression(_ unexpectedBetweenOperatorTokenAndPostfixExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrefixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenOperatorTokenAndPostfixExpression.map(RawSyntax.init), arena: arena).as(RawPrefixOperatorExprSyntax.self)!
-  }
   public var postfixExpression: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public func withPostfixExpression(_ postfixExpression: RawExprSyntax, arena: SyntaxArena) -> RawPrefixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(postfixExpression), arena: arena).as(RawPrefixOperatorExprSyntax.self)!
-  }
   public var unexpectedAfterPostfixExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPostfixExpression(_ unexpectedAfterPostfixExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrefixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterPostfixExpression.map(RawSyntax.init), arena: arena).as(RawPrefixOperatorExprSyntax.self)!
   }
 }
 
@@ -2620,20 +2308,11 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeOperatorToken(_ unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBinaryOperatorExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeOperatorToken.map(RawSyntax.init), arena: arena).as(RawBinaryOperatorExprSyntax.self)!
-  }
   public var operatorToken: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withOperatorToken(_ operatorToken: RawTokenSyntax, arena: SyntaxArena) -> RawBinaryOperatorExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(operatorToken), arena: arena).as(RawBinaryOperatorExprSyntax.self)!
-  }
   public var unexpectedAfterOperatorToken: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterOperatorToken(_ unexpectedAfterOperatorToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBinaryOperatorExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterOperatorToken.map(RawSyntax.init), arena: arena).as(RawBinaryOperatorExprSyntax.self)!
   }
 }
 
@@ -2688,44 +2367,23 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeAsyncKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAsyncKeyword(_ unexpectedBeforeAsyncKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrowExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAsyncKeyword.map(RawSyntax.init), arena: arena).as(RawArrowExprSyntax.self)!
-  }
   public var asyncKeyword: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAsyncKeyword(_ asyncKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawArrowExprSyntax {
-    return layoutView.replacingChild(at: 1, with: asyncKeyword.map(RawSyntax.init), arena: arena).as(RawArrowExprSyntax.self)!
   }
   public var unexpectedBetweenAsyncKeywordAndThrowsToken: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsyncKeywordAndThrowsToken(_ unexpectedBetweenAsyncKeywordAndThrowsToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrowExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAsyncKeywordAndThrowsToken.map(RawSyntax.init), arena: arena).as(RawArrowExprSyntax.self)!
-  }
   public var throwsToken: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withThrowsToken(_ throwsToken: RawTokenSyntax?, arena: SyntaxArena) -> RawArrowExprSyntax {
-    return layoutView.replacingChild(at: 3, with: throwsToken.map(RawSyntax.init), arena: arena).as(RawArrowExprSyntax.self)!
   }
   public var unexpectedBetweenThrowsTokenAndArrowToken: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenThrowsTokenAndArrowToken(_ unexpectedBetweenThrowsTokenAndArrowToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrowExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenThrowsTokenAndArrowToken.map(RawSyntax.init), arena: arena).as(RawArrowExprSyntax.self)!
-  }
   public var arrowToken: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withArrowToken(_ arrowToken: RawTokenSyntax, arena: SyntaxArena) -> RawArrowExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(arrowToken), arena: arena).as(RawArrowExprSyntax.self)!
-  }
   public var unexpectedAfterArrowToken: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterArrowToken(_ unexpectedAfterArrowToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrowExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterArrowToken.map(RawSyntax.init), arena: arena).as(RawArrowExprSyntax.self)!
   }
 }
 
@@ -2780,44 +2438,23 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeLeftOperand: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftOperand(_ unexpectedBeforeLeftOperand: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInfixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftOperand.map(RawSyntax.init), arena: arena).as(RawInfixOperatorExprSyntax.self)!
-  }
   public var leftOperand: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withLeftOperand(_ leftOperand: RawExprSyntax, arena: SyntaxArena) -> RawInfixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftOperand), arena: arena).as(RawInfixOperatorExprSyntax.self)!
   }
   public var unexpectedBetweenLeftOperandAndOperatorOperand: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftOperandAndOperatorOperand(_ unexpectedBetweenLeftOperandAndOperatorOperand: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInfixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftOperandAndOperatorOperand.map(RawSyntax.init), arena: arena).as(RawInfixOperatorExprSyntax.self)!
-  }
   public var operatorOperand: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
-  }
-  public func withOperatorOperand(_ operatorOperand: RawExprSyntax, arena: SyntaxArena) -> RawInfixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(operatorOperand), arena: arena).as(RawInfixOperatorExprSyntax.self)!
   }
   public var unexpectedBetweenOperatorOperandAndRightOperand: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOperatorOperandAndRightOperand(_ unexpectedBetweenOperatorOperandAndRightOperand: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInfixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenOperatorOperandAndRightOperand.map(RawSyntax.init), arena: arena).as(RawInfixOperatorExprSyntax.self)!
-  }
   public var rightOperand: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
   }
-  public func withRightOperand(_ rightOperand: RawExprSyntax, arena: SyntaxArena) -> RawInfixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightOperand), arena: arena).as(RawInfixOperatorExprSyntax.self)!
-  }
   public var unexpectedAfterRightOperand: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightOperand(_ unexpectedAfterRightOperand: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInfixOperatorExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightOperand.map(RawSyntax.init), arena: arena).as(RawInfixOperatorExprSyntax.self)!
   }
 }
 
@@ -2864,20 +2501,11 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeFloatingDigits: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeFloatingDigits(_ unexpectedBeforeFloatingDigits: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFloatLiteralExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeFloatingDigits.map(RawSyntax.init), arena: arena).as(RawFloatLiteralExprSyntax.self)!
-  }
   public var floatingDigits: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withFloatingDigits(_ floatingDigits: RawTokenSyntax, arena: SyntaxArena) -> RawFloatLiteralExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(floatingDigits), arena: arena).as(RawFloatLiteralExprSyntax.self)!
-  }
   public var unexpectedAfterFloatingDigits: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterFloatingDigits(_ unexpectedAfterFloatingDigits: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFloatLiteralExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterFloatingDigits.map(RawSyntax.init), arena: arena).as(RawFloatLiteralExprSyntax.self)!
   }
 }
 
@@ -2932,44 +2560,23 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawTupleExprSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawTupleExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawTupleExprSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndElementList(_ unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndElementList.map(RawSyntax.init), arena: arena).as(RawTupleExprSyntax.self)!
-  }
   public var elementList: RawTupleExprElementListSyntax {
     layoutView.children[3].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withElementList(_ elementList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawTupleExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(elementList), arena: arena).as(RawTupleExprSyntax.self)!
   }
   public var unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElementListAndRightParen(_ unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenElementListAndRightParen.map(RawSyntax.init), arena: arena).as(RawTupleExprSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawTupleExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawTupleExprSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawTupleExprSyntax.self)!
   }
 }
 
@@ -3024,44 +2631,23 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftSquare(_ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftSquare.map(RawSyntax.init), arena: arena).as(RawArrayExprSyntax.self)!
-  }
   public var leftSquare: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftSquare(_ leftSquare: RawTokenSyntax, arena: SyntaxArena) -> RawArrayExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftSquare), arena: arena).as(RawArrayExprSyntax.self)!
   }
   public var unexpectedBetweenLeftSquareAndElements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftSquareAndElements(_ unexpectedBetweenLeftSquareAndElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftSquareAndElements.map(RawSyntax.init), arena: arena).as(RawArrayExprSyntax.self)!
-  }
   public var elements: RawArrayElementListSyntax {
     layoutView.children[3].map(RawArrayElementListSyntax.init(raw:))!
-  }
-  public func withElements(_ elements: RawArrayElementListSyntax, arena: SyntaxArena) -> RawArrayExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(elements), arena: arena).as(RawArrayExprSyntax.self)!
   }
   public var unexpectedBetweenElementsAndRightSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElementsAndRightSquare(_ unexpectedBetweenElementsAndRightSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenElementsAndRightSquare.map(RawSyntax.init), arena: arena).as(RawArrayExprSyntax.self)!
-  }
   public var rightSquare: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightSquare(_ rightSquare: RawTokenSyntax, arena: SyntaxArena) -> RawArrayExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightSquare), arena: arena).as(RawArrayExprSyntax.self)!
-  }
   public var unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightSquare(_ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightSquare.map(RawSyntax.init), arena: arena).as(RawArrayExprSyntax.self)!
   }
 }
 
@@ -3144,44 +2730,23 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftSquare(_ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftSquare.map(RawSyntax.init), arena: arena).as(RawDictionaryExprSyntax.self)!
-  }
   public var leftSquare: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftSquare(_ leftSquare: RawTokenSyntax, arena: SyntaxArena) -> RawDictionaryExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftSquare), arena: arena).as(RawDictionaryExprSyntax.self)!
   }
   public var unexpectedBetweenLeftSquareAndContent: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftSquareAndContent(_ unexpectedBetweenLeftSquareAndContent: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftSquareAndContent.map(RawSyntax.init), arena: arena).as(RawDictionaryExprSyntax.self)!
-  }
   public var content: RawSyntax {
     layoutView.children[3]!
-  }
-  public func withContent(_ content: RawSyntax, arena: SyntaxArena) -> RawDictionaryExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(content), arena: arena).as(RawDictionaryExprSyntax.self)!
   }
   public var unexpectedBetweenContentAndRightSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenContentAndRightSquare(_ unexpectedBetweenContentAndRightSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenContentAndRightSquare.map(RawSyntax.init), arena: arena).as(RawDictionaryExprSyntax.self)!
-  }
   public var rightSquare: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightSquare(_ rightSquare: RawTokenSyntax, arena: SyntaxArena) -> RawDictionaryExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightSquare), arena: arena).as(RawDictionaryExprSyntax.self)!
-  }
   public var unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightSquare(_ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightSquare.map(RawSyntax.init), arena: arena).as(RawDictionaryExprSyntax.self)!
   }
 }
 
@@ -3240,56 +2805,29 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabel(_ unexpectedBeforeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabel.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
-  }
   public var label: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLabel(_ label: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 1, with: label.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
   }
   public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelAndColon(_ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelAndColon.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
-  }
   public var colon: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 3, with: colon.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
   }
   public var unexpectedBetweenColonAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndExpression(_ unexpectedBetweenColonAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndExpression.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(expression), arena: arena).as(RawTupleExprElementSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndTrailingComma(_ unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenExpressionAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 7, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleExprElementSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawTupleExprElementSyntax.self)!
   }
 }
 
@@ -3340,32 +2878,17 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawArrayElementSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawArrayElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawArrayElementSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndTrailingComma(_ unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawArrayElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawArrayElementSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawArrayElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawArrayElementSyntax.self)!
   }
 }
 
@@ -3424,56 +2947,29 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeKeyExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeKeyExpression(_ unexpectedBeforeKeyExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeKeyExpression.map(RawSyntax.init), arena: arena).as(RawDictionaryElementSyntax.self)!
-  }
   public var keyExpression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withKeyExpression(_ keyExpression: RawExprSyntax, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(keyExpression), arena: arena).as(RawDictionaryElementSyntax.self)!
   }
   public var unexpectedBetweenKeyExpressionAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenKeyExpressionAndColon(_ unexpectedBetweenKeyExpressionAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenKeyExpressionAndColon.map(RawSyntax.init), arena: arena).as(RawDictionaryElementSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawDictionaryElementSyntax.self)!
   }
   public var unexpectedBetweenColonAndValueExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndValueExpression(_ unexpectedBetweenColonAndValueExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndValueExpression.map(RawSyntax.init), arena: arena).as(RawDictionaryElementSyntax.self)!
-  }
   public var valueExpression: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
-  }
-  public func withValueExpression(_ valueExpression: RawExprSyntax, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(valueExpression), arena: arena).as(RawDictionaryElementSyntax.self)!
   }
   public var unexpectedBetweenValueExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenValueExpressionAndTrailingComma(_ unexpectedBetweenValueExpressionAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenValueExpressionAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawDictionaryElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 7, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawDictionaryElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryElementSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawDictionaryElementSyntax.self)!
   }
 }
 
@@ -3520,20 +3016,11 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeDigits: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDigits(_ unexpectedBeforeDigits: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIntegerLiteralExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDigits.map(RawSyntax.init), arena: arena).as(RawIntegerLiteralExprSyntax.self)!
-  }
   public var digits: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withDigits(_ digits: RawTokenSyntax, arena: SyntaxArena) -> RawIntegerLiteralExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(digits), arena: arena).as(RawIntegerLiteralExprSyntax.self)!
-  }
   public var unexpectedAfterDigits: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDigits(_ unexpectedAfterDigits: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIntegerLiteralExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterDigits.map(RawSyntax.init), arena: arena).as(RawIntegerLiteralExprSyntax.self)!
   }
 }
 
@@ -3580,20 +3067,11 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeBooleanLiteral: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBooleanLiteral(_ unexpectedBeforeBooleanLiteral: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBooleanLiteralExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBooleanLiteral.map(RawSyntax.init), arena: arena).as(RawBooleanLiteralExprSyntax.self)!
-  }
   public var booleanLiteral: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withBooleanLiteral(_ booleanLiteral: RawTokenSyntax, arena: SyntaxArena) -> RawBooleanLiteralExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(booleanLiteral), arena: arena).as(RawBooleanLiteralExprSyntax.self)!
-  }
   public var unexpectedAfterBooleanLiteral: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBooleanLiteral(_ unexpectedAfterBooleanLiteral: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBooleanLiteralExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterBooleanLiteral.map(RawSyntax.init), arena: arena).as(RawBooleanLiteralExprSyntax.self)!
   }
 }
 
@@ -3648,44 +3126,23 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeQuestionMark(_ unexpectedBeforeQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedTernaryExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeQuestionMark.map(RawSyntax.init), arena: arena).as(RawUnresolvedTernaryExprSyntax.self)!
-  }
   public var questionMark: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withQuestionMark(_ questionMark: RawTokenSyntax, arena: SyntaxArena) -> RawUnresolvedTernaryExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(questionMark), arena: arena).as(RawUnresolvedTernaryExprSyntax.self)!
   }
   public var unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenQuestionMarkAndFirstChoice(_ unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedTernaryExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenQuestionMarkAndFirstChoice.map(RawSyntax.init), arena: arena).as(RawUnresolvedTernaryExprSyntax.self)!
-  }
   public var firstChoice: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
-  }
-  public func withFirstChoice(_ firstChoice: RawExprSyntax, arena: SyntaxArena) -> RawUnresolvedTernaryExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(firstChoice), arena: arena).as(RawUnresolvedTernaryExprSyntax.self)!
   }
   public var unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenFirstChoiceAndColonMark(_ unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedTernaryExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenFirstChoiceAndColonMark.map(RawSyntax.init), arena: arena).as(RawUnresolvedTernaryExprSyntax.self)!
-  }
   public var colonMark: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withColonMark(_ colonMark: RawTokenSyntax, arena: SyntaxArena) -> RawUnresolvedTernaryExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(colonMark), arena: arena).as(RawUnresolvedTernaryExprSyntax.self)!
-  }
   public var unexpectedAfterColonMark: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterColonMark(_ unexpectedAfterColonMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedTernaryExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterColonMark.map(RawSyntax.init), arena: arena).as(RawUnresolvedTernaryExprSyntax.self)!
   }
 }
 
@@ -3748,68 +3205,35 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeConditionExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeConditionExpression(_ unexpectedBeforeConditionExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeConditionExpression.map(RawSyntax.init), arena: arena).as(RawTernaryExprSyntax.self)!
-  }
   public var conditionExpression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withConditionExpression(_ conditionExpression: RawExprSyntax, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(conditionExpression), arena: arena).as(RawTernaryExprSyntax.self)!
   }
   public var unexpectedBetweenConditionExpressionAndQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConditionExpressionAndQuestionMark(_ unexpectedBetweenConditionExpressionAndQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenConditionExpressionAndQuestionMark.map(RawSyntax.init), arena: arena).as(RawTernaryExprSyntax.self)!
-  }
   public var questionMark: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withQuestionMark(_ questionMark: RawTokenSyntax, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(questionMark), arena: arena).as(RawTernaryExprSyntax.self)!
   }
   public var unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenQuestionMarkAndFirstChoice(_ unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenQuestionMarkAndFirstChoice.map(RawSyntax.init), arena: arena).as(RawTernaryExprSyntax.self)!
-  }
   public var firstChoice: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
-  }
-  public func withFirstChoice(_ firstChoice: RawExprSyntax, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(firstChoice), arena: arena).as(RawTernaryExprSyntax.self)!
   }
   public var unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenFirstChoiceAndColonMark(_ unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenFirstChoiceAndColonMark.map(RawSyntax.init), arena: arena).as(RawTernaryExprSyntax.self)!
-  }
   public var colonMark: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColonMark(_ colonMark: RawTokenSyntax, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(colonMark), arena: arena).as(RawTernaryExprSyntax.self)!
   }
   public var unexpectedBetweenColonMarkAndSecondChoice: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonMarkAndSecondChoice(_ unexpectedBetweenColonMarkAndSecondChoice: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenColonMarkAndSecondChoice.map(RawSyntax.init), arena: arena).as(RawTernaryExprSyntax.self)!
-  }
   public var secondChoice: RawExprSyntax {
     layoutView.children[9].map(RawExprSyntax.init(raw:))!
   }
-  public func withSecondChoice(_ secondChoice: RawExprSyntax, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(secondChoice), arena: arena).as(RawTernaryExprSyntax.self)!
-  }
   public var unexpectedAfterSecondChoice: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterSecondChoice(_ unexpectedAfterSecondChoice: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTernaryExprSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterSecondChoice.map(RawSyntax.init), arena: arena).as(RawTernaryExprSyntax.self)!
   }
 }
 
@@ -3868,56 +3292,29 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeBase: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBase(_ unexpectedBeforeBase: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBase.map(RawSyntax.init), arena: arena).as(RawMemberAccessExprSyntax.self)!
-  }
   public var base: RawExprSyntax? {
     layoutView.children[1].map(RawExprSyntax.init(raw:))
-  }
-  public func withBase(_ base: RawExprSyntax?, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 1, with: base.map(RawSyntax.init), arena: arena).as(RawMemberAccessExprSyntax.self)!
   }
   public var unexpectedBetweenBaseAndDot: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBaseAndDot(_ unexpectedBetweenBaseAndDot: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBaseAndDot.map(RawSyntax.init), arena: arena).as(RawMemberAccessExprSyntax.self)!
-  }
   public var dot: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDot(_ dot: RawTokenSyntax, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(dot), arena: arena).as(RawMemberAccessExprSyntax.self)!
   }
   public var unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDotAndName(_ unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenDotAndName.map(RawSyntax.init), arena: arena).as(RawMemberAccessExprSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(name), arena: arena).as(RawMemberAccessExprSyntax.self)!
   }
   public var unexpectedBetweenNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndDeclNameArguments(_ unexpectedBetweenNameAndDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenNameAndDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawMemberAccessExprSyntax.self)!
-  }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     layoutView.children[7].map(RawDeclNameArgumentsSyntax.init(raw:))
   }
-  public func withDeclNameArguments(_ declNameArguments: RawDeclNameArgumentsSyntax?, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 7, with: declNameArguments.map(RawSyntax.init), arena: arena).as(RawMemberAccessExprSyntax.self)!
-  }
   public var unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDeclNameArguments(_ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberAccessExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawMemberAccessExprSyntax.self)!
   }
 }
 
@@ -3964,20 +3361,11 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeIsTok: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIsTok(_ unexpectedBeforeIsTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedIsExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIsTok.map(RawSyntax.init), arena: arena).as(RawUnresolvedIsExprSyntax.self)!
-  }
   public var isTok: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withIsTok(_ isTok: RawTokenSyntax, arena: SyntaxArena) -> RawUnresolvedIsExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(isTok), arena: arena).as(RawUnresolvedIsExprSyntax.self)!
-  }
   public var unexpectedAfterIsTok: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterIsTok(_ unexpectedAfterIsTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedIsExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterIsTok.map(RawSyntax.init), arena: arena).as(RawUnresolvedIsExprSyntax.self)!
   }
 }
 
@@ -4032,44 +3420,23 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIsExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawIsExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawIsExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawIsExprSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndIsTok: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndIsTok(_ unexpectedBetweenExpressionAndIsTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIsExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndIsTok.map(RawSyntax.init), arena: arena).as(RawIsExprSyntax.self)!
-  }
   public var isTok: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIsTok(_ isTok: RawTokenSyntax, arena: SyntaxArena) -> RawIsExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(isTok), arena: arena).as(RawIsExprSyntax.self)!
   }
   public var unexpectedBetweenIsTokAndTypeName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIsTokAndTypeName(_ unexpectedBetweenIsTokAndTypeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIsExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenIsTokAndTypeName.map(RawSyntax.init), arena: arena).as(RawIsExprSyntax.self)!
-  }
   public var typeName: RawTypeSyntax {
     layoutView.children[5].map(RawTypeSyntax.init(raw:))!
   }
-  public func withTypeName(_ typeName: RawTypeSyntax, arena: SyntaxArena) -> RawIsExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(typeName), arena: arena).as(RawIsExprSyntax.self)!
-  }
   public var unexpectedAfterTypeName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTypeName(_ unexpectedAfterTypeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIsExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterTypeName.map(RawSyntax.init), arena: arena).as(RawIsExprSyntax.self)!
   }
 }
 
@@ -4120,32 +3487,17 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeAsTok: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAsTok(_ unexpectedBeforeAsTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedAsExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAsTok.map(RawSyntax.init), arena: arena).as(RawUnresolvedAsExprSyntax.self)!
-  }
   public var asTok: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAsTok(_ asTok: RawTokenSyntax, arena: SyntaxArena) -> RawUnresolvedAsExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(asTok), arena: arena).as(RawUnresolvedAsExprSyntax.self)!
   }
   public var unexpectedBetweenAsTokAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsTokAndQuestionOrExclamationMark(_ unexpectedBetweenAsTokAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedAsExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawUnresolvedAsExprSyntax.self)!
-  }
   public var questionOrExclamationMark: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withQuestionOrExclamationMark(_ questionOrExclamationMark: RawTokenSyntax?, arena: SyntaxArena) -> RawUnresolvedAsExprSyntax {
-    return layoutView.replacingChild(at: 3, with: questionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawUnresolvedAsExprSyntax.self)!
-  }
   public var unexpectedAfterQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterQuestionOrExclamationMark(_ unexpectedAfterQuestionOrExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedAsExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterQuestionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawUnresolvedAsExprSyntax.self)!
   }
 }
 
@@ -4204,56 +3556,29 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawAsExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawAsExprSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndAsTok: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndAsTok(_ unexpectedBetweenExpressionAndAsTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndAsTok.map(RawSyntax.init), arena: arena).as(RawAsExprSyntax.self)!
-  }
   public var asTok: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAsTok(_ asTok: RawTokenSyntax, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(asTok), arena: arena).as(RawAsExprSyntax.self)!
   }
   public var unexpectedBetweenAsTokAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsTokAndQuestionOrExclamationMark(_ unexpectedBetweenAsTokAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawAsExprSyntax.self)!
-  }
   public var questionOrExclamationMark: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withQuestionOrExclamationMark(_ questionOrExclamationMark: RawTokenSyntax?, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 5, with: questionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawAsExprSyntax.self)!
   }
   public var unexpectedBetweenQuestionOrExclamationMarkAndTypeName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenQuestionOrExclamationMarkAndTypeName(_ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenQuestionOrExclamationMarkAndTypeName.map(RawSyntax.init), arena: arena).as(RawAsExprSyntax.self)!
-  }
   public var typeName: RawTypeSyntax {
     layoutView.children[7].map(RawTypeSyntax.init(raw:))!
   }
-  public func withTypeName(_ typeName: RawTypeSyntax, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(typeName), arena: arena).as(RawAsExprSyntax.self)!
-  }
   public var unexpectedAfterTypeName: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTypeName(_ unexpectedAfterTypeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterTypeName.map(RawSyntax.init), arena: arena).as(RawAsExprSyntax.self)!
   }
 }
 
@@ -4300,20 +3625,11 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeType(_ unexpectedBeforeType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeType.map(RawSyntax.init), arena: arena).as(RawTypeExprSyntax.self)!
-  }
   public var type: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public func withType(_ type: RawTypeSyntax, arena: SyntaxArena) -> RawTypeExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(type), arena: arena).as(RawTypeExprSyntax.self)!
-  }
   public var unexpectedAfterType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterType(_ unexpectedAfterType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterType.map(RawSyntax.init), arena: arena).as(RawTypeExprSyntax.self)!
   }
 }
 
@@ -4376,68 +3692,35 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeSpecifier(_ unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeSpecifier.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
-  }
   public var specifier: RawTokenListSyntax? {
     layoutView.children[1].map(RawTokenListSyntax.init(raw:))
-  }
-  public func withSpecifier(_ specifier: RawTokenListSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 1, with: specifier.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
   }
   public var unexpectedBetweenSpecifierAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSpecifierAndName(_ unexpectedBetweenSpecifierAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenSpecifierAndName.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
-  }
   public var name: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withName(_ name: RawTokenSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 3, with: name.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
   }
   public var unexpectedBetweenNameAndAssignToken: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndAssignToken(_ unexpectedBetweenNameAndAssignToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenNameAndAssignToken.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
-  }
   public var assignToken: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAssignToken(_ assignToken: RawTokenSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 5, with: assignToken.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
   }
   public var unexpectedBetweenAssignTokenAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAssignTokenAndExpression(_ unexpectedBetweenAssignTokenAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenAssignTokenAndExpression.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[7].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(expression), arena: arena).as(RawClosureCaptureItemSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndTrailingComma(_ unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenExpressionAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 9, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureItemSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawClosureCaptureItemSyntax.self)!
   }
 }
 
@@ -4533,44 +3816,23 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftSquare(_ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureSignatureSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftSquare.map(RawSyntax.init), arena: arena).as(RawClosureCaptureSignatureSyntax.self)!
-  }
   public var leftSquare: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftSquare(_ leftSquare: RawTokenSyntax, arena: SyntaxArena) -> RawClosureCaptureSignatureSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftSquare), arena: arena).as(RawClosureCaptureSignatureSyntax.self)!
   }
   public var unexpectedBetweenLeftSquareAndItems: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftSquareAndItems(_ unexpectedBetweenLeftSquareAndItems: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureSignatureSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftSquareAndItems.map(RawSyntax.init), arena: arena).as(RawClosureCaptureSignatureSyntax.self)!
-  }
   public var items: RawClosureCaptureItemListSyntax? {
     layoutView.children[3].map(RawClosureCaptureItemListSyntax.init(raw:))
-  }
-  public func withItems(_ items: RawClosureCaptureItemListSyntax?, arena: SyntaxArena) -> RawClosureCaptureSignatureSyntax {
-    return layoutView.replacingChild(at: 3, with: items.map(RawSyntax.init), arena: arena).as(RawClosureCaptureSignatureSyntax.self)!
   }
   public var unexpectedBetweenItemsAndRightSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenItemsAndRightSquare(_ unexpectedBetweenItemsAndRightSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureSignatureSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenItemsAndRightSquare.map(RawSyntax.init), arena: arena).as(RawClosureCaptureSignatureSyntax.self)!
-  }
   public var rightSquare: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightSquare(_ rightSquare: RawTokenSyntax, arena: SyntaxArena) -> RawClosureCaptureSignatureSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightSquare), arena: arena).as(RawClosureCaptureSignatureSyntax.self)!
-  }
   public var unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightSquare(_ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureCaptureSignatureSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightSquare.map(RawSyntax.init), arena: arena).as(RawClosureCaptureSignatureSyntax.self)!
   }
 }
 
@@ -4621,32 +3883,17 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureParamSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawClosureParamSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawClosureParamSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawClosureParamSyntax.self)!
   }
   public var unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndTrailingComma(_ unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureParamSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawClosureParamSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawClosureParamSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawClosureParamSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureParamSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawClosureParamSyntax.self)!
   }
 }
 
@@ -4786,92 +4033,47 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndCapture: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndCapture(_ unexpectedBetweenAttributesAndCapture: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndCapture.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var capture: RawClosureCaptureSignatureSyntax? {
     layoutView.children[3].map(RawClosureCaptureSignatureSyntax.init(raw:))
-  }
-  public func withCapture(_ capture: RawClosureCaptureSignatureSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 3, with: capture.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
   }
   public var unexpectedBetweenCaptureAndInput: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCaptureAndInput(_ unexpectedBetweenCaptureAndInput: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenCaptureAndInput.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var input: RawSyntax? {
     layoutView.children[5]
-  }
-  public func withInput(_ input: RawSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 5, with: input.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
   }
   public var unexpectedBetweenInputAndAsyncKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInputAndAsyncKeyword(_ unexpectedBetweenInputAndAsyncKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenInputAndAsyncKeyword.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var asyncKeyword: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAsyncKeyword(_ asyncKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 7, with: asyncKeyword.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
   }
   public var unexpectedBetweenAsyncKeywordAndThrowsTok: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsyncKeywordAndThrowsTok(_ unexpectedBetweenAsyncKeywordAndThrowsTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenAsyncKeywordAndThrowsTok.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var throwsTok: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withThrowsTok(_ throwsTok: RawTokenSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 9, with: throwsTok.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
   }
   public var unexpectedBetweenThrowsTokAndOutput: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenThrowsTokAndOutput(_ unexpectedBetweenThrowsTokAndOutput: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenThrowsTokAndOutput.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var output: RawReturnClauseSyntax? {
     layoutView.children[11].map(RawReturnClauseSyntax.init(raw:))
-  }
-  public func withOutput(_ output: RawReturnClauseSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 11, with: output.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
   }
   public var unexpectedBetweenOutputAndInTok: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOutputAndInTok(_ unexpectedBetweenOutputAndInTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenOutputAndInTok.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var inTok: RawTokenSyntax {
     layoutView.children[13].map(RawTokenSyntax.init(raw:))!
   }
-  public func withInTok(_ inTok: RawTokenSyntax, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 13, with: RawSyntax(inTok), arena: arena).as(RawClosureSignatureSyntax.self)!
-  }
   public var unexpectedAfterInTok: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterInTok(_ unexpectedAfterInTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureSignatureSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterInTok.map(RawSyntax.init), arena: arena).as(RawClosureSignatureSyntax.self)!
   }
 }
 
@@ -4930,56 +4132,29 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftBrace(_ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftBrace.map(RawSyntax.init), arena: arena).as(RawClosureExprSyntax.self)!
-  }
   public var leftBrace: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBrace(_ leftBrace: RawTokenSyntax, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftBrace), arena: arena).as(RawClosureExprSyntax.self)!
   }
   public var unexpectedBetweenLeftBraceAndSignature: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBraceAndSignature(_ unexpectedBetweenLeftBraceAndSignature: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftBraceAndSignature.map(RawSyntax.init), arena: arena).as(RawClosureExprSyntax.self)!
-  }
   public var signature: RawClosureSignatureSyntax? {
     layoutView.children[3].map(RawClosureSignatureSyntax.init(raw:))
-  }
-  public func withSignature(_ signature: RawClosureSignatureSyntax?, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 3, with: signature.map(RawSyntax.init), arena: arena).as(RawClosureExprSyntax.self)!
   }
   public var unexpectedBetweenSignatureAndStatements: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSignatureAndStatements(_ unexpectedBetweenSignatureAndStatements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenSignatureAndStatements.map(RawSyntax.init), arena: arena).as(RawClosureExprSyntax.self)!
-  }
   public var statements: RawCodeBlockItemListSyntax {
     layoutView.children[5].map(RawCodeBlockItemListSyntax.init(raw:))!
-  }
-  public func withStatements(_ statements: RawCodeBlockItemListSyntax, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(statements), arena: arena).as(RawClosureExprSyntax.self)!
   }
   public var unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenStatementsAndRightBrace(_ unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenStatementsAndRightBrace.map(RawSyntax.init), arena: arena).as(RawClosureExprSyntax.self)!
-  }
   public var rightBrace: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightBrace(_ rightBrace: RawTokenSyntax, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightBrace), arena: arena).as(RawClosureExprSyntax.self)!
-  }
   public var unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightBrace(_ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClosureExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightBrace.map(RawSyntax.init), arena: arena).as(RawClosureExprSyntax.self)!
   }
 }
 
@@ -5026,20 +4201,11 @@ public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePattern(_ unexpectedBeforePattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedPatternExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePattern.map(RawSyntax.init), arena: arena).as(RawUnresolvedPatternExprSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[1].map(RawPatternSyntax.init(raw:))!
   }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawUnresolvedPatternExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(pattern), arena: arena).as(RawUnresolvedPatternExprSyntax.self)!
-  }
   public var unexpectedAfterPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPattern(_ unexpectedAfterPattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnresolvedPatternExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPattern.map(RawSyntax.init), arena: arena).as(RawUnresolvedPatternExprSyntax.self)!
   }
 }
 
@@ -5094,44 +4260,23 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol, Ra
   public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabel(_ unexpectedBeforeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMultipleTrailingClosureElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabel.map(RawSyntax.init), arena: arena).as(RawMultipleTrailingClosureElementSyntax.self)!
-  }
   public var label: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLabel(_ label: RawTokenSyntax, arena: SyntaxArena) -> RawMultipleTrailingClosureElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(label), arena: arena).as(RawMultipleTrailingClosureElementSyntax.self)!
   }
   public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelAndColon(_ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMultipleTrailingClosureElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelAndColon.map(RawSyntax.init), arena: arena).as(RawMultipleTrailingClosureElementSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawMultipleTrailingClosureElementSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawMultipleTrailingClosureElementSyntax.self)!
   }
   public var unexpectedBetweenColonAndClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndClosure(_ unexpectedBetweenColonAndClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMultipleTrailingClosureElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndClosure.map(RawSyntax.init), arena: arena).as(RawMultipleTrailingClosureElementSyntax.self)!
-  }
   public var closure: RawClosureExprSyntax {
     layoutView.children[5].map(RawClosureExprSyntax.init(raw:))!
   }
-  public func withClosure(_ closure: RawClosureExprSyntax, arena: SyntaxArena) -> RawMultipleTrailingClosureElementSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(closure), arena: arena).as(RawMultipleTrailingClosureElementSyntax.self)!
-  }
   public var unexpectedAfterClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterClosure(_ unexpectedAfterClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMultipleTrailingClosureElementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterClosure.map(RawSyntax.init), arena: arena).as(RawMultipleTrailingClosureElementSyntax.self)!
   }
 }
 
@@ -5239,80 +4384,41 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeCalledExpression(_ unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeCalledExpression.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
-  }
   public var calledExpression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withCalledExpression(_ calledExpression: RawExprSyntax, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(calledExpression), arena: arena).as(RawFunctionCallExprSyntax.self)!
   }
   public var unexpectedBetweenCalledExpressionAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCalledExpressionAndLeftParen(_ unexpectedBetweenCalledExpressionAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenCalledExpressionAndLeftParen.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 3, with: leftParen.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArgumentList(_ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndArgumentList.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
-  }
   public var argumentList: RawTupleExprElementListSyntax {
     layoutView.children[5].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(argumentList), arena: arena).as(RawFunctionCallExprSyntax.self)!
   }
   public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentListAndRightParen(_ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenArgumentListAndRightParen.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 7, with: rightParen.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
   }
   public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRightParenAndTrailingClosure(_ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenRightParenAndTrailingClosure.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
-  }
   public var trailingClosure: RawClosureExprSyntax? {
     layoutView.children[9].map(RawClosureExprSyntax.init(raw:))
-  }
-  public func withTrailingClosure(_ trailingClosure: RawClosureExprSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 9, with: trailingClosure.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
   }
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
-  }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
     layoutView.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
   }
-  public func withAdditionalTrailingClosures(_ additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 11, with: additionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
-  }
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAdditionalTrailingClosures(_ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionCallExprSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedAfterAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawFunctionCallExprSyntax.self)!
   }
 }
 
@@ -5379,80 +4485,41 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeCalledExpression(_ unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeCalledExpression.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
-  }
   public var calledExpression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withCalledExpression(_ calledExpression: RawExprSyntax, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(calledExpression), arena: arena).as(RawSubscriptExprSyntax.self)!
   }
   public var unexpectedBetweenCalledExpressionAndLeftBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCalledExpressionAndLeftBracket(_ unexpectedBetweenCalledExpressionAndLeftBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenCalledExpressionAndLeftBracket.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
-  }
   public var leftBracket: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBracket(_ leftBracket: RawTokenSyntax, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftBracket), arena: arena).as(RawSubscriptExprSyntax.self)!
   }
   public var unexpectedBetweenLeftBracketAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBracketAndArgumentList(_ unexpectedBetweenLeftBracketAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftBracketAndArgumentList.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
-  }
   public var argumentList: RawTupleExprElementListSyntax {
     layoutView.children[5].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(argumentList), arena: arena).as(RawSubscriptExprSyntax.self)!
   }
   public var unexpectedBetweenArgumentListAndRightBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentListAndRightBracket(_ unexpectedBetweenArgumentListAndRightBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenArgumentListAndRightBracket.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
-  }
   public var rightBracket: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withRightBracket(_ rightBracket: RawTokenSyntax, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightBracket), arena: arena).as(RawSubscriptExprSyntax.self)!
   }
   public var unexpectedBetweenRightBracketAndTrailingClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRightBracketAndTrailingClosure(_ unexpectedBetweenRightBracketAndTrailingClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenRightBracketAndTrailingClosure.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
-  }
   public var trailingClosure: RawClosureExprSyntax? {
     layoutView.children[9].map(RawClosureExprSyntax.init(raw:))
-  }
-  public func withTrailingClosure(_ trailingClosure: RawClosureExprSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 9, with: trailingClosure.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
   }
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
-  }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
     layoutView.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
   }
-  public func withAdditionalTrailingClosures(_ additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 11, with: additionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
-  }
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAdditionalTrailingClosures(_ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptExprSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedAfterAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawSubscriptExprSyntax.self)!
   }
 }
 
@@ -5503,32 +4570,17 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalChainingExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawOptionalChainingExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawOptionalChainingExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawOptionalChainingExprSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndQuestionMark(_ unexpectedBetweenExpressionAndQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalChainingExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndQuestionMark.map(RawSyntax.init), arena: arena).as(RawOptionalChainingExprSyntax.self)!
-  }
   public var questionMark: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withQuestionMark(_ questionMark: RawTokenSyntax, arena: SyntaxArena) -> RawOptionalChainingExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(questionMark), arena: arena).as(RawOptionalChainingExprSyntax.self)!
-  }
   public var unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterQuestionMark(_ unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalChainingExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterQuestionMark.map(RawSyntax.init), arena: arena).as(RawOptionalChainingExprSyntax.self)!
   }
 }
 
@@ -5579,32 +4631,17 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForcedValueExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawForcedValueExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawForcedValueExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawForcedValueExprSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndExclamationMark(_ unexpectedBetweenExpressionAndExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForcedValueExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndExclamationMark.map(RawSyntax.init), arena: arena).as(RawForcedValueExprSyntax.self)!
-  }
   public var exclamationMark: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withExclamationMark(_ exclamationMark: RawTokenSyntax, arena: SyntaxArena) -> RawForcedValueExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(exclamationMark), arena: arena).as(RawForcedValueExprSyntax.self)!
-  }
   public var unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExclamationMark(_ unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForcedValueExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterExclamationMark.map(RawSyntax.init), arena: arena).as(RawForcedValueExprSyntax.self)!
   }
 }
 
@@ -5655,32 +4692,17 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPostfixUnaryExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawPostfixUnaryExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawPostfixUnaryExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawPostfixUnaryExprSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndOperatorToken: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndOperatorToken(_ unexpectedBetweenExpressionAndOperatorToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPostfixUnaryExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndOperatorToken.map(RawSyntax.init), arena: arena).as(RawPostfixUnaryExprSyntax.self)!
-  }
   public var operatorToken: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withOperatorToken(_ operatorToken: RawTokenSyntax, arena: SyntaxArena) -> RawPostfixUnaryExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(operatorToken), arena: arena).as(RawPostfixUnaryExprSyntax.self)!
-  }
   public var unexpectedAfterOperatorToken: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterOperatorToken(_ unexpectedAfterOperatorToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPostfixUnaryExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterOperatorToken.map(RawSyntax.init), arena: arena).as(RawPostfixUnaryExprSyntax.self)!
   }
 }
 
@@ -5731,32 +4753,17 @@ public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSpecializeExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawSpecializeExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawSpecializeExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawSpecializeExprSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndGenericArgumentClause(_ unexpectedBetweenExpressionAndGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSpecializeExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSpecializeExprSyntax.self)!
-  }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax {
     layoutView.children[3].map(RawGenericArgumentClauseSyntax.init(raw:))!
   }
-  public func withGenericArgumentClause(_ genericArgumentClause: RawGenericArgumentClauseSyntax, arena: SyntaxArena) -> RawSpecializeExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(genericArgumentClause), arena: arena).as(RawSpecializeExprSyntax.self)!
-  }
   public var unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGenericArgumentClause(_ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSpecializeExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSpecializeExprSyntax.self)!
   }
 }
 
@@ -5803,20 +4810,11 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeContent: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeContent(_ unexpectedBeforeContent: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringSegmentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeContent.map(RawSyntax.init), arena: arena).as(RawStringSegmentSyntax.self)!
-  }
   public var content: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withContent(_ content: RawTokenSyntax, arena: SyntaxArena) -> RawStringSegmentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(content), arena: arena).as(RawStringSegmentSyntax.self)!
-  }
   public var unexpectedAfterContent: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterContent(_ unexpectedAfterContent: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringSegmentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterContent.map(RawSyntax.init), arena: arena).as(RawStringSegmentSyntax.self)!
   }
 }
 
@@ -5879,68 +4877,35 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBackslash(_ unexpectedBeforeBackslash: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBackslash.map(RawSyntax.init), arena: arena).as(RawExpressionSegmentSyntax.self)!
-  }
   public var backslash: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withBackslash(_ backslash: RawTokenSyntax, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(backslash), arena: arena).as(RawExpressionSegmentSyntax.self)!
   }
   public var unexpectedBetweenBackslashAndDelimiter: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBackslashAndDelimiter(_ unexpectedBetweenBackslashAndDelimiter: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBackslashAndDelimiter.map(RawSyntax.init), arena: arena).as(RawExpressionSegmentSyntax.self)!
-  }
   public var delimiter: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withDelimiter(_ delimiter: RawTokenSyntax?, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 3, with: delimiter.map(RawSyntax.init), arena: arena).as(RawExpressionSegmentSyntax.self)!
   }
   public var unexpectedBetweenDelimiterAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDelimiterAndLeftParen(_ unexpectedBetweenDelimiterAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenDelimiterAndLeftParen.map(RawSyntax.init), arena: arena).as(RawExpressionSegmentSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(leftParen), arena: arena).as(RawExpressionSegmentSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndExpressions: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndExpressions(_ unexpectedBetweenLeftParenAndExpressions: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftParenAndExpressions.map(RawSyntax.init), arena: arena).as(RawExpressionSegmentSyntax.self)!
-  }
   public var expressions: RawTupleExprElementListSyntax {
     layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withExpressions(_ expressions: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(expressions), arena: arena).as(RawExpressionSegmentSyntax.self)!
   }
   public var unexpectedBetweenExpressionsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionsAndRightParen(_ unexpectedBetweenExpressionsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenExpressionsAndRightParen.map(RawSyntax.init), arena: arena).as(RawExpressionSegmentSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(rightParen), arena: arena).as(RawExpressionSegmentSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionSegmentSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawExpressionSegmentSyntax.self)!
   }
 }
 
@@ -6003,68 +4968,35 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeOpenDelimiter: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeOpenDelimiter(_ unexpectedBeforeOpenDelimiter: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeOpenDelimiter.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
-  }
   public var openDelimiter: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withOpenDelimiter(_ openDelimiter: RawTokenSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 1, with: openDelimiter.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
   }
   public var unexpectedBetweenOpenDelimiterAndOpenQuote: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOpenDelimiterAndOpenQuote(_ unexpectedBetweenOpenDelimiterAndOpenQuote: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenOpenDelimiterAndOpenQuote.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
-  }
   public var openQuote: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withOpenQuote(_ openQuote: RawTokenSyntax, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(openQuote), arena: arena).as(RawStringLiteralExprSyntax.self)!
   }
   public var unexpectedBetweenOpenQuoteAndSegments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOpenQuoteAndSegments(_ unexpectedBetweenOpenQuoteAndSegments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenOpenQuoteAndSegments.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
-  }
   public var segments: RawStringLiteralSegmentsSyntax {
     layoutView.children[5].map(RawStringLiteralSegmentsSyntax.init(raw:))!
-  }
-  public func withSegments(_ segments: RawStringLiteralSegmentsSyntax, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(segments), arena: arena).as(RawStringLiteralExprSyntax.self)!
   }
   public var unexpectedBetweenSegmentsAndCloseQuote: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSegmentsAndCloseQuote(_ unexpectedBetweenSegmentsAndCloseQuote: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenSegmentsAndCloseQuote.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
-  }
   public var closeQuote: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withCloseQuote(_ closeQuote: RawTokenSyntax, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(closeQuote), arena: arena).as(RawStringLiteralExprSyntax.self)!
   }
   public var unexpectedBetweenCloseQuoteAndCloseDelimiter: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCloseQuoteAndCloseDelimiter(_ unexpectedBetweenCloseQuoteAndCloseDelimiter: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenCloseQuoteAndCloseDelimiter.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
-  }
   public var closeDelimiter: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public func withCloseDelimiter(_ closeDelimiter: RawTokenSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 9, with: closeDelimiter.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
-  }
   public var unexpectedAfterCloseDelimiter: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterCloseDelimiter(_ unexpectedAfterCloseDelimiter: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStringLiteralExprSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterCloseDelimiter.map(RawSyntax.init), arena: arena).as(RawStringLiteralExprSyntax.self)!
   }
 }
 
@@ -6111,20 +5043,11 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeRegex: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeRegex(_ unexpectedBeforeRegex: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawRegexLiteralExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeRegex.map(RawSyntax.init), arena: arena).as(RawRegexLiteralExprSyntax.self)!
-  }
   public var regex: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRegex(_ regex: RawTokenSyntax, arena: SyntaxArena) -> RawRegexLiteralExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(regex), arena: arena).as(RawRegexLiteralExprSyntax.self)!
-  }
   public var unexpectedAfterRegex: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRegex(_ unexpectedAfterRegex: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawRegexLiteralExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterRegex.map(RawSyntax.init), arena: arena).as(RawRegexLiteralExprSyntax.self)!
   }
 }
 
@@ -6179,44 +5102,23 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBackslash(_ unexpectedBeforeBackslash: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBackslash.map(RawSyntax.init), arena: arena).as(RawKeyPathExprSyntax.self)!
-  }
   public var backslash: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withBackslash(_ backslash: RawTokenSyntax, arena: SyntaxArena) -> RawKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(backslash), arena: arena).as(RawKeyPathExprSyntax.self)!
   }
   public var unexpectedBetweenBackslashAndRoot: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBackslashAndRoot(_ unexpectedBetweenBackslashAndRoot: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBackslashAndRoot.map(RawSyntax.init), arena: arena).as(RawKeyPathExprSyntax.self)!
-  }
   public var root: RawTypeSyntax? {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))
-  }
-  public func withRoot(_ root: RawTypeSyntax?, arena: SyntaxArena) -> RawKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 3, with: root.map(RawSyntax.init), arena: arena).as(RawKeyPathExprSyntax.self)!
   }
   public var unexpectedBetweenRootAndComponents: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRootAndComponents(_ unexpectedBetweenRootAndComponents: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenRootAndComponents.map(RawSyntax.init), arena: arena).as(RawKeyPathExprSyntax.self)!
-  }
   public var components: RawKeyPathComponentListSyntax {
     layoutView.children[5].map(RawKeyPathComponentListSyntax.init(raw:))!
   }
-  public func withComponents(_ components: RawKeyPathComponentListSyntax, arena: SyntaxArena) -> RawKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(components), arena: arena).as(RawKeyPathExprSyntax.self)!
-  }
   public var unexpectedAfterComponents: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterComponents(_ unexpectedAfterComponents: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterComponents.map(RawSyntax.init), arena: arena).as(RawKeyPathExprSyntax.self)!
   }
 }
 
@@ -6342,32 +5244,17 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforePeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePeriod(_ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathComponentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePeriod.map(RawSyntax.init), arena: arena).as(RawKeyPathComponentSyntax.self)!
-  }
   public var period: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withPeriod(_ period: RawTokenSyntax?, arena: SyntaxArena) -> RawKeyPathComponentSyntax {
-    return layoutView.replacingChild(at: 1, with: period.map(RawSyntax.init), arena: arena).as(RawKeyPathComponentSyntax.self)!
   }
   public var unexpectedBetweenPeriodAndComponent: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPeriodAndComponent(_ unexpectedBetweenPeriodAndComponent: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathComponentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPeriodAndComponent.map(RawSyntax.init), arena: arena).as(RawKeyPathComponentSyntax.self)!
-  }
   public var component: RawSyntax {
     layoutView.children[3]!
   }
-  public func withComponent(_ component: RawSyntax, arena: SyntaxArena) -> RawKeyPathComponentSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(component), arena: arena).as(RawKeyPathComponentSyntax.self)!
-  }
   public var unexpectedAfterComponent: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterComponent(_ unexpectedAfterComponent: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathComponentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterComponent.map(RawSyntax.init), arena: arena).as(RawKeyPathComponentSyntax.self)!
   }
 }
 
@@ -6422,44 +5309,23 @@ public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIdentifier(_ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathPropertyComponentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIdentifier.map(RawSyntax.init), arena: arena).as(RawKeyPathPropertyComponentSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawKeyPathPropertyComponentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(identifier), arena: arena).as(RawKeyPathPropertyComponentSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndDeclNameArguments(_ unexpectedBetweenIdentifierAndDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathPropertyComponentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenIdentifierAndDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawKeyPathPropertyComponentSyntax.self)!
-  }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     layoutView.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
-  }
-  public func withDeclNameArguments(_ declNameArguments: RawDeclNameArgumentsSyntax?, arena: SyntaxArena) -> RawKeyPathPropertyComponentSyntax {
-    return layoutView.replacingChild(at: 3, with: declNameArguments.map(RawSyntax.init), arena: arena).as(RawKeyPathPropertyComponentSyntax.self)!
   }
   public var unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDeclNameArgumentsAndGenericArgumentClause(_ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathPropertyComponentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawKeyPathPropertyComponentSyntax.self)!
-  }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
     layoutView.children[5].map(RawGenericArgumentClauseSyntax.init(raw:))
   }
-  public func withGenericArgumentClause(_ genericArgumentClause: RawGenericArgumentClauseSyntax?, arena: SyntaxArena) -> RawKeyPathPropertyComponentSyntax {
-    return layoutView.replacingChild(at: 5, with: genericArgumentClause.map(RawSyntax.init), arena: arena).as(RawKeyPathPropertyComponentSyntax.self)!
-  }
   public var unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGenericArgumentClause(_ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathPropertyComponentSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawKeyPathPropertyComponentSyntax.self)!
   }
 }
 
@@ -6514,44 +5380,23 @@ public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeLeftBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftBracket(_ unexpectedBeforeLeftBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathSubscriptComponentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftBracket.map(RawSyntax.init), arena: arena).as(RawKeyPathSubscriptComponentSyntax.self)!
-  }
   public var leftBracket: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBracket(_ leftBracket: RawTokenSyntax, arena: SyntaxArena) -> RawKeyPathSubscriptComponentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftBracket), arena: arena).as(RawKeyPathSubscriptComponentSyntax.self)!
   }
   public var unexpectedBetweenLeftBracketAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBracketAndArgumentList(_ unexpectedBetweenLeftBracketAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathSubscriptComponentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftBracketAndArgumentList.map(RawSyntax.init), arena: arena).as(RawKeyPathSubscriptComponentSyntax.self)!
-  }
   public var argumentList: RawTupleExprElementListSyntax {
     layoutView.children[3].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawKeyPathSubscriptComponentSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(argumentList), arena: arena).as(RawKeyPathSubscriptComponentSyntax.self)!
   }
   public var unexpectedBetweenArgumentListAndRightBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentListAndRightBracket(_ unexpectedBetweenArgumentListAndRightBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathSubscriptComponentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenArgumentListAndRightBracket.map(RawSyntax.init), arena: arena).as(RawKeyPathSubscriptComponentSyntax.self)!
-  }
   public var rightBracket: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightBracket(_ rightBracket: RawTokenSyntax, arena: SyntaxArena) -> RawKeyPathSubscriptComponentSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightBracket), arena: arena).as(RawKeyPathSubscriptComponentSyntax.self)!
-  }
   public var unexpectedAfterRightBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightBracket(_ unexpectedAfterRightBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathSubscriptComponentSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightBracket.map(RawSyntax.init), arena: arena).as(RawKeyPathSubscriptComponentSyntax.self)!
   }
 }
 
@@ -6598,20 +5443,11 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeQuestionOrExclamationMark(_ unexpectedBeforeQuestionOrExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathOptionalComponentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeQuestionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawKeyPathOptionalComponentSyntax.self)!
-  }
   public var questionOrExclamationMark: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withQuestionOrExclamationMark(_ questionOrExclamationMark: RawTokenSyntax, arena: SyntaxArena) -> RawKeyPathOptionalComponentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(questionOrExclamationMark), arena: arena).as(RawKeyPathOptionalComponentSyntax.self)!
-  }
   public var unexpectedAfterQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterQuestionOrExclamationMark(_ unexpectedAfterQuestionOrExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathOptionalComponentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterQuestionOrExclamationMark.map(RawSyntax.init), arena: arena).as(RawKeyPathOptionalComponentSyntax.self)!
   }
 }
 
@@ -6700,44 +5536,23 @@ public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBackslash(_ unexpectedBeforeBackslash: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOldKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBackslash.map(RawSyntax.init), arena: arena).as(RawOldKeyPathExprSyntax.self)!
-  }
   public var backslash: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withBackslash(_ backslash: RawTokenSyntax, arena: SyntaxArena) -> RawOldKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(backslash), arena: arena).as(RawOldKeyPathExprSyntax.self)!
   }
   public var unexpectedBetweenBackslashAndRootExpr: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBackslashAndRootExpr(_ unexpectedBetweenBackslashAndRootExpr: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOldKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBackslashAndRootExpr.map(RawSyntax.init), arena: arena).as(RawOldKeyPathExprSyntax.self)!
-  }
   public var rootExpr: RawExprSyntax? {
     layoutView.children[3].map(RawExprSyntax.init(raw:))
-  }
-  public func withRootExpr(_ rootExpr: RawExprSyntax?, arena: SyntaxArena) -> RawOldKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 3, with: rootExpr.map(RawSyntax.init), arena: arena).as(RawOldKeyPathExprSyntax.self)!
   }
   public var unexpectedBetweenRootExprAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRootExprAndExpression(_ unexpectedBetweenRootExprAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOldKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenRootExprAndExpression.map(RawSyntax.init), arena: arena).as(RawOldKeyPathExprSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawOldKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(expression), arena: arena).as(RawOldKeyPathExprSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOldKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawOldKeyPathExprSyntax.self)!
   }
 }
 
@@ -6784,20 +5599,11 @@ public struct RawKeyPathBaseExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforePeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePeriod(_ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathBaseExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePeriod.map(RawSyntax.init), arena: arena).as(RawKeyPathBaseExprSyntax.self)!
-  }
   public var period: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPeriod(_ period: RawTokenSyntax, arena: SyntaxArena) -> RawKeyPathBaseExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(period), arena: arena).as(RawKeyPathBaseExprSyntax.self)!
-  }
   public var unexpectedAfterPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPeriod(_ unexpectedAfterPeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawKeyPathBaseExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterPeriod.map(RawSyntax.init), arena: arena).as(RawKeyPathBaseExprSyntax.self)!
   }
 }
 
@@ -6848,32 +5654,17 @@ public struct RawObjcNamePieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcNamePieceSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawObjcNamePieceSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawObjcNamePieceSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawObjcNamePieceSyntax.self)!
   }
   public var unexpectedBetweenNameAndDot: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndDot(_ unexpectedBetweenNameAndDot: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcNamePieceSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndDot.map(RawSyntax.init), arena: arena).as(RawObjcNamePieceSyntax.self)!
-  }
   public var dot: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withDot(_ dot: RawTokenSyntax?, arena: SyntaxArena) -> RawObjcNamePieceSyntax {
-    return layoutView.replacingChild(at: 3, with: dot.map(RawSyntax.init), arena: arena).as(RawObjcNamePieceSyntax.self)!
-  }
   public var unexpectedAfterDot: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDot(_ unexpectedAfterDot: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcNamePieceSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterDot.map(RawSyntax.init), arena: arena).as(RawObjcNamePieceSyntax.self)!
   }
 }
 
@@ -6973,56 +5764,29 @@ public struct RawObjcKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeKeyPath: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeKeyPath(_ unexpectedBeforeKeyPath: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeKeyPath.map(RawSyntax.init), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
-  }
   public var keyPath: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withKeyPath(_ keyPath: RawTokenSyntax, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(keyPath), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
   }
   public var unexpectedBetweenKeyPathAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenKeyPathAndLeftParen(_ unexpectedBetweenKeyPathAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenKeyPathAndLeftParen.map(RawSyntax.init), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndName(_ unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndName.map(RawSyntax.init), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
-  }
   public var name: RawObjcNameSyntax {
     layoutView.children[5].map(RawObjcNameSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawObjcNameSyntax, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(name), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
   }
   public var unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndRightParen(_ unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenNameAndRightParen.map(RawSyntax.init), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcKeyPathExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawObjcKeyPathExprSyntax.self)!
   }
 }
 
@@ -7089,80 +5853,41 @@ public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforePoundSelector: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundSelector(_ unexpectedBeforePoundSelector: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundSelector.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
-  }
   public var poundSelector: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundSelector(_ poundSelector: RawTokenSyntax, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundSelector), arena: arena).as(RawObjcSelectorExprSyntax.self)!
   }
   public var unexpectedBetweenPoundSelectorAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundSelectorAndLeftParen(_ unexpectedBetweenPoundSelectorAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundSelectorAndLeftParen.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawObjcSelectorExprSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndKind: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndKind(_ unexpectedBetweenLeftParenAndKind: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndKind.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
-  }
   public var kind: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withKind(_ kind: RawTokenSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 5, with: kind.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
   }
   public var unexpectedBetweenKindAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenKindAndColon(_ unexpectedBetweenKindAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenKindAndColon.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
-  }
   public var colon: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 7, with: colon.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
   }
   public var unexpectedBetweenColonAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndName(_ unexpectedBetweenColonAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenColonAndName.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
-  }
   public var name: RawExprSyntax {
     layoutView.children[9].map(RawExprSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawExprSyntax, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(name), arena: arena).as(RawObjcSelectorExprSyntax.self)!
   }
   public var unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndRightParen(_ unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenNameAndRightParen.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(rightParen), arena: arena).as(RawObjcSelectorExprSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjcSelectorExprSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawObjcSelectorExprSyntax.self)!
   }
 }
 
@@ -7233,92 +5958,47 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforePoundToken: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundToken(_ unexpectedBeforePoundToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundToken.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var poundToken: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundToken(_ poundToken: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundToken), arena: arena).as(RawMacroExpansionExprSyntax.self)!
   }
   public var unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundTokenAndMacro(_ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundTokenAndMacro.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var macro: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withMacro(_ macro: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(macro), arena: arena).as(RawMacroExpansionExprSyntax.self)!
   }
   public var unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMacroAndLeftParen(_ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenMacroAndLeftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 5, with: leftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArgumentList(_ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftParenAndArgumentList.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var argumentList: RawTupleExprElementListSyntax {
     layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(argumentList), arena: arena).as(RawMacroExpansionExprSyntax.self)!
   }
   public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentListAndRightParen(_ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenArgumentListAndRightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 9, with: rightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
   }
   public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRightParenAndTrailingClosure(_ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenRightParenAndTrailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var trailingClosure: RawClosureExprSyntax? {
     layoutView.children[11].map(RawClosureExprSyntax.init(raw:))
-  }
-  public func withTrailingClosure(_ trailingClosure: RawClosureExprSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 11, with: trailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
   }
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
     layoutView.children[13].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
   }
-  public func withAdditionalTrailingClosures(_ additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 13, with: additionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
-  }
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAdditionalTrailingClosures(_ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionExprSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionExprSyntax.self)!
   }
 }
 
@@ -7369,32 +6049,17 @@ public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforeBase: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBase(_ unexpectedBeforeBase: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPostfixIfConfigExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBase.map(RawSyntax.init), arena: arena).as(RawPostfixIfConfigExprSyntax.self)!
-  }
   public var base: RawExprSyntax? {
     layoutView.children[1].map(RawExprSyntax.init(raw:))
-  }
-  public func withBase(_ base: RawExprSyntax?, arena: SyntaxArena) -> RawPostfixIfConfigExprSyntax {
-    return layoutView.replacingChild(at: 1, with: base.map(RawSyntax.init), arena: arena).as(RawPostfixIfConfigExprSyntax.self)!
   }
   public var unexpectedBetweenBaseAndConfig: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBaseAndConfig(_ unexpectedBetweenBaseAndConfig: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPostfixIfConfigExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBaseAndConfig.map(RawSyntax.init), arena: arena).as(RawPostfixIfConfigExprSyntax.self)!
-  }
   public var config: RawIfConfigDeclSyntax {
     layoutView.children[3].map(RawIfConfigDeclSyntax.init(raw:))!
   }
-  public func withConfig(_ config: RawIfConfigDeclSyntax, arena: SyntaxArena) -> RawPostfixIfConfigExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(config), arena: arena).as(RawPostfixIfConfigExprSyntax.self)!
-  }
   public var unexpectedAfterConfig: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterConfig(_ unexpectedAfterConfig: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPostfixIfConfigExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterConfig.map(RawSyntax.init), arena: arena).as(RawPostfixIfConfigExprSyntax.self)!
   }
 }
 
@@ -7441,20 +6106,11 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIdentifier(_ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEditorPlaceholderExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIdentifier.map(RawSyntax.init), arena: arena).as(RawEditorPlaceholderExprSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawEditorPlaceholderExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(identifier), arena: arena).as(RawEditorPlaceholderExprSyntax.self)!
-  }
   public var unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterIdentifier(_ unexpectedAfterIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEditorPlaceholderExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterIdentifier.map(RawSyntax.init), arena: arena).as(RawEditorPlaceholderExprSyntax.self)!
   }
 }
 
@@ -7513,56 +6169,29 @@ public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIdentifier(_ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIdentifier.map(RawSyntax.init), arena: arena).as(RawObjectLiteralExprSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(identifier), arena: arena).as(RawObjectLiteralExprSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndLeftParen(_ unexpectedBetweenIdentifierAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenIdentifierAndLeftParen.map(RawSyntax.init), arena: arena).as(RawObjectLiteralExprSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawObjectLiteralExprSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArguments(_ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndArguments.map(RawSyntax.init), arena: arena).as(RawObjectLiteralExprSyntax.self)!
-  }
   public var arguments: RawTupleExprElementListSyntax {
     layoutView.children[5].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withArguments(_ arguments: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(arguments), arena: arena).as(RawObjectLiteralExprSyntax.self)!
   }
   public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentsAndRightParen(_ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenArgumentsAndRightParen.map(RawSyntax.init), arena: arena).as(RawObjectLiteralExprSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawObjectLiteralExprSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjectLiteralExprSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawObjectLiteralExprSyntax.self)!
   }
 }
 
@@ -7654,32 +6283,17 @@ public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldExprListElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawYieldExprListElementSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawYieldExprListElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawYieldExprListElementSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndComma(_ unexpectedBetweenExpressionAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldExprListElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenExpressionAndComma.map(RawSyntax.init), arena: arena).as(RawYieldExprListElementSyntax.self)!
-  }
   public var comma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withComma(_ comma: RawTokenSyntax?, arena: SyntaxArena) -> RawYieldExprListElementSyntax {
-    return layoutView.replacingChild(at: 3, with: comma.map(RawSyntax.init), arena: arena).as(RawYieldExprListElementSyntax.self)!
-  }
   public var unexpectedAfterComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterComma(_ unexpectedAfterComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldExprListElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterComma.map(RawSyntax.init), arena: arena).as(RawYieldExprListElementSyntax.self)!
   }
 }
 
@@ -7730,32 +6344,17 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeEqual: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeEqual(_ unexpectedBeforeEqual: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeEqual.map(RawSyntax.init), arena: arena).as(RawTypeInitializerClauseSyntax.self)!
-  }
   public var equal: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withEqual(_ equal: RawTokenSyntax, arena: SyntaxArena) -> RawTypeInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(equal), arena: arena).as(RawTypeInitializerClauseSyntax.self)!
   }
   public var unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEqualAndValue(_ unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenEqualAndValue.map(RawSyntax.init), arena: arena).as(RawTypeInitializerClauseSyntax.self)!
-  }
   public var value: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public func withValue(_ value: RawTypeSyntax, arena: SyntaxArena) -> RawTypeInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(value), arena: arena).as(RawTypeInitializerClauseSyntax.self)!
-  }
   public var unexpectedAfterValue: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterValue(_ unexpectedAfterValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterValue.map(RawSyntax.init), arena: arena).as(RawTypeInitializerClauseSyntax.self)!
   }
 }
 
@@ -7826,92 +6425,47 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndTypealiasKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndTypealiasKeyword(_ unexpectedBetweenModifiersAndTypealiasKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndTypealiasKeyword.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var typealiasKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withTypealiasKeyword(_ typealiasKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(typealiasKeyword), arena: arena).as(RawTypealiasDeclSyntax.self)!
   }
   public var unexpectedBetweenTypealiasKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypealiasKeywordAndIdentifier(_ unexpectedBetweenTypealiasKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenTypealiasKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawTypealiasDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndGenericParameterClause.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameterClause(_ genericParameterClause: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: genericParameterClause.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterClauseAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterClauseAndInitializer(_ unexpectedBetweenGenericParameterClauseAndInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenGenericParameterClauseAndInitializer.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var initializer: RawTypeInitializerClauseSyntax {
     layoutView.children[11].map(RawTypeInitializerClauseSyntax.init(raw:))!
-  }
-  public func withInitializer(_ initializer: RawTypeInitializerClauseSyntax, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(initializer), arena: arena).as(RawTypealiasDeclSyntax.self)!
   }
   public var unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInitializerAndGenericWhereClause(_ unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenInitializerAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
-  }
   public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGenericWhereClause(_ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypealiasDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawTypealiasDeclSyntax.self)!
   }
 }
 
@@ -7982,92 +6536,47 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndAssociatedtypeKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndAssociatedtypeKeyword(_ unexpectedBetweenModifiersAndAssociatedtypeKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndAssociatedtypeKeyword.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var associatedtypeKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAssociatedtypeKeyword(_ associatedtypeKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(associatedtypeKeyword), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
   }
   public var unexpectedBetweenAssociatedtypeKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAssociatedtypeKeywordAndIdentifier(_ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenAssociatedtypeKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndInheritanceClause(_ unexpectedBetweenIdentifierAndInheritanceClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndInheritanceClause.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     layoutView.children[9].map(RawTypeInheritanceClauseSyntax.init(raw:))
-  }
-  public func withInheritanceClause(_ inheritanceClause: RawTypeInheritanceClauseSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: inheritanceClause.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
   }
   public var unexpectedBetweenInheritanceClauseAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritanceClauseAndInitializer(_ unexpectedBetweenInheritanceClauseAndInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenInheritanceClauseAndInitializer.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var initializer: RawTypeInitializerClauseSyntax? {
     layoutView.children[11].map(RawTypeInitializerClauseSyntax.init(raw:))
-  }
-  public func withInitializer(_ initializer: RawTypeInitializerClauseSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: initializer.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
   }
   public var unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInitializerAndGenericWhereClause(_ unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenInitializerAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
-  }
   public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGenericWhereClause(_ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAssociatedtypeDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawAssociatedtypeDeclSyntax.self)!
   }
 }
 
@@ -8163,44 +6672,23 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawParameterClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawParameterClauseSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawParameterClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawParameterClauseSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndParameterList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndParameterList(_ unexpectedBetweenLeftParenAndParameterList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawParameterClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndParameterList.map(RawSyntax.init), arena: arena).as(RawParameterClauseSyntax.self)!
-  }
   public var parameterList: RawFunctionParameterListSyntax {
     layoutView.children[3].map(RawFunctionParameterListSyntax.init(raw:))!
-  }
-  public func withParameterList(_ parameterList: RawFunctionParameterListSyntax, arena: SyntaxArena) -> RawParameterClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(parameterList), arena: arena).as(RawParameterClauseSyntax.self)!
   }
   public var unexpectedBetweenParameterListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenParameterListAndRightParen(_ unexpectedBetweenParameterListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawParameterClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenParameterListAndRightParen.map(RawSyntax.init), arena: arena).as(RawParameterClauseSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawParameterClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawParameterClauseSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawParameterClauseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawParameterClauseSyntax.self)!
   }
 }
 
@@ -8251,32 +6739,17 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeArrow: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeArrow(_ unexpectedBeforeArrow: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawReturnClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeArrow.map(RawSyntax.init), arena: arena).as(RawReturnClauseSyntax.self)!
-  }
   public var arrow: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withArrow(_ arrow: RawTokenSyntax, arena: SyntaxArena) -> RawReturnClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(arrow), arena: arena).as(RawReturnClauseSyntax.self)!
   }
   public var unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArrowAndReturnType(_ unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawReturnClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenArrowAndReturnType.map(RawSyntax.init), arena: arena).as(RawReturnClauseSyntax.self)!
-  }
   public var returnType: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public func withReturnType(_ returnType: RawTypeSyntax, arena: SyntaxArena) -> RawReturnClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(returnType), arena: arena).as(RawReturnClauseSyntax.self)!
-  }
   public var unexpectedAfterReturnType: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterReturnType(_ unexpectedAfterReturnType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawReturnClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterReturnType.map(RawSyntax.init), arena: arena).as(RawReturnClauseSyntax.self)!
   }
 }
 
@@ -8335,56 +6808,29 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeInput: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeInput(_ unexpectedBeforeInput: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeInput.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
-  }
   public var input: RawParameterClauseSyntax {
     layoutView.children[1].map(RawParameterClauseSyntax.init(raw:))!
-  }
-  public func withInput(_ input: RawParameterClauseSyntax, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(input), arena: arena).as(RawFunctionSignatureSyntax.self)!
   }
   public var unexpectedBetweenInputAndAsyncOrReasyncKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInputAndAsyncOrReasyncKeyword(_ unexpectedBetweenInputAndAsyncOrReasyncKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenInputAndAsyncOrReasyncKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
-  }
   public var asyncOrReasyncKeyword: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAsyncOrReasyncKeyword(_ asyncOrReasyncKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 3, with: asyncOrReasyncKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
   }
   public var unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword(_ unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
-  }
   public var throwsOrRethrowsKeyword: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withThrowsOrRethrowsKeyword(_ throwsOrRethrowsKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 5, with: throwsOrRethrowsKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
   }
   public var unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenThrowsOrRethrowsKeywordAndOutput(_ unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenThrowsOrRethrowsKeywordAndOutput.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
-  }
   public var output: RawReturnClauseSyntax? {
     layoutView.children[7].map(RawReturnClauseSyntax.init(raw:))
   }
-  public func withOutput(_ output: RawReturnClauseSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 7, with: output.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
-  }
   public var unexpectedAfterOutput: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterOutput(_ unexpectedAfterOutput: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionSignatureSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterOutput.map(RawSyntax.init), arena: arena).as(RawFunctionSignatureSyntax.self)!
   }
 }
 
@@ -8485,44 +6931,23 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
   public var unexpectedBeforePoundKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundKeyword(_ unexpectedBeforePoundKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundKeyword.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
-  }
   public var poundKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundKeyword(_ poundKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundKeyword), arena: arena).as(RawIfConfigClauseSyntax.self)!
   }
   public var unexpectedBetweenPoundKeywordAndCondition: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundKeywordAndCondition(_ unexpectedBetweenPoundKeywordAndCondition: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundKeywordAndCondition.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
-  }
   public var condition: RawExprSyntax? {
     layoutView.children[3].map(RawExprSyntax.init(raw:))
-  }
-  public func withCondition(_ condition: RawExprSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: condition.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
   }
   public var unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConditionAndElements(_ unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenConditionAndElements.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
-  }
   public var elements: RawSyntax? {
     layoutView.children[5]
   }
-  public func withElements(_ elements: RawSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: elements.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
-  }
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterElements(_ unexpectedAfterElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigClauseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterElements.map(RawSyntax.init), arena: arena).as(RawIfConfigClauseSyntax.self)!
   }
 }
 
@@ -8614,32 +7039,17 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeClauses: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeClauses(_ unexpectedBeforeClauses: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeClauses.map(RawSyntax.init), arena: arena).as(RawIfConfigDeclSyntax.self)!
-  }
   public var clauses: RawIfConfigClauseListSyntax {
     layoutView.children[1].map(RawIfConfigClauseListSyntax.init(raw:))!
-  }
-  public func withClauses(_ clauses: RawIfConfigClauseListSyntax, arena: SyntaxArena) -> RawIfConfigDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(clauses), arena: arena).as(RawIfConfigDeclSyntax.self)!
   }
   public var unexpectedBetweenClausesAndPoundEndif: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenClausesAndPoundEndif(_ unexpectedBetweenClausesAndPoundEndif: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenClausesAndPoundEndif.map(RawSyntax.init), arena: arena).as(RawIfConfigDeclSyntax.self)!
-  }
   public var poundEndif: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withPoundEndif(_ poundEndif: RawTokenSyntax, arena: SyntaxArena) -> RawIfConfigDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(poundEndif), arena: arena).as(RawIfConfigDeclSyntax.self)!
-  }
   public var unexpectedAfterPoundEndif: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPoundEndif(_ unexpectedAfterPoundEndif: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfConfigDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterPoundEndif.map(RawSyntax.init), arena: arena).as(RawIfConfigDeclSyntax.self)!
   }
 }
 
@@ -8698,56 +7108,29 @@ public struct RawPoundErrorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforePoundError: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundError(_ unexpectedBeforePoundError: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundError.map(RawSyntax.init), arena: arena).as(RawPoundErrorDeclSyntax.self)!
-  }
   public var poundError: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundError(_ poundError: RawTokenSyntax, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundError), arena: arena).as(RawPoundErrorDeclSyntax.self)!
   }
   public var unexpectedBetweenPoundErrorAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundErrorAndLeftParen(_ unexpectedBetweenPoundErrorAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundErrorAndLeftParen.map(RawSyntax.init), arena: arena).as(RawPoundErrorDeclSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawPoundErrorDeclSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndMessage(_ unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndMessage.map(RawSyntax.init), arena: arena).as(RawPoundErrorDeclSyntax.self)!
-  }
   public var message: RawStringLiteralExprSyntax {
     layoutView.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
-  }
-  public func withMessage(_ message: RawStringLiteralExprSyntax, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(message), arena: arena).as(RawPoundErrorDeclSyntax.self)!
   }
   public var unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMessageAndRightParen(_ unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenMessageAndRightParen.map(RawSyntax.init), arena: arena).as(RawPoundErrorDeclSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawPoundErrorDeclSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundErrorDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawPoundErrorDeclSyntax.self)!
   }
 }
 
@@ -8806,56 +7189,29 @@ public struct RawPoundWarningDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforePoundWarning: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundWarning(_ unexpectedBeforePoundWarning: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundWarning.map(RawSyntax.init), arena: arena).as(RawPoundWarningDeclSyntax.self)!
-  }
   public var poundWarning: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundWarning(_ poundWarning: RawTokenSyntax, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundWarning), arena: arena).as(RawPoundWarningDeclSyntax.self)!
   }
   public var unexpectedBetweenPoundWarningAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundWarningAndLeftParen(_ unexpectedBetweenPoundWarningAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundWarningAndLeftParen.map(RawSyntax.init), arena: arena).as(RawPoundWarningDeclSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawPoundWarningDeclSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndMessage(_ unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndMessage.map(RawSyntax.init), arena: arena).as(RawPoundWarningDeclSyntax.self)!
-  }
   public var message: RawStringLiteralExprSyntax {
     layoutView.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
-  }
-  public func withMessage(_ message: RawStringLiteralExprSyntax, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(message), arena: arena).as(RawPoundWarningDeclSyntax.self)!
   }
   public var unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMessageAndRightParen(_ unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenMessageAndRightParen.map(RawSyntax.init), arena: arena).as(RawPoundWarningDeclSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawPoundWarningDeclSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundWarningDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawPoundWarningDeclSyntax.self)!
   }
 }
 
@@ -8914,56 +7270,29 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforePoundSourceLocation: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundSourceLocation(_ unexpectedBeforePoundSourceLocation: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundSourceLocation.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationSyntax.self)!
-  }
   public var poundSourceLocation: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundSourceLocation(_ poundSourceLocation: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundSourceLocation), arena: arena).as(RawPoundSourceLocationSyntax.self)!
   }
   public var unexpectedBetweenPoundSourceLocationAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundSourceLocationAndLeftParen(_ unexpectedBetweenPoundSourceLocationAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundSourceLocationAndLeftParen.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawPoundSourceLocationSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArgs: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArgs(_ unexpectedBetweenLeftParenAndArgs: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndArgs.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationSyntax.self)!
-  }
   public var args: RawPoundSourceLocationArgsSyntax? {
     layoutView.children[5].map(RawPoundSourceLocationArgsSyntax.init(raw:))
-  }
-  public func withArgs(_ args: RawPoundSourceLocationArgsSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 5, with: args.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationSyntax.self)!
   }
   public var unexpectedBetweenArgsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgsAndRightParen(_ unexpectedBetweenArgsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenArgsAndRightParen.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawPoundSourceLocationSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationSyntax.self)!
   }
 }
 
@@ -9034,92 +7363,47 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforeFileArgLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeFileArgLabel(_ unexpectedBeforeFileArgLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeFileArgLabel.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var fileArgLabel: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withFileArgLabel(_ fileArgLabel: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(fileArgLabel), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
   }
   public var unexpectedBetweenFileArgLabelAndFileArgColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenFileArgLabelAndFileArgColon(_ unexpectedBetweenFileArgLabelAndFileArgColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenFileArgLabelAndFileArgColon.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var fileArgColon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withFileArgColon(_ fileArgColon: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(fileArgColon), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
   }
   public var unexpectedBetweenFileArgColonAndFileName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenFileArgColonAndFileName(_ unexpectedBetweenFileArgColonAndFileName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenFileArgColonAndFileName.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var fileName: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withFileName(_ fileName: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(fileName), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
   }
   public var unexpectedBetweenFileNameAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenFileNameAndComma(_ unexpectedBetweenFileNameAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenFileNameAndComma.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var comma: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withComma(_ comma: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(comma), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
   }
   public var unexpectedBetweenCommaAndLineArgLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCommaAndLineArgLabel(_ unexpectedBetweenCommaAndLineArgLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenCommaAndLineArgLabel.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var lineArgLabel: RawTokenSyntax {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLineArgLabel(_ lineArgLabel: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(lineArgLabel), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
   }
   public var unexpectedBetweenLineArgLabelAndLineArgColon: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLineArgLabelAndLineArgColon(_ unexpectedBetweenLineArgLabelAndLineArgColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenLineArgLabelAndLineArgColon.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var lineArgColon: RawTokenSyntax {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLineArgColon(_ lineArgColon: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(lineArgColon), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
   }
   public var unexpectedBetweenLineArgColonAndLineNumber: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLineArgColonAndLineNumber(_ unexpectedBetweenLineArgColonAndLineNumber: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenLineArgColonAndLineNumber.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var lineNumber: RawTokenSyntax {
     layoutView.children[13].map(RawTokenSyntax.init(raw:))!
   }
-  public func withLineNumber(_ lineNumber: RawTokenSyntax, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 13, with: RawSyntax(lineNumber), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
-  }
   public var unexpectedAfterLineNumber: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterLineNumber(_ unexpectedAfterLineNumber: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundSourceLocationArgsSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterLineNumber.map(RawSyntax.init), arena: arena).as(RawPoundSourceLocationArgsSyntax.self)!
   }
 }
 
@@ -9174,44 +7458,23 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclModifierDetailSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawDeclModifierDetailSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawDeclModifierDetailSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawDeclModifierDetailSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndDetail: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndDetail(_ unexpectedBetweenLeftParenAndDetail: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclModifierDetailSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndDetail.map(RawSyntax.init), arena: arena).as(RawDeclModifierDetailSyntax.self)!
-  }
   public var detail: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDetail(_ detail: RawTokenSyntax, arena: SyntaxArena) -> RawDeclModifierDetailSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(detail), arena: arena).as(RawDeclModifierDetailSyntax.self)!
   }
   public var unexpectedBetweenDetailAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDetailAndRightParen(_ unexpectedBetweenDetailAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclModifierDetailSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenDetailAndRightParen.map(RawSyntax.init), arena: arena).as(RawDeclModifierDetailSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawDeclModifierDetailSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawDeclModifierDetailSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclModifierDetailSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawDeclModifierDetailSyntax.self)!
   }
 }
 
@@ -9262,32 +7525,17 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclModifierSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawDeclModifierSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawDeclModifierSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawDeclModifierSyntax.self)!
   }
   public var unexpectedBetweenNameAndDetail: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndDetail(_ unexpectedBetweenNameAndDetail: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclModifierSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndDetail.map(RawSyntax.init), arena: arena).as(RawDeclModifierSyntax.self)!
-  }
   public var detail: RawDeclModifierDetailSyntax? {
     layoutView.children[3].map(RawDeclModifierDetailSyntax.init(raw:))
   }
-  public func withDetail(_ detail: RawDeclModifierDetailSyntax?, arena: SyntaxArena) -> RawDeclModifierSyntax {
-    return layoutView.replacingChild(at: 3, with: detail.map(RawSyntax.init), arena: arena).as(RawDeclModifierSyntax.self)!
-  }
   public var unexpectedAfterDetail: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDetail(_ unexpectedAfterDetail: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclModifierSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterDetail.map(RawSyntax.init), arena: arena).as(RawDeclModifierSyntax.self)!
   }
 }
 
@@ -9338,32 +7586,17 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeTypeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeTypeName(_ unexpectedBeforeTypeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInheritedTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeTypeName.map(RawSyntax.init), arena: arena).as(RawInheritedTypeSyntax.self)!
-  }
   public var typeName: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withTypeName(_ typeName: RawTypeSyntax, arena: SyntaxArena) -> RawInheritedTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(typeName), arena: arena).as(RawInheritedTypeSyntax.self)!
   }
   public var unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeNameAndTrailingComma(_ unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInheritedTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenTypeNameAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawInheritedTypeSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawInheritedTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawInheritedTypeSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInheritedTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawInheritedTypeSyntax.self)!
   }
 }
 
@@ -9455,32 +7688,17 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeColon: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeColon(_ unexpectedBeforeColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeInheritanceClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeColon.map(RawSyntax.init), arena: arena).as(RawTypeInheritanceClauseSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawTypeInheritanceClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(colon), arena: arena).as(RawTypeInheritanceClauseSyntax.self)!
   }
   public var unexpectedBetweenColonAndInheritedTypeCollection: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndInheritedTypeCollection(_ unexpectedBetweenColonAndInheritedTypeCollection: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeInheritanceClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenColonAndInheritedTypeCollection.map(RawSyntax.init), arena: arena).as(RawTypeInheritanceClauseSyntax.self)!
-  }
   public var inheritedTypeCollection: RawInheritedTypeListSyntax {
     layoutView.children[3].map(RawInheritedTypeListSyntax.init(raw:))!
   }
-  public func withInheritedTypeCollection(_ inheritedTypeCollection: RawInheritedTypeListSyntax, arena: SyntaxArena) -> RawTypeInheritanceClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(inheritedTypeCollection), arena: arena).as(RawTypeInheritanceClauseSyntax.self)!
-  }
   public var unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterInheritedTypeCollection(_ unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeInheritanceClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterInheritedTypeCollection.map(RawSyntax.init), arena: arena).as(RawTypeInheritanceClauseSyntax.self)!
   }
 }
 
@@ -9555,104 +7773,53 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndClassKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndClassKeyword(_ unexpectedBetweenModifiersAndClassKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndClassKeyword.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var classKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withClassKeyword(_ classKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(classKeyword), arena: arena).as(RawClassDeclSyntax.self)!
   }
   public var unexpectedBetweenClassKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenClassKeywordAndIdentifier(_ unexpectedBetweenClassKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenClassKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawClassDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndGenericParameterClause.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameterClause(_ genericParameterClause: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: genericParameterClause.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     layoutView.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
-  }
-  public func withInheritanceClause(_ inheritanceClause: RawTypeInheritanceClauseSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: inheritanceClause.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
   }
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndMembers.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var members: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
-  public func withMembers(_ members: RawMemberDeclBlockSyntax, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: RawSyntax(members), arena: arena).as(RawClassDeclSyntax.self)!
-  }
   public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterMembers(_ unexpectedAfterMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterMembers.map(RawSyntax.init), arena: arena).as(RawClassDeclSyntax.self)!
   }
 }
 
@@ -9727,104 +7894,53 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndActorKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndActorKeyword(_ unexpectedBetweenModifiersAndActorKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndActorKeyword.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var actorKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withActorKeyword(_ actorKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(actorKeyword), arena: arena).as(RawActorDeclSyntax.self)!
   }
   public var unexpectedBetweenActorKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenActorKeywordAndIdentifier(_ unexpectedBetweenActorKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenActorKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawActorDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndGenericParameterClause.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameterClause(_ genericParameterClause: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: genericParameterClause.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     layoutView.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
-  }
-  public func withInheritanceClause(_ inheritanceClause: RawTypeInheritanceClauseSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: inheritanceClause.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
   }
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndMembers.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var members: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
-  public func withMembers(_ members: RawMemberDeclBlockSyntax, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: RawSyntax(members), arena: arena).as(RawActorDeclSyntax.self)!
-  }
   public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterMembers(_ unexpectedAfterMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawActorDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterMembers.map(RawSyntax.init), arena: arena).as(RawActorDeclSyntax.self)!
   }
 }
 
@@ -9899,104 +8015,53 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax 
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndStructKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndStructKeyword(_ unexpectedBetweenModifiersAndStructKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndStructKeyword.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var structKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withStructKeyword(_ structKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(structKeyword), arena: arena).as(RawStructDeclSyntax.self)!
   }
   public var unexpectedBetweenStructKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenStructKeywordAndIdentifier(_ unexpectedBetweenStructKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenStructKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawStructDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndGenericParameterClause.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameterClause(_ genericParameterClause: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: genericParameterClause.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenGenericParameterClauseAndInheritanceClause.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     layoutView.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
-  }
-  public func withInheritanceClause(_ inheritanceClause: RawTypeInheritanceClauseSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: inheritanceClause.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
   }
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndMembers.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var members: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
-  public func withMembers(_ members: RawMemberDeclBlockSyntax, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: RawSyntax(members), arena: arena).as(RawStructDeclSyntax.self)!
-  }
   public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterMembers(_ unexpectedAfterMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawStructDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterMembers.map(RawSyntax.init), arena: arena).as(RawStructDeclSyntax.self)!
   }
 }
 
@@ -10071,104 +8136,53 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndProtocolKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndProtocolKeyword(_ unexpectedBetweenModifiersAndProtocolKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndProtocolKeyword.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var protocolKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withProtocolKeyword(_ protocolKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(protocolKeyword), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
   public var unexpectedBetweenProtocolKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenProtocolKeywordAndIdentifier(_ unexpectedBetweenProtocolKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenProtocolKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause(_ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var primaryAssociatedTypeClause: RawPrimaryAssociatedTypeClauseSyntax? {
     layoutView.children[9].map(RawPrimaryAssociatedTypeClauseSyntax.init(raw:))
-  }
-  public func withPrimaryAssociatedTypeClause(_ primaryAssociatedTypeClause: RawPrimaryAssociatedTypeClauseSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: primaryAssociatedTypeClause.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
   public var unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause(_ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     layoutView.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
-  }
-  public func withInheritanceClause(_ inheritanceClause: RawTypeInheritanceClauseSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: inheritanceClause.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndMembers.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var members: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
-  public func withMembers(_ members: RawMemberDeclBlockSyntax, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: RawSyntax(members), arena: arena).as(RawProtocolDeclSyntax.self)!
-  }
   public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterMembers(_ unexpectedAfterMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawProtocolDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterMembers.map(RawSyntax.init), arena: arena).as(RawProtocolDeclSyntax.self)!
   }
 }
 
@@ -10239,92 +8253,47 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndExtensionKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndExtensionKeyword(_ unexpectedBetweenModifiersAndExtensionKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndExtensionKeyword.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var extensionKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withExtensionKeyword(_ extensionKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(extensionKeyword), arena: arena).as(RawExtensionDeclSyntax.self)!
   }
   public var unexpectedBetweenExtensionKeywordAndExtendedType: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExtensionKeywordAndExtendedType(_ unexpectedBetweenExtensionKeywordAndExtendedType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenExtensionKeywordAndExtendedType.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var extendedType: RawTypeSyntax {
     layoutView.children[7].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withExtendedType(_ extendedType: RawTypeSyntax, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(extendedType), arena: arena).as(RawExtensionDeclSyntax.self)!
   }
   public var unexpectedBetweenExtendedTypeAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExtendedTypeAndInheritanceClause(_ unexpectedBetweenExtendedTypeAndInheritanceClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenExtendedTypeAndInheritanceClause.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     layoutView.children[9].map(RawTypeInheritanceClauseSyntax.init(raw:))
-  }
-  public func withInheritanceClause(_ inheritanceClause: RawTypeInheritanceClauseSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: inheritanceClause.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
   }
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[11].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenGenericWhereClauseAndMembers.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var members: RawMemberDeclBlockSyntax {
     layoutView.children[13].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
-  public func withMembers(_ members: RawMemberDeclBlockSyntax, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: RawSyntax(members), arena: arena).as(RawExtensionDeclSyntax.self)!
-  }
   public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterMembers(_ unexpectedAfterMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExtensionDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterMembers.map(RawSyntax.init), arena: arena).as(RawExtensionDeclSyntax.self)!
   }
 }
 
@@ -10379,44 +8348,23 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftBrace(_ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberDeclBlockSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftBrace.map(RawSyntax.init), arena: arena).as(RawMemberDeclBlockSyntax.self)!
-  }
   public var leftBrace: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBrace(_ leftBrace: RawTokenSyntax, arena: SyntaxArena) -> RawMemberDeclBlockSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftBrace), arena: arena).as(RawMemberDeclBlockSyntax.self)!
   }
   public var unexpectedBetweenLeftBraceAndMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBraceAndMembers(_ unexpectedBetweenLeftBraceAndMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberDeclBlockSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftBraceAndMembers.map(RawSyntax.init), arena: arena).as(RawMemberDeclBlockSyntax.self)!
-  }
   public var members: RawMemberDeclListSyntax {
     layoutView.children[3].map(RawMemberDeclListSyntax.init(raw:))!
-  }
-  public func withMembers(_ members: RawMemberDeclListSyntax, arena: SyntaxArena) -> RawMemberDeclBlockSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(members), arena: arena).as(RawMemberDeclBlockSyntax.self)!
   }
   public var unexpectedBetweenMembersAndRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMembersAndRightBrace(_ unexpectedBetweenMembersAndRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberDeclBlockSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenMembersAndRightBrace.map(RawSyntax.init), arena: arena).as(RawMemberDeclBlockSyntax.self)!
-  }
   public var rightBrace: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightBrace(_ rightBrace: RawTokenSyntax, arena: SyntaxArena) -> RawMemberDeclBlockSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightBrace), arena: arena).as(RawMemberDeclBlockSyntax.self)!
-  }
   public var unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightBrace(_ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberDeclBlockSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightBrace.map(RawSyntax.init), arena: arena).as(RawMemberDeclBlockSyntax.self)!
   }
 }
 
@@ -10508,32 +8456,17 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeDecl: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDecl(_ unexpectedBeforeDecl: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberDeclListItemSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDecl.map(RawSyntax.init), arena: arena).as(RawMemberDeclListItemSyntax.self)!
-  }
   public var decl: RawDeclSyntax {
     layoutView.children[1].map(RawDeclSyntax.init(raw:))!
-  }
-  public func withDecl(_ decl: RawDeclSyntax, arena: SyntaxArena) -> RawMemberDeclListItemSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(decl), arena: arena).as(RawMemberDeclListItemSyntax.self)!
   }
   public var unexpectedBetweenDeclAndSemicolon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDeclAndSemicolon(_ unexpectedBetweenDeclAndSemicolon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberDeclListItemSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenDeclAndSemicolon.map(RawSyntax.init), arena: arena).as(RawMemberDeclListItemSyntax.self)!
-  }
   public var semicolon: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withSemicolon(_ semicolon: RawTokenSyntax?, arena: SyntaxArena) -> RawMemberDeclListItemSyntax {
-    return layoutView.replacingChild(at: 3, with: semicolon.map(RawSyntax.init), arena: arena).as(RawMemberDeclListItemSyntax.self)!
-  }
   public var unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterSemicolon(_ unexpectedAfterSemicolon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberDeclListItemSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterSemicolon.map(RawSyntax.init), arena: arena).as(RawMemberDeclListItemSyntax.self)!
   }
 }
 
@@ -10584,32 +8517,17 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeStatements: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeStatements(_ unexpectedBeforeStatements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSourceFileSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeStatements.map(RawSyntax.init), arena: arena).as(RawSourceFileSyntax.self)!
-  }
   public var statements: RawCodeBlockItemListSyntax {
     layoutView.children[1].map(RawCodeBlockItemListSyntax.init(raw:))!
-  }
-  public func withStatements(_ statements: RawCodeBlockItemListSyntax, arena: SyntaxArena) -> RawSourceFileSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(statements), arena: arena).as(RawSourceFileSyntax.self)!
   }
   public var unexpectedBetweenStatementsAndEOFToken: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenStatementsAndEOFToken(_ unexpectedBetweenStatementsAndEOFToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSourceFileSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenStatementsAndEOFToken.map(RawSyntax.init), arena: arena).as(RawSourceFileSyntax.self)!
-  }
   public var eofToken: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withEOFToken(_ eofToken: RawTokenSyntax, arena: SyntaxArena) -> RawSourceFileSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(eofToken), arena: arena).as(RawSourceFileSyntax.self)!
-  }
   public var unexpectedAfterEOFToken: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterEOFToken(_ unexpectedAfterEOFToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSourceFileSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterEOFToken.map(RawSyntax.init), arena: arena).as(RawSourceFileSyntax.self)!
   }
 }
 
@@ -10660,32 +8578,17 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeEqual: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeEqual(_ unexpectedBeforeEqual: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeEqual.map(RawSyntax.init), arena: arena).as(RawInitializerClauseSyntax.self)!
-  }
   public var equal: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withEqual(_ equal: RawTokenSyntax, arena: SyntaxArena) -> RawInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(equal), arena: arena).as(RawInitializerClauseSyntax.self)!
   }
   public var unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEqualAndValue(_ unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenEqualAndValue.map(RawSyntax.init), arena: arena).as(RawInitializerClauseSyntax.self)!
-  }
   public var value: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public func withValue(_ value: RawExprSyntax, arena: SyntaxArena) -> RawInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(value), arena: arena).as(RawInitializerClauseSyntax.self)!
-  }
   public var unexpectedAfterValue: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterValue(_ unexpectedAfterValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterValue.map(RawSyntax.init), arena: arena).as(RawInitializerClauseSyntax.self)!
   }
 }
 
@@ -10764,116 +8667,59 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndFirstName(_ unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndFirstName.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var firstName: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withFirstName(_ firstName: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 5, with: firstName.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenFirstNameAndSecondName(_ unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenFirstNameAndSecondName.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var secondName: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withSecondName(_ secondName: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 7, with: secondName.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSecondNameAndColon(_ unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenSecondNameAndColon.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var colon: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 9, with: colon.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndType(_ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenColonAndType.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var type: RawTypeSyntax? {
     layoutView.children[11].map(RawTypeSyntax.init(raw:))
-  }
-  public func withType(_ type: RawTypeSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 11, with: type.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAndEllipsis(_ unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenTypeAndEllipsis.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var ellipsis: RawTokenSyntax? {
     layoutView.children[13].map(RawTokenSyntax.init(raw:))
-  }
-  public func withEllipsis(_ ellipsis: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 13, with: ellipsis.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenEllipsisAndDefaultArgument: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEllipsisAndDefaultArgument(_ unexpectedBetweenEllipsisAndDefaultArgument: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenEllipsisAndDefaultArgument.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var defaultArgument: RawInitializerClauseSyntax? {
     layoutView.children[15].map(RawInitializerClauseSyntax.init(raw:))
-  }
-  public func withDefaultArgument(_ defaultArgument: RawInitializerClauseSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 15, with: defaultArgument.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
   public var unexpectedBetweenDefaultArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDefaultArgumentAndTrailingComma(_ unexpectedBetweenDefaultArgumentAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedBetweenDefaultArgumentAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[17].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 17, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionParameterSyntax {
-    return layoutView.replacingChild(at: 18, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawFunctionParameterSyntax.self)!
   }
 }
 
@@ -10989,104 +8835,53 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndFuncKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndFuncKeyword(_ unexpectedBetweenModifiersAndFuncKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndFuncKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var funcKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withFuncKeyword(_ funcKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(funcKeyword), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
   public var unexpectedBetweenFuncKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenFuncKeywordAndIdentifier(_ unexpectedBetweenFuncKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenFuncKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndGenericParameterClause.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameterClause(_ genericParameterClause: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: genericParameterClause.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterClauseAndSignature(_ unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenGenericParameterClauseAndSignature.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var signature: RawFunctionSignatureSyntax {
     layoutView.children[11].map(RawFunctionSignatureSyntax.init(raw:))!
-  }
-  public func withSignature(_ signature: RawFunctionSignatureSyntax, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(signature), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
   public var unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSignatureAndGenericWhereClause(_ unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenSignatureAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndBody(_ unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndBody.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax? {
     layoutView.children[15].map(RawCodeBlockSyntax.init(raw:))
   }
-  public func withBody(_ body: RawCodeBlockSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: body.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawFunctionDeclSyntax.self)!
   }
 }
 
@@ -11161,104 +8956,53 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndInitKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndInitKeyword(_ unexpectedBetweenModifiersAndInitKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndInitKeyword.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var initKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withInitKeyword(_ initKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(initKeyword), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenInitKeywordAndOptionalMark: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInitKeywordAndOptionalMark(_ unexpectedBetweenInitKeywordAndOptionalMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenInitKeywordAndOptionalMark.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var optionalMark: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withOptionalMark(_ optionalMark: RawTokenSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: optionalMark.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenOptionalMarkAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOptionalMarkAndGenericParameterClause(_ unexpectedBetweenOptionalMarkAndGenericParameterClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenOptionalMarkAndGenericParameterClause.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameterClause(_ genericParameterClause: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: genericParameterClause.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterClauseAndSignature(_ unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenGenericParameterClauseAndSignature.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var signature: RawFunctionSignatureSyntax {
     layoutView.children[11].map(RawFunctionSignatureSyntax.init(raw:))!
-  }
-  public func withSignature(_ signature: RawFunctionSignatureSyntax, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(signature), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSignatureAndGenericWhereClause(_ unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenSignatureAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndBody(_ unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndBody.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax? {
     layoutView.children[15].map(RawCodeBlockSyntax.init(raw:))
   }
-  public func withBody(_ body: RawCodeBlockSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: body.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawInitializerDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawInitializerDeclSyntax.self)!
   }
 }
 
@@ -11317,56 +9061,29 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndDeinitKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndDeinitKeyword(_ unexpectedBetweenModifiersAndDeinitKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndDeinitKeyword.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
-  }
   public var deinitKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDeinitKeyword(_ deinitKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(deinitKeyword), arena: arena).as(RawDeinitializerDeclSyntax.self)!
   }
   public var unexpectedBetweenDeinitKeywordAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDeinitKeywordAndBody(_ unexpectedBetweenDeinitKeywordAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenDeinitKeywordAndBody.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax? {
     layoutView.children[7].map(RawCodeBlockSyntax.init(raw:))
   }
-  public func withBody(_ body: RawCodeBlockSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: body.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeinitializerDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawDeinitializerDeclSyntax.self)!
   }
 }
 
@@ -11469,104 +9186,53 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndSubscriptKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndSubscriptKeyword(_ unexpectedBetweenModifiersAndSubscriptKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndSubscriptKeyword.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var subscriptKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withSubscriptKeyword(_ subscriptKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(subscriptKeyword), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
   public var unexpectedBetweenSubscriptKeywordAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSubscriptKeywordAndGenericParameterClause(_ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenSubscriptKeywordAndGenericParameterClause.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[7].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameterClause(_ genericParameterClause: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: genericParameterClause.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterClauseAndIndices: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterClauseAndIndices(_ unexpectedBetweenGenericParameterClauseAndIndices: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenGenericParameterClauseAndIndices.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var indices: RawParameterClauseSyntax {
     layoutView.children[9].map(RawParameterClauseSyntax.init(raw:))!
-  }
-  public func withIndices(_ indices: RawParameterClauseSyntax, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(indices), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
   public var unexpectedBetweenIndicesAndResult: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIndicesAndResult(_ unexpectedBetweenIndicesAndResult: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenIndicesAndResult.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var result: RawReturnClauseSyntax {
     layoutView.children[11].map(RawReturnClauseSyntax.init(raw:))!
-  }
-  public func withResult(_ result: RawReturnClauseSyntax, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(result), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
   public var unexpectedBetweenResultAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenResultAndGenericWhereClause(_ unexpectedBetweenResultAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenResultAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndAccessor: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndAccessor(_ unexpectedBetweenGenericWhereClauseAndAccessor: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndAccessor.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var accessor: RawSyntax? {
     layoutView.children[15]
   }
-  public func withAccessor(_ accessor: RawSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: accessor.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
-  }
   public var unexpectedAfterAccessor: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAccessor(_ unexpectedAfterAccessor: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSubscriptDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterAccessor.map(RawSyntax.init), arena: arena).as(RawSubscriptDeclSyntax.self)!
   }
 }
 
@@ -11617,32 +9283,17 @@ public struct RawAccessLevelModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessLevelModifierSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawAccessLevelModifierSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawAccessLevelModifierSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawAccessLevelModifierSyntax.self)!
   }
   public var unexpectedBetweenNameAndModifier: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndModifier(_ unexpectedBetweenNameAndModifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessLevelModifierSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndModifier.map(RawSyntax.init), arena: arena).as(RawAccessLevelModifierSyntax.self)!
-  }
   public var modifier: RawDeclModifierDetailSyntax? {
     layoutView.children[3].map(RawDeclModifierDetailSyntax.init(raw:))
   }
-  public func withModifier(_ modifier: RawDeclModifierDetailSyntax?, arena: SyntaxArena) -> RawAccessLevelModifierSyntax {
-    return layoutView.replacingChild(at: 3, with: modifier.map(RawSyntax.init), arena: arena).as(RawAccessLevelModifierSyntax.self)!
-  }
   public var unexpectedAfterModifier: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterModifier(_ unexpectedAfterModifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessLevelModifierSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterModifier.map(RawSyntax.init), arena: arena).as(RawAccessLevelModifierSyntax.self)!
   }
 }
 
@@ -11693,32 +9344,17 @@ public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessPathComponentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawAccessPathComponentSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawAccessPathComponentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawAccessPathComponentSyntax.self)!
   }
   public var unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndTrailingDot(_ unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessPathComponentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndTrailingDot.map(RawSyntax.init), arena: arena).as(RawAccessPathComponentSyntax.self)!
-  }
   public var trailingDot: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingDot(_ trailingDot: RawTokenSyntax?, arena: SyntaxArena) -> RawAccessPathComponentSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingDot.map(RawSyntax.init), arena: arena).as(RawAccessPathComponentSyntax.self)!
-  }
   public var unexpectedAfterTrailingDot: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingDot(_ unexpectedAfterTrailingDot: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessPathComponentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingDot.map(RawSyntax.init), arena: arena).as(RawAccessPathComponentSyntax.self)!
   }
 }
 
@@ -11822,68 +9458,35 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax 
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndImportTok: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndImportTok(_ unexpectedBetweenModifiersAndImportTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndImportTok.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
-  }
   public var importTok: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withImportTok(_ importTok: RawTokenSyntax, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(importTok), arena: arena).as(RawImportDeclSyntax.self)!
   }
   public var unexpectedBetweenImportTokAndImportKind: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenImportTokAndImportKind(_ unexpectedBetweenImportTokAndImportKind: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenImportTokAndImportKind.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
-  }
   public var importKind: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withImportKind(_ importKind: RawTokenSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: importKind.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
   }
   public var unexpectedBetweenImportKindAndPath: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenImportKindAndPath(_ unexpectedBetweenImportKindAndPath: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenImportKindAndPath.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
-  }
   public var path: RawAccessPathSyntax {
     layoutView.children[9].map(RawAccessPathSyntax.init(raw:))!
   }
-  public func withPath(_ path: RawAccessPathSyntax, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(path), arena: arena).as(RawImportDeclSyntax.self)!
-  }
   public var unexpectedAfterPath: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPath(_ unexpectedAfterPath: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImportDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterPath.map(RawSyntax.init), arena: arena).as(RawImportDeclSyntax.self)!
   }
 }
 
@@ -11938,44 +9541,23 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorParameterSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawAccessorParameterSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawAccessorParameterSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawAccessorParameterSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndName(_ unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorParameterSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndName.map(RawSyntax.init), arena: arena).as(RawAccessorParameterSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawAccessorParameterSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(name), arena: arena).as(RawAccessorParameterSyntax.self)!
   }
   public var unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndRightParen(_ unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorParameterSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenNameAndRightParen.map(RawSyntax.init), arena: arena).as(RawAccessorParameterSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawAccessorParameterSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawAccessorParameterSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorParameterSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawAccessorParameterSyntax.self)!
   }
 }
 
@@ -12046,92 +9628,47 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifier: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifier(_ unexpectedBetweenAttributesAndModifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifier.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var modifier: RawDeclModifierSyntax? {
     layoutView.children[3].map(RawDeclModifierSyntax.init(raw:))
-  }
-  public func withModifier(_ modifier: RawDeclModifierSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifier.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
   }
   public var unexpectedBetweenModifierAndAccessorKind: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifierAndAccessorKind(_ unexpectedBetweenModifierAndAccessorKind: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifierAndAccessorKind.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var accessorKind: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAccessorKind(_ accessorKind: RawTokenSyntax, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(accessorKind), arena: arena).as(RawAccessorDeclSyntax.self)!
   }
   public var unexpectedBetweenAccessorKindAndParameter: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAccessorKindAndParameter(_ unexpectedBetweenAccessorKindAndParameter: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenAccessorKindAndParameter.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var parameter: RawAccessorParameterSyntax? {
     layoutView.children[7].map(RawAccessorParameterSyntax.init(raw:))
-  }
-  public func withParameter(_ parameter: RawAccessorParameterSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: parameter.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
   }
   public var unexpectedBetweenParameterAndAsyncKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenParameterAndAsyncKeyword(_ unexpectedBetweenParameterAndAsyncKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenParameterAndAsyncKeyword.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var asyncKeyword: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAsyncKeyword(_ asyncKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: asyncKeyword.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
   }
   public var unexpectedBetweenAsyncKeywordAndThrowsKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsyncKeywordAndThrowsKeyword(_ unexpectedBetweenAsyncKeywordAndThrowsKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenAsyncKeywordAndThrowsKeyword.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var throwsKeyword: RawTokenSyntax? {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
-  }
-  public func withThrowsKeyword(_ throwsKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: throwsKeyword.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
   }
   public var unexpectedBetweenThrowsKeywordAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenThrowsKeywordAndBody(_ unexpectedBetweenThrowsKeywordAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenThrowsKeywordAndBody.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax? {
     layoutView.children[13].map(RawCodeBlockSyntax.init(raw:))
   }
-  public func withBody(_ body: RawCodeBlockSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: body.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawAccessorDeclSyntax.self)!
   }
 }
 
@@ -12227,44 +9764,23 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftBrace(_ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorBlockSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftBrace.map(RawSyntax.init), arena: arena).as(RawAccessorBlockSyntax.self)!
-  }
   public var leftBrace: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBrace(_ leftBrace: RawTokenSyntax, arena: SyntaxArena) -> RawAccessorBlockSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftBrace), arena: arena).as(RawAccessorBlockSyntax.self)!
   }
   public var unexpectedBetweenLeftBraceAndAccessors: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBraceAndAccessors(_ unexpectedBetweenLeftBraceAndAccessors: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorBlockSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftBraceAndAccessors.map(RawSyntax.init), arena: arena).as(RawAccessorBlockSyntax.self)!
-  }
   public var accessors: RawAccessorListSyntax {
     layoutView.children[3].map(RawAccessorListSyntax.init(raw:))!
-  }
-  public func withAccessors(_ accessors: RawAccessorListSyntax, arena: SyntaxArena) -> RawAccessorBlockSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(accessors), arena: arena).as(RawAccessorBlockSyntax.self)!
   }
   public var unexpectedBetweenAccessorsAndRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAccessorsAndRightBrace(_ unexpectedBetweenAccessorsAndRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorBlockSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAccessorsAndRightBrace.map(RawSyntax.init), arena: arena).as(RawAccessorBlockSyntax.self)!
-  }
   public var rightBrace: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightBrace(_ rightBrace: RawTokenSyntax, arena: SyntaxArena) -> RawAccessorBlockSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightBrace), arena: arena).as(RawAccessorBlockSyntax.self)!
-  }
   public var unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightBrace(_ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAccessorBlockSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightBrace.map(RawSyntax.init), arena: arena).as(RawAccessorBlockSyntax.self)!
   }
 }
 
@@ -12355,68 +9871,35 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
   public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePattern(_ unexpectedBeforePattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePattern.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[1].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(pattern), arena: arena).as(RawPatternBindingSyntax.self)!
   }
   public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndTypeAnnotation(_ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPatternAndTypeAnnotation.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
-  }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     layoutView.children[3].map(RawTypeAnnotationSyntax.init(raw:))
-  }
-  public func withTypeAnnotation(_ typeAnnotation: RawTypeAnnotationSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 3, with: typeAnnotation.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
   }
   public var unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAnnotationAndInitializer(_ unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenTypeAnnotationAndInitializer.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
-  }
   public var initializer: RawInitializerClauseSyntax? {
     layoutView.children[5].map(RawInitializerClauseSyntax.init(raw:))
-  }
-  public func withInitializer(_ initializer: RawInitializerClauseSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 5, with: initializer.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
   }
   public var unexpectedBetweenInitializerAndAccessor: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInitializerAndAccessor(_ unexpectedBetweenInitializerAndAccessor: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenInitializerAndAccessor.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
-  }
   public var accessor: RawSyntax? {
     layoutView.children[7]
-  }
-  public func withAccessor(_ accessor: RawSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 7, with: accessor.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
   }
   public var unexpectedBetweenAccessorAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAccessorAndTrailingComma(_ unexpectedBetweenAccessorAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenAccessorAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 9, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPatternBindingSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawPatternBindingSyntax.self)!
   }
 }
 
@@ -12516,56 +9999,29 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawVariableDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawVariableDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawVariableDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawVariableDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndLetOrVarKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndLetOrVarKeyword(_ unexpectedBetweenModifiersAndLetOrVarKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndLetOrVarKeyword.map(RawSyntax.init), arena: arena).as(RawVariableDeclSyntax.self)!
-  }
   public var letOrVarKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLetOrVarKeyword(_ letOrVarKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(letOrVarKeyword), arena: arena).as(RawVariableDeclSyntax.self)!
   }
   public var unexpectedBetweenLetOrVarKeywordAndBindings: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLetOrVarKeywordAndBindings(_ unexpectedBetweenLetOrVarKeywordAndBindings: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLetOrVarKeywordAndBindings.map(RawSyntax.init), arena: arena).as(RawVariableDeclSyntax.self)!
-  }
   public var bindings: RawPatternBindingListSyntax {
     layoutView.children[7].map(RawPatternBindingListSyntax.init(raw:))!
   }
-  public func withBindings(_ bindings: RawPatternBindingListSyntax, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(bindings), arena: arena).as(RawVariableDeclSyntax.self)!
-  }
   public var unexpectedAfterBindings: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBindings(_ unexpectedAfterBindings: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVariableDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterBindings.map(RawSyntax.init), arena: arena).as(RawVariableDeclSyntax.self)!
   }
 }
 
@@ -12624,56 +10080,29 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIdentifier(_ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIdentifier.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(identifier), arena: arena).as(RawEnumCaseElementSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndAssociatedValue: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndAssociatedValue(_ unexpectedBetweenIdentifierAndAssociatedValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenIdentifierAndAssociatedValue.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
-  }
   public var associatedValue: RawParameterClauseSyntax? {
     layoutView.children[3].map(RawParameterClauseSyntax.init(raw:))
-  }
-  public func withAssociatedValue(_ associatedValue: RawParameterClauseSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 3, with: associatedValue.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
   }
   public var unexpectedBetweenAssociatedValueAndRawValue: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAssociatedValueAndRawValue(_ unexpectedBetweenAssociatedValueAndRawValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAssociatedValueAndRawValue.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
-  }
   public var rawValue: RawInitializerClauseSyntax? {
     layoutView.children[5].map(RawInitializerClauseSyntax.init(raw:))
-  }
-  public func withRawValue(_ rawValue: RawInitializerClauseSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 5, with: rawValue.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
   }
   public var unexpectedBetweenRawValueAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRawValueAndTrailingComma(_ unexpectedBetweenRawValueAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenRawValueAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 7, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseElementSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawEnumCaseElementSyntax.self)!
   }
 }
 
@@ -12773,56 +10202,29 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawEnumCaseDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawEnumCaseDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawEnumCaseDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawEnumCaseDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndCaseKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndCaseKeyword(_ unexpectedBetweenModifiersAndCaseKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndCaseKeyword.map(RawSyntax.init), arena: arena).as(RawEnumCaseDeclSyntax.self)!
-  }
   public var caseKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withCaseKeyword(_ caseKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(caseKeyword), arena: arena).as(RawEnumCaseDeclSyntax.self)!
   }
   public var unexpectedBetweenCaseKeywordAndElements: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCaseKeywordAndElements(_ unexpectedBetweenCaseKeywordAndElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenCaseKeywordAndElements.map(RawSyntax.init), arena: arena).as(RawEnumCaseDeclSyntax.self)!
-  }
   public var elements: RawEnumCaseElementListSyntax {
     layoutView.children[7].map(RawEnumCaseElementListSyntax.init(raw:))!
   }
-  public func withElements(_ elements: RawEnumCaseElementListSyntax, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(elements), arena: arena).as(RawEnumCaseDeclSyntax.self)!
-  }
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterElements(_ unexpectedAfterElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCaseDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterElements.map(RawSyntax.init), arena: arena).as(RawEnumCaseDeclSyntax.self)!
   }
 }
 
@@ -12897,104 +10299,53 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndEnumKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndEnumKeyword(_ unexpectedBetweenModifiersAndEnumKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndEnumKeyword.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var enumKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withEnumKeyword(_ enumKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(enumKeyword), arena: arena).as(RawEnumDeclSyntax.self)!
   }
   public var unexpectedBetweenEnumKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEnumKeywordAndIdentifier(_ unexpectedBetweenEnumKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenEnumKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawEnumDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndGenericParameters: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndGenericParameters(_ unexpectedBetweenIdentifierAndGenericParameters: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndGenericParameters.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var genericParameters: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
-  }
-  public func withGenericParameters(_ genericParameters: RawGenericParameterClauseSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: genericParameters.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericParametersAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParametersAndInheritanceClause(_ unexpectedBetweenGenericParametersAndInheritanceClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenGenericParametersAndInheritanceClause.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     layoutView.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
-  }
-  public func withInheritanceClause(_ inheritanceClause: RawTypeInheritanceClauseSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: inheritanceClause.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
   }
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenInheritanceClauseAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenGenericWhereClauseAndMembers.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var members: RawMemberDeclBlockSyntax {
     layoutView.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
   }
-  public func withMembers(_ members: RawMemberDeclBlockSyntax, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 15, with: RawSyntax(members), arena: arena).as(RawEnumDeclSyntax.self)!
-  }
   public var unexpectedAfterMembers: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterMembers(_ unexpectedAfterMembers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumDeclSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterMembers.map(RawSyntax.init), arena: arena).as(RawEnumDeclSyntax.self)!
   }
 }
 
@@ -13057,68 +10408,35 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndOperatorKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndOperatorKeyword(_ unexpectedBetweenModifiersAndOperatorKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndOperatorKeyword.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
-  }
   public var operatorKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withOperatorKeyword(_ operatorKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(operatorKeyword), arena: arena).as(RawOperatorDeclSyntax.self)!
   }
   public var unexpectedBetweenOperatorKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOperatorKeywordAndIdentifier(_ unexpectedBetweenOperatorKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenOperatorKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawOperatorDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes(_ unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
-  }
   public var operatorPrecedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax? {
     layoutView.children[9].map(RawOperatorPrecedenceAndTypesSyntax.init(raw:))
   }
-  public func withOperatorPrecedenceAndTypes(_ operatorPrecedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: operatorPrecedenceAndTypes.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
-  }
   public var unexpectedAfterOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterOperatorPrecedenceAndTypes(_ unexpectedAfterOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterOperatorPrecedenceAndTypes.map(RawSyntax.init), arena: arena).as(RawOperatorDeclSyntax.self)!
   }
 }
 
@@ -13210,32 +10528,17 @@ public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeLeadingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeadingComma(_ unexpectedBeforeLeadingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDesignatedTypeElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeadingComma.map(RawSyntax.init), arena: arena).as(RawDesignatedTypeElementSyntax.self)!
-  }
   public var leadingComma: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeadingComma(_ leadingComma: RawTokenSyntax, arena: SyntaxArena) -> RawDesignatedTypeElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leadingComma), arena: arena).as(RawDesignatedTypeElementSyntax.self)!
   }
   public var unexpectedBetweenLeadingCommaAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeadingCommaAndName(_ unexpectedBetweenLeadingCommaAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDesignatedTypeElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeadingCommaAndName.map(RawSyntax.init), arena: arena).as(RawDesignatedTypeElementSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawDesignatedTypeElementSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(name), arena: arena).as(RawDesignatedTypeElementSyntax.self)!
-  }
   public var unexpectedAfterName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterName(_ unexpectedAfterName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDesignatedTypeElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterName.map(RawSyntax.init), arena: arena).as(RawDesignatedTypeElementSyntax.self)!
   }
 }
 
@@ -13290,44 +10593,23 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol, RawSyn
   public var unexpectedBeforeColon: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeColon(_ unexpectedBeforeColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorPrecedenceAndTypesSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeColon.map(RawSyntax.init), arena: arena).as(RawOperatorPrecedenceAndTypesSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawOperatorPrecedenceAndTypesSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(colon), arena: arena).as(RawOperatorPrecedenceAndTypesSyntax.self)!
   }
   public var unexpectedBetweenColonAndPrecedenceGroup: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndPrecedenceGroup(_ unexpectedBetweenColonAndPrecedenceGroup: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorPrecedenceAndTypesSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenColonAndPrecedenceGroup.map(RawSyntax.init), arena: arena).as(RawOperatorPrecedenceAndTypesSyntax.self)!
-  }
   public var precedenceGroup: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPrecedenceGroup(_ precedenceGroup: RawTokenSyntax, arena: SyntaxArena) -> RawOperatorPrecedenceAndTypesSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(precedenceGroup), arena: arena).as(RawOperatorPrecedenceAndTypesSyntax.self)!
   }
   public var unexpectedBetweenPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPrecedenceGroupAndDesignatedTypes(_ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorPrecedenceAndTypesSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPrecedenceGroupAndDesignatedTypes.map(RawSyntax.init), arena: arena).as(RawOperatorPrecedenceAndTypesSyntax.self)!
-  }
   public var designatedTypes: RawDesignatedTypeListSyntax {
     layoutView.children[5].map(RawDesignatedTypeListSyntax.init(raw:))!
   }
-  public func withDesignatedTypes(_ designatedTypes: RawDesignatedTypeListSyntax, arena: SyntaxArena) -> RawOperatorPrecedenceAndTypesSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(designatedTypes), arena: arena).as(RawOperatorPrecedenceAndTypesSyntax.self)!
-  }
   public var unexpectedAfterDesignatedTypes: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDesignatedTypes(_ unexpectedAfterDesignatedTypes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOperatorPrecedenceAndTypesSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterDesignatedTypes.map(RawSyntax.init), arena: arena).as(RawOperatorPrecedenceAndTypesSyntax.self)!
   }
 }
 
@@ -13398,92 +10680,47 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndModifiers(_ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndModifiers.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var modifiers: RawModifierListSyntax? {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  public func withModifiers(_ modifiers: RawModifierListSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: modifiers.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
   }
   public var unexpectedBetweenModifiersAndPrecedencegroupKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenModifiersAndPrecedencegroupKeyword(_ unexpectedBetweenModifiersAndPrecedencegroupKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenModifiersAndPrecedencegroupKeyword.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var precedencegroupKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPrecedencegroupKeyword(_ precedencegroupKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(precedencegroupKeyword), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
   }
   public var unexpectedBetweenPrecedencegroupKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPrecedencegroupKeywordAndIdentifier(_ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenPrecedencegroupKeywordAndIdentifier.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(identifier), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
   }
   public var unexpectedBetweenIdentifierAndLeftBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIdentifierAndLeftBrace(_ unexpectedBetweenIdentifierAndLeftBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenIdentifierAndLeftBrace.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var leftBrace: RawTokenSyntax {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBrace(_ leftBrace: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(leftBrace), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
   }
   public var unexpectedBetweenLeftBraceAndGroupAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBraceAndGroupAttributes(_ unexpectedBetweenLeftBraceAndGroupAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenLeftBraceAndGroupAttributes.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var groupAttributes: RawPrecedenceGroupAttributeListSyntax {
     layoutView.children[11].map(RawPrecedenceGroupAttributeListSyntax.init(raw:))!
-  }
-  public func withGroupAttributes(_ groupAttributes: RawPrecedenceGroupAttributeListSyntax, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(groupAttributes), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
   }
   public var unexpectedBetweenGroupAttributesAndRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGroupAttributesAndRightBrace(_ unexpectedBetweenGroupAttributesAndRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenGroupAttributesAndRightBrace.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var rightBrace: RawTokenSyntax {
     layoutView.children[13].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightBrace(_ rightBrace: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: RawSyntax(rightBrace), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
-  }
   public var unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightBrace(_ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterRightBrace.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupDeclSyntax.self)!
   }
 }
 
@@ -13613,44 +10850,23 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforeHigherThanOrLowerThan: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeHigherThanOrLowerThan(_ unexpectedBeforeHigherThanOrLowerThan: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupRelationSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeHigherThanOrLowerThan.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupRelationSyntax.self)!
-  }
   public var higherThanOrLowerThan: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withHigherThanOrLowerThan(_ higherThanOrLowerThan: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupRelationSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(higherThanOrLowerThan), arena: arena).as(RawPrecedenceGroupRelationSyntax.self)!
   }
   public var unexpectedBetweenHigherThanOrLowerThanAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenHigherThanOrLowerThanAndColon(_ unexpectedBetweenHigherThanOrLowerThanAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupRelationSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenHigherThanOrLowerThanAndColon.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupRelationSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupRelationSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawPrecedenceGroupRelationSyntax.self)!
   }
   public var unexpectedBetweenColonAndOtherNames: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndOtherNames(_ unexpectedBetweenColonAndOtherNames: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupRelationSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndOtherNames.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupRelationSyntax.self)!
-  }
   public var otherNames: RawPrecedenceGroupNameListSyntax {
     layoutView.children[5].map(RawPrecedenceGroupNameListSyntax.init(raw:))!
   }
-  public func withOtherNames(_ otherNames: RawPrecedenceGroupNameListSyntax, arena: SyntaxArena) -> RawPrecedenceGroupRelationSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(otherNames), arena: arena).as(RawPrecedenceGroupRelationSyntax.self)!
-  }
   public var unexpectedAfterOtherNames: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterOtherNames(_ unexpectedAfterOtherNames: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupRelationSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterOtherNames.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupRelationSyntax.self)!
   }
 }
 
@@ -13742,32 +10958,17 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol, RawSyn
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupNameElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupNameElementSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupNameElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawPrecedenceGroupNameElementSyntax.self)!
   }
   public var unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndTrailingComma(_ unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupNameElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupNameElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupNameElementSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupNameElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupNameElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupNameElementSyntax.self)!
   }
 }
 
@@ -13822,44 +11023,23 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeAssignmentKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAssignmentKeyword(_ unexpectedBeforeAssignmentKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssignmentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAssignmentKeyword.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssignmentSyntax.self)!
-  }
   public var assignmentKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAssignmentKeyword(_ assignmentKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupAssignmentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(assignmentKeyword), arena: arena).as(RawPrecedenceGroupAssignmentSyntax.self)!
   }
   public var unexpectedBetweenAssignmentKeywordAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAssignmentKeywordAndColon(_ unexpectedBetweenAssignmentKeywordAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssignmentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAssignmentKeywordAndColon.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssignmentSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupAssignmentSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawPrecedenceGroupAssignmentSyntax.self)!
   }
   public var unexpectedBetweenColonAndFlag: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndFlag(_ unexpectedBetweenColonAndFlag: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssignmentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndFlag.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssignmentSyntax.self)!
-  }
   public var flag: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withFlag(_ flag: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupAssignmentSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(flag), arena: arena).as(RawPrecedenceGroupAssignmentSyntax.self)!
-  }
   public var unexpectedAfterFlag: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterFlag(_ unexpectedAfterFlag: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssignmentSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterFlag.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssignmentSyntax.self)!
   }
 }
 
@@ -13914,44 +11094,23 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol, RawS
   public var unexpectedBeforeAssociativityKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAssociativityKeyword(_ unexpectedBeforeAssociativityKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAssociativityKeyword.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
-  }
   public var associativityKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAssociativityKeyword(_ associativityKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(associativityKeyword), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
   }
   public var unexpectedBetweenAssociativityKeywordAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAssociativityKeywordAndColon(_ unexpectedBetweenAssociativityKeywordAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAssociativityKeywordAndColon.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
   }
   public var unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndValue(_ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndValue.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
-  }
   public var value: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withValue(_ value: RawTokenSyntax, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(value), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
-  }
   public var unexpectedAfterValue: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterValue(_ unexpectedAfterValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrecedenceGroupAssociativitySyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterValue.map(RawSyntax.init), arena: arena).as(RawPrecedenceGroupAssociativitySyntax.self)!
   }
 }
 
@@ -14022,92 +11181,47 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforePoundToken: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundToken(_ unexpectedBeforePoundToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundToken.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var poundToken: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundToken(_ poundToken: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundToken), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
   public var unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundTokenAndMacro(_ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundTokenAndMacro.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var macro: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withMacro(_ macro: RawTokenSyntax, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(macro), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
   public var unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMacroAndLeftParen(_ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenMacroAndLeftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 5, with: leftParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArgumentList(_ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftParenAndArgumentList.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var argumentList: RawTupleExprElementListSyntax {
     layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
-  }
-  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(argumentList), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
   public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentListAndRightParen(_ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenArgumentListAndRightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 9, with: rightParen.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
   public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRightParenAndTrailingClosure(_ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenRightParenAndTrailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var trailingClosure: RawClosureExprSyntax? {
     layoutView.children[11].map(RawClosureExprSyntax.init(raw:))
-  }
-  public func withTrailingClosure(_ trailingClosure: RawClosureExprSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 11, with: trailingClosure.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
     layoutView.children[13].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
   }
-  public func withAdditionalTrailingClosures(_ additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 13, with: additionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
-  }
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAdditionalTrailingClosures(_ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMacroExpansionDeclSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterAdditionalTrailingClosures.map(RawSyntax.init), arena: arena).as(RawMacroExpansionDeclSyntax.self)!
   }
 }
 
@@ -14252,68 +11366,35 @@ public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAtSignToken(_ unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAtSignToken.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
-  }
   public var atSignToken: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAtSignToken(_ atSignToken: RawTokenSyntax, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(atSignToken), arena: arena).as(RawCustomAttributeSyntax.self)!
   }
   public var unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAtSignTokenAndAttributeName(_ unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAtSignTokenAndAttributeName.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
-  }
   public var attributeName: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withAttributeName(_ attributeName: RawTypeSyntax, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(attributeName), arena: arena).as(RawCustomAttributeSyntax.self)!
   }
   public var unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributeNameAndLeftParen(_ unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAttributeNameAndLeftParen.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 5, with: leftParen.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArgumentList(_ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftParenAndArgumentList.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
-  }
   public var argumentList: RawTupleExprElementListSyntax? {
     layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))
-  }
-  public func withArgumentList(_ argumentList: RawTupleExprElementListSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 7, with: argumentList.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
   }
   public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentListAndRightParen(_ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenArgumentListAndRightParen.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 9, with: rightParen.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCustomAttributeSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawCustomAttributeSyntax.self)!
   }
 }
 
@@ -14480,80 +11561,41 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAtSignToken(_ unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAtSignToken.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
-  }
   public var atSignToken: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAtSignToken(_ atSignToken: RawTokenSyntax, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(atSignToken), arena: arena).as(RawAttributeSyntax.self)!
   }
   public var unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAtSignTokenAndAttributeName(_ unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAtSignTokenAndAttributeName.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
-  }
   public var attributeName: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAttributeName(_ attributeName: RawTokenSyntax, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(attributeName), arena: arena).as(RawAttributeSyntax.self)!
   }
   public var unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributeNameAndLeftParen(_ unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAttributeNameAndLeftParen.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 5, with: leftParen.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArgument: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArgument(_ unexpectedBetweenLeftParenAndArgument: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftParenAndArgument.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
-  }
   public var argument: RawSyntax? {
     layoutView.children[7]
-  }
-  public func withArgument(_ argument: RawSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 7, with: argument.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
   }
   public var unexpectedBetweenArgumentAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentAndRightParen(_ unexpectedBetweenArgumentAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenArgumentAndRightParen.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 9, with: rightParen.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
   }
   public var unexpectedBetweenRightParenAndTokenList: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRightParenAndTokenList(_ unexpectedBetweenRightParenAndTokenList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenRightParenAndTokenList.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
-  }
   public var tokenList: RawTokenListSyntax? {
     layoutView.children[11].map(RawTokenListSyntax.init(raw:))
   }
-  public func withTokenList(_ tokenList: RawTokenListSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 11, with: tokenList.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
-  }
   public var unexpectedAfterTokenList: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTokenList(_ unexpectedAfterTokenList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributeSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedAfterTokenList.map(RawSyntax.init), arena: arena).as(RawAttributeSyntax.self)!
   }
 }
 
@@ -14768,56 +11810,29 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabel(_ unexpectedBeforeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabel.map(RawSyntax.init), arena: arena).as(RawAvailabilityEntrySyntax.self)!
-  }
   public var label: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLabel(_ label: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(label), arena: arena).as(RawAvailabilityEntrySyntax.self)!
   }
   public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelAndColon(_ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelAndColon.map(RawSyntax.init), arena: arena).as(RawAvailabilityEntrySyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawAvailabilityEntrySyntax.self)!
   }
   public var unexpectedBetweenColonAndAvailabilityList: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndAvailabilityList(_ unexpectedBetweenColonAndAvailabilityList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndAvailabilityList.map(RawSyntax.init), arena: arena).as(RawAvailabilityEntrySyntax.self)!
-  }
   public var availabilityList: RawAvailabilitySpecListSyntax {
     layoutView.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
-  }
-  public func withAvailabilityList(_ availabilityList: RawAvailabilitySpecListSyntax, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(availabilityList), arena: arena).as(RawAvailabilityEntrySyntax.self)!
   }
   public var unexpectedBetweenAvailabilityListAndSemicolon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAvailabilityListAndSemicolon(_ unexpectedBetweenAvailabilityListAndSemicolon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenAvailabilityListAndSemicolon.map(RawSyntax.init), arena: arena).as(RawAvailabilityEntrySyntax.self)!
-  }
   public var semicolon: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withSemicolon(_ semicolon: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(semicolon), arena: arena).as(RawAvailabilityEntrySyntax.self)!
-  }
   public var unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterSemicolon(_ unexpectedAfterSemicolon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityEntrySyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterSemicolon.map(RawSyntax.init), arena: arena).as(RawAvailabilityEntrySyntax.self)!
   }
 }
 
@@ -14876,56 +11891,29 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabel(_ unexpectedBeforeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabel.map(RawSyntax.init), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
-  }
   public var label: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLabel(_ label: RawTokenSyntax, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(label), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
   }
   public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelAndColon(_ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelAndColon.map(RawSyntax.init), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
   }
   public var unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndValue(_ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndValue.map(RawSyntax.init), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
-  }
   public var value: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withValue(_ value: RawTokenSyntax, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(value), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
   }
   public var unexpectedBetweenValueAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenValueAndTrailingComma(_ unexpectedBetweenValueAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenValueAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 7, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledSpecializeEntrySyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawLabeledSpecializeEntrySyntax.self)!
   }
 }
 
@@ -14984,56 +11972,29 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabel(_ unexpectedBeforeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabel.map(RawSyntax.init), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
-  }
   public var label: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLabel(_ label: RawTokenSyntax, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(label), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
   }
   public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelAndColon(_ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelAndColon.map(RawSyntax.init), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
   }
   public var unexpectedBetweenColonAndDeclname: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndDeclname(_ unexpectedBetweenColonAndDeclname: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndDeclname.map(RawSyntax.init), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
-  }
   public var declname: RawDeclNameSyntax {
     layoutView.children[5].map(RawDeclNameSyntax.init(raw:))!
-  }
-  public func withDeclname(_ declname: RawDeclNameSyntax, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(declname), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
   }
   public var unexpectedBetweenDeclnameAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDeclnameAndTrailingComma(_ unexpectedBetweenDeclnameAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenDeclnameAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 7, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTargetFunctionEntrySyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawTargetFunctionEntrySyntax.self)!
   }
 }
 
@@ -15116,44 +12077,23 @@ public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawS
   public var unexpectedBeforeNameTok: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeNameTok(_ unexpectedBeforeNameTok: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNamedAttributeStringArgumentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeNameTok.map(RawSyntax.init), arena: arena).as(RawNamedAttributeStringArgumentSyntax.self)!
-  }
   public var nameTok: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withNameTok(_ nameTok: RawTokenSyntax, arena: SyntaxArena) -> RawNamedAttributeStringArgumentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(nameTok), arena: arena).as(RawNamedAttributeStringArgumentSyntax.self)!
   }
   public var unexpectedBetweenNameTokAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameTokAndColon(_ unexpectedBetweenNameTokAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNamedAttributeStringArgumentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameTokAndColon.map(RawSyntax.init), arena: arena).as(RawNamedAttributeStringArgumentSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawNamedAttributeStringArgumentSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawNamedAttributeStringArgumentSyntax.self)!
   }
   public var unexpectedBetweenColonAndStringOrDeclname: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndStringOrDeclname(_ unexpectedBetweenColonAndStringOrDeclname: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNamedAttributeStringArgumentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndStringOrDeclname.map(RawSyntax.init), arena: arena).as(RawNamedAttributeStringArgumentSyntax.self)!
-  }
   public var stringOrDeclname: RawSyntax {
     layoutView.children[5]!
   }
-  public func withStringOrDeclname(_ stringOrDeclname: RawSyntax, arena: SyntaxArena) -> RawNamedAttributeStringArgumentSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(stringOrDeclname), arena: arena).as(RawNamedAttributeStringArgumentSyntax.self)!
-  }
   public var unexpectedAfterStringOrDeclname: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterStringOrDeclname(_ unexpectedAfterStringOrDeclname: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNamedAttributeStringArgumentSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterStringOrDeclname.map(RawSyntax.init), arena: arena).as(RawNamedAttributeStringArgumentSyntax.self)!
   }
 }
 
@@ -15204,32 +12144,17 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeDeclBaseName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDeclBaseName(_ unexpectedBeforeDeclBaseName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDeclBaseName.map(RawSyntax.init), arena: arena).as(RawDeclNameSyntax.self)!
-  }
   public var declBaseName: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDeclBaseName(_ declBaseName: RawTokenSyntax, arena: SyntaxArena) -> RawDeclNameSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(declBaseName), arena: arena).as(RawDeclNameSyntax.self)!
   }
   public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDeclBaseNameAndDeclNameArguments(_ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawDeclNameSyntax.self)!
-  }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     layoutView.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
   }
-  public func withDeclNameArguments(_ declNameArguments: RawDeclNameArgumentsSyntax?, arena: SyntaxArena) -> RawDeclNameSyntax {
-    return layoutView.replacingChild(at: 3, with: declNameArguments.map(RawSyntax.init), arena: arena).as(RawDeclNameSyntax.self)!
-  }
   public var unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDeclNameArguments(_ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclNameSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawDeclNameSyntax.self)!
   }
 }
 
@@ -15288,56 +12213,29 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawS
   public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeType(_ unexpectedBeforeType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeType.map(RawSyntax.init), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
-  }
   public var type: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withType(_ type: RawTypeSyntax, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(type), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAndComma(_ unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenTypeAndComma.map(RawSyntax.init), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
-  }
   public var comma: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withComma(_ comma: RawTokenSyntax, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(comma), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCommaAndDeclBaseName(_ unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenCommaAndDeclBaseName.map(RawSyntax.init), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
-  }
   public var declBaseName: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDeclBaseName(_ declBaseName: RawTokenSyntax, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(declBaseName), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDeclBaseNameAndDeclNameArguments(_ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
-  }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     layoutView.children[7].map(RawDeclNameArgumentsSyntax.init(raw:))
   }
-  public func withDeclNameArguments(_ declNameArguments: RawDeclNameArgumentsSyntax?, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 7, with: declNameArguments.map(RawSyntax.init), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
-  }
   public var unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDeclNameArguments(_ unexpectedAfterDeclNameArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplementsAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterDeclNameArguments.map(RawSyntax.init), arena: arena).as(RawImplementsAttributeArgumentsSyntax.self)!
   }
 }
 
@@ -15388,32 +12286,17 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjCSelectorPieceSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawObjCSelectorPieceSyntax.self)!
-  }
   public var name: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withName(_ name: RawTokenSyntax?, arena: SyntaxArena) -> RawObjCSelectorPieceSyntax {
-    return layoutView.replacingChild(at: 1, with: name.map(RawSyntax.init), arena: arena).as(RawObjCSelectorPieceSyntax.self)!
   }
   public var unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndColon(_ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjCSelectorPieceSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndColon.map(RawSyntax.init), arena: arena).as(RawObjCSelectorPieceSyntax.self)!
-  }
   public var colon: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawObjCSelectorPieceSyntax {
-    return layoutView.replacingChild(at: 3, with: colon.map(RawSyntax.init), arena: arena).as(RawObjCSelectorPieceSyntax.self)!
-  }
   public var unexpectedAfterColon: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterColon(_ unexpectedAfterColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawObjCSelectorPieceSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterColon.map(RawSyntax.init), arena: arena).as(RawObjCSelectorPieceSyntax.self)!
   }
 }
 
@@ -15517,68 +12400,35 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol, 
   public var unexpectedBeforeDiffKind: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDiffKind(_ unexpectedBeforeDiffKind: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDiffKind.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
-  }
   public var diffKind: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withDiffKind(_ diffKind: RawTokenSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 1, with: diffKind.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenDiffKindAndDiffKindComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDiffKindAndDiffKindComma(_ unexpectedBetweenDiffKindAndDiffKindComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenDiffKindAndDiffKindComma.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
-  }
   public var diffKindComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withDiffKindComma(_ diffKindComma: RawTokenSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 3, with: diffKindComma.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenDiffKindCommaAndDiffParams: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDiffKindCommaAndDiffParams(_ unexpectedBetweenDiffKindCommaAndDiffParams: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenDiffKindCommaAndDiffParams.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
-  }
   public var diffParams: RawDifferentiabilityParamsClauseSyntax? {
     layoutView.children[5].map(RawDifferentiabilityParamsClauseSyntax.init(raw:))
-  }
-  public func withDiffParams(_ diffParams: RawDifferentiabilityParamsClauseSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 5, with: diffParams.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenDiffParamsAndDiffParamsComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDiffParamsAndDiffParamsComma(_ unexpectedBetweenDiffParamsAndDiffParamsComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenDiffParamsAndDiffParamsComma.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
-  }
   public var diffParamsComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withDiffParamsComma(_ diffParamsComma: RawTokenSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 7, with: diffParamsComma.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenDiffParamsCommaAndWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDiffParamsCommaAndWhereClause(_ unexpectedBetweenDiffParamsCommaAndWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenDiffParamsCommaAndWhereClause.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
-  }
   public var whereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[9].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public func withWhereClause(_ whereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 9, with: whereClause.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
-  }
   public var unexpectedAfterWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterWhereClause(_ unexpectedAfterWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiableAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterWhereClause.map(RawSyntax.init), arena: arena).as(RawDifferentiableAttributeArgumentsSyntax.self)!
   }
 }
 
@@ -15661,44 +12511,23 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, Raw
   public var unexpectedBeforeWrtLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWrtLabel(_ unexpectedBeforeWrtLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWrtLabel.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsClauseSyntax.self)!
-  }
   public var wrtLabel: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withWrtLabel(_ wrtLabel: RawTokenSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamsClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(wrtLabel), arena: arena).as(RawDifferentiabilityParamsClauseSyntax.self)!
   }
   public var unexpectedBetweenWrtLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWrtLabelAndColon(_ unexpectedBetweenWrtLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWrtLabelAndColon.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsClauseSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamsClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawDifferentiabilityParamsClauseSyntax.self)!
   }
   public var unexpectedBetweenColonAndParameters: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndParameters(_ unexpectedBetweenColonAndParameters: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndParameters.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsClauseSyntax.self)!
-  }
   public var parameters: RawSyntax {
     layoutView.children[5]!
   }
-  public func withParameters(_ parameters: RawSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamsClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(parameters), arena: arena).as(RawDifferentiabilityParamsClauseSyntax.self)!
-  }
   public var unexpectedAfterParameters: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterParameters(_ unexpectedAfterParameters: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsClauseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterParameters.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsClauseSyntax.self)!
   }
 }
 
@@ -15753,44 +12582,23 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawDifferentiabilityParamsSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndDiffParams: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndDiffParams(_ unexpectedBetweenLeftParenAndDiffParams: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndDiffParams.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsSyntax.self)!
-  }
   public var diffParams: RawDifferentiabilityParamListSyntax {
     layoutView.children[3].map(RawDifferentiabilityParamListSyntax.init(raw:))!
-  }
-  public func withDiffParams(_ diffParams: RawDifferentiabilityParamListSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamsSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(diffParams), arena: arena).as(RawDifferentiabilityParamsSyntax.self)!
   }
   public var unexpectedBetweenDiffParamsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDiffParamsAndRightParen(_ unexpectedBetweenDiffParamsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenDiffParamsAndRightParen.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamsSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawDifferentiabilityParamsSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamsSyntax.self)!
   }
 }
 
@@ -15882,32 +12690,17 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeParameter: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeParameter(_ unexpectedBeforeParameter: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeParameter.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamSyntax.self)!
-  }
   public var parameter: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withParameter(_ parameter: RawTokenSyntax, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(parameter), arena: arena).as(RawDifferentiabilityParamSyntax.self)!
   }
   public var unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenParameterAndTrailingComma(_ unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenParameterAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDifferentiabilityParamSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawDifferentiabilityParamSyntax.self)!
   }
 }
 
@@ -15978,92 +12771,47 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
   public var unexpectedBeforeOfLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeOfLabel(_ unexpectedBeforeOfLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeOfLabel.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var ofLabel: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withOfLabel(_ ofLabel: RawTokenSyntax, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(ofLabel), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenOfLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOfLabelAndColon(_ unexpectedBetweenOfLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenOfLabelAndColon.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenColonAndOriginalDeclName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndOriginalDeclName(_ unexpectedBetweenColonAndOriginalDeclName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndOriginalDeclName.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var originalDeclName: RawQualifiedDeclNameSyntax {
     layoutView.children[5].map(RawQualifiedDeclNameSyntax.init(raw:))!
-  }
-  public func withOriginalDeclName(_ originalDeclName: RawQualifiedDeclNameSyntax, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(originalDeclName), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenOriginalDeclNameAndPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenOriginalDeclNameAndPeriod(_ unexpectedBetweenOriginalDeclNameAndPeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenOriginalDeclNameAndPeriod.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var period: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withPeriod(_ period: RawTokenSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 7, with: period.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenPeriodAndAccessorKind: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPeriodAndAccessorKind(_ unexpectedBetweenPeriodAndAccessorKind: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenPeriodAndAccessorKind.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var accessorKind: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAccessorKind(_ accessorKind: RawTokenSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 9, with: accessorKind.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenAccessorKindAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAccessorKindAndComma(_ unexpectedBetweenAccessorKindAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenAccessorKindAndComma.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var comma: RawTokenSyntax? {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
-  }
-  public func withComma(_ comma: RawTokenSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 11, with: comma.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenCommaAndDiffParams: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCommaAndDiffParams(_ unexpectedBetweenCommaAndDiffParams: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenCommaAndDiffParams.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var diffParams: RawDifferentiabilityParamsClauseSyntax? {
     layoutView.children[13].map(RawDifferentiabilityParamsClauseSyntax.init(raw:))
   }
-  public func withDiffParams(_ diffParams: RawDifferentiabilityParamsClauseSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 13, with: diffParams.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
-  }
   public var unexpectedAfterDiffParams: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDiffParams(_ unexpectedAfterDiffParams: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDerivativeRegistrationAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterDiffParams.map(RawSyntax.init), arena: arena).as(RawDerivativeRegistrationAttributeArgumentsSyntax.self)!
   }
 }
 
@@ -16122,56 +12870,29 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBaseType(_ unexpectedBeforeBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBaseType.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
-  }
   public var baseType: RawTypeSyntax? {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))
-  }
-  public func withBaseType(_ baseType: RawTypeSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 1, with: baseType.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
   }
   public var unexpectedBetweenBaseTypeAndDot: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBaseTypeAndDot(_ unexpectedBetweenBaseTypeAndDot: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBaseTypeAndDot.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
-  }
   public var dot: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withDot(_ dot: RawTokenSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 3, with: dot.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
   }
   public var unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDotAndName(_ unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenDotAndName.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(name), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
   }
   public var unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndArguments(_ unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenNameAndArguments.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
-  }
   public var arguments: RawDeclNameArgumentsSyntax? {
     layoutView.children[7].map(RawDeclNameArgumentsSyntax.init(raw:))
   }
-  public func withArguments(_ arguments: RawDeclNameArgumentsSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 7, with: arguments.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
-  }
   public var unexpectedAfterArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterArguments(_ unexpectedAfterArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawQualifiedDeclNameSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterArguments.map(RawSyntax.init), arena: arena).as(RawQualifiedDeclNameSyntax.self)!
   }
 }
 
@@ -16222,32 +12943,17 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawFunctionDeclNameSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawFunctionDeclNameSyntax.self)!
   }
   public var unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndArguments(_ unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndArguments.map(RawSyntax.init), arena: arena).as(RawFunctionDeclNameSyntax.self)!
-  }
   public var arguments: RawDeclNameArgumentsSyntax? {
     layoutView.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
   }
-  public func withArguments(_ arguments: RawDeclNameArgumentsSyntax?, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
-    return layoutView.replacingChild(at: 3, with: arguments.map(RawSyntax.init), arena: arena).as(RawFunctionDeclNameSyntax.self)!
-  }
   public var unexpectedAfterArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterArguments(_ unexpectedAfterArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionDeclNameSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterArguments.map(RawSyntax.init), arena: arena).as(RawFunctionDeclNameSyntax.self)!
   }
 }
 
@@ -16302,44 +13008,23 @@ public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSy
   public var unexpectedBeforeBeforeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBeforeLabel(_ unexpectedBeforeBeforeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBackDeployAttributeSpecListSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBeforeLabel.map(RawSyntax.init), arena: arena).as(RawBackDeployAttributeSpecListSyntax.self)!
-  }
   public var beforeLabel: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withBeforeLabel(_ beforeLabel: RawTokenSyntax, arena: SyntaxArena) -> RawBackDeployAttributeSpecListSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(beforeLabel), arena: arena).as(RawBackDeployAttributeSpecListSyntax.self)!
   }
   public var unexpectedBetweenBeforeLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBeforeLabelAndColon(_ unexpectedBetweenBeforeLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBackDeployAttributeSpecListSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBeforeLabelAndColon.map(RawSyntax.init), arena: arena).as(RawBackDeployAttributeSpecListSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawBackDeployAttributeSpecListSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawBackDeployAttributeSpecListSyntax.self)!
   }
   public var unexpectedBetweenColonAndVersionList: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndVersionList(_ unexpectedBetweenColonAndVersionList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBackDeployAttributeSpecListSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndVersionList.map(RawSyntax.init), arena: arena).as(RawBackDeployAttributeSpecListSyntax.self)!
-  }
   public var versionList: RawBackDeployVersionListSyntax {
     layoutView.children[5].map(RawBackDeployVersionListSyntax.init(raw:))!
   }
-  public func withVersionList(_ versionList: RawBackDeployVersionListSyntax, arena: SyntaxArena) -> RawBackDeployAttributeSpecListSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(versionList), arena: arena).as(RawBackDeployAttributeSpecListSyntax.self)!
-  }
   public var unexpectedAfterVersionList: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterVersionList(_ unexpectedAfterVersionList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBackDeployAttributeSpecListSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterVersionList.map(RawSyntax.init), arena: arena).as(RawBackDeployAttributeSpecListSyntax.self)!
   }
 }
 
@@ -16431,32 +13116,17 @@ public struct RawBackDeployVersionArgumentSyntax: RawSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeAvailabilityVersionRestriction: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAvailabilityVersionRestriction(_ unexpectedBeforeAvailabilityVersionRestriction: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBackDeployVersionArgumentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAvailabilityVersionRestriction.map(RawSyntax.init), arena: arena).as(RawBackDeployVersionArgumentSyntax.self)!
-  }
   public var availabilityVersionRestriction: RawAvailabilityVersionRestrictionSyntax {
     layoutView.children[1].map(RawAvailabilityVersionRestrictionSyntax.init(raw:))!
-  }
-  public func withAvailabilityVersionRestriction(_ availabilityVersionRestriction: RawAvailabilityVersionRestrictionSyntax, arena: SyntaxArena) -> RawBackDeployVersionArgumentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(availabilityVersionRestriction), arena: arena).as(RawBackDeployVersionArgumentSyntax.self)!
   }
   public var unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma(_ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBackDeployVersionArgumentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawBackDeployVersionArgumentSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawBackDeployVersionArgumentSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawBackDeployVersionArgumentSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBackDeployVersionArgumentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawBackDeployVersionArgumentSyntax.self)!
   }
 }
 
@@ -16511,44 +13181,23 @@ public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtoc
   public var unexpectedBeforeMangledName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeMangledName(_ unexpectedBeforeMangledName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeMangledName.map(RawSyntax.init), arena: arena).as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
-  }
   public var mangledName: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withMangledName(_ mangledName: RawTokenSyntax, arena: SyntaxArena) -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(mangledName), arena: arena).as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenMangledNameAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMangledNameAndComma(_ unexpectedBetweenMangledNameAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenMangledNameAndComma.map(RawSyntax.init), arena: arena).as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
-  }
   public var comma: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withComma(_ comma: RawTokenSyntax, arena: SyntaxArena) -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(comma), arena: arena).as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenCommaAndOrdinal: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCommaAndOrdinal(_ unexpectedBetweenCommaAndOrdinal: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenCommaAndOrdinal.map(RawSyntax.init), arena: arena).as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
-  }
   public var ordinal: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withOrdinal(_ ordinal: RawTokenSyntax, arena: SyntaxArena) -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(ordinal), arena: arena).as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
-  }
   public var unexpectedAfterOrdinal: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterOrdinal(_ unexpectedAfterOrdinal: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterOrdinal.map(RawSyntax.init), arena: arena).as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
   }
 }
 
@@ -16611,68 +13260,35 @@ public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawS
   public var unexpectedBeforeConventionLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeConventionLabel(_ unexpectedBeforeConventionLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeConventionLabel.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
-  }
   public var conventionLabel: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withConventionLabel(_ conventionLabel: RawTokenSyntax, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(conventionLabel), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenConventionLabelAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConventionLabelAndComma(_ unexpectedBetweenConventionLabelAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenConventionLabelAndComma.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
-  }
   public var comma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withComma(_ comma: RawTokenSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 3, with: comma.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenCommaAndCTypeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCommaAndCTypeLabel(_ unexpectedBetweenCommaAndCTypeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenCommaAndCTypeLabel.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
-  }
   public var cTypeLabel: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withCTypeLabel(_ cTypeLabel: RawTokenSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 5, with: cTypeLabel.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenCTypeLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCTypeLabelAndColon(_ unexpectedBetweenCTypeLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenCTypeLabelAndColon.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
-  }
   public var colon: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 7, with: colon.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenColonAndCTypeString: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndCTypeString(_ unexpectedBetweenColonAndCTypeString: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenColonAndCTypeString.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
-  }
   public var cTypeString: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public func withCTypeString(_ cTypeString: RawTokenSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 9, with: cTypeString.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
-  }
   public var unexpectedAfterCTypeString: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterCTypeString(_ unexpectedAfterCTypeString: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterCTypeString.map(RawSyntax.init), arena: arena).as(RawConventionAttributeArgumentsSyntax.self)!
   }
 }
 
@@ -16727,44 +13343,23 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
   public var unexpectedBeforeWitnessMethodLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWitnessMethodLabel(_ unexpectedBeforeWitnessMethodLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionWitnessMethodAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWitnessMethodLabel.map(RawSyntax.init), arena: arena).as(RawConventionWitnessMethodAttributeArgumentsSyntax.self)!
-  }
   public var witnessMethodLabel: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withWitnessMethodLabel(_ witnessMethodLabel: RawTokenSyntax, arena: SyntaxArena) -> RawConventionWitnessMethodAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(witnessMethodLabel), arena: arena).as(RawConventionWitnessMethodAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenWitnessMethodLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWitnessMethodLabelAndColon(_ unexpectedBetweenWitnessMethodLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionWitnessMethodAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWitnessMethodLabelAndColon.map(RawSyntax.init), arena: arena).as(RawConventionWitnessMethodAttributeArgumentsSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawConventionWitnessMethodAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawConventionWitnessMethodAttributeArgumentsSyntax.self)!
   }
   public var unexpectedBetweenColonAndProtocolName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndProtocolName(_ unexpectedBetweenColonAndProtocolName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionWitnessMethodAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndProtocolName.map(RawSyntax.init), arena: arena).as(RawConventionWitnessMethodAttributeArgumentsSyntax.self)!
-  }
   public var protocolName: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withProtocolName(_ protocolName: RawTokenSyntax, arena: SyntaxArena) -> RawConventionWitnessMethodAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(protocolName), arena: arena).as(RawConventionWitnessMethodAttributeArgumentsSyntax.self)!
-  }
   public var unexpectedAfterProtocolName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterProtocolName(_ unexpectedAfterProtocolName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConventionWitnessMethodAttributeArgumentsSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterProtocolName.map(RawSyntax.init), arena: arena).as(RawConventionWitnessMethodAttributeArgumentsSyntax.self)!
   }
 }
 
@@ -16819,44 +13414,23 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeLabelName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabelName(_ unexpectedBeforeLabelName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabelName.map(RawSyntax.init), arena: arena).as(RawLabeledStmtSyntax.self)!
-  }
   public var labelName: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLabelName(_ labelName: RawTokenSyntax, arena: SyntaxArena) -> RawLabeledStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(labelName), arena: arena).as(RawLabeledStmtSyntax.self)!
   }
   public var unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelNameAndLabelColon(_ unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelNameAndLabelColon.map(RawSyntax.init), arena: arena).as(RawLabeledStmtSyntax.self)!
-  }
   public var labelColon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLabelColon(_ labelColon: RawTokenSyntax, arena: SyntaxArena) -> RawLabeledStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(labelColon), arena: arena).as(RawLabeledStmtSyntax.self)!
   }
   public var unexpectedBetweenLabelColonAndStatement: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelColonAndStatement(_ unexpectedBetweenLabelColonAndStatement: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLabelColonAndStatement.map(RawSyntax.init), arena: arena).as(RawLabeledStmtSyntax.self)!
-  }
   public var statement: RawStmtSyntax {
     layoutView.children[5].map(RawStmtSyntax.init(raw:))!
   }
-  public func withStatement(_ statement: RawStmtSyntax, arena: SyntaxArena) -> RawLabeledStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(statement), arena: arena).as(RawLabeledStmtSyntax.self)!
-  }
   public var unexpectedAfterStatement: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterStatement(_ unexpectedAfterStatement: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLabeledStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterStatement.map(RawSyntax.init), arena: arena).as(RawLabeledStmtSyntax.self)!
   }
 }
 
@@ -16907,32 +13481,17 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeContinueKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeContinueKeyword(_ unexpectedBeforeContinueKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawContinueStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeContinueKeyword.map(RawSyntax.init), arena: arena).as(RawContinueStmtSyntax.self)!
-  }
   public var continueKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withContinueKeyword(_ continueKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawContinueStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(continueKeyword), arena: arena).as(RawContinueStmtSyntax.self)!
   }
   public var unexpectedBetweenContinueKeywordAndLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenContinueKeywordAndLabel(_ unexpectedBetweenContinueKeywordAndLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawContinueStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenContinueKeywordAndLabel.map(RawSyntax.init), arena: arena).as(RawContinueStmtSyntax.self)!
-  }
   public var label: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withLabel(_ label: RawTokenSyntax?, arena: SyntaxArena) -> RawContinueStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: label.map(RawSyntax.init), arena: arena).as(RawContinueStmtSyntax.self)!
-  }
   public var unexpectedAfterLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterLabel(_ unexpectedAfterLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawContinueStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterLabel.map(RawSyntax.init), arena: arena).as(RawContinueStmtSyntax.self)!
   }
 }
 
@@ -16987,44 +13546,23 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeWhileKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWhileKeyword(_ unexpectedBeforeWhileKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWhileStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWhileKeyword.map(RawSyntax.init), arena: arena).as(RawWhileStmtSyntax.self)!
-  }
   public var whileKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withWhileKeyword(_ whileKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawWhileStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(whileKeyword), arena: arena).as(RawWhileStmtSyntax.self)!
   }
   public var unexpectedBetweenWhileKeywordAndConditions: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWhileKeywordAndConditions(_ unexpectedBetweenWhileKeywordAndConditions: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWhileStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWhileKeywordAndConditions.map(RawSyntax.init), arena: arena).as(RawWhileStmtSyntax.self)!
-  }
   public var conditions: RawConditionElementListSyntax {
     layoutView.children[3].map(RawConditionElementListSyntax.init(raw:))!
-  }
-  public func withConditions(_ conditions: RawConditionElementListSyntax, arena: SyntaxArena) -> RawWhileStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(conditions), arena: arena).as(RawWhileStmtSyntax.self)!
   }
   public var unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConditionsAndBody(_ unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWhileStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenConditionsAndBody.map(RawSyntax.init), arena: arena).as(RawWhileStmtSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[5].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawWhileStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(body), arena: arena).as(RawWhileStmtSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWhileStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawWhileStmtSyntax.self)!
   }
 }
 
@@ -17075,32 +13613,17 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeDeferKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDeferKeyword(_ unexpectedBeforeDeferKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeferStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDeferKeyword.map(RawSyntax.init), arena: arena).as(RawDeferStmtSyntax.self)!
-  }
   public var deferKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDeferKeyword(_ deferKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawDeferStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(deferKeyword), arena: arena).as(RawDeferStmtSyntax.self)!
   }
   public var unexpectedBetweenDeferKeywordAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDeferKeywordAndBody(_ unexpectedBetweenDeferKeywordAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeferStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenDeferKeywordAndBody.map(RawSyntax.init), arena: arena).as(RawDeferStmtSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[3].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawDeferStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(body), arena: arena).as(RawDeferStmtSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeferStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawDeferStmtSyntax.self)!
   }
 }
 
@@ -17147,20 +13670,11 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawExpressionStmtSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawExpressionStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawExpressionStmtSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawExpressionStmtSyntax.self)!
   }
 }
 
@@ -17288,56 +13802,29 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeRepeatKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeRepeatKeyword(_ unexpectedBeforeRepeatKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeRepeatKeyword.map(RawSyntax.init), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
-  }
   public var repeatKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withRepeatKeyword(_ repeatKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(repeatKeyword), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
   }
   public var unexpectedBetweenRepeatKeywordAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRepeatKeywordAndBody(_ unexpectedBetweenRepeatKeywordAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenRepeatKeywordAndBody.map(RawSyntax.init), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[3].map(RawCodeBlockSyntax.init(raw:))!
-  }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(body), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
   }
   public var unexpectedBetweenBodyAndWhileKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBodyAndWhileKeyword(_ unexpectedBetweenBodyAndWhileKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenBodyAndWhileKeyword.map(RawSyntax.init), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
-  }
   public var whileKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withWhileKeyword(_ whileKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(whileKeyword), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
   }
   public var unexpectedBetweenWhileKeywordAndCondition: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWhileKeywordAndCondition(_ unexpectedBetweenWhileKeywordAndCondition: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenWhileKeywordAndCondition.map(RawSyntax.init), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
-  }
   public var condition: RawExprSyntax {
     layoutView.children[7].map(RawExprSyntax.init(raw:))!
   }
-  public func withCondition(_ condition: RawExprSyntax, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(condition), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
-  }
   public var unexpectedAfterCondition: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterCondition(_ unexpectedAfterCondition: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawRepeatWhileStmtSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterCondition.map(RawSyntax.init), arena: arena).as(RawRepeatWhileStmtSyntax.self)!
   }
 }
 
@@ -17396,56 +13883,29 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeGuardKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeGuardKeyword(_ unexpectedBeforeGuardKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeGuardKeyword.map(RawSyntax.init), arena: arena).as(RawGuardStmtSyntax.self)!
-  }
   public var guardKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withGuardKeyword(_ guardKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(guardKeyword), arena: arena).as(RawGuardStmtSyntax.self)!
   }
   public var unexpectedBetweenGuardKeywordAndConditions: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGuardKeywordAndConditions(_ unexpectedBetweenGuardKeywordAndConditions: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenGuardKeywordAndConditions.map(RawSyntax.init), arena: arena).as(RawGuardStmtSyntax.self)!
-  }
   public var conditions: RawConditionElementListSyntax {
     layoutView.children[3].map(RawConditionElementListSyntax.init(raw:))!
-  }
-  public func withConditions(_ conditions: RawConditionElementListSyntax, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(conditions), arena: arena).as(RawGuardStmtSyntax.self)!
   }
   public var unexpectedBetweenConditionsAndElseKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConditionsAndElseKeyword(_ unexpectedBetweenConditionsAndElseKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenConditionsAndElseKeyword.map(RawSyntax.init), arena: arena).as(RawGuardStmtSyntax.self)!
-  }
   public var elseKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withElseKeyword(_ elseKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(elseKeyword), arena: arena).as(RawGuardStmtSyntax.self)!
   }
   public var unexpectedBetweenElseKeywordAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElseKeywordAndBody(_ unexpectedBetweenElseKeywordAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenElseKeywordAndBody.map(RawSyntax.init), arena: arena).as(RawGuardStmtSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[7].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(body), arena: arena).as(RawGuardStmtSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGuardStmtSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawGuardStmtSyntax.self)!
   }
 }
 
@@ -17496,32 +13956,17 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWhereKeyword(_ unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWhereClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWhereKeyword.map(RawSyntax.init), arena: arena).as(RawWhereClauseSyntax.self)!
-  }
   public var whereKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withWhereKeyword(_ whereKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawWhereClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(whereKeyword), arena: arena).as(RawWhereClauseSyntax.self)!
   }
   public var unexpectedBetweenWhereKeywordAndGuardResult: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWhereKeywordAndGuardResult(_ unexpectedBetweenWhereKeywordAndGuardResult: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWhereClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWhereKeywordAndGuardResult.map(RawSyntax.init), arena: arena).as(RawWhereClauseSyntax.self)!
-  }
   public var guardResult: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public func withGuardResult(_ guardResult: RawExprSyntax, arena: SyntaxArena) -> RawWhereClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(guardResult), arena: arena).as(RawWhereClauseSyntax.self)!
-  }
   public var unexpectedAfterGuardResult: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGuardResult(_ unexpectedAfterGuardResult: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWhereClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterGuardResult.map(RawSyntax.init), arena: arena).as(RawWhereClauseSyntax.self)!
   }
 }
 
@@ -17604,128 +14049,65 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeForKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeForKeyword(_ unexpectedBeforeForKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeForKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var forKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withForKeyword(_ forKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(forKeyword), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenForKeywordAndTryKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenForKeywordAndTryKeyword(_ unexpectedBetweenForKeywordAndTryKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenForKeywordAndTryKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var tryKeyword: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withTryKeyword(_ tryKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: tryKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenTryKeywordAndAwaitKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTryKeywordAndAwaitKeyword(_ unexpectedBetweenTryKeywordAndAwaitKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenTryKeywordAndAwaitKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var awaitKeyword: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAwaitKeyword(_ awaitKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: awaitKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenAwaitKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAwaitKeywordAndCaseKeyword(_ unexpectedBetweenAwaitKeywordAndCaseKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenAwaitKeywordAndCaseKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var caseKeyword: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withCaseKeyword(_ caseKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 7, with: caseKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCaseKeywordAndPattern(_ unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenCaseKeywordAndPattern.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[9].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(pattern), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndTypeAnnotation(_ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenPatternAndTypeAnnotation.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     layoutView.children[11].map(RawTypeAnnotationSyntax.init(raw:))
-  }
-  public func withTypeAnnotation(_ typeAnnotation: RawTypeAnnotationSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 11, with: typeAnnotation.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenTypeAnnotationAndInKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAnnotationAndInKeyword(_ unexpectedBetweenTypeAnnotationAndInKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenTypeAnnotationAndInKeyword.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var inKeyword: RawTokenSyntax {
     layoutView.children[13].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withInKeyword(_ inKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 13, with: RawSyntax(inKeyword), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenInKeywordAndSequenceExpr: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInKeywordAndSequenceExpr(_ unexpectedBetweenInKeywordAndSequenceExpr: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenInKeywordAndSequenceExpr.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var sequenceExpr: RawExprSyntax {
     layoutView.children[15].map(RawExprSyntax.init(raw:))!
-  }
-  public func withSequenceExpr(_ sequenceExpr: RawExprSyntax, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 15, with: RawSyntax(sequenceExpr), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenSequenceExprAndWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSequenceExprAndWhereClause(_ unexpectedBetweenSequenceExprAndWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedBetweenSequenceExprAndWhereClause.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var whereClause: RawWhereClauseSyntax? {
     layoutView.children[17].map(RawWhereClauseSyntax.init(raw:))
-  }
-  public func withWhereClause(_ whereClause: RawWhereClauseSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 17, with: whereClause.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
   }
   public var unexpectedBetweenWhereClauseAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWhereClauseAndBody(_ unexpectedBetweenWhereClauseAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 18, with: unexpectedBetweenWhereClauseAndBody.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[19].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 19, with: RawSyntax(body), arena: arena).as(RawForInStmtSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[20].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawForInStmtSyntax {
-    return layoutView.replacingChild(at: 20, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawForInStmtSyntax.self)!
   }
 }
 
@@ -17788,68 +14170,35 @@ public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax 
   public var unexpectedBeforeSwitchKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeSwitchKeyword(_ unexpectedBeforeSwitchKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeSwitchKeyword.map(RawSyntax.init), arena: arena).as(RawSwitchStmtSyntax.self)!
-  }
   public var switchKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withSwitchKeyword(_ switchKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(switchKeyword), arena: arena).as(RawSwitchStmtSyntax.self)!
   }
   public var unexpectedBetweenSwitchKeywordAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSwitchKeywordAndExpression(_ unexpectedBetweenSwitchKeywordAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenSwitchKeywordAndExpression.map(RawSyntax.init), arena: arena).as(RawSwitchStmtSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(expression), arena: arena).as(RawSwitchStmtSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndLeftBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndLeftBrace(_ unexpectedBetweenExpressionAndLeftBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenExpressionAndLeftBrace.map(RawSyntax.init), arena: arena).as(RawSwitchStmtSyntax.self)!
-  }
   public var leftBrace: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftBrace(_ leftBrace: RawTokenSyntax, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(leftBrace), arena: arena).as(RawSwitchStmtSyntax.self)!
   }
   public var unexpectedBetweenLeftBraceAndCases: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftBraceAndCases(_ unexpectedBetweenLeftBraceAndCases: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLeftBraceAndCases.map(RawSyntax.init), arena: arena).as(RawSwitchStmtSyntax.self)!
-  }
   public var cases: RawSwitchCaseListSyntax {
     layoutView.children[7].map(RawSwitchCaseListSyntax.init(raw:))!
-  }
-  public func withCases(_ cases: RawSwitchCaseListSyntax, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(cases), arena: arena).as(RawSwitchStmtSyntax.self)!
   }
   public var unexpectedBetweenCasesAndRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCasesAndRightBrace(_ unexpectedBetweenCasesAndRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenCasesAndRightBrace.map(RawSyntax.init), arena: arena).as(RawSwitchStmtSyntax.self)!
-  }
   public var rightBrace: RawTokenSyntax {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightBrace(_ rightBrace: RawTokenSyntax, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(rightBrace), arena: arena).as(RawSwitchStmtSyntax.self)!
-  }
   public var unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightBrace(_ unexpectedAfterRightBrace: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchStmtSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterRightBrace.map(RawSyntax.init), arena: arena).as(RawSwitchStmtSyntax.self)!
   }
 }
 
@@ -17945,44 +14294,23 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeDoKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDoKeyword(_ unexpectedBeforeDoKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDoStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDoKeyword.map(RawSyntax.init), arena: arena).as(RawDoStmtSyntax.self)!
-  }
   public var doKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDoKeyword(_ doKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawDoStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(doKeyword), arena: arena).as(RawDoStmtSyntax.self)!
   }
   public var unexpectedBetweenDoKeywordAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDoKeywordAndBody(_ unexpectedBetweenDoKeywordAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDoStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenDoKeywordAndBody.map(RawSyntax.init), arena: arena).as(RawDoStmtSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[3].map(RawCodeBlockSyntax.init(raw:))!
-  }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawDoStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(body), arena: arena).as(RawDoStmtSyntax.self)!
   }
   public var unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBodyAndCatchClauses(_ unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDoStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenBodyAndCatchClauses.map(RawSyntax.init), arena: arena).as(RawDoStmtSyntax.self)!
-  }
   public var catchClauses: RawCatchClauseListSyntax? {
     layoutView.children[5].map(RawCatchClauseListSyntax.init(raw:))
   }
-  public func withCatchClauses(_ catchClauses: RawCatchClauseListSyntax?, arena: SyntaxArena) -> RawDoStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: catchClauses.map(RawSyntax.init), arena: arena).as(RawDoStmtSyntax.self)!
-  }
   public var unexpectedAfterCatchClauses: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterCatchClauses(_ unexpectedAfterCatchClauses: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDoStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterCatchClauses.map(RawSyntax.init), arena: arena).as(RawDoStmtSyntax.self)!
   }
 }
 
@@ -18033,32 +14361,17 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax 
   public var unexpectedBeforeReturnKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeReturnKeyword(_ unexpectedBeforeReturnKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawReturnStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeReturnKeyword.map(RawSyntax.init), arena: arena).as(RawReturnStmtSyntax.self)!
-  }
   public var returnKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withReturnKeyword(_ returnKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawReturnStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(returnKeyword), arena: arena).as(RawReturnStmtSyntax.self)!
   }
   public var unexpectedBetweenReturnKeywordAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenReturnKeywordAndExpression(_ unexpectedBetweenReturnKeywordAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawReturnStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenReturnKeywordAndExpression.map(RawSyntax.init), arena: arena).as(RawReturnStmtSyntax.self)!
-  }
   public var expression: RawExprSyntax? {
     layoutView.children[3].map(RawExprSyntax.init(raw:))
   }
-  public func withExpression(_ expression: RawExprSyntax?, arena: SyntaxArena) -> RawReturnStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: expression.map(RawSyntax.init), arena: arena).as(RawReturnStmtSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawReturnStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawReturnStmtSyntax.self)!
   }
 }
 
@@ -18137,32 +14450,17 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeYieldKeyword(_ unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeYieldKeyword.map(RawSyntax.init), arena: arena).as(RawYieldStmtSyntax.self)!
-  }
   public var yieldKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withYieldKeyword(_ yieldKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawYieldStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(yieldKeyword), arena: arena).as(RawYieldStmtSyntax.self)!
   }
   public var unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenYieldKeywordAndYields(_ unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenYieldKeywordAndYields.map(RawSyntax.init), arena: arena).as(RawYieldStmtSyntax.self)!
-  }
   public var yields: RawSyntax {
     layoutView.children[3]!
   }
-  public func withYields(_ yields: RawSyntax, arena: SyntaxArena) -> RawYieldStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(yields), arena: arena).as(RawYieldStmtSyntax.self)!
-  }
   public var unexpectedAfterYields: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterYields(_ unexpectedAfterYields: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterYields.map(RawSyntax.init), arena: arena).as(RawYieldStmtSyntax.self)!
   }
 }
 
@@ -18217,44 +14515,23 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldListSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawYieldListSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawYieldListSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawYieldListSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndElementList(_ unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldListSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndElementList.map(RawSyntax.init), arena: arena).as(RawYieldListSyntax.self)!
-  }
   public var elementList: RawYieldExprListSyntax {
     layoutView.children[3].map(RawYieldExprListSyntax.init(raw:))!
-  }
-  public func withElementList(_ elementList: RawYieldExprListSyntax, arena: SyntaxArena) -> RawYieldListSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(elementList), arena: arena).as(RawYieldListSyntax.self)!
   }
   public var unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElementListAndRightParen(_ unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldListSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenElementListAndRightParen.map(RawSyntax.init), arena: arena).as(RawYieldListSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawYieldListSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawYieldListSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawYieldListSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawYieldListSyntax.self)!
   }
 }
 
@@ -18301,20 +14578,11 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeFallthroughKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeFallthroughKeyword(_ unexpectedBeforeFallthroughKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFallthroughStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeFallthroughKeyword.map(RawSyntax.init), arena: arena).as(RawFallthroughStmtSyntax.self)!
-  }
   public var fallthroughKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withFallthroughKeyword(_ fallthroughKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawFallthroughStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(fallthroughKeyword), arena: arena).as(RawFallthroughStmtSyntax.self)!
-  }
   public var unexpectedAfterFallthroughKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterFallthroughKeyword(_ unexpectedAfterFallthroughKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFallthroughStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterFallthroughKeyword.map(RawSyntax.init), arena: arena).as(RawFallthroughStmtSyntax.self)!
   }
 }
 
@@ -18365,32 +14633,17 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeBreakKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBreakKeyword(_ unexpectedBeforeBreakKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBreakStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBreakKeyword.map(RawSyntax.init), arena: arena).as(RawBreakStmtSyntax.self)!
-  }
   public var breakKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withBreakKeyword(_ breakKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawBreakStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(breakKeyword), arena: arena).as(RawBreakStmtSyntax.self)!
   }
   public var unexpectedBetweenBreakKeywordAndLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBreakKeywordAndLabel(_ unexpectedBetweenBreakKeywordAndLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBreakStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBreakKeywordAndLabel.map(RawSyntax.init), arena: arena).as(RawBreakStmtSyntax.self)!
-  }
   public var label: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withLabel(_ label: RawTokenSyntax?, arena: SyntaxArena) -> RawBreakStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: label.map(RawSyntax.init), arena: arena).as(RawBreakStmtSyntax.self)!
-  }
   public var unexpectedAfterLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterLabel(_ unexpectedAfterLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawBreakStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterLabel.map(RawSyntax.init), arena: arena).as(RawBreakStmtSyntax.self)!
   }
 }
 
@@ -18575,32 +14828,17 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeCondition: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeCondition(_ unexpectedBeforeCondition: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConditionElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeCondition.map(RawSyntax.init), arena: arena).as(RawConditionElementSyntax.self)!
-  }
   public var condition: RawSyntax {
     layoutView.children[1]!
-  }
-  public func withCondition(_ condition: RawSyntax, arena: SyntaxArena) -> RawConditionElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(condition), arena: arena).as(RawConditionElementSyntax.self)!
   }
   public var unexpectedBetweenConditionAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConditionAndTrailingComma(_ unexpectedBetweenConditionAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConditionElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenConditionAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawConditionElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawConditionElementSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawConditionElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConditionElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawConditionElementSyntax.self)!
   }
 }
 
@@ -18659,56 +14897,29 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforePoundAvailableKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundAvailableKeyword(_ unexpectedBeforePoundAvailableKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundAvailableKeyword.map(RawSyntax.init), arena: arena).as(RawAvailabilityConditionSyntax.self)!
-  }
   public var poundAvailableKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundAvailableKeyword(_ poundAvailableKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundAvailableKeyword), arena: arena).as(RawAvailabilityConditionSyntax.self)!
   }
   public var unexpectedBetweenPoundAvailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundAvailableKeywordAndLeftParen(_ unexpectedBetweenPoundAvailableKeywordAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundAvailableKeywordAndLeftParen.map(RawSyntax.init), arena: arena).as(RawAvailabilityConditionSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawAvailabilityConditionSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndAvailabilitySpec(_ unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndAvailabilitySpec.map(RawSyntax.init), arena: arena).as(RawAvailabilityConditionSyntax.self)!
-  }
   public var availabilitySpec: RawAvailabilitySpecListSyntax {
     layoutView.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
-  }
-  public func withAvailabilitySpec(_ availabilitySpec: RawAvailabilitySpecListSyntax, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(availabilitySpec), arena: arena).as(RawAvailabilityConditionSyntax.self)!
   }
   public var unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAvailabilitySpecAndRightParen(_ unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenAvailabilitySpecAndRightParen.map(RawSyntax.init), arena: arena).as(RawAvailabilityConditionSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawAvailabilityConditionSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawAvailabilityConditionSyntax.self)!
   }
 }
 
@@ -18767,56 +14978,29 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeCaseKeyword(_ unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeCaseKeyword.map(RawSyntax.init), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
-  }
   public var caseKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withCaseKeyword(_ caseKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(caseKeyword), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
   }
   public var unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCaseKeywordAndPattern(_ unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenCaseKeywordAndPattern.map(RawSyntax.init), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[3].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(pattern), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
   }
   public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndTypeAnnotation(_ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPatternAndTypeAnnotation.map(RawSyntax.init), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
-  }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     layoutView.children[5].map(RawTypeAnnotationSyntax.init(raw:))
-  }
-  public func withTypeAnnotation(_ typeAnnotation: RawTypeAnnotationSyntax?, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 5, with: typeAnnotation.map(RawSyntax.init), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
   }
   public var unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAnnotationAndInitializer(_ unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenTypeAnnotationAndInitializer.map(RawSyntax.init), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
-  }
   public var initializer: RawInitializerClauseSyntax {
     layoutView.children[7].map(RawInitializerClauseSyntax.init(raw:))!
   }
-  public func withInitializer(_ initializer: RawInitializerClauseSyntax, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(initializer), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
-  }
   public var unexpectedAfterInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterInitializer(_ unexpectedAfterInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMatchingPatternConditionSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterInitializer.map(RawSyntax.init), arena: arena).as(RawMatchingPatternConditionSyntax.self)!
   }
 }
 
@@ -18875,56 +15059,29 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLetOrVarKeyword(_ unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLetOrVarKeyword.map(RawSyntax.init), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
-  }
   public var letOrVarKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLetOrVarKeyword(_ letOrVarKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(letOrVarKeyword), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
   }
   public var unexpectedBetweenLetOrVarKeywordAndPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLetOrVarKeywordAndPattern(_ unexpectedBetweenLetOrVarKeywordAndPattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLetOrVarKeywordAndPattern.map(RawSyntax.init), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[3].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(pattern), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
   }
   public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndTypeAnnotation(_ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPatternAndTypeAnnotation.map(RawSyntax.init), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
-  }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     layoutView.children[5].map(RawTypeAnnotationSyntax.init(raw:))
-  }
-  public func withTypeAnnotation(_ typeAnnotation: RawTypeAnnotationSyntax?, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 5, with: typeAnnotation.map(RawSyntax.init), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
   }
   public var unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAnnotationAndInitializer(_ unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenTypeAnnotationAndInitializer.map(RawSyntax.init), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
-  }
   public var initializer: RawInitializerClauseSyntax? {
     layoutView.children[7].map(RawInitializerClauseSyntax.init(raw:))
   }
-  public func withInitializer(_ initializer: RawInitializerClauseSyntax?, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 7, with: initializer.map(RawSyntax.init), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
-  }
   public var unexpectedAfterInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterInitializer(_ unexpectedAfterInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalBindingConditionSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterInitializer.map(RawSyntax.init), arena: arena).as(RawOptionalBindingConditionSyntax.self)!
   }
 }
 
@@ -18983,56 +15140,29 @@ public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntax
   public var unexpectedBeforePoundUnavailableKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundUnavailableKeyword(_ unexpectedBeforePoundUnavailableKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundUnavailableKeyword.map(RawSyntax.init), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
-  }
   public var poundUnavailableKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundUnavailableKeyword(_ poundUnavailableKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundUnavailableKeyword), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
   }
   public var unexpectedBetweenPoundUnavailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundUnavailableKeywordAndLeftParen(_ unexpectedBetweenPoundUnavailableKeywordAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundUnavailableKeywordAndLeftParen.map(RawSyntax.init), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndAvailabilitySpec(_ unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndAvailabilitySpec.map(RawSyntax.init), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
-  }
   public var availabilitySpec: RawAvailabilitySpecListSyntax {
     layoutView.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
-  }
-  public func withAvailabilitySpec(_ availabilitySpec: RawAvailabilitySpecListSyntax, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(availabilitySpec), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
   }
   public var unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAvailabilitySpecAndRightParen(_ unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenAvailabilitySpecAndRightParen.map(RawSyntax.init), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawUnavailabilityConditionSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawUnavailabilityConditionSyntax.self)!
   }
 }
 
@@ -19091,56 +15221,29 @@ public struct RawHasSymbolConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeHasSymbolKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeHasSymbolKeyword(_ unexpectedBeforeHasSymbolKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeHasSymbolKeyword.map(RawSyntax.init), arena: arena).as(RawHasSymbolConditionSyntax.self)!
-  }
   public var hasSymbolKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withHasSymbolKeyword(_ hasSymbolKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(hasSymbolKeyword), arena: arena).as(RawHasSymbolConditionSyntax.self)!
   }
   public var unexpectedBetweenHasSymbolKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenHasSymbolKeywordAndLeftParen(_ unexpectedBetweenHasSymbolKeywordAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenHasSymbolKeywordAndLeftParen.map(RawSyntax.init), arena: arena).as(RawHasSymbolConditionSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawHasSymbolConditionSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndExpression(_ unexpectedBetweenLeftParenAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndExpression.map(RawSyntax.init), arena: arena).as(RawHasSymbolConditionSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
-  }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(expression), arena: arena).as(RawHasSymbolConditionSyntax.self)!
   }
   public var unexpectedBetweenExpressionAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenExpressionAndRightParen(_ unexpectedBetweenExpressionAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenExpressionAndRightParen.map(RawSyntax.init), arena: arena).as(RawHasSymbolConditionSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightParen), arena: arena).as(RawHasSymbolConditionSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawHasSymbolConditionSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawHasSymbolConditionSyntax.self)!
   }
 }
 
@@ -19228,20 +15331,11 @@ public struct RawDeclarationStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeDeclaration: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDeclaration(_ unexpectedBeforeDeclaration: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclarationStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDeclaration.map(RawSyntax.init), arena: arena).as(RawDeclarationStmtSyntax.self)!
-  }
   public var declaration: RawDeclSyntax {
     layoutView.children[1].map(RawDeclSyntax.init(raw:))!
   }
-  public func withDeclaration(_ declaration: RawDeclSyntax, arena: SyntaxArena) -> RawDeclarationStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(declaration), arena: arena).as(RawDeclarationStmtSyntax.self)!
-  }
   public var unexpectedAfterDeclaration: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterDeclaration(_ unexpectedAfterDeclaration: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDeclarationStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterDeclaration.map(RawSyntax.init), arena: arena).as(RawDeclarationStmtSyntax.self)!
   }
 }
 
@@ -19292,32 +15386,17 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeThrowKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeThrowKeyword(_ unexpectedBeforeThrowKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawThrowStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeThrowKeyword.map(RawSyntax.init), arena: arena).as(RawThrowStmtSyntax.self)!
-  }
   public var throwKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withThrowKeyword(_ throwKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawThrowStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(throwKeyword), arena: arena).as(RawThrowStmtSyntax.self)!
   }
   public var unexpectedBetweenThrowKeywordAndExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenThrowKeywordAndExpression(_ unexpectedBetweenThrowKeywordAndExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawThrowStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenThrowKeywordAndExpression.map(RawSyntax.init), arena: arena).as(RawThrowStmtSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawThrowStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(expression), arena: arena).as(RawThrowStmtSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawThrowStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawThrowStmtSyntax.self)!
   }
 }
 
@@ -19408,68 +15487,35 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeIfKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIfKeyword(_ unexpectedBeforeIfKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIfKeyword.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
-  }
   public var ifKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIfKeyword(_ ifKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(ifKeyword), arena: arena).as(RawIfStmtSyntax.self)!
   }
   public var unexpectedBetweenIfKeywordAndConditions: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIfKeywordAndConditions(_ unexpectedBetweenIfKeywordAndConditions: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenIfKeywordAndConditions.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
-  }
   public var conditions: RawConditionElementListSyntax {
     layoutView.children[3].map(RawConditionElementListSyntax.init(raw:))!
-  }
-  public func withConditions(_ conditions: RawConditionElementListSyntax, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(conditions), arena: arena).as(RawIfStmtSyntax.self)!
   }
   public var unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConditionsAndBody(_ unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenConditionsAndBody.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[5].map(RawCodeBlockSyntax.init(raw:))!
-  }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(body), arena: arena).as(RawIfStmtSyntax.self)!
   }
   public var unexpectedBetweenBodyAndElseKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBodyAndElseKeyword(_ unexpectedBetweenBodyAndElseKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenBodyAndElseKeyword.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
-  }
   public var elseKeyword: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withElseKeyword(_ elseKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 7, with: elseKeyword.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
   }
   public var unexpectedBetweenElseKeywordAndElseBody: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElseKeywordAndElseBody(_ unexpectedBetweenElseKeywordAndElseBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenElseKeywordAndElseBody.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
-  }
   public var elseBody: RawSyntax? {
     layoutView.children[9]
   }
-  public func withElseBody(_ elseBody: RawSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 9, with: elseBody.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
-  }
   public var unexpectedAfterElseBody: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterElseBody(_ unexpectedAfterElseBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIfStmtSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterElseBody.map(RawSyntax.init), arena: arena).as(RawIfStmtSyntax.self)!
   }
 }
 
@@ -19552,44 +15598,23 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeUnknownAttr: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeUnknownAttr(_ unexpectedBeforeUnknownAttr: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeUnknownAttr.map(RawSyntax.init), arena: arena).as(RawSwitchCaseSyntax.self)!
-  }
   public var unknownAttr: RawAttributeSyntax? {
     layoutView.children[1].map(RawAttributeSyntax.init(raw:))
-  }
-  public func withUnknownAttr(_ unknownAttr: RawAttributeSyntax?, arena: SyntaxArena) -> RawSwitchCaseSyntax {
-    return layoutView.replacingChild(at: 1, with: unknownAttr.map(RawSyntax.init), arena: arena).as(RawSwitchCaseSyntax.self)!
   }
   public var unexpectedBetweenUnknownAttrAndLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenUnknownAttrAndLabel(_ unexpectedBetweenUnknownAttrAndLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenUnknownAttrAndLabel.map(RawSyntax.init), arena: arena).as(RawSwitchCaseSyntax.self)!
-  }
   public var label: RawSyntax {
     layoutView.children[3]!
-  }
-  public func withLabel(_ label: RawSyntax, arena: SyntaxArena) -> RawSwitchCaseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(label), arena: arena).as(RawSwitchCaseSyntax.self)!
   }
   public var unexpectedBetweenLabelAndStatements: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelAndStatements(_ unexpectedBetweenLabelAndStatements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLabelAndStatements.map(RawSyntax.init), arena: arena).as(RawSwitchCaseSyntax.self)!
-  }
   public var statements: RawCodeBlockItemListSyntax {
     layoutView.children[5].map(RawCodeBlockItemListSyntax.init(raw:))!
   }
-  public func withStatements(_ statements: RawCodeBlockItemListSyntax, arena: SyntaxArena) -> RawSwitchCaseSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(statements), arena: arena).as(RawSwitchCaseSyntax.self)!
-  }
   public var unexpectedAfterStatements: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterStatements(_ unexpectedAfterStatements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterStatements.map(RawSyntax.init), arena: arena).as(RawSwitchCaseSyntax.self)!
   }
 }
 
@@ -19640,32 +15665,17 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeDefaultKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeDefaultKeyword(_ unexpectedBeforeDefaultKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchDefaultLabelSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeDefaultKeyword.map(RawSyntax.init), arena: arena).as(RawSwitchDefaultLabelSyntax.self)!
-  }
   public var defaultKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withDefaultKeyword(_ defaultKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawSwitchDefaultLabelSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(defaultKeyword), arena: arena).as(RawSwitchDefaultLabelSyntax.self)!
   }
   public var unexpectedBetweenDefaultKeywordAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenDefaultKeywordAndColon(_ unexpectedBetweenDefaultKeywordAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchDefaultLabelSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenDefaultKeywordAndColon.map(RawSyntax.init), arena: arena).as(RawSwitchDefaultLabelSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawSwitchDefaultLabelSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawSwitchDefaultLabelSyntax.self)!
-  }
   public var unexpectedAfterColon: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterColon(_ unexpectedAfterColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchDefaultLabelSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterColon.map(RawSyntax.init), arena: arena).as(RawSwitchDefaultLabelSyntax.self)!
   }
 }
 
@@ -19720,44 +15730,23 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePattern(_ unexpectedBeforePattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCaseItemSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePattern.map(RawSyntax.init), arena: arena).as(RawCaseItemSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[1].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawCaseItemSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(pattern), arena: arena).as(RawCaseItemSyntax.self)!
   }
   public var unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndWhereClause(_ unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCaseItemSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPatternAndWhereClause.map(RawSyntax.init), arena: arena).as(RawCaseItemSyntax.self)!
-  }
   public var whereClause: RawWhereClauseSyntax? {
     layoutView.children[3].map(RawWhereClauseSyntax.init(raw:))
-  }
-  public func withWhereClause(_ whereClause: RawWhereClauseSyntax?, arena: SyntaxArena) -> RawCaseItemSyntax {
-    return layoutView.replacingChild(at: 3, with: whereClause.map(RawSyntax.init), arena: arena).as(RawCaseItemSyntax.self)!
   }
   public var unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWhereClauseAndTrailingComma(_ unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCaseItemSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenWhereClauseAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawCaseItemSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawCaseItemSyntax {
-    return layoutView.replacingChild(at: 5, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawCaseItemSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCaseItemSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawCaseItemSyntax.self)!
   }
 }
 
@@ -19812,44 +15801,23 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePattern(_ unexpectedBeforePattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchItemSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePattern.map(RawSyntax.init), arena: arena).as(RawCatchItemSyntax.self)!
-  }
   public var pattern: RawPatternSyntax? {
     layoutView.children[1].map(RawPatternSyntax.init(raw:))
-  }
-  public func withPattern(_ pattern: RawPatternSyntax?, arena: SyntaxArena) -> RawCatchItemSyntax {
-    return layoutView.replacingChild(at: 1, with: pattern.map(RawSyntax.init), arena: arena).as(RawCatchItemSyntax.self)!
   }
   public var unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndWhereClause(_ unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchItemSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPatternAndWhereClause.map(RawSyntax.init), arena: arena).as(RawCatchItemSyntax.self)!
-  }
   public var whereClause: RawWhereClauseSyntax? {
     layoutView.children[3].map(RawWhereClauseSyntax.init(raw:))
-  }
-  public func withWhereClause(_ whereClause: RawWhereClauseSyntax?, arena: SyntaxArena) -> RawCatchItemSyntax {
-    return layoutView.replacingChild(at: 3, with: whereClause.map(RawSyntax.init), arena: arena).as(RawCatchItemSyntax.self)!
   }
   public var unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWhereClauseAndTrailingComma(_ unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchItemSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenWhereClauseAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawCatchItemSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawCatchItemSyntax {
-    return layoutView.replacingChild(at: 5, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawCatchItemSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchItemSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawCatchItemSyntax.self)!
   }
 }
 
@@ -19904,44 +15872,23 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeCaseKeyword(_ unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseLabelSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeCaseKeyword.map(RawSyntax.init), arena: arena).as(RawSwitchCaseLabelSyntax.self)!
-  }
   public var caseKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withCaseKeyword(_ caseKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawSwitchCaseLabelSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(caseKeyword), arena: arena).as(RawSwitchCaseLabelSyntax.self)!
   }
   public var unexpectedBetweenCaseKeywordAndCaseItems: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCaseKeywordAndCaseItems(_ unexpectedBetweenCaseKeywordAndCaseItems: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseLabelSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenCaseKeywordAndCaseItems.map(RawSyntax.init), arena: arena).as(RawSwitchCaseLabelSyntax.self)!
-  }
   public var caseItems: RawCaseItemListSyntax {
     layoutView.children[3].map(RawCaseItemListSyntax.init(raw:))!
-  }
-  public func withCaseItems(_ caseItems: RawCaseItemListSyntax, arena: SyntaxArena) -> RawSwitchCaseLabelSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(caseItems), arena: arena).as(RawSwitchCaseLabelSyntax.self)!
   }
   public var unexpectedBetweenCaseItemsAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCaseItemsAndColon(_ unexpectedBetweenCaseItemsAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseLabelSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenCaseItemsAndColon.map(RawSyntax.init), arena: arena).as(RawSwitchCaseLabelSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawSwitchCaseLabelSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(colon), arena: arena).as(RawSwitchCaseLabelSyntax.self)!
-  }
   public var unexpectedAfterColon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterColon(_ unexpectedAfterColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSwitchCaseLabelSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterColon.map(RawSyntax.init), arena: arena).as(RawSwitchCaseLabelSyntax.self)!
   }
 }
 
@@ -19996,44 +15943,23 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeCatchKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeCatchKeyword(_ unexpectedBeforeCatchKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeCatchKeyword.map(RawSyntax.init), arena: arena).as(RawCatchClauseSyntax.self)!
-  }
   public var catchKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withCatchKeyword(_ catchKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawCatchClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(catchKeyword), arena: arena).as(RawCatchClauseSyntax.self)!
   }
   public var unexpectedBetweenCatchKeywordAndCatchItems: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCatchKeywordAndCatchItems(_ unexpectedBetweenCatchKeywordAndCatchItems: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenCatchKeywordAndCatchItems.map(RawSyntax.init), arena: arena).as(RawCatchClauseSyntax.self)!
-  }
   public var catchItems: RawCatchItemListSyntax? {
     layoutView.children[3].map(RawCatchItemListSyntax.init(raw:))
-  }
-  public func withCatchItems(_ catchItems: RawCatchItemListSyntax?, arena: SyntaxArena) -> RawCatchClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: catchItems.map(RawSyntax.init), arena: arena).as(RawCatchClauseSyntax.self)!
   }
   public var unexpectedBetweenCatchItemsAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCatchItemsAndBody(_ unexpectedBetweenCatchItemsAndBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenCatchItemsAndBody.map(RawSyntax.init), arena: arena).as(RawCatchClauseSyntax.self)!
-  }
   public var body: RawCodeBlockSyntax {
     layoutView.children[5].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public func withBody(_ body: RawCodeBlockSyntax, arena: SyntaxArena) -> RawCatchClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(body), arena: arena).as(RawCatchClauseSyntax.self)!
-  }
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBody(_ unexpectedAfterBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCatchClauseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterBody.map(RawSyntax.init), arena: arena).as(RawCatchClauseSyntax.self)!
   }
 }
 
@@ -20100,80 +16026,41 @@ public struct RawPoundAssertStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforePoundAssert: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePoundAssert(_ unexpectedBeforePoundAssert: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePoundAssert.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
-  }
   public var poundAssert: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPoundAssert(_ poundAssert: RawTokenSyntax, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(poundAssert), arena: arena).as(RawPoundAssertStmtSyntax.self)!
   }
   public var unexpectedBetweenPoundAssertAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPoundAssertAndLeftParen(_ unexpectedBetweenPoundAssertAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPoundAssertAndLeftParen.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(leftParen), arena: arena).as(RawPoundAssertStmtSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndCondition: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndCondition(_ unexpectedBetweenLeftParenAndCondition: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLeftParenAndCondition.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
-  }
   public var condition: RawExprSyntax {
     layoutView.children[5].map(RawExprSyntax.init(raw:))!
-  }
-  public func withCondition(_ condition: RawExprSyntax, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(condition), arena: arena).as(RawPoundAssertStmtSyntax.self)!
   }
   public var unexpectedBetweenConditionAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenConditionAndComma(_ unexpectedBetweenConditionAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenConditionAndComma.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
-  }
   public var comma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withComma(_ comma: RawTokenSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 7, with: comma.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
   }
   public var unexpectedBetweenCommaAndMessage: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCommaAndMessage(_ unexpectedBetweenCommaAndMessage: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenCommaAndMessage.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
-  }
   public var message: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withMessage(_ message: RawTokenSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 9, with: message.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
   }
   public var unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMessageAndRightParen(_ unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenMessageAndRightParen.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(rightParen), arena: arena).as(RawPoundAssertStmtSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPoundAssertStmtSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawPoundAssertStmtSyntax.self)!
   }
 }
 
@@ -20224,32 +16111,17 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWhereKeyword(_ unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericWhereClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWhereKeyword.map(RawSyntax.init), arena: arena).as(RawGenericWhereClauseSyntax.self)!
-  }
   public var whereKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withWhereKeyword(_ whereKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawGenericWhereClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(whereKeyword), arena: arena).as(RawGenericWhereClauseSyntax.self)!
   }
   public var unexpectedBetweenWhereKeywordAndRequirementList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWhereKeywordAndRequirementList(_ unexpectedBetweenWhereKeywordAndRequirementList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericWhereClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWhereKeywordAndRequirementList.map(RawSyntax.init), arena: arena).as(RawGenericWhereClauseSyntax.self)!
-  }
   public var requirementList: RawGenericRequirementListSyntax {
     layoutView.children[3].map(RawGenericRequirementListSyntax.init(raw:))!
   }
-  public func withRequirementList(_ requirementList: RawGenericRequirementListSyntax, arena: SyntaxArena) -> RawGenericWhereClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(requirementList), arena: arena).as(RawGenericWhereClauseSyntax.self)!
-  }
   public var unexpectedAfterRequirementList: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRequirementList(_ unexpectedAfterRequirementList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericWhereClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterRequirementList.map(RawSyntax.init), arena: arena).as(RawGenericWhereClauseSyntax.self)!
   }
 }
 
@@ -20375,32 +16247,17 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeBody: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBody(_ unexpectedBeforeBody: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericRequirementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBody.map(RawSyntax.init), arena: arena).as(RawGenericRequirementSyntax.self)!
-  }
   public var body: RawSyntax {
     layoutView.children[1]!
-  }
-  public func withBody(_ body: RawSyntax, arena: SyntaxArena) -> RawGenericRequirementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(body), arena: arena).as(RawGenericRequirementSyntax.self)!
   }
   public var unexpectedBetweenBodyAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBodyAndTrailingComma(_ unexpectedBetweenBodyAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericRequirementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBodyAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericRequirementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericRequirementSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawGenericRequirementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericRequirementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericRequirementSyntax.self)!
   }
 }
 
@@ -20455,44 +16312,23 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftTypeIdentifier(_ unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSameTypeRequirementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftTypeIdentifier.map(RawSyntax.init), arena: arena).as(RawSameTypeRequirementSyntax.self)!
-  }
   public var leftTypeIdentifier: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withLeftTypeIdentifier(_ leftTypeIdentifier: RawTypeSyntax, arena: SyntaxArena) -> RawSameTypeRequirementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftTypeIdentifier), arena: arena).as(RawSameTypeRequirementSyntax.self)!
   }
   public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftTypeIdentifierAndEqualityToken(_ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSameTypeRequirementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftTypeIdentifierAndEqualityToken.map(RawSyntax.init), arena: arena).as(RawSameTypeRequirementSyntax.self)!
-  }
   public var equalityToken: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withEqualityToken(_ equalityToken: RawTokenSyntax, arena: SyntaxArena) -> RawSameTypeRequirementSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(equalityToken), arena: arena).as(RawSameTypeRequirementSyntax.self)!
   }
   public var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEqualityTokenAndRightTypeIdentifier(_ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSameTypeRequirementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenEqualityTokenAndRightTypeIdentifier.map(RawSyntax.init), arena: arena).as(RawSameTypeRequirementSyntax.self)!
-  }
   public var rightTypeIdentifier: RawTypeSyntax {
     layoutView.children[5].map(RawTypeSyntax.init(raw:))!
   }
-  public func withRightTypeIdentifier(_ rightTypeIdentifier: RawTypeSyntax, arena: SyntaxArena) -> RawSameTypeRequirementSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightTypeIdentifier), arena: arena).as(RawSameTypeRequirementSyntax.self)!
-  }
   public var unexpectedAfterRightTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightTypeIdentifier(_ unexpectedAfterRightTypeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSameTypeRequirementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightTypeIdentifier.map(RawSyntax.init), arena: arena).as(RawSameTypeRequirementSyntax.self)!
   }
 }
 
@@ -20567,104 +16403,53 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
   public var unexpectedBeforeTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeTypeIdentifier(_ unexpectedBeforeTypeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeTypeIdentifier.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var typeIdentifier: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withTypeIdentifier(_ typeIdentifier: RawTypeSyntax, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(typeIdentifier), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
   public var unexpectedBetweenTypeIdentifierAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeIdentifierAndColon(_ unexpectedBetweenTypeIdentifierAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenTypeIdentifierAndColon.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
   public var unexpectedBetweenColonAndLayoutConstraint: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndLayoutConstraint(_ unexpectedBetweenColonAndLayoutConstraint: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndLayoutConstraint.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var layoutConstraint: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLayoutConstraint(_ layoutConstraint: RawTokenSyntax, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(layoutConstraint), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
   public var unexpectedBetweenLayoutConstraintAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLayoutConstraintAndLeftParen(_ unexpectedBetweenLayoutConstraintAndLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenLayoutConstraintAndLeftParen.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 7, with: leftParen.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndSize: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndSize(_ unexpectedBetweenLeftParenAndSize: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenLeftParenAndSize.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var size: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withSize(_ size: RawTokenSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 9, with: size.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
   public var unexpectedBetweenSizeAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSizeAndComma(_ unexpectedBetweenSizeAndComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenSizeAndComma.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var comma: RawTokenSyntax? {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
-  }
-  public func withComma(_ comma: RawTokenSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 11, with: comma.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
   public var unexpectedBetweenCommaAndAlignment: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCommaAndAlignment(_ unexpectedBetweenCommaAndAlignment: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenCommaAndAlignment.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var alignment: RawTokenSyntax? {
     layoutView.children[13].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAlignment(_ alignment: RawTokenSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 13, with: alignment.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
   public var unexpectedBetweenAlignmentAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAlignmentAndRightParen(_ unexpectedBetweenAlignmentAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenAlignmentAndRightParen.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax? {
     layoutView.children[15].map(RawTokenSyntax.init(raw:))
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 15, with: rightParen.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawLayoutRequirementSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawLayoutRequirementSyntax.self)!
   }
 }
 
@@ -20772,80 +16557,41 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeAttributes(_ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeAttributes.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 1, with: attributes.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndName(_ unexpectedBetweenAttributesAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenAttributesAndName.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(name), arena: arena).as(RawGenericParameterSyntax.self)!
   }
   public var unexpectedBetweenNameAndEllipsis: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndEllipsis(_ unexpectedBetweenNameAndEllipsis: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenNameAndEllipsis.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
-  }
   public var ellipsis: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withEllipsis(_ ellipsis: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 5, with: ellipsis.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
   public var unexpectedBetweenEllipsisAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEllipsisAndColon(_ unexpectedBetweenEllipsisAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenEllipsisAndColon.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
-  }
   public var colon: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 7, with: colon.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
   public var unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndInheritedType(_ unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenColonAndInheritedType.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
-  }
   public var inheritedType: RawTypeSyntax? {
     layoutView.children[9].map(RawTypeSyntax.init(raw:))
-  }
-  public func withInheritedType(_ inheritedType: RawTypeSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 9, with: inheritedType.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
   public var unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInheritedTypeAndTrailingComma(_ unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenInheritedTypeAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 11, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericParameterSyntax.self)!
   }
 }
 
@@ -20937,32 +16683,17 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawPrimaryAssociatedTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawPrimaryAssociatedTypeSyntax.self)!
   }
   public var unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndTrailingComma(_ unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeSyntax.self)!
   }
 }
 
@@ -21021,56 +16752,29 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftAngleBracket(_ unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftAngleBracket.map(RawSyntax.init), arena: arena).as(RawGenericParameterClauseSyntax.self)!
-  }
   public var leftAngleBracket: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftAngleBracket(_ leftAngleBracket: RawTokenSyntax, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftAngleBracket), arena: arena).as(RawGenericParameterClauseSyntax.self)!
   }
   public var unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftAngleBracketAndGenericParameterList(_ unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftAngleBracketAndGenericParameterList.map(RawSyntax.init), arena: arena).as(RawGenericParameterClauseSyntax.self)!
-  }
   public var genericParameterList: RawGenericParameterListSyntax {
     layoutView.children[3].map(RawGenericParameterListSyntax.init(raw:))!
-  }
-  public func withGenericParameterList(_ genericParameterList: RawGenericParameterListSyntax, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(genericParameterList), arena: arena).as(RawGenericParameterClauseSyntax.self)!
   }
   public var unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParameterListAndGenericWhereClause(_ unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenGenericParameterListAndGenericWhereClause.map(RawSyntax.init), arena: arena).as(RawGenericParameterClauseSyntax.self)!
-  }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     layoutView.children[5].map(RawGenericWhereClauseSyntax.init(raw:))
-  }
-  public func withGenericWhereClause(_ genericWhereClause: RawGenericWhereClauseSyntax?, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: genericWhereClause.map(RawSyntax.init), arena: arena).as(RawGenericParameterClauseSyntax.self)!
   }
   public var unexpectedBetweenGenericWhereClauseAndRightAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericWhereClauseAndRightAngleBracket(_ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenGenericWhereClauseAndRightAngleBracket.map(RawSyntax.init), arena: arena).as(RawGenericParameterClauseSyntax.self)!
-  }
   public var rightAngleBracket: RawTokenSyntax {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightAngleBracket(_ rightAngleBracket: RawTokenSyntax, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(rightAngleBracket), arena: arena).as(RawGenericParameterClauseSyntax.self)!
-  }
   public var unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightAngleBracket(_ unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericParameterClauseSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterRightAngleBracket.map(RawSyntax.init), arena: arena).as(RawGenericParameterClauseSyntax.self)!
   }
 }
 
@@ -21125,44 +16829,23 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftTypeIdentifier(_ unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConformanceRequirementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftTypeIdentifier.map(RawSyntax.init), arena: arena).as(RawConformanceRequirementSyntax.self)!
-  }
   public var leftTypeIdentifier: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withLeftTypeIdentifier(_ leftTypeIdentifier: RawTypeSyntax, arena: SyntaxArena) -> RawConformanceRequirementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftTypeIdentifier), arena: arena).as(RawConformanceRequirementSyntax.self)!
   }
   public var unexpectedBetweenLeftTypeIdentifierAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftTypeIdentifierAndColon(_ unexpectedBetweenLeftTypeIdentifierAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConformanceRequirementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftTypeIdentifierAndColon.map(RawSyntax.init), arena: arena).as(RawConformanceRequirementSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawConformanceRequirementSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawConformanceRequirementSyntax.self)!
   }
   public var unexpectedBetweenColonAndRightTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndRightTypeIdentifier(_ unexpectedBetweenColonAndRightTypeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConformanceRequirementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndRightTypeIdentifier.map(RawSyntax.init), arena: arena).as(RawConformanceRequirementSyntax.self)!
-  }
   public var rightTypeIdentifier: RawTypeSyntax {
     layoutView.children[5].map(RawTypeSyntax.init(raw:))!
   }
-  public func withRightTypeIdentifier(_ rightTypeIdentifier: RawTypeSyntax, arena: SyntaxArena) -> RawConformanceRequirementSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightTypeIdentifier), arena: arena).as(RawConformanceRequirementSyntax.self)!
-  }
   public var unexpectedAfterRightTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightTypeIdentifier(_ unexpectedAfterRightTypeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConformanceRequirementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightTypeIdentifier.map(RawSyntax.init), arena: arena).as(RawConformanceRequirementSyntax.self)!
   }
 }
 
@@ -21217,44 +16900,23 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol, RawSy
   public var unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftAngleBracket(_ unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftAngleBracket.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeClauseSyntax.self)!
-  }
   public var leftAngleBracket: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftAngleBracket(_ leftAngleBracket: RawTokenSyntax, arena: SyntaxArena) -> RawPrimaryAssociatedTypeClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftAngleBracket), arena: arena).as(RawPrimaryAssociatedTypeClauseSyntax.self)!
   }
   public var unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList(_ unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeClauseSyntax.self)!
-  }
   public var primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax {
     layoutView.children[3].map(RawPrimaryAssociatedTypeListSyntax.init(raw:))!
-  }
-  public func withPrimaryAssociatedTypeList(_ primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax, arena: SyntaxArena) -> RawPrimaryAssociatedTypeClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(primaryAssociatedTypeList), arena: arena).as(RawPrimaryAssociatedTypeClauseSyntax.self)!
   }
   public var unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket(_ unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeClauseSyntax.self)!
-  }
   public var rightAngleBracket: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightAngleBracket(_ rightAngleBracket: RawTokenSyntax, arena: SyntaxArena) -> RawPrimaryAssociatedTypeClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightAngleBracket), arena: arena).as(RawPrimaryAssociatedTypeClauseSyntax.self)!
-  }
   public var unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightAngleBracket(_ unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPrimaryAssociatedTypeClauseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightAngleBracket.map(RawSyntax.init), arena: arena).as(RawPrimaryAssociatedTypeClauseSyntax.self)!
   }
 }
 
@@ -21305,32 +16967,17 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeName(_ unexpectedBeforeName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSimpleTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeName.map(RawSyntax.init), arena: arena).as(RawSimpleTypeIdentifierSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawSimpleTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(name), arena: arena).as(RawSimpleTypeIdentifierSyntax.self)!
   }
   public var unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndGenericArgumentClause(_ unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSimpleTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenNameAndGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSimpleTypeIdentifierSyntax.self)!
-  }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
     layoutView.children[3].map(RawGenericArgumentClauseSyntax.init(raw:))
   }
-  public func withGenericArgumentClause(_ genericArgumentClause: RawGenericArgumentClauseSyntax?, arena: SyntaxArena) -> RawSimpleTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 3, with: genericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSimpleTypeIdentifierSyntax.self)!
-  }
   public var unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGenericArgumentClause(_ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawSimpleTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawSimpleTypeIdentifierSyntax.self)!
   }
 }
 
@@ -21389,56 +17036,29 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBaseType(_ unexpectedBeforeBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBaseType.map(RawSyntax.init), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
-  }
   public var baseType: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withBaseType(_ baseType: RawTypeSyntax, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(baseType), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
   }
   public var unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBaseTypeAndPeriod(_ unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBaseTypeAndPeriod.map(RawSyntax.init), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
-  }
   public var period: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPeriod(_ period: RawTokenSyntax, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(period), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
   }
   public var unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPeriodAndName(_ unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPeriodAndName.map(RawSyntax.init), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
-  }
   public var name: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withName(_ name: RawTokenSyntax, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(name), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
   }
   public var unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndGenericArgumentClause(_ unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenNameAndGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
-  }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
     layoutView.children[7].map(RawGenericArgumentClauseSyntax.init(raw:))
   }
-  public func withGenericArgumentClause(_ genericArgumentClause: RawGenericArgumentClauseSyntax?, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 7, with: genericArgumentClause.map(RawSyntax.init), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
-  }
   public var unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterGenericArgumentClause(_ unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMemberTypeIdentifierSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterGenericArgumentClause.map(RawSyntax.init), arena: arena).as(RawMemberTypeIdentifierSyntax.self)!
   }
 }
 
@@ -21485,20 +17105,11 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeClassKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeClassKeyword(_ unexpectedBeforeClassKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassRestrictionTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeClassKeyword.map(RawSyntax.init), arena: arena).as(RawClassRestrictionTypeSyntax.self)!
-  }
   public var classKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withClassKeyword(_ classKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawClassRestrictionTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(classKeyword), arena: arena).as(RawClassRestrictionTypeSyntax.self)!
-  }
   public var unexpectedAfterClassKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterClassKeyword(_ unexpectedAfterClassKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawClassRestrictionTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterClassKeyword.map(RawSyntax.init), arena: arena).as(RawClassRestrictionTypeSyntax.self)!
   }
 }
 
@@ -21553,44 +17164,23 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftSquareBracket(_ unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftSquareBracket.map(RawSyntax.init), arena: arena).as(RawArrayTypeSyntax.self)!
-  }
   public var leftSquareBracket: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftSquareBracket(_ leftSquareBracket: RawTokenSyntax, arena: SyntaxArena) -> RawArrayTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftSquareBracket), arena: arena).as(RawArrayTypeSyntax.self)!
   }
   public var unexpectedBetweenLeftSquareBracketAndElementType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftSquareBracketAndElementType(_ unexpectedBetweenLeftSquareBracketAndElementType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftSquareBracketAndElementType.map(RawSyntax.init), arena: arena).as(RawArrayTypeSyntax.self)!
-  }
   public var elementType: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withElementType(_ elementType: RawTypeSyntax, arena: SyntaxArena) -> RawArrayTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(elementType), arena: arena).as(RawArrayTypeSyntax.self)!
   }
   public var unexpectedBetweenElementTypeAndRightSquareBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElementTypeAndRightSquareBracket(_ unexpectedBetweenElementTypeAndRightSquareBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenElementTypeAndRightSquareBracket.map(RawSyntax.init), arena: arena).as(RawArrayTypeSyntax.self)!
-  }
   public var rightSquareBracket: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightSquareBracket(_ rightSquareBracket: RawTokenSyntax, arena: SyntaxArena) -> RawArrayTypeSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightSquareBracket), arena: arena).as(RawArrayTypeSyntax.self)!
-  }
   public var unexpectedAfterRightSquareBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightSquareBracket(_ unexpectedAfterRightSquareBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawArrayTypeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightSquareBracket.map(RawSyntax.init), arena: arena).as(RawArrayTypeSyntax.self)!
   }
 }
 
@@ -21653,68 +17243,35 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftSquareBracket(_ unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftSquareBracket.map(RawSyntax.init), arena: arena).as(RawDictionaryTypeSyntax.self)!
-  }
   public var leftSquareBracket: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftSquareBracket(_ leftSquareBracket: RawTokenSyntax, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftSquareBracket), arena: arena).as(RawDictionaryTypeSyntax.self)!
   }
   public var unexpectedBetweenLeftSquareBracketAndKeyType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftSquareBracketAndKeyType(_ unexpectedBetweenLeftSquareBracketAndKeyType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftSquareBracketAndKeyType.map(RawSyntax.init), arena: arena).as(RawDictionaryTypeSyntax.self)!
-  }
   public var keyType: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withKeyType(_ keyType: RawTypeSyntax, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(keyType), arena: arena).as(RawDictionaryTypeSyntax.self)!
   }
   public var unexpectedBetweenKeyTypeAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenKeyTypeAndColon(_ unexpectedBetweenKeyTypeAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenKeyTypeAndColon.map(RawSyntax.init), arena: arena).as(RawDictionaryTypeSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(colon), arena: arena).as(RawDictionaryTypeSyntax.self)!
   }
   public var unexpectedBetweenColonAndValueType: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndValueType(_ unexpectedBetweenColonAndValueType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenColonAndValueType.map(RawSyntax.init), arena: arena).as(RawDictionaryTypeSyntax.self)!
-  }
   public var valueType: RawTypeSyntax {
     layoutView.children[7].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withValueType(_ valueType: RawTypeSyntax, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 7, with: RawSyntax(valueType), arena: arena).as(RawDictionaryTypeSyntax.self)!
   }
   public var unexpectedBetweenValueTypeAndRightSquareBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenValueTypeAndRightSquareBracket(_ unexpectedBetweenValueTypeAndRightSquareBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenValueTypeAndRightSquareBracket.map(RawSyntax.init), arena: arena).as(RawDictionaryTypeSyntax.self)!
-  }
   public var rightSquareBracket: RawTokenSyntax {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightSquareBracket(_ rightSquareBracket: RawTokenSyntax, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(rightSquareBracket), arena: arena).as(RawDictionaryTypeSyntax.self)!
-  }
   public var unexpectedAfterRightSquareBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightSquareBracket(_ unexpectedAfterRightSquareBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawDictionaryTypeSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedAfterRightSquareBracket.map(RawSyntax.init), arena: arena).as(RawDictionaryTypeSyntax.self)!
   }
 }
 
@@ -21769,44 +17326,23 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeBaseType(_ unexpectedBeforeBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMetatypeTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeBaseType.map(RawSyntax.init), arena: arena).as(RawMetatypeTypeSyntax.self)!
-  }
   public var baseType: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withBaseType(_ baseType: RawTypeSyntax, arena: SyntaxArena) -> RawMetatypeTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(baseType), arena: arena).as(RawMetatypeTypeSyntax.self)!
   }
   public var unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenBaseTypeAndPeriod(_ unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMetatypeTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenBaseTypeAndPeriod.map(RawSyntax.init), arena: arena).as(RawMetatypeTypeSyntax.self)!
-  }
   public var period: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPeriod(_ period: RawTokenSyntax, arena: SyntaxArena) -> RawMetatypeTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(period), arena: arena).as(RawMetatypeTypeSyntax.self)!
   }
   public var unexpectedBetweenPeriodAndTypeOrProtocol: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPeriodAndTypeOrProtocol(_ unexpectedBetweenPeriodAndTypeOrProtocol: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMetatypeTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPeriodAndTypeOrProtocol.map(RawSyntax.init), arena: arena).as(RawMetatypeTypeSyntax.self)!
-  }
   public var typeOrProtocol: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withTypeOrProtocol(_ typeOrProtocol: RawTokenSyntax, arena: SyntaxArena) -> RawMetatypeTypeSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(typeOrProtocol), arena: arena).as(RawMetatypeTypeSyntax.self)!
-  }
   public var unexpectedAfterTypeOrProtocol: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTypeOrProtocol(_ unexpectedAfterTypeOrProtocol: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawMetatypeTypeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterTypeOrProtocol.map(RawSyntax.init), arena: arena).as(RawMetatypeTypeSyntax.self)!
   }
 }
 
@@ -21857,32 +17393,17 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWrappedType(_ unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWrappedType.map(RawSyntax.init), arena: arena).as(RawOptionalTypeSyntax.self)!
-  }
   public var wrappedType: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withWrappedType(_ wrappedType: RawTypeSyntax, arena: SyntaxArena) -> RawOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(wrappedType), arena: arena).as(RawOptionalTypeSyntax.self)!
   }
   public var unexpectedBetweenWrappedTypeAndQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWrappedTypeAndQuestionMark(_ unexpectedBetweenWrappedTypeAndQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWrappedTypeAndQuestionMark.map(RawSyntax.init), arena: arena).as(RawOptionalTypeSyntax.self)!
-  }
   public var questionMark: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withQuestionMark(_ questionMark: RawTokenSyntax, arena: SyntaxArena) -> RawOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(questionMark), arena: arena).as(RawOptionalTypeSyntax.self)!
-  }
   public var unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterQuestionMark(_ unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterQuestionMark.map(RawSyntax.init), arena: arena).as(RawOptionalTypeSyntax.self)!
   }
 }
 
@@ -21933,32 +17454,17 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeSomeOrAnySpecifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeSomeOrAnySpecifier(_ unexpectedBeforeSomeOrAnySpecifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConstrainedSugarTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeSomeOrAnySpecifier.map(RawSyntax.init), arena: arena).as(RawConstrainedSugarTypeSyntax.self)!
-  }
   public var someOrAnySpecifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withSomeOrAnySpecifier(_ someOrAnySpecifier: RawTokenSyntax, arena: SyntaxArena) -> RawConstrainedSugarTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(someOrAnySpecifier), arena: arena).as(RawConstrainedSugarTypeSyntax.self)!
   }
   public var unexpectedBetweenSomeOrAnySpecifierAndBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSomeOrAnySpecifierAndBaseType(_ unexpectedBetweenSomeOrAnySpecifierAndBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConstrainedSugarTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenSomeOrAnySpecifierAndBaseType.map(RawSyntax.init), arena: arena).as(RawConstrainedSugarTypeSyntax.self)!
-  }
   public var baseType: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public func withBaseType(_ baseType: RawTypeSyntax, arena: SyntaxArena) -> RawConstrainedSugarTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(baseType), arena: arena).as(RawConstrainedSugarTypeSyntax.self)!
-  }
   public var unexpectedAfterBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBaseType(_ unexpectedAfterBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawConstrainedSugarTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterBaseType.map(RawSyntax.init), arena: arena).as(RawConstrainedSugarTypeSyntax.self)!
   }
 }
 
@@ -22009,32 +17515,17 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
   public var unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWrappedType(_ unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWrappedType.map(RawSyntax.init), arena: arena).as(RawImplicitlyUnwrappedOptionalTypeSyntax.self)!
-  }
   public var wrappedType: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withWrappedType(_ wrappedType: RawTypeSyntax, arena: SyntaxArena) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(wrappedType), arena: arena).as(RawImplicitlyUnwrappedOptionalTypeSyntax.self)!
   }
   public var unexpectedBetweenWrappedTypeAndExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWrappedTypeAndExclamationMark(_ unexpectedBetweenWrappedTypeAndExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWrappedTypeAndExclamationMark.map(RawSyntax.init), arena: arena).as(RawImplicitlyUnwrappedOptionalTypeSyntax.self)!
-  }
   public var exclamationMark: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withExclamationMark(_ exclamationMark: RawTokenSyntax, arena: SyntaxArena) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(exclamationMark), arena: arena).as(RawImplicitlyUnwrappedOptionalTypeSyntax.self)!
-  }
   public var unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExclamationMark(_ unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterExclamationMark.map(RawSyntax.init), arena: arena).as(RawImplicitlyUnwrappedOptionalTypeSyntax.self)!
   }
 }
 
@@ -22085,32 +17576,17 @@ public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeType(_ unexpectedBeforeType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCompositionTypeElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeType.map(RawSyntax.init), arena: arena).as(RawCompositionTypeElementSyntax.self)!
-  }
   public var type: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withType(_ type: RawTypeSyntax, arena: SyntaxArena) -> RawCompositionTypeElementSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(type), arena: arena).as(RawCompositionTypeElementSyntax.self)!
   }
   public var unexpectedBetweenTypeAndAmpersand: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAndAmpersand(_ unexpectedBetweenTypeAndAmpersand: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCompositionTypeElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenTypeAndAmpersand.map(RawSyntax.init), arena: arena).as(RawCompositionTypeElementSyntax.self)!
-  }
   public var ampersand: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withAmpersand(_ ampersand: RawTokenSyntax?, arena: SyntaxArena) -> RawCompositionTypeElementSyntax {
-    return layoutView.replacingChild(at: 3, with: ampersand.map(RawSyntax.init), arena: arena).as(RawCompositionTypeElementSyntax.self)!
-  }
   public var unexpectedAfterAmpersand: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAmpersand(_ unexpectedAfterAmpersand: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCompositionTypeElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterAmpersand.map(RawSyntax.init), arena: arena).as(RawCompositionTypeElementSyntax.self)!
   }
 }
 
@@ -22198,20 +17674,11 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeElements: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeElements(_ unexpectedBeforeElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCompositionTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeElements.map(RawSyntax.init), arena: arena).as(RawCompositionTypeSyntax.self)!
-  }
   public var elements: RawCompositionTypeElementListSyntax {
     layoutView.children[1].map(RawCompositionTypeElementListSyntax.init(raw:))!
   }
-  public func withElements(_ elements: RawCompositionTypeElementListSyntax, arena: SyntaxArena) -> RawCompositionTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(elements), arena: arena).as(RawCompositionTypeSyntax.self)!
-  }
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterElements(_ unexpectedAfterElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawCompositionTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterElements.map(RawSyntax.init), arena: arena).as(RawCompositionTypeSyntax.self)!
   }
 }
 
@@ -22262,32 +17729,17 @@ public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforePatternType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePatternType(_ unexpectedBeforePatternType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPackExpansionTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePatternType.map(RawSyntax.init), arena: arena).as(RawPackExpansionTypeSyntax.self)!
-  }
   public var patternType: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withPatternType(_ patternType: RawTypeSyntax, arena: SyntaxArena) -> RawPackExpansionTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(patternType), arena: arena).as(RawPackExpansionTypeSyntax.self)!
   }
   public var unexpectedBetweenPatternTypeAndEllipsis: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternTypeAndEllipsis(_ unexpectedBetweenPatternTypeAndEllipsis: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPackExpansionTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPatternTypeAndEllipsis.map(RawSyntax.init), arena: arena).as(RawPackExpansionTypeSyntax.self)!
-  }
   public var ellipsis: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withEllipsis(_ ellipsis: RawTokenSyntax, arena: SyntaxArena) -> RawPackExpansionTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(ellipsis), arena: arena).as(RawPackExpansionTypeSyntax.self)!
-  }
   public var unexpectedAfterEllipsis: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterEllipsis(_ unexpectedAfterEllipsis: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawPackExpansionTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterEllipsis.map(RawSyntax.init), arena: arena).as(RawPackExpansionTypeSyntax.self)!
   }
 }
 
@@ -22362,104 +17814,53 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeInOut: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeInOut(_ unexpectedBeforeInOut: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeInOut.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var inOut: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withInOut(_ inOut: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 1, with: inOut.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
   public var unexpectedBetweenInOutAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInOutAndName(_ unexpectedBetweenInOutAndName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenInOutAndName.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var name: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withName(_ name: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 3, with: name.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
   public var unexpectedBetweenNameAndSecondName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenNameAndSecondName(_ unexpectedBetweenNameAndSecondName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenNameAndSecondName.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var secondName: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
-  }
-  public func withSecondName(_ secondName: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 5, with: secondName.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
   public var unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSecondNameAndColon(_ unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenSecondNameAndColon.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var colon: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withColon(_ colon: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 7, with: colon.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
   public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndType(_ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenColonAndType.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var type: RawTypeSyntax {
     layoutView.children[9].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withType(_ type: RawTypeSyntax, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 9, with: RawSyntax(type), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
   public var unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAndEllipsis(_ unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenTypeAndEllipsis.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var ellipsis: RawTokenSyntax? {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
-  }
-  public func withEllipsis(_ ellipsis: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 11, with: ellipsis.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
   public var unexpectedBetweenEllipsisAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEllipsisAndInitializer(_ unexpectedBetweenEllipsisAndInitializer: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenEllipsisAndInitializer.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var initializer: RawInitializerClauseSyntax? {
     layoutView.children[13].map(RawInitializerClauseSyntax.init(raw:))
-  }
-  public func withInitializer(_ initializer: RawInitializerClauseSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 13, with: initializer.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
   public var unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenInitializerAndTrailingComma(_ unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedBetweenInitializerAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[15].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 15, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeElementSyntax {
-    return layoutView.replacingChild(at: 16, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawTupleTypeElementSyntax.self)!
   }
 }
 
@@ -22555,44 +17956,23 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawTupleTypeSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawTupleTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawTupleTypeSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndElements(_ unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndElements.map(RawSyntax.init), arena: arena).as(RawTupleTypeSyntax.self)!
-  }
   public var elements: RawTupleTypeElementListSyntax {
     layoutView.children[3].map(RawTupleTypeElementListSyntax.init(raw:))!
-  }
-  public func withElements(_ elements: RawTupleTypeElementListSyntax, arena: SyntaxArena) -> RawTupleTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(elements), arena: arena).as(RawTupleTypeSyntax.self)!
   }
   public var unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElementsAndRightParen(_ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenElementsAndRightParen.map(RawSyntax.init), arena: arena).as(RawTupleTypeSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawTupleTypeSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawTupleTypeSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTupleTypeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawTupleTypeSyntax.self)!
   }
 }
 
@@ -22663,92 +18043,47 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawFunctionTypeSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndArguments(_ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndArguments.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var arguments: RawTupleTypeElementListSyntax {
     layoutView.children[3].map(RawTupleTypeElementListSyntax.init(raw:))!
-  }
-  public func withArguments(_ arguments: RawTupleTypeElementListSyntax, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(arguments), arena: arena).as(RawFunctionTypeSyntax.self)!
   }
   public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentsAndRightParen(_ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenArgumentsAndRightParen.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawFunctionTypeSyntax.self)!
   }
   public var unexpectedBetweenRightParenAndAsyncKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenRightParenAndAsyncKeyword(_ unexpectedBetweenRightParenAndAsyncKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenRightParenAndAsyncKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var asyncKeyword: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
-  }
-  public func withAsyncKeyword(_ asyncKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 7, with: asyncKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
   }
   public var unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword(_ unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var throwsOrRethrowsKeyword: RawTokenSyntax? {
     layoutView.children[9].map(RawTokenSyntax.init(raw:))
-  }
-  public func withThrowsOrRethrowsKeyword(_ throwsOrRethrowsKeyword: RawTokenSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 9, with: throwsOrRethrowsKeyword.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
   }
   public var unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenThrowsOrRethrowsKeywordAndArrow(_ unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 10, with: unexpectedBetweenThrowsOrRethrowsKeywordAndArrow.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var arrow: RawTokenSyntax {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withArrow(_ arrow: RawTokenSyntax, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 11, with: RawSyntax(arrow), arena: arena).as(RawFunctionTypeSyntax.self)!
   }
   public var unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArrowAndReturnType(_ unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 12, with: unexpectedBetweenArrowAndReturnType.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var returnType: RawTypeSyntax {
     layoutView.children[13].map(RawTypeSyntax.init(raw:))!
   }
-  public func withReturnType(_ returnType: RawTypeSyntax, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 13, with: RawSyntax(returnType), arena: arena).as(RawFunctionTypeSyntax.self)!
-  }
   public var unexpectedAfterReturnType: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterReturnType(_ unexpectedAfterReturnType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawFunctionTypeSyntax {
-    return layoutView.replacingChild(at: 14, with: unexpectedAfterReturnType.map(RawSyntax.init), arena: arena).as(RawFunctionTypeSyntax.self)!
   }
 }
 
@@ -22803,44 +18138,23 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyn
   public var unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeSpecifier(_ unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributedTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeSpecifier.map(RawSyntax.init), arena: arena).as(RawAttributedTypeSyntax.self)!
-  }
   public var specifier: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withSpecifier(_ specifier: RawTokenSyntax?, arena: SyntaxArena) -> RawAttributedTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: specifier.map(RawSyntax.init), arena: arena).as(RawAttributedTypeSyntax.self)!
   }
   public var unexpectedBetweenSpecifierAndAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSpecifierAndAttributes(_ unexpectedBetweenSpecifierAndAttributes: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributedTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenSpecifierAndAttributes.map(RawSyntax.init), arena: arena).as(RawAttributedTypeSyntax.self)!
-  }
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[3].map(RawAttributeListSyntax.init(raw:))
-  }
-  public func withAttributes(_ attributes: RawAttributeListSyntax?, arena: SyntaxArena) -> RawAttributedTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: attributes.map(RawSyntax.init), arena: arena).as(RawAttributedTypeSyntax.self)!
   }
   public var unexpectedBetweenAttributesAndBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAttributesAndBaseType(_ unexpectedBetweenAttributesAndBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributedTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAttributesAndBaseType.map(RawSyntax.init), arena: arena).as(RawAttributedTypeSyntax.self)!
-  }
   public var baseType: RawTypeSyntax {
     layoutView.children[5].map(RawTypeSyntax.init(raw:))!
   }
-  public func withBaseType(_ baseType: RawTypeSyntax, arena: SyntaxArena) -> RawAttributedTypeSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(baseType), arena: arena).as(RawAttributedTypeSyntax.self)!
-  }
   public var unexpectedAfterBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBaseType(_ unexpectedAfterBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAttributedTypeSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterBaseType.map(RawSyntax.init), arena: arena).as(RawAttributedTypeSyntax.self)!
   }
 }
 
@@ -22932,32 +18246,17 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
   public var unexpectedBeforeArgumentType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeArgumentType(_ unexpectedBeforeArgumentType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericArgumentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeArgumentType.map(RawSyntax.init), arena: arena).as(RawGenericArgumentSyntax.self)!
-  }
   public var argumentType: RawTypeSyntax {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
-  }
-  public func withArgumentType(_ argumentType: RawTypeSyntax, arena: SyntaxArena) -> RawGenericArgumentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(argumentType), arena: arena).as(RawGenericArgumentSyntax.self)!
   }
   public var unexpectedBetweenArgumentTypeAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentTypeAndTrailingComma(_ unexpectedBetweenArgumentTypeAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericArgumentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenArgumentTypeAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericArgumentSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawGenericArgumentSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawGenericArgumentSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericArgumentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawGenericArgumentSyntax.self)!
   }
 }
 
@@ -23012,44 +18311,23 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
   public var unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftAngleBracket(_ unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericArgumentClauseSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftAngleBracket.map(RawSyntax.init), arena: arena).as(RawGenericArgumentClauseSyntax.self)!
-  }
   public var leftAngleBracket: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftAngleBracket(_ leftAngleBracket: RawTokenSyntax, arena: SyntaxArena) -> RawGenericArgumentClauseSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftAngleBracket), arena: arena).as(RawGenericArgumentClauseSyntax.self)!
   }
   public var unexpectedBetweenLeftAngleBracketAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftAngleBracketAndArguments(_ unexpectedBetweenLeftAngleBracketAndArguments: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericArgumentClauseSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftAngleBracketAndArguments.map(RawSyntax.init), arena: arena).as(RawGenericArgumentClauseSyntax.self)!
-  }
   public var arguments: RawGenericArgumentListSyntax {
     layoutView.children[3].map(RawGenericArgumentListSyntax.init(raw:))!
-  }
-  public func withArguments(_ arguments: RawGenericArgumentListSyntax, arena: SyntaxArena) -> RawGenericArgumentClauseSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(arguments), arena: arena).as(RawGenericArgumentClauseSyntax.self)!
   }
   public var unexpectedBetweenArgumentsAndRightAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenArgumentsAndRightAngleBracket(_ unexpectedBetweenArgumentsAndRightAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericArgumentClauseSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenArgumentsAndRightAngleBracket.map(RawSyntax.init), arena: arena).as(RawGenericArgumentClauseSyntax.self)!
-  }
   public var rightAngleBracket: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightAngleBracket(_ rightAngleBracket: RawTokenSyntax, arena: SyntaxArena) -> RawGenericArgumentClauseSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightAngleBracket), arena: arena).as(RawGenericArgumentClauseSyntax.self)!
-  }
   public var unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightAngleBracket(_ unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawGenericArgumentClauseSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightAngleBracket.map(RawSyntax.init), arena: arena).as(RawGenericArgumentClauseSyntax.self)!
   }
 }
 
@@ -23100,32 +18378,17 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynt
   public var unexpectedBeforeGenericParameters: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeGenericParameters(_ unexpectedBeforeGenericParameters: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNamedOpaqueReturnTypeSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeGenericParameters.map(RawSyntax.init), arena: arena).as(RawNamedOpaqueReturnTypeSyntax.self)!
-  }
   public var genericParameters: RawGenericParameterClauseSyntax {
     layoutView.children[1].map(RawGenericParameterClauseSyntax.init(raw:))!
-  }
-  public func withGenericParameters(_ genericParameters: RawGenericParameterClauseSyntax, arena: SyntaxArena) -> RawNamedOpaqueReturnTypeSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(genericParameters), arena: arena).as(RawNamedOpaqueReturnTypeSyntax.self)!
   }
   public var unexpectedBetweenGenericParametersAndBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenGenericParametersAndBaseType(_ unexpectedBetweenGenericParametersAndBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNamedOpaqueReturnTypeSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenGenericParametersAndBaseType.map(RawSyntax.init), arena: arena).as(RawNamedOpaqueReturnTypeSyntax.self)!
-  }
   public var baseType: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public func withBaseType(_ baseType: RawTypeSyntax, arena: SyntaxArena) -> RawNamedOpaqueReturnTypeSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(baseType), arena: arena).as(RawNamedOpaqueReturnTypeSyntax.self)!
-  }
   public var unexpectedAfterBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterBaseType(_ unexpectedAfterBaseType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawNamedOpaqueReturnTypeSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterBaseType.map(RawSyntax.init), arena: arena).as(RawNamedOpaqueReturnTypeSyntax.self)!
   }
 }
 
@@ -23176,32 +18439,17 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
   public var unexpectedBeforeColon: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeColon(_ unexpectedBeforeColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeAnnotationSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeColon.map(RawSyntax.init), arena: arena).as(RawTypeAnnotationSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawTypeAnnotationSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(colon), arena: arena).as(RawTypeAnnotationSyntax.self)!
   }
   public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndType(_ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeAnnotationSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenColonAndType.map(RawSyntax.init), arena: arena).as(RawTypeAnnotationSyntax.self)!
-  }
   public var type: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public func withType(_ type: RawTypeSyntax, arena: SyntaxArena) -> RawTypeAnnotationSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(type), arena: arena).as(RawTypeAnnotationSyntax.self)!
-  }
   public var unexpectedAfterType: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterType(_ unexpectedAfterType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTypeAnnotationSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterType.map(RawSyntax.init), arena: arena).as(RawTypeAnnotationSyntax.self)!
   }
 }
 
@@ -23260,56 +18508,29 @@ public struct RawEnumCasePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeType(_ unexpectedBeforeType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeType.map(RawSyntax.init), arena: arena).as(RawEnumCasePatternSyntax.self)!
-  }
   public var type: RawTypeSyntax? {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))
-  }
-  public func withType(_ type: RawTypeSyntax?, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 1, with: type.map(RawSyntax.init), arena: arena).as(RawEnumCasePatternSyntax.self)!
   }
   public var unexpectedBetweenTypeAndPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenTypeAndPeriod(_ unexpectedBetweenTypeAndPeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenTypeAndPeriod.map(RawSyntax.init), arena: arena).as(RawEnumCasePatternSyntax.self)!
-  }
   public var period: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPeriod(_ period: RawTokenSyntax, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(period), arena: arena).as(RawEnumCasePatternSyntax.self)!
   }
   public var unexpectedBetweenPeriodAndCaseName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPeriodAndCaseName(_ unexpectedBetweenPeriodAndCaseName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPeriodAndCaseName.map(RawSyntax.init), arena: arena).as(RawEnumCasePatternSyntax.self)!
-  }
   public var caseName: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withCaseName(_ caseName: RawTokenSyntax, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(caseName), arena: arena).as(RawEnumCasePatternSyntax.self)!
   }
   public var unexpectedBetweenCaseNameAndAssociatedTuple: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenCaseNameAndAssociatedTuple(_ unexpectedBetweenCaseNameAndAssociatedTuple: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenCaseNameAndAssociatedTuple.map(RawSyntax.init), arena: arena).as(RawEnumCasePatternSyntax.self)!
-  }
   public var associatedTuple: RawTuplePatternSyntax? {
     layoutView.children[7].map(RawTuplePatternSyntax.init(raw:))
   }
-  public func withAssociatedTuple(_ associatedTuple: RawTuplePatternSyntax?, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 7, with: associatedTuple.map(RawSyntax.init), arena: arena).as(RawEnumCasePatternSyntax.self)!
-  }
   public var unexpectedAfterAssociatedTuple: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterAssociatedTuple(_ unexpectedAfterAssociatedTuple: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawEnumCasePatternSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterAssociatedTuple.map(RawSyntax.init), arena: arena).as(RawEnumCasePatternSyntax.self)!
   }
 }
 
@@ -23360,32 +18581,17 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeIsKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIsKeyword(_ unexpectedBeforeIsKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIsTypePatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIsKeyword.map(RawSyntax.init), arena: arena).as(RawIsTypePatternSyntax.self)!
-  }
   public var isKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withIsKeyword(_ isKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawIsTypePatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(isKeyword), arena: arena).as(RawIsTypePatternSyntax.self)!
   }
   public var unexpectedBetweenIsKeywordAndType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenIsKeywordAndType(_ unexpectedBetweenIsKeywordAndType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIsTypePatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenIsKeywordAndType.map(RawSyntax.init), arena: arena).as(RawIsTypePatternSyntax.self)!
-  }
   public var type: RawTypeSyntax {
     layoutView.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public func withType(_ type: RawTypeSyntax, arena: SyntaxArena) -> RawIsTypePatternSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(type), arena: arena).as(RawIsTypePatternSyntax.self)!
-  }
   public var unexpectedAfterType: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterType(_ unexpectedAfterType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIsTypePatternSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterType.map(RawSyntax.init), arena: arena).as(RawIsTypePatternSyntax.self)!
   }
 }
 
@@ -23436,32 +18642,17 @@ public struct RawOptionalPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeSubPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeSubPattern(_ unexpectedBeforeSubPattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalPatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeSubPattern.map(RawSyntax.init), arena: arena).as(RawOptionalPatternSyntax.self)!
-  }
   public var subPattern: RawPatternSyntax {
     layoutView.children[1].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withSubPattern(_ subPattern: RawPatternSyntax, arena: SyntaxArena) -> RawOptionalPatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(subPattern), arena: arena).as(RawOptionalPatternSyntax.self)!
   }
   public var unexpectedBetweenSubPatternAndQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenSubPatternAndQuestionMark(_ unexpectedBetweenSubPatternAndQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalPatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenSubPatternAndQuestionMark.map(RawSyntax.init), arena: arena).as(RawOptionalPatternSyntax.self)!
-  }
   public var questionMark: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public func withQuestionMark(_ questionMark: RawTokenSyntax, arena: SyntaxArena) -> RawOptionalPatternSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(questionMark), arena: arena).as(RawOptionalPatternSyntax.self)!
-  }
   public var unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterQuestionMark(_ unexpectedAfterQuestionMark: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawOptionalPatternSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterQuestionMark.map(RawSyntax.init), arena: arena).as(RawOptionalPatternSyntax.self)!
   }
 }
 
@@ -23508,20 +18699,11 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeIdentifier(_ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIdentifierPatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeIdentifier.map(RawSyntax.init), arena: arena).as(RawIdentifierPatternSyntax.self)!
-  }
   public var identifier: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public func withIdentifier(_ identifier: RawTokenSyntax, arena: SyntaxArena) -> RawIdentifierPatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(identifier), arena: arena).as(RawIdentifierPatternSyntax.self)!
-  }
   public var unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterIdentifier(_ unexpectedAfterIdentifier: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawIdentifierPatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterIdentifier.map(RawSyntax.init), arena: arena).as(RawIdentifierPatternSyntax.self)!
   }
 }
 
@@ -23576,44 +18758,23 @@ public struct RawAsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePattern(_ unexpectedBeforePattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsTypePatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePattern.map(RawSyntax.init), arena: arena).as(RawAsTypePatternSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[1].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawAsTypePatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(pattern), arena: arena).as(RawAsTypePatternSyntax.self)!
   }
   public var unexpectedBetweenPatternAndAsKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndAsKeyword(_ unexpectedBetweenPatternAndAsKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsTypePatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPatternAndAsKeyword.map(RawSyntax.init), arena: arena).as(RawAsTypePatternSyntax.self)!
-  }
   public var asKeyword: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withAsKeyword(_ asKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawAsTypePatternSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(asKeyword), arena: arena).as(RawAsTypePatternSyntax.self)!
   }
   public var unexpectedBetweenAsKeywordAndType: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenAsKeywordAndType(_ unexpectedBetweenAsKeywordAndType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsTypePatternSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenAsKeywordAndType.map(RawSyntax.init), arena: arena).as(RawAsTypePatternSyntax.self)!
-  }
   public var type: RawTypeSyntax {
     layoutView.children[5].map(RawTypeSyntax.init(raw:))!
   }
-  public func withType(_ type: RawTypeSyntax, arena: SyntaxArena) -> RawAsTypePatternSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(type), arena: arena).as(RawAsTypePatternSyntax.self)!
-  }
   public var unexpectedAfterType: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterType(_ unexpectedAfterType: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAsTypePatternSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterType.map(RawSyntax.init), arena: arena).as(RawAsTypePatternSyntax.self)!
   }
 }
 
@@ -23668,44 +18829,23 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLeftParen(_ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLeftParen.map(RawSyntax.init), arena: arena).as(RawTuplePatternSyntax.self)!
-  }
   public var leftParen: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLeftParen(_ leftParen: RawTokenSyntax, arena: SyntaxArena) -> RawTuplePatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(leftParen), arena: arena).as(RawTuplePatternSyntax.self)!
   }
   public var unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLeftParenAndElements(_ unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLeftParenAndElements.map(RawSyntax.init), arena: arena).as(RawTuplePatternSyntax.self)!
-  }
   public var elements: RawTuplePatternElementListSyntax {
     layoutView.children[3].map(RawTuplePatternElementListSyntax.init(raw:))!
-  }
-  public func withElements(_ elements: RawTuplePatternElementListSyntax, arena: SyntaxArena) -> RawTuplePatternSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(elements), arena: arena).as(RawTuplePatternSyntax.self)!
   }
   public var unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenElementsAndRightParen(_ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenElementsAndRightParen.map(RawSyntax.init), arena: arena).as(RawTuplePatternSyntax.self)!
-  }
   public var rightParen: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public func withRightParen(_ rightParen: RawTokenSyntax, arena: SyntaxArena) -> RawTuplePatternSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(rightParen), arena: arena).as(RawTuplePatternSyntax.self)!
-  }
   public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterRightParen(_ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterRightParen.map(RawSyntax.init), arena: arena).as(RawTuplePatternSyntax.self)!
   }
 }
 
@@ -23756,32 +18896,17 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
   public var unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeWildcard(_ unexpectedBeforeWildcard: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWildcardPatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeWildcard.map(RawSyntax.init), arena: arena).as(RawWildcardPatternSyntax.self)!
-  }
   public var wildcard: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withWildcard(_ wildcard: RawTokenSyntax, arena: SyntaxArena) -> RawWildcardPatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(wildcard), arena: arena).as(RawWildcardPatternSyntax.self)!
   }
   public var unexpectedBetweenWildcardAndTypeAnnotation: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenWildcardAndTypeAnnotation(_ unexpectedBetweenWildcardAndTypeAnnotation: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWildcardPatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenWildcardAndTypeAnnotation.map(RawSyntax.init), arena: arena).as(RawWildcardPatternSyntax.self)!
-  }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     layoutView.children[3].map(RawTypeAnnotationSyntax.init(raw:))
   }
-  public func withTypeAnnotation(_ typeAnnotation: RawTypeAnnotationSyntax?, arena: SyntaxArena) -> RawWildcardPatternSyntax {
-    return layoutView.replacingChild(at: 3, with: typeAnnotation.map(RawSyntax.init), arena: arena).as(RawWildcardPatternSyntax.self)!
-  }
   public var unexpectedAfterTypeAnnotation: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTypeAnnotation(_ unexpectedAfterTypeAnnotation: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawWildcardPatternSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTypeAnnotation.map(RawSyntax.init), arena: arena).as(RawWildcardPatternSyntax.self)!
   }
 }
 
@@ -23840,56 +18965,29 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
   public var unexpectedBeforeLabelName: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabelName(_ unexpectedBeforeLabelName: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabelName.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
-  }
   public var labelName: RawTokenSyntax? {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLabelName(_ labelName: RawTokenSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 1, with: labelName.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
   }
   public var unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelNameAndLabelColon(_ unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelNameAndLabelColon.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
-  }
   public var labelColon: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withLabelColon(_ labelColon: RawTokenSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 3, with: labelColon.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
   }
   public var unexpectedBetweenLabelColonAndPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelColonAndPattern(_ unexpectedBetweenLabelColonAndPattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenLabelColonAndPattern.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
-  }
   public var pattern: RawPatternSyntax {
     layoutView.children[5].map(RawPatternSyntax.init(raw:))!
-  }
-  public func withPattern(_ pattern: RawPatternSyntax, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(pattern), arena: arena).as(RawTuplePatternElementSyntax.self)!
   }
   public var unexpectedBetweenPatternAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatternAndTrailingComma(_ unexpectedBetweenPatternAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedBetweenPatternAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 7, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawTuplePatternElementSyntax {
-    return layoutView.replacingChild(at: 8, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawTuplePatternElementSyntax.self)!
   }
 }
 
@@ -23936,20 +19034,11 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol, RawSynta
   public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeExpression(_ unexpectedBeforeExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionPatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeExpression.map(RawSyntax.init), arena: arena).as(RawExpressionPatternSyntax.self)!
-  }
   public var expression: RawExprSyntax {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public func withExpression(_ expression: RawExprSyntax, arena: SyntaxArena) -> RawExpressionPatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(expression), arena: arena).as(RawExpressionPatternSyntax.self)!
-  }
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterExpression(_ unexpectedAfterExpression: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawExpressionPatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedAfterExpression.map(RawSyntax.init), arena: arena).as(RawExpressionPatternSyntax.self)!
   }
 }
 
@@ -24041,32 +19130,17 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyn
   public var unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLetOrVarKeyword(_ unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawValueBindingPatternSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLetOrVarKeyword.map(RawSyntax.init), arena: arena).as(RawValueBindingPatternSyntax.self)!
-  }
   public var letOrVarKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLetOrVarKeyword(_ letOrVarKeyword: RawTokenSyntax, arena: SyntaxArena) -> RawValueBindingPatternSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(letOrVarKeyword), arena: arena).as(RawValueBindingPatternSyntax.self)!
   }
   public var unexpectedBetweenLetOrVarKeywordAndValuePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLetOrVarKeywordAndValuePattern(_ unexpectedBetweenLetOrVarKeywordAndValuePattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawValueBindingPatternSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLetOrVarKeywordAndValuePattern.map(RawSyntax.init), arena: arena).as(RawValueBindingPatternSyntax.self)!
-  }
   public var valuePattern: RawPatternSyntax {
     layoutView.children[3].map(RawPatternSyntax.init(raw:))!
   }
-  public func withValuePattern(_ valuePattern: RawPatternSyntax, arena: SyntaxArena) -> RawValueBindingPatternSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(valuePattern), arena: arena).as(RawValueBindingPatternSyntax.self)!
-  }
   public var unexpectedAfterValuePattern: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterValuePattern(_ unexpectedAfterValuePattern: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawValueBindingPatternSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterValuePattern.map(RawSyntax.init), arena: arena).as(RawValueBindingPatternSyntax.self)!
   }
 }
 
@@ -24198,32 +19272,17 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
   public var unexpectedBeforeEntry: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeEntry(_ unexpectedBeforeEntry: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityArgumentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeEntry.map(RawSyntax.init), arena: arena).as(RawAvailabilityArgumentSyntax.self)!
-  }
   public var entry: RawSyntax {
     layoutView.children[1]!
-  }
-  public func withEntry(_ entry: RawSyntax, arena: SyntaxArena) -> RawAvailabilityArgumentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(entry), arena: arena).as(RawAvailabilityArgumentSyntax.self)!
   }
   public var unexpectedBetweenEntryAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenEntryAndTrailingComma(_ unexpectedBetweenEntryAndTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityArgumentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenEntryAndTrailingComma.map(RawSyntax.init), arena: arena).as(RawAvailabilityArgumentSyntax.self)!
-  }
   public var trailingComma: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public func withTrailingComma(_ trailingComma: RawTokenSyntax?, arena: SyntaxArena) -> RawAvailabilityArgumentSyntax {
-    return layoutView.replacingChild(at: 3, with: trailingComma.map(RawSyntax.init), arena: arena).as(RawAvailabilityArgumentSyntax.self)!
-  }
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterTrailingComma(_ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityArgumentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterTrailingComma.map(RawSyntax.init), arena: arena).as(RawAvailabilityArgumentSyntax.self)!
   }
 }
 
@@ -24306,44 +19365,23 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSy
   public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeLabel(_ unexpectedBeforeLabel: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityLabeledArgumentSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeLabel.map(RawSyntax.init), arena: arena).as(RawAvailabilityLabeledArgumentSyntax.self)!
-  }
   public var label: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withLabel(_ label: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityLabeledArgumentSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(label), arena: arena).as(RawAvailabilityLabeledArgumentSyntax.self)!
   }
   public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenLabelAndColon(_ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityLabeledArgumentSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenLabelAndColon.map(RawSyntax.init), arena: arena).as(RawAvailabilityLabeledArgumentSyntax.self)!
-  }
   public var colon: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withColon(_ colon: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityLabeledArgumentSyntax {
-    return layoutView.replacingChild(at: 3, with: RawSyntax(colon), arena: arena).as(RawAvailabilityLabeledArgumentSyntax.self)!
   }
   public var unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenColonAndValue(_ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityLabeledArgumentSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenColonAndValue.map(RawSyntax.init), arena: arena).as(RawAvailabilityLabeledArgumentSyntax.self)!
-  }
   public var value: RawSyntax {
     layoutView.children[5]!
   }
-  public func withValue(_ value: RawSyntax, arena: SyntaxArena) -> RawAvailabilityLabeledArgumentSyntax {
-    return layoutView.replacingChild(at: 5, with: RawSyntax(value), arena: arena).as(RawAvailabilityLabeledArgumentSyntax.self)!
-  }
   public var unexpectedAfterValue: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterValue(_ unexpectedAfterValue: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityLabeledArgumentSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterValue.map(RawSyntax.init), arena: arena).as(RawAvailabilityLabeledArgumentSyntax.self)!
   }
 }
 
@@ -24394,32 +19432,17 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol, Ra
   public var unexpectedBeforePlatform: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforePlatform(_ unexpectedBeforePlatform: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityVersionRestrictionSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforePlatform.map(RawSyntax.init), arena: arena).as(RawAvailabilityVersionRestrictionSyntax.self)!
-  }
   public var platform: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withPlatform(_ platform: RawTokenSyntax, arena: SyntaxArena) -> RawAvailabilityVersionRestrictionSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(platform), arena: arena).as(RawAvailabilityVersionRestrictionSyntax.self)!
   }
   public var unexpectedBetweenPlatformAndVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPlatformAndVersion(_ unexpectedBetweenPlatformAndVersion: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityVersionRestrictionSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenPlatformAndVersion.map(RawSyntax.init), arena: arena).as(RawAvailabilityVersionRestrictionSyntax.self)!
-  }
   public var version: RawVersionTupleSyntax? {
     layoutView.children[3].map(RawVersionTupleSyntax.init(raw:))
   }
-  public func withVersion(_ version: RawVersionTupleSyntax?, arena: SyntaxArena) -> RawAvailabilityVersionRestrictionSyntax {
-    return layoutView.replacingChild(at: 3, with: version.map(RawSyntax.init), arena: arena).as(RawAvailabilityVersionRestrictionSyntax.self)!
-  }
   public var unexpectedAfterVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterVersion(_ unexpectedAfterVersion: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawAvailabilityVersionRestrictionSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedAfterVersion.map(RawSyntax.init), arena: arena).as(RawAvailabilityVersionRestrictionSyntax.self)!
   }
 }
 
@@ -24474,43 +19497,22 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
   public var unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBeforeMajorMinor(_ unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVersionTupleSyntax {
-    return layoutView.replacingChild(at: 0, with: unexpectedBeforeMajorMinor.map(RawSyntax.init), arena: arena).as(RawVersionTupleSyntax.self)!
-  }
   public var majorMinor: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
-  }
-  public func withMajorMinor(_ majorMinor: RawTokenSyntax, arena: SyntaxArena) -> RawVersionTupleSyntax {
-    return layoutView.replacingChild(at: 1, with: RawSyntax(majorMinor), arena: arena).as(RawVersionTupleSyntax.self)!
   }
   public var unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenMajorMinorAndPatchPeriod(_ unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVersionTupleSyntax {
-    return layoutView.replacingChild(at: 2, with: unexpectedBetweenMajorMinorAndPatchPeriod.map(RawSyntax.init), arena: arena).as(RawVersionTupleSyntax.self)!
-  }
   public var patchPeriod: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-  public func withPatchPeriod(_ patchPeriod: RawTokenSyntax?, arena: SyntaxArena) -> RawVersionTupleSyntax {
-    return layoutView.replacingChild(at: 3, with: patchPeriod.map(RawSyntax.init), arena: arena).as(RawVersionTupleSyntax.self)!
   }
   public var unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public func withUnexpectedBetweenPatchPeriodAndPatchVersion(_ unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVersionTupleSyntax {
-    return layoutView.replacingChild(at: 4, with: unexpectedBetweenPatchPeriodAndPatchVersion.map(RawSyntax.init), arena: arena).as(RawVersionTupleSyntax.self)!
-  }
   public var patchVersion: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public func withPatchVersion(_ patchVersion: RawTokenSyntax?, arena: SyntaxArena) -> RawVersionTupleSyntax {
-    return layoutView.replacingChild(at: 5, with: patchVersion.map(RawSyntax.init), arena: arena).as(RawVersionTupleSyntax.self)!
-  }
   public var unexpectedAfterPatchVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public func withUnexpectedAfterPatchVersion(_ unexpectedAfterPatchVersion: RawUnexpectedNodesSyntax?, arena: SyntaxArena) -> RawVersionTupleSyntax {
-    return layoutView.replacingChild(at: 6, with: unexpectedAfterPatchVersion.map(RawSyntax.init), arena: arena).as(RawVersionTupleSyntax.self)!
   }
 }

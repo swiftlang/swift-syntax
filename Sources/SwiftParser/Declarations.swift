@@ -167,7 +167,13 @@ extension Parser {
           arena: parser.arena)
       } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
         if lastElement.semicolon == nil && !newItemAtStartOfLine {
-          return lastElement.withSemicolon(parser.missingToken(.semicolon, text: nil), arena: parser.arena)
+          return RawMemberDeclListItemSyntax(
+            lastElement.unexpectedBeforeDecl,
+            decl: lastElement.decl,
+            lastElement.unexpectedBetweenDeclAndSemicolon,
+            semicolon: parser.missingToken(.semicolon, text: nil),
+            lastElement.unexpectedAfterSemicolon,
+            arena: parser.arena)
         } else {
           return nil
         }
@@ -681,7 +687,14 @@ extension Parser {
           break
         }
         if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
-          elements[elements.count - 1] = lastItem.withSemicolon(missingToken(.semicolon, text: nil), arena: self.arena)
+          elements[elements.count - 1] = RawMemberDeclListItemSyntax(
+            lastItem.unexpectedBeforeDecl,
+            decl: lastItem.decl,
+            lastItem.unexpectedBetweenDeclAndSemicolon,
+            semicolon: self.missingToken(.semicolon, text: nil),
+            lastItem.unexpectedAfterSemicolon,
+            arena: self.arena)
+
         }
         elements.append(newElement)
       }

@@ -4,6 +4,10 @@
 *.xcodeproj
 # Ignore Data Xcode stores when opening the project directly
 /.swiftpm/xcode
+# Ignore user state in Xcode Projects
+*.xcuserdatad
+UserInterfaceState.xcuserstate
+xcuserdata/
 
 # We always build swiftSyntax of trunk dependencies. Ignore any fixed 
 # dependency versions.

@@ -21,22 +21,20 @@ func performParse<SyntaxType: SyntaxProtocol>(source: [UInt8], parse: (inout Par
     var parser = Parser(buffer)
     // FIXME: When the parser supports incremental parsing, put the
     // interpolatedSyntaxNodes in so we don't have to parse them again.
-    return try parser.arena.assumingSingleThread {
-      let result = try parse(&parser)
-      if !parser.at(.eof) {
-        var remainingTokens: [TokenSyntax] = []
-        while !parser.at(.eof) {
-          remainingTokens.append(parser.consumeAnyToken().syntax)
-        }
-        throw SyntaxStringInterpolationError.didNotConsumeAllTokens(remainingTokens: remainingTokens)
+    let result = try parse(&parser)
+    if !parser.at(.eof) {
+      var remainingTokens: [TokenSyntax] = []
+      while !parser.at(.eof) {
+        remainingTokens.append(parser.consumeAnyToken().syntax)
       }
-      if result.hasError {
-        let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
-        assert(!diagnostics.isEmpty)
-        throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(result))
-      }
-      return result
+      throw SyntaxStringInterpolationError.didNotConsumeAllTokens(remainingTokens: remainingTokens)
     }
+    if result.hasError {
+      let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
+      assert(!diagnostics.isEmpty)
+      throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(result))
+    }
+    return result
   }
 }
 

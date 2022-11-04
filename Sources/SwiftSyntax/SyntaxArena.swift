@@ -23,61 +23,27 @@ public class SyntaxArena {
   /// If the syntax tree that’s allocated in this arena references nodes from
   /// other arenas, `children` contains those arenas to keep them alive.
   private var children: Set<SyntaxArena>
+  private var parseTriviaFunction: ParseTriviaFunction
+
+#if DEBUG
   /// Whether or not this arena has been added to other arenas as a child.
   /// Used to make sure we don’t introduce retain cycles between arenas.
   private var hasParent: Bool
-  private var parseTriviaFunction: ParseTriviaFunction
-
-  #if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
-  /// Thread safe guard.
-  private let lock: PlatformMutex
-  private var singleThreadMode: Bool
-  #endif
+#endif
 
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
     self.allocator = BumpPtrAllocator()
-#if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
-    self.lock = PlatformMutex(allocator: self.allocator)
-    self.singleThreadMode = false
-#endif
     self.children = []
     self.sourceBuffer = .init(start: nil, count: 0)
-    self.hasParent = false
     self.parseTriviaFunction = parseTriviaFunction
-  }
-
-  deinit {
-#if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
-    // Make sure we give the platform lock a chance to deinitialize any
-    // memory it used.
-    lock.deinitialize()
+#if DEBUG
+    self.hasParent = false
 #endif
   }
 
   public convenience init() {
     self.init(parseTriviaFunction: _defaultParseTriviaFunction(_:_:))
-  }
-
-  private func withGuard<R>(_ body: () throws -> R) rethrows -> R {
-#if SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
-    return try body()
-#else
-    if self.singleThreadMode {
-      return try body()
-    } else {
-      return try self.lock.withGuard(body: body)
-    }
-#endif
-  }
-
-  public func assumingSingleThread<R>(body: () throws -> R) rethrows -> R {
-#if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
-    let oldValue = self.singleThreadMode
-    defer { self.singleThreadMode = oldValue }
-    self.singleThreadMode = true
-#endif
-    return try body()
   }
 
   /// Copies a source buffer in to the memory this arena manages, and returns
@@ -87,9 +53,8 @@ public class SyntaxArena {
   /// `contains(address _:)` is faster if the address is inside the memory
   /// range this function returned.
   public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
-    let allocated = self.withGuard {
-      allocator.allocate(UInt8.self, count: buffer.count + /* for NULL */1)
-    }
+    let allocated = allocator.allocate(
+      UInt8.self, count: buffer.count + /* for NULL */1)
     precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
     _ = allocated.initialize(from: buffer)
 
@@ -110,9 +75,7 @@ public class SyntaxArena {
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
   /// uninitlialized memory range as a `UnsafeMutableBufferPointer<RawSyntax?>`.
   func allocateRawSyntaxBuffer(count: Int) -> UnsafeMutableBufferPointer<RawSyntax?> {
-    return self.withGuard {
-      allocator.allocate(RawSyntax?.self, count: count)
-    }
+    return allocator.allocate(RawSyntax?.self, count: count)
   }
 
   /// Allcates a buffer of `RawTriviaPiece` with the given count, then returns
@@ -120,17 +83,13 @@ public class SyntaxArena {
   func allocateRawTriviaPieceBuffer(
     count: Int
   ) -> UnsafeMutableBufferPointer<RawTriviaPiece> {
-    return self.withGuard {
-      allocator.allocate(RawTriviaPiece.self, count: count)
-    }
+    return allocator.allocate(RawTriviaPiece.self, count: count)
   }
 
   /// Allcates a buffer of `UInt8` with the given count, then returns the
   /// uninitialized memory range as a `UnsafeMutableBufferPointer<UInt8>`.
   func allocateTextBuffer(count: Int) -> UnsafeMutableBufferPointer<UInt8> {
-    return self.withGuard {
-      allocator.allocate(UInt8.self, count: count)
-    }
+    return allocator.allocate(UInt8.self, count: count)
   }
 
   /// Copies the contents of a `SyntaxText` to the memory this arena manages,
@@ -162,9 +121,7 @@ public class SyntaxArena {
   /// Copies a `RawSyntaxData` to the memory this arena manages, and retuns the
   /// pointer to the destination.
   func intern(_ value: RawSyntaxData) -> UnsafePointer<RawSyntaxData> {
-    let allocated = self.withGuard {
-      allocator.allocate(RawSyntaxData.self, count: 1).baseAddress!
-    }
+    let allocated = allocator.allocate(RawSyntaxData.self, count: 1).baseAddress!
     allocated.initialize(to: value)
     return UnsafePointer(allocated)
   }
@@ -180,24 +137,22 @@ public class SyntaxArena {
     if SyntaxArenaRef(self) == arenaRef { return }
     let other = arenaRef.value
 
-    other.withGuard {
-      self.withGuard {
-        precondition(
-          !self.hasParent,
-          "an arena can't have a new child once it's owned by other arenas")
+#if DEBUG
+    precondition(
+      !self.hasParent,
+      "an arena can't have a new child once it's owned by other arenas")
+    // FIXME: This may trigger a data race warning in Thread Sanitizer.
+    // Can we use atomic bool here?
+    other.hasParent = true
+#endif
 
-        other.hasParent = true
-        children.insert(other)
-      }
-    }
+    children.insert(other)
   }
 
   /// Recursively checks if this arena contains given `arena` as a descendant.
   func contains(arena: SyntaxArena) -> Bool {
-    self.withGuard {
-      children.contains { child in
-        child === arena  || child.contains(arena: arena)
-      }
+    children.contains { child in
+      child === arena  || child.contains(arena: arena)
     }
   }
 
@@ -209,7 +164,7 @@ public class SyntaxArena {
   public func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty ||
             sourceBufferContains(text.baseAddress!) ||
-            self.withGuard({allocator.contains(address: text.baseAddress!)}))
+            allocator.contains(address: text.baseAddress!))
   }
 
   @_spi(RawSyntax)

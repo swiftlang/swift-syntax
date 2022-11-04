@@ -95,7 +95,8 @@ public struct RawSyntaxTokenView {
   public var leadingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      return raw.arena.parseTrivia(source: dat.leadingTriviaText, position: .leading)
+      let arena = raw.arena as! ParsingSyntaxArena
+      return arena.parseTrivia(source: dat.leadingTriviaText, position: .leading)
     case .materializedToken(let dat):
       return Array(dat.leadingTrivia)
     case .layout(_):
@@ -107,7 +108,8 @@ public struct RawSyntaxTokenView {
   public var trailingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      return raw.arena.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
+      let arena = raw.arena as! ParsingSyntaxArena
+      return arena.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
     case .materializedToken(let dat):
       return Array(dat.trailingTrivia)
     case .layout(_):

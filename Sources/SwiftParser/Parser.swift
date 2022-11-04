@@ -118,7 +118,7 @@ extension Parser {
 /// operates on a copy of the lexical stream, no input tokens are lost..
 public struct Parser: TokenConsumer {
   @_spi(RawSyntax)
-  public var arena: SyntaxArena
+  public var arena: ParsingSyntaxArena
   /// A view of the sequence of lexemes in the input.
   var lexemes: Lexer.LexemeSequence
   /// The current token. If there was no input, this token will have a kind of `.eof`.
@@ -153,7 +153,7 @@ public struct Parser: TokenConsumer {
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be the registered source
   ///            buffer of `arena` or a slice of the source buffer.
-  public init(_ input: UnsafeBufferPointer<UInt8>, maximumNestingLevel: Int? = nil, arena: SyntaxArena? = nil) {
+  public init(_ input: UnsafeBufferPointer<UInt8>, maximumNestingLevel: Int? = nil, arena: ParsingSyntaxArena? = nil) {
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
 
     var sourceBuffer: UnsafeBufferPointer<UInt8>
@@ -162,7 +162,7 @@ public struct Parser: TokenConsumer {
       sourceBuffer = input
       assert(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
    } else {
-     self.arena = SyntaxArena(
+     self.arena = ParsingSyntaxArena(
       parseTriviaFunction: TriviaParser.parseTrivia(_:position:))
      sourceBuffer = self.arena.internSourceBuffer(input)
     }

@@ -11,20 +11,13 @@
 //===----------------------------------------------------------------------===//
 
 public class SyntaxArena {
-
-  @_spi(RawSyntax)
-  public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
-
   /// Bump-pointer allocator for all "intern" methods.
-  private let allocator: BumpPtrAllocator
-  /// Source file buffer the Syntax tree represents.
-  private var sourceBuffer: UnsafeBufferPointer<UInt8>
+  fileprivate let allocator: BumpPtrAllocator
 
   /// If the syntax tree that’s allocated in this arena references nodes from
   /// other arenas, `childRefs` contains references to the arenas. Child arenas
   /// are retained in `addChild()` and are released in `deinit`.
   private var childRefs: Set<SyntaxArenaRef>
-  private var parseTriviaFunction: ParseTriviaFunction
 
 #if DEBUG
   /// Whether or not this arena has been added to other arenas as a child.
@@ -32,51 +25,22 @@ public class SyntaxArena {
   private var hasParent: Bool
 #endif
 
-  @_spi(RawSyntax)
-  public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
-    self.allocator = BumpPtrAllocator()
+  public convenience init() {
+    self.init(slabSize: 128)
+  }
+
+  fileprivate init(slabSize: Int) {
+    self.allocator = BumpPtrAllocator(slabSize: slabSize)
     self.childRefs = []
-    self.sourceBuffer = .init(start: nil, count: 0)
-    self.parseTriviaFunction = parseTriviaFunction
 #if DEBUG
     self.hasParent = false
 #endif
-  }
-
-  public convenience init() {
-    self.init(parseTriviaFunction: _defaultParseTriviaFunction(_:_:))
   }
 
   deinit {
     for child in childRefs {
       child.release()
     }
-  }
-
-  /// Copies a source buffer in to the memory this arena manages, and returns
-  /// the interned buffer.
-  ///
-  /// The interned buffer is guaranteed to be null-terminated.
-  /// `contains(address _:)` is faster if the address is inside the memory
-  /// range this function returned.
-  public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
-    let allocated = allocator.allocate(
-      UInt8.self, count: buffer.count + /* for NULL */1)
-    precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
-    _ = allocated.initialize(from: buffer)
-
-    // NULL terminate.
-    allocated.baseAddress!.advanced(by: buffer.count).initialize(to: 0)
-
-    sourceBuffer = UnsafeBufferPointer(start: allocated.baseAddress!, count: buffer.count)
-    return sourceBuffer
-  }
-
-  /// Checks if the given memory address is inside the memory range returned
-  /// from `internSourceBuffer(_:)` method.
-  func sourceBufferContains(_ address: UnsafePointer<UInt8>) -> Bool {
-    guard let sourceStart = sourceBuffer.baseAddress else { return false }
-    return sourceStart <= address && address < sourceStart.advanced(by: sourceBuffer.count)
   }
 
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
@@ -173,10 +137,63 @@ public class SyntaxArena {
   @_spi(RawSyntax)
   public func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty ||
-            sourceBufferContains(text.baseAddress!) ||
             allocator.contains(address: text.baseAddress!))
   }
+}
 
+/// SyntaxArena for parsing.
+public class ParsingSyntaxArena: SyntaxArena {
+  @_spi(RawSyntax)
+  public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
+
+  /// Source file buffer the Syntax tree represents.
+  private var sourceBuffer: UnsafeBufferPointer<UInt8>
+
+  /// Function to parse trivia.
+  private var parseTriviaFunction: ParseTriviaFunction
+
+  @_spi(RawSyntax)
+  public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
+    self.sourceBuffer = .init(start: nil, count: 0)
+    self.parseTriviaFunction = parseTriviaFunction
+    super.init(slabSize: 4096)
+  }
+
+  /// Copies a source buffer in to the memory this arena manages, and returns
+  /// the interned buffer.
+  ///
+  /// The interned buffer is guaranteed to be null-terminated.
+  /// `contains(address _:)` is faster if the address is inside the memory
+  /// range this function returned.
+  public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
+    let allocated = allocator.allocate(
+      UInt8.self, count: buffer.count + /* for NULL */1)
+    precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
+    _ = allocated.initialize(from: buffer)
+
+    // NULL terminate.
+    allocated.baseAddress!.advanced(by: buffer.count).initialize(to: 0)
+
+    sourceBuffer = UnsafeBufferPointer(start: allocated.baseAddress!, count: buffer.count)
+    return sourceBuffer
+  }
+
+  @_spi(RawSyntax)
+  public override func contains(text: SyntaxText) -> Bool {
+    if let addr = text.baseAddress, self.sourceBufferContains(addr) {
+      return true
+    }
+    return super.contains(text: text)
+  }
+
+  /// Checks if the given memory address is inside the memory range returned
+  /// from `internSourceBuffer(_:)` method.
+  func sourceBufferContains(_ address: UnsafePointer<UInt8>) -> Bool {
+    guard let sourceStart = sourceBuffer.baseAddress else { return false }
+    return sourceStart <= address && address < sourceStart.advanced(by: sourceBuffer.count)
+  }
+
+  /// Parse `source` into a list of `RawTriviaPiece` using `parseTriviaFunction`.
   @_spi(RawSyntax)
   public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
     return self.parseTriviaFunction(source, position)
@@ -216,8 +233,4 @@ struct SyntaxArenaRef: Hashable {
   static func ==(lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
     return lhs._value.toOpaque() == rhs._value.toOpaque()
   }
-}
-
-private func _defaultParseTriviaFunction(_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece] {
-  preconditionFailure("Trivia parsing not supported")
 }

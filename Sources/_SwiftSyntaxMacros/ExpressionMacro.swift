@@ -50,18 +50,17 @@ extension ExpressionMacro {
     let filePath = String(decoding: filePathBuffer, as: UTF8.self)
     let sourceFileTextBuffer = UnsafeBufferPointer(
       start: sourceFileText, count: sourceFileTextCount)
-    let sourceFileString = String(decoding: sourceFileTextBuffer, as: UTF8.self)
-    let sourceFileSyntax = Parser.parse(source: sourceFileString)
+    let sourceFileSyntax = Parser.parse(source: sourceFileTextBuffer)
     let converter = SourceLocationConverter(
       file: filePath, tree: sourceFileSyntax)
     let context = MacroEvaluationContext(
       moduleName: targetModuleName, sourceLocationConverter: converter)
     let meePosition = AbsolutePosition(
-      utf8Offset: localSourceText.distance(to: localSourceText))
+      utf8Offset: sourceFileText.distance(to: localSourceText))
     guard let meeStartToken = sourceFileSyntax.token(at: meePosition),
           let mee = meeStartToken.parent?.as(MacroExpansionExprSyntax.self)
     else {
-      fatalError("Unable to locate 'MacroExpansionExprSyntax'")
+      fatalError("Unable to locate 'MacroExpansionExprSyntax' at offset \(meePosition)")
     }
 
     // Evaluate the macro.

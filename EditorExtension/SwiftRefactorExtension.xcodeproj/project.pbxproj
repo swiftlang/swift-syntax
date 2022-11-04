@@ -1,0 +1,617 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 52;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		25F743FF1DA97E9000CCD5AD /* HostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F743FE1DA97E9000CCD5AD /* HostApp.swift */; };
+		25F744031DA97E9000CCD5AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25F744021DA97E9000CCD5AD /* Assets.xcassets */; };
+		25F744141DA97ED800CCD5AD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F744131DA97ED800CCD5AD /* Cocoa.framework */; };
+		25F744191DA97ED800CCD5AD /* SourceEditorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F744181DA97ED800CCD5AD /* SourceEditorExtension.swift */; };
+		25F7441B1DA97ED800CCD5AD /* SourceEditorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F7441A1DA97ED800CCD5AD /* SourceEditorCommand.swift */; };
+		25F7441F1DA97ED800CCD5AD /* Swift Refactor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 25F744111DA97ED800CCD5AD /* Swift Refactor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		999BA0FC2914963100706E88 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 999BA0F42914952D00706E88 /* XcodeKit.framework */; };
+		999BA0FD2914963100706E88 /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 999BA0F42914952D00706E88 /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		999BA10B291497D300706E88 /* SwiftOperators in Frameworks */ = {isa = PBXBuildFile; productRef = 999BA10A291497D300706E88 /* SwiftOperators */; };
+		999BA10D291497D300706E88 /* SwiftParser in Frameworks */ = {isa = PBXBuildFile; productRef = 999BA10C291497D300706E88 /* SwiftParser */; };
+		999BA10F291497D300706E88 /* SwiftRefactor in Frameworks */ = {isa = PBXBuildFile; productRef = 999BA10E291497D300706E88 /* SwiftRefactor */; };
+		999BA111291497D300706E88 /* SwiftSyntax in Frameworks */ = {isa = PBXBuildFile; productRef = 999BA110291497D300706E88 /* SwiftSyntax */; };
+		999BA113291497D300706E88 /* SwiftSyntaxBuilder in Frameworks */ = {isa = PBXBuildFile; productRef = 999BA112291497D300706E88 /* SwiftSyntaxBuilder */; };
+		999BA11529149D8500706E88 /* CommandDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999BA11429149D8500706E88 /* CommandDiscovery.swift */; };
+		999BA11729149F4200706E88 /* Bridge.h in Sources */ = {isa = PBXBuildFile; fileRef = 999BA11629149F4200706E88 /* Bridge.h */; };
+		999BA11B2914B25900706E88 /* RefactoringRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999BA11A2914B25900706E88 /* RefactoringRegistry.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		25F7441D1DA97ED800CCD5AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 25F743F31DA97E9000CCD5AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 25F744101DA97ED800CCD5AD;
+			remoteInfo = SwiftRefactorExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		25F744231DA97ED800CCD5AD /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				25F7441F1DA97ED800CCD5AD /* Swift Refactor.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		999BA0FE2914963100706E88 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				999BA0FD2914963100706E88 /* XcodeKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		25F743FB1DA97E9000CCD5AD /* Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Host.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		25F743FE1DA97E9000CCD5AD /* HostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostApp.swift; sourceTree = "<group>"; };
+		25F744021DA97E9000CCD5AD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		25F744071DA97E9000CCD5AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		25F744111DA97ED800CCD5AD /* Swift Refactor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Swift Refactor.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25F744131DA97ED800CCD5AD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		25F744181DA97ED800CCD5AD /* SourceEditorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorExtension.swift; sourceTree = "<group>"; };
+		25F7441A1DA97ED800CCD5AD /* SourceEditorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorCommand.swift; sourceTree = "<group>"; };
+		25F7441C1DA97ED800CCD5AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		999BA0F42914952D00706E88 /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
+		999BA0F8291495FC00706E88 /* SwiftRefactorExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftRefactorExtension.entitlements; sourceTree = "<group>"; };
+		999BA0FF291497AD00706E88 /* swift-syntax */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swift-syntax"; path = ..; sourceTree = "<group>"; };
+		999BA11429149D8500706E88 /* CommandDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandDiscovery.swift; sourceTree = "<group>"; };
+		999BA11629149F4200706E88 /* Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
+		999BA11A2914B25900706E88 /* RefactoringRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefactoringRegistry.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		25F743F81DA97E9000CCD5AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		25F7440E1DA97ED800CCD5AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				999BA10B291497D300706E88 /* SwiftOperators in Frameworks */,
+				999BA111291497D300706E88 /* SwiftSyntax in Frameworks */,
+				999BA10D291497D300706E88 /* SwiftParser in Frameworks */,
+				25F744141DA97ED800CCD5AD /* Cocoa.framework in Frameworks */,
+				999BA113291497D300706E88 /* SwiftSyntaxBuilder in Frameworks */,
+				999BA10F291497D300706E88 /* SwiftRefactor in Frameworks */,
+				999BA0FC2914963100706E88 /* XcodeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		25F743F21DA97E9000CCD5AD = {
+			isa = PBXGroup;
+			children = (
+				999BA0FF291497AD00706E88 /* swift-syntax */,
+				25F743FD1DA97E9000CCD5AD /* Host */,
+				25F744151DA97ED800CCD5AD /* SwiftRefactorExtension */,
+				25F744121DA97ED800CCD5AD /* Frameworks */,
+				25F743FC1DA97E9000CCD5AD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		25F743FC1DA97E9000CCD5AD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				25F743FB1DA97E9000CCD5AD /* Host.app */,
+				25F744111DA97ED800CCD5AD /* Swift Refactor.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		25F743FD1DA97E9000CCD5AD /* Host */ = {
+			isa = PBXGroup;
+			children = (
+				25F743FE1DA97E9000CCD5AD /* HostApp.swift */,
+				25F744021DA97E9000CCD5AD /* Assets.xcassets */,
+				25F744071DA97E9000CCD5AD /* Info.plist */,
+			);
+			path = Host;
+			sourceTree = "<group>";
+		};
+		25F744121DA97ED800CCD5AD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				999BA0F42914952D00706E88 /* XcodeKit.framework */,
+				25F744131DA97ED800CCD5AD /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		25F744151DA97ED800CCD5AD /* SwiftRefactorExtension */ = {
+			isa = PBXGroup;
+			children = (
+				25F744181DA97ED800CCD5AD /* SourceEditorExtension.swift */,
+				25F7441A1DA97ED800CCD5AD /* SourceEditorCommand.swift */,
+				999BA11A2914B25900706E88 /* RefactoringRegistry.swift */,
+				999BA11429149D8500706E88 /* CommandDiscovery.swift */,
+				999BA11629149F4200706E88 /* Bridge.h */,
+				25F7441C1DA97ED800CCD5AD /* Info.plist */,
+				25F744161DA97ED800CCD5AD /* Supporting Files */,
+			);
+			path = SwiftRefactorExtension;
+			sourceTree = "<group>";
+		};
+		25F744161DA97ED800CCD5AD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				999BA0F8291495FC00706E88 /* SwiftRefactorExtension.entitlements */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		25F743FA1DA97E9000CCD5AD /* Host */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 25F7440A1DA97E9000CCD5AD /* Build configuration list for PBXNativeTarget "Host" */;
+			buildPhases = (
+				25F743F71DA97E9000CCD5AD /* Sources */,
+				25F743F81DA97E9000CCD5AD /* Frameworks */,
+				25F743F91DA97E9000CCD5AD /* Resources */,
+				25F744231DA97ED800CCD5AD /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				25F7441E1DA97ED800CCD5AD /* PBXTargetDependency */,
+			);
+			name = Host;
+			productName = Host;
+			productReference = 25F743FB1DA97E9000CCD5AD /* Host.app */;
+			productType = "com.apple.product-type.application";
+		};
+		25F744101DA97ED800CCD5AD /* SwiftRefactorExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 25F744201DA97ED800CCD5AD /* Build configuration list for PBXNativeTarget "SwiftRefactorExtension" */;
+			buildPhases = (
+				25F7440D1DA97ED800CCD5AD /* Sources */,
+				25F7440E1DA97ED800CCD5AD /* Frameworks */,
+				25F7440F1DA97ED800CCD5AD /* Resources */,
+				999BA0FE2914963100706E88 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				999BA101291497C700706E88 /* PBXTargetDependency */,
+				999BA103291497C700706E88 /* PBXTargetDependency */,
+				999BA105291497C700706E88 /* PBXTargetDependency */,
+				999BA107291497C700706E88 /* PBXTargetDependency */,
+				999BA109291497C700706E88 /* PBXTargetDependency */,
+			);
+			name = SwiftRefactorExtension;
+			packageProductDependencies = (
+				999BA10A291497D300706E88 /* SwiftOperators */,
+				999BA10C291497D300706E88 /* SwiftParser */,
+				999BA10E291497D300706E88 /* SwiftRefactor */,
+				999BA110291497D300706E88 /* SwiftSyntax */,
+				999BA112291497D300706E88 /* SwiftSyntaxBuilder */,
+			);
+			productName = SwiftRefactorExtension;
+			productReference = 25F744111DA97ED800CCD5AD /* Swift Refactor.appex */;
+			productType = "com.apple.product-type.xcode-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		25F743F31DA97E9000CCD5AD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 1430;
+				ORGANIZATIONNAME = sergdort;
+				TargetAttributes = {
+					25F743FA1DA97E9000CCD5AD = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+					25F744101DA97ED800CCD5AD = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 25F743F61DA97E9000CCD5AD /* Build configuration list for PBXProject "SwiftRefactorExtension" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 25F743F21DA97E9000CCD5AD;
+			productRefGroup = 25F743FC1DA97E9000CCD5AD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				25F743FA1DA97E9000CCD5AD /* Host */,
+				25F744101DA97ED800CCD5AD /* SwiftRefactorExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		25F743F91DA97E9000CCD5AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				25F744031DA97E9000CCD5AD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		25F7440F1DA97ED800CCD5AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		25F743F71DA97E9000CCD5AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				25F743FF1DA97E9000CCD5AD /* HostApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		25F7440D1DA97ED800CCD5AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				999BA11729149F4200706E88 /* Bridge.h in Sources */,
+				999BA11B2914B25900706E88 /* RefactoringRegistry.swift in Sources */,
+				999BA11529149D8500706E88 /* CommandDiscovery.swift in Sources */,
+				25F744191DA97ED800CCD5AD /* SourceEditorExtension.swift in Sources */,
+				25F7441B1DA97ED800CCD5AD /* SourceEditorCommand.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		25F7441E1DA97ED800CCD5AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 25F744101DA97ED800CCD5AD /* SwiftRefactorExtension */;
+			targetProxy = 25F7441D1DA97ED800CCD5AD /* PBXContainerItemProxy */;
+		};
+		999BA101291497C700706E88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 999BA100291497C700706E88 /* SwiftOperators */;
+		};
+		999BA103291497C700706E88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 999BA102291497C700706E88 /* SwiftParser */;
+		};
+		999BA105291497C700706E88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 999BA104291497C700706E88 /* SwiftRefactor */;
+		};
+		999BA107291497C700706E88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 999BA106291497C700706E88 /* SwiftSyntax */;
+		};
+		999BA109291497C700706E88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 999BA108291497C700706E88 /* SwiftSyntaxBuilder */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		25F744081DA97E9000CCD5AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		25F744091DA97E9000CCD5AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		25F7440B1DA97E9000CCD5AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Host/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.apple.dt.swift.swift-syntax.swift-refactor.host";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		25F7440C1DA97E9000CCD5AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Host/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.apple.dt.swift.swift-syntax.swift-refactor.host";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		25F744211DA97ED800CCD5AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SwiftRefactorExtension/SwiftRefactorExtension.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = SwiftRefactorExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.apple.dt.swift.swift-syntax.swift-refactor.extension";
+				PRODUCT_NAME = "Swift Refactor";
+				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SwiftRefactorExtension/Bridge.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		25F744221DA97ED800CCD5AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SwiftRefactorExtension/SwiftRefactorExtension.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = SwiftRefactorExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.apple.dt.swift.swift-syntax.swift-refactor.extension";
+				PRODUCT_NAME = "Swift Refactor";
+				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SwiftRefactorExtension/Bridge.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		25F743F61DA97E9000CCD5AD /* Build configuration list for PBXProject "SwiftRefactorExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				25F744081DA97E9000CCD5AD /* Debug */,
+				25F744091DA97E9000CCD5AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		25F7440A1DA97E9000CCD5AD /* Build configuration list for PBXNativeTarget "Host" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				25F7440B1DA97E9000CCD5AD /* Debug */,
+				25F7440C1DA97E9000CCD5AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		25F744201DA97ED800CCD5AD /* Build configuration list for PBXNativeTarget "SwiftRefactorExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				25F744211DA97ED800CCD5AD /* Debug */,
+				25F744221DA97ED800CCD5AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		999BA100291497C700706E88 /* SwiftOperators */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftOperators;
+		};
+		999BA102291497C700706E88 /* SwiftParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftParser;
+		};
+		999BA104291497C700706E88 /* SwiftRefactor */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftRefactor;
+		};
+		999BA106291497C700706E88 /* SwiftSyntax */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftSyntax;
+		};
+		999BA108291497C700706E88 /* SwiftSyntaxBuilder */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftSyntaxBuilder;
+		};
+		999BA10A291497D300706E88 /* SwiftOperators */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftOperators;
+		};
+		999BA10C291497D300706E88 /* SwiftParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftParser;
+		};
+		999BA10E291497D300706E88 /* SwiftRefactor */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftRefactor;
+		};
+		999BA110291497D300706E88 /* SwiftSyntax */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftSyntax;
+		};
+		999BA112291497D300706E88 /* SwiftSyntaxBuilder */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftSyntaxBuilder;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 25F743F31DA97E9000CCD5AD /* Project object */;
+}

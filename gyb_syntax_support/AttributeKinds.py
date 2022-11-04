@@ -703,7 +703,7 @@ DECL_ATTR_KINDS = [
                         ABIStableToAdd, ABIBreakingToRemove, APIStableToAdd, APIStableToRemove,
                         code=138),
                    
-    SimpleDeclAttribute('ignoreDeprecations', 'IgnoreDeprecations',
+    DeclAttribute('ignoreDeprecations', 'IgnoreDeprecations',
                         OnGenericType, OnEnumElement, OnExtension,
                         OnVar, OnFunc,
                         ABIStableToAdd, ABIStableToRemove, APIStableToAdd, APIStableToRemove,

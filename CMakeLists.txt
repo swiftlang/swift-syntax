@@ -42,12 +42,6 @@ if (NOT SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
     $<$<COMPILE_LANGUAGE:Swift>:-disable-implicit-string-processing-module-import>)
 endif()
 
-# Force single-threaded-only syntax trees to eliminate the Darwin
-# dependency in the compiler.
-add_compile_definitions(
-  $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED>
-)
-
 add_subdirectory(Sources)
 
 export(EXPORT SwiftSyntaxTargets

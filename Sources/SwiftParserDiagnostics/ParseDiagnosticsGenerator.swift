@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftParser
+@_spi(LexerDiagnostics) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
 public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
@@ -241,6 +241,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         )
       } else {
         return handleMissingSyntax(node)
+      }
+    } else if node.hasError {
+      node.syntaxTextBytes.withUnsafeBufferPointer { buf in
+        var cursor = Lexer.Cursor(input: buf, previous: 0)
+        _ = cursor.nextToken(cursor) { [self] offset, diagnostic in
+          self.addDiagnostic(node, position: node.position.advanced(by: offset), diagnostic)
+        }
       }
     }
     return .skipChildren

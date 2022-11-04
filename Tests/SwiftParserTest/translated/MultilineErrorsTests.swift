@@ -329,8 +329,6 @@ final class MultilineErrorsTests: XCTestCase {
         """
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 2: invalid escape sequence in literal
       ]
     )
@@ -405,12 +403,11 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors26() {
     AssertParse(
       ##"""
-      _ = 1️⃣"""
-        foo\
+      _ = """
+        foo\1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code at top level"),
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
       ]
     )
   }
@@ -459,17 +456,19 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors30() {
     AssertParse(
       ##"""
-      let _ = 1️⃣"""
+      let _ = """
         foo
-        \("bar
-        baz
+        \(1️⃣"bar2️⃣
+      3️⃣  baz
         """
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous code at top level"),
         // TODO: Old parser expected error on line 3: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 3: unterminated string literal
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"expected value in string literal"#),
+        DiagnosticSpec(locationMarker: "1️⃣", message: #"unexpected code '"bar' in string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected ')' in string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"unexpected code '' in string literal"#),
       ]
     )
   }

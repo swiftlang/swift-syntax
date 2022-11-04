@@ -39,6 +39,7 @@ public class MultithreadingTests: XCTestCase {
           wholeText: arena.intern(text),
           textRange: 1..<(text.count-1),
           presence: .present,
+          hasLexerError: false,
           arena: arena)
       }
       let identifierExprRaw = RawIdentifierExprSyntax(

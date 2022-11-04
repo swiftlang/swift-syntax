@@ -145,7 +145,7 @@ public class LexerTests: XCTestCase {
       data.withUTF8 { buf in
         let lexemes = Lexer.lex(buf)
         AssertEqualTokens(lexemes, [
-          lexeme(.unknown, #""\u{12341234}""#),
+          lexeme(.stringLiteral, #""\u{12341234}""#),
           lexeme(.eof, ""),
         ])
       }
@@ -744,6 +744,54 @@ public class LexerTests: XCTestCase {
         lexeme(.eof, "")
       ])
     }
+  }
+
+  func testNumericLiteralDiagnostics() {
+    AssertParse(
+      """
+      var fl_l: Float = 0x1.01️⃣
+
+      var fl_bad_separator2: Double = 0x1p2️⃣_
+
+      var invalid_num_literal: Int64 = 03️⃣QWERTY
+      var invalid_bin_literal: Int64 = 0b4️⃣QWERTY
+      var invalid_hex_literal: Int64 = 0x5️⃣QWERTY
+      var invalid_oct_literal: Int64 = 0o6️⃣QWERTY
+
+      var invalid_exp_literal: Double = 1.0e+7️⃣QWERTY
+      var invalid_fp_exp_literal: Double = 0x1p+8️⃣QWERTY
+      """,
+    diagnostics: [
+      DiagnosticSpec(locationMarker: "1️⃣", message: "hexadecimal floating point literal must end with an exponent"),
+
+      DiagnosticSpec(locationMarker: "2️⃣", message: "'_' is not a valid first character in floating point exponent"),
+
+      DiagnosticSpec(locationMarker: "3️⃣", message: "'Q' is not a valid digit in integer literal"),
+      DiagnosticSpec(locationMarker: "4️⃣", message: "'Q' is not a valid binary digit (0 or 1) in integer literal"),
+      DiagnosticSpec(locationMarker: "5️⃣", message: "'Q' is not a valid hexadecimal digit (0-9, A-F) in integer literal"),
+      DiagnosticSpec(locationMarker: "6️⃣", message: "'Q' is not a valid octal digit (0-7) in integer literal"),
+
+      DiagnosticSpec(locationMarker: "7️⃣", message: "'Q' is not a valid digit in floating point exponent"),
+      DiagnosticSpec(locationMarker: "8️⃣", message: "'Q' is not a valid digit in floating point exponent"),
+    ])
+  }
+
+  func testBadNumericLiteralDigits() {
+    AssertParse(
+      """
+      var invalid_num_literal_prefix: Int64 = 01️⃣a1234567
+      var invalid_num_literal_middle: Int64 = 01232️⃣A5678
+      var invalid_bin_literal_middle: Int64 = 0b103️⃣20101
+      var invalid_oct_literal_middle: Int64 = 0o13574️⃣864
+      var invalid_hex_literal_middle: Int64 = 0x147AD5️⃣G0
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'a' is not a valid digit in integer literal"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'A' is not a valid digit in integer literal"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "'2' is not a valid binary digit (0 or 1) in integer literal"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "'8' is not a valid octal digit (0-7) in integer literal"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal"),
+      ])
   }
 }
 

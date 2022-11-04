@@ -49,13 +49,11 @@ final class StringLiteralEofTests: XCTestCase {
   func testStringLiteralEof3() {
     AssertParse(
       ##"""
-      _ = 1️⃣"foo \
+      _ = "foo \1️⃣
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: unterminated string literal
         // TODO: Old parser expected error on line 1: invalid escape sequence in literal
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: #"extraneous code '"foo \' at top level"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -64,13 +62,12 @@ final class StringLiteralEofTests: XCTestCase {
     AssertParse(
       ##"""
       // NOTE: DO NOT add a newline at EOF.
-      _ = 1️⃣"foo \
+      _ = "foo \1️⃣
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unterminated string literal
         // TODO: Old parser expected error on line 2: invalid escape sequence in literal
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: #"extraneous code '"foo \' at top level"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#),
       ]
     )
   }
@@ -130,15 +127,17 @@ final class StringLiteralEofTests: XCTestCase {
   func testStringLiteralEof8() {
     AssertParse(
       ##"""
-      _ = 1️⃣"""
-          foo
-          \("bar
-          baz
+      _ = """
+          \(1️⃣"bar2️⃣
+      3️⃣    baz4️⃣
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unterminated string literal
-        DiagnosticSpec(message: "expected expression"),
-        DiagnosticSpec(message: "extraneous code at top level"),
+        DiagnosticSpec(message: "expected value in string literal"),
+        DiagnosticSpec(message: #"unexpected code '"bar' in string literal"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected ')' in string literal"#),
+        DiagnosticSpec(locationMarker: "3️⃣", message: #"unexpected code '' in string literal"#),
+        DiagnosticSpec(locationMarker: "4️⃣", message: #"expected '"""' to end string literal"#),
         // TODO: Old parser expected error on line 3: cannot find ')' to match opening '(' in string interpolation
         // TODO: Old parser expected error on line 3: unterminated string literal
       ]

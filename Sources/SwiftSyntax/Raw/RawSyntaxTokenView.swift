@@ -216,4 +216,15 @@ public struct RawSyntaxTokenView {
       preconditionFailure("'presence' is a token-only property")
     }
   }
+
+  var hasLexerError: Bool {
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      return dat.hasLexerError
+    case .materializedToken(_):
+      return false
+    case .layout(_):
+      preconditionFailure("'hasError' is a token-only property")
+    }
+  }
 }

@@ -21,6 +21,10 @@ public struct AbsolutePosition: Comparable {
     self.utf8Offset = utf8Offset
   }
 
+  public func advanced(by offset: Int) -> AbsolutePosition {
+    return AbsolutePosition(utf8Offset: self.utf8Offset + offset)
+  }
+
   public static func <(lhs: AbsolutePosition, rhs: AbsolutePosition) -> Bool {
     return lhs.utf8Offset < rhs.utf8Offset
   }

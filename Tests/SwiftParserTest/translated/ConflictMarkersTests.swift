@@ -76,15 +76,15 @@ final class ConflictMarkersTests: XCTestCase {
       =======2️⃣
       var a : String = "a"
       var b : String = "B"
-      >>>>>>> 3️⃣18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+      >>>>>>> 188443️⃣bc65229786b96b89a9fc7739c0fc897905e4️⃣:conflict_markers.swift
       print(a + b)
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '<<<<<<< HEAD:conflict_markers.swift' before variable"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in variable"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression in variable"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "'b' is not a valid digit in integer literal"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous code at top level"),
       ]
     )
   }
@@ -95,14 +95,14 @@ final class ConflictMarkersTests: XCTestCase {
       1️⃣<<<<<<< HEAD:conflict_markers.swift 
       ======= 
       var d : String = "D"
-      >>>>>>> 2️⃣18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+      >>>>>>> 188442️⃣bc65229786b96b89a9fc7739c0fc897905e3️⃣:conflict_markers.swift
       print(d)
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'b' is not a valid digit in integer literal"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
       ]
     )
   }
@@ -127,14 +127,14 @@ final class ConflictMarkersTests: XCTestCase {
       <<<<<<<"HEAD:fake_conflict_markers.swift"
       var fake_c : String = "a"
       >>>>>>>"18844bc65229786b96b89a9fc7739c0fc897905e:fake_conflict_markers.swift"
-      >>>>>>> 2️⃣18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+      >>>>>>> 188442️⃣bc65229786b96b89a9fc7739c0fc897905e3️⃣:conflict_markers.swift
       print(fake_b + fake_c)
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 1: source control conflict marker in source file
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'b' is not a valid digit in integer literal"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
       ]
     )
   }

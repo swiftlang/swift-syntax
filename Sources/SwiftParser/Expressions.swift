@@ -1382,6 +1382,7 @@ extension Parser {
       wholeText: wholeText,
       textRange: textRange,
       presence: .present,
+      hasLexerError: false,
       arena: self.arena
     )
   }
@@ -1485,21 +1486,31 @@ extension Parser {
     var stringLiteralSegmentStart = segment.startIndex
     while let slashIndex = segment.firstIndex(of: UInt8(ascii: "\\")), stringLiteralSegmentStart < segment.endIndex {
       let delimiterStart = text.index(after: slashIndex)
-      guard (delimiterStart < segment.endIndex &&
-             SyntaxText(rebasing: text[delimiterStart...]).hasPrefix(delimiter)) else {
+      guard delimiterStart < segment.endIndex &&
+             SyntaxText(rebasing: text[delimiterStart...]).hasPrefix(delimiter) else {
         // If `\` is not followed by the custom delimiter, it's not a segment delimiter.
         // Restart after the `\`.
-        segment = text[text.index(after: delimiterStart)...]
-        continue
+        if delimiterStart == segment.endIndex {
+          segment = text[segment.endIndex...]
+          break
+        } else {
+          segment = text[text.index(after: delimiterStart)...]
+          continue
+        }
       }
 
       let contentStart = text.index(delimiterStart, offsetBy: delimiter.count)
-      guard (contentStart < segment.endIndex &&
-             text[contentStart] == UInt8(ascii: "(")) else {
-        // If `\` (or `\#`) is not followed by `(`, it's not a segment delimiter.
-        // Restart after the `(`.
-        segment = text[text.index(after: contentStart)...]
-        continue
+      guard contentStart < segment.endIndex &&
+             text[contentStart] == UInt8(ascii: "(") else {
+        if contentStart == segment.endIndex {
+          segment = text[segment.endIndex...]
+          break
+        } else {
+          // If `\` (or `\#`) is not followed by `(`, it's not a segment delimiter.
+          // Restart after the `(`.
+          segment = text[text.index(after: contentStart)...]
+          continue
+        }
       }
 
       // Collect ".stringSegment" before `\`.
@@ -1556,6 +1567,13 @@ extension Parser {
             runexpected = nil
           }
           let rparen = subparser.expectWithoutRecovery(.rightParen)
+          assert(subparser.currentToken.tokenKind == .eof)
+          let trailing: RawUnexpectedNodesSyntax?
+          if subparser.currentToken.byteLength == 0 {
+            trailing = nil
+          } else {
+            trailing = RawUnexpectedNodesSyntax([ subparser.consumeAnyToken() ], arena: self.arena)
+          }
 
           segments.append(.expressionSegment(RawExpressionSegmentSyntax(
             backslash: slashToken,
@@ -1565,6 +1583,7 @@ extension Parser {
             expressions: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
             runexpected,
             rightParen: rparen,
+            trailing,
             arena: self.arena)))
         }
       }

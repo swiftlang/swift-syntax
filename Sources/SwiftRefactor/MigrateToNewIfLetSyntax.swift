@@ -24,7 +24,7 @@ import SwiftParser
 public struct MigrateToNewIfLetSyntax: RefactoringProvider {
   public static func refactor(syntax node: IfStmtSyntax, in context: ()) -> StmtSyntax? {
     // Visit all conditions in the node.
-    let newConditions = node.conditions.enumerated().map { (index, condition) in
+    let newConditions = node.conditions.enumerated().map { (index, condition) -> ConditionElementListSyntax.Element in
       var conditionCopy = condition
       // Check if the condition is an optional binding ...
       if var binding = condition.condition.as(OptionalBindingConditionSyntax.self),

@@ -126,7 +126,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       else:
     ${child.swift_name}: ${param_type}${comma}
 %       end
-%     end 
+%     end
   ) {
     let layout: [RawSyntax?] = [
 %     for child in node.children:
@@ -137,9 +137,11 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       end
 %     end
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 %     for (idx, child) in enumerate(node.children):
@@ -190,13 +192,14 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   ///            appended to its `${child.swift_name}` collection.
   public func add${child_elt}(_ element: ${child_elt_type}) -> ${node.name} {
     var collection: RawSyntax
+    let arena = SyntaxArena()
     if let col = raw.layoutView!.children[${idx}] {
-      collection = col.layoutView!.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.${child_node.swift_syntax_kind},
-        from: [element.raw], arena: .default)
+        from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: ${idx})
+    let newData = data.replacingChild(collection, at: ${idx}, arena: arena)
     return ${node.name}(newData)
   }
 %       end
@@ -207,14 +210,14 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   /// Returns a copy of the receiver with its `${child.swift_name}` replaced.
   /// - param newChild: The new `${child.swift_name}` to replace the node's
   ///                   current `${child.swift_name}`, if present.
-  public func with${child.name}(
-    _ newChild: ${child_type}?) -> ${node.name} {
+  public func with${child.name}(_ newChild: ${child_type}?) -> ${node.name} {
+    let arena = SyntaxArena()
 %       if child.is_optional:
     let raw = newChild?.raw
 %       else:
     let raw = newChild?.raw ?? ${make_missing_swift_child(child)}
 %       end
-    let newData = data.replacingChild(raw, at: ${idx})
+    let newData = data.replacingChild(raw, at: ${idx}, arena: arena)
     return ${node.name}(newData)
   }
 %     end

@@ -219,7 +219,8 @@ extension RawSyntax {
   /// If the syntax tree did not contain a token and thus no trivia could be attached to it, `nil` is returned.
   /// - Parameters:
   ///   - leadingTrivia: The trivia to attach.
-  func withLeadingTrivia(_ leadingTrivia: Trivia) -> RawSyntax? {
+  ///   - arena: SyntaxArena to the result node data resides.
+  func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> RawSyntax? {
     switch view {
     case .token(let tokenView):
       return .makeMaterializedToken(
@@ -229,7 +230,7 @@ extension RawSyntax {
         arena: arena)
     case .layout(let layoutView):
       for (index, child) in layoutView.children.enumerated() {
-        if let replaced = child?.withLeadingTrivia(leadingTrivia) {
+        if let replaced = child?.withLeadingTrivia(leadingTrivia, arena: arena) {
           return layoutView.replacingChild(at: index, with: replaced, arena: arena)
         }
       }
@@ -241,7 +242,8 @@ extension RawSyntax {
   /// If the syntax tree did not contain a token and thus no trivia could be attached to it, `nil` is returned.
   /// - Parameters:
   ///   - trailingTrivia: The trivia to attach.
-  func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax? {
+  ///   - arena: SyntaxArena to the result node data resides.
+  func withTrailingTrivia(_ trailingTrivia: Trivia, arena: SyntaxArena) -> RawSyntax? {
     switch view {
     case .token(let tokenView):
       return .makeMaterializedToken(
@@ -251,7 +253,7 @@ extension RawSyntax {
         arena: arena)
     case .layout(let layoutView):
       for (index, child) in layoutView.children.enumerated().reversed() {
-        if let replaced = child?.withTrailingTrivia(trailingTrivia) {
+        if let replaced = child?.withTrailingTrivia(trailingTrivia, arena: arena) {
           return layoutView.replacingChild(at: index, with: replaced, arena: arena)
         }
       }

@@ -54,9 +54,11 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -71,8 +73,9 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CodeBlockItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return CodeBlockItemListSyntax(newData)
   }
 
@@ -164,13 +167,13 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `CodeBlockItemListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CodeBlockItemListSyntax {
-    return CodeBlockItemListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return CodeBlockItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CodeBlockItemListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CodeBlockItemListSyntax {
-    return CodeBlockItemListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return CodeBlockItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CodeBlockItemListSyntax` with its leading trivia removed.
@@ -305,9 +308,11 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -322,8 +327,9 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `UnexpectedNodesSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return UnexpectedNodesSyntax(newData)
   }
 
@@ -415,13 +421,13 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `UnexpectedNodesSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> UnexpectedNodesSyntax {
-    return UnexpectedNodesSyntax(data.withLeadingTrivia(leadingTrivia))
+    return UnexpectedNodesSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `UnexpectedNodesSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> UnexpectedNodesSyntax {
-    return UnexpectedNodesSyntax(data.withTrailingTrivia(trailingTrivia))
+    return UnexpectedNodesSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `UnexpectedNodesSyntax` with its leading trivia removed.
@@ -556,9 +562,11 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -573,8 +581,9 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleExprElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return TupleExprElementListSyntax(newData)
   }
 
@@ -666,13 +675,13 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `TupleExprElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TupleExprElementListSyntax {
-    return TupleExprElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return TupleExprElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TupleExprElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TupleExprElementListSyntax {
-    return TupleExprElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return TupleExprElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TupleExprElementListSyntax` with its leading trivia removed.
@@ -807,9 +816,11 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -824,8 +835,9 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ArrayElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ArrayElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ArrayElementListSyntax(newData)
   }
 
@@ -917,13 +929,13 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ArrayElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ArrayElementListSyntax {
-    return ArrayElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ArrayElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ArrayElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ArrayElementListSyntax {
-    return ArrayElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ArrayElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ArrayElementListSyntax` with its leading trivia removed.
@@ -1058,9 +1070,11 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -1075,8 +1089,9 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DictionaryElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return DictionaryElementListSyntax(newData)
   }
 
@@ -1168,13 +1183,13 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `DictionaryElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DictionaryElementListSyntax {
-    return DictionaryElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return DictionaryElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DictionaryElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DictionaryElementListSyntax {
-    return DictionaryElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return DictionaryElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DictionaryElementListSyntax` with its leading trivia removed.
@@ -1343,9 +1358,11 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -1360,8 +1377,9 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return StringLiteralSegmentsSyntax(newData)
   }
 
@@ -1453,13 +1471,13 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `StringLiteralSegmentsSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> StringLiteralSegmentsSyntax {
-    return StringLiteralSegmentsSyntax(data.withLeadingTrivia(leadingTrivia))
+    return StringLiteralSegmentsSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `StringLiteralSegmentsSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> StringLiteralSegmentsSyntax {
-    return StringLiteralSegmentsSyntax(data.withTrailingTrivia(trailingTrivia))
+    return StringLiteralSegmentsSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `StringLiteralSegmentsSyntax` with its leading trivia removed.
@@ -1594,9 +1612,11 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -1611,8 +1631,9 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DeclNameArgumentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return DeclNameArgumentListSyntax(newData)
   }
 
@@ -1704,13 +1725,13 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `DeclNameArgumentListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DeclNameArgumentListSyntax {
-    return DeclNameArgumentListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return DeclNameArgumentListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DeclNameArgumentListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DeclNameArgumentListSyntax {
-    return DeclNameArgumentListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return DeclNameArgumentListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DeclNameArgumentListSyntax` with its leading trivia removed.
@@ -1845,9 +1866,11 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -1862,8 +1885,9 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ExprListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ExprListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ExprListSyntax(newData)
   }
 
@@ -1955,13 +1979,13 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ExprListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ExprListSyntax {
-    return ExprListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ExprListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ExprListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ExprListSyntax {
-    return ExprListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ExprListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ExprListSyntax` with its leading trivia removed.
@@ -2096,9 +2120,11 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -2113,8 +2139,9 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ClosureCaptureItemListSyntax(newData)
   }
 
@@ -2206,13 +2233,13 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ClosureCaptureItemListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ClosureCaptureItemListSyntax {
-    return ClosureCaptureItemListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ClosureCaptureItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ClosureCaptureItemListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ClosureCaptureItemListSyntax {
-    return ClosureCaptureItemListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ClosureCaptureItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ClosureCaptureItemListSyntax` with its leading trivia removed.
@@ -2347,9 +2374,11 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -2364,8 +2393,9 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureParamListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ClosureParamListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ClosureParamListSyntax(newData)
   }
 
@@ -2457,13 +2487,13 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ClosureParamListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ClosureParamListSyntax {
-    return ClosureParamListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ClosureParamListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ClosureParamListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ClosureParamListSyntax {
-    return ClosureParamListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ClosureParamListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ClosureParamListSyntax` with its leading trivia removed.
@@ -2598,9 +2628,11 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -2615,8 +2647,9 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return MultipleTrailingClosureElementListSyntax(newData)
   }
 
@@ -2708,13 +2741,13 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// Returns a new `MultipleTrailingClosureElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> MultipleTrailingClosureElementListSyntax {
-    return MultipleTrailingClosureElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return MultipleTrailingClosureElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `MultipleTrailingClosureElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> MultipleTrailingClosureElementListSyntax {
-    return MultipleTrailingClosureElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return MultipleTrailingClosureElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `MultipleTrailingClosureElementListSyntax` with its leading trivia removed.
@@ -2849,9 +2882,11 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -2866,8 +2901,9 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `KeyPathComponentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> KeyPathComponentListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return KeyPathComponentListSyntax(newData)
   }
 
@@ -2959,13 +2995,13 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `KeyPathComponentListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> KeyPathComponentListSyntax {
-    return KeyPathComponentListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return KeyPathComponentListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `KeyPathComponentListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> KeyPathComponentListSyntax {
-    return KeyPathComponentListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return KeyPathComponentListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `KeyPathComponentListSyntax` with its leading trivia removed.
@@ -3100,9 +3136,11 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objcName,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.objcName,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -3117,8 +3155,9 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjcNameSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ObjcNameSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ObjcNameSyntax(newData)
   }
 
@@ -3210,13 +3249,13 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ObjcNameSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ObjcNameSyntax {
-    return ObjcNameSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ObjcNameSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ObjcNameSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ObjcNameSyntax {
-    return ObjcNameSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ObjcNameSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ObjcNameSyntax` with its leading trivia removed.
@@ -3351,9 +3390,11 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -3368,8 +3409,9 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `YieldExprListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> YieldExprListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return YieldExprListSyntax(newData)
   }
 
@@ -3461,13 +3503,13 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `YieldExprListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> YieldExprListSyntax {
-    return YieldExprListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return YieldExprListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `YieldExprListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> YieldExprListSyntax {
-    return YieldExprListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return YieldExprListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `YieldExprListSyntax` with its leading trivia removed.
@@ -3602,9 +3644,11 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -3619,8 +3663,9 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `FunctionParameterListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return FunctionParameterListSyntax(newData)
   }
 
@@ -3712,13 +3757,13 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `FunctionParameterListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> FunctionParameterListSyntax {
-    return FunctionParameterListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return FunctionParameterListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `FunctionParameterListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> FunctionParameterListSyntax {
-    return FunctionParameterListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return FunctionParameterListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `FunctionParameterListSyntax` with its leading trivia removed.
@@ -3853,9 +3898,11 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -3870,8 +3917,9 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IfConfigClauseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return IfConfigClauseListSyntax(newData)
   }
 
@@ -3963,13 +4011,13 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `IfConfigClauseListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> IfConfigClauseListSyntax {
-    return IfConfigClauseListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return IfConfigClauseListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `IfConfigClauseListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> IfConfigClauseListSyntax {
-    return IfConfigClauseListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return IfConfigClauseListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `IfConfigClauseListSyntax` with its leading trivia removed.
@@ -4104,9 +4152,11 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -4121,8 +4171,9 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `InheritedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return InheritedTypeListSyntax(newData)
   }
 
@@ -4214,13 +4265,13 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `InheritedTypeListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> InheritedTypeListSyntax {
-    return InheritedTypeListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return InheritedTypeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `InheritedTypeListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> InheritedTypeListSyntax {
-    return InheritedTypeListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return InheritedTypeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `InheritedTypeListSyntax` with its leading trivia removed.
@@ -4355,9 +4406,11 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -4372,8 +4425,9 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `MemberDeclListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> MemberDeclListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return MemberDeclListSyntax(newData)
   }
 
@@ -4465,13 +4519,13 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `MemberDeclListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> MemberDeclListSyntax {
-    return MemberDeclListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return MemberDeclListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `MemberDeclListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> MemberDeclListSyntax {
-    return MemberDeclListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return MemberDeclListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `MemberDeclListSyntax` with its leading trivia removed.
@@ -4606,9 +4660,11 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -4623,8 +4679,9 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ModifierListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ModifierListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ModifierListSyntax(newData)
   }
 
@@ -4716,13 +4773,13 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ModifierListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ModifierListSyntax {
-    return ModifierListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ModifierListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ModifierListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ModifierListSyntax {
-    return ModifierListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ModifierListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ModifierListSyntax` with its leading trivia removed.
@@ -4857,9 +4914,11 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -4874,8 +4933,9 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessPathSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AccessPathSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return AccessPathSyntax(newData)
   }
 
@@ -4967,13 +5027,13 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `AccessPathSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AccessPathSyntax {
-    return AccessPathSyntax(data.withLeadingTrivia(leadingTrivia))
+    return AccessPathSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AccessPathSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AccessPathSyntax {
-    return AccessPathSyntax(data.withTrailingTrivia(trailingTrivia))
+    return AccessPathSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AccessPathSyntax` with its leading trivia removed.
@@ -5108,9 +5168,11 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -5125,8 +5187,9 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessorListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AccessorListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return AccessorListSyntax(newData)
   }
 
@@ -5218,13 +5281,13 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `AccessorListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AccessorListSyntax {
-    return AccessorListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return AccessorListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AccessorListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AccessorListSyntax {
-    return AccessorListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return AccessorListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AccessorListSyntax` with its leading trivia removed.
@@ -5359,9 +5422,11 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -5376,8 +5441,9 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PatternBindingListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PatternBindingListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return PatternBindingListSyntax(newData)
   }
 
@@ -5469,13 +5535,13 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `PatternBindingListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PatternBindingListSyntax {
-    return PatternBindingListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return PatternBindingListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PatternBindingListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PatternBindingListSyntax {
-    return PatternBindingListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return PatternBindingListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PatternBindingListSyntax` with its leading trivia removed.
@@ -5607,9 +5673,11 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -5624,8 +5692,9 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `EnumCaseElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return EnumCaseElementListSyntax(newData)
   }
 
@@ -5717,13 +5786,13 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `EnumCaseElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> EnumCaseElementListSyntax {
-    return EnumCaseElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return EnumCaseElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `EnumCaseElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> EnumCaseElementListSyntax {
-    return EnumCaseElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return EnumCaseElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `EnumCaseElementListSyntax` with its leading trivia removed.
@@ -5858,9 +5927,11 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -5875,8 +5946,9 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DesignatedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return DesignatedTypeListSyntax(newData)
   }
 
@@ -5968,13 +6040,13 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `DesignatedTypeListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DesignatedTypeListSyntax {
-    return DesignatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return DesignatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DesignatedTypeListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DesignatedTypeListSyntax {
-    return DesignatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return DesignatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DesignatedTypeListSyntax` with its leading trivia removed.
@@ -6153,9 +6225,11 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -6170,8 +6244,9 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return PrecedenceGroupAttributeListSyntax(newData)
   }
 
@@ -6263,13 +6338,13 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// Returns a new `PrecedenceGroupAttributeListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PrecedenceGroupAttributeListSyntax {
-    return PrecedenceGroupAttributeListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return PrecedenceGroupAttributeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PrecedenceGroupAttributeListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PrecedenceGroupAttributeListSyntax {
-    return PrecedenceGroupAttributeListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return PrecedenceGroupAttributeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PrecedenceGroupAttributeListSyntax` with its leading trivia removed.
@@ -6404,9 +6479,11 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -6421,8 +6498,9 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return PrecedenceGroupNameListSyntax(newData)
   }
 
@@ -6514,13 +6592,13 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `PrecedenceGroupNameListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PrecedenceGroupNameListSyntax {
-    return PrecedenceGroupNameListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return PrecedenceGroupNameListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PrecedenceGroupNameListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PrecedenceGroupNameListSyntax {
-    return PrecedenceGroupNameListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return PrecedenceGroupNameListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PrecedenceGroupNameListSyntax` with its leading trivia removed.
@@ -6655,9 +6733,11 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -6672,8 +6752,9 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TokenListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TokenListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return TokenListSyntax(newData)
   }
 
@@ -6765,13 +6846,13 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `TokenListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TokenListSyntax {
-    return TokenListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return TokenListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TokenListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TokenListSyntax {
-    return TokenListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return TokenListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TokenListSyntax` with its leading trivia removed.
@@ -6906,9 +6987,11 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.nonEmptyTokenList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.nonEmptyTokenList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -6923,8 +7006,9 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `NonEmptyTokenListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> NonEmptyTokenListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return NonEmptyTokenListSyntax(newData)
   }
 
@@ -7016,13 +7100,13 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `NonEmptyTokenListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> NonEmptyTokenListSyntax {
-    return NonEmptyTokenListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return NonEmptyTokenListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `NonEmptyTokenListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> NonEmptyTokenListSyntax {
-    return NonEmptyTokenListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return NonEmptyTokenListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `NonEmptyTokenListSyntax` with its leading trivia removed.
@@ -7201,9 +7285,11 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -7218,8 +7304,9 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AttributeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AttributeListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return AttributeListSyntax(newData)
   }
 
@@ -7311,13 +7398,13 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `AttributeListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AttributeListSyntax {
-    return AttributeListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return AttributeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AttributeListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AttributeListSyntax {
-    return AttributeListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return AttributeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AttributeListSyntax` with its leading trivia removed.
@@ -7505,9 +7592,11 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -7522,8 +7611,9 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return SpecializeAttributeSpecListSyntax(newData)
   }
 
@@ -7615,13 +7705,13 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// Returns a new `SpecializeAttributeSpecListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> SpecializeAttributeSpecListSyntax {
-    return SpecializeAttributeSpecListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return SpecializeAttributeSpecListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `SpecializeAttributeSpecListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> SpecializeAttributeSpecListSyntax {
-    return SpecializeAttributeSpecListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return SpecializeAttributeSpecListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `SpecializeAttributeSpecListSyntax` with its leading trivia removed.
@@ -7756,9 +7846,11 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -7773,8 +7865,9 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjCSelectorSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ObjCSelectorSyntax(newData)
   }
 
@@ -7866,13 +7959,13 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ObjCSelectorSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ObjCSelectorSyntax {
-    return ObjCSelectorSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ObjCSelectorSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ObjCSelectorSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ObjCSelectorSyntax {
-    return ObjCSelectorSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ObjCSelectorSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ObjCSelectorSyntax` with its leading trivia removed.
@@ -8007,9 +8100,11 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -8024,8 +8119,9 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return DifferentiabilityParamListSyntax(newData)
   }
 
@@ -8117,13 +8213,13 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// Returns a new `DifferentiabilityParamListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DifferentiabilityParamListSyntax {
-    return DifferentiabilityParamListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return DifferentiabilityParamListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DifferentiabilityParamListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DifferentiabilityParamListSyntax {
-    return DifferentiabilityParamListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return DifferentiabilityParamListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `DifferentiabilityParamListSyntax` with its leading trivia removed.
@@ -8258,9 +8354,11 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -8275,8 +8373,9 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `BackDeployVersionListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> BackDeployVersionListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return BackDeployVersionListSyntax(newData)
   }
 
@@ -8368,13 +8467,13 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `BackDeployVersionListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> BackDeployVersionListSyntax {
-    return BackDeployVersionListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return BackDeployVersionListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `BackDeployVersionListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> BackDeployVersionListSyntax {
-    return BackDeployVersionListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return BackDeployVersionListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `BackDeployVersionListSyntax` with its leading trivia removed.
@@ -8543,9 +8642,11 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -8560,8 +8661,9 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `SwitchCaseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return SwitchCaseListSyntax(newData)
   }
 
@@ -8653,13 +8755,13 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `SwitchCaseListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> SwitchCaseListSyntax {
-    return SwitchCaseListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return SwitchCaseListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `SwitchCaseListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> SwitchCaseListSyntax {
-    return SwitchCaseListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return SwitchCaseListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `SwitchCaseListSyntax` with its leading trivia removed.
@@ -8794,9 +8896,11 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -8811,8 +8915,9 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchClauseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CatchClauseListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return CatchClauseListSyntax(newData)
   }
 
@@ -8904,13 +9009,13 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `CatchClauseListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CatchClauseListSyntax {
-    return CatchClauseListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return CatchClauseListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CatchClauseListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CatchClauseListSyntax {
-    return CatchClauseListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return CatchClauseListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CatchClauseListSyntax` with its leading trivia removed.
@@ -9045,9 +9150,11 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -9062,8 +9169,9 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CaseItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CaseItemListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return CaseItemListSyntax(newData)
   }
 
@@ -9155,13 +9263,13 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `CaseItemListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CaseItemListSyntax {
-    return CaseItemListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return CaseItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CaseItemListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CaseItemListSyntax {
-    return CaseItemListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return CaseItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CaseItemListSyntax` with its leading trivia removed.
@@ -9296,9 +9404,11 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -9313,8 +9423,9 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CatchItemListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return CatchItemListSyntax(newData)
   }
 
@@ -9406,13 +9517,13 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `CatchItemListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CatchItemListSyntax {
-    return CatchItemListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return CatchItemListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CatchItemListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CatchItemListSyntax {
-    return CatchItemListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return CatchItemListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CatchItemListSyntax` with its leading trivia removed.
@@ -9547,9 +9658,11 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -9564,8 +9677,9 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ConditionElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ConditionElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return ConditionElementListSyntax(newData)
   }
 
@@ -9657,13 +9771,13 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `ConditionElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ConditionElementListSyntax {
-    return ConditionElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return ConditionElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ConditionElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ConditionElementListSyntax {
-    return ConditionElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return ConditionElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `ConditionElementListSyntax` with its leading trivia removed.
@@ -9798,9 +9912,11 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -9815,8 +9931,9 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericRequirementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return GenericRequirementListSyntax(newData)
   }
 
@@ -9908,13 +10025,13 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `GenericRequirementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> GenericRequirementListSyntax {
-    return GenericRequirementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return GenericRequirementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `GenericRequirementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> GenericRequirementListSyntax {
-    return GenericRequirementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return GenericRequirementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `GenericRequirementListSyntax` with its leading trivia removed.
@@ -10049,9 +10166,11 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -10066,8 +10185,9 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericParameterListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> GenericParameterListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return GenericParameterListSyntax(newData)
   }
 
@@ -10159,13 +10279,13 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `GenericParameterListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> GenericParameterListSyntax {
-    return GenericParameterListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return GenericParameterListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `GenericParameterListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> GenericParameterListSyntax {
-    return GenericParameterListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return GenericParameterListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `GenericParameterListSyntax` with its leading trivia removed.
@@ -10300,9 +10420,11 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -10317,8 +10439,9 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return PrimaryAssociatedTypeListSyntax(newData)
   }
 
@@ -10410,13 +10533,13 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// Returns a new `PrimaryAssociatedTypeListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PrimaryAssociatedTypeListSyntax {
-    return PrimaryAssociatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return PrimaryAssociatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PrimaryAssociatedTypeListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PrimaryAssociatedTypeListSyntax {
-    return PrimaryAssociatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return PrimaryAssociatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `PrimaryAssociatedTypeListSyntax` with its leading trivia removed.
@@ -10551,9 +10674,11 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -10568,8 +10693,9 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `CompositionTypeElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return CompositionTypeElementListSyntax(newData)
   }
 
@@ -10661,13 +10787,13 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// Returns a new `CompositionTypeElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> CompositionTypeElementListSyntax {
-    return CompositionTypeElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return CompositionTypeElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CompositionTypeElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> CompositionTypeElementListSyntax {
-    return CompositionTypeElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return CompositionTypeElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `CompositionTypeElementListSyntax` with its leading trivia removed.
@@ -10802,9 +10928,11 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -10819,8 +10947,9 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleTypeElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return TupleTypeElementListSyntax(newData)
   }
 
@@ -10912,13 +11041,13 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `TupleTypeElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TupleTypeElementListSyntax {
-    return TupleTypeElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return TupleTypeElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TupleTypeElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TupleTypeElementListSyntax {
-    return TupleTypeElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return TupleTypeElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TupleTypeElementListSyntax` with its leading trivia removed.
@@ -11053,9 +11182,11 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -11070,8 +11201,9 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericArgumentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return GenericArgumentListSyntax(newData)
   }
 
@@ -11163,13 +11295,13 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `GenericArgumentListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> GenericArgumentListSyntax {
-    return GenericArgumentListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return GenericArgumentListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `GenericArgumentListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> GenericArgumentListSyntax {
-    return GenericArgumentListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return GenericArgumentListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `GenericArgumentListSyntax` with its leading trivia removed.
@@ -11304,9 +11436,11 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -11321,8 +11455,9 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TuplePatternElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return TuplePatternElementListSyntax(newData)
   }
 
@@ -11414,13 +11549,13 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `TuplePatternElementListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TuplePatternElementListSyntax {
-    return TuplePatternElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return TuplePatternElementListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TuplePatternElementListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TuplePatternElementListSyntax {
-    return TuplePatternElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return TuplePatternElementListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `TuplePatternElementListSyntax` with its leading trivia removed.
@@ -11555,9 +11690,11 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Element]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
-      from: children.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+        from: children.map { $0.raw }, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
     self.init(data)
   }
 
@@ -11572,8 +11709,9 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AvailabilitySpecListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
-    let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
-    let newData = data.replacingSelf(newRaw)
+    let arena = SyntaxArena()
+    let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
+    let newData = data.replacingSelf(newRaw, arena: arena)
     return AvailabilitySpecListSyntax(newData)
   }
 
@@ -11665,13 +11803,13 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// Returns a new `AvailabilitySpecListSyntax` with its leading trivia replaced
   /// by the provided trivia.
   public func withLeadingTrivia(_ leadingTrivia: Trivia) -> AvailabilitySpecListSyntax {
-    return AvailabilitySpecListSyntax(data.withLeadingTrivia(leadingTrivia))
+    return AvailabilitySpecListSyntax(data.withLeadingTrivia(leadingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AvailabilitySpecListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
   public func withTrailingTrivia(_ trailingTrivia: Trivia) -> AvailabilitySpecListSyntax {
-    return AvailabilitySpecListSyntax(data.withTrailingTrivia(trailingTrivia))
+    return AvailabilitySpecListSyntax(data.withTrailingTrivia(trailingTrivia, arena: SyntaxArena()))
   }
 
   /// Returns a new `AvailabilitySpecListSyntax` with its leading trivia removed.

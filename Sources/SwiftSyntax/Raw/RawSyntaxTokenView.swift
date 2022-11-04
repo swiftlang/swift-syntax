@@ -151,7 +151,7 @@ public struct RawSyntaxTokenView {
   /// Returns a `RawSyntax` node with the same source text but with the token
   /// kind changed to `newValue`.
   @_spi(RawSyntax)
-  public func withKind(_ newValue: TokenKind) -> RawSyntax {
+  public func withKind(_ newValue: TokenKind, arena: SyntaxArena) -> RawSyntax {
     switch raw.rawData.payload {
     case .parsedToken(_):
       // The wholeText can't be continuous anymore. Make a materialized token.
@@ -159,16 +159,16 @@ public struct RawSyntaxTokenView {
         kind: newValue,
         leadingTrivia: formLeadingTrivia(),
         trailingTrivia: formTrailingTrivia(),
-        arena: raw.arena)
+        arena: arena)
     case .materializedToken(var payload):
       let decomposed = newValue.decomposeToRaw()
       let rawKind = decomposed.rawKind
-      let text: SyntaxText = (decomposed.string.map({raw.arena.intern($0)}) ??
+      let text: SyntaxText = (decomposed.string.map({arena.intern($0)}) ??
                               decomposed.rawKind.defaultText ??
                               "")
       payload.tokenKind = rawKind
       payload.tokenText = text
-      return RawSyntax(arena: raw.arena, payload: .materializedToken(payload))
+      return RawSyntax(arena: arena, payload: .materializedToken(payload))
     default:
       preconditionFailure("'withTokenKind()' is called on non-token raw syntax")
     }

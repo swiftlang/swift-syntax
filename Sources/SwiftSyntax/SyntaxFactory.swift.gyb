@@ -32,18 +32,16 @@ public enum SyntaxFactory {
   public static func makeToken(_ kind: TokenKind, presence: SourcePresence,
                                leadingTrivia: Trivia = [],
                                trailingTrivia: Trivia = []) -> TokenSyntax {
-    let raw = RawSyntax.makeMaterializedToken(kind: kind, leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia, presence: presence, arena: .default)
-    let data = SyntaxData.forRoot(raw)
-    return TokenSyntax(data)
+    TokenSyntax(
+      kind,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence)
   }
 
   @available(*, deprecated, message: "Use initializer on UnknownSyntax")
   public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> UnknownSyntax {
-    let raw = RawSyntax.makeLayout(kind: .unknown,
-      from: tokens.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
-    return UnknownSyntax(data)
+    UnknownSyntax(tokens: tokens)
   }
 
 /// MARK: Syntax Node Creation APIs
@@ -78,19 +76,23 @@ public enum SyntaxFactory {
 %       end
 %     end
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
-      from: layout, arena: .default)
-    let data = SyntaxData.forRoot(raw)
-    return ${node.name}(data)
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return ${node.name}(data)
+    }
   }
 %   elif node.is_syntax_collection():
   @available(*, deprecated, message: "Use initializer on ${node.name}")
   public static func make${node.syntax_kind}(
     _ elements: [${node.collection_element_type}]) -> ${node.name} {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
-      from: elements.map { $0.raw }, arena: .default)
-    let data = SyntaxData.forRoot(raw)
-    return ${node.name}(data)
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
+        from: elements.map { $0.raw }, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return ${node.name}(data)
+    }
   }
 %   end
 
@@ -98,17 +100,19 @@ public enum SyntaxFactory {
 %   default_presence = 'missing' if node.is_missing() else 'present'
   @available(*, deprecated, message: "Use initializer on ${node.name}")
   public static func makeBlank${node.syntax_kind}(presence: SourcePresence = .${default_presence}) -> ${node.name} {
-    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .${node.swift_syntax_kind},
-      from: [
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .${node.swift_syntax_kind},
+        from: [
 %     for child in node.children:
 %       if child.is_optional:
-      nil,
+        nil,
 %       else:
-      ${make_missing_swift_child(child)},
+        ${make_missing_swift_child(child)},
 %       end
 %     end
-    ], arena: .default))
-    return ${node.name}(data)
+      ], arena: arena))
+      return ${node.name}(data)
+    }
   }
 %   end
 % end

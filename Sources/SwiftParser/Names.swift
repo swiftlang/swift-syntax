@@ -31,7 +31,7 @@ extension Parser {
         self.missingToken(.identifier, text: nil)
       )
     } else {
-      return (nil, self.consumeAnyToken())
+      return (nil, self.consumeAnyToken(remapping: .identifier))
     }
   }
 }

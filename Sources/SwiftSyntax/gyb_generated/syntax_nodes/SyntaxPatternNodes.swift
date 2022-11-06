@@ -18,11 +18,9 @@
 public struct UnknownPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnknownPatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unknownPattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unknownPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnknownPatternSyntax` node from the given `SyntaxData`. This assumes
@@ -70,11 +68,9 @@ extension UnknownPatternSyntax: CustomReflectable {
 public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MissingPatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .missingPattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .missingPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MissingPatternSyntax` node from the given `SyntaxData`. This assumes
@@ -122,11 +118,9 @@ extension MissingPatternSyntax: CustomReflectable {
 public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `EnumCasePatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .enumCasePattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .enumCasePattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `EnumCasePatternSyntax` node from the given `SyntaxData`. This assumes
@@ -415,11 +409,9 @@ extension EnumCasePatternSyntax: CustomReflectable {
 public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IsTypePatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .isTypePattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .isTypePattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `IsTypePatternSyntax` node from the given `SyntaxData`. This assumes
@@ -600,11 +592,9 @@ extension IsTypePatternSyntax: CustomReflectable {
 public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `OptionalPatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .optionalPattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .optionalPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `OptionalPatternSyntax` node from the given `SyntaxData`. This assumes
@@ -785,11 +775,9 @@ extension OptionalPatternSyntax: CustomReflectable {
 public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IdentifierPatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .identifierPattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .identifierPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `IdentifierPatternSyntax` node from the given `SyntaxData`. This assumes
@@ -917,11 +905,9 @@ extension IdentifierPatternSyntax: CustomReflectable {
 public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `AsTypePatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .asTypePattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .asTypePattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `AsTypePatternSyntax` node from the given `SyntaxData`. This assumes
@@ -1155,11 +1141,9 @@ extension AsTypePatternSyntax: CustomReflectable {
 public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `TuplePatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tuplePattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tuplePattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `TuplePatternSyntax` node from the given `SyntaxData`. This assumes
@@ -1412,11 +1396,9 @@ extension TuplePatternSyntax: CustomReflectable {
 public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `WildcardPatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .wildcardPattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .wildcardPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `WildcardPatternSyntax` node from the given `SyntaxData`. This assumes
@@ -1598,11 +1580,9 @@ extension WildcardPatternSyntax: CustomReflectable {
 public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ExpressionPatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .expressionPattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .expressionPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ExpressionPatternSyntax` node from the given `SyntaxData`. This assumes
@@ -1730,11 +1710,9 @@ extension ExpressionPatternSyntax: CustomReflectable {
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ValueBindingPatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .valueBindingPattern else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .valueBindingPattern else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ValueBindingPatternSyntax` node from the given `SyntaxData`. This assumes

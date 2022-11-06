@@ -78,15 +78,13 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
 
-  /// Converts the given `Syntax` node to a `${node.name}` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    switch node.raw.kind {
 %     castable_kinds = ['.' + child_node.swift_syntax_kind for child_node \
 %                       in SYNTAX_NODES \
 %                       if child_node.base_kind == node.syntax_kind]
     case ${', '.join(castable_kinds)}:
-      self._syntaxNode = syntax
+      self._syntaxNode = node._syntaxNode
     default:
       return nil
     }
@@ -117,7 +115,7 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
   }
 
   public func `as`<S: ${node.name}Protocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
+    return S.init(self)
   }
 
   public func cast<S: ${node.name}Protocol>(_ syntaxType: S.Type) -> S {

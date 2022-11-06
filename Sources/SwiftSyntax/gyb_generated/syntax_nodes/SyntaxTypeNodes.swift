@@ -18,11 +18,9 @@
 public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnknownTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unknownType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unknownType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnknownTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -70,11 +68,9 @@ extension UnknownTypeSyntax: CustomReflectable {
 public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MissingTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .missingType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .missingType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MissingTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -122,11 +118,9 @@ extension MissingTypeSyntax: CustomReflectable {
 public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SimpleTypeIdentifierSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .simpleTypeIdentifier else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .simpleTypeIdentifier else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SimpleTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes
@@ -308,11 +302,9 @@ extension SimpleTypeIdentifierSyntax: CustomReflectable {
 public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MemberTypeIdentifierSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .memberTypeIdentifier else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .memberTypeIdentifier else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MemberTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes
@@ -600,11 +592,9 @@ extension MemberTypeIdentifierSyntax: CustomReflectable {
 public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ClassRestrictionTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .classRestrictionType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .classRestrictionType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ClassRestrictionTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -732,11 +722,9 @@ extension ClassRestrictionTypeSyntax: CustomReflectable {
 public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ArrayTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .arrayType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .arrayType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ArrayTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -970,11 +958,9 @@ extension ArrayTypeSyntax: CustomReflectable {
 public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DictionaryTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .dictionaryType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .dictionaryType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `DictionaryTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -1314,11 +1300,9 @@ extension DictionaryTypeSyntax: CustomReflectable {
 public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MetatypeTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .metatypeType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .metatypeType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MetatypeTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -1552,11 +1536,9 @@ extension MetatypeTypeSyntax: CustomReflectable {
 public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `OptionalTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .optionalType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .optionalType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `OptionalTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -1737,11 +1719,9 @@ extension OptionalTypeSyntax: CustomReflectable {
 public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ConstrainedSugarTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .constrainedSugarType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .constrainedSugarType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ConstrainedSugarTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -1922,11 +1902,9 @@ extension ConstrainedSugarTypeSyntax: CustomReflectable {
 public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ImplicitlyUnwrappedOptionalTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .implicitlyUnwrappedOptionalType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .implicitlyUnwrappedOptionalType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ImplicitlyUnwrappedOptionalTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -2107,11 +2085,9 @@ extension ImplicitlyUnwrappedOptionalTypeSyntax: CustomReflectable {
 public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `CompositionTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .compositionType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .compositionType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `CompositionTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -2258,11 +2234,9 @@ extension CompositionTypeSyntax: CustomReflectable {
 public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PackExpansionTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .packExpansionType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .packExpansionType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PackExpansionTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -2443,11 +2417,9 @@ extension PackExpansionTypeSyntax: CustomReflectable {
 public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `TupleTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tupleType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tupleType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `TupleTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -2700,11 +2672,9 @@ extension TupleTypeSyntax: CustomReflectable {
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `FunctionTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .functionType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .functionType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `FunctionTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -3171,11 +3141,9 @@ extension FunctionTypeSyntax: CustomReflectable {
 public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `AttributedTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .attributedType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .attributedType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `AttributedTypeSyntax` node from the given `SyntaxData`. This assumes
@@ -3430,11 +3398,9 @@ extension AttributedTypeSyntax: CustomReflectable {
 public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `NamedOpaqueReturnTypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .namedOpaqueReturnType else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .namedOpaqueReturnType else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `NamedOpaqueReturnTypeSyntax` node from the given `SyntaxData`. This assumes

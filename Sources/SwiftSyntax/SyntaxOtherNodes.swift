@@ -16,11 +16,9 @@
 public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Convert the given `Syntax` node to an `UnknownSyntax` if possible. Return
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unknown else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unknown else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates an `UnknownSyntax` node from the given `SyntaxData`. This assumes
@@ -66,11 +64,9 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return raw.tokenView!
   }
 
-  /// Converts the given `Syntax` node to a `TokenSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .token else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .token else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the given `SyntaxData`. This assumes

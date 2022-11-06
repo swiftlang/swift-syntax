@@ -65,12 +65,10 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
 
-  /// Converts the given `Syntax` node to a `DeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    switch node.raw.kind {
     case .unknownDecl, .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroExpansionDecl:
-      self._syntaxNode = syntax
+      self._syntaxNode = node._syntaxNode
     default:
       return nil
     }
@@ -98,7 +96,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
+    return S.init(self)
   }
 
   public func cast<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S {
@@ -215,12 +213,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
 
-  /// Converts the given `Syntax` node to a `ExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    switch node.raw.kind {
     case .unknownExpr, .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFileIDExpr, .poundFilePathExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .unresolvedIsExpr, .isExpr, .unresolvedAsExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .oldKeyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .macroExpansionExpr, .postfixIfConfigExpr, .editorPlaceholderExpr, .objectLiteralExpr:
-      self._syntaxNode = syntax
+      self._syntaxNode = node._syntaxNode
     default:
       return nil
     }
@@ -248,7 +244,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 
   public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
+    return S.init(self)
   }
 
   public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
@@ -397,12 +393,10 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
 
-  /// Converts the given `Syntax` node to a `StmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    switch node.raw.kind {
     case .unknownStmt, .missingStmt, .labeledStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
-      self._syntaxNode = syntax
+      self._syntaxNode = node._syntaxNode
     default:
       return nil
     }
@@ -430,7 +424,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 
   public func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
+    return S.init(self)
   }
 
   public func cast<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S {
@@ -542,12 +536,10 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
 
-  /// Converts the given `Syntax` node to a `TypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    switch node.raw.kind {
     case .unknownType, .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
-      self._syntaxNode = syntax
+      self._syntaxNode = node._syntaxNode
     default:
       return nil
     }
@@ -575,7 +567,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 
   public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
+    return S.init(self)
   }
 
   public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
@@ -684,12 +676,10 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
 
-  /// Converts the given `Syntax` node to a `PatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    switch node.raw.kind {
     case .unknownPattern, .missingPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
-      self._syntaxNode = syntax
+      self._syntaxNode = node._syntaxNode
     default:
       return nil
     }
@@ -717,7 +707,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
 
   public func `as`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
+    return S.init(self)
   }
 
   public func cast<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S {

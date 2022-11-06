@@ -1,6 +1,5 @@
 %{
   from gyb_syntax_support import *
-  NODE_MAP = create_node_map()
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -18,49 +17,58 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
-@_spi(RawSyntax) import SwiftParser
+import SwiftSyntax
+import SwiftParser
+import SwiftParserDiagnostics
 
-% STRING_INTERPOLATION_BASE_KINDS = [base_kind for base_kind in SYNTAX_BASE_KINDS if base_kind != 'Syntax' and base_kind != 'SyntaxCollection']
-% for base_kind in STRING_INTERPOLATION_BASE_KINDS:
-%   node = NODE_MAP[base_kind]
-extension ${base_kind}SyntaxProtocol {
-  public static func parse(from parser: inout Parser) throws -> Self {
-    let node = parser.${node.parser_function}().syntax
-    guard let result = node.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: type(of: node.asProtocol(${base_kind}SyntaxProtocol.self)))
+extension SyntaxParseable {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
+      return Self.parse(from: &parser)
+    })
+  }
+}
+
+% for node in SYNTAX_NODES:
+%   if node.parser_function and node.is_base():
+extension ${node.name}Protocol {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
+      let node = ${node.name}.parse(from: &parser)
+      guard let result = node.as(Self.self) else {
+        throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
+      }
+      return result
+    })
+  }
+}
+extension ${node.name}: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in
+      return Self.parse(from: &parser)
+    })
+  }
+}
+
+%   elif node.parser_function or (node.base_type != 'Syntax' and node.base_type != 'SyntaxCollection'):
+extension ${node.name}: SyntaxExpressibleByStringInterpolation { }
+
+%   end
+% end
+
+// TODO: This should be fileprivate, but is currently used in
+// `ConvenienceInitializers.swift`. See the corresponding TODO there.
+func performParse<SyntaxType: SyntaxProtocol>(source: [UInt8], parse: (inout Parser) throws -> SyntaxType) throws -> SyntaxType {
+  return try source.withUnsafeBufferPointer { buffer in
+    var parser = Parser(buffer)
+    // FIXME: When the parser supports incremental parsing, put the
+    // interpolatedSyntaxNodes in so we don't have to parse them again.
+    let result = try parse(&parser)
+    if result.hasError {
+      let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
+      assert(!diagnostics.isEmpty)
+      throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(result))
     }
     return result
   }
 }
-
-% end
-
-%{
-def parser_invocation(node):
-  if node.kind == 'Expr':
-    return "return ExprSyntax(parser.parseExpression().syntax).castOrFatalError(Self.self)"
-  elif node.kind == 'Stmt':
-    return "return StmtSyntax(parser.parseStatement().syntax).castOrFatalError(Self.self)"
-  elif node.kind == 'Type':
-    return "return TypeSyntax(parser.parseType().syntax).castOrFatalError(Self.self)"
-  elif node.kind == 'Pattern':
-    return "return PatternSyntax(parser.parsePattern().syntax).castOrFatalError(Self.self)"
-  elif node.parser_function is not None:
-    return f"return parser.{node.parser_function}().syntax"
-  else:
-    return None
-}%
-% for node in SYNTAX_NODES:
-%   if node.kind in STRING_INTERPOLATION_BASE_KINDS:
-extension ${node.name}: SyntaxExpressibleByStringInterpolation {}
-
-%   elif node.parser_function:
-extension ${node.name}: SyntaxExpressibleByStringInterpolation {
-  public static func parse(from parser: inout Parser) -> Self {
-    return parser.${node.parser_function}().syntax
-  }
-}
-
-%   end
-% end

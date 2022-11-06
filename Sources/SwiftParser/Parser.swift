@@ -12,39 +12,6 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-extension Parser {
-  /// Parse the source code in the given string as Swift source file.
-  public static func parse(
-    source: String,
-    parseTransition: IncrementalParseTransition? = nil
-  ) -> SourceFileSyntax {
-    var source = source
-    source.makeContiguousUTF8()
-    return source.withUTF8 { buffer in
-      return parse(source: buffer, parseTransition: parseTransition)
-    }
-  }
-
-  /// Parse the source code in the given string as Swift source file.
-  /// If `maximumNestingLevel` is set, the parser will stop if a nesting level
-  /// that is greater than this value is reached to avoid overflowing the stack.
-  /// The nesting level is increased whenever a bracketed expression like `(`
-  /// or `{` is stared.
-  public static func parse(
-    source: UnsafeBufferPointer<UInt8>,
-    maximumNestingLevel: Int? = nil,
-    parseTransition: IncrementalParseTransition? = nil
-  ) -> SourceFileSyntax {
-    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel)
-    // Extended lifetime is required because `SyntaxArena` in the parser must
-    // be alive until `Syntax(raw:)` retains the arena.
-    return withExtendedLifetime(parser) {
-      let rawSourceFile =  parser.parseSourceFile()
-      return rawSourceFile.syntax
-    }
-  }
-}
-
 /// A parser for the Swift programming language.
 ///
 /// `Parser` implements a recursive descent parser that produces a SwiftSyntax
@@ -142,17 +109,37 @@ public struct Parser: TokenConsumer {
   public static let defaultMaximumNestingLevel = 256
   #endif
 
-  /// Initializes a Parser from the given input buffer.
-  ///
-  /// The lexer will copy any string data it needs from the resulting buffer
-  /// so it is the caller's responsibility to free it.
+  /// Initializes a `Parser` from the given string.
+  public init(_ input: String, maximumNestingLevel: Int? = nil) {
+    self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
+
+    self.arena = ParsingSyntaxArena(
+      parseTriviaFunction: TriviaParser.parseTrivia(_:position:))
+
+    var input = input
+    input.makeContiguousUTF8()
+    let interned = input.withUTF8 { [arena] buffer in
+      return arena.internSourceBuffer(buffer)
+    }
+
+    self.lexemes = Lexer.tokenize(interned)
+    self.currentToken = self.lexemes.advance()
+  }
+
+  /// Initializes a `Parser` from the given input buffer.
   ///
   /// - Parameters
   ///   - input: An input buffer containing Swift source text.
+  ///   - maximumNestingLevel: To avoid overflowing the stack, the parser will
+  ///                          stop if a nesting level greater than this value
+  ///                          is reached. The nesting level is increased
+  ///                          whenever a bracketed expression like `(` or `{`
+  ///                          is started. `defaultMaximumNestingLevel` is used
+  ///                          if this is `nil`.
   ///   - arena: Arena the parsing syntax are made into. If it's `nil`, a new
   ///            arena is created automatically, and `input` copied into the
-  ///            arena. If non-`nil`, `input` must be the registered source
-  ///            buffer of `arena` or a slice of the source buffer.
+  ///            arena. If non-`nil`, `input` must be within its registered
+  ///            source buffer or allocator.
   public init(_ input: UnsafeBufferPointer<UInt8>, maximumNestingLevel: Int? = nil, arena: ParsingSyntaxArena? = nil) {
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
 
@@ -166,6 +153,7 @@ public struct Parser: TokenConsumer {
       parseTriviaFunction: TriviaParser.parseTrivia(_:position:))
      sourceBuffer = self.arena.internSourceBuffer(input)
     }
+
     self.lexemes = Lexer.tokenize(sourceBuffer)
     self.currentToken = self.lexemes.advance()
   }
@@ -419,7 +407,7 @@ extension Parser {
   /// This should be set if keywords aren't strong recovery marker at this
   /// position, e.g. because the parser expects a punctuator next.
   @_spi(RawSyntax)
-  public mutating func expectIdentifier(allowIdentifierLikeKeywords: Bool = true, keywordRecovery: Bool = false) -> (RawUnexpectedNodesSyntax?, Token) {
+  public mutating func expectIdentifier(allowIdentifierLikeKeywords: Bool = true, keywordRecovery: Bool = false) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
     if allowIdentifierLikeKeywords {
       if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
         return self.eat(handle)
@@ -454,7 +442,7 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func expectIdentifierOrRethrows() -> (RawUnexpectedNodesSyntax?, Token) {
+  public mutating func expectIdentifierOrRethrows() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
     if let (_, handle) = self.canRecoverTo(anyIn: IdentifierOrRethrowsTokens.self) {
       return self.eat(handle)
     }

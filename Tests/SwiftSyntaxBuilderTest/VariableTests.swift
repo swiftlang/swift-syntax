@@ -19,7 +19,7 @@ final class VariableTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
     let buildable = VariableDecl(leadingTrivia: leadingTrivia, letOrVarKeyword: .let) {
-      PatternBinding(pattern: Pattern("a"), typeAnnotation: TypeAnnotation(type: ArrayType(elementType: Type("Int"))))
+      PatternBinding(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotation(type: ArrayType(elementType: Type("Int"))))
     }
 
     AssertBuildResult(buildable, "␣let a: [Int]")
@@ -30,7 +30,7 @@ final class VariableTests: XCTestCase {
 
     let buildable = VariableDecl(leadingTrivia: leadingTrivia, letOrVarKeyword: .var) {
       PatternBinding(
-        pattern: Pattern("d"),
+        pattern: PatternSyntax("d"),
         typeAnnotation: TypeAnnotation(type: DictionaryType(keyType: Type("String"), valueType: Type("Int"))),
         initializer: InitializerClause(value: DictionaryExpr()))
     }
@@ -40,7 +40,7 @@ final class VariableTests: XCTestCase {
 
   func testVariableDeclWithExplicitTrailingCommas() {
     let buildable = VariableDecl(letOrVarKeyword: .let, bindings: [
-      PatternBinding(pattern: Pattern("a"), initializer: InitializerClause(value: ArrayExpr(
+      PatternBinding(pattern: PatternSyntax("a"), initializer: InitializerClause(value: ArrayExpr(
         leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)) {
           for i in 1...3 {
             ArrayElement(
@@ -62,18 +62,18 @@ final class VariableTests: XCTestCase {
 
   func testMultiPatternVariableDecl() {
     let buildable = VariableDecl(letOrVarKeyword: .let) {
-      PatternBinding(pattern: Pattern("a"), initializer: InitializerClause(value: ArrayExpr {
+      PatternBinding(pattern: PatternSyntax("a"), initializer: InitializerClause(value: ArrayExpr {
         for i in 1...3 {
           ArrayElement(expression: IntegerLiteralExpr(i))
         }
       }))
-      PatternBinding(pattern: Pattern("d"), initializer: InitializerClause(value: DictionaryExpr {
+      PatternBinding(pattern: PatternSyntax("d"), initializer: InitializerClause(value: DictionaryExpr {
         for i in 1...3 {
           DictionaryElement(keyExpression: StringLiteralExpr(content: "key\(i)"), valueExpression: IntegerLiteralExpr(i))
         }
       }))
-      PatternBinding(pattern: Pattern("i"), typeAnnotation: TypeAnnotation(type: Type("Int")))
-      PatternBinding(pattern: Pattern("s"), typeAnnotation: TypeAnnotation(type: Type("String")))
+      PatternBinding(pattern: PatternSyntax("i"), typeAnnotation: TypeAnnotation(type: Type("Int")))
+      PatternBinding(pattern: PatternSyntax("s"), typeAnnotation: TypeAnnotation(type: Type("String")))
     }
     AssertBuildResult(buildable, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
   }
@@ -81,7 +81,7 @@ final class VariableTests: XCTestCase {
   func testClosureTypeVariableDecl() {
     let type = FunctionType(arguments: [TupleTypeElement(type: Type("Int"))], returnType: Type("Bool"))
     let buildable = VariableDecl(letOrVarKeyword: .let) {
-      PatternBinding(pattern: Pattern("c"), typeAnnotation: TypeAnnotation(type: type))
+      PatternBinding(pattern: PatternSyntax("c"), typeAnnotation: TypeAnnotation(type: type))
     }
     AssertBuildResult(buildable, "let c: (Int) -> Bool")
   }

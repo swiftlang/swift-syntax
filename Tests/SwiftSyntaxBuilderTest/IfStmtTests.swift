@@ -52,7 +52,7 @@ final class IfStmtTests: XCTestCase {
       conditions: ConditionElementList {
         OptionalBindingCondition(
           letOrVarKeyword: .let,
-          pattern: Pattern("x"),
+          pattern: PatternSyntax("x"),
           initializer: InitializerClause(value: Expr("y"))
         )
       }

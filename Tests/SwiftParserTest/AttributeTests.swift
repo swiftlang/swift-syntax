@@ -98,7 +98,6 @@ final class AttributeTests: XCTestCase {
       @1️⃣rethrows
       protocol P { }
       """,
-      { $0.parseDeclaration() },
       substructure: Syntax(TokenSyntax.identifier("rethrows")),
       substructureAfterMarker: "1️⃣"
     )

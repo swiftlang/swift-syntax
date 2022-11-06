@@ -10,33 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
-@_spi(RawSyntax) import SwiftParser
-import SwiftParserDiagnostics
-import SwiftDiagnostics
 import SwiftBasicFormat
-
-func performParse<SyntaxType: SyntaxProtocol>(source: [UInt8], parse: (inout Parser) throws -> SyntaxType) throws -> SyntaxType {
-  return try source.withUnsafeBufferPointer { buffer in
-    var parser = Parser(buffer)
-    // FIXME: When the parser supports incremental parsing, put the
-    // interpolatedSyntaxNodes in so we don't have to parse them again.
-    let result = try parse(&parser)
-    if !parser.at(.eof) {
-      var remainingTokens: [TokenSyntax] = []
-      while !parser.at(.eof) {
-        remainingTokens.append(parser.consumeAnyToken().syntax)
-      }
-      throw SyntaxStringInterpolationError.didNotConsumeAllTokens(remainingTokens: remainingTokens)
-    }
-    if result.hasError {
-      let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: result)
-      assert(!diagnostics.isEmpty)
-      throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(result))
-    }
-    return result
-  }
-}
+import SwiftDiagnostics
+import SwiftSyntax
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -113,6 +89,14 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     self.lastIndentation = nil
   }
 
+  // Append a value of any metatype as source text
+  public mutating func appendInterpolation<T>(
+    _ type: T.Type
+  ) {
+    sourceText.append(contentsOf: String(describing: type).utf8)
+    self.lastIndentation = nil
+  }
+
   public mutating func appendInterpolation<Buildable: SyntaxProtocol>(
     _ buildable: Buildable,
     format: BasicFormat = BasicFormat()
@@ -126,24 +110,19 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
 public protocol SyntaxExpressibleByStringInterpolation:
     ExpressibleByStringInterpolation, SyntaxProtocol
     where Self.StringInterpolation == SyntaxStringInterpolation {
-  /// Create an instance of this syntax node by parsing it from the given
-  /// parser.
-  static func parse(from parser: inout Parser) throws -> Self
+  init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws
 }
 
 enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
-  case didNotConsumeAllTokens(remainingTokens: [TokenSyntax])
   case producedInvalidNodeType(expectedType: SyntaxProtocol.Type, actualType: SyntaxProtocol.Type)
   case diagnostics([Diagnostic], tree: Syntax)
 
   var description: String {
     switch self {
-    case .didNotConsumeAllTokens(remainingTokens: let tokens):
-      return "Extraneous text in snippet: '\(tokens.map(\.description).joined())'"
     case .producedInvalidNodeType(expectedType: let expectedType, actualType: let actualType):
       return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"
     case .diagnostics(let diagnostics, let tree):
-      // Start the diagnostc on a new line so it isn't prefixed with the file, which messes up the
+      // Start the diagnostic on a new line so it isn't prefixed with the file, which messes up the
       // column-aligned message from `DiagnosticsFormatter`.
       return "\n" + DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
     }
@@ -165,10 +144,6 @@ extension SyntaxExpressibleByStringInterpolation {
     }
   }
 
-  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
-    self = try performParse(source: stringInterpolation.sourceText, parse: Self.parse)
-  }
-
   @_transparent
   public init(stringLiteral value: String) {
     do {
@@ -183,10 +158,5 @@ extension SyntaxExpressibleByStringInterpolation {
     var interpolation = SyntaxStringInterpolation()
     interpolation.appendLiteral(value)
     try self.init(stringInterpolationOrThrow: interpolation)
-  }
-
-  /// Construct this node by parsing `source`. If parsing fails, raise a `fatalError`.
-  public init(_ source: String) {
-    self.init(stringLiteral: source)
   }
 }

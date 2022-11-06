@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftOperators
-@_spi(Testing) @_spi(RawSyntax) import SwiftParser
+import SwiftParser
 import SwiftParserDiagnostics
-@_spi(RawSyntax) import SwiftSyntax
+import SwiftSyntax
 
 extension Syntax {
   /// Whether this syntax node is or is enclosed within a #if.
@@ -51,11 +51,11 @@ public func _parserConsistencyCheck(
   var parser = Parser(buffer)
   return withExtendedLifetime(parser) { () -> CInt in
     // Parse the source file
-    let rawSourceFile = parser.parseSourceFile()
+    let sourceFile = SourceFileSyntax.parse(from: &parser)
 
     // Round-trip test.
     if flags & 0x01 != 0 {
-      if rawSourceFile.raw.syntaxTextBytes != [UInt8](buffer) {
+      if sourceFile.syntaxTextBytes != [UInt8](buffer) {
         print(
           "\(String(cString: filename)): error: file failed to round-trip")
         return 1
@@ -66,7 +66,6 @@ public func _parserConsistencyCheck(
     if flags & 0x02 != 0 {
       var anyDiags = false
 
-      let sourceFile = Syntax(raw: rawSourceFile.raw).as(SourceFileSyntax.self)!
       let diags = ParseDiagnosticsGenerator.diagnostics(
         for: sourceFile)
       for diag in diags {

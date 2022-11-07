@@ -195,7 +195,7 @@ struct AbsoluteRawSyntax {
 /// SyntaxData is an implementation detail, and should not be exposed to clients
 /// of SwiftSyntax.
 struct SyntaxData {
-  private enum Info {
+  fileprivate enum Info {
     case root(Root)
     indirect case nonRoot(NonRoot)
 
@@ -372,3 +372,25 @@ struct SyntaxData {
     }
   }
 }
+
+#if DEBUG
+/// See `SyntaxMemoryLayout`.
+var SyntaxDataMemoryLayouts: [String : SyntaxMemoryLayout.Value] = [
+  "SyntaxData": .init(
+    size: MemoryLayout<SyntaxData>.size,
+    stride: MemoryLayout<SyntaxData>.stride,
+    alignment: MemoryLayout<SyntaxData>.alignment),
+  "SyntaxData.Info": .init(
+    size: MemoryLayout<SyntaxData.Info>.size,
+    stride: MemoryLayout<SyntaxData.Info>.stride,
+    alignment: MemoryLayout<SyntaxData.Info>.alignment),
+  "SyntaxData.Info.Root": .init(
+    size: MemoryLayout<SyntaxData.Info.Root>.size,
+    stride: MemoryLayout<SyntaxData.Info.Root>.stride,
+    alignment: MemoryLayout<SyntaxData.Info.Root>.alignment),
+  "SyntaxData.Info.NonRoot": .init(
+    size: MemoryLayout<SyntaxData.Info.NonRoot>.size,
+    stride: MemoryLayout<SyntaxData.Info.NonRoot>.stride,
+    alignment: MemoryLayout<SyntaxData.Info.NonRoot>.alignment),
+]
+#endif

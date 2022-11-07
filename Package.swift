@@ -103,6 +103,7 @@ let package = Package(
       name: "IDEUtils",
       dependencies: ["SwiftSyntax"],
       exclude: [
+        "CMakeLists.txt",
         "SyntaxClassification.swift.gyb",
       ]
     ),

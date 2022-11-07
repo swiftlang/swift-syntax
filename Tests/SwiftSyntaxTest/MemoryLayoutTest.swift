@@ -17,12 +17,15 @@ import XCTest
 final class MemoryLayoutTest: XCTestCase {
 
   func testMemoryLayouts() throws {
+#if !arch(x86_64) && !arch(arm64)
+    throw XCTSkip("Only runs on x86_64 and arm64")
+#endif
+
     /// This test result is just for tracking the memory footprint of syntax nodes,
     /// and they are totally informative purpose. Although we want to keep the
     /// numbers as low as possible, nothing should rely on them, and are not hard
     /// limits in any way.
     /// If this fails, just update the numbers.
-#if arch(x86_64) || arch(arm64)
     let expected: [String: SyntaxMemoryLayout.Value] = [
       "RawSyntaxData.Layout": .init(size: 41, stride: 48, alignment: 8),
       "RawSyntaxData.ParsedToken": .init(size: 42, stride: 48, alignment: 8),
@@ -35,9 +38,6 @@ final class MemoryLayoutTest: XCTestCase {
       "SyntaxData.Info.Root": .init(size: 8, stride: 8, alignment: 8),
       "SyntaxData.Info.NonRoot": .init(size: 36, stride: 40, alignment: 8),
     ]
-#else
-    XCTSkip()
-#endif
 
     let values = SyntaxMemoryLayout.values
     XCTAssertEqual(values.count, expected.count)

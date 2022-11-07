@@ -21,8 +21,9 @@ public class SyntaxArena {
   private var sourceBuffer: UnsafeBufferPointer<UInt8>
 
   /// If the syntax tree that’s allocated in this arena references nodes from
-  /// other arenas, `children` contains those arenas to keep them alive.
-  private var children: Set<SyntaxArena>
+  /// other arenas, `childRefs` contains references to the arenas. Child arenas
+  /// are retained in `addChild()` and are released in `deinit`.
+  private var childRefs: Set<SyntaxArenaRef>
   private var parseTriviaFunction: ParseTriviaFunction
 
 #if DEBUG
@@ -34,7 +35,7 @@ public class SyntaxArena {
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
     self.allocator = BumpPtrAllocator()
-    self.children = []
+    self.childRefs = []
     self.sourceBuffer = .init(start: nil, count: 0)
     self.parseTriviaFunction = parseTriviaFunction
 #if DEBUG
@@ -44,6 +45,12 @@ public class SyntaxArena {
 
   public convenience init() {
     self.init(parseTriviaFunction: _defaultParseTriviaFunction(_:_:))
+  }
+
+  deinit {
+    for child in childRefs {
+      child.release()
+    }
   }
 
   /// Copies a source buffer in to the memory this arena manages, and returns
@@ -133,26 +140,29 @@ public class SyntaxArena {
   /// until the parent arena is deinitialized. This can be used when the syntax
   /// tree managed by this arena want to hold a subtree owned by other arena.
   /// See also `RawSyntax.layout()`.
-  func addChild(_ arenaRef: SyntaxArenaRef) {
-    if SyntaxArenaRef(self) == arenaRef { return }
-    let other = arenaRef.value
+  func addChild(_ otherRef: SyntaxArenaRef) {
+    if SyntaxArenaRef(self) == otherRef { return }
 
 #if DEBUG
     precondition(
       !self.hasParent,
       "an arena can't have a new child once it's owned by other arenas")
-    // FIXME: This may trigger a data race warning in Thread Sanitizer.
-    // Can we use atomic bool here?
-    other.hasParent = true
 #endif
 
-    children.insert(other)
+    if childRefs.insert(otherRef).inserted {
+      otherRef.retain()
+#if DEBUG
+      // FIXME: This may trigger a data race warning in Thread Sanitizer.
+      // Can we use atomic bool here?
+      otherRef.value.hasParent = true
+#endif
+    }
   }
 
-  /// Recursively checks if this arena contains given `arena` as a descendant.
-  func contains(arena: SyntaxArena) -> Bool {
-    children.contains { child in
-      child === arena  || child.contains(arena: arena)
+  /// Recursively checks if this arena contains given `arenaRef` as a descendant.
+  func contains(arenaRef: SyntaxArenaRef) -> Bool {
+    childRefs.contains { childRef in
+      childRef == arenaRef || childRef.value.contains(arenaRef: arenaRef)
     }
   }
 
@@ -173,35 +183,38 @@ public class SyntaxArena {
   }
 }
 
-extension SyntaxArena: Hashable {
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(ObjectIdentifier(self))
-  }
-  public static func ==(lhs: SyntaxArena, rhs: SyntaxArena) -> Bool {
-    return lhs === rhs
-  }
-}
-
 /// Unsafely unowned reference to `SyntaxArena`. The user is responsible to
 /// maintain the lifetime of the `SyntaxArena`.
 ///
 /// `RawSyntaxData` holds its `SyntaxArena` in this form to prevent their cyclic
 /// strong references. Also, passing around `SyntaxArena` in this form doesn't
 /// cause any ref-counting traffic.
-struct SyntaxArenaRef: Equatable {
-  private unowned(unsafe) var _value: SyntaxArena
+struct SyntaxArenaRef: Hashable {
+  private let _value: Unmanaged<SyntaxArena>
 
   init(_ value: __shared SyntaxArena) {
-    self._value = value
+    self._value = .passUnretained(value)
   }
 
   /// Returns the `SyntaxArena`
   var value: SyntaxArena {
-    get { self._value }
+    get { self._value.takeUnretainedValue() }
+  }
+
+  func retain() {
+    _ = self._value.retain()
+  }
+
+  func release() {
+    self._value.release()
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(_value.toOpaque())
   }
 
   static func ==(lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
-    return lhs._value === rhs._value
+    return lhs._value.toOpaque() == rhs._value.toOpaque()
   }
 }
 

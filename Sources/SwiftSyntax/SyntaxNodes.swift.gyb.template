@@ -73,9 +73,9 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     }
 %           end
 %         end
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
 %         for choice in child.node_choices:
-      if let node = syntaxNode.as(${choice.type_name}.self) {
+      if let node = node.as(${choice.type_name}.self) {
         self = .${choice.swift_name}(node)
         return
       }
@@ -100,11 +100,9 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `${node.name}` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .${node.swift_syntax_kind} else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .${node.swift_syntax_kind} else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `${node.name}` node from the given `SyntaxData`. This assumes

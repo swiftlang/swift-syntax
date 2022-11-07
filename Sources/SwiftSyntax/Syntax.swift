@@ -71,12 +71,6 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   public init<S: SyntaxProtocol>(_ syntax: S) {
     self = syntax._syntaxNode
   }
-
-  /// Create a `Syntax` node from a specialized optional syntax node.
-  public init?<S: SyntaxProtocol>(_ syntax: S?) {
-    guard let syntax = syntax else { return nil }
-    self = syntax._syntaxNode
-  }
   
   public init(fromProtocol syntax: SyntaxProtocol) {
     self = syntax._syntaxNode
@@ -111,21 +105,6 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 
   public static func ==(lhs: Syntax, rhs: Syntax) -> Bool {
     return lhs.data.nodeId == rhs.data.nodeId
-  }
-}
-
-// Casting functions to specialized syntax nodes.
-extension SyntaxProtocol {
-  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return self.as(syntaxType) != nil
-  }
-
-  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(self._syntaxNode)
-  }
-
-  func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
-    return self.as(S.self)!
   }
 }
 
@@ -188,9 +167,9 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Do not retrieve this property directly. Use `Syntax(self)` instead.
   var _syntaxNode: Syntax { get }
 
-  /// Converts the given `Syntax` node to this type. Returns `nil` if the
+  /// Converts the given specialized node to this type. Returns `nil` if the
   /// conversion is not possible.
-  init?(_ syntaxNode: Syntax)
+  init?<S: SyntaxProtocol>(_ node: S)
 
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }
@@ -200,6 +179,30 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Typically, you want to use `childNameInParent` on the child instead of
   /// calling this method on the parent.
   func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String?
+}
+
+// Casting functions to specialized syntax nodes.
+public extension SyntaxProtocol {
+  /// Converts the given specialized node to this type. Returns `nil` if the
+  /// conversion is not possible or the given node was `nil`.
+  init?<S: SyntaxProtocol>(_ node: S?) {
+    guard let node = node else {
+      return nil
+    }
+    self.init(node)
+  }
+
+  func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(self)
+  }
+
+  func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
 }
 
 public extension SyntaxProtocol {

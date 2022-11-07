@@ -18,11 +18,9 @@
 public struct UnknownDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnknownDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unknownDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unknownDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnknownDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -70,11 +68,9 @@ extension UnknownDeclSyntax: CustomReflectable {
 public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MissingDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .missingDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .missingDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MissingDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -295,11 +291,9 @@ extension MissingDeclSyntax: CustomReflectable {
 public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `TypealiasDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .typealiasDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .typealiasDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `TypealiasDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -787,11 +781,9 @@ extension TypealiasDeclSyntax: CustomReflectable {
 public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `AssociatedtypeDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .associatedtypeDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .associatedtypeDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `AssociatedtypeDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -1280,11 +1272,9 @@ extension AssociatedtypeDeclSyntax: CustomReflectable {
 public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IfConfigDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .ifConfigDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .ifConfigDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `IfConfigDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -1484,11 +1474,9 @@ extension IfConfigDeclSyntax: CustomReflectable {
 public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundErrorDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundErrorDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundErrorDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundErrorDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -1775,11 +1763,9 @@ extension PoundErrorDeclSyntax: CustomReflectable {
 public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundWarningDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundWarningDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundWarningDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundWarningDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -2066,11 +2052,9 @@ extension PoundWarningDeclSyntax: CustomReflectable {
 public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundSourceLocationSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundSourceLocation else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundSourceLocation else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundSourceLocationSyntax` node from the given `SyntaxData`. This assumes
@@ -2358,11 +2342,9 @@ extension PoundSourceLocationSyntax: CustomReflectable {
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ClassDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .classDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .classDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ClassDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -2904,11 +2886,9 @@ extension ClassDeclSyntax: CustomReflectable {
 public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ActorDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .actorDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .actorDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ActorDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -3450,11 +3430,9 @@ extension ActorDeclSyntax: CustomReflectable {
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `StructDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .structDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .structDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `StructDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -3996,11 +3974,9 @@ extension StructDeclSyntax: CustomReflectable {
 public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ProtocolDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .protocolDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .protocolDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ProtocolDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -4542,11 +4518,9 @@ extension ProtocolDeclSyntax: CustomReflectable {
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ExtensionDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .extensionDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .extensionDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ExtensionDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -5034,11 +5008,9 @@ extension ExtensionDeclSyntax: CustomReflectable {
 public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `FunctionDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .functionDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .functionDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `FunctionDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -5580,11 +5552,9 @@ extension FunctionDeclSyntax: CustomReflectable {
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `InitializerDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .initializerDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .initializerDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `InitializerDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -6127,11 +6097,9 @@ extension InitializerDeclSyntax: CustomReflectable {
 public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DeinitializerDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .deinitializerDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .deinitializerDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `DeinitializerDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -6473,12 +6441,12 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     public init(_ node: CodeBlockSyntax) {
       self = .getter(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(AccessorBlockSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(AccessorBlockSyntax.self) {
         self = .accessors(node)
         return
       }
-      if let node = syntaxNode.as(CodeBlockSyntax.self) {
+      if let node = node.as(CodeBlockSyntax.self) {
         self = .getter(node)
         return
       }
@@ -6495,11 +6463,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SubscriptDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .subscriptDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .subscriptDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SubscriptDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -7041,11 +7007,9 @@ extension SubscriptDeclSyntax: CustomReflectable {
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ImportDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .importDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .importDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ImportDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -7445,11 +7409,9 @@ extension ImportDeclSyntax: CustomReflectable {
 public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `AccessorDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .accessorDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .accessorDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `AccessorDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -7920,11 +7882,9 @@ extension AccessorDeclSyntax: CustomReflectable {
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `VariableDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .variableDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .variableDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `VariableDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -8275,11 +8235,9 @@ extension VariableDeclSyntax: CustomReflectable {
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `EnumCaseDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .enumCaseDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .enumCaseDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `EnumCaseDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -8634,11 +8592,9 @@ extension EnumCaseDeclSyntax: CustomReflectable {
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `EnumDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .enumDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .enumDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `EnumDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -9207,11 +9163,9 @@ extension EnumDeclSyntax: CustomReflectable {
 public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `OperatorDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .operatorDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .operatorDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `OperatorDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -9603,11 +9557,9 @@ extension OperatorDeclSyntax: CustomReflectable {
 public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PrecedenceGroupDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .precedenceGroupDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .precedenceGroupDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PrecedenceGroupDeclSyntax` node from the given `SyntaxData`. This assumes
@@ -10125,11 +10077,9 @@ extension PrecedenceGroupDeclSyntax: CustomReflectable {
 public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MacroExpansionDeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .macroExpansionDecl else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .macroExpansionDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MacroExpansionDeclSyntax` node from the given `SyntaxData`. This assumes

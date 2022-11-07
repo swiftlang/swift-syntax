@@ -18,11 +18,9 @@
 public struct UnknownExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnknownExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unknownExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unknownExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnknownExprSyntax` node from the given `SyntaxData`. This assumes
@@ -70,11 +68,9 @@ extension UnknownExprSyntax: CustomReflectable {
 public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MissingExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .missingExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .missingExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MissingExprSyntax` node from the given `SyntaxData`. This assumes
@@ -122,11 +118,9 @@ extension MissingExprSyntax: CustomReflectable {
 public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `InOutExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .inOutExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .inOutExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `InOutExprSyntax` node from the given `SyntaxData`. This assumes
@@ -307,11 +301,9 @@ extension InOutExprSyntax: CustomReflectable {
 public struct PoundColumnExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundColumnExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundColumnExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundColumnExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundColumnExprSyntax` node from the given `SyntaxData`. This assumes
@@ -439,11 +431,9 @@ extension PoundColumnExprSyntax: CustomReflectable {
 public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `TryExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tryExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tryExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `TryExprSyntax` node from the given `SyntaxData`. This assumes
@@ -678,11 +668,9 @@ extension TryExprSyntax: CustomReflectable {
 public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `AwaitExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .awaitExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .awaitExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `AwaitExprSyntax` node from the given `SyntaxData`. This assumes
@@ -863,11 +851,9 @@ extension AwaitExprSyntax: CustomReflectable {
 public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MoveExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .moveExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .moveExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MoveExprSyntax` node from the given `SyntaxData`. This assumes
@@ -1048,11 +1034,9 @@ extension MoveExprSyntax: CustomReflectable {
 public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IdentifierExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .identifierExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .identifierExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `IdentifierExprSyntax` node from the given `SyntaxData`. This assumes
@@ -1234,11 +1218,9 @@ extension IdentifierExprSyntax: CustomReflectable {
 public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SuperRefExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .superRefExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .superRefExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SuperRefExprSyntax` node from the given `SyntaxData`. This assumes
@@ -1366,11 +1348,9 @@ extension SuperRefExprSyntax: CustomReflectable {
 public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `NilLiteralExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .nilLiteralExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .nilLiteralExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `NilLiteralExprSyntax` node from the given `SyntaxData`. This assumes
@@ -1498,11 +1478,9 @@ extension NilLiteralExprSyntax: CustomReflectable {
 public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DiscardAssignmentExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .discardAssignmentExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .discardAssignmentExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `DiscardAssignmentExprSyntax` node from the given `SyntaxData`. This assumes
@@ -1630,11 +1608,9 @@ extension DiscardAssignmentExprSyntax: CustomReflectable {
 public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `AssignmentExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .assignmentExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .assignmentExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `AssignmentExprSyntax` node from the given `SyntaxData`. This assumes
@@ -1762,11 +1738,9 @@ extension AssignmentExprSyntax: CustomReflectable {
 public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SequenceExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .sequenceExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .sequenceExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SequenceExprSyntax` node from the given `SyntaxData`. This assumes
@@ -1913,11 +1887,9 @@ extension SequenceExprSyntax: CustomReflectable {
 public struct PoundLineExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundLineExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundLineExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundLineExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundLineExprSyntax` node from the given `SyntaxData`. This assumes
@@ -2045,11 +2017,9 @@ extension PoundLineExprSyntax: CustomReflectable {
 public struct PoundFileExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundFileExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundFileExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundFileExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundFileExprSyntax` node from the given `SyntaxData`. This assumes
@@ -2177,11 +2147,9 @@ extension PoundFileExprSyntax: CustomReflectable {
 public struct PoundFileIDExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundFileIDExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundFileIDExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundFileIDExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundFileIDExprSyntax` node from the given `SyntaxData`. This assumes
@@ -2309,11 +2277,9 @@ extension PoundFileIDExprSyntax: CustomReflectable {
 public struct PoundFilePathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundFilePathExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundFilePathExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundFilePathExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundFilePathExprSyntax` node from the given `SyntaxData`. This assumes
@@ -2441,11 +2407,9 @@ extension PoundFilePathExprSyntax: CustomReflectable {
 public struct PoundFunctionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundFunctionExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundFunctionExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundFunctionExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundFunctionExprSyntax` node from the given `SyntaxData`. This assumes
@@ -2573,11 +2537,9 @@ extension PoundFunctionExprSyntax: CustomReflectable {
 public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundDsohandleExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundDsohandleExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundDsohandleExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundDsohandleExprSyntax` node from the given `SyntaxData`. This assumes
@@ -2705,11 +2667,9 @@ extension PoundDsohandleExprSyntax: CustomReflectable {
 public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SymbolicReferenceExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .symbolicReferenceExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .symbolicReferenceExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SymbolicReferenceExprSyntax` node from the given `SyntaxData`. This assumes
@@ -2891,11 +2851,9 @@ extension SymbolicReferenceExprSyntax: CustomReflectable {
 public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PrefixOperatorExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .prefixOperatorExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .prefixOperatorExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PrefixOperatorExprSyntax` node from the given `SyntaxData`. This assumes
@@ -3077,11 +3035,9 @@ extension PrefixOperatorExprSyntax: CustomReflectable {
 public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `BinaryOperatorExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .binaryOperatorExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .binaryOperatorExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `BinaryOperatorExprSyntax` node from the given `SyntaxData`. This assumes
@@ -3209,11 +3165,9 @@ extension BinaryOperatorExprSyntax: CustomReflectable {
 public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ArrowExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .arrowExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .arrowExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ArrowExprSyntax` node from the given `SyntaxData`. This assumes
@@ -3449,11 +3403,9 @@ extension ArrowExprSyntax: CustomReflectable {
 public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `InfixOperatorExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .infixOperatorExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .infixOperatorExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `InfixOperatorExprSyntax` node from the given `SyntaxData`. This assumes
@@ -3687,11 +3639,9 @@ extension InfixOperatorExprSyntax: CustomReflectable {
 public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `FloatLiteralExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .floatLiteralExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .floatLiteralExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `FloatLiteralExprSyntax` node from the given `SyntaxData`. This assumes
@@ -3819,11 +3769,9 @@ extension FloatLiteralExprSyntax: CustomReflectable {
 public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `TupleExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tupleExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tupleExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `TupleExprSyntax` node from the given `SyntaxData`. This assumes
@@ -4076,11 +4024,9 @@ extension TupleExprSyntax: CustomReflectable {
 public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ArrayExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .arrayExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .arrayExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ArrayExprSyntax` node from the given `SyntaxData`. This assumes
@@ -4347,12 +4293,12 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     public init(_ node: DictionaryElementListSyntax) {
       self = .elements(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(TokenSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(TokenSyntax.self) {
         self = .colon(node)
         return
       }
-      if let node = syntaxNode.as(DictionaryElementListSyntax.self) {
+      if let node = node.as(DictionaryElementListSyntax.self) {
         self = .elements(node)
         return
       }
@@ -4369,11 +4315,9 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DictionaryExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .dictionaryExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .dictionaryExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `DictionaryExprSyntax` node from the given `SyntaxData`. This assumes
@@ -4607,11 +4551,9 @@ extension DictionaryExprSyntax: CustomReflectable {
 public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IntegerLiteralExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .integerLiteralExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .integerLiteralExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `IntegerLiteralExprSyntax` node from the given `SyntaxData`. This assumes
@@ -4739,11 +4681,9 @@ extension IntegerLiteralExprSyntax: CustomReflectable {
 public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `BooleanLiteralExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .booleanLiteralExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .booleanLiteralExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `BooleanLiteralExprSyntax` node from the given `SyntaxData`. This assumes
@@ -4871,11 +4811,9 @@ extension BooleanLiteralExprSyntax: CustomReflectable {
 public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnresolvedTernaryExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unresolvedTernaryExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unresolvedTernaryExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnresolvedTernaryExprSyntax` node from the given `SyntaxData`. This assumes
@@ -5109,11 +5047,9 @@ extension UnresolvedTernaryExprSyntax: CustomReflectable {
 public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `TernaryExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .ternaryExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .ternaryExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `TernaryExprSyntax` node from the given `SyntaxData`. This assumes
@@ -5453,11 +5389,9 @@ extension TernaryExprSyntax: CustomReflectable {
 public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MemberAccessExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .memberAccessExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .memberAccessExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MemberAccessExprSyntax` node from the given `SyntaxData`. This assumes
@@ -5746,11 +5680,9 @@ extension MemberAccessExprSyntax: CustomReflectable {
 public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnresolvedIsExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unresolvedIsExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unresolvedIsExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnresolvedIsExprSyntax` node from the given `SyntaxData`. This assumes
@@ -5878,11 +5810,9 @@ extension UnresolvedIsExprSyntax: CustomReflectable {
 public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IsExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .isExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .isExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `IsExprSyntax` node from the given `SyntaxData`. This assumes
@@ -6116,11 +6046,9 @@ extension IsExprSyntax: CustomReflectable {
 public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnresolvedAsExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unresolvedAsExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unresolvedAsExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnresolvedAsExprSyntax` node from the given `SyntaxData`. This assumes
@@ -6302,11 +6230,9 @@ extension UnresolvedAsExprSyntax: CustomReflectable {
 public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `AsExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .asExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .asExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `AsExprSyntax` node from the given `SyntaxData`. This assumes
@@ -6594,11 +6520,9 @@ extension AsExprSyntax: CustomReflectable {
 public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `TypeExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .typeExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .typeExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `TypeExprSyntax` node from the given `SyntaxData`. This assumes
@@ -6726,11 +6650,9 @@ extension TypeExprSyntax: CustomReflectable {
 public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ClosureExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .closureExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .closureExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ClosureExprSyntax` node from the given `SyntaxData`. This assumes
@@ -7037,11 +6959,9 @@ extension ClosureExprSyntax: CustomReflectable {
 public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnresolvedPatternExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unresolvedPatternExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unresolvedPatternExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnresolvedPatternExprSyntax` node from the given `SyntaxData`. This assumes
@@ -7169,11 +7089,9 @@ extension UnresolvedPatternExprSyntax: CustomReflectable {
 public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `FunctionCallExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .functionCallExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .functionCallExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `FunctionCallExprSyntax` node from the given `SyntaxData`. This assumes
@@ -7608,11 +7526,9 @@ extension FunctionCallExprSyntax: CustomReflectable {
 public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SubscriptExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .subscriptExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .subscriptExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SubscriptExprSyntax` node from the given `SyntaxData`. This assumes
@@ -8045,11 +7961,9 @@ extension SubscriptExprSyntax: CustomReflectable {
 public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `OptionalChainingExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .optionalChainingExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .optionalChainingExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `OptionalChainingExprSyntax` node from the given `SyntaxData`. This assumes
@@ -8230,11 +8144,9 @@ extension OptionalChainingExprSyntax: CustomReflectable {
 public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ForcedValueExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .forcedValueExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .forcedValueExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ForcedValueExprSyntax` node from the given `SyntaxData`. This assumes
@@ -8415,11 +8327,9 @@ extension ForcedValueExprSyntax: CustomReflectable {
 public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PostfixUnaryExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .postfixUnaryExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .postfixUnaryExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PostfixUnaryExprSyntax` node from the given `SyntaxData`. This assumes
@@ -8600,11 +8510,9 @@ extension PostfixUnaryExprSyntax: CustomReflectable {
 public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SpecializeExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .specializeExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .specializeExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SpecializeExprSyntax` node from the given `SyntaxData`. This assumes
@@ -8785,11 +8693,9 @@ extension SpecializeExprSyntax: CustomReflectable {
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `StringLiteralExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .stringLiteralExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .stringLiteralExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `StringLiteralExprSyntax` node from the given `SyntaxData`. This assumes
@@ -9150,11 +9056,9 @@ extension StringLiteralExprSyntax: CustomReflectable {
 public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `RegexLiteralExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .regexLiteralExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .regexLiteralExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `RegexLiteralExprSyntax` node from the given `SyntaxData`. This assumes
@@ -9282,11 +9186,9 @@ extension RegexLiteralExprSyntax: CustomReflectable {
 public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `KeyPathExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .keyPathExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .keyPathExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `KeyPathExprSyntax` node from the given `SyntaxData`. This assumes
@@ -9559,16 +9461,16 @@ public struct OldKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     public init(_ node: OptionalChainingExprSyntax) {
       self = .optionalChainingExpr(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(IdentifierExprSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(IdentifierExprSyntax.self) {
         self = .identifierExpr(node)
         return
       }
-      if let node = syntaxNode.as(SpecializeExprSyntax.self) {
+      if let node = node.as(SpecializeExprSyntax.self) {
         self = .specializeExpr(node)
         return
       }
-      if let node = syntaxNode.as(OptionalChainingExprSyntax.self) {
+      if let node = node.as(OptionalChainingExprSyntax.self) {
         self = .optionalChainingExpr(node)
         return
       }
@@ -9586,11 +9488,9 @@ public struct OldKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `OldKeyPathExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .oldKeyPathExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .oldKeyPathExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `OldKeyPathExprSyntax` node from the given `SyntaxData`. This assumes
@@ -9825,11 +9725,9 @@ extension OldKeyPathExprSyntax: CustomReflectable {
 public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `KeyPathBaseExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .keyPathBaseExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .keyPathBaseExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `KeyPathBaseExprSyntax` node from the given `SyntaxData`. This assumes
@@ -9957,11 +9855,9 @@ extension KeyPathBaseExprSyntax: CustomReflectable {
 public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ObjcKeyPathExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .objcKeyPathExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .objcKeyPathExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ObjcKeyPathExprSyntax` node from the given `SyntaxData`. This assumes
@@ -10267,11 +10163,9 @@ extension ObjcKeyPathExprSyntax: CustomReflectable {
 public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ObjcSelectorExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .objcSelectorExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .objcSelectorExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ObjcSelectorExprSyntax` node from the given `SyntaxData`. This assumes
@@ -10666,11 +10560,9 @@ extension ObjcSelectorExprSyntax: CustomReflectable {
 public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MacroExpansionExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .macroExpansionExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .macroExpansionExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MacroExpansionExprSyntax` node from the given `SyntaxData`. This assumes
@@ -11159,11 +11051,9 @@ extension MacroExpansionExprSyntax: CustomReflectable {
 public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PostfixIfConfigExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .postfixIfConfigExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .postfixIfConfigExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PostfixIfConfigExprSyntax` node from the given `SyntaxData`. This assumes
@@ -11345,11 +11235,9 @@ extension PostfixIfConfigExprSyntax: CustomReflectable {
 public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `EditorPlaceholderExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .editorPlaceholderExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .editorPlaceholderExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `EditorPlaceholderExprSyntax` node from the given `SyntaxData`. This assumes
@@ -11477,11 +11365,9 @@ extension EditorPlaceholderExprSyntax: CustomReflectable {
 public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ObjectLiteralExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .objectLiteralExpr else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .objectLiteralExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ObjectLiteralExprSyntax` node from the given `SyntaxData`. This assumes

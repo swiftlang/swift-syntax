@@ -18,11 +18,9 @@
 public struct UnknownStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `UnknownStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unknownStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unknownStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `UnknownStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -70,11 +68,9 @@ extension UnknownStmtSyntax: CustomReflectable {
 public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `MissingStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .missingStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .missingStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `MissingStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -122,11 +118,9 @@ extension MissingStmtSyntax: CustomReflectable {
 public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `LabeledStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .labeledStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .labeledStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `LabeledStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -360,11 +354,9 @@ extension LabeledStmtSyntax: CustomReflectable {
 public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ContinueStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .continueStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .continueStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ContinueStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -546,11 +538,9 @@ extension ContinueStmtSyntax: CustomReflectable {
 public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `WhileStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .whileStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .whileStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `WhileStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -803,11 +793,9 @@ extension WhileStmtSyntax: CustomReflectable {
 public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DeferStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .deferStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .deferStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `DeferStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -988,11 +976,9 @@ extension DeferStmtSyntax: CustomReflectable {
 public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ExpressionStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .expressionStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .expressionStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ExpressionStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -1120,11 +1106,9 @@ extension ExpressionStmtSyntax: CustomReflectable {
 public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `RepeatWhileStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .repeatWhileStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .repeatWhileStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `RepeatWhileStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -1411,11 +1395,9 @@ extension RepeatWhileStmtSyntax: CustomReflectable {
 public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `GuardStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .guardStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .guardStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `GuardStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -1721,11 +1703,9 @@ extension GuardStmtSyntax: CustomReflectable {
 public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ForInStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .forInStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .forInStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ForInStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -2335,11 +2315,9 @@ extension ForInStmtSyntax: CustomReflectable {
 public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SwitchStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .switchStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .switchStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `SwitchStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -2698,11 +2676,9 @@ extension SwitchStmtSyntax: CustomReflectable {
 public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DoStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .doStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .doStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `DoStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -2956,11 +2932,9 @@ extension DoStmtSyntax: CustomReflectable {
 public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ReturnStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .returnStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .returnStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ReturnStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -3156,12 +3130,12 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     public init<Node: ExprSyntaxProtocol>(_ node: Node) {
       self = .simpleYield(ExprSyntax(node))
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(YieldListSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(YieldListSyntax.self) {
         self = .yieldList(node)
         return
       }
-      if let node = syntaxNode.as(ExprSyntax.self) {
+      if let node = node.as(ExprSyntax.self) {
         self = .simpleYield(node)
         return
       }
@@ -3178,11 +3152,9 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `YieldStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .yieldStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .yieldStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `YieldStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -3363,11 +3335,9 @@ extension YieldStmtSyntax: CustomReflectable {
 public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `FallthroughStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .fallthroughStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .fallthroughStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `FallthroughStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -3495,11 +3465,9 @@ extension FallthroughStmtSyntax: CustomReflectable {
 public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `BreakStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .breakStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .breakStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `BreakStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -3681,11 +3649,9 @@ extension BreakStmtSyntax: CustomReflectable {
 public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DeclarationStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .declarationStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .declarationStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `DeclarationStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -3813,11 +3779,9 @@ extension DeclarationStmtSyntax: CustomReflectable {
 public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `ThrowStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .throwStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .throwStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `ThrowStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -4012,12 +3976,12 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     public init(_ node: CodeBlockSyntax) {
       self = .codeBlock(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(IfStmtSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(IfStmtSyntax.self) {
         self = .ifStmt(node)
         return
       }
-      if let node = syntaxNode.as(CodeBlockSyntax.self) {
+      if let node = node.as(CodeBlockSyntax.self) {
         self = .codeBlock(node)
         return
       }
@@ -4034,11 +3998,9 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IfStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .ifStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .ifStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `IfStmtSyntax` node from the given `SyntaxData`. This assumes
@@ -4399,11 +4361,9 @@ extension IfStmtSyntax: CustomReflectable {
 public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `PoundAssertStmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .poundAssertStmt else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .poundAssertStmt else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a `PoundAssertStmtSyntax` node from the given `SyntaxData`. This assumes

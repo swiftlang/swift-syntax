@@ -71,10 +71,10 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
     }
 %     end
 %   end
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
 %   for choice_name in node.collection_element_choices:
 %     choice = NODE_MAP[choice_name]
-      if let node = syntaxNode.as(${choice.name}.self) {
+      if let node = node.as(${choice.name}.self) {
         self = .${choice.swift_syntax_kind}(node)
         return
       }
@@ -102,11 +102,9 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `${node.name}` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .${node.swift_syntax_kind} else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .${node.swift_syntax_kind} else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 

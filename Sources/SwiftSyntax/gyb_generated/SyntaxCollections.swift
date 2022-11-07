@@ -38,11 +38,9 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `CodeBlockItemListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .codeBlockItemList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .codeBlockItemList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -292,11 +290,9 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `UnexpectedNodesSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unexpectedNodes else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .unexpectedNodes else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -546,11 +542,9 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `TupleExprElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tupleExprElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tupleExprElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -800,11 +794,9 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ArrayElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .arrayElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .arrayElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -1054,11 +1046,9 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `DictionaryElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .dictionaryElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .dictionaryElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -1315,12 +1305,12 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     public init(_ node: ExpressionSegmentSyntax) {
       self = .expressionSegment(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(StringSegmentSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(StringSegmentSyntax.self) {
         self = .stringSegment(node)
         return
       }
-      if let node = syntaxNode.as(ExpressionSegmentSyntax.self) {
+      if let node = node.as(ExpressionSegmentSyntax.self) {
         self = .expressionSegment(node)
         return
       }
@@ -1342,11 +1332,9 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `StringLiteralSegmentsSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .stringLiteralSegments else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .stringLiteralSegments else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -1596,11 +1584,9 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `DeclNameArgumentListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .declNameArgumentList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .declNameArgumentList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -1850,11 +1836,9 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ExprListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .exprList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .exprList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -2104,11 +2088,9 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ClosureCaptureItemListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .closureCaptureItemList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .closureCaptureItemList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -2358,11 +2340,9 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ClosureParamListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .closureParamList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .closureParamList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -2612,11 +2592,9 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `MultipleTrailingClosureElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .multipleTrailingClosureElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .multipleTrailingClosureElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -2866,11 +2844,9 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `KeyPathComponentListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .keyPathComponentList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .keyPathComponentList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -3120,11 +3096,9 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ObjcNameSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .objcName else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .objcName else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -3374,11 +3348,9 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `YieldExprListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .yieldExprList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .yieldExprList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -3628,11 +3600,9 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `FunctionParameterListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .functionParameterList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .functionParameterList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -3882,11 +3852,9 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `IfConfigClauseListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .ifConfigClauseList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .ifConfigClauseList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -4136,11 +4104,9 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `InheritedTypeListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .inheritedTypeList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .inheritedTypeList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -4390,11 +4356,9 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `MemberDeclListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .memberDeclList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .memberDeclList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -4644,11 +4608,9 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ModifierListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .modifierList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .modifierList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -4898,11 +4860,9 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `AccessPathSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .accessPath else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .accessPath else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -5152,11 +5112,9 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `AccessorListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .accessorList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .accessorList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -5406,11 +5364,9 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `PatternBindingListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .patternBindingList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .patternBindingList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -5657,11 +5613,9 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `EnumCaseElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .enumCaseElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .enumCaseElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -5911,11 +5865,9 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `DesignatedTypeListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .designatedTypeList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .designatedTypeList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -6177,16 +6129,16 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     public init(_ node: PrecedenceGroupAssociativitySyntax) {
       self = .precedenceGroupAssociativity(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(PrecedenceGroupRelationSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(PrecedenceGroupRelationSyntax.self) {
         self = .precedenceGroupRelation(node)
         return
       }
-      if let node = syntaxNode.as(PrecedenceGroupAssignmentSyntax.self) {
+      if let node = node.as(PrecedenceGroupAssignmentSyntax.self) {
         self = .precedenceGroupAssignment(node)
         return
       }
-      if let node = syntaxNode.as(PrecedenceGroupAssociativitySyntax.self) {
+      if let node = node.as(PrecedenceGroupAssociativitySyntax.self) {
         self = .precedenceGroupAssociativity(node)
         return
       }
@@ -6209,11 +6161,9 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `PrecedenceGroupAttributeListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .precedenceGroupAttributeList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .precedenceGroupAttributeList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -6463,11 +6413,9 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `PrecedenceGroupNameListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .precedenceGroupNameList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .precedenceGroupNameList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -6717,11 +6665,9 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `TokenListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tokenList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tokenList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -6971,11 +6917,9 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `NonEmptyTokenListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .nonEmptyTokenList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .nonEmptyTokenList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -7237,16 +7181,16 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     public init(_ node: IfConfigDeclSyntax) {
       self = .ifConfigDecl(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(AttributeSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(AttributeSyntax.self) {
         self = .attribute(node)
         return
       }
-      if let node = syntaxNode.as(CustomAttributeSyntax.self) {
+      if let node = node.as(CustomAttributeSyntax.self) {
         self = .customAttribute(node)
         return
       }
-      if let node = syntaxNode.as(IfConfigDeclSyntax.self) {
+      if let node = node.as(IfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
         return
       }
@@ -7269,11 +7213,9 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `AttributeListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .attributeList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .attributeList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -7539,20 +7481,20 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     public init(_ node: GenericWhereClauseSyntax) {
       self = .genericWhereClause(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(LabeledSpecializeEntrySyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(LabeledSpecializeEntrySyntax.self) {
         self = .labeledSpecializeEntry(node)
         return
       }
-      if let node = syntaxNode.as(AvailabilityEntrySyntax.self) {
+      if let node = node.as(AvailabilityEntrySyntax.self) {
         self = .availabilityEntry(node)
         return
       }
-      if let node = syntaxNode.as(TargetFunctionEntrySyntax.self) {
+      if let node = node.as(TargetFunctionEntrySyntax.self) {
         self = .targetFunctionEntry(node)
         return
       }
-      if let node = syntaxNode.as(GenericWhereClauseSyntax.self) {
+      if let node = node.as(GenericWhereClauseSyntax.self) {
         self = .genericWhereClause(node)
         return
       }
@@ -7576,11 +7518,9 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `SpecializeAttributeSpecListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .specializeAttributeSpecList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .specializeAttributeSpecList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -7830,11 +7770,9 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ObjCSelectorSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .objCSelector else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .objCSelector else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -8084,11 +8022,9 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `DifferentiabilityParamListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .differentiabilityParamList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .differentiabilityParamList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -8338,11 +8274,9 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `BackDeployVersionListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .backDeployVersionList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .backDeployVersionList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -8599,12 +8533,12 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     public init(_ node: IfConfigDeclSyntax) {
       self = .ifConfigDecl(node)
     }
-    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
-      if let node = syntaxNode.as(SwitchCaseSyntax.self) {
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(SwitchCaseSyntax.self) {
         self = .switchCase(node)
         return
       }
-      if let node = syntaxNode.as(IfConfigDeclSyntax.self) {
+      if let node = node.as(IfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
         return
       }
@@ -8626,11 +8560,9 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `SwitchCaseListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .switchCaseList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .switchCaseList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -8880,11 +8812,9 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `CatchClauseListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .catchClauseList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .catchClauseList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -9134,11 +9064,9 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `CaseItemListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .caseItemList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .caseItemList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -9388,11 +9316,9 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `CatchItemListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .catchItemList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .catchItemList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -9642,11 +9568,9 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `ConditionElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .conditionElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .conditionElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -9896,11 +9820,9 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `GenericRequirementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .genericRequirementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .genericRequirementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -10150,11 +10072,9 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `GenericParameterListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .genericParameterList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .genericParameterList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -10404,11 +10324,9 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `PrimaryAssociatedTypeListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .primaryAssociatedTypeList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .primaryAssociatedTypeList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -10658,11 +10576,9 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `CompositionTypeElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .compositionTypeElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .compositionTypeElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -10912,11 +10828,9 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `TupleTypeElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tupleTypeElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tupleTypeElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -11166,11 +11080,9 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `GenericArgumentListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .genericArgumentList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .genericArgumentList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -11420,11 +11332,9 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `TuplePatternElementListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tuplePatternElementList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .tuplePatternElementList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 
@@ -11674,11 +11584,9 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `AvailabilitySpecListSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .availabilitySpecList else { return nil }
-    self._syntaxNode = syntax
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .availabilitySpecList else { return nil }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Creates a Syntax node from the provided root and data. This assumes 

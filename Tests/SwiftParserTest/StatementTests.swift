@@ -489,6 +489,32 @@ final class StatementTests: XCTestCase {
         rightParen: .rightParenToken(),
         trailingClosure: nil,
         additionalTrailingClosures: nil)))
+
+    AssertParse(
+      """
+      func f() -> Int {
+        1️⃣yield & 5
+      }
+      """,
+      substructure: Syntax(SequenceExprSyntax(elements: ExprListSyntax([
+        IdentifierExprSyntax(identifier: .identifier("yield"), declNameArguments: nil),
+        BinaryOperatorExprSyntax(operatorToken: .spacedBinaryOperator("&")),
+        IntegerLiteralExprSyntax(5)
+      ]))),
+      substructureAfterMarker: "1️⃣")
+
+    AssertParse(
+      """
+      func f() -> Int {
+        1️⃣yield&5
+      }
+      """,
+      substructure: Syntax(SequenceExprSyntax(elements: ExprListSyntax([
+        IdentifierExprSyntax(identifier: .identifier("yield"), declNameArguments: nil),
+        BinaryOperatorExprSyntax(operatorToken: .unspacedBinaryOperator("&")),
+        IntegerLiteralExprSyntax(5)
+      ]))),
+      substructureAfterMarker: "1️⃣")
   }
 
   func testDefaultIdentIdentifierInReturnStmt() {

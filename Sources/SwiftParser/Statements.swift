@@ -1196,11 +1196,14 @@ extension Parser.Lookahead {
        case .prefixAmpersand:
          // "yield &" always denotes a yield statement.
          return true
-       case .leftParen:
+      case .leftParen:
          // "yield (", by contrast, must be disambiguated with additional
          // context. We always consider it an apply expression of a function
          // called `yield` for the purposes of the parse.
          return false
+      case .spacedBinaryOperator, .unspacedBinaryOperator:
+        // 'yield &= x' treats yield as an identifier.
+        return false
        default:
         // "yield" followed immediately by any other token is likely a
         // yield statement of some singular expression.

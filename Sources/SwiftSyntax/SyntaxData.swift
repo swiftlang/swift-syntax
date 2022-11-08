@@ -331,7 +331,7 @@ struct SyntaxData {
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent = parent {
-      let parentData = parent.replacingChild(newRaw, at: indexInParent, arena: arena)
+      let parentData = parent.replacingChild(at: indexInParent, with: newRaw, arena: arena)
       let newParent = Syntax(parentData)
       return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
     } else {
@@ -344,15 +344,15 @@ struct SyntaxData {
   /// with a new SyntaxData containing the raw syntax provided.
   ///
   /// - Parameters:
-  ///   - child: The raw syntax for the new child to replace.
   ///   - index: The index pointing to where in the raw layout to place this
   ///            child.
+  ///   - newChild: The raw syntax for the new child to replace.
   ///   - arena: SyntaxArena to the result RawSyntax node data resides.
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(_ child: RawSyntax?, at index: Int, arena: SyntaxArena) -> SyntaxData {
-    let newRaw = raw.layoutView!.replacingChild(at: index, with: child, arena: arena)
+  func replacingChild(at index: Int, with newChild: RawSyntax?, arena: SyntaxArena) -> SyntaxData {
+    let newRaw = raw.layoutView!.replacingChild(at: index, with: newChild, arena: arena)
     return replacingSelf(newRaw, arena: arena)
   }
 

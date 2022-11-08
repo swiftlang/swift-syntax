@@ -120,7 +120,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -150,7 +150,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -160,7 +160,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> MissingDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -181,7 +181,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -211,7 +211,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -221,7 +221,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> MissingDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -242,7 +242,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterModifiers(_ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return MissingDeclSyntax(newData)
   }
 
@@ -363,7 +363,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -393,7 +393,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -403,7 +403,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -424,7 +424,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -454,7 +454,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -464,7 +464,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -485,7 +485,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndTypealiasKeyword(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -505,7 +505,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withTypealiasKeyword(_ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.typealiasKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -526,7 +526,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenTypealiasKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -546,7 +546,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -567,7 +567,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -588,7 +588,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -609,7 +609,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInitializer(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -629,7 +629,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInitializer(_ newChild: TypeInitializerClauseSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.typeInitializerClause, arena: arena)
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -650,7 +650,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInitializerAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -671,7 +671,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -692,7 +692,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -853,7 +853,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -883,7 +883,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -893,7 +893,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -914,7 +914,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -944,7 +944,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -954,7 +954,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -975,7 +975,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndAssociatedtypeKeyword(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -995,7 +995,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAssociatedtypeKeyword(_ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.associatedtypeKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1016,7 +1016,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAssociatedtypeKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1036,7 +1036,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1057,7 +1057,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1078,7 +1078,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1099,7 +1099,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndInitializer(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1120,7 +1120,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInitializer(_ newChild: TypeInitializerClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1141,7 +1141,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInitializerAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1162,7 +1162,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1183,7 +1183,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -1324,7 +1324,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeClauses(_ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1353,7 +1353,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1363,7 +1363,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withClauses(_ newChild: IfConfigClauseListSyntax?) -> IfConfigDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.ifConfigClauseList, arena: arena)
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1384,7 +1384,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenClausesAndPoundEndif(_ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1404,7 +1404,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundEndif(_ newChild: TokenSyntax?) -> IfConfigDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundEndifKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1425,7 +1425,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterPoundEndif(_ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1534,7 +1534,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePoundError(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1554,7 +1554,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundError(_ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundErrorKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1575,7 +1575,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPoundErrorAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1595,7 +1595,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(_ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1616,7 +1616,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndMessage(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1636,7 +1636,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMessage(_ newChild: StringLiteralExprSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1657,7 +1657,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenMessageAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1677,7 +1677,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightParen(_ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1698,7 +1698,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -1823,7 +1823,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePoundWarning(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1843,7 +1843,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundWarning(_ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundWarningKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1864,7 +1864,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPoundWarningAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1884,7 +1884,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(_ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1905,7 +1905,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndMessage(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1925,7 +1925,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMessage(_ newChild: StringLiteralExprSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1946,7 +1946,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenMessageAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1966,7 +1966,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightParen(_ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1987,7 +1987,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -2112,7 +2112,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePoundSourceLocation(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2132,7 +2132,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundSourceLocation(_ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundSourceLocationKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2153,7 +2153,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPoundSourceLocationAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2173,7 +2173,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(_ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2194,7 +2194,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndArgs(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2215,7 +2215,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withArgs(_ newChild: PoundSourceLocationArgsSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2236,7 +2236,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenArgsAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2256,7 +2256,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightParen(_ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2277,7 +2277,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -2418,7 +2418,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2448,7 +2448,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2458,7 +2458,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2479,7 +2479,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2509,7 +2509,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2519,7 +2519,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2540,7 +2540,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndClassKeyword(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2560,7 +2560,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withClassKeyword(_ newChild: TokenSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.classKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2581,7 +2581,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenClassKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2601,7 +2601,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2622,7 +2622,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2643,7 +2643,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2664,7 +2664,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2685,7 +2685,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2706,7 +2706,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2727,7 +2727,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2748,7 +2748,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2768,7 +2768,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2789,7 +2789,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return ClassDeclSyntax(newData)
   }
 
@@ -2962,7 +2962,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -2992,7 +2992,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3002,7 +3002,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3023,7 +3023,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3053,7 +3053,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3063,7 +3063,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3084,7 +3084,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndActorKeyword(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3104,7 +3104,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withActorKeyword(_ newChild: TokenSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3125,7 +3125,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenActorKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3145,7 +3145,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3166,7 +3166,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3187,7 +3187,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3208,7 +3208,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3229,7 +3229,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3250,7 +3250,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3271,7 +3271,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3292,7 +3292,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3312,7 +3312,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3333,7 +3333,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return ActorDeclSyntax(newData)
   }
 
@@ -3506,7 +3506,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3536,7 +3536,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3546,7 +3546,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3567,7 +3567,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3597,7 +3597,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3607,7 +3607,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3628,7 +3628,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndStructKeyword(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3648,7 +3648,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withStructKeyword(_ newChild: TokenSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.structKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3669,7 +3669,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenStructKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3689,7 +3689,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3710,7 +3710,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3731,7 +3731,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3752,7 +3752,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3773,7 +3773,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3794,7 +3794,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3815,7 +3815,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3836,7 +3836,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3856,7 +3856,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -3877,7 +3877,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return StructDeclSyntax(newData)
   }
 
@@ -4050,7 +4050,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4080,7 +4080,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4090,7 +4090,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4111,7 +4111,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4141,7 +4141,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4151,7 +4151,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4172,7 +4172,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndProtocolKeyword(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4192,7 +4192,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withProtocolKeyword(_ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.protocolKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4213,7 +4213,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenProtocolKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4233,7 +4233,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4254,7 +4254,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4275,7 +4275,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPrimaryAssociatedTypeClause(_ newChild: PrimaryAssociatedTypeClauseSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4296,7 +4296,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4317,7 +4317,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4338,7 +4338,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4359,7 +4359,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4380,7 +4380,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4400,7 +4400,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4421,7 +4421,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -4590,7 +4590,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4620,7 +4620,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4630,7 +4630,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4651,7 +4651,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4681,7 +4681,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4691,7 +4691,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4712,7 +4712,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndExtensionKeyword(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4732,7 +4732,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withExtensionKeyword(_ newChild: TokenSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.extensionKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4753,7 +4753,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenExtensionKeywordAndExtendedType(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4773,7 +4773,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withExtendedType(_ newChild: TypeSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4794,7 +4794,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenExtendedTypeAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4815,7 +4815,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4836,7 +4836,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4857,7 +4857,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4878,7 +4878,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4898,7 +4898,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4919,7 +4919,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -5084,7 +5084,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5114,7 +5114,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5124,7 +5124,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5145,7 +5145,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5175,7 +5175,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5185,7 +5185,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5206,7 +5206,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndFuncKeyword(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5226,7 +5226,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withFuncKeyword(_ newChild: TokenSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.funcKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5247,7 +5247,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenFuncKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5267,7 +5267,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5288,7 +5288,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5309,7 +5309,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5330,7 +5330,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndSignature(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5350,7 +5350,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withSignature(_ newChild: FunctionSignatureSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: arena)
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5371,7 +5371,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSignatureAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5392,7 +5392,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5413,7 +5413,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndBody(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5434,7 +5434,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(_ newChild: CodeBlockSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5455,7 +5455,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return FunctionDeclSyntax(newData)
   }
 
@@ -5628,7 +5628,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5658,7 +5658,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5668,7 +5668,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5689,7 +5689,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5719,7 +5719,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5729,7 +5729,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5750,7 +5750,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndInitKeyword(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5770,7 +5770,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInitKeyword(_ newChild: TokenSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.initKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5791,7 +5791,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInitKeywordAndOptionalMark(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5812,7 +5812,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withOptionalMark(_ newChild: TokenSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5833,7 +5833,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenOptionalMarkAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5854,7 +5854,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5875,7 +5875,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndSignature(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5895,7 +5895,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withSignature(_ newChild: FunctionSignatureSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: arena)
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5916,7 +5916,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSignatureAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5937,7 +5937,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5958,7 +5958,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndBody(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5979,7 +5979,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(_ newChild: CodeBlockSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -6000,7 +6000,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return InitializerDeclSyntax(newData)
   }
 
@@ -6157,7 +6157,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6187,7 +6187,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6197,7 +6197,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6218,7 +6218,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6248,7 +6248,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6258,7 +6258,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6279,7 +6279,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndDeinitKeyword(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6299,7 +6299,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withDeinitKeyword(_ newChild: TokenSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.deinitKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6320,7 +6320,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenDeinitKeywordAndBody(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6341,7 +6341,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(_ newChild: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6362,7 +6362,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -6539,7 +6539,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6569,7 +6569,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6579,7 +6579,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6600,7 +6600,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6630,7 +6630,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6640,7 +6640,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6661,7 +6661,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndSubscriptKeyword(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6681,7 +6681,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withSubscriptKeyword(_ newChild: TokenSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.subscriptKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6702,7 +6702,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSubscriptKeywordAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6723,7 +6723,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6744,7 +6744,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndIndices(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6764,7 +6764,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIndices(_ newChild: ParameterClauseSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.parameterClause, arena: arena)
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6785,7 +6785,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIndicesAndResult(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6805,7 +6805,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withResult(_ newChild: ReturnClauseSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.returnClause, arena: arena)
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6826,7 +6826,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenResultAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6847,7 +6847,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6868,7 +6868,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndAccessor(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6889,7 +6889,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAccessor(_ newChild: Accessor?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -6910,7 +6910,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterAccessor(_ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -7071,7 +7071,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7101,7 +7101,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7111,7 +7111,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7132,7 +7132,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7162,7 +7162,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7172,7 +7172,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7193,7 +7193,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndImportTok(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7213,7 +7213,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withImportTok(_ newChild: TokenSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.importKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7234,7 +7234,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenImportTokAndImportKind(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7255,7 +7255,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withImportKind(_ newChild: TokenSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7276,7 +7276,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenImportKindAndPath(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7305,7 +7305,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: collection, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7315,7 +7315,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPath(_ newChild: AccessPathSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.accessPath, arena: arena)
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7336,7 +7336,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterPath(_ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return ImportDeclSyntax(newData)
   }
 
@@ -7481,7 +7481,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7511,7 +7511,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7521,7 +7521,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7542,7 +7542,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifier(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7563,7 +7563,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifier(_ newChild: DeclModifierSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7584,7 +7584,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifierAndAccessorKind(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7604,7 +7604,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAccessorKind(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7625,7 +7625,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAccessorKindAndParameter(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7646,7 +7646,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withParameter(_ newChild: AccessorParameterSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7667,7 +7667,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenParameterAndAsyncKeyword(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7688,7 +7688,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAsyncKeyword(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7709,7 +7709,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAsyncKeywordAndThrowsKeyword(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7730,7 +7730,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withThrowsKeyword(_ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7751,7 +7751,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenThrowsKeywordAndBody(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7772,7 +7772,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(_ newChild: CodeBlockSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7793,7 +7793,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterBody(_ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return AccessorDeclSyntax(newData)
   }
 
@@ -7942,7 +7942,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -7972,7 +7972,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -7982,7 +7982,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8003,7 +8003,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8033,7 +8033,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8043,7 +8043,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8064,7 +8064,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndLetOrVarKeyword(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8084,7 +8084,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLetOrVarKeyword(_ newChild: TokenSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8105,7 +8105,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLetOrVarKeywordAndBindings(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8134,7 +8134,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8144,7 +8144,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBindings(_ newChild: PatternBindingListSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.patternBindingList, arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8165,7 +8165,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterBindings(_ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return VariableDeclSyntax(newData)
   }
 
@@ -8295,7 +8295,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8328,7 +8328,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8338,7 +8338,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8359,7 +8359,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8392,7 +8392,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8402,7 +8402,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8423,7 +8423,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndCaseKeyword(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8444,7 +8444,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withCaseKeyword(_ newChild: TokenSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8465,7 +8465,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenCaseKeywordAndElements(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8495,7 +8495,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8505,7 +8505,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withElements(_ newChild: EnumCaseElementListSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.enumCaseElementList, arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8526,7 +8526,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterElements(_ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -8668,7 +8668,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8701,7 +8701,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8711,7 +8711,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8732,7 +8732,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8765,7 +8765,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8775,7 +8775,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8796,7 +8796,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndEnumKeyword(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8819,7 +8819,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withEnumKeyword(_ newChild: TokenSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.enumKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8840,7 +8840,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenEnumKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8863,7 +8863,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8884,7 +8884,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameters(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8908,7 +8908,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameters(_ newChild: GenericParameterClauseSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8929,7 +8929,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParametersAndInheritanceClause(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8954,7 +8954,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(_ newChild: TypeInheritanceClauseSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -8975,7 +8975,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9000,7 +9000,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9021,7 +9021,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9044,7 +9044,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(_ newChild: MemberDeclBlockSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: arena)
-    let newData = data.replacingChild(raw, at: 15, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9065,7 +9065,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterMembers(_ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 16, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return EnumDeclSyntax(newData)
   }
 
@@ -9227,7 +9227,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9260,7 +9260,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9270,7 +9270,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9291,7 +9291,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9325,7 +9325,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9335,7 +9335,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9356,7 +9356,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndOperatorKeyword(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9376,7 +9376,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withOperatorKeyword(_ newChild: TokenSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.operatorKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9397,7 +9397,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenOperatorKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9417,7 +9417,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unspacedBinaryOperator(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9438,7 +9438,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9462,7 +9462,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withOperatorPrecedenceAndTypes(_ newChild: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9483,7 +9483,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterOperatorPrecedenceAndTypes(_ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return OperatorDeclSyntax(newData)
   }
 
@@ -9629,7 +9629,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9662,7 +9662,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9672,7 +9672,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(_ newChild: AttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9693,7 +9693,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9727,7 +9727,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9737,7 +9737,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(_ newChild: ModifierListSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9758,7 +9758,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndPrecedencegroupKeyword(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9778,7 +9778,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPrecedencegroupKeyword(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.precedencegroupKeyword, arena: arena)
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9799,7 +9799,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPrecedencegroupKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9822,7 +9822,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9843,7 +9843,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndLeftBrace(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9863,7 +9863,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftBrace(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: arena)
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9884,7 +9884,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftBraceAndGroupAttributes(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9916,7 +9916,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: collection, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9926,7 +9926,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGroupAttributes(_ newChild: PrecedenceGroupAttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.precedenceGroupAttributeList, arena: arena)
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9947,7 +9947,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGroupAttributesAndRightBrace(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9967,7 +9967,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightBrace(_ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: arena)
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -9988,7 +9988,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterRightBrace(_ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -10149,7 +10149,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePoundToken(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 0, arena: arena)
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10170,7 +10170,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundToken(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.pound, arena: arena)
-    let newData = data.replacingChild(raw, at: 1, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10191,7 +10191,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPoundTokenAndMacro(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2, arena: arena)
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10211,7 +10211,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMacro(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(raw, at: 3, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10232,7 +10232,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenMacroAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4, arena: arena)
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10253,7 +10253,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 5, arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10274,7 +10274,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndArgumentList(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6, arena: arena)
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10303,7 +10303,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10313,7 +10313,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withArgumentList(_ newChild: TupleExprElementListSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: arena)
-    let newData = data.replacingChild(raw, at: 7, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10334,7 +10334,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenArgumentListAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 8, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10355,7 +10355,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightParen(_ newChild: TokenSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 9, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10376,7 +10376,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenRightParenAndTrailingClosure(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 10, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10397,7 +10397,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withTrailingClosure(_ newChild: ClosureExprSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 11, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10418,7 +10418,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 12, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10448,7 +10448,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: collection, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10458,7 +10458,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAdditionalTrailingClosures(_ newChild: MultipleTrailingClosureElementListSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 13, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 
@@ -10479,7 +10479,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterAdditionalTrailingClosures(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 14, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return MacroExpansionDeclSyntax(newData)
   }
 

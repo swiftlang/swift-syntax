@@ -197,7 +197,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.${child_node.swift_syntax_kind},
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(collection, at: ${idx}, arena: arena)
+    let newData = data.replacingChild(at: ${idx}, with: collection, arena: arena)
     return ${node.name}(newData)
   }
 %       end
@@ -215,7 +215,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       else:
     let raw = newChild?.raw ?? ${make_missing_swift_child(child)}
 %       end
-    let newData = data.replacingChild(raw, at: ${idx}, arena: arena)
+    let newData = data.replacingChild(at: ${idx}, with: raw, arena: arena)
     return ${node.name}(newData)
   }
 %     end

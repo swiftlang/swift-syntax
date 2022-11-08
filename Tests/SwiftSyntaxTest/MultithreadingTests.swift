@@ -13,6 +13,12 @@
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 
+extension SyntaxProtocol {
+  subscript<S: SyntaxProtocol>(as type: S.Type) -> S {
+    get { self.as(S.self)! }
+    set { self = newValue.as(Self.self)! }
+  }
+}
 
 public class MultithreadingTests: XCTestCase {
 
@@ -28,27 +34,31 @@ public class MultithreadingTests: XCTestCase {
     }
   }
 
-  public func testConcurrentArena() {
-    let arena = SyntaxArena()
+  public func testConcurrentMutation() {
+    // 'base.member()'
+    let methodCall = FunctionCallExprSyntax(
+      calledExpression: MemberAccessExprSyntax(
+        base: IdentifierExprSyntax(
+          identifier: .identifier("base"),
+          declNameArguments: nil),
+        dot: .periodToken(),
+        name: .identifier("member"),
+        declNameArguments: nil),
+      leftParen: .leftParenToken(),
+      argumentList: TupleExprElementListSyntax([]),
+      rightParen: .rightParenToken(),
+      trailingClosure: nil,
+      additionalTrailingClosures: nil)
 
     DispatchQueue.concurrentPerform(iterations: 100) { i in
-      var identStr = " ident\(i) "
-      let tokenRaw = identStr.withSyntaxText { text in
-        RawTokenSyntax(
-          kind: .identifier,
-          wholeText: arena.intern(text),
-          textRange: 1..<(text.count-1),
-          presence: .present,
-          hasLexerError: false,
-          arena: arena)
-      }
-      let identifierExprRaw = RawIdentifierExprSyntax(
-        identifier: tokenRaw,
-        declNameArguments: nil,
-        arena: arena)
+      var copied = methodCall
+      copied
+        .calledExpression[as: MemberAccessExprSyntax.self]
+        .base![as: IdentifierExprSyntax.self]
+        .identifier = .identifier("ident\(i)")
+      copied = copied.withLeadingTrivia([.newlines(1)])
 
-      let expr = Syntax(raw: RawSyntax(identifierExprRaw)).as(IdentifierExprSyntax.self)!
-      XCTAssertEqual(expr.identifier.text, "ident\(i)")
+      XCTAssertEqual(copied.description, "\nident\(i).member()")
     }
   }
 

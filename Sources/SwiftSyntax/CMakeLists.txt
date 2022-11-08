@@ -11,9 +11,6 @@ add_library(SwiftSyntax STATIC
   BumpPtrAllocator.swift
   CommonAncestor.swift
   IncrementalParseTransition.swift
-  # PlatformMutex.swift is intentionally excluded because it brings in
-  # platform dependencies we don't want within the CMake build, which is
-  # trying to minimize such dependencies.
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift

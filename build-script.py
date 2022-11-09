@@ -15,7 +15,6 @@ from typing import Dict, List, Optional
 
 PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.dirname(PACKAGE_DIR)
-EXAMPLES_DIR = os.path.join(PACKAGE_DIR, "Examples")
 SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
 IDEUTILS_DIR = os.path.join(SOURCES_DIR, "IDEUtils")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
@@ -464,10 +463,6 @@ class Builder(object):
         print("** Building product " + product_name + " **")
         self.__build(PACKAGE_DIR, product_name)
 
-    def buildExample(self, example_name: str) -> None:
-        print("** Building example " + example_name + " **")
-        self.__build(EXAMPLES_DIR, example_name)
-
     def __build(self, package_dir: str, product_name: str) -> None:
         command = list(self.__get_swiftpm_invocation(package_dir))
         command.extend(["--product", product_name])
@@ -764,8 +759,8 @@ def build_command(args: argparse.Namespace) -> None:
         builder.buildProduct("SwiftSyntaxBuilder")
 
         # Build examples
-        builder.buildExample("AddOneToIntegerLiterals")
-        builder.buildExample("CodeGenerationUsingSwiftSyntaxBuilder")
+        builder.buildProduct("AddOneToIntegerLiterals")
+        builder.buildProduct("CodeGenerationUsingSwiftSyntaxBuilder")
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 

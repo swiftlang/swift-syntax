@@ -104,7 +104,7 @@ final class RawSyntaxTests: XCTestCase {
       return [.unexpectedText(source)]
     }
 
-    withExtendedLifetime(SyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier, wholeText: arena.intern("\nfoo "), textRange: 1..<4,
         presence: .present,

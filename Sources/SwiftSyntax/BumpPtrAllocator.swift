@@ -15,9 +15,11 @@
 public class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
-  static private var SLAB_SIZE: Int = 4096
   static private var GLOWTH_DELAY: Int = 128
   static private var SLAB_ALIGNMENT: Int = 8
+
+  /// Initial slab size.
+  private var slabSize: Int
 
   private var slabs: [Slab]
   /// Pair of pointers in the current slab.
@@ -30,7 +32,8 @@ public class BumpPtrAllocator {
   private var customSizeSlabs: [Slab]
   private var _totalBytesAllocated: Int
 
-  public init() {
+  public init(slabSize: Int) {
+    self.slabSize = slabSize
     slabs = []
     current = nil
     customSizeSlabs = []
@@ -50,13 +53,13 @@ public class BumpPtrAllocator {
   }
 
   /// Calculate the size of the slab at the index.
-  private static func slabSize(at index: Int) -> Int {
+  private func slabSize(at index: Int) -> Int {
     // Double the slab size every 'GLOWTH_DELAY' slabs.
-    return SLAB_SIZE * (1 << min(30, index / GLOWTH_DELAY))
+    return self.slabSize * (1 << min(30, index / Self.GLOWTH_DELAY))
   }
 
   private func startNewSlab() {
-    let newSlabSize = Self.slabSize(at: slabs.count)
+    let newSlabSize = self.slabSize(at: slabs.count)
     let newSlab = Slab.allocate(
       byteCount: newSlabSize, alignment: Self.SLAB_ALIGNMENT)
     let pointer = newSlab.baseAddress!
@@ -103,7 +106,7 @@ public class BumpPtrAllocator {
     }
 
     // If the size is too big, allocate a dedicated slab for it.
-    if byteCount >= Self.SLAB_SIZE {
+    if byteCount >= self.slabSize {
       let customSlab = Slab.allocate(
         byteCount: byteCount, alignment: alignment)
       customSizeSlabs.append(customSlab)

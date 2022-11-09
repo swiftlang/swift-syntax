@@ -32,7 +32,6 @@ final class LinkageTest: XCTestCase {
       .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
       .library("-lswiftCompatibilityConcurrency"),
       .library("-lswiftCore"),
-      .library("-lswiftDarwin", condition: .mayBeAbsent("Not present when building inside the compiler")),
       .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
       .library("-lswift_Concurrency"),
       .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),

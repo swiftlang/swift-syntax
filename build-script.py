@@ -887,7 +887,7 @@ def parse_args() -> argparse.Namespace:
     # -------------------------------------------------------------------------
     # Shared arguments
 
-    sub_parsers = parser.add_subparsers()
+    sub_parsers = parser.add_subparsers(required=True)
 
     # -------------------------------------------------------------------------
     generate_xcodeproj_parser = sub_parsers.add_parser(

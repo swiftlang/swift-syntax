@@ -459,7 +459,7 @@ class Builder(object):
             invocation.append("--verbose")
         return invocation
 
-    def buildProduct(self, product_name: str) -> None:
+    def build_product(self, product_name: str) -> None:
         print("** Building product " + product_name + " **")
         self.__build(PACKAGE_DIR, product_name)
 
@@ -754,13 +754,13 @@ def build_command(args: argparse.Namespace) -> None:
         )
         # Until rdar://53881101 is implemented, we cannot request a build of multiple
         # targets simultaneously. For now, just build one product after the other.
-        builder.buildProduct("SwiftSyntax")
-        builder.buildProduct("SwiftSyntaxParser")
-        builder.buildProduct("SwiftSyntaxBuilder")
+        builder.build_product("SwiftSyntax")
+        builder.build_product("SwiftSyntaxParser")
+        builder.build_product("SwiftSyntaxBuilder")
 
         # Build examples
-        builder.buildProduct("AddOneToIntegerLiterals")
-        builder.buildProduct("CodeGenerationUsingSwiftSyntaxBuilder")
+        builder.build_product("AddOneToIntegerLiterals")
+        builder.build_product("CodeGenerationUsingSwiftSyntaxBuilder")
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 
@@ -776,7 +776,7 @@ def test_command(args: argparse.Namespace) -> None:
             disable_sandbox=args.disable_sandbox,
         )
 
-        builder.buildProduct("lit-test-helper")
+        builder.build_product("lit-test-helper")
 
         run_tests(
             toolchain=args.toolchain,

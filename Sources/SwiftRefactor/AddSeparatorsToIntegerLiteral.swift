@@ -1,0 +1,57 @@
+import SwiftSyntax
+
+/// Format an integer literal by inserting underscores at base-appropriate
+/// locations.
+///
+/// This pass will also clean up any errant underscores.
+///
+/// ## Before
+///
+/// ```swift
+/// 123456789
+/// 0xFFFFFFFFF
+/// 0b1_0_1_0
+/// ```
+///
+/// ## After
+///
+/// ```swift
+/// 123_456_789
+/// 0xF_FFFF_FFFF
+/// 0b1_010
+/// ```
+public struct AddSeparatorsToIntegerLiteral: RefactoringProvider {
+  public static func refactor(syntax lit: IntegerLiteralExprSyntax, in context: Void) -> IntegerLiteralExprSyntax? {
+    if lit.digits.text.contains("_") {
+      guard let strippedLiteral = RemoveSeparatorsFromIntegerLiteral.refactor(syntax: lit) else {
+        return nil
+      }
+      return self.addSeparators(to: strippedLiteral)
+    } else {
+      return self.addSeparators(to: lit)
+    }
+  }
+
+  private static func addSeparators(to lit: IntegerLiteralExprSyntax) -> IntegerLiteralExprSyntax {
+    var formattedText = ""
+    let (prefix, value) = lit.split()
+    formattedText += prefix
+    formattedText += value.byAddingGroupSeparators(at: lit.idealGroupSize)
+    return lit
+      .withDigits(lit.digits.withKind(.integerLiteral(formattedText)))
+  }
+}
+
+extension Substring {
+  fileprivate func byAddingGroupSeparators(at interval: Int) -> String {
+    var result = ""
+    result.reserveCapacity(self.count)
+    for (i, char) in self.filter({ $0 != "_" }).reversed().enumerated() {
+      if i > 0 && i % interval == 0 {
+        result.append("_")
+      }
+      result.append(char)
+    }
+    return String(result.reversed())
+  }
+}

@@ -197,10 +197,12 @@ extension String {
   fileprivate func replacingNewlines() -> String {
     var result = ""
     var input = self[...]
-    while let firstNewline = input.firstIndex(where: { $0 == "\r" || $0 == "\n" }) {
+    while let firstNewline = input.firstIndex(where: { $0.isNewline }) {
       result += input[..<firstNewline]
       if input[firstNewline] == "\r" {
         result += "\\r"
+      } else if input[firstNewline] == "\r\n" {
+        result += "\\r\\n"
       } else {
         result += "\\n"
       }

@@ -3,7 +3,7 @@ import SwiftSyntax
 /// A type that transforms syntax to provide a (context-sensitive)
 /// refactoring.
 ///
-/// A type conforming to the `RefactoringProvider` protocol defines the
+/// A type conforming to the `RefactoringProvider` protocol defines
 /// a refactoring action against a family of Swift syntax trees.
 ///
 /// Refactoring
@@ -43,7 +43,7 @@ import SwiftSyntax
 public protocol RefactoringProvider {
   /// The type of syntax this refactoring action accepts.
   associatedtype Input: SyntaxProtocol = SourceFileSyntax
-  /// The type of syntax this refactorign action returns.
+  /// The type of syntax this refactoring action returns.
   associatedtype Output: SyntaxProtocol = SourceFileSyntax
   /// Contextual information used by the refactoring action.
   associatedtype Context = Void

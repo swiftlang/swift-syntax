@@ -33,7 +33,7 @@ struct StringifyMacro: ExpressionMacro {
       return MacroResult(ExprSyntax(macro))
     }
 
-    return MacroResult("(\(argument), #\"\(argument)\"#)")
+    return MacroResult("(\(argument), \(StringLiteralExprSyntax(content: argument.description)))")
   }
 }
 

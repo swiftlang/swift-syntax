@@ -192,6 +192,28 @@ extension MemberAccessExpr {
 
 // MARK: - StringLiteralExpr
 
+extension String {
+  /// Replace literal newlines with "\r", "\n".
+  fileprivate func replacingNewlines() -> String {
+    var result = ""
+    var input = self[...]
+    while let firstNewline = input.firstIndex(where: { $0.isNewline }) {
+      result += input[..<firstNewline]
+      if input[firstNewline] == "\r" {
+        result += "\\r"
+      } else if input[firstNewline] == "\r\n" {
+        result += "\\r\\n"
+      } else {
+        result += "\\n"
+      }
+      input = input[input.index(after: firstNewline)...]
+      continue
+    }
+
+    return result + input
+  }
+}
+
 extension StringLiteralExpr {
   private enum PoundState {
     case afterQuote, afterBackslash, none
@@ -241,7 +263,7 @@ extension StringLiteralExpr {
     closeQuote: Token = .stringQuote,
     closeDelimiter: Token? = nil
   ) {
-    let contentToken = Token.stringSegment(content)
+    let contentToken = Token.stringSegment(content.replacingNewlines())
     let segment = StringSegment(content: contentToken)
     let segments = StringLiteralSegments([.stringSegment(segment)])
 

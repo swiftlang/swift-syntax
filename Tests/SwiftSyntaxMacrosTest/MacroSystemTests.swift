@@ -38,9 +38,35 @@ final class MacroSystemTests: XCTestCase {
       """
       1
       let a = (2)
-      let b = (x + y, #"x + y"#)
+      let b = (x + y, "x + y")
       .init(_colorLiteralRed: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       let c = 9
+      """
+    )
+  }
+
+  func testStringifyExpression() {
+    let sf: SourceFileSyntax =
+      """
+      _ = #stringify({ () -> Bool in
+        print("hello")
+        return true
+      })
+      """
+    let converter = SourceLocationConverter(file: "test.swift", tree: sf)
+    let context = MacroEvaluationContext(
+      moduleName: "MyModule", sourceLocationConverter: converter
+    )
+    let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
+      node: sf, in: context, errorHandler: { error in }
+    )
+    AssertStringsEqualWithDiff(
+      transformedSF.description,
+      """
+      _ = ({ () -> Bool in
+        print("hello")
+        return true
+      }, #"{ () -> Bool in\\n  print("hello")\\n  return true\\n}"#)
       """
     )
   }

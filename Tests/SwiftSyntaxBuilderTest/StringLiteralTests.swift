@@ -82,4 +82,11 @@ final class StringLiteralTests: XCTestCase {
     #"\"#
     """##)
   }
+
+  func testNewlines() {
+    AssertBuildResult(
+      StringLiteralExpr(content: "linux\nwindows\r\na"),
+      #""linux\nwindows\r\na""#
+    )
+  }
 }

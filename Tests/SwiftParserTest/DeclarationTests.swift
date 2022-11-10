@@ -73,6 +73,22 @@ final class DeclarationTests: XCTestCase {
     )
 
     AssertParse("func /^ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
+    
+    AssertParse(
+      """
+      func name(_ default: Int) {}
+      """,
+      substructure: Syntax(FunctionParameterSyntax(
+        attributes: nil,
+        modifiers: nil,
+        firstName: .wildcardKeyword(),
+        secondName: .identifier("default"),
+        colon: TokenSyntax.colonToken(),
+        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Int"), genericArgumentClause: nil)),
+        ellipsis: nil,
+        defaultArgument: nil,
+        trailingComma: nil))
+    )
   }
 
   func testFuncAfterUnbalancedClosingBrace() {

@@ -795,7 +795,7 @@ DECL_MODIFIER_KINDS = [
                                   OnConstructor,
                                   DeclModifier,
                                   NotSerialized,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  ABIBreakingToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                                   code=43),
     ContextualSimpleDeclAttribute('override', 'Override',
                                   OnFunc,  OnAccessor,  OnVar,  OnSubscript,  OnConstructor,  OnAssociatedType,

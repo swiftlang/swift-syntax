@@ -39,11 +39,29 @@ public protocol Macro: _CompilerPlugin {
   /// as `#line`) that does not. This is a syntactic distinction, not a
   /// semantic one.
   static var signature: TypeSyntax { get }
+
+  /// The module that "owns" this macro.
+  ///
+  /// This module must be imported by any code that wishes to use the macro.
+  static var owningModule: String { get }
+
+  /// Additional imports requires to describe the signature of the macro.
+  ///
+  /// For example, if your macro is owned by module A, but its signature also
+  /// contains types from another module B that is used by A, then the module
+  /// B should be
+  static var supplementalSignatureModules: [String] { get }
 }
 
 extension Macro {
   /// Default, empty documentation string for macros.
   public static var documentation: String { "" }
+
+  /// Default, empty set of supplemental signature modules.
+  ///
+  /// Many macros won't need any supplemental signature modules beyond the
+  /// default "Swift" import.
+  public static var supplementalSignatureModules: [String] { [] }
 }
 
 #if canImport(_CompilerPluginSupport)
@@ -72,6 +90,25 @@ extension Macro {
   public static func _typeSignature() -> (UnsafePointer<UInt8>, count: Int) {
     var signature = "\(signature)"
     return signature.withUTF8 { buffer in
+      let result = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.count)
+      result.initialize(from: buffer.baseAddress!, count: buffer.count)
+      return (UnsafePointer(result), count: buffer.count)
+    }
+  }
+
+  public static func _owningModule() -> (UnsafePointer<UInt8>, count: Int) {
+    var module = "\(owningModule)"
+    return module.withUTF8 { buffer in
+      let result = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.count)
+      result.initialize(from: buffer.baseAddress!, count: buffer.count)
+      return (UnsafePointer(result), count: buffer.count)
+    }
+  }
+
+  public static func _supplementalSignatureModules()
+      -> (UnsafePointer<UInt8>, count: Int) {
+    var allModulesJoined = supplementalSignatureModules.joined(separator:";")
+    return allModulesJoined.withUTF8 { buffer in
       let result = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.count)
       result.initialize(from: buffer.baseAddress!, count: buffer.count)
       return (UnsafePointer(result), count: buffer.count)

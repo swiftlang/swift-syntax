@@ -27,6 +27,8 @@ struct ColumnMacro: ExpressionMacro {
 
   static var signature: TypeSyntax = "T"
 
+  static var owningModule: String = "Swift"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
@@ -50,6 +52,8 @@ struct LineMacro: ExpressionMacro {
      """
 
   static var signature: TypeSyntax = "T"
+
+  static var owningModule: String = "Swift"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -86,6 +90,8 @@ struct FunctionMacro: ExpressionMacro {
      """
 
   static var signature: TypeSyntax = "T"
+
+  static var owningModule: String = "Swift"
 
   /// Form a function name.
   private static func formFunctionName(
@@ -221,6 +227,10 @@ struct ColorLiteralMacro: ExpressionMacro {
      ) -> T
      """
 
+  // FIXME: Not entirely correct, should use _ColorLiteralType from
+  // appropriate place.
+  static var owningModule: String = "Swift"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
@@ -249,6 +259,8 @@ struct FileLiteralMacro: ExpressionMacro {
 
   static var signature: TypeSyntax =
       "(resourceName path: String) -> T"
+
+  static var owningModule: String = "Swift"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -279,6 +291,9 @@ struct ImageLiteralMacro: ExpressionMacro {
   static var signature: TypeSyntax =
       "(resourceName path: String) -> T"
 
+  // FIXME: Not really correct, use _ImageLiteralType
+  static var owningModule: String = "Swift"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
@@ -307,6 +322,8 @@ struct FilePathMacro: ExpressionMacro {
 
   static var signature: TypeSyntax = "T"
 
+  static var owningModule: String = "Swift"
+
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
@@ -334,6 +351,8 @@ struct FileIDMacro: ExpressionMacro {
      """
 
   static var signature: TypeSyntax = "T"
+
+  static var owningModule: String = "Swift"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
@@ -368,6 +387,8 @@ struct FileMacro: ExpressionMacro {
      """
 
   static var signature: TypeSyntax = "T"
+
+  static var owningModule: String = "Swift"
 
   static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext

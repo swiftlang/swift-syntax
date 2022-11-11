@@ -791,25 +791,10 @@ extension RawSyntax {
 #if DEBUG
 /// See `SyntaxMemoryLayout`.
 var RawSyntaxDataMemoryLayouts: [String : SyntaxMemoryLayout.Value] = [
-  "RawSyntaxData": .init(
-    size: MemoryLayout<RawSyntaxData>.size,
-    stride: MemoryLayout<RawSyntaxData>.stride,
-    alignment: MemoryLayout<RawSyntaxData>.alignment),
-  "RawSyntaxData.Layout": .init(
-    size: MemoryLayout<RawSyntaxData.Layout>.size,
-    stride: MemoryLayout<RawSyntaxData.Layout>.stride,
-    alignment: MemoryLayout<RawSyntaxData.Layout>.alignment),
-  "RawSyntaxData.ParsedToken": .init(
-    size: MemoryLayout<RawSyntaxData.ParsedToken>.size,
-    stride: MemoryLayout<RawSyntaxData.ParsedToken>.stride,
-    alignment: MemoryLayout<RawSyntaxData.ParsedToken>.alignment),
-  "RawSyntaxData.MaterializedToken": .init(
-    size: MemoryLayout<RawSyntaxData.MaterializedToken>.size,
-    stride: MemoryLayout<RawSyntaxData.MaterializedToken>.stride,
-    alignment: MemoryLayout<RawSyntaxData.MaterializedToken>.alignment),
-  "RawSyntax?": .init(
-    size: MemoryLayout<RawSyntax?>.size,
-    stride: MemoryLayout<RawSyntax?>.stride,
-    alignment: MemoryLayout<RawSyntax?>.alignment),
+  "RawSyntaxData": .init(RawSyntaxData.self),
+  "RawSyntaxData.Layout": .init(RawSyntaxData.Layout.self),
+  "RawSyntaxData.ParsedToken": .init(RawSyntaxData.ParsedToken.self),
+  "RawSyntaxData.MaterializedToken": .init(RawSyntaxData.MaterializedToken.self),
+  "RawSyntax?": .init(RawSyntax?.self),
 ]
 #endif

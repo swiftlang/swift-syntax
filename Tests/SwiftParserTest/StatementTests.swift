@@ -520,4 +520,30 @@ final class StatementTests: XCTestCase {
   func testDefaultIdentIdentifierInReturnStmt() {
     AssertParse("return FileManager.default")
   }
+  
+  func testDefaultAsIdentifierInSubscript() {
+    AssertParse(
+         """
+         data[position, default: 0]
+         """,
+         substructure: Syntax(ExprSyntax(SubscriptExprSyntax(
+          calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("data"), declNameArguments: nil)),
+          leftBracket: .leftSquareBracketToken(),
+          argumentList: TupleExprElementListSyntax([
+            TupleExprElementSyntax(
+              label: nil,
+              colon: nil,
+              expression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("position"), declNameArguments: nil)),
+              trailingComma: .commaToken()),
+            TupleExprElementSyntax(
+              label: .identifier("default"),
+              colon: .colonToken(),
+              expression: ExprSyntax(IntegerLiteralExprSyntax(0)),
+              trailingComma: nil),
+          ]),
+          rightBracket: .rightSquareBracketToken(),
+          trailingClosure: nil,
+          additionalTrailingClosures: nil)))
+    )
+  }
 }

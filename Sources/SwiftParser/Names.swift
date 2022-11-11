@@ -31,7 +31,10 @@ extension Parser {
         self.missingToken(.identifier, text: nil)
       )
     } else {
-      return (nil, self.consumeAnyToken())
+      if let wildcardToken = self.consume(if: .wildcardKeyword) {
+        return (nil, wildcardToken)
+      }
+      return (nil, self.consumeAnyToken(remapping: .identifier))
     }
   }
 }

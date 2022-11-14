@@ -12,11 +12,13 @@
 
 import SwiftSyntax
 
-fileprivate typealias RewrittenSome = (
-  ConstrainedSugarTypeSyntax,
-  GenericParameterSyntax,
-  SimpleTypeIdentifierSyntax
-)
+/// Describes a "some" parameter that has been rewritten into a generic
+/// parameter.
+fileprivate struct RewrittenSome {
+  let original: ConstrainedSugarTypeSyntax
+  let genericParam: GenericParameterSyntax
+  let genericParamRef: SimpleTypeIdentifierSyntax
+}
 
 /// Rewrite `some` parameters to explicit generic parameters.
 ///
@@ -61,7 +63,10 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
       name: .identifier(paramName), genericArgumentClause: nil
     )
 
-    rewrittenSomeParameters.append((node, genericParam, genericParamRef))
+    rewrittenSomeParameters.append(
+      .init(
+        original: node, genericParam: genericParam,
+        genericParamRef: genericParamRef))
 
     return TypeSyntax(genericParamRef)
   }
@@ -79,7 +84,7 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
           let onlyIdentifierType =
             onlyElement.type.as(SimpleTypeIdentifierSyntax.self),
           rewrittenSomeParameters.first(
-            where: { $0.2.name.text == onlyIdentifierType.name.text }
+            where: { $0.genericParamRef.name.text == onlyIdentifierType.name.text }
           ) != nil
     else {
       return newNode
@@ -124,7 +129,9 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
       newGenericParams.append(contentsOf: genericParams.genericParameterList)
     }
 
-    for (_, newGenericParam, _) in rewriter.rewrittenSomeParameters {
+    for rewritten in rewriter.rewrittenSomeParameters {
+      let newGenericParam = rewritten.genericParam
+
       // Add a trailing comma to the prior generic parameter, if there is one.
       if let lastNewGenericParam = newGenericParams.last {
         newGenericParams[newGenericParams.count-1] =

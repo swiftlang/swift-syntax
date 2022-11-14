@@ -41,14 +41,14 @@ final class OpaqueParameterToGenericTest: XCTestCase {
   func testRefactoringInit() throws {
     let baseline: DeclSyntax = """
       init<A>(
-        x: some P<A>,
+        x: (some P<A>),
         y: [some Hashable & Codable: some Any]
       ) { }
       """
 
     let expected: DeclSyntax = """
       init<A, T1: P<A>, T2: Hashable & Codable, T3>(
-        x: T1,
+        x: (T1),
         y: [T2: T3]
       ) { }
       """

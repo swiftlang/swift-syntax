@@ -48,7 +48,7 @@ final class OpaqueParameterToGenericTest: XCTestCase {
 
     let expected: DeclSyntax = """
       init<A, T1: P<A>, T2: Hashable & Codable, T3>(
-        x: (T1),
+        x: T1,
         y: [T2: T3]
       ) { }
       """

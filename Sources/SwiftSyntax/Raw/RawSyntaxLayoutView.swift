@@ -166,11 +166,5 @@ public struct RawSyntaxLayoutView {
   public var children: RawSyntaxBuffer {
     layoutData.layout
   }
-
-  /// The number of children, `present` or `missing`, in this node.
-  @_spi(RawSyntax)
-  public var numberOfChildren: Int {
-    return children.count
-  }
 }
 

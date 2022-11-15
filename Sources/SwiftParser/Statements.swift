@@ -1214,11 +1214,6 @@ extension Parser.Lookahead {
     }
   }
 
-  func isBooleanExpr() -> Bool {
-    var lookahead = self.lookahead()
-    return !lookahead.canParseTypedPattern() || !lookahead.at(.equal)
-  }
-
   /// Returns whether the parser's current position is the start of a switch case,
   /// given that we're in the middle of a switch already.
   func isAtStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {

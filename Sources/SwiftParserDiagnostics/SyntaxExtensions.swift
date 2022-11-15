@@ -21,11 +21,6 @@ extension UnexpectedNodesSyntax {
     return self.tokens(satisfying: { $0.tokenKind == kind })
   }
 
-  /// If this only contains a single item that is a token, return that token, otherwise return `nil`.
-  var onlyToken: TokenSyntax? {
-    return onlyToken(where: { _ in true })
-  }
-
   /// If this only contains a single item, which is a token satisfying `condition`, return that token, otherwise return `nil`.
   func onlyToken(where condition: (TokenSyntax) -> Bool) -> TokenSyntax? {
     if self.count == 1, let token = self.first?.as(TokenSyntax.self), condition(token) {
@@ -92,11 +87,6 @@ extension SyntaxProtocol {
     } else {
       return "code '\(contentWithoutTrivia)'"
     }
-  }
-
-  /// Returns this node or the first ancestor that satisfies `condition`.
-  func ancestorOrSelf(where condition: (Syntax) -> Bool) -> Syntax? {
-    return ancestorOrSelf(mapping: { condition($0) ? $0 : nil })
   }
 
   /// Returns this node or the first ancestor that satisfies `condition`.

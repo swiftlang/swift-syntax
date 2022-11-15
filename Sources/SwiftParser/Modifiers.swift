@@ -107,12 +107,6 @@ extension Parser {
     )
   }
 
-  mutating func parseSingleArgumentModifier() -> RawDeclModifierSyntax {
-    let keyword = self.consumeAnyToken(remapping: .contextualKeyword)
-    let detail = self.parseModifierDetail()
-    return RawDeclModifierSyntax(name: keyword, detail: detail, arena: self.arena)
-  }
-
   mutating func parseUnownedModifier() -> RawDeclModifierSyntax {
     let (unexpectedBeforeKeyword, keyword) = self.expectContextualKeyword("unowned")
 

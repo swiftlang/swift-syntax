@@ -227,10 +227,6 @@ extension Lexer {
       return self.pointer.distance(to: other.pointer)
     }
 
-    func absoluteDistance(to other: Self) -> AbsolutePosition {
-      return AbsolutePosition(utf8Offset: self.distance(to: other))
-    }
-
     func peek(at offset: Int = 0) -> UInt8 {
       assert(!self.isAtEndOfFile)
       assert(offset >= 0)

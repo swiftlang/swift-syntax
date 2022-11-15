@@ -325,18 +325,6 @@ extension Parser.Lookahead {
     return self.consume(if: .rightParen) != nil
   }
 
-  ///  typed-pattern ::= pattern (':' type)?
-  mutating func canParseTypedPattern() -> Bool {
-    guard self.canParsePattern() else {
-      return false
-    }
-
-    if self.consume(if: .colon) != nil {
-      return self.canParseType()
-    }
-    return true
-  }
-
   /// Determine whether we are at the start of a parameter name when
   /// parsing a parameter.
   /// If `allowMisplacedSpecifierRecovery` is `true`, then this will skip over any type

@@ -21,12 +21,6 @@ struct AbsoluteSyntaxPosition {
     return .init(offset: newOffset, indexInParent: newIndexInParent)
   }
 
-  func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxPosition {
-    let newOffset = self.offset - UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
-    let newIndexInParent = self.indexInParent - 1
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
-  }
-
   func advancedToFirstChild() -> AbsoluteSyntaxPosition {
     return .init(offset: self.offset, indexInParent: 0)
   }
@@ -49,12 +43,6 @@ struct AbsoluteSyntaxInfo {
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
     let newPosition = position.advancedBySibling(raw)
     let newNodeId = nodeId.advancedBySibling(raw)
-    return .init(position: newPosition, nodeId: newNodeId)
-  }
-
-  func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
-    let newPosition = position.reversedBySibling(raw)
-    let newNodeId = nodeId.reversedBySibling(raw)
     return .init(position: newPosition, nodeId: newNodeId)
   }
 
@@ -124,11 +112,6 @@ public struct SyntaxIdentifier: Hashable {
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
-  func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree.reversedBy(raw)
-    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
-  }
-
   func advancedToFirstChild() -> SyntaxIdentifier {
     let newIndexInTree = self.indexInTree.advancedToFirstChild()
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
@@ -143,16 +126,6 @@ public struct SyntaxIdentifier: Hashable {
 struct AbsoluteRawSyntax {
   let raw: RawSyntax
   let info: AbsoluteSyntaxInfo
-
-  /// The position of the start of this node's leading trivia
-  var position: AbsolutePosition {
-    return AbsolutePosition(utf8Offset: Int(info.offset))
-  }
-
-  /// The end position of this node, including its trivia.
-  var endPosition: AbsolutePosition {
-    return position + raw.totalLength
-  }
 
   /// Returns first `present` child.
   func firstChild(viewMode: SyntaxTreeViewMode) -> AbsoluteRawSyntax? {
@@ -183,10 +156,6 @@ struct AbsoluteRawSyntax {
     let nodeId = SyntaxIdentifier(rootId: newRootId, indexInTree: info.nodeId.indexInTree)
     let newInfo = AbsoluteSyntaxInfo(position: info.position, nodeId: nodeId)
     return .init(raw: newRaw, info: newInfo)
-  }
-
-  static func forRoot(_ raw: RawSyntax) -> AbsoluteRawSyntax {
-    return .init(raw: raw, info: .forRoot(raw))
   }
 }
 
@@ -226,10 +195,6 @@ struct SyntaxData {
     case .root(_): return nil
     case .nonRoot(let info): return info
     }
-  }
-
-  private var rootArena: SyntaxArena {
-    rootInfo.arena
   }
 
   private var root: SyntaxData {

@@ -11,18 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 extension String {
-  /// Remove any leading or trailing spaces.
-  /// This is necessary to avoid depending SwiftParser on Foundation.
-  func trimmingWhitespace() -> String {
-    let charactersToDrop: [Character] = [" ", "\t", "\n", "\r"]
-    var result: Substring = Substring(self)
-    result = result.drop(while: { charactersToDrop.contains($0) })
-    while let lastCharacter = result.last, charactersToDrop.contains(lastCharacter) {
-      result = result.dropLast(1)
-    }
-    return String(result)
-  }
-
   func withFirstLetterUppercased() -> String {
     if let firstLetter = self.first {
       return firstLetter.uppercased() + self.dropFirst()

@@ -212,6 +212,8 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   public init(
     missing kind: RawTokenKind,
     text: SyntaxText? = nil,
+    leadingTriviaPieces: [RawTriviaPiece] = [],
+    trailingTriviaPieces: [RawTriviaPiece] = [],
     arena: __shared SyntaxArena
   ) {
     // FIXME: Allow creating a `RawSyntax.parsedToken()` with a string literal
@@ -220,8 +222,8 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     self.init(
       materialized: kind,
       text: text ?? kind.defaultText ?? "",
-      leadingTriviaPieces: [],
-      trailingTriviaPieces: [],
+      leadingTriviaPieces: leadingTriviaPieces,
+      trailingTriviaPieces: trailingTriviaPieces,
       presence: .missing,
       arena: arena
     )

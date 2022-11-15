@@ -509,11 +509,10 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The base type of the qualified name, optionally specified.",
                isOptional: true),
          Child(name: "Dot",
-               kind: "Token",
+               kind: "PeriodToken",
                isOptional: true,
                tokenChoices: [
-                 "Period",
-                 "PrefixPeriod"
+                 "Period"
                ]),
          Child(name: "Name",
                kind: "Token",

@@ -33,7 +33,6 @@ public class TokenTests: XCTestCase {
     XCTAssertTrue(TokenKind.leftAngle.isPunctuation)
     XCTAssertTrue(TokenKind.rightAngle.isPunctuation)
     XCTAssertTrue(TokenKind.period.isPunctuation)
-    XCTAssertTrue(TokenKind.prefixPeriod.isPunctuation)
     XCTAssertTrue(TokenKind.comma.isPunctuation)
     XCTAssertTrue(TokenKind.ellipsis.isPunctuation)
     XCTAssertTrue(TokenKind.colon.isPunctuation)

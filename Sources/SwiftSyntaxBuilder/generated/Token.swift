@@ -331,11 +331,6 @@ public extension TokenSyntax {
     return .periodToken()
   }
   
-  /// The `.` token
-  static var `prefixPeriod`: TokenSyntax {
-    return .prefixPeriodToken()
-  }
-  
   /// The `,` token
   static var `comma`: TokenSyntax {
     return .commaToken()

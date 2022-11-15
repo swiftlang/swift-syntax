@@ -260,7 +260,6 @@ SYNTAX_TOKENS = [
                requires_trailing_space=True),
 
     Punctuator('Period', 'period', text='.'),
-    Punctuator('PrefixPeriod', 'period_prefix', text='.'),
     Punctuator('Comma', 'comma', text=',', requires_trailing_space=True),
     Punctuator('Ellipsis', 'ellipsis', text='...'),
     Punctuator('Colon', 'colon', text=':', requires_trailing_space=True),

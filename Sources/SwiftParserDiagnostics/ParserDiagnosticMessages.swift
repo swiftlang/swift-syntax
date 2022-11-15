@@ -131,6 +131,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var invalidFlagAfterPrecedenceGroupAssignment: Self {
     .init("expected 'true' or 'false' after 'assignment'")
   }
+  public static var invalidWhitespaceAfterPeriod: Self {
+    .init("extraneous whitespace after '.' is not permitted")
+  }
   public static var missingColonAndExprInTernaryExpr: Self {
     .init("expected ':' and expression after '? ...' in ternary expression")
   }
@@ -318,6 +321,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var joinIdentifiersWithCamelCase: Self {
     .init("join the identifiers together with camel-case")
+  }
+  public static var removeExtraneousWhitespace: Self {
+    .init("remove whitespace")
   }
   public static var removeOperatorBody: Self {
     .init("remove operator body")

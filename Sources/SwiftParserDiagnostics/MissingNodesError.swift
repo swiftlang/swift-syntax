@@ -293,7 +293,78 @@ public struct InsertTokenFixIt: ParserFixIt {
 // MARK: - Generate Error
 
 extension ParseDiagnosticsGenerator {
-  func handleMissingSyntax<T: SyntaxProtocol>(_ node: T) -> SyntaxVisitorContinueKind {
+  func handleMissingToken(_ node: TokenSyntax) {
+    guard let invalidToken = node.previousToken(viewMode: .all),
+      let unexpectedTokens = invalidToken.parent?.as(UnexpectedNodesSyntax.self),
+      unexpectedTokens.count == 1
+    else {
+      _ = handleMissingSyntax(node)
+      return
+    }
+
+    // The previous token is unexpected, assume that it was intended to be
+    // this token.
+
+    if node.tokenKind.isIdentifier {
+      let fixIts: [FixIt]
+      if invalidToken.tokenKind.isKeyword || invalidToken.tokenKind.isDollarIdentifier {
+        // TODO: Should the parser add the text with backticks to the missing
+        // node? Then this could just make missing/present.
+        fixIts = [
+          FixIt(
+            message: .wrapInBackticks,
+            changes: [
+              .replace(
+                oldNode: Syntax(invalidToken),
+                newNode: Syntax(TokenSyntax.identifier("`\(invalidToken.text)`", leadingTrivia: invalidToken.leadingTrivia, trailingTrivia: invalidToken.trailingTrivia))
+              )
+            ]
+          )
+        ]
+      } else {
+        fixIts = []
+      }
+      addDiagnostic(
+        invalidToken,
+        InvalidIdentifierError(invalidIdentifier: invalidToken, missingIdentifier: node),
+        fixIts: fixIts,
+        handledNodes: [unexpectedTokens.id]
+      )
+    } else if node.tokenKind == .period && invalidToken.tokenKind == .period {
+      // Trailing trivia is the cause of this diagnostic, don't transfer it.
+      let changes: [FixIt.Changes] = [
+        .makeMissing(invalidToken, transferTrivia: false),
+        .makePresent(node),
+      ]
+
+      if let identifier = node.nextToken(viewMode: .all),
+        identifier.rawTokenKind == .identifier,
+        identifier.presence == .missing
+      {
+        // The extraneous whitespace caused a missing identifier, output a
+        // diagnostic inserting it instead of a diagnostic to fix the trivia
+        // around the period.
+        _ = handleMissingSyntax(
+          identifier,
+          overridePosition: invalidToken.endPositionBeforeTrailingTrivia,
+          additionalChanges: changes,
+          additionalHandledNodes: [unexpectedTokens.id]
+        )
+      } else {
+        let fixIt = FixIt(message: .removeExtraneousWhitespace, changes: changes)
+        addDiagnostic(invalidToken, .invalidWhitespaceAfterPeriod, fixIts: [fixIt], handledNodes: [unexpectedTokens.id])
+      }
+    } else {
+      _ = handleMissingSyntax(node)
+    }
+  }
+
+  func handleMissingSyntax<T: SyntaxProtocol>(
+    _ node: T,
+    overridePosition: AbsolutePosition? = nil,
+    additionalChanges: [FixIt.Changes] = [],
+    additionalHandledNodes: [SyntaxIdentifier] = []
+  ) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }
@@ -334,15 +405,23 @@ extension ParseDiagnosticsGenerator {
     }
 
     let changes = missingNodes.enumerated().map { (index, missingNode) -> FixIt.Changes in
-      if index == 0, let token = missingNode.as(TokenSyntax.self), token.tokenKind.isPunctuation == true, token.previousToken(viewMode: .sourceAccurate)?.tokenKind.isPunctuation == false {
-        return .makePresentBeforeTrivia(token)
-      } else {
-        return .makePresent(missingNode)
+      if index == 0,
+        let token = missingNode.as(TokenSyntax.self),
+        let previousTokenKind = missingNode.previousToken(viewMode: .sourceAccurate)?.tokenKind
+      {
+        if token.tokenKind.isPunctuation && !previousTokenKind.isPunctuation {
+          // Don't want whitespace before punctuation
+          return .makePresentBeforeTrivia(token)
+        } else if (token.tokenKind.isIdentifier || token.tokenKind.isDollarIdentifier) && previousTokenKind.isPunctuation {
+          // Don't want whitespace after punctuation where the following token is an identifier
+          return .makePresentBeforeTrivia(token)
+        }
       }
+      return .makePresent(missingNode)
     }
     let fixIt = FixIt(
       message: InsertTokenFixIt(missingNodes: missingNodes),
-      changes: changes
+      changes: additionalChanges + changes
     )
 
     var notes: [Note] = []
@@ -355,7 +434,9 @@ extension ParseDiagnosticsGenerator {
     }
 
     let position: AbsolutePosition
-    if node.shouldBeInsertedAfterNextTokenTrivia, let nextToken = node.nextToken(viewMode: .sourceAccurate) {
+    if let overridePosition = overridePosition {
+      position = overridePosition
+    } else if node.shouldBeInsertedAfterNextTokenTrivia, let nextToken = node.nextToken(viewMode: .sourceAccurate) {
       position = nextToken.positionAfterSkippingLeadingTrivia
     } else {
       position = node.endPosition
@@ -367,7 +448,7 @@ extension ParseDiagnosticsGenerator {
       MissingNodesError(missingNodes: missingNodes),
       notes: notes,
       fixIts: [fixIt],
-      handledNodes: missingNodes.map(\.id)
+      handledNodes: additionalHandledNodes + missingNodes.map(\.id)
     )
     return .visitChildren
   }

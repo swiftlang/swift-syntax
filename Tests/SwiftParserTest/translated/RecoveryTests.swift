@@ -871,14 +871,12 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorTypeInVarDecl2 {
-        var v1 : Int1️⃣. 
+        var v1 : Int.1️⃣
         var v2 : Int
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected member name following '.'
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(message: "unexpected code '.' before variable"),
+        DiagnosticSpec(message: "expected name in member type")
       ]
     )
   }
@@ -1360,12 +1358,11 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       func exprPostfix1(x : Int) {
-        x1️⃣. 
+        x.1️⃣
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected member name following '.'
-        DiagnosticSpec(message: "unexpected code '.' in function")
+        DiagnosticSpec(message: "expected name in member access")
       ]
     )
   }
@@ -1417,13 +1414,12 @@ final class RecoveryTests: XCTestCase {
       """
       class ExprSuper2 {
         init() {
-          super1️⃣. 
+          super.1️⃣
         }
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected member name following '.'
-        DiagnosticSpec(message: "unexpected code '.' in initializer")
+        DiagnosticSpec(message: "expected name in member access")
       ]
     )
   }
@@ -2148,16 +2144,15 @@ final class RecoveryTests: XCTestCase {
       // <rdar://problem/24029542> "Postfix '.' is reserved" error message" isn't helpful
       func postfixDot(a : String) {
         _ = a.utf8
-        _ = a1️⃣.   utf8  
-        _ = a.       
-          a.         
+        _ = a1️⃣.   utf8
+        _ = a.2️⃣
+          a.3️⃣
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: extraneous whitespace after '.' is not permitted, Fix-It replacements: 9 - 12 = ''
-        DiagnosticSpec(message: "unexpected code in function")
-        // TODO: Old parser expected error on line 5: expected member name following '.'
-        // TODO: Old parser expected error on line 6: expected member name following '.'
+        DiagnosticSpec(locationMarker: "1️⃣", message: "extraneous whitespace after '.' is not permitted"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in member access"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in member access"),
       ]
     )
   }
@@ -2167,12 +2162,11 @@ final class RecoveryTests: XCTestCase {
       #"""
       // <rdar://problem/22290244> QoI: "UIColor." gives two issues, should only give one
       func f() { // expected-note 2{{did you mean 'f'?}}
-        _ = ClassWithStaticDecls1️⃣.  
+        _ = ClassWithStaticDecls.1️⃣
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected member name following '.'
-        DiagnosticSpec(message: "unexpected code '.' in function")
+        DiagnosticSpec(message: "expected name in member access")
       ]
     )
   }

@@ -695,7 +695,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case nilKeyword
   case period
   case pound
-  case prefixPeriod
   case regexLiteral
   case selfKeyword
   case stringLiteral
@@ -719,7 +718,6 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: self = .nilKeyword
     case .period: self = .period
     case .pound: self = .pound
-    case .prefixPeriod: self = .prefixPeriod
     case .regexLiteral: self = .regexLiteral
     case .selfKeyword: self = .selfKeyword
     case .stringLiteral: self = .stringLiteral
@@ -746,20 +744,12 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: return .nilKeyword
     case .period: return .period
     case .pound: return .pound
-    case .prefixPeriod: return .prefixPeriod
     case .regexLiteral: return .regexLiteral
     case .selfKeyword: return .selfKeyword
     case .stringLiteral: return .stringLiteral
     case .superKeyword: return .superKeyword
     case .trueKeyword: return .trueKeyword
     case .wildcardKeyword: return .wildcardKeyword
-    }
-  }
-
-  var remappedKind: RawTokenKind? {
-    switch self {
-    case .period: return .prefixPeriod
-    default: return nil
     }
   }
 }

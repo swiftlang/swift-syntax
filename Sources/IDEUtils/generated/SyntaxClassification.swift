@@ -266,8 +266,6 @@ extension RawTokenKind {
       return .none
     case .period: 
       return .none
-    case .prefixPeriod: 
-      return .none
     case .comma: 
       return .none
     case .ellipsis: 

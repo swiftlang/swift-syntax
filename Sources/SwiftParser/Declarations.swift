@@ -795,7 +795,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let unexpectedPeriod = self.consume(ifAny: [.period, .prefixPeriod])
+        let unexpectedPeriod = self.consume(if: .period)
         let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
 
         let associatedValue: RawParameterClauseSyntax?

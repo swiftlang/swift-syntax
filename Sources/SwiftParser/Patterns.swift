@@ -389,7 +389,7 @@ extension Parser.Lookahead {
       }
     }
 
-    if nextTok.isOptionalToken || nextTok.isImplicitlyUnwrappedOptionalToken {
+    if nextTok.tokenKind == .postfixQuestionMark || nextTok.tokenKind == .exclamationMark {
       return false
     }
 

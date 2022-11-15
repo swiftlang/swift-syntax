@@ -541,10 +541,9 @@ public let EXPR_NODES: [Node] = [
                kind: "Expr",
                isOptional: true),
          Child(name: "Dot",
-               kind: "Token",
+               kind: "PeriodToken",
                tokenChoices: [
-                 "Period",
-                 "PrefixPeriod"
+                 "Period"
                ]),
          Child(name: "Name",
                kind: "Token"),
@@ -1043,11 +1042,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Period",
-               kind: "Token",
+               kind: "PeriodToken",
                isOptional: true,
                tokenChoices: [
-                 "Period",
-                 "PrefixPeriod"
+                 "Period"
                ]),
          Child(name: "Component",
                kind: "Syntax",

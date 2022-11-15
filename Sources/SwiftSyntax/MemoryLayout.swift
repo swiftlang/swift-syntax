@@ -23,6 +23,12 @@
       self.stride = stride
       self.alignment = alignment
     }
+    init<T>(_: T.Type) {
+      self.init(
+        size: MemoryLayout<T>.size,
+        stride: MemoryLayout<T>.stride,
+        alignment: MemoryLayout<T>.alignment)
+    }
   }
 
   public static var values: [String : Value] {

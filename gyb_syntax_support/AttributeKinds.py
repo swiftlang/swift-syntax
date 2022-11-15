@@ -701,7 +701,12 @@ DECL_ATTR_KINDS = [
                         UserInaccessible,
                         NotSerialized,
                         ABIStableToAdd, ABIBreakingToRemove, APIStableToAdd, APIStableToRemove,
-                        code=138)
+                        code=138),
+
+    SimpleDeclAttribute('runtimeMetadata', 'RuntimeMetadata',
+                        OnStruct,  OnClass,
+                        ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
+                        code=139)
 ]
 
 # Schema for declaration modifiers:

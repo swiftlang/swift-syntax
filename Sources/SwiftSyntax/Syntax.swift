@@ -472,6 +472,11 @@ public extension SyntaxProtocol {
     return withTrailingTrivia([])
   }
 
+  /// Returns a new syntax node with all trivia removed.
+  func withoutTrivia() -> Self {
+    return withoutLeadingTrivia().withoutTrailingTrivia()
+  }
+
   /// The length of this node including all of its trivia.
   var totalLength: SourceLength {
     return raw.totalLength

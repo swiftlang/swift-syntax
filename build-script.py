@@ -35,7 +35,7 @@ LLVM_DIR = os.path.join(WORKSPACE_DIR, "llvm-project", "llvm")
 SWIFT_DIR = os.path.join(WORKSPACE_DIR, "swift")
 
 INCR_TRANSFER_ROUNDTRIP_EXEC = os.path.join(
-    SWIFT_DIR, "utils", "incrparse", "incr_transfer_round_trip.py"
+    PACKAGE_DIR, "utils", "incrparse", "incr_transfer_round_trip.py"
 )
 
 GYB_EXEC = os.path.join(SWIFT_DIR, "utils", "gyb")

@@ -2018,6 +2018,14 @@ extension Parser {
     let poundKeyword = self.consumeAnyToken()
     let (unexpectedBeforeMacro, macro) = self.expectIdentifier()
 
+    // Parse the optional generic argument list.
+    let generics: RawGenericArgumentClauseSyntax?
+    if self.lookahead().canParseAsGenericArgumentList() {
+      generics = self.parseGenericArguments()
+    } else {
+      generics = nil
+    }
+
     // Parse the optional parenthesized argument list.
     let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine })
     let args: [RawTupleExprElementSyntax]
@@ -2048,6 +2056,7 @@ extension Parser {
       poundToken: poundKeyword,
       unexpectedBeforeMacro,
       macro: macro,
+      genericArguments: generics,
       leftParen: leftParen,
       argumentList: RawTupleExprElementListSyntax(
         elements: args, arena: self.arena

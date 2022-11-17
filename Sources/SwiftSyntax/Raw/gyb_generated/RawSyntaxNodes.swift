@@ -5920,7 +5920,9 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
     poundToken: RawTokenSyntax,
     _ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? = nil,
     macro: RawTokenSyntax,
-    _ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenMacroAndGenericArguments: RawUnexpectedNodesSyntax? = nil,
+    genericArguments: RawGenericArgumentClauseSyntax?,
+    _ unexpectedBetweenGenericArgumentsAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax?,
     _ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? = nil,
     argumentList: RawTupleExprElementListSyntax,
@@ -5934,23 +5936,25 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .macroExpansionExpr, uninitializedCount: 15, arena: arena) { layout in
+      kind: .macroExpansionExpr, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePoundToken?.raw
       layout[1] = poundToken.raw
       layout[2] = unexpectedBetweenPoundTokenAndMacro?.raw
       layout[3] = macro.raw
-      layout[4] = unexpectedBetweenMacroAndLeftParen?.raw
-      layout[5] = leftParen?.raw
-      layout[6] = unexpectedBetweenLeftParenAndArgumentList?.raw
-      layout[7] = argumentList.raw
-      layout[8] = unexpectedBetweenArgumentListAndRightParen?.raw
-      layout[9] = rightParen?.raw
-      layout[10] = unexpectedBetweenRightParenAndTrailingClosure?.raw
-      layout[11] = trailingClosure?.raw
-      layout[12] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
-      layout[13] = additionalTrailingClosures?.raw
-      layout[14] = unexpectedAfterAdditionalTrailingClosures?.raw
+      layout[4] = unexpectedBetweenMacroAndGenericArguments?.raw
+      layout[5] = genericArguments?.raw
+      layout[6] = unexpectedBetweenGenericArgumentsAndLeftParen?.raw
+      layout[7] = leftParen?.raw
+      layout[8] = unexpectedBetweenLeftParenAndArgumentList?.raw
+      layout[9] = argumentList.raw
+      layout[10] = unexpectedBetweenArgumentListAndRightParen?.raw
+      layout[11] = rightParen?.raw
+      layout[12] = unexpectedBetweenRightParenAndTrailingClosure?.raw
+      layout[13] = trailingClosure?.raw
+      layout[14] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
+      layout[15] = additionalTrailingClosures?.raw
+      layout[16] = unexpectedAfterAdditionalTrailingClosures?.raw
     }
     self.init(raw: raw)
   }
@@ -5967,38 +5971,44 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
   public var macro: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroAndGenericArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var leftParen: RawTokenSyntax? {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  public var genericArguments: RawGenericArgumentClauseSyntax? {
+    layoutView.children[5].map(RawGenericArgumentClauseSyntax.init(raw:))
   }
-  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericArgumentsAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var argumentList: RawTupleExprElementListSyntax {
-    layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
+  public var leftParen: RawTokenSyntax? {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var rightParen: RawTokenSyntax? {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+  public var argumentList: RawTupleExprElementListSyntax {
+    layoutView.children[9].map(RawTupleExprElementListSyntax.init(raw:))!
   }
-  public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var trailingClosure: RawClosureExprSyntax? {
-    layoutView.children[11].map(RawClosureExprSyntax.init(raw:))
+  public var rightParen: RawTokenSyntax? {
+    layoutView.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
+  public var trailingClosure: RawClosureExprSyntax? {
+    layoutView.children[13].map(RawClosureExprSyntax.init(raw:))
+  }
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
-    layoutView.children[13].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+    layoutView.children[15].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
   }
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -11143,7 +11153,9 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
     poundToken: RawTokenSyntax,
     _ unexpectedBetweenPoundTokenAndMacro: RawUnexpectedNodesSyntax? = nil,
     macro: RawTokenSyntax,
-    _ unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenMacroAndGenericArguments: RawUnexpectedNodesSyntax? = nil,
+    genericArguments: RawGenericArgumentClauseSyntax?,
+    _ unexpectedBetweenGenericArgumentsAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax?,
     _ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? = nil,
     argumentList: RawTupleExprElementListSyntax,
@@ -11157,23 +11169,25 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .macroExpansionDecl, uninitializedCount: 15, arena: arena) { layout in
+      kind: .macroExpansionDecl, uninitializedCount: 17, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePoundToken?.raw
       layout[1] = poundToken.raw
       layout[2] = unexpectedBetweenPoundTokenAndMacro?.raw
       layout[3] = macro.raw
-      layout[4] = unexpectedBetweenMacroAndLeftParen?.raw
-      layout[5] = leftParen?.raw
-      layout[6] = unexpectedBetweenLeftParenAndArgumentList?.raw
-      layout[7] = argumentList.raw
-      layout[8] = unexpectedBetweenArgumentListAndRightParen?.raw
-      layout[9] = rightParen?.raw
-      layout[10] = unexpectedBetweenRightParenAndTrailingClosure?.raw
-      layout[11] = trailingClosure?.raw
-      layout[12] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
-      layout[13] = additionalTrailingClosures?.raw
-      layout[14] = unexpectedAfterAdditionalTrailingClosures?.raw
+      layout[4] = unexpectedBetweenMacroAndGenericArguments?.raw
+      layout[5] = genericArguments?.raw
+      layout[6] = unexpectedBetweenGenericArgumentsAndLeftParen?.raw
+      layout[7] = leftParen?.raw
+      layout[8] = unexpectedBetweenLeftParenAndArgumentList?.raw
+      layout[9] = argumentList.raw
+      layout[10] = unexpectedBetweenArgumentListAndRightParen?.raw
+      layout[11] = rightParen?.raw
+      layout[12] = unexpectedBetweenRightParenAndTrailingClosure?.raw
+      layout[13] = trailingClosure?.raw
+      layout[14] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
+      layout[15] = additionalTrailingClosures?.raw
+      layout[16] = unexpectedAfterAdditionalTrailingClosures?.raw
     }
     self.init(raw: raw)
   }
@@ -11190,38 +11204,44 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
   public var macro: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var unexpectedBetweenMacroAndLeftParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroAndGenericArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var leftParen: RawTokenSyntax? {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  public var genericArguments: RawGenericArgumentClauseSyntax? {
+    layoutView.children[5].map(RawGenericArgumentClauseSyntax.init(raw:))
   }
-  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericArgumentsAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var argumentList: RawTupleExprElementListSyntax {
-    layoutView.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
+  public var leftParen: RawTokenSyntax? {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var rightParen: RawTokenSyntax? {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+  public var argumentList: RawTupleExprElementListSyntax {
+    layoutView.children[9].map(RawTupleExprElementListSyntax.init(raw:))!
   }
-  public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var trailingClosure: RawClosureExprSyntax? {
-    layoutView.children[11].map(RawClosureExprSyntax.init(raw:))
+  public var rightParen: RawTokenSyntax? {
+    layoutView.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
+  public var trailingClosure: RawClosureExprSyntax? {
+    layoutView.children[13].map(RawClosureExprSyntax.init(raw:))
+  }
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
-    layoutView.children[13].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+    layoutView.children[15].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
   }
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

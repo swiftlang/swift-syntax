@@ -1517,6 +1517,9 @@ public let DECL_NODES: [Node] = [
                tokenChoices: [
                  "Identifier"
                ]),
+         Child(name: "GenericArguments",
+               kind: "GenericArgumentClause",
+               isOptional: true),
          Child(name: "LeftParen",
                kind: "LeftParenToken",
                isOptional: true,

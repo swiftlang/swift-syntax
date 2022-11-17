@@ -2806,7 +2806,9 @@ extension MacroExpansionDecl {
   ///   - poundToken: The `#` sign.
   ///   - unexpectedBetweenPoundTokenAndMacro: 
   ///   - macro: 
-  ///   - unexpectedBetweenMacroAndLeftParen: 
+  ///   - unexpectedBetweenMacroAndGenericArguments: 
+  ///   - genericArguments: 
+  ///   - unexpectedBetweenGenericArgumentsAndLeftParen: 
   ///   - leftParen: 
   ///   - unexpectedBetweenLeftParenAndArgumentList: 
   ///   - argumentList: 
@@ -2816,21 +2818,21 @@ extension MacroExpansionDecl {
   ///   - trailingClosure: 
   ///   - unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: 
   ///   - additionalTrailingClosures: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: Token, unexpectedBetweenMacroAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, argumentList: TupleExprElementList, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: Token, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodes? = nil, genericArguments: GenericArgumentClause? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, argumentList: TupleExprElementList, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil) {
     assert(poundToken.text == "#")
     assert(leftParen == nil || leftParen!.text == "(")
     assert(rightParen == nil || rightParen!.text == ")")
-    self = MacroExpansionDeclSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
+    self = MacroExpansionDeclSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
     self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodes? = nil, genericArguments: GenericArgumentClause? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
     TupleExprElementListSyntax([])
   }) {
-    self.init (unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: Token.`identifier`(macro), unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
+    self.init (unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: Token.`identifier`(macro), unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
   }
 }
@@ -2842,7 +2844,9 @@ extension MacroExpansionExpr {
   ///   - poundToken: The `#` sign.
   ///   - unexpectedBetweenPoundTokenAndMacro: 
   ///   - macro: 
-  ///   - unexpectedBetweenMacroAndLeftParen: 
+  ///   - unexpectedBetweenMacroAndGenericArguments: 
+  ///   - genericArguments: 
+  ///   - unexpectedBetweenGenericArgumentsAndLeftParen: 
   ///   - leftParen: 
   ///   - unexpectedBetweenLeftParenAndArgumentList: 
   ///   - argumentList: 
@@ -2852,21 +2856,21 @@ extension MacroExpansionExpr {
   ///   - trailingClosure: 
   ///   - unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: 
   ///   - additionalTrailingClosures: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: Token, unexpectedBetweenMacroAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, argumentList: TupleExprElementList, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: Token, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodes? = nil, genericArguments: GenericArgumentClause? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, argumentList: TupleExprElementList, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil) {
     assert(poundToken.text == "#")
     assert(leftParen == nil || leftParen!.text == "(")
     assert(rightParen == nil || rightParen!.text == ")")
-    self = MacroExpansionExprSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
+    self = MacroExpansionExprSyntax(unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: macro, unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList, unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
     self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforePoundToken: UnexpectedNodes? = nil, poundToken: Token = Token.`pound`, unexpectedBetweenPoundTokenAndMacro: UnexpectedNodes? = nil, macro: String, unexpectedBetweenMacroAndGenericArguments: UnexpectedNodes? = nil, genericArguments: GenericArgumentClause? = nil, unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes? = nil, trailingClosure: ClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes? = nil, additionalTrailingClosures: MultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementListSyntax = {
     TupleExprElementListSyntax([])
   }) {
-    self.init (unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: Token.`identifier`(macro), unexpectedBetweenMacroAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
+    self.init (unexpectedBeforePoundToken, poundToken: poundToken, unexpectedBetweenPoundTokenAndMacro, macro: Token.`identifier`(macro), unexpectedBetweenMacroAndGenericArguments, genericArguments: genericArguments, unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
   }
 }

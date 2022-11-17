@@ -12,6 +12,7 @@
 
 import SwiftSyntax
 import SwiftParser
+import SwiftDiagnostics
 #if canImport(_CompilerPluginSupport)
 import _CompilerPluginSupport
 #endif
@@ -26,6 +27,16 @@ public protocol ExpressionMacro: Macro {
 }
 
 #if canImport(_CompilerPluginSupport)
+extension _CompilerPluginSupport._DiagnosticSeverity {
+  fileprivate init(_ other: SwiftDiagnostics.DiagnosticSeverity) {
+    switch other {
+    case .note: self = .note
+    case .warning: self = .warning
+    case .error: self = .error
+    }
+  }
+}
+
 extension ExpressionMacro {
   public static func _kind() -> _CompilerPluginKind {
     .expressionMacro
@@ -40,7 +51,9 @@ extension ExpressionMacro {
     sourceFileTextCount: Int,
     localSourceText: UnsafePointer<UInt8>,
     localSourceTextCount: Int
-  ) -> (UnsafePointer<UInt8>?, count: Int) {
+  ) -> (code: UnsafePointer<UInt8>?, codeLength: Int,
+        diagnostics: UnsafePointer<_Diagnostic>?,
+        diagnosticCount: Int) {
     let targetModuleNameBuffer = UnsafeBufferPointer(
       start: filePath, count: targetModuleNameCount)
     let targetModuleName = String(
@@ -66,13 +79,25 @@ extension ExpressionMacro {
     // Evaluate the macro.
     let evalResult = apply(mee, in: context)
 
+    let rawDiags = UnsafeMutablePointer<_Diagnostic>.allocate(
+      capacity: evalResult.diagnostics.count)
+    for (i, diag) in evalResult.diagnostics.enumerated() {
+      rawDiags.advanced(by: i).initialize(to: _makeDiagnostic(
+        message: diag.message,
+        position: diag.position.utf8Offset,
+        severity: .init(diag.diagMessage.severity)))
+    }
+
     var resultString = "\(evalResult.rewritten)"
     return resultString.withUTF8 { buffer in
       let result = UnsafeMutableBufferPointer<UInt8>.allocate(
         capacity: buffer.count + 1)
       _ = result.initialize(from: buffer)
       result[buffer.count] = 0
-      return (UnsafePointer(result.baseAddress), buffer.count)
+      return (
+        code: UnsafePointer(result.baseAddress), codeLength: buffer.count,
+        diagnostics: UnsafePointer?(rawDiags),
+        diagnosticCount: evalResult.diagnostics.count)
     }
   }
 }

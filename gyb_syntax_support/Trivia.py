@@ -3,11 +3,10 @@ from .kinds import lowercase_first_word  # noqa: I201
 
 
 class Trivia(object):
-    def __init__(self, name, comment, serialization_code, characters=[],
+    def __init__(self, name, comment, characters=[],
                  swift_characters=[], is_new_line=False, is_comment=False):
         self.name = name
         self.comment = comment
-        self.serialization_code = serialization_code
         self.characters = tuple(characters)
         self.lower_name = lowercase_first_word(name)
         self.is_new_line = is_new_line
@@ -29,49 +28,32 @@ class Trivia(object):
 
 
 TRIVIAS = [
-    Trivia('Space', 'A space \' \' character.', characters=[' '],
-           serialization_code=0),
-    Trivia('Tab', 'A tab \'\\t\' character.', characters=['\\t'],
-           serialization_code=1),
+    Trivia('Space', 'A space \' \' character.', characters=[' ']),
+    Trivia('Tab', 'A tab \'\\t\' character.', characters=['\\t']),
     Trivia('VerticalTab', 'A vertical tab \'\\v\' character.',
-           characters=['\\v'], swift_characters=['\\u{2B7F}'],
-           serialization_code=2),
+           characters=['\\v'], swift_characters=['\\u{2B7F}']),
     Trivia('Formfeed', 'A form-feed \'f\' character.', characters=['\\f'],
-           swift_characters=['\\u{240C}'], serialization_code=3),
+           swift_characters=['\\u{240C}']),
     Trivia('Newline', 'A newline \'\\n\' character.', characters=['\\n'],
-           is_new_line=True, serialization_code=4),
+           is_new_line=True),
     Trivia('CarriageReturn', 'A newline \'\\r\' character.',
-           characters=['\\r'], is_new_line=True, serialization_code=5),
+           characters=['\\r'], is_new_line=True),
     Trivia('CarriageReturnLineFeed',
            'A newline consists of contiguous \'\\r\' and \'\\n\' characters.',
-           characters=['\\r', '\\n'], is_new_line=True, serialization_code=6),
+           characters=['\\r', '\\n'], is_new_line=True),
     Trivia('LineComment', 'A developer line comment, starting with \'//\'',
-           is_comment=True, serialization_code=8),
+           is_comment=True),
     Trivia('BlockComment',
            'A developer block comment, starting with \'/*\' and ending with'
            ' \'*/\'.',
-           is_comment=True, serialization_code=9),
+           is_comment=True),
     Trivia('DocLineComment',
            'A documentation line comment, starting with \'///\'.',
-           is_comment=True, serialization_code=10),
+           is_comment=True),
     Trivia('DocBlockComment',
            'A documentation block comment, starting with \'/**\' and ending '
            'with \'*/\'.',
-           is_comment=True, serialization_code=11),
-    Trivia('UnexpectedText', 'Any skipped unexpected text.',
-           serialization_code=12),
-    Trivia('Shebang', 'A script command, starting with \'#!\'.',
-           serialization_code=13),
+           is_comment=True),
+    Trivia('UnexpectedText', 'Any skipped unexpected text.'),
+    Trivia('Shebang', 'A script command, starting with \'#!\'.'),
 ]
-
-
-def verify_no_duplicate_serialization_codes(trivias):
-    used_codes = set()
-    for trivia in trivias:
-        if trivia.serialization_code in used_codes:
-            error("Serialization code %d used twice for trivia" %
-                  trivia.serialization_code)
-        used_codes.add(trivia.serialization_code)
-
-
-verify_no_duplicate_serialization_codes(TRIVIAS)

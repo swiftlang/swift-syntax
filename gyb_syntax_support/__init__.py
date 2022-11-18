@@ -171,7 +171,6 @@ def calculate_node_hash():
 
     def _digest_trivia(trivia):
         digest.update(trivia.name.encode("utf-8"))
-        digest.update(str(trivia.serialization_code).encode("utf-8"))
         digest.update(str(trivia.characters).encode("utf-8"))
 
     for node in SYNTAX_NODES:

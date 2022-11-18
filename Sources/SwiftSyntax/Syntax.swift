@@ -295,6 +295,17 @@ public extension SyntaxProtocol {
     return data.indexInParent
   }
 
+  /// Whether or not this node has a parent.
+  var hasParent: Bool {
+    return parent != nil
+  }
+
+  /// Recursively walks through the tree to find the token semantically before
+  /// this node.
+  var previousToken: TokenSyntax? {
+    return self.previousToken(viewMode: .sourceAccurate)
+  }
+
   /// Recursively walks through the tree to find the token semantically before
   /// this node.
   func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
@@ -313,6 +324,12 @@ public extension SyntaxProtocol {
       }
     }
     return parent.previousToken(viewMode: viewMode)
+  }
+
+  /// Recursively walks through the tree to find the next token semantically
+  /// after this node.
+  var nextToken: TokenSyntax? {
+    return self.nextToken(viewMode: .sourceAccurate)
   }
 
   /// Recursively walks through the tree to find the next token semantically
@@ -351,6 +368,11 @@ public extension SyntaxProtocol {
       }
     }
     return nil
+  }
+
+  /// Returns the last token node that is part of this syntax node.
+  var lastToken: TokenSyntax? {
+    return self.lastToken(viewMode: .sourceAccurate)
   }
 
   /// Returns the last token node that is part of this syntax node.
@@ -448,6 +470,16 @@ public extension SyntaxProtocol {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  /// The length this node's leading trivia takes up spelled out in source.
+  var leadingTriviaLength: SourceLength {
+    return raw.leadingTriviaLength
+  }
+
+  /// The length this node's trailing trivia takes up spelled out in source.
+  var trailingTriviaLength: SourceLength {
+    return raw.trailingTriviaLength
   }
 
   /// Returns a new syntax node with its leading trivia replaced

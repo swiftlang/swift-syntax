@@ -1807,6 +1807,30 @@ extension ExtensionDecl {
   }
 }
 
+extension ExternalMacroName {
+  /// Creates a `ExternalMacroName` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeModuleName: 
+  ///   - moduleName: 
+  ///   - unexpectedBetweenModuleNameAndPeriod: 
+  ///   - period: 
+  ///   - unexpectedBetweenPeriodAndMacroTypeName: 
+  ///   - macroTypeName: 
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeModuleName: UnexpectedNodes? = nil, moduleName: Token, unexpectedBetweenModuleNameAndPeriod: UnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndMacroTypeName: UnexpectedNodes? = nil, macroTypeName: Token) {
+    assert(period.text == ".")
+    self = ExternalMacroNameSyntax(unexpectedBeforeModuleName, moduleName: moduleName, unexpectedBetweenModuleNameAndPeriod, period: period, unexpectedBetweenPeriodAndMacroTypeName, macroTypeName: macroTypeName)
+    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
+    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforeModuleName: UnexpectedNodes? = nil, moduleName: String, unexpectedBetweenModuleNameAndPeriod: UnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndMacroTypeName: UnexpectedNodes? = nil, macroTypeName: String) {
+    self.init (unexpectedBeforeModuleName, moduleName: Token.`identifier`(moduleName), unexpectedBetweenModuleNameAndPeriod, period: period, unexpectedBetweenPeriodAndMacroTypeName, macroTypeName: Token.`identifier`(macroTypeName))
+    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
+  }
+}
+
 extension FallthroughStmt {
   /// Creates a `FallthroughStmt` using the provided parameters.
   /// - Parameters:
@@ -2795,6 +2819,43 @@ extension LayoutRequirement {
     }, unexpectedBetweenSizeAndComma, comma: comma, unexpectedBetweenCommaAndAlignment, alignment: alignment.map { 
       Token.`integerLiteral`($0) 
     }, unexpectedBetweenAlignmentAndRightParen, rightParen: rightParen)
+    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
+  }
+}
+
+extension MacroDecl {
+  /// Creates a `MacroDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeAttributes: 
+  ///   - attributes: 
+  ///   - unexpectedBetweenAttributesAndModifiers: 
+  ///   - modifiers: 
+  ///   - unexpectedBetweenModifiersAndMacroKeyword: 
+  ///   - macroKeyword: 
+  ///   - unexpectedBetweenMacroKeywordAndIdentifier: 
+  ///   - identifier: 
+  ///   - unexpectedBetweenIdentifierAndGenericParameterClause: 
+  ///   - genericParameterClause: 
+  ///   - unexpectedBetweenGenericParameterClauseAndSignature: 
+  ///   - signature: 
+  ///   - unexpectedBetweenSignatureAndEqual: 
+  ///   - equal: 
+  ///   - unexpectedBetweenEqualAndExternalName: 
+  ///   - externalName: 
+  ///   - unexpectedBetweenExternalNameAndGenericWhereClause: 
+  ///   - genericWhereClause: 
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAttributes: UnexpectedNodes? = nil, attributes: AttributeList? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodes? = nil, modifiers: ModifierList? = nil, unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodes? = nil, macroKeyword: Token, unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes? = nil, genericParameterClause: GenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes? = nil, signature: Signature, unexpectedBetweenSignatureAndEqual: UnexpectedNodes? = nil, equal: Token = Token.`equal`, unexpectedBetweenEqualAndExternalName: UnexpectedNodes? = nil, externalName: ExternalMacroName? = nil, unexpectedBetweenExternalNameAndGenericWhereClause: UnexpectedNodes? = nil, genericWhereClause: GenericWhereClause? = nil) {
+    assert(macroKeyword.text == "macro")
+    assert(equal.text == "=")
+    self = MacroDeclSyntax(unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndMacroKeyword, macroKeyword: macroKeyword, unexpectedBetweenMacroKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndEqual, equal: equal, unexpectedBetweenEqualAndExternalName, externalName: externalName, unexpectedBetweenExternalNameAndGenericWhereClause, genericWhereClause: genericWhereClause)
+    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
+    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: UnexpectedNodes? = nil, attributes: AttributeList? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodes? = nil, modifiers: ModifierList? = nil, unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodes? = nil, macroKeyword: String, unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes? = nil, genericParameterClause: GenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes? = nil, signature: Signature, unexpectedBetweenSignatureAndEqual: UnexpectedNodes? = nil, equal: Token = Token.`equal`, unexpectedBetweenEqualAndExternalName: UnexpectedNodes? = nil, externalName: ExternalMacroName? = nil, unexpectedBetweenExternalNameAndGenericWhereClause: UnexpectedNodes? = nil, genericWhereClause: GenericWhereClause? = nil) {
+    self.init (unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndMacroKeyword, macroKeyword: Token.`contextualKeyword`(macroKeyword), unexpectedBetweenMacroKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndEqual, equal: equal, unexpectedBetweenEqualAndExternalName, externalName: externalName, unexpectedBetweenExternalNameAndGenericWhereClause, genericWhereClause: genericWhereClause)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
   }
 }

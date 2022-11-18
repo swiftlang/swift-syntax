@@ -11935,6 +11935,242 @@ extension PrecedenceGroupAssociativitySyntax: CustomReflectable {
   }
 }
 
+// MARK: - ExternalMacroNameSyntax
+
+public struct ExternalMacroNameSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .externalMacroName else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `ExternalMacroNameSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .externalMacroName)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeModuleName: UnexpectedNodesSyntax? = nil,
+    moduleName: TokenSyntax,
+    _ unexpectedBetweenModuleNameAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax,
+    _ unexpectedBetweenPeriodAndMacroTypeName: UnexpectedNodesSyntax? = nil,
+    macroTypeName: TokenSyntax,
+    _ unexpectedAfterMacroTypeName: UnexpectedNodesSyntax? = nil
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeModuleName?.raw,
+      moduleName.raw,
+      unexpectedBetweenModuleNameAndPeriod?.raw,
+      period.raw,
+      unexpectedBetweenPeriodAndMacroTypeName?.raw,
+      macroTypeName.raw,
+      unexpectedAfterMacroTypeName?.raw,
+    ]
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.externalMacroName,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeModuleName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeModuleName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeModuleName` replaced.
+  /// - param newChild: The new `unexpectedBeforeModuleName` to replace the node's
+  ///                   current `unexpectedBeforeModuleName`, if present.
+  public func withUnexpectedBeforeModuleName(_ newChild: UnexpectedNodesSyntax?) -> ExternalMacroNameSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return ExternalMacroNameSyntax(newData)
+  }
+
+  public var moduleName: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withModuleName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `moduleName` replaced.
+  /// - param newChild: The new `moduleName` to replace the node's
+  ///                   current `moduleName`, if present.
+  public func withModuleName(_ newChild: TokenSyntax?) -> ExternalMacroNameSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return ExternalMacroNameSyntax(newData)
+  }
+
+  public var unexpectedBetweenModuleNameAndPeriod: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenModuleNameAndPeriod(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenModuleNameAndPeriod` replaced.
+  /// - param newChild: The new `unexpectedBetweenModuleNameAndPeriod` to replace the node's
+  ///                   current `unexpectedBetweenModuleNameAndPeriod`, if present.
+  public func withUnexpectedBetweenModuleNameAndPeriod(_ newChild: UnexpectedNodesSyntax?) -> ExternalMacroNameSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return ExternalMacroNameSyntax(newData)
+  }
+
+  public var period: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPeriod(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `period` replaced.
+  /// - param newChild: The new `period` to replace the node's
+  ///                   current `period`, if present.
+  public func withPeriod(_ newChild: TokenSyntax?) -> ExternalMacroNameSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return ExternalMacroNameSyntax(newData)
+  }
+
+  public var unexpectedBetweenPeriodAndMacroTypeName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenPeriodAndMacroTypeName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenPeriodAndMacroTypeName` replaced.
+  /// - param newChild: The new `unexpectedBetweenPeriodAndMacroTypeName` to replace the node's
+  ///                   current `unexpectedBetweenPeriodAndMacroTypeName`, if present.
+  public func withUnexpectedBetweenPeriodAndMacroTypeName(_ newChild: UnexpectedNodesSyntax?) -> ExternalMacroNameSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return ExternalMacroNameSyntax(newData)
+  }
+
+  public var macroTypeName: TokenSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMacroTypeName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `macroTypeName` replaced.
+  /// - param newChild: The new `macroTypeName` to replace the node's
+  ///                   current `macroTypeName`, if present.
+  public func withMacroTypeName(_ newChild: TokenSyntax?) -> ExternalMacroNameSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return ExternalMacroNameSyntax(newData)
+  }
+
+  public var unexpectedAfterMacroTypeName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterMacroTypeName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterMacroTypeName` replaced.
+  /// - param newChild: The new `unexpectedAfterMacroTypeName` to replace the node's
+  ///                   current `unexpectedAfterMacroTypeName`, if present.
+  public func withUnexpectedAfterMacroTypeName(_ newChild: UnexpectedNodesSyntax?) -> ExternalMacroNameSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return ExternalMacroNameSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeModuleName,
+      \Self.moduleName,
+      \Self.unexpectedBetweenModuleNameAndPeriod,
+      \Self.period,
+      \Self.unexpectedBetweenPeriodAndMacroTypeName,
+      \Self.macroTypeName,
+      \Self.unexpectedAfterMacroTypeName,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "module name"
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return "macro type name"
+    case 6:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension ExternalMacroNameSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeModuleName": unexpectedBeforeModuleName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "moduleName": Syntax(moduleName).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenModuleNameAndPeriod": unexpectedBetweenModuleNameAndPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "period": Syntax(period).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenPeriodAndMacroTypeName": unexpectedBetweenPeriodAndMacroTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "macroTypeName": Syntax(macroTypeName).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterMacroTypeName": unexpectedAfterMacroTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - CustomAttributeSyntax
 
 /// 

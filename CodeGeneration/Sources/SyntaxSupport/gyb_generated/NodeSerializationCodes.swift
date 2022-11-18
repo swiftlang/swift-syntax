@@ -298,4 +298,6 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "OldKeyPathExpr": 287,
   "MacroExpansionExpr": 288,
   "MacroExpansionDecl": 289,
+  "MacroDecl": 290,
+  "ExternalMacroName": 291,
 ]

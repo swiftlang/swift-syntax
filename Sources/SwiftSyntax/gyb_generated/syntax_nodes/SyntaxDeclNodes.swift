@@ -10072,6 +10072,639 @@ extension PrecedenceGroupDeclSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MacroDeclSyntax
+
+public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+  public enum Signature: SyntaxChildChoices {
+    case `functionLike`(FunctionSignatureSyntax)
+    case `valueLike`(TypeAnnotationSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .functionLike(let node): return node._syntaxNode
+      case .valueLike(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: FunctionSignatureSyntax) {
+      self = .functionLike(node)
+    }
+    public init(_ node: TypeAnnotationSyntax) {
+      self = .valueLike(node)
+    }
+    public init?<S: SyntaxProtocol>(_ node: S) {
+      if let node = node.as(FunctionSignatureSyntax.self) {
+        self = .functionLike(node)
+        return
+      }
+      if let node = node.as(TypeAnnotationSyntax.self) {
+        self = .valueLike(node)
+        return
+      }
+      return nil
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(FunctionSignatureSyntax.self),
+        .node(TypeAnnotationSyntax.self),
+      ])
+    }
+  }
+
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .macroDecl else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `MacroDeclSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .macroDecl)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax?,
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: ModifierListSyntax?,
+    _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil,
+    macroKeyword: TokenSyntax,
+    _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
+    identifier: TokenSyntax,
+    _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax?,
+    _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil,
+    signature: Signature,
+    _ unexpectedBetweenSignatureAndEqual: UnexpectedNodesSyntax? = nil,
+    equal: TokenSyntax,
+    _ unexpectedBetweenEqualAndExternalName: UnexpectedNodesSyntax? = nil,
+    externalName: ExternalMacroNameSyntax?,
+    _ unexpectedBetweenExternalNameAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax?,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeAttributes?.raw,
+      attributes?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
+      modifiers?.raw,
+      unexpectedBetweenModifiersAndMacroKeyword?.raw,
+      macroKeyword.raw,
+      unexpectedBetweenMacroKeywordAndIdentifier?.raw,
+      identifier.raw,
+      unexpectedBetweenIdentifierAndGenericParameterClause?.raw,
+      genericParameterClause?.raw,
+      unexpectedBetweenGenericParameterClauseAndSignature?.raw,
+      signature.raw,
+      unexpectedBetweenSignatureAndEqual?.raw,
+      equal.raw,
+      unexpectedBetweenEqualAndExternalName?.raw,
+      externalName?.raw,
+      unexpectedBetweenExternalNameAndGenericWhereClause?.raw,
+      genericWhereClause?.raw,
+      unexpectedAfterGenericWhereClause?.raw,
+    ]
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroDecl,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
+  /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
+  ///                   current `unexpectedBeforeAttributes`, if present.
+  public func withUnexpectedBeforeAttributes(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var attributes: AttributeListSyntax? {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
+  }
+
+  /// Adds the provided `Attribute` to the node's `attributes`
+  /// collection.
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  public func addAttribute(_ element: Syntax) -> MacroDeclSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[1] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `attributes` replaced.
+  /// - param newChild: The new `attributes` to replace the node's
+  ///                   current `attributes`, if present.
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `unexpectedBetweenAttributesAndModifiers`, if present.
+  public func withUnexpectedBetweenAttributesAndModifiers(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var modifiers: ModifierListSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
+  }
+
+  /// Adds the provided `Modifier` to the node's `modifiers`
+  /// collection.
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  public func addModifier(_ element: DeclModifierSyntax) -> MacroDeclSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `modifiers` replaced.
+  /// - param newChild: The new `modifiers` to replace the node's
+  ///                   current `modifiers`, if present.
+  public func withModifiers(_ newChild: ModifierListSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenModifiersAndMacroKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenModifiersAndMacroKeyword` replaced.
+  /// - param newChild: The new `unexpectedBetweenModifiersAndMacroKeyword` to replace the node's
+  ///                   current `unexpectedBetweenModifiersAndMacroKeyword`, if present.
+  public func withUnexpectedBetweenModifiersAndMacroKeyword(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var macroKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMacroKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `macroKeyword` replaced.
+  /// - param newChild: The new `macroKeyword` to replace the node's
+  ///                   current `macroKeyword`, if present.
+  public func withMacroKeyword(_ newChild: TokenSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: arena)
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenMacroKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenMacroKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBetweenMacroKeywordAndIdentifier` to replace the node's
+  ///                   current `unexpectedBetweenMacroKeywordAndIdentifier`, if present.
+  public func withUnexpectedBetweenMacroKeywordAndIdentifier(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var identifier: TokenSyntax {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `identifier` replaced.
+  /// - param newChild: The new `identifier` to replace the node's
+  ///                   current `identifier`, if present.
+  public func withIdentifier(_ newChild: TokenSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenIdentifierAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndGenericParameterClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenIdentifierAndGenericParameterClause` to replace the node's
+  ///                   current `unexpectedBetweenIdentifierAndGenericParameterClause`, if present.
+  public func withUnexpectedBetweenIdentifierAndGenericParameterClause(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var genericParameterClause: GenericParameterClauseSyntax? {
+    get {
+      let childData = data.child(at: 9, parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `genericParameterClause` replaced.
+  /// - param newChild: The new `genericParameterClause` to replace the node's
+  ///                   current `genericParameterClause`, if present.
+  public func withGenericParameterClause(_ newChild: GenericParameterClauseSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 10, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenGenericParameterClauseAndSignature(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterClauseAndSignature` replaced.
+  /// - param newChild: The new `unexpectedBetweenGenericParameterClauseAndSignature` to replace the node's
+  ///                   current `unexpectedBetweenGenericParameterClauseAndSignature`, if present.
+  public func withUnexpectedBetweenGenericParameterClauseAndSignature(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var signature: Signature {
+    get {
+      let childData = data.child(at: 11, parent: Syntax(self))
+      return Signature(childData!)
+    }
+    set(value) {
+      self = withSignature(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `signature` replaced.
+  /// - param newChild: The new `signature` to replace the node's
+  ///                   current `signature`, if present.
+  public func withSignature(_ newChild: Signature?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenSignatureAndEqual: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 12, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenSignatureAndEqual(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenSignatureAndEqual` replaced.
+  /// - param newChild: The new `unexpectedBetweenSignatureAndEqual` to replace the node's
+  ///                   current `unexpectedBetweenSignatureAndEqual`, if present.
+  public func withUnexpectedBetweenSignatureAndEqual(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var equal: TokenSyntax {
+    get {
+      let childData = data.child(at: 13, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEqual(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `equal` replaced.
+  /// - param newChild: The new `equal` to replace the node's
+  ///                   current `equal`, if present.
+  public func withEqual(_ newChild: TokenSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenEqualAndExternalName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 14, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenEqualAndExternalName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenEqualAndExternalName` replaced.
+  /// - param newChild: The new `unexpectedBetweenEqualAndExternalName` to replace the node's
+  ///                   current `unexpectedBetweenEqualAndExternalName`, if present.
+  public func withUnexpectedBetweenEqualAndExternalName(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var externalName: ExternalMacroNameSyntax? {
+    get {
+      let childData = data.child(at: 15, parent: Syntax(self))
+      if childData == nil { return nil }
+      return ExternalMacroNameSyntax(childData!)
+    }
+    set(value) {
+      self = withExternalName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `externalName` replaced.
+  /// - param newChild: The new `externalName` to replace the node's
+  ///                   current `externalName`, if present.
+  public func withExternalName(_ newChild: ExternalMacroNameSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedBetweenExternalNameAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 16, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenExternalNameAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenExternalNameAndGenericWhereClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenExternalNameAndGenericWhereClause` to replace the node's
+  ///                   current `unexpectedBetweenExternalNameAndGenericWhereClause`, if present.
+  public func withUnexpectedBetweenExternalNameAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      let childData = data.child(at: 17, parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `genericWhereClause` replaced.
+  /// - param newChild: The new `genericWhereClause` to replace the node's
+  ///                   current `genericWhereClause`, if present.
+  public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 17, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 18, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterGenericWhereClause` replaced.
+  /// - param newChild: The new `unexpectedAfterGenericWhereClause` to replace the node's
+  ///                   current `unexpectedAfterGenericWhereClause`, if present.
+  public func withUnexpectedAfterGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 18, with: raw, arena: arena)
+    return MacroDeclSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeAttributes,
+      \Self.attributes,
+      \Self.unexpectedBetweenAttributesAndModifiers,
+      \Self.modifiers,
+      \Self.unexpectedBetweenModifiersAndMacroKeyword,
+      \Self.macroKeyword,
+      \Self.unexpectedBetweenMacroKeywordAndIdentifier,
+      \Self.identifier,
+      \Self.unexpectedBetweenIdentifierAndGenericParameterClause,
+      \Self.genericParameterClause,
+      \Self.unexpectedBetweenGenericParameterClauseAndSignature,
+      \Self.signature,
+      \Self.unexpectedBetweenSignatureAndEqual,
+      \Self.equal,
+      \Self.unexpectedBetweenEqualAndExternalName,
+      \Self.externalName,
+      \Self.unexpectedBetweenExternalNameAndGenericWhereClause,
+      \Self.genericWhereClause,
+      \Self.unexpectedAfterGenericWhereClause,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return "attributes"
+    case 2:
+      return nil
+    case 3:
+      return "modifiers"
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    case 9:
+      return "generic parameter clause"
+    case 10:
+      return nil
+    case 11:
+      return "macro signature"
+    case 12:
+      return nil
+    case 13:
+      return nil
+    case 14:
+      return nil
+    case 15:
+      return "external macro name"
+    case 16:
+      return nil
+    case 17:
+      return "generic where clause"
+    case 18:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension MacroDeclSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributesAndModifiers": unexpectedBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenModifiersAndMacroKeyword": unexpectedBetweenModifiersAndMacroKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "macroKeyword": Syntax(macroKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenMacroKeywordAndIdentifier": unexpectedBetweenMacroKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenIdentifierAndGenericParameterClause": unexpectedBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenGenericParameterClauseAndSignature": unexpectedBetweenGenericParameterClauseAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "signature": Syntax(signature).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenSignatureAndEqual": unexpectedBetweenSignatureAndEqual.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "equal": Syntax(equal).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenEqualAndExternalName": unexpectedBetweenEqualAndExternalName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "externalName": externalName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenExternalNameAndGenericWhereClause": unexpectedBetweenExternalNameAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterGenericWhereClause": unexpectedAfterGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - MacroExpansionDeclSyntax
 
 public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {

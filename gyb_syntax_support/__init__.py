@@ -166,9 +166,8 @@ def calculate_node_hash():
             digest.update(str(child.is_optional).encode("utf-8"))
 
     def _digest_syntax_token(token):
-        # Hash into the token name and serialization code
+        # Hash into the token name
         digest.update(token.name.encode("utf-8"))
-        digest.update(str(token.serialization_code).encode("utf-8"))
 
     def _digest_trivia(trivia):
         digest.update(trivia.name.encode("utf-8"))

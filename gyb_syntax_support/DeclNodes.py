@@ -916,6 +916,36 @@ DECL_NODES = [
                    '''),
          ]),
 
+    Node('MacroDecl', name_for_diagnostics='macro', kind='Decl',
+         traits=['IdentifiedDecl'],
+         children=[
+             Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
+                   collection_element_name='Attribute', is_optional=True),
+             Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
+                   collection_element_name='Modifier', is_optional=True),
+             Child('MacroKeyword', kind='ContextualKeywordToken',
+                   text_choices=['macro']),
+             Child('Identifier', kind='IdentifierToken'),
+             Child('GenericParameterClause', kind='GenericParameterClause', name_for_diagnostics='generic parameter clause',
+                   is_optional=True),
+             Child('Signature', kind='Syntax', name_for_diagnostics='macro signature',
+                   node_choices=[
+                       Child('FunctionLike', kind='FunctionSignature', name_for_diagnostics="macro signature"),
+                       Child('ValueLike', kind='TypeAnnotation', name_for_diagnostics="macro signature"),
+                   ]),
+             Child('Equal', kind='EqualToken'),
+             Child('ExternalName', kind='ExternalMacroName', name_for_diagnostics='external macro name', is_optional = True),
+             Child('GenericWhereClause', kind='GenericWhereClause', name_for_diagnostics='generic where clause',
+                   is_optional=True),
+         ]),
+
+    Node('ExternalMacroName', name_for_diagnostics='external macro name', kind='Syntax',
+         children=[
+             Child('ModuleName', kind='IdentifierToken', name_for_diagnostics='module name'),
+             Child('Period', kind='PeriodToken'),
+             Child('MacroTypeName', kind='IdentifierToken', name_for_diagnostics='macro type name'),
+         ]),
+
     # e.g., "#embed("filename.txt")"
     Node('MacroExpansionDecl',
          name_for_diagnostics="pound literal declaration", kind='Decl',

@@ -289,8 +289,9 @@ SYNTAX_NODE_SERIALIZATION_CODES = {
     'OldKeyPathExpr': 287,
     'MacroExpansionExpr': 288,
     'MacroExpansionDecl': 289,
+    'MacroDecl': 290,
+    'ExternalMacroName': 291,
 }
-
 
 def verify_syntax_node_serialization_codes(nodes, serialization_codes):
     # Verify that all nodes have serialization codes

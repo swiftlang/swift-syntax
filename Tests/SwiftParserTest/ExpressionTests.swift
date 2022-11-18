@@ -343,6 +343,12 @@ final class ExpressionTests: XCTestCase {
           additionalTrailingClosures: nil)),
         trailingComma: .commaToken())),
     substructureAfterMarker: "1️⃣")
+
+    AssertParse(
+      """
+      #fancyMacro<Arg1, Arg2>(hello: "me")
+      """
+    )
   }
 
   func testInterpolatedStringLiterals() {

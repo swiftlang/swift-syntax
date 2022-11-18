@@ -49,7 +49,8 @@ extension MacroExpansionDeclSyntax {
     MacroExpansionExprSyntax(
       unexpectedBeforePoundToken, poundToken: poundToken,
       unexpectedBetweenPoundTokenAndMacro, macro: macro,
-      unexpectedBetweenMacroAndLeftParen, leftParen: leftParen,
+      genericArguments: genericArguments,
+      unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen,
       unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList,
       unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen,
       unexpectedBetweenRightParenAndTrailingClosure,

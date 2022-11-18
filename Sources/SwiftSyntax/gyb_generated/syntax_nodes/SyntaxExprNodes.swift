@@ -10578,7 +10578,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     poundToken: TokenSyntax,
     _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
     macro: TokenSyntax,
-    _ unexpectedBetweenMacroAndLeftParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil,
+    genericArguments: GenericArgumentClauseSyntax?,
+    _ unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax?,
     _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
     argumentList: TupleExprElementListSyntax,
@@ -10595,7 +10597,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       poundToken.raw,
       unexpectedBetweenPoundTokenAndMacro?.raw,
       macro.raw,
-      unexpectedBetweenMacroAndLeftParen?.raw,
+      unexpectedBetweenMacroAndGenericArguments?.raw,
+      genericArguments?.raw,
+      unexpectedBetweenGenericArgumentsAndLeftParen?.raw,
       leftParen?.raw,
       unexpectedBetweenLeftParenAndArgumentList?.raw,
       argumentList.raw,
@@ -10698,30 +10702,72 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return MacroExpansionExprSyntax(newData)
   }
 
-  public var unexpectedBetweenMacroAndLeftParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenMacroAndLeftParen(value)
+      self = withUnexpectedBetweenMacroAndGenericArguments(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenMacroAndLeftParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenMacroAndLeftParen` to replace the node's
-  ///                   current `unexpectedBetweenMacroAndLeftParen`, if present.
-  public func withUnexpectedBetweenMacroAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenMacroAndGenericArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenMacroAndGenericArguments` to replace the node's
+  ///                   current `unexpectedBetweenMacroAndGenericArguments`, if present.
+  public func withUnexpectedBetweenMacroAndGenericArguments(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 4, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
-  public var leftParen: TokenSyntax? {
+  public var genericArguments: GenericArgumentClauseSyntax? {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericArgumentClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericArguments(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `genericArguments` replaced.
+  /// - param newChild: The new `genericArguments` to replace the node's
+  ///                   current `genericArguments`, if present.
+  public func withGenericArguments(_ newChild: GenericArgumentClauseSyntax?) -> MacroExpansionExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return MacroExpansionExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenGenericArgumentsAndLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenGenericArgumentsAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenGenericArgumentsAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenGenericArgumentsAndLeftParen`, if present.
+  public func withUnexpectedBetweenGenericArgumentsAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return MacroExpansionExprSyntax(newData)
+  }
+
+  public var leftParen: TokenSyntax? {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -10736,13 +10782,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(_ newChild: TokenSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 6, parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -10757,13 +10803,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndArgumentList(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var argumentList: TupleExprElementListSyntax {
     get {
-      let childData = data.child(at: 7, parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       return TupleExprElementListSyntax(childData!)
     }
     set(value) {
@@ -10780,13 +10826,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[7] {
+    if let col = raw.layoutView!.children[9] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
+    let newData = data.replacingChild(at: 9, with: collection, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
@@ -10796,13 +10842,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withArgumentList(_ newChild: TupleExprElementListSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: arena)
-    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 8, parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -10817,13 +10863,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenArgumentListAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var rightParen: TokenSyntax? {
     get {
-      let childData = data.child(at: 9, parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -10838,13 +10884,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withRightParen(_ newChild: TokenSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 9, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 10, parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -10859,13 +10905,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenRightParenAndTrailingClosure(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 10, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var trailingClosure: ClosureExprSyntax? {
     get {
-      let childData = data.child(at: 11, parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return ClosureExprSyntax(childData!)
     }
@@ -10880,13 +10926,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withTrailingClosure(_ newChild: ClosureExprSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 12, parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -10901,13 +10947,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenTrailingClosureAndAdditionalTrailingClosures(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
     get {
-      let childData = data.child(at: 13, parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       if childData == nil { return nil }
       return MultipleTrailingClosureElementListSyntax(childData!)
     }
@@ -10925,13 +10971,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[13] {
+    if let col = raw.layoutView!.children[15] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 13, with: collection, arena: arena)
+    let newData = data.replacingChild(at: 15, with: collection, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
@@ -10941,13 +10987,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withAdditionalTrailingClosures(_ newChild: MultipleTrailingClosureElementListSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 13, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
   public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 14, parent: Syntax(self))
+      let childData = data.child(at: 16, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -10962,7 +11008,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterAdditionalTrailingClosures(_ newChild: UnexpectedNodesSyntax?) -> MacroExpansionExprSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 14, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return MacroExpansionExprSyntax(newData)
   }
 
@@ -10972,7 +11018,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       \Self.poundToken,
       \Self.unexpectedBetweenPoundTokenAndMacro,
       \Self.macro,
-      \Self.unexpectedBetweenMacroAndLeftParen,
+      \Self.unexpectedBetweenMacroAndGenericArguments,
+      \Self.genericArguments,
+      \Self.unexpectedBetweenGenericArgumentsAndLeftParen,
       \Self.leftParen,
       \Self.unexpectedBetweenLeftParenAndArgumentList,
       \Self.argumentList,
@@ -11018,6 +11066,10 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return nil
     case 14:
       return nil
+    case 15:
+      return nil
+    case 16:
+      return nil
     default:
       fatalError("Invalid index")
     }
@@ -11031,7 +11083,9 @@ extension MacroExpansionExprSyntax: CustomReflectable {
       "poundToken": Syntax(poundToken).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenPoundTokenAndMacro": unexpectedBetweenPoundTokenAndMacro.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "macro": Syntax(macro).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenMacroAndLeftParen": unexpectedBetweenMacroAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenMacroAndGenericArguments": unexpectedBetweenMacroAndGenericArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericArguments": genericArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenGenericArgumentsAndLeftParen": unexpectedBetweenGenericArgumentsAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenLeftParenAndArgumentList": unexpectedBetweenLeftParenAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self),

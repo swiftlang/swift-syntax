@@ -1322,6 +1322,25 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse("func foo(body: (isolated String) -> Int) {}")
   }
+
+  func testMacroDecl() {
+    AssertParse("""
+      macro m1: Int = A.M1
+      macro m2(_: Int) = A.M2
+      macro m3(a b: Int) -> Int = A.M3
+      macro m4<T>: T = A.M4 where T.Assoc: P
+      macro m4<T: P>(_: T) = A.M4
+      """)
+
+    AssertParse("""
+      macro m1 1️⃣= A2️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '.' and macro type name in external macro name"),
+      ]
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

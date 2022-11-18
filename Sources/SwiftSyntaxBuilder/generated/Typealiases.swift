@@ -213,6 +213,8 @@ public typealias ExpressionStmt = ExpressionStmtSyntax
 
 public typealias ExtensionDecl = ExtensionDeclSyntax
 
+public typealias ExternalMacroName = ExternalMacroNameSyntax
+
 public typealias FallthroughStmt = FallthroughStmtSyntax
 
 public typealias FloatLiteralExpr = FloatLiteralExprSyntax
@@ -312,6 +314,8 @@ public typealias LabeledSpecializeEntry = LabeledSpecializeEntrySyntax
 public typealias LabeledStmt = LabeledStmtSyntax
 
 public typealias LayoutRequirement = LayoutRequirementSyntax
+
+public typealias MacroDecl = MacroDeclSyntax
 
 public typealias MacroExpansionDecl = MacroExpansionDeclSyntax
 

@@ -107,6 +107,101 @@ final class StringInterpolationTests: XCTestCase {
       """
   }
 
+  func testInterpolationLiteralString() {
+    let a: SourceFileSyntax = "print(\(literal: "Hello, world!"))"
+    AssertStringsEqualWithDiff(a.description, #"print("Hello, world!")"#)
+
+    let b: SourceFileSyntax = "print(\(literal: "\"Hello\", world!"))"
+    AssertStringsEqualWithDiff(b.description, ##"print(#""Hello", world!"#)"##)
+
+    let c: SourceFileSyntax = "print(\(literal: "Hello\\#\\world!"))"
+    AssertStringsEqualWithDiff(c.description, ###"print(##"Hello\#\world!"##)"###)
+
+    let d: SourceFileSyntax = "print(\(literal: "Hello, world!\n"))"
+    AssertStringsEqualWithDiff(d.description, #"print("Hello, world!\n")"#)
+
+    let e: SourceFileSyntax = "print(\(literal: "\"Hello\", world!\n"))"
+    AssertStringsEqualWithDiff(e.description, ##"print(#""Hello", world!\#n"#)"##)
+  }
+
+  func testInterpolationLiteralInt() {
+    func test<T: ExpressibleByIntegerLiteral & ExpressibleByLiteralSyntax>(with ty: T.Type, unsigned: Bool = false) {
+      let a: SourceFileSyntax = "print(\(literal: 42 as T))"
+      AssertStringsEqualWithDiff(a.description, #"print(42)"#, additionalInfo: String(describing: ty))
+
+      let b: SourceFileSyntax = "print(\(literal: 0 as T))"
+      AssertStringsEqualWithDiff(b.description, #"print(0)"#, additionalInfo: String(describing: ty))
+
+      if !unsigned {
+        let c: SourceFileSyntax = "print(\(literal: -42 as T))"
+        AssertStringsEqualWithDiff(c.description, ##"print(-42)"##, additionalInfo: String(describing: ty))
+      }
+    }
+
+    test(with: Int.self)
+    test(with: Int8.self)
+    test(with: Int16.self)
+    test(with: Int32.self)
+    test(with: Int64.self)
+    test(with: UInt.self, unsigned: true)
+    test(with: UInt8.self, unsigned: true)
+    test(with: UInt16.self, unsigned: true)
+    test(with: UInt32.self, unsigned: true)
+    test(with: UInt64.self, unsigned: true)
+  }
+
+  func testInterpolationLiteralFloat() {
+    func test<T: FloatingPoint & ExpressibleByFloatLiteral & ExpressibleByLiteralSyntax>(with ty: T.Type) {
+      let a: SourceFileSyntax = "print(\(literal: 3.14 as T))"
+      AssertStringsEqualWithDiff(a.description, #"print(3.14)"#, additionalInfo: String(describing: ty))
+
+      let b: SourceFileSyntax = "print(\(literal: 0 as T))"
+      AssertStringsEqualWithDiff(b.description, #"print(0.0)"#, additionalInfo: String(describing: ty))
+
+      let c: SourceFileSyntax = "print(\(literal: -42 as T))"
+      AssertStringsEqualWithDiff(c.description, ##"print(-42.0)"##, additionalInfo: String(describing: ty))
+
+      let d: SourceFileSyntax = "print(\(literal: T.infinity))"
+      AssertStringsEqualWithDiff(d.description, ##"print(.infinity)"##, additionalInfo: String(describing: ty))
+
+      let e: SourceFileSyntax = "print(\(literal: -T.infinity))"
+      AssertStringsEqualWithDiff(e.description, ##"print(-.infinity)"##, additionalInfo: String(describing: ty))
+
+      let f: SourceFileSyntax = "print(\(literal: T.nan))"
+      AssertStringsEqualWithDiff(f.description, ##"print(.nan)"##, additionalInfo: String(describing: ty))
+
+      let g: SourceFileSyntax = "print(\(literal: T.signalingNaN))"
+      AssertStringsEqualWithDiff(g.description, ##"print(.signalingNaN)"##, additionalInfo: String(describing: ty))
+
+      let h: SourceFileSyntax = "print(\(literal: -0.0 as T))"
+      AssertStringsEqualWithDiff(h.description, ##"print(-0.0)"##, additionalInfo: String(describing: ty))
+    }
+
+    test(with: Float.self)
+    test(with: Double.self)
+  }
+
+  func testInterpolationLiteralBool() {
+    let a: SourceFileSyntax = "print(\(literal: true))"
+    AssertStringsEqualWithDiff(a.description, #"print(true)"#)
+
+    let b: SourceFileSyntax = "print(\(literal: false))"
+    AssertStringsEqualWithDiff(b.description, #"print(false)"#)
+  }
+
+  func testInterpolationLiteralCollections() {
+    let a: SourceFileSyntax = "print(\(literal: [3, 2, 1]))"
+    AssertStringsEqualWithDiff(a.description, #"print([3, 2, 1])"#)
+
+    let b: SourceFileSyntax = "print(\(literal: [3, 2, 1] as Set))"
+    AssertStringsEqualWithDiff(b.description, #"print([1, 2, 3])"#)
+
+    let c: SourceFileSyntax = "print(\(literal: [3: "three", 2: "two", 1: "one"] as KeyValuePairs))"
+    AssertStringsEqualWithDiff(c.description, #"print([3: "three", 2: "two", 1: "one"])"#)
+
+    let d: SourceFileSyntax = "print(\(literal: [3: "three", 2: "two", 1: "one"]))"
+    AssertStringsEqualWithDiff(d.description, #"print([1: "one", 2: "two", 3: "three"])"#)
+  }
 
   func testRewriter() {
     let sourceFile = Parser.parse(source: """
@@ -136,6 +231,42 @@ final class StringInterpolationTests: XCTestCase {
         SwitchCase("""
         case \(raw: i):
           return \(raw: i + 1)
+        """)
+      }
+      SwitchCase("""
+      default:
+        return -1
+      """)
+    }
+    let plusOne = FunctionDeclSyntax("""
+    func plusOne(base: Int) -> Int {
+      switch base {
+      \(cases, format: TwoSpacesFormat())
+      }
+    }
+    """)
+
+    AssertStringsEqualWithDiff(plusOne.description.trimmingTrailingWhitespace(), """
+    func plusOne(base: Int) -> Int {
+      switch base {
+
+      case 0:
+        return 1
+      case 1:
+        return 2
+      default:
+        return -1
+      }
+    }
+    """)
+  }
+
+  func testParserBuilderInStringInterpolationLiteral() {
+    let cases = SwitchCaseList {
+      for i in 0..<2 {
+        SwitchCase("""
+        case \(literal: i):
+          return \(literal: i + 1)
         """)
       }
       SwitchCase("""

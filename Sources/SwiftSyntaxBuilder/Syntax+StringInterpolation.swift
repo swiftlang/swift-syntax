@@ -109,6 +109,16 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   ) {
     self.appendInterpolation(buildable.formatted(using: format))
   }
+
+  public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
+    literal value: Literal,
+    format: BasicFormat = BasicFormat()
+  ) {
+    self.appendInterpolation(
+      ExprSyntax(fromProtocol: value.makeLiteralSyntax()),
+      format: format
+    )
+  }
 }
 
 /// Syntax nodes that can be formed by a string interpolation involve source
@@ -133,6 +143,26 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
       return "\n" + DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
     }
   }
+}
+
+/// A Swift type whose value can be represented directly in source code by a Swift literal.
+///
+/// Conforming types do not *contain* Swift source code; rather, they can be *expressed* in Swift source code, and this protocol can be used to get whatever source code would do that. For example, `String` is `ExpressibleByLiteralSyntax` but `StringLiteralExprSyntax` is not.
+///
+/// Conforming types can be interpolated into a Swift source code literal with the syntax `\(literal: <value>)`:
+///
+///      let greeting = "Hello, world!"
+///      let expr1 = ExprSyntax("print(\(literal: greeting))")
+///      // `expr1` is a syntax tree for `print("Hello, world!")`
+///
+/// Note that quote marks are automatically added around the contents; you don't have to write them yourself. The conformance will automatically ensure the contents are correctly escaped, possibly by using raw literals or other language features:
+///
+///      let msPath = "c:\\windows\\system32"
+///      let expr2 = ExprSyntax("open(\(literal: msPath))")
+///      // `expr2` might be a syntax tree for `open(#"c:\windows\system32"#)`
+///      // or for `open("c:\\windows\\system32")`.
+public protocol ExpressibleByLiteralSyntax {
+  func makeLiteralSyntax() -> ExprSyntaxProtocol
 }
 
 extension SyntaxExpressibleByStringInterpolation {
@@ -166,3 +196,218 @@ extension SyntaxExpressibleByStringInterpolation {
     try self.init(stringInterpolationOrThrow: interpolation)
   }
 }
+
+// MARK: ExpressibleByLiteralSyntax conformances
+
+extension Collection {
+  fileprivate func allIndices(where predicate: @escaping (Element) -> Bool) -> UnfoldSequence<Index, Index> {
+    sequence(state: startIndex) { i in
+      guard let newI = self[i...].firstIndex(where: predicate) else {
+        return nil
+      }
+      i = index(after: newI)
+      return newI
+    }
+  }
+}
+
+extension Substring: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // TODO: Choose whether to use a single-line or multi-line literal.
+    let quote = TokenSyntax.stringQuote
+
+    // Select a raw delimiter long enough that we won't need to escape quotes or backslashes.
+    // Locate backslashes and quotes...
+    let problemIndices = allIndices(where: #"\""#.contains(_:))
+    // Count adjacent hashes and compute the largest number (-1 = no problem chars)...
+    let maxPoundCount = problemIndices.reduce(-1) { prevCount, i in
+      // Technically we don't need to check leading pounds for a backslash, but this is easier.
+      Swift.max(
+        prevCount,
+        self[index(after: i)...].prefix(while: { $0 == "#" }).count,
+        self[..<i].reversed().prefix(while: { $0 == "#" }).count
+      )
+    }
+    // And create the delimiter.
+    let rawDelimiter = String(repeating: "#", count: maxPoundCount + 1)
+
+    // Assemble the string with newlines escaped.
+    var segment = ""
+    var previousStart = startIndex
+
+    // Scan for next newline; if found, append text up to newline, then an escape sequence for the newline, then continue at the next character.
+    for i in allIndices(where: \.isNewline) {
+      segment += self[previousStart..<i]
+
+      for scalar in self[i].unicodeScalars {
+        segment += "\\" + rawDelimiter
+        switch scalar {
+        case "\r":
+          segment += "r"
+        case "\n":
+          segment += "n"
+        default:
+          segment += "u{\(String(scalar.value, radix: 16))}"
+        }
+      }
+
+      previousStart = index(after: i)
+    }
+
+    // Append remainder of string.
+    segment += self[previousStart...]
+
+    // Now make these into syntax nodes.
+    let optRawDelimiter = rawDelimiter.isEmpty ? nil : rawDelimiter
+    return StringLiteralExpr(
+      openDelimiter: optRawDelimiter,
+      openQuote: quote,
+      segments: StringLiteralSegments {
+        StringSegment(content: segment)
+      },
+      closeQuote: quote,
+      closeDelimiter: optRawDelimiter
+    )
+  }
+}
+
+extension String: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    self[...].makeLiteralSyntax()
+  }
+}
+
+extension ExpressibleByLiteralSyntax where Self: BinaryInteger {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // TODO: Radix selection? Thousands separators?
+    let digits = String(self, radix: 10)
+    return IntegerLiteralExpr(digits: digits)
+  }
+}
+extension Int: ExpressibleByLiteralSyntax {}
+extension Int8: ExpressibleByLiteralSyntax {}
+extension Int16: ExpressibleByLiteralSyntax {}
+extension Int32: ExpressibleByLiteralSyntax {}
+extension Int64: ExpressibleByLiteralSyntax {}
+extension UInt: ExpressibleByLiteralSyntax {}
+extension UInt8: ExpressibleByLiteralSyntax {}
+extension UInt16: ExpressibleByLiteralSyntax {}
+extension UInt32: ExpressibleByLiteralSyntax {}
+extension UInt64: ExpressibleByLiteralSyntax {}
+
+extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessStringConvertible {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    switch floatingPointClass {
+    case .positiveInfinity:
+      return MemberAccessExpr(name: "infinity")
+
+    case .quietNaN:
+      return MemberAccessExpr(name: "nan")
+
+    case .signalingNaN:
+      return MemberAccessExpr(name: "signalingNaN")
+
+    case .negativeInfinity, .negativeZero:
+      return PrefixOperatorExpr(
+        operatorToken: "-",
+        postfixExpression: (-self).makeLiteralSyntax()
+      )
+
+    case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
+      // TODO: Thousands separators?
+      let digits = String(self)
+      return FloatLiteralExpr(floatingDigits: digits)
+    }
+
+  }
+}
+extension Float: ExpressibleByLiteralSyntax {}
+extension Double: ExpressibleByLiteralSyntax {}
+
+#if !((os(macOS) || targetEnvironment(macCatalyst)) && arch(x86_64))
+@available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
+extension Float16: ExpressibleByLiteralSyntax {}
+#endif
+
+extension Bool: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    BooleanLiteralExpr(self)
+  }
+}
+
+extension ArraySlice: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    ArrayExpr(
+      leftSquare: .leftSquareBracket,
+      elements: ArrayElementList {
+        for elem in self {
+          ArrayElement(expression: elem.makeLiteralSyntax())
+        }
+      },
+      rightSquare: .rightSquareBracket
+    )
+  }
+}
+
+extension Array: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    self[...].makeLiteralSyntax()
+  }
+}
+
+extension Set: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // Sets are unordered. Sort the elements by their source-code representation to emit them in a stable order.
+    let elemSyntaxes = map {
+      $0.makeLiteralSyntax()
+    }.sorted {
+      $0.syntaxTextBytes.lexicographicallyPrecedes($1.syntaxTextBytes)
+    }
+
+    return ArrayExpr(
+      leftSquare: .leftSquareBracket,
+      elements: ArrayElementList {
+        for elemSyntax in elemSyntaxes {
+          ArrayElement(expression: elemSyntax)
+        }
+      },
+      rightSquare: .rightSquareBracket
+    )
+  }
+}
+
+extension KeyValuePairs: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    DictionaryExpr(leftSquare: .leftSquareBracket, rightSquare: .rightSquareBracket) {
+      for elem in self {
+        DictionaryElement(
+          keyExpression: elem.key.makeLiteralSyntax(),
+          colon: .colon,
+          valueExpression: elem.value.makeLiteralSyntax()
+        )
+      }
+    }
+  }
+}
+
+extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // Dictionaries are unordered. Sort the elements by their keys' source-code representation to emit them in a stable order.
+    let elemSyntaxes = map {
+      (key: $0.key.makeLiteralSyntax(), value: $0.value.makeLiteralSyntax())
+    }.sorted {
+      $0.key.syntaxTextBytes.lexicographicallyPrecedes($1.key.syntaxTextBytes)
+    }
+
+    return DictionaryExpr(leftSquare: .leftSquareBracket, rightSquare: .rightSquareBracket) {
+      for elemSyntax in elemSyntaxes {
+        DictionaryElement(
+          keyExpression: elemSyntax.key,
+          colon: .colon,
+          valueExpression: elemSyntax.value
+        )
+      }
+    }
+  }
+}
+

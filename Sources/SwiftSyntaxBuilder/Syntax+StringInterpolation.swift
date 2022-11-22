@@ -82,7 +82,9 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   }
 
   // Append a value of any CustomStringConvertible type as source text.
-  @available(*, deprecated, renamed: "appendInterpolation(raw:)", message: "use '\\(raw: <value>)' to interpolate a plain string directly into Swift code")
+  // Deprecated because this can cause code injection bugs (and we want the
+  // error message to tell users what to do instead).
+  @available(*, deprecated, renamed: "appendInterpolation(raw:)", message: "use '\\(raw: <value>)' to interpolate a plain string directly into Swift code, or use '\\(literal: <value>)' to add it in a literal")
   public mutating func appendInterpolation<T: CustomStringConvertible>(
     _ value: T
   ) {

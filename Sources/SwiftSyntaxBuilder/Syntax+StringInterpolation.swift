@@ -199,81 +199,16 @@ extension SyntaxExpressibleByStringInterpolation {
 
 // MARK: ExpressibleByLiteralSyntax conformances
 
-extension Collection {
-  fileprivate func allIndices(where predicate: @escaping (Element) -> Bool) -> UnfoldSequence<Index, Index> {
-    sequence(state: startIndex) { i in
-      guard let newI = self[i...].firstIndex(where: predicate) else {
-        return nil
-      }
-      i = index(after: newI)
-      return newI
-    }
-  }
-}
-
 extension Substring: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> ExprSyntaxProtocol {
-    // TODO: Choose whether to use a single-line or multi-line literal.
-    let quote = TokenSyntax.stringQuote
-
-    // Select a raw delimiter long enough that we won't need to escape quotes or backslashes.
-    // Locate backslashes and quotes...
-    let problemIndices = allIndices(where: #"\""#.contains(_:))
-    // Count adjacent hashes and compute the largest number (-1 = no problem chars)...
-    let maxPoundCount = problemIndices.reduce(-1) { prevCount, i in
-      // Technically we don't need to check leading pounds for a backslash, but this is easier.
-      Swift.max(
-        prevCount,
-        self[index(after: i)...].prefix(while: { $0 == "#" }).count,
-        self[..<i].reversed().prefix(while: { $0 == "#" }).count
-      )
-    }
-    // And create the delimiter.
-    let rawDelimiter = String(repeating: "#", count: maxPoundCount + 1)
-
-    // Assemble the string with newlines escaped.
-    var segment = ""
-    var previousStart = startIndex
-
-    // Scan for next newline; if found, append text up to newline, then an escape sequence for the newline, then continue at the next character.
-    for i in allIndices(where: \.isNewline) {
-      segment += self[previousStart..<i]
-
-      for scalar in self[i].unicodeScalars {
-        segment += "\\" + rawDelimiter
-        switch scalar {
-        case "\r":
-          segment += "r"
-        case "\n":
-          segment += "n"
-        default:
-          segment += "u{\(String(scalar.value, radix: 16))}"
-        }
-      }
-
-      previousStart = index(after: i)
-    }
-
-    // Append remainder of string.
-    segment += self[previousStart...]
-
-    // Now make these into syntax nodes.
-    let optRawDelimiter = rawDelimiter.isEmpty ? nil : rawDelimiter
-    return StringLiteralExpr(
-      openDelimiter: optRawDelimiter,
-      openQuote: quote,
-      segments: StringLiteralSegments {
-        StringSegment(content: segment)
-      },
-      closeQuote: quote,
-      closeDelimiter: optRawDelimiter
-    )
+    String(self).makeLiteralSyntax()
   }
 }
 
 extension String: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> ExprSyntaxProtocol {
-    self[...].makeLiteralSyntax()
+    // TODO: Use a multi-line literal if there are more than N inner newlines.
+    StringLiteralExpr(content: self)
   }
 }
 

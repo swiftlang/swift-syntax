@@ -90,6 +90,42 @@ extension DictionaryExpr {
   }
 }
 
+// MARK: - Expr
+
+extension Expr {
+  /// Returns a syntax tree for an expression that represents the value of the
+  /// provided instance. For example, passing an `Array<String>` will result in
+  /// an array literal containing string literals:
+  ///
+  ///     let arrayExpr = Expr(literal: ["a", "b", "c"])
+  ///     // `arrayExpr` is a syntax tree like `["a", "b", "c"]`
+  ///
+  /// This initializer is compatible with types that conform to
+  /// ``ExpressibleByLiteralSyntax``. These include:
+  ///
+  /// * `String` and `Substring`
+  /// * `Int` and other integer types
+  /// * `Double` and other floating-point types
+  /// * `Bool`
+  /// * `Array` and `Set` of conforming elements
+  /// * `Dictionary` and `KeyValuePairs` of conforming keys and values
+  /// * `Optional` of conforming wrapped value
+  ///
+  /// Conformances will generally handle edge cases sensibly: `String` will
+  /// use raw literals and escapes as needed, `Optional` will wrap a nested
+  /// `nil` in `.some`, `Double` wil represent special values like infinities
+  /// as code sequences like `.infinity`, etc. `Set` and `Dictionary` sort
+  /// thier elements to improve stability.
+  ///
+  /// Because of that intelligent behavior, this initializer is not guaranteed
+  /// to produce a literal as the outermost syntax node, or even to have a
+  /// literal anywhere in its syntax tree. Use a convenience initializer on a
+  /// specific type if you need that exact type in the syntax tree.
+  public init<Literal: ExpressibleByLiteralSyntax>(literal: Literal) {
+    self.init(fromProtocol: literal.makeLiteralSyntax())
+  }
+}
+
 // MARK: - FloatLiteralExprSyntax
 
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {

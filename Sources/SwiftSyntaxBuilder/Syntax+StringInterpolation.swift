@@ -110,26 +110,26 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     self.appendInterpolation(buildable.formatted(using: format))
   }
 
+  /// Interpolates a literal or similar expression syntax equivalent to `value`.
+  ///
+  /// - SeeAlso: ``Expr.init(literal:)``
   public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
     literal value: Literal,
     format: BasicFormat = BasicFormat()
   ) {
-    self.appendInterpolation(
-      ExprSyntax(fromProtocol: value.makeLiteralSyntax()),
-      format: format
-    )
+    self.appendInterpolation(Expr(literal: value), format: format)
   }
 
   // This overload is technically redundant with the previous one, except that
   // it silences a warning about interpolating Optionals.
+  /// Interpolates a literal or similar expression syntax equivalent to `value`.
+  ///
+  /// - SeeAlso: ``Expr.init(literal:)``
   public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
     literal value: Literal?,
     format: BasicFormat = BasicFormat()
   ) {
-    self.appendInterpolation(
-      ExprSyntax(fromProtocol: value.makeLiteralSyntax()),
-      format: format
-    )
+    self.appendInterpolation(Expr(literal: value), format: format)
   }
 }
 
@@ -157,23 +157,55 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
   }
 }
 
-/// A Swift type whose value can be represented directly in source code by a Swift literal.
+/// A Swift type whose value can be represented directly in source code by a
+/// Swift literal.
 ///
-/// Conforming types do not *contain* Swift source code; rather, they can be *expressed* in Swift source code, and this protocol can be used to get whatever source code would do that. For example, `String` is `ExpressibleByLiteralSyntax` but `StringLiteralExprSyntax` is not.
+/// Conforming types do not *contain* Swift source code; rather, they can be
+/// *expressed* in Swift source code, and this protocol can be used to get
+/// whatever source code would do that. For example, `String` is
+/// `ExpressibleByLiteralSyntax` but `StringLiteralExprSyntax` is not.
 ///
-/// Conforming types can be interpolated into a Swift source code literal with the syntax `\(literal: <value>)`:
+/// This protocol is usually not used directly. Instead, conforming types can
+/// be turned into syntax trees using ``Expr.init(literal:)``:
 ///
-///      let greeting = "Hello, world!"
-///      let expr1 = ExprSyntax("print(\(literal: greeting))")
-///      // `expr1` is a syntax tree for `print("Hello, world!")`
+///     let expr2 = Expr(literal: [0+1, 1+1, 2+1])
+///     // `expr2` is a syntax tree for `[1, 2, 3]`.
 ///
-/// Note that quote marks are automatically added around the contents; you don't have to write them yourself. The conformance will automatically ensure the contents are correctly escaped, possibly by using raw literals or other language features:
+/// Or interpolated into a Swift source code literal with the syntax
+/// `\(literal: <value>)`:
 ///
-///      let msPath = "c:\\windows\\system32"
-///      let expr2 = ExprSyntax("open(\(literal: msPath))")
-///      // `expr2` might be a syntax tree for `open(#"c:\windows\system32"#)`
-///      // or for `open("c:\\windows\\system32")`.
+///     let greeting = "Hello, world!"
+///     let expr1 = ExprSyntax("print(\(literal: greeting))")
+///     // `expr1` is a syntax tree for `print("Hello, world!")`
+///
+/// Note that quote marks are automatically added around the contents of string
+/// literals; you don't have to write them yourself. The conformance for
+/// `String` will automatically ensure the contents are correctly escaped,
+/// possibly by using raw literals or other language features:
+///
+///     let msPath = "c:\\windows\\system32"
+///     let expr3 = ExprSyntax("open(\(literal: msPath))")
+///     // `expr3` might be a syntax tree for `open(#"c:\windows\system32"#)`
+///     // or for `open("c:\\windows\\system32")`.
+///
+/// Other conformances have similar intelligent behaviors: floating-point types
+/// produce correct syntax trees for infinities and NaNs, nested optionals
+/// produce `.some(nil)` where appropriate, etc.
 public protocol ExpressibleByLiteralSyntax {
+  /// Returns a syntax tree that represents the value of this instance.
+  ///
+  /// This method is usually not called directly. Instead, conforming types can
+  /// be turned into syntax trees using ``Expr.init(literal:)``:
+  ///
+  ///     let expr2 = Expr(literal: [0+1, 1+1, 2+1])
+  ///     // `expr2` is a syntax tree for `[1, 2, 3]`.
+  ///
+  /// Or interpolated into a Swift source code literal with the syntax
+  /// `\(literal: <value>)`:
+  ///
+  ///     let greeting = "Hello, world!"
+  ///     let expr1 = ExprSyntax("print(\(literal: greeting))")
+  ///     // `expr1` is a syntax tree for `print("Hello, world!")`
   func makeLiteralSyntax() -> ExprSyntaxProtocol
 }
 

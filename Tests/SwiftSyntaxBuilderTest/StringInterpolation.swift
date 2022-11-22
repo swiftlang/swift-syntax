@@ -203,6 +203,26 @@ final class StringInterpolationTests: XCTestCase {
     AssertStringsEqualWithDiff(d.description, #"print([1: "one", 2: "two", 3: "three"])"#)
   }
 
+  func testInterpolationLiteralOptional() {
+    let some: Optional<Int> = 42
+    let none: Optional<Int> = nil
+
+    let a: ExprSyntax = "print(\(literal: some))"
+    AssertStringsEqualWithDiff(a.description, #"print(42)"#)
+
+    let b: ExprSyntax = "print(\(literal: Optional.some(some)))"
+    AssertStringsEqualWithDiff(b.description, #"print(42)"#)
+
+    let c: ExprSyntax = "print(\(literal: none))"
+    AssertStringsEqualWithDiff(c.description, #"print(nil)"#)
+
+    let d: ExprSyntax = "print(\(literal: Optional.some(none)))"
+    AssertStringsEqualWithDiff(d.description, #"print(.some(nil))"#)
+
+    let e: ExprSyntax = "print(\(literal: Int??.none))"
+    AssertStringsEqualWithDiff(e.description, #"print(nil)"#)
+  }
+
   func testRewriter() {
     let sourceFile = Parser.parse(source: """
       class Foo {

@@ -119,6 +119,18 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
       format: format
     )
   }
+
+  // This overload is technically redundant with the previous one, except that
+  // it silences a warning about interpolating Optionals.
+  public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
+    literal value: Literal?,
+    format: BasicFormat = BasicFormat()
+  ) {
+    self.appendInterpolation(
+      ExprSyntax(fromProtocol: value.makeLiteralSyntax()),
+      format: format
+    )
+  }
 }
 
 /// Syntax nodes that can be formed by a string interpolation involve source
@@ -342,6 +354,50 @@ extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteral
           valueExpression: elemSyntax.value
         )
       }
+    }
+  }
+}
+
+extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    func containsNil(_ expr: ExprSyntaxProtocol) -> Bool {
+      if expr.is(NilLiteralExpr.self) {
+        return true
+      }
+
+      if let call = expr.as(FunctionCallExpr.self),
+         let memberAccess = call.calledExpression.as(MemberAccessExpr.self),
+         memberAccess.name.text == "some",
+         let argument = call.argumentList.first?.expression {
+        return containsNil(argument)
+      }
+
+      return false
+    }
+
+    switch self {
+    case nil:
+      return NilLiteralExpr()
+
+    case let wrapped?:
+      let wrappedExpr = wrapped.makeLiteralSyntax()
+
+      // If this is a nested optional type, and the wrapped value is `nil` or
+      // e.g. `.some(nil)`, add a layer of `.some(_:)` around it to preserve the
+      // depth of the data structure.
+      if containsNil(wrappedExpr) {
+        // TODO: Can't we have something nicer than this? `MemberAccessExpr(name: "some").makeCall(wrapped)`?
+        return FunctionCallExpr(
+          calledExpression: MemberAccessExpr(name: "some"),
+          leftParen: .leftParen,
+          argumentList: TupleExprElementList {
+            TupleExprElement(expression: wrappedExpr)
+          },
+          rightParen: .rightParen
+        )
+      }
+
+      return wrappedExpr
     }
   }
 }

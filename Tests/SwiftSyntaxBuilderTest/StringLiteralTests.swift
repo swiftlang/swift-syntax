@@ -81,6 +81,21 @@ final class StringLiteralTests: XCTestCase {
     ##"""
     #"\"#
     """##)
+
+    AssertBuildResult(StringLiteralExpr(content: ##"\#n"##),
+    ##"""
+    ##"\#n"##
+    """##)
+
+    AssertBuildResult(StringLiteralExpr(content: ##"\#\"##),
+    ##"""
+    ##"\#\"##
+    """##)
+
+    AssertBuildResult(StringLiteralExpr(content: ##"\#"##),
+    ##"""
+    ##"\#"##
+    """##)
   }
 
   func testNewlines() {

@@ -241,34 +241,28 @@ extension StringLiteralExpr {
   }
 
   private static func requiresEscaping(_ content: String) -> (Bool, poundCount: Int) {
-    var state: PoundState = .none
+    var countingPounds = false
     var consecutivePounds = 0
     var maxPounds = 0
     var requiresEscaping = false
 
     for c in content {
-      switch c {
-      case "#":
+      switch (countingPounds, c) {
+      // Normal mode: scanning for characters that can be followed by pounds.
+      case (false, "\""), (false, "\\"):
+        countingPounds = true
+        requiresEscaping = true
+      case (false, _):
+        continue
+
+      // Special mode: counting a sequence of pounds until we reach its end.
+      case (true, "#"):
         consecutivePounds += 1
-      case "\"":
-        state = .afterQuote
-        consecutivePounds = 0
-      case "\\":
-        state = .afterBackslash
-        consecutivePounds = 0
-      case "(" where state == .afterBackslash:
         maxPounds = max(maxPounds, consecutivePounds)
-        fallthrough
-      default:
+      case (true, _):
+        countingPounds = false
         consecutivePounds = 0
-        state = .none
       }
-
-      if state == .afterQuote {
-        maxPounds = max(maxPounds, consecutivePounds)
-      }
-
-      requiresEscaping = requiresEscaping || state != .none
     }
 
     return (requiresEscaping, poundCount: maxPounds)

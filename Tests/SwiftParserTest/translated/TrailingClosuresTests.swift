@@ -183,12 +183,9 @@ final class TrailingClosuresTests: XCTestCase {
         colon: .colonToken(trailingTrivia: .space),
         closure: ClosureExprSyntax(
           leftBrace: .leftBraceToken(presence: .missing),
-          signature: nil,
           statements: CodeBlockItemListSyntax([
             CodeBlockItemSyntax(
-              item: .init(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>"))),
-              semicolon: nil,
-              errorTokens: nil
+              item: .init(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>")))
             )
           ]),
           rightBrace: .rightBraceToken(presence: .missing)

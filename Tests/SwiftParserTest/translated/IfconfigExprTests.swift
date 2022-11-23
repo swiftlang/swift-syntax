@@ -455,25 +455,17 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("compiler"),
-          declNameArguments: nil
-        )),
+        calledExpression: IdentifierExprSyntax(identifier: .identifier("compiler")),
         leftParen: .leftParenToken(),
         argumentList: TupleExprElementListSyntax([
           TupleExprElementSyntax(
-            label: nil,
-            colon: nil,
-            expression: ExprSyntax(PrefixOperatorExprSyntax(
+            expression: PrefixOperatorExprSyntax(
               operatorToken: .prefixOperator("<"),
-              postfixExpression: ExprSyntax(FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("10.0")))
-            )),
-            trailingComma: nil
+              postfixExpression: FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("10.0"))
+            )
           )
         ]),
-        rightParen: .rightParenToken(trailingTrivia: .space),
-        trailingClosure: nil,
-        additionalTrailingClosures: nil
+        rightParen: .rightParenToken(trailingTrivia: .space)
       ))
     )
   }
@@ -516,21 +508,16 @@ final class IfconfigExprTests: XCTestCase {
       """,
       substructure: Syntax(IfConfigClauseSyntax(
         poundKeyword: .poundIfKeyword(),
-        condition: ExprSyntax(FunctionCallExprSyntax(
-          calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("hasFeature"), declNameArguments: nil)),
+        condition: FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("hasFeature")),
           leftParen: .leftParenToken(),
           argumentList: TupleExprElementListSyntax([
             TupleExprElementSyntax(
-              label: nil,
-              colon: nil,
-              expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("17"))),
-              trailingComma: nil
+              expression: IntegerLiteralExprSyntax(digits: .integerLiteral("17"))
             )
           ]),
-          rightParen: .rightParenToken(),
-          trailingClosure: nil,
-          additionalTrailingClosures: nil
-        )),
+          rightParen: .rightParenToken()
+        ),
         elements: .init(CodeBlockItemListSyntax([]))
       ))
     )

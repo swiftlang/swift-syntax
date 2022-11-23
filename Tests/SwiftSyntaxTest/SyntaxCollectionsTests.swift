@@ -17,8 +17,7 @@ import _SwiftSyntaxTestSupport
 fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
     let literal = TokenSyntax.integerLiteral("\(int)")
     return ArrayElementSyntax(
-        expression: ExprSyntax(IntegerLiteralExprSyntax(digits: literal)),
-        trailingComma: nil)
+        expression: IntegerLiteralExprSyntax(digits: literal))
 }
 
 public class SyntaxCollectionsTests: XCTestCase {

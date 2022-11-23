@@ -181,16 +181,11 @@ public class SyntaxComparisonTests: XCTestCase {
       input: ParameterClauseSyntax(
         leftParen: .leftParenToken(),
         parameterList: FunctionParameterListSyntax([]),
-        rightParen: .rightParenToken()),
-      asyncOrReasyncKeyword: nil, throwsOrRethrowsKeyword: nil, output: nil)
+        rightParen: .rightParenToken()))
     let fd = FunctionDeclSyntax(
-      attributes: nil,
-      modifiers: nil,
       funcKeyword: keyword,
       identifier: identifier,
-      genericParameterClause: nil,
       signature: emptySignature,
-      genericWhereClause: nil,
       body: funcBody
     )
     if indent > 0 {
@@ -212,7 +207,7 @@ public class SyntaxComparisonTests: XCTestCase {
     var items = [CodeBlockItemSyntax]()
     for i in 0..<statementCount {
       let literal = IntegerLiteralExprSyntax(digits: .integerLiteral(String(i)))
-      items.append(CodeBlockItemSyntax(item: .init(literal), semicolon: nil, errorTokens: nil))
+      items.append(CodeBlockItemSyntax(item: .init(literal)))
     }
     let block = CodeBlockItemListSyntax(items)
     return CodeBlockSyntax(

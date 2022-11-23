@@ -19,34 +19,32 @@ final class StatementTests: XCTestCase {
     AssertParse("""
                 if let baz {}
                 """,
-                substructure: Syntax(IfStmtSyntax(ifKeyword: .ifKeyword(),
-                                                  conditions: ConditionElementListSyntax([
-                                                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
-                                                      letOrVarKeyword: .letKeyword(),
-                                                      pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("baz"))),
-                                                      typeAnnotation: nil,
-                                                      initializer: nil)), trailingComma: nil)
-                                                  ]),
-                                                  body: .init(leftBrace: .leftBraceToken(),
-                                                              statements: .init([]),
-                                                              rightBrace: .rightBraceToken()),
-                                                  elseKeyword: nil, elseBody: nil)))
+                substructure: Syntax(IfStmtSyntax(
+                  ifKeyword: .ifKeyword(),
+                  conditions: ConditionElementListSyntax([
+                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
+                      letOrVarKeyword: .letKeyword(),
+                      pattern: IdentifierPatternSyntax(identifier: .identifier("baz"))
+                      )))
+                  ]),
+                  body: .init(leftBrace: .leftBraceToken(),
+                              statements: .init([]),
+                              rightBrace: .rightBraceToken()))))
 
     AssertParse("""
                 if let self = self {}
                 """,
-                substructure: Syntax(IfStmtSyntax(ifKeyword: .ifKeyword(),
-                                                  conditions: ConditionElementListSyntax([
-                                                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
-                                                      letOrVarKeyword: .letKeyword(),
-                                                      pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .selfKeyword())),
-                                                      typeAnnotation: nil,
-                                                      initializer: InitializerClauseSyntax(equal: .equalToken(), value: ExprSyntax(IdentifierExprSyntax(identifier: .selfKeyword(), declNameArguments: nil))))), trailingComma: nil)
-                                                  ]),
-                                                  body: .init(leftBrace: .leftBraceToken(),
-                                                              statements: .init([]),
-                                                              rightBrace: .rightBraceToken()),
-                                                  elseKeyword: nil, elseBody: nil)))
+                substructure: Syntax(IfStmtSyntax(
+                  ifKeyword: .ifKeyword(),
+                  conditions: ConditionElementListSyntax([
+                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
+                      letOrVarKeyword: .letKeyword(),
+                      pattern: IdentifierPatternSyntax(identifier: .selfKeyword()),
+                      initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .selfKeyword())))))
+                  ]),
+                  body: .init(leftBrace: .leftBraceToken(),
+                              statements: .init([]),
+                              rightBrace: .rightBraceToken()))))
 
     AssertParse("if let x { }")
 
@@ -119,8 +117,9 @@ final class StatementTests: XCTestCase {
     AssertParse(
       "{ 1️⃣return 0 }",
       { ExprSyntax.parse(from: &$0) },
-      substructure: Syntax(ReturnStmtSyntax(returnKeyword: .returnKeyword(),
-                                            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))))),
+      substructure: Syntax(ReturnStmtSyntax(
+        returnKeyword: .returnKeyword(),
+        expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0")))),
       substructureAfterMarker: "1️⃣"
     )
 
@@ -319,21 +318,16 @@ final class StatementTests: XCTestCase {
       graphQLMap["clientMutationId"] as? 1️⃣Swift.Optional<String?> ?? Swift.Optional<String?>.none
       """,
     substructure: Syntax(MemberTypeIdentifierSyntax(
-      baseType: TypeSyntax(SimpleTypeIdentifierSyntax(
-        name: .identifier("Swift"),
-        genericArgumentClause: nil)),
+      baseType: SimpleTypeIdentifierSyntax(name: .identifier("Swift")),
       period: .periodToken(),
       name: .identifier("Optional"),
       genericArgumentClause: GenericArgumentClauseSyntax(
         leftAngleBracket: .leftAngleToken(),
         arguments: GenericArgumentListSyntax([
           GenericArgumentSyntax(
-            argumentType: TypeSyntax(OptionalTypeSyntax(
-              wrappedType: TypeSyntax(SimpleTypeIdentifierSyntax(
-                name: .identifier("String"),
-                genericArgumentClause: nil)),
-              questionMark: .postfixQuestionMarkToken())),
-            trailingComma: nil)
+            argumentType: OptionalTypeSyntax(
+              wrappedType: SimpleTypeIdentifierSyntax(name: .identifier("String")),
+              questionMark: .postfixQuestionMarkToken()))
         ]),
         rightAngleBracket: .rightAngleToken()))),
     substructureAfterMarker: "1️⃣")
@@ -343,14 +337,11 @@ final class StatementTests: XCTestCase {
       if case 1️⃣Optional<Any>.none = object["anyCol"] { }
       """,
       substructure: Syntax(SpecializeExprSyntax(
-        expression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("Optional"), declNameArguments: nil)),
+        expression: IdentifierExprSyntax(identifier: .identifier("Optional")),
         genericArgumentClause: GenericArgumentClauseSyntax(
           leftAngleBracket: .leftAngleToken(), arguments: GenericArgumentListSyntax([
         GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .anyKeyword(), genericArgumentClause: nil)),
-          trailingComma: nil)
+          argumentType: SimpleTypeIdentifierSyntax(name: .anyKeyword()))
       ]), rightAngleBracket: .rightAngleToken()))),
       substructureAfterMarker: "1️⃣")
   }
@@ -361,7 +352,7 @@ final class StatementTests: XCTestCase {
       1️⃣yield
       print("huh")
       """,
-      substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("yield"), declNameArguments: nil)),
+      substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("yield"))),
     substructureAfterMarker: "1️⃣")
   }
 
@@ -379,9 +370,7 @@ final class StatementTests: XCTestCase {
         yieldKeyword: .contextualKeyword("yield"),
         yields: .init(InOutExprSyntax(
           ampersand: .prefixAmpersandToken(),
-          expression: ExprSyntax(IdentifierExprSyntax(
-            identifier: .identifier("x"),
-            declNameArguments: nil)))))),
+          expression: IdentifierExprSyntax(identifier: .identifier("x")))))),
       substructureAfterMarker: "1️⃣")
 
     AssertParse(
@@ -408,24 +397,19 @@ final class StatementTests: XCTestCase {
         yieldKeyword: .contextualKeyword("yield"),
         yields: .init(InOutExprSyntax(
           ampersand: .prefixAmpersandToken(),
-          expression: ExprSyntax(SubscriptExprSyntax(
-            calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("native"), declNameArguments: nil)),
+          expression: SubscriptExprSyntax(
+            calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
             leftBracket: .leftSquareBracketToken(),
             argumentList: TupleExprElementListSyntax([
               TupleExprElementSyntax(
-                label: nil,
-                colon: nil,
-                expression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("key"), declNameArguments: nil)),
+                expression: IdentifierExprSyntax(identifier: .identifier("key")),
                 trailingComma: .commaToken()),
               TupleExprElementSyntax(
                 label: .identifier("isUnique"),
                 colon: .colonToken(),
-                expression: ExprSyntax(BooleanLiteralExprSyntax(booleanLiteral: .trueKeyword())),
-                trailingComma: nil),
+                expression: BooleanLiteralExprSyntax(booleanLiteral: .trueKeyword())),
             ]),
-            rightBracket: .rightSquareBracketToken(),
-            trailingClosure: nil,
-            additionalTrailingClosures: nil)))))),
+            rightBracket: .rightSquareBracketToken()))))),
       substructureAfterMarker: "1️⃣")
 
     // Make sure these are not.
@@ -438,14 +422,10 @@ final class StatementTests: XCTestCase {
       }
       """,
       substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("yield"),
-          declNameArguments: nil)),
+        calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
         leftParen: .leftParenToken(),
         argumentList: TupleExprElementListSyntax([]),
-        rightParen: .rightParenToken(),
-        trailingClosure: nil,
-        additionalTrailingClosures: nil)),
+        rightParen: .rightParenToken())),
     substructureAfterMarker: "1️⃣")
 
     AssertParse(
@@ -457,14 +437,10 @@ final class StatementTests: XCTestCase {
       }
       """,
       substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("yield"),
-          declNameArguments: nil)),
+        calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
         leftParen: .leftParenToken(),
         argumentList: TupleExprElementListSyntax([]),
-        rightParen: .rightParenToken(),
-        trailingClosure: nil,
-        additionalTrailingClosures: nil)),
+        rightParen: .rightParenToken())),
     substructureAfterMarker: "1️⃣")
 
     AssertParse(
@@ -472,23 +448,16 @@ final class StatementTests: XCTestCase {
       yield([])
       """,
       substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("yield"),
-          declNameArguments: nil)),
+        calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
         leftParen: .leftParenToken(),
         argumentList: TupleExprElementListSyntax([
           TupleExprElementSyntax(
-            label: nil,
-            colon: nil,
-            expression: ExprSyntax(ArrayExprSyntax(
+            expression: ArrayExprSyntax(
               leftSquare: .leftSquareBracketToken(),
               elements: ArrayElementListSyntax([]),
               rightSquare: .rightSquareBracketToken())),
-            trailingComma: nil),
         ]),
-        rightParen: .rightParenToken(),
-        trailingClosure: nil,
-        additionalTrailingClosures: nil)))
+        rightParen: .rightParenToken())))
 
     AssertParse(
       """
@@ -497,7 +466,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       substructure: Syntax(SequenceExprSyntax(elements: ExprListSyntax([
-        IdentifierExprSyntax(identifier: .identifier("yield"), declNameArguments: nil),
+        IdentifierExprSyntax(identifier: .identifier("yield")),
         BinaryOperatorExprSyntax(operatorToken: .spacedBinaryOperator("&")),
         IntegerLiteralExprSyntax(5)
       ]))),
@@ -510,7 +479,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       substructure: Syntax(SequenceExprSyntax(elements: ExprListSyntax([
-        IdentifierExprSyntax(identifier: .identifier("yield"), declNameArguments: nil),
+        IdentifierExprSyntax(identifier: .identifier("yield")),
         BinaryOperatorExprSyntax(operatorToken: .unspacedBinaryOperator("&")),
         IntegerLiteralExprSyntax(5)
       ]))),
@@ -526,24 +495,19 @@ final class StatementTests: XCTestCase {
          """
          data[position, default: 0]
          """,
-         substructure: Syntax(ExprSyntax(SubscriptExprSyntax(
-          calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("data"), declNameArguments: nil)),
+         substructure: Syntax(SubscriptExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("data")),
           leftBracket: .leftSquareBracketToken(),
           argumentList: TupleExprElementListSyntax([
             TupleExprElementSyntax(
-              label: nil,
-              colon: nil,
-              expression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("position"), declNameArguments: nil)),
+              expression: IdentifierExprSyntax(identifier: .identifier("position")),
               trailingComma: .commaToken()),
             TupleExprElementSyntax(
               label: .identifier("default"),
               colon: .colonToken(),
-              expression: ExprSyntax(IntegerLiteralExprSyntax(0)),
-              trailingComma: nil),
+              expression: IntegerLiteralExprSyntax(0)),
           ]),
-          rightBracket: .rightSquareBracketToken(),
-          trailingClosure: nil,
-          additionalTrailingClosures: nil)))
+          rightBracket: .rightSquareBracketToken()))
     )
   }
 }

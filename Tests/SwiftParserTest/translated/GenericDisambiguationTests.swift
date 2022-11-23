@@ -92,18 +92,11 @@ final class GenericDisambiguationTests: XCTestCase {
       """,
       substructure: Syntax(GenericArgumentListSyntax([
         GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("b"),
-            genericArgumentClause: nil
-          )),
+          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
           trailingComma: .commaToken()
         ),
         GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("c"),
-            genericArgumentClause: nil
-          )),
-          trailingComma: nil
+          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
         )
       ]))
     )
@@ -117,18 +110,11 @@ final class GenericDisambiguationTests: XCTestCase {
       """,
       substructure: Syntax(GenericArgumentListSyntax([
         GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("b"),
-            genericArgumentClause: nil
-          )),
+          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
           trailingComma: .commaToken()
         ),
         GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("c"),
-            genericArgumentClause: nil
-          )),
-          trailingComma: nil
+          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
         )
       ]))
     )

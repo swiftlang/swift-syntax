@@ -411,8 +411,7 @@ extension OperatorTable {
 
       Operator(
         kind: .infix,
-        name: "~>",
-        precedenceGroup: nil
+        name: "~>"
       )
     ]
 

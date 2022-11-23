@@ -32,11 +32,13 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
-    _ unexpectedAfterModifiers: UnexpectedNodesSyntax? = nil
+    modifiers: ModifierListSyntax? = nil,
+    _ unexpectedAfterModifiers: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -46,8 +48,9 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterModifiers?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.missingDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -255,21 +258,23 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil,
-    typealiasKeyword: TokenSyntax,
+    typealiasKeyword: TokenSyntax = .typealiasKeyword(),
     _ unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: TypeInitializerClauseSyntax,
     _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
-    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -289,8 +294,9 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterGenericWhereClause?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.typealiasDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.typealiasDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -745,21 +751,23 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? = nil,
-    associatedtypeKeyword: TokenSyntax,
+    associatedtypeKeyword: TokenSyntax = .associatedtypeKeyword(),
     _ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: TypeInheritanceClauseSyntax?,
+    inheritanceClause: TypeInheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodesSyntax? = nil,
-    initializer: TypeInitializerClauseSyntax?,
+    initializer: TypeInitializerClauseSyntax? = nil,
     _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
-    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -779,8 +787,9 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterGenericWhereClause?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.associatedtypeDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.associatedtypeDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1236,11 +1245,13 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeClauses: UnexpectedNodesSyntax? = nil,
     clauses: IfConfigClauseListSyntax,
     _ unexpectedBetweenClausesAndPoundEndif: UnexpectedNodesSyntax? = nil,
-    poundEndif: TokenSyntax,
-    _ unexpectedAfterPoundEndif: UnexpectedNodesSyntax? = nil
+    poundEndif: TokenSyntax = .poundEndifKeyword(),
+    _ unexpectedAfterPoundEndif: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeClauses?.raw,
@@ -1250,8 +1261,9 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterPoundEndif?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.ifConfigDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1438,15 +1450,17 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforePoundError: UnexpectedNodesSyntax? = nil,
-    poundError: TokenSyntax,
+    poundError: TokenSyntax = .poundErrorKeyword(),
     _ unexpectedBetweenPoundErrorAndLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax,
+    leftParen: TokenSyntax = .leftParenToken(),
     _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil,
     message: StringLiteralExprSyntax,
     _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax,
-    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundError?.raw,
@@ -1460,8 +1474,9 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterRightParen?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundErrorDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.poundErrorDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1727,15 +1742,17 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforePoundWarning: UnexpectedNodesSyntax? = nil,
-    poundWarning: TokenSyntax,
+    poundWarning: TokenSyntax = .poundWarningKeyword(),
     _ unexpectedBetweenPoundWarningAndLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax,
+    leftParen: TokenSyntax = .leftParenToken(),
     _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil,
     message: StringLiteralExprSyntax,
     _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax,
-    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundWarning?.raw,
@@ -1749,8 +1766,9 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterRightParen?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundWarningDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.poundWarningDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2016,15 +2034,17 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforePoundSourceLocation: UnexpectedNodesSyntax? = nil,
-    poundSourceLocation: TokenSyntax,
+    poundSourceLocation: TokenSyntax = .poundSourceLocationKeyword(),
     _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax,
+    leftParen: TokenSyntax = .leftParenToken(),
     _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil,
-    args: PoundSourceLocationArgsSyntax?,
+    args: PoundSourceLocationArgsSyntax? = nil,
     _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax,
-    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundSourceLocation?.raw,
@@ -2038,8 +2058,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterRightParen?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundSourceLocation,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.poundSourceLocation, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2306,23 +2327,25 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
-    classKeyword: TokenSyntax,
+    classKeyword: TokenSyntax = .classKeyword(),
     _ unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: TypeInheritanceClauseSyntax?,
+    inheritanceClause: TypeInheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
     members: MemberDeclBlockSyntax,
-    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -2344,8 +2367,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterMembers?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.classDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.classDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2850,23 +2874,25 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
-    actorKeyword: TokenSyntax,
+    actorKeyword: TokenSyntax = .contextualKeyword("actor"),
     _ unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: TypeInheritanceClauseSyntax?,
+    inheritanceClause: TypeInheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
     members: MemberDeclBlockSyntax,
-    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -2888,8 +2914,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterMembers?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.actorDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.actorDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3394,23 +3421,25 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
-    structKeyword: TokenSyntax,
+    structKeyword: TokenSyntax = .structKeyword(),
     _ unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: TypeInheritanceClauseSyntax?,
+    inheritanceClause: TypeInheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
     members: MemberDeclBlockSyntax,
-    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -3432,8 +3461,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterMembers?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.structDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.structDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3938,23 +3968,25 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
-    protocolKeyword: TokenSyntax,
+    protocolKeyword: TokenSyntax = .protocolKeyword(),
     _ unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil,
-    primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?,
+    primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil,
     _ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: TypeInheritanceClauseSyntax?,
+    inheritanceClause: TypeInheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
     members: MemberDeclBlockSyntax,
-    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -3976,8 +4008,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterMembers?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.protocolDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.protocolDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4481,22 +4514,24 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public init(
+  public init<E: TypeSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil,
-    extensionKeyword: TokenSyntax,
+    extensionKeyword: TokenSyntax = .extensionKeyword(),
     _ unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
-    extendedType: TypeSyntax,
+    extendedType: E,
     _ unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: TypeInheritanceClauseSyntax?,
+    inheritanceClause: TypeInheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
     members: MemberDeclBlockSyntax,
-    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -4516,8 +4551,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterMembers?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.extensionDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.extensionDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4972,23 +5008,25 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil,
-    funcKeyword: TokenSyntax,
+    funcKeyword: TokenSyntax = .funcKeyword(),
     _ unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil,
     signature: FunctionSignatureSyntax,
     _ unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?,
-    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
+    body: CodeBlockSyntax? = nil,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -5010,8 +5048,9 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterBody?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.functionDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5516,23 +5555,25 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil,
-    initKeyword: TokenSyntax,
+    initKeyword: TokenSyntax = .initKeyword(),
     _ unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodesSyntax? = nil,
-    optionalMark: TokenSyntax?,
+    optionalMark: TokenSyntax? = nil,
     _ unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil,
     signature: FunctionSignatureSyntax,
     _ unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?,
-    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
+    body: CodeBlockSyntax? = nil,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -5554,8 +5595,9 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterBody?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.initializerDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.initializerDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6061,15 +6103,17 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil,
-    deinitKeyword: TokenSyntax,
+    deinitKeyword: TokenSyntax = .deinitKeyword(),
     _ unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?,
-    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
+    body: CodeBlockSyntax? = nil,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -6083,8 +6127,9 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterBody?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.deinitializerDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.deinitializerDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6427,23 +6472,25 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? = nil,
-    subscriptKeyword: TokenSyntax,
+    subscriptKeyword: TokenSyntax = .subscriptKeyword(),
     _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? = nil,
     indices: ParameterClauseSyntax,
     _ unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? = nil,
     result: ReturnClauseSyntax,
     _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
-    accessor: Accessor?,
-    _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil
+    accessor: Accessor? = nil,
+    _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -6465,8 +6512,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterAccessor?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.subscriptDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.subscriptDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6971,17 +7019,19 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? = nil,
-    importTok: TokenSyntax,
+    importTok: TokenSyntax = .importKeyword(),
     _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
-    importKind: TokenSyntax?,
+    importKind: TokenSyntax? = nil,
     _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil,
     path: AccessPathSyntax,
-    _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -6997,8 +7047,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterPath?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.importDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.importDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7373,21 +7424,23 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil,
-    modifier: DeclModifierSyntax?,
+    modifier: DeclModifierSyntax? = nil,
     _ unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil,
     accessorKind: TokenSyntax,
     _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil,
-    parameter: AccessorParameterSyntax?,
+    parameter: AccessorParameterSyntax? = nil,
     _ unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodesSyntax? = nil,
-    asyncKeyword: TokenSyntax?,
+    asyncKeyword: TokenSyntax? = nil,
     _ unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodesSyntax? = nil,
-    throwsKeyword: TokenSyntax?,
+    throwsKeyword: TokenSyntax? = nil,
     _ unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodesSyntax? = nil,
-    body: CodeBlockSyntax?,
-    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil
+    body: CodeBlockSyntax? = nil,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -7407,8 +7460,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterBody?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.accessorDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7846,15 +7900,17 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? = nil,
     letOrVarKeyword: TokenSyntax,
     _ unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? = nil,
     bindings: PatternBindingListSyntax,
-    _ unexpectedAfterBindings: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterBindings: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -7868,8 +7924,9 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterBindings?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.variableDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.variableDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8199,15 +8256,17 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil,
-    caseKeyword: TokenSyntax,
+    caseKeyword: TokenSyntax = .caseKeyword(),
     _ unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? = nil,
     elements: EnumCaseElementListSyntax,
-    _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -8221,8 +8280,9 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterElements?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.enumCaseDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8556,23 +8616,25 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
-    enumKeyword: TokenSyntax,
+    enumKeyword: TokenSyntax = .enumKeyword(),
     _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil,
-    genericParameters: GenericParameterClauseSyntax?,
+    genericParameters: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: TypeInheritanceClauseSyntax?,
+    inheritanceClause: TypeInheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil,
     members: MemberDeclBlockSyntax,
-    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil
+    _ unexpectedAfterMembers: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -8594,8 +8656,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterMembers?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.enumDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9127,17 +9190,19 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodesSyntax? = nil,
-    operatorKeyword: TokenSyntax,
+    operatorKeyword: TokenSyntax = .operatorKeyword(),
     _ unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
-    operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?,
-    _ unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil
+    operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? = nil,
+    _ unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -9153,8 +9218,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterOperatorPrecedenceAndTypes?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.operatorDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9521,21 +9587,23 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? = nil,
-    precedencegroupKeyword: TokenSyntax,
+    precedencegroupKeyword: TokenSyntax = .precedencegroupKeyword(),
     _ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodesSyntax? = nil,
-    leftBrace: TokenSyntax,
+    leftBrace: TokenSyntax = .leftBraceToken(),
     _ unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodesSyntax? = nil,
     groupAttributes: PrecedenceGroupAttributeListSyntax,
     _ unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodesSyntax? = nil,
-    rightBrace: TokenSyntax,
-    _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil
+    rightBrace: TokenSyntax = .rightBraceToken(),
+    _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -9555,8 +9623,9 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterRightBrace?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.precedenceGroupDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10077,23 +10146,25 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax? = nil,
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: ModifierListSyntax?,
+    modifiers: ModifierListSyntax? = nil,
     _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil,
-    macroKeyword: TokenSyntax,
+    macroKeyword: TokenSyntax = .contextualKeyword("macro"),
     _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax?,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil,
     signature: Signature,
     _ unexpectedBetweenSignatureAndDefinition: UnexpectedNodesSyntax? = nil,
-    definition: InitializerClauseSyntax?,
+    definition: InitializerClauseSyntax? = nil,
     _ unexpectedBetweenDefinitionAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax?,
-    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
@@ -10115,8 +10186,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterGenericWhereClause?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.macroDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10621,23 +10693,25 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    leadingTrivia: Trivia? = nil,
     _ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil,
-    poundToken: TokenSyntax,
+    poundToken: TokenSyntax = .poundToken(),
     _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
     macro: TokenSyntax,
     _ unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil,
-    genericArguments: GenericArgumentClauseSyntax?,
+    genericArguments: GenericArgumentClauseSyntax? = nil,
     _ unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax?,
+    leftParen: TokenSyntax? = nil,
     _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
     argumentList: TupleExprElementListSyntax,
     _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax?,
+    rightParen: TokenSyntax? = nil,
     _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
-    trailingClosure: ClosureExprSyntax?,
+    trailingClosure: ClosureExprSyntax? = nil,
     _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?,
-    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundToken?.raw,
@@ -10659,8 +10733,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       unexpectedAfterAdditionalTrailingClosures?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.macroExpansionDecl,
-        from: layout, arena: arena)
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.macroExpansionDecl, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)

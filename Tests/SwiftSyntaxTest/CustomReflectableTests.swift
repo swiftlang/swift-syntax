@@ -106,18 +106,8 @@ public class CustomReflectableTests: XCTestCase {
         let token2 = TokenSyntax.integerLiteral("2")
         let expr2 = IntegerLiteralExprSyntax(digits: token2)
         let elements = [
-          TupleExprElementSyntax(
-            label: nil,
-            colon: nil,
-            expression: ExprSyntax(expr1),
-            trailingComma: nil
-          ),
-          TupleExprElementSyntax(
-            label: nil,
-            colon: nil,
-            expression: ExprSyntax(expr2),
-            trailingComma: nil
-          )
+          TupleExprElementSyntax(expression: expr1),
+          TupleExprElementSyntax(expression: expr2)
         ]
         let tuples = TupleExprElementListSyntax(elements)
         return .init(syntax: tuples,
@@ -171,14 +161,10 @@ public class CustomReflectableTests: XCTestCase {
         let expr1 = IntegerLiteralExprSyntax(digits: token1)
         let token2 = TokenSyntax.integerLiteral("2")
         let expr2 = IntegerLiteralExprSyntax(digits: token2)
-        let elements = [TupleExprElementSyntax(label: nil,
-                                                       colon: nil,
-                                                       expression: ExprSyntax(expr1),
-                                                       trailingComma: nil),
-          TupleExprElementSyntax(label: nil,
-                                         colon: nil,
-                                         expression: ExprSyntax(expr2),
-                                         trailingComma: nil)]
+        let elements = [
+          TupleExprElementSyntax(expression: expr1),
+          TupleExprElementSyntax(expression: expr2)
+        ]
         let tuples = TupleExprElementListSyntax(elements)
         return .init(syntax: tuples.reversed(),
                      expectedDumped: """

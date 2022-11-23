@@ -130,19 +130,14 @@ final class SuperTests: XCTestCase {
       }
       """#,
       substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: ExprSyntax(SuperRefExprSyntax(superKeyword: .superKeyword())),
+        calledExpression: SuperRefExprSyntax(superKeyword: .superKeyword()),
         leftParen: .leftParenToken(),
         argumentList: TupleExprElementListSyntax([
           TupleExprElementSyntax(
-            label: nil,
-            colon: nil,
-            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))),
-            trailingComma: nil
+            expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
           )
         ]),
-        rightParen: .rightParenToken(),
-        trailingClosure: nil,
-        additionalTrailingClosures: nil
+        rightParen: .rightParenToken()
       ))
     )
   }
@@ -161,8 +156,7 @@ final class SuperTests: XCTestCase {
         leftSquare: .leftSquareBracketToken(),
         elements: ArrayElementListSyntax([
           ArrayElementSyntax(
-            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
-            trailingComma: nil
+            expression: IntegerLiteralExprSyntax(digits: .integerLiteral("1"))
           )
         ]),
         rightSquare: .rightSquareBracketToken()

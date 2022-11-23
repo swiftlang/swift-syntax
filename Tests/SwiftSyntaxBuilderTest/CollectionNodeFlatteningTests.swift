@@ -21,18 +21,18 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     
     @CodeBlockItemListBuilder
     func buildInnerCodeBlockItemList() -> CodeBlockItemList {
-      FunctionCallExpr(callee: "innerBuilder")
+      FunctionCallExpr(callee: ExprSyntax("innerBuilder"))
     }
     
     @CodeBlockItemListBuilder
     func buildOuterCodeBlockItemList() -> CodeBlockItemList {
-      FunctionCallExpr(callee: "outerBuilder")
+      FunctionCallExpr(callee: ExprSyntax("outerBuilder"))
       
       buildInnerCodeBlockItemList()
     }
     
     let codeBlock = CodeBlock(leadingTrivia: leadingTrivia) {
-      FunctionCallExpr(callee: "outsideBuilder")
+      FunctionCallExpr(callee: ExprSyntax("outsideBuilder"))
       buildOuterCodeBlockItemList()
     }
 

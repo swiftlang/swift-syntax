@@ -17,8 +17,8 @@ import SwiftSyntaxBuilder
 final class TriviaTests: XCTestCase {
   func testLeadingTrivia() {
     let decl = VariableDecl(
-      leadingTrivia: .docLineComment("/// A doc comment") + .newline,
-      modifiers: [DeclModifier(name: .static.withLeadingTrivia(.blockComment("/* An inline comment */") + .space))],
+      leadingTrivia: .docLineComment("/// A doc comment") + .newline + .blockComment("/* An inline comment */") + .space,
+      modifiers: [DeclModifier(name: .static)],
       letOrVarKeyword: .var
     ) {
       PatternBinding(

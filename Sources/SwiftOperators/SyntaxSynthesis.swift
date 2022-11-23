@@ -17,7 +17,7 @@ extension Operator {
   /// semantic definition.
   public func synthesizedSyntax() -> OperatorDeclSyntax {
     let modifiers = ModifierListSyntax(
-      [DeclModifierSyntax(name: .identifier("\(kind)"), detail: nil)]
+      [DeclModifierSyntax(name: .identifier("\(kind)"))]
     )
     let operatorKeyword = TokenSyntax.operatorKeyword(leadingTrivia: .space)
     let identifierSyntax =
@@ -31,7 +31,7 @@ extension Operator {
     }
 
     return OperatorDeclSyntax(
-      attributes: nil, modifiers: modifiers, operatorKeyword: operatorKeyword,
+      modifiers: modifiers, operatorKeyword: operatorKeyword,
       identifier: identifierSyntax,
       operatorPrecedenceAndTypes: precedenceGroupSyntax
     )
@@ -55,8 +55,7 @@ extension PrecedenceRelation {
       otherNames: PrecedenceGroupNameListSyntax(
         [
           PrecedenceGroupNameElementSyntax(
-            name: .identifier(groupName, leadingTrivia:  .space),
-            trailingComma: nil)
+            name: .identifier(groupName, leadingTrivia:  .space))
         ]
       )
     )
@@ -126,7 +125,6 @@ extension PrecedenceGroup {
     )
 
     return PrecedenceGroupDeclSyntax(
-      attributes: nil, modifiers: nil,
       precedencegroupKeyword: precedencegroupKeyword,
       identifier: identifierSyntax, leftBrace: leftBrace,
       groupAttributes: PrecedenceGroupAttributeListSyntax(groupAttributes),

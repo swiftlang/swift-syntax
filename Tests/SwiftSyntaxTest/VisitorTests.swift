@@ -15,10 +15,7 @@ import SwiftSyntax
 
 public class VisitorTests: XCTestCase {
   public func testVisitMissingNodes() {
-    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax(
-      attributes: nil,
-      modifiers: nil
-    )))
+    let node = DeclarationStmtSyntax(declaration: MissingDeclSyntax())
 
     class MissingDeclChecker: SyntaxVisitor {
       var didSeeMissingDeclSyntax = false
@@ -41,8 +38,7 @@ public class VisitorTests: XCTestCase {
 
   public func testVisitMissingToken() {
     let node = ReturnStmtSyntax(
-      returnKeyword: .returnKeyword(presence: .missing),
-      expression: nil
+      returnKeyword: .returnKeyword(presence: .missing)
     )
 
     class MissingTokenChecker: SyntaxVisitor {

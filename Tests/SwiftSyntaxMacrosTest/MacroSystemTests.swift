@@ -166,9 +166,4 @@ final class MacroSystemTests: XCTestCase {
       """
     )
   }
-
-  func testDocumentation() {
-    let macro = MacroSystem.builtinMacroSystem.lookup("line")!
-    XCTAssertEqual(macro.documentation, "The line at which this macro is used")
-  }
 }

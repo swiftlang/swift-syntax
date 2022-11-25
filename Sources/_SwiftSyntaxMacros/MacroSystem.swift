@@ -45,12 +45,12 @@ public struct MacroSystem {
   /// Add a macro to the system.
   ///
   /// Throws an error if there is already a macro with this name.
-  public mutating func add(_ macro: Macro.Type) throws {
-    if let knownMacro = macros[macro.name] {
+  public mutating func add(_ macro: Macro.Type, name: String) throws {
+    if let knownMacro = macros[name] {
       throw MacroSystemError.alreadyDefined(new: macro, existing: knownMacro)
     }
 
-    macros[macro.name] = macro
+    macros[name] = macro
   }
 
   /// Look for a macro with the given name.

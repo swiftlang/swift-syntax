@@ -17,6 +17,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 ### Articles
 
 - <doc:ChangingSwiftSyntax>
+- <doc:Create-SwiftSyntax-Release>
 
 ### Syntax
 

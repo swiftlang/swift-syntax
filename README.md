@@ -72,11 +72,20 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 
 ## Documentation
 
-Documentation can be found in the following places:
-- For the parser: [Sources/SwiftParser/SwiftParser.docc](Sources/SwiftParser/SwiftParser.docc) 
-  - You can either directly view this documentation on GitHub or build a documentation bundle by opening the project in Xcode and clicking Product -> Build Documentation
-- General documentation: [Documentation](Documentation) 
-- Examples of using SwiftSyntax: [Examples](Examples).
+SwiftSyntax uses [DocC](https://developer.apple.com/documentation/docc) bundles
+for its documentation. To view rendered documentation in Xcode, open the 
+SwiftSyntax package and select
+
+```
+Product > Build Documentation
+``` 
+
+Associated articles are written in markdown, and can be viewed in a browser, 
+text editor, or IDE.
+
+- [SwiftSyntax](Sources/SwiftSyntax/Documentation.docc)
+- [SwiftParser](Sources/SwiftParser/SwiftParser.docc)
+- [SwiftOperators](Sources/SwiftOperators/SwiftOperators.docc)
 
 ## Contributing
 

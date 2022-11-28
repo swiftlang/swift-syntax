@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(_SwiftSyntaxMacros STATIC
+add_library(_SwiftSyntaxMacros
   ExpressionMacro.swift
   Macro.swift
   MacroEvaluationContext.swift

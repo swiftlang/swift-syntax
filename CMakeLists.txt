@@ -23,6 +23,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_MACOSX_RPATH YES)
 
+include(AddSwiftHostLibrary)
+
 # Ensure that we do not link the _StringProcessing module. But we can
 # only pass this flag for new-enough compilers that support it.
 file(WRITE "${CMAKE_BINARY_DIR}/tmp/empty-check-string-processing.swift" "")

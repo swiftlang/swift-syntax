@@ -56,8 +56,15 @@ function(add_swift_host_library name)
   # Install this target
   install(TARGETS ${name}
     EXPORT SwiftSyntaxTargets
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+    LIBRARY DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
     RUNTIME DESTINATION bin
+  )
+
+  # Install the module files.
+  install(
+    DIRECTORY ${module_base}
+    DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+    FILES_MATCHING PATTERN "*.swift*"
   )
 endfunction()

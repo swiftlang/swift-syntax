@@ -114,11 +114,11 @@ final class StatementTests: XCTestCase {
   }
 
   func testReturn() {
-    AssertParse("return actor", { $0.parseReturnStatement(returnHandle: .constant(.returnKeyword)) })
+    AssertParse("return actor", { StmtSyntax.parse(from: &$0) })
 
     AssertParse(
       "{ 1️⃣return 0 }",
-      { $0.parseClosureExpression() },
+      { ExprSyntax.parse(from: &$0) },
       substructure: Syntax(ReturnStmtSyntax(returnKeyword: .returnKeyword(),
                                             expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))))),
       substructureAfterMarker: "1️⃣"

@@ -22,8 +22,8 @@ final class DoStmtTests: XCTestCase {
       }),
       catchClauses: [
         CatchClause(CatchItemList {
-          CatchItem(pattern: Pattern("Error1"))
-          CatchItem(pattern: Pattern("Error2"))
+          CatchItem(pattern: PatternSyntax("Error1"))
+          CatchItem(pattern: PatternSyntax("Error2"))
         }) {
           FunctionCallExpr(callee: "print") {
             TupleExprElement(expression: StringLiteralExpr(content: "Known error"))
@@ -31,7 +31,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClause(CatchItemList {
           CatchItem(
-            pattern: Pattern("Error3"), whereClause: WhereClause(guardResult: MemberAccessExpr(base: "error", name: "isError4")))
+            pattern: PatternSyntax("Error3"), whereClause: WhereClause(guardResult: MemberAccessExpr(base: "error", name: "isError4")))
         }) {
           ThrowStmt(expression: MemberAccessExpr(base: "Error4", name: "error3"))
         },

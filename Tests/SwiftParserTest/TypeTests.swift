@@ -28,12 +28,12 @@ final class TypeTests: XCTestCase {
   func testClosureParsing() {
     AssertParse(
       "(a, b) -> c",
-      { $0.parseType() }
+      { TypeSyntax.parse(from: &$0) }
     )
 
     AssertParse(
       "@MainActor (a, b) async throws -> c",
-      { $0.parseType() }
+      { TypeSyntax.parse(from: &$0) }
     )
 
     AssertParse("() -> (\u{feff})")
@@ -47,7 +47,7 @@ final class TypeTests: XCTestCase {
                   V, Baz<Quux>
               >>
       """,
-      { $0.parseType() }
+      { TypeSyntax.parse(from: &$0) }
     )
   }
 
@@ -72,15 +72,15 @@ final class TypeTests: XCTestCase {
                 { ()
                 throws -> Void in }
                 """,
-                { $0.parseClosureExpression() })
+                { ExprSyntax.parse(from: &$0) })
 
     AssertParse("""
                 { [weak a, unowned(safe) self, b = 3] (a: Int, b: Int, _: Int) -> Int in }
                 """,
-                { $0.parseClosureExpression() })
+                { ExprSyntax.parse(from: &$0) })
 
     AssertParse("{[1️⃣class]in2️⃣",
-                { $0.parseClosureExpression() },
+                { ExprSyntax.parse(from: &$0) },
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item"),
                   DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'class' keyword in closure capture signature"),
@@ -88,13 +88,13 @@ final class TypeTests: XCTestCase {
                 ])
 
     AssertParse("{[n1️⃣`]in}",
-                { $0.parseClosureExpression() },
+                { ExprSyntax.parse(from: &$0) },
                 diagnostics: [
                   DiagnosticSpec(message: "unexpected code '`' in closure capture signature")
                 ])
 
     AssertParse("{[weak1️⃣^]in}",
-                { $0.parseClosureExpression() },
+                { ExprSyntax.parse(from: &$0) },
                 diagnostics: [
                   DiagnosticSpec(message: "expected identifier in closure capture item"),
                   DiagnosticSpec(message: "unexpected code '^' in closure capture signature"),

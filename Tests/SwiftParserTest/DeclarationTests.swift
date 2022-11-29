@@ -118,7 +118,7 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse(
       "<@NSApplicationMain T: AnyObject>",
-      { $0.parseGenericParameters() }
+      { GenericParameterClauseSyntax.parse(from: &$0) }
     )
 
     AssertParse("class T where t1️⃣",
@@ -599,8 +599,7 @@ final class DeclarationTests: XCTestCase {
 
   func testMissingColonInFunctionSignature() {
     AssertParse(
-      "(first second 1️⃣Int)",
-      { $0.parseFunctionSignature() },
+      "func test(first second 1️⃣Int)",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in parameter")
       ]
@@ -609,8 +608,7 @@ final class DeclarationTests: XCTestCase {
 
   func testExtraArgumentLabelsInFunctionSignature() {
     AssertParse(
-      "(first second 1️⃣third fourth: Int)",
-      { $0.parseFunctionSignature() },
+      "func test(first second 1️⃣third fourth: Int)",
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third fourth' in parameter")
       ]
@@ -619,8 +617,7 @@ final class DeclarationTests: XCTestCase {
 
   func testMissingClosingParenInFunctionSignature() {
     AssertParse(
-      "(first second: Int1️⃣",
-      { $0.parseFunctionSignature() },
+      "func test(first second: Int1️⃣",
       diagnostics: [
         DiagnosticSpec(message: "expected ')' to end parameter clause")
       ]
@@ -629,8 +626,7 @@ final class DeclarationTests: XCTestCase {
 
   func testMissingOpeningParenInFunctionSignature() {
     AssertParse(
-      "1️⃣first second: Int)",
-      { $0.parseFunctionSignature() },
+      "func test 1️⃣first second: Int)",
       diagnostics: [
         DiagnosticSpec(message: "expected '(' to start parameter clause")
       ]
@@ -673,12 +669,11 @@ final class DeclarationTests: XCTestCase {
 
   func testThrowsInWrongLocation() {
     AssertParse(
-      "() -> 1️⃣throws Int",
-      { $0.parseFunctionSignature() },
+      "func test() -> 1️⃣throws Int",
       diagnostics: [
         DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
-      fixedSource: "() throws -> Int"
+      fixedSource: "func test() throws -> Int"
     )
   }
 
@@ -788,8 +783,7 @@ final class DeclarationTests: XCTestCase {
 
   func testRecoverOneExtraLabel() {
     AssertParse(
-      "(first second 1️⃣third: Int)",
-      { $0.parseFunctionSignature() },
+      "func test(first second 1️⃣third: Int)",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         modifiers: nil,
@@ -810,8 +804,7 @@ final class DeclarationTests: XCTestCase {
 
   func testRecoverTwoExtraLabels() {
     AssertParse(
-      "(first second 1️⃣third fourth: Int)",
-      { $0.parseFunctionSignature() },
+      "func test(first second 1️⃣third fourth: Int)",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         modifiers: nil,
@@ -855,8 +848,7 @@ final class DeclarationTests: XCTestCase {
 
   func testRecoverFromParens() {
     AssertParse(
-      "(first second 1️⃣[third fourth]: Int)",
-      { $0.parseFunctionSignature() },
+      "func test(first second 1️⃣[third fourth]: Int)",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         modifiers: nil,
@@ -965,8 +957,8 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testDeinitializers() {
-    AssertParse("deinit {}", { $0.parseDeinitializerDeclaration(.empty, .constant(.deinitKeyword)) })
-    AssertParse("deinit", { $0.parseDeinitializerDeclaration(.empty, .constant(.deinitKeyword)) })
+    AssertParse("deinit {}")
+    AssertParse("deinit")
   }
 
   func testAttributedMember() {

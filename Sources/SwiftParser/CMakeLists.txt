@@ -34,6 +34,7 @@ add_library(SwiftParser STATIC
 
   gyb_generated/DeclarationAttribute.swift
   gyb_generated/DeclarationModifier.swift
+  gyb_generated/Parser+Entry.swift
   gyb_generated/TypeAttribute.swift)
 
 target_link_libraries(SwiftParser PUBLIC

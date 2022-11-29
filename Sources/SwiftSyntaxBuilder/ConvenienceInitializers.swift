@@ -109,7 +109,7 @@ extension FunctionCallExpr {
   /// instead of having to wrap them in a `TupleExprElementList`.
   /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
   public init(
-    callee: String,
+    callee: ExprSyntax,
     trailingClosure: ClosureExprSyntax? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
     @TupleExprElementListBuilder argumentList: () -> TupleExprElementList = { [] }
@@ -117,7 +117,7 @@ extension FunctionCallExpr {
     let argumentList = argumentList()
     let shouldOmitParens = argumentList.isEmpty && trailingClosure != nil
     self.init(
-      calledExpression: Expr(callee),
+      calledExpression: callee,
       leftParen: shouldOmitParens ? nil : .leftParen,
       argumentList: argumentList,
       rightParen: shouldOmitParens ? nil : .rightParen,
@@ -129,6 +129,12 @@ extension FunctionCallExpr {
 
 // MARK: - FunctionParameter
 
+// TODO: We should split FunctionParameter into separate nodes
+//
+// This would allow them to be both `SyntaxParseable` and
+// `SyntaxExpressibleByStringInterpolation`, allowing this initializer to be
+// removed. In general we shouldn't allow the builder to take arbitrary
+// strings, only literals.
 extension FunctionParameter {
   public init(
     _ source: String,
@@ -292,8 +298,8 @@ extension StringLiteralExpr {
 // MARK: - SwitchCase
 
 extension SwitchCase {
-  public init(_ label: String, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
-    self.init("\(label)")
+  public init(_ label: SwitchCase, @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemListSyntax) {
+    self = label
     self.statements = statementsBuilder()
   }
 }

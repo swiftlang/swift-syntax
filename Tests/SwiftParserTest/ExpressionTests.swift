@@ -701,7 +701,7 @@ final class ExpressionTests: XCTestCase {
   func testParseArrowExpr() {
     AssertParse(
       "Foo 1️⃣async ->2️⃣",
-      { $0.parseSequenceExpression(.basic, forDirective: false) },
+      { ExprSyntax.parse(from: &$0) },
       substructure: Syntax(TokenSyntax.contextualKeyword("async")),
       substructureAfterMarker: "1️⃣",
       diagnostics: [

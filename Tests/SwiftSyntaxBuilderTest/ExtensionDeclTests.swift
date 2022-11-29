@@ -26,7 +26,7 @@ final class ExtensionDeclTests: XCTestCase {
         modifiers: [DeclModifier(name: .public)],
         letOrVarKeyword: .var
       ) {
-        PatternBinding(pattern: Pattern("`\(keyword)`"),
+        PatternBinding(pattern: PatternSyntax("`\(keyword)`"),
                        typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
                        initializer: nil,
                        accessor: .getter(body))

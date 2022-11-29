@@ -10,9 +10,6 @@ from .CommonNodes import COMMON_NODES  # noqa: I201
 from .DeclNodes import DECL_NODES  # noqa: I201
 from .ExprNodes import EXPR_NODES  # noqa: I201
 from .GenericNodes import GENERIC_NODES  # noqa: I201
-from .NodeSerializationCodes import SYNTAX_NODE_SERIALIZATION_CODES, \
-    get_serialization_code, \
-    verify_syntax_node_serialization_codes
 from .PatternNodes import PATTERN_NODES  # noqa: I201
 from .StmtNodes import STMT_NODES  # noqa: I201
 from .Trivia import TRIVIAS  # noqa: I201
@@ -29,8 +26,6 @@ SYNTAX_TOKENS = Token.SYNTAX_TOKENS
 SYNTAX_TOKEN_MAP = Token.SYNTAX_TOKEN_MAP
 SYNTAX_CLASSIFICATIONS = Classification.SYNTAX_CLASSIFICATIONS
 
-verify_syntax_node_serialization_codes(SYNTAX_NODES,
-                                       SYNTAX_NODE_SERIALIZATION_CODES)
 verify_attribute_serialization_codes(DECL_ATTR_KINDS + DECL_MODIFIER_KINDS)
 
 def make_missing_child(child):
@@ -160,9 +155,8 @@ def calculate_node_hash():
     digest = hashlib.sha1()
 
     def _digest_syntax_node(node):
-        # Hash into the syntax name and serialization code
+        # Hash into the syntax name
         digest.update(node.name.encode("utf-8"))
-        digest.update(str(get_serialization_code(node.syntax_kind)).encode("utf-8"))
         for child in node.children:
             # Hash into the expected child syntax
             digest.update(child.syntax_kind.encode("utf-8"))
@@ -172,13 +166,11 @@ def calculate_node_hash():
             digest.update(str(child.is_optional).encode("utf-8"))
 
     def _digest_syntax_token(token):
-        # Hash into the token name and serialization code
+        # Hash into the token name
         digest.update(token.name.encode("utf-8"))
-        digest.update(str(token.serialization_code).encode("utf-8"))
 
     def _digest_trivia(trivia):
         digest.update(trivia.name.encode("utf-8"))
-        digest.update(str(trivia.serialization_code).encode("utf-8"))
         digest.update(str(trivia.characters).encode("utf-8"))
 
     for node in SYNTAX_NODES:

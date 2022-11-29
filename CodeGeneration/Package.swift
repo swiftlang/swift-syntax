@@ -48,7 +48,6 @@ let package = Package(
         "DeclNodes.swift.gyb",
         "ExprNodes.swift.gyb",
         "GenericNodes.swift.gyb",
-        "NodeSerializationCodes.swift.gyb",
         "PatternNodes.swift.gyb",
         "StmtNodes.swift.gyb",
         "SyntaxBaseKinds.swift.gyb",

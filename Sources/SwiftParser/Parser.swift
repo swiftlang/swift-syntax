@@ -116,7 +116,7 @@ extension Parser {
 /// The exception to this is parser lookahead, which is allowed to skip as many
 /// tokens as needed to disambiguate a parse. However, because lookahead
 /// operates on a copy of the lexical stream, no input tokens are lost..
-public struct Parser: TokenConsumer {
+public struct Parser {
   @_spi(RawSyntax)
   public var arena: ParsingSyntaxArena
   /// A view of the sequence of lexemes in the input.
@@ -222,6 +222,9 @@ extension Parser {
 }
 
 // MARK: Consuming Tokens
+
+@_spi(RawSyntax)
+extension Parser: TokenConsumer {}
 
 extension Parser {
   /// Consumes the current token and sets its kind to the given `TokenKind`,

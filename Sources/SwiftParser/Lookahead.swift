@@ -20,7 +20,7 @@ extension Parser {
   /// arbitrary number of tokens ahead in the input stream. Instances of
   /// ``Lookahead`` are distinct from their parent ``Parser`` instances, so
   /// any tokens they consume will not be reflected in the parent parser.
-  public struct Lookahead: TokenConsumer {
+  public struct Lookahead {
     var lexemes: Lexer.LexemeSequence
     @_spi(RawSyntax)
     public var currentToken: Lexer.Lexeme
@@ -55,6 +55,21 @@ extension Parser {
   public func withLookahead<T>(_ body: (_: inout Lookahead) -> T) -> T {
     var lookahead = lookahead()
     return body(&lookahead)
+  }
+}
+
+@_spi(RawSyntax)
+extension Parser.Lookahead: TokenConsumer {
+  /// Consumes the current token, and asserts that the kind of token that was
+  /// consumed matches the given kind.
+  ///
+  /// If the token kind did not match, this function will abort. It is useful
+  /// to insert structural invariants during parsing.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Returns: A token of the given kind.
+  public mutating func eat(_ kind: RawTokenKind) -> Token {
+    return self.consume(if: kind)!
   }
 }
 
@@ -163,18 +178,6 @@ extension Parser.Lookahead {
 
     _ = self.canParseCustomAttribute()
     return
-  }
-
-  /// Consumes the current token, and asserts that the kind of token that was
-  /// consumed matches the given kind.
-  ///
-  /// If the token kind did not match, this function will abort. It is useful
-  /// to insert structural invariants during parsing.
-  ///
-  /// - Parameter kind: The kind of token to consume.
-  /// - Returns: A token of the given kind.
-  public mutating func eat(_ kind: RawTokenKind) -> Token {
-    return self.consume(if: kind)!
   }
 }
 

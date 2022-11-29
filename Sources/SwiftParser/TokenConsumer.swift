@@ -13,10 +13,10 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 /// A type that consumes  instances of `TokenSyntax`.
+@_spi(RawSyntax)
 public protocol TokenConsumer {
   associatedtype Token
   /// The current token syntax being examined by the consumer
-  @_spi(RawSyntax)
   var currentToken: Lexer.Lexeme { get }
   /// Whether the current token matches the given kind.
   mutating func consumeAnyToken() -> Token
@@ -26,7 +26,6 @@ public protocol TokenConsumer {
 
   /// Synthesize a missing token with `kind`.
   /// If `text` is not `nil`, use it for the token's text, otherwise use the token's default text.
-  @_spi(RawSyntax)
   mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) -> Token
 
   /// Return the lexeme that will be parsed next.

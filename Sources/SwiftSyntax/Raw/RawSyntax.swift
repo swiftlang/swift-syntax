@@ -133,7 +133,7 @@ public struct RawSyntax {
   }
 
   internal var payload: RawSyntaxData.Payload {
-    _read { yield rawData.payload }
+    get { rawData.payload }
   }
 }
 

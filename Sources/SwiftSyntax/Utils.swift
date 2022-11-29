@@ -85,41 +85,6 @@ public struct SourceEdit: Equatable {
   }
 }
 
-extension String {
-  static func fromBuffer(_ textBuffer: UnsafeBufferPointer<UInt8>) -> String {
-    return String(decoding: textBuffer, as: UTF8.self)
-  }
-}
-
-extension UnsafeBufferPointer where Element == UInt8 {
-  func hasPrefix(_ char: UInt8) -> Bool {
-    guard self.count >= 1 else { return false }
-    return self[0] == char
-  }
-
-  func hasPrefix(_ char1: UInt8, _ char2: UInt8) -> Bool {
-    guard self.count >= 2 else { return false }
-    return self[0] == char1 && self[1] == char2
-  }
-
-  func hasSuffix(_ char: UInt8) -> Bool {
-    guard self.count >= 1 else { return false }
-    return self[self.count-1] == char
-  }
-
-  func hasSuffix(_ char1: UInt8, _ char2: UInt8) -> Bool {
-    guard self.count >= 2 else { return false }
-    return self[self.count-2] == char1 && self[self.count-1] == char2
-  }
-}
-
-extension UInt8 {
-  static var asciiDoubleQuote: UInt8 { return 34 /* " */ }
-  static var asciiLeftAngleBracket: UInt8 { return 60 /* < */ }
-  static var asciiRightAngleBracket: UInt8 { return 62 /* > */ }
-  static var asciiPound: UInt8 { return 35 /* # */ }
-}
-
 extension RawUnexpectedNodesSyntax {
   public init(elements: [RawSyntax], isMaximumNestingLevelOverflow: Bool, arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(

@@ -87,14 +87,6 @@ struct CommandLineArguments {
     return self[key] != nil
   }
 
-  func getRequiredValues(_ key: String) throws -> [String] {
-    if let value = args[key] {
-      return value
-    } else {
-      throw MissingArgumentError(argName: key)
-    }
-  }
-
   func getValues(_ key: String) throws -> [String] {
     return args[key, default: []]
   }

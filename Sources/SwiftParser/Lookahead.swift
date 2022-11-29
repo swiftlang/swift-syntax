@@ -245,51 +245,6 @@ extension Parser.Lookahead {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  private static let declAttributeNames: [SyntaxText] = [
-    "autoclosure",
-    "convention",
-    "noescape",
-    "escaping",
-    "differentiable",
-    "noDerivative",
-    "async",
-    "Sendable",
-    "unchecked",
-    "_local",
-    "block_storage",
-    "box",
-    "dynamic_self",
-    "sil_weak",
-    "sil_unowned",
-    "sil_unmanaged",
-    "error",
-    "out",
-    "in",
-    "inout",
-    "inout_aliasable",
-    "in_guaranteed",
-    "in_constant",
-    "owned",
-    "unowned_inner_pointer",
-    "guaranteed",
-    "autoreleased",
-    "callee_owned",
-    "callee_guaranteed",
-    "objc_metatype",
-    "opened",
-    "pseudogeneric",
-    "yields",
-    "yield_once",
-    "yield_many",
-    "captures_generics",
-    "thin",
-    "thick",
-    "_opaqueReturnTypeOf",
-  ]
-
-}
-
-extension Parser.Lookahead {
   func isStartOfGetSetAccessor() -> Bool {
     assert(self.at(.leftBrace), "not checking a brace?")
 

@@ -156,16 +156,6 @@ extension RawSyntax {
     kind == .token
   }
 
-  /// Whether or not this node is a collection one.
-  var isCollection: Bool {
-    kind.isSyntaxCollection
-  }
-
-  /// Whether or not this node is an unknown one.
-  var isUnknown: Bool {
-    kind.isUnknown
-  }
-
   var recursiveFlags: RecursiveRawSyntaxFlags {
     switch view {
     case .token(let tokenView):

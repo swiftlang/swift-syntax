@@ -374,31 +374,6 @@ struct FileIDMacro: ExpressionMacro {
   }
 }
 
-struct FileMacro: ExpressionMacro {
-  static var name: String { "file" }
-
-  static var documentation: String {
-    "The file in which this macro is used"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-     """
-     <T: ExpressibleByStringLiteral>
-     """
-
-  static var signature: TypeSyntax = "T"
-
-  static var owningModule: String = "Swift"
-
-  static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
-  ) -> MacroResult<ExprSyntax> {
-    // FIXME: Macro evaluation context needs to know the semantics of #file,
-    // which is a feature check.
-    return FilePathMacro.apply(macro, in: context)
-  }
-}
-
 extension MacroSystem {
   public static var builtinMacroSystem: MacroSystem = {
     var macroSystem = MacroSystem()

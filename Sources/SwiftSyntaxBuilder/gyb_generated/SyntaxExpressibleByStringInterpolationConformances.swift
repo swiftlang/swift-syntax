@@ -282,6 +282,8 @@ extension OperatorDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension PrecedenceGroupDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
+extension MacroDeclSyntax: SyntaxExpressibleByStringInterpolation {}
+
 extension MacroExpansionDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension LabeledStmtSyntax: SyntaxExpressibleByStringInterpolation {}

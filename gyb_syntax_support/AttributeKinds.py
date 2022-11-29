@@ -47,6 +47,7 @@ class BuiltinDeclModifier(Attribute):
 OnValue = 'OnValue'
 OnTypeAlias = 'OnTypeAlias'
 OnEnumElement = 'OnEnumElement'
+OnMacro = 'OnMacro'
 OnSubscript = 'OnSubscript'
 OnVar = 'OnVar'
 OnExtension = 'OnExtension'
@@ -173,7 +174,7 @@ DECL_ATTR_KINDS = [
                   APIStableToAdd,  APIStableToRemove,
                   code=0),
     DeclAttribute('available', 'Available',
-                  OnAbstractFunction,  OnGenericType,  OnVar,  OnSubscript,  OnEnumElement,
+                  OnAbstractFunction,  OnGenericType,  OnVar,  OnSubscript,  OnEnumElement, OnMacro,
                   OnExtension,  AllowMultipleAttributes,  LongAttribute,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=1),
@@ -530,7 +531,7 @@ DECL_ATTR_KINDS = [
 
     DeclAttribute('_spi', 'SPIAccessControl',
                   OnAbstractFunction,  OnExtension,  OnGenericType,  OnVar,  OnSubscript,
-                  OnImport,  OnAccessor,  OnEnumElement,
+                  OnImport,  OnAccessor,  OnEnumElement, OnMacro,
                   AllowMultipleAttributes,  UserInaccessible,
                   ABIStableToAdd,  ABIStableToRemove,  APIBreakingToAdd,  APIStableToRemove,
                   code=98),
@@ -645,7 +646,7 @@ DECL_ATTR_KINDS = [
                         code=125),
 
     DeclAttribute('_unavailableFromAsync', 'UnavailableFromAsync',
-                  OnFunc,  OnConstructor,  UserInaccessible,
+                  OnFunc,  OnConstructor,  OnMacro, UserInaccessible,
                   ABIStableToAdd,  ABIStableToRemove,
                   APIBreakingToAdd,  APIStableToRemove,
                   code=127),
@@ -810,7 +811,7 @@ DECL_MODIFIER_KINDS = [
                                   code=44),
     DeclAttribute('private', 'AccessControl',
                   OnFunc,  OnAccessor,  OnExtension,  OnGenericType,  OnVar,  OnSubscript,
-                  OnConstructor,
+                  OnConstructor, OnMacro,
                   DeclModifier,
                   NotSerialized,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,

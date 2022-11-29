@@ -13,23 +13,8 @@
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-struct ColumnMacro: ExpressionMacro {
-  static var name: String { "column" }
-
-  static var documentation: String {
-    "The column at which this macro is used"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-     """
-     <T: ExpressibleByIntegerLiteral>
-     """
-
-  static var signature: TypeSyntax = "T"
-
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct ColumnMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let line = macro.startLocation(
@@ -39,23 +24,8 @@ struct ColumnMacro: ExpressionMacro {
   }
 }
 
-struct LineMacro: ExpressionMacro {
-  static var name: String { "line" }
-
-  static var documentation: String {
-    "The line at which this macro is used"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-     """
-     <T: ExpressibleByIntegerLiteral>
-     """
-
-  static var signature: TypeSyntax = "T"
-
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct LineMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let line = macro.startLocation(
@@ -77,22 +47,7 @@ extension PatternBindingSyntax {
   }
 }
 
-struct FunctionMacro: ExpressionMacro {
-  static var name: String { "function" }
-
-  static var documentation: String {
-    "The name of the function in which this macro is used"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-     """
-     <T: ExpressibleByStringLiteral>
-     """
-
-  static var signature: TypeSyntax = "T"
-
-  static var owningModule: String = "Swift"
-
+public struct FunctionMacro: ExpressionMacro {
   /// Form a function name.
   private static func formFunctionName(
     _ baseName: String, _ parameters: ParameterClauseSyntax?,
@@ -182,7 +137,7 @@ struct FunctionMacro: ExpressionMacro {
     return nil
   }
 
-  static func apply(
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let name = findEnclosingName(macro) ?? context.moduleName
@@ -208,30 +163,8 @@ private func replaceFirstLabel(
     childAt: 0, with: firstElement.withLabel(.identifier(newLabel)))
 }
 
-struct ColorLiteralMacro: ExpressionMacro {
-  static var name: String { "colorLiteral" }
-
-  static var documentation: String {
-    "A color value expressed in terms of its RGBA components"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-     """
-     <T: ExpressibleByColorLiteral>
-     """
-
-  static var signature: TypeSyntax =
-     """
-     (
-      red: Float, green: Float, blue: Float, alpha: Float
-     ) -> T
-     """
-
-  // FIXME: Not entirely correct, should use _ColorLiteralType from
-  // appropriate place.
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct ColorLiteralMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let argList = replaceFirstLabel(
@@ -245,24 +178,8 @@ struct ColorLiteralMacro: ExpressionMacro {
   }
 }
 
-struct FileLiteralMacro: ExpressionMacro {
-  static var name: String { "fileLiteral" }
-
-  static var documentation: String {
-    "A file resource in the application bundle"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-      """
-      <T: ExpressibleByFileReferenceLiteral>
-      """
-
-  static var signature: TypeSyntax =
-      "(resourceName path: String) -> T"
-
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct FileLiteralMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let argList = replaceFirstLabel(
@@ -276,25 +193,8 @@ struct FileLiteralMacro: ExpressionMacro {
   }
 }
 
-struct ImageLiteralMacro: ExpressionMacro {
-  static var name: String { "imageLiteral" }
-
-  static var documentation: String {
-    "An image resource in the application bundle"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-      """
-      <T: ExpressibleByImageLiteral>
-      """
-
-  static var signature: TypeSyntax =
-      "(resourceName path: String) -> T"
-
-  // FIXME: Not really correct, use _ImageLiteralType
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct ImageLiteralMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let argList = replaceFirstLabel(
@@ -308,23 +208,8 @@ struct ImageLiteralMacro: ExpressionMacro {
   }
 }
 
-struct FilePathMacro: ExpressionMacro {
-  static var name: String { "filePath" }
-
-  static var documentation: String {
-    "The full path to the file in which this macro is used"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-     """
-     <T: ExpressibleByStringLiteral>
-     """
-
-  static var signature: TypeSyntax = "T"
-
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct FilePathMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let fileName = context.sourceLocationConverter.location(
@@ -338,23 +223,8 @@ struct FilePathMacro: ExpressionMacro {
   }
 }
 
-struct FileIDMacro: ExpressionMacro {
-  static var name: String { "fileID" }
-
-  static var documentation: String {
-    "The file in which this macro is used in the form ModuleName/FileName"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? =
-     """
-     <T: ExpressibleByStringLiteral>
-     """
-
-  static var signature: TypeSyntax = "T"
-
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct FileIDMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     var fileName = context.sourceLocationConverter.location(
@@ -377,14 +247,14 @@ struct FileIDMacro: ExpressionMacro {
 extension MacroSystem {
   public static var builtinMacroSystem: MacroSystem = {
     var macroSystem = MacroSystem()
-    try! macroSystem.add(ColorLiteralMacro.self)
-    try! macroSystem.add(ColumnMacro.self)
-    try! macroSystem.add(FileIDMacro.self)
-    try! macroSystem.add(FileLiteralMacro.self)
-    try! macroSystem.add(FilePathMacro.self)
-    try! macroSystem.add(FunctionMacro.self)
-    try! macroSystem.add(ImageLiteralMacro.self)
-    try! macroSystem.add(LineMacro.self)
+    try! macroSystem.add(ColorLiteralMacro.self, name: "colorLiteral")
+    try! macroSystem.add(ColumnMacro.self, name: "column")
+    try! macroSystem.add(FileIDMacro.self, name: "fileID")
+    try! macroSystem.add(FileLiteralMacro.self, name: "file")
+    try! macroSystem.add(FilePathMacro.self, name: "filePath")
+    try! macroSystem.add(FunctionMacro.self, name: "function")
+    try! macroSystem.add(ImageLiteralMacro.self, name: "imageLiteral")
+    try! macroSystem.add(LineMacro.self, name: "line")
     return macroSystem
   }()
 }

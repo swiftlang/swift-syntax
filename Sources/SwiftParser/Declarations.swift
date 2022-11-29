@@ -102,6 +102,9 @@ extension TokenConsumer {
       return false
     case .initKeyword:
       return allowInitDecl
+    case .macroContextualKeyword:
+      // macro Foo ...
+      return subparser.peek().tokenKind == .identifier
     case .some(_):
       // All other decl start keywords unconditonally start a decl.
       return true
@@ -149,6 +152,7 @@ extension Parser {
   ///     declaration → subscript-declaration
   ///     declaration → operator-declaration
   ///     declaration → precedence-group-declaration
+  ///     declaration → macro-declaration
   ///
   ///     declarations → declaration declarations?
   ///
@@ -236,6 +240,8 @@ extension Parser {
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
     case (.actorContextualKeyword, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
+    case (.macroContextualKeyword, let handle)?:
+      return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case nil:
       if inMemberDeclList {
         let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().tokenKind.is(any: [.colon, .equal, .comma])
@@ -2005,6 +2011,65 @@ extension Parser {
         rightParen: rightParen,
         arena: self.arena))
     }
+  }
+
+  /// Parse a macro declaration.
+  mutating func parseMacroDeclaration(
+    attrs: DeclAttributes,
+    introducerHandle: RecoveryConsumptionHandle
+  ) -> RawMacroDeclSyntax {
+    let (unexpectedBeforeIntroducerKeyword, introducerKeyword) = self.eat(introducerHandle)
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
+
+    // Optional generic parameters.
+    let genericParams: RawGenericParameterClauseSyntax?
+    if self.currentToken.starts(with: "<") {
+      genericParams = self.parseGenericParameters()
+    } else {
+      genericParams = nil
+    }
+
+    // Macro signature, which is either value-like or function-like.
+    let signature: RawMacroDeclSyntax.Signature
+    if let colon = self.consume(if: .colon) {
+      let type = self.parseType()
+      signature = .valueLike(
+        RawTypeAnnotationSyntax(colon: colon, type: type, arena: self.arena))
+    } else {
+      signature = .functionLike(self.parseFunctionSignature())
+    }
+
+    // External macro name
+    let (unexpectedBeforeEqual, equal) = self.expect(.equal)
+    let (unexpectedBeforeModuleName, moduleName) = self.expectIdentifier()
+    let (unexpectedBeforePeriod, period) = self.expect(.period)
+    let (unexpectedBeforeMacroTypeName, macroTypeName) = self.expectIdentifier()
+
+    let externalMacroName = RawExternalMacroNameSyntax(
+      unexpectedBeforeModuleName, moduleName: moduleName,
+      unexpectedBeforePeriod, period: period,
+      unexpectedBeforeMacroTypeName, macroTypeName: macroTypeName,
+      arena: self.arena
+    )
+
+    // Parse a 'where' clause if present.
+    let whereClause: RawGenericWhereClauseSyntax?
+    if self.at(.whereKeyword) {
+      whereClause = self.parseGenericWhereClause()
+    } else {
+      whereClause = nil
+    }
+
+    return RawMacroDeclSyntax(
+      attributes: attrs.attributes, modifiers: attrs.modifiers,
+      unexpectedBeforeIntroducerKeyword, macroKeyword: introducerKeyword,
+      unexpectedBeforeName, identifier: name,
+      genericParameterClause: genericParams,
+      signature: signature, unexpectedBeforeEqual, equal: equal,
+      externalName: externalMacroName,
+      genericWhereClause: whereClause,
+      arena: self.arena
+    )
   }
 
   /// Parse a macro expansion as an declaration.

@@ -75,6 +75,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/EnumDeclSyntax>
 - <doc:SwiftSyntax/OperatorDeclSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupDeclSyntax>
+- <doc:SwiftSyntax/MacroDeclSyntax>
 - <doc:SwiftSyntax/MacroExpansionDeclSyntax>
 
 ### Statements
@@ -355,6 +356,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PrecedenceGroupNameElementSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAssignmentSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAssociativitySyntax>
+- <doc:SwiftSyntax/ExternalMacroNameSyntax>
 - <doc:SwiftSyntax/TokenListSyntax>
 - <doc:SwiftSyntax/NonEmptyTokenListSyntax>
 - <doc:SwiftSyntax/CustomAttributeSyntax>

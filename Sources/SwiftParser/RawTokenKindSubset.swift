@@ -223,6 +223,7 @@ enum DeclarationStart: RawTokenKindSubset {
   case importKeyword
   case initKeyword
   case letKeyword
+  case macroContextualKeyword
   case operatorKeyword
   case precedencegroupKeyword
   case protocolKeyword
@@ -234,6 +235,7 @@ enum DeclarationStart: RawTokenKindSubset {
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme.tokenKind {
     case .identifier where lexeme.tokenText == "actor": self = .actorContextualKeyword
+    case .identifier where lexeme.tokenText == "macro": self = .macroContextualKeyword
     case .associatedtypeKeyword: self = .associatedtypeKeyword
     case .caseKeyword: self = .caseKeyword
     case .classKeyword: self = .classKeyword
@@ -268,6 +270,7 @@ enum DeclarationStart: RawTokenKindSubset {
     case .importKeyword: return .importKeyword
     case .initKeyword: return .initKeyword
     case .letKeyword: return .letKeyword
+    case .macroContextualKeyword: return .identifier
     case .operatorKeyword: return .operatorKeyword
     case .precedencegroupKeyword: return .precedencegroupKeyword
     case .protocolKeyword: return .protocolKeyword
@@ -281,6 +284,7 @@ enum DeclarationStart: RawTokenKindSubset {
   var contextualKeyword: SyntaxText? {
     switch self {
     case .actorContextualKeyword: return "actor"
+    case .macroContextualKeyword: return "macro"
     default: return nil
     }
   }
@@ -289,6 +293,7 @@ enum DeclarationStart: RawTokenKindSubset {
     switch self {
     case .actorContextualKeyword: return .declKeyword
     case .caseKeyword: return .declKeyword
+    case .macroContextualKeyword: return .declKeyword
     default: return nil
     }
   }

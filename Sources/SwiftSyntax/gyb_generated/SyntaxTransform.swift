@@ -664,6 +664,14 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType
+  /// Visiting `MacroDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: MacroDeclSyntax) -> ResultType
+  /// Visiting `ExternalMacroNameSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ExternalMacroNameSyntax) -> ResultType
   /// Visiting `MacroExpansionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2109,6 +2117,18 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType {
     visitAny(Syntax(node))
   }
+  /// Visiting `MacroDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: MacroDeclSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `ExternalMacroNameSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ExternalMacroNameSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
   /// Visiting `MacroExpansionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3139,6 +3159,10 @@ extension SyntaxTransformVisitor {
     case .precedenceGroupAssignment(let derived):
       return visit(derived)
     case .precedenceGroupAssociativity(let derived):
+      return visit(derived)
+    case .macroDecl(let derived):
+      return visit(derived)
+    case .externalMacroName(let derived):
       return visit(derived)
     case .macroExpansionDecl(let derived):
       return visit(derived)

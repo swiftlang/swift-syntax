@@ -1502,6 +1502,79 @@ public let DECL_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "MacroDecl",
+       nameForDiagnostics: "macro",
+       kind: "Decl",
+       traits: [
+         "IdentifiedDecl"
+       ],
+       children: [
+         Child(name: "Attributes",
+               kind: "AttributeList",
+               isOptional: true,
+               collectionElementName: "Attribute"),
+         Child(name: "Modifiers",
+               kind: "ModifierList",
+               isOptional: true,
+               collectionElementName: "Modifier"),
+         Child(name: "MacroKeyword",
+               kind: "ContextualKeywordToken",
+               tokenChoices: [
+                 "ContextualKeyword"
+               ],
+               textChoices: [
+                 "macro"
+               ]),
+         Child(name: "Identifier",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ]),
+         Child(name: "GenericParameterClause",
+               kind: "GenericParameterClause",
+               isOptional: true),
+         Child(name: "Signature",
+               kind: "Syntax",
+               nodeChoices: [
+                 Child(name: "FunctionLike",
+                       kind: "FunctionSignature"),
+                 Child(name: "ValueLike",
+                       kind: "TypeAnnotation")
+               ]),
+         Child(name: "Equal",
+               kind: "EqualToken",
+               tokenChoices: [
+                 "Equal"
+               ]),
+         Child(name: "ExternalName",
+               kind: "ExternalMacroName",
+               isOptional: true),
+         Child(name: "GenericWhereClause",
+               kind: "GenericWhereClause",
+               isOptional: true)
+       ]),
+
+  Node(name: "ExternalMacroName",
+       nameForDiagnostics: "external macro name",
+       kind: "Syntax",
+       children: [
+         Child(name: "ModuleName",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ]),
+         Child(name: "Period",
+               kind: "PeriodToken",
+               tokenChoices: [
+                 "Period"
+               ]),
+         Child(name: "MacroTypeName",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ])
+       ]),
+
   Node(name: "MacroExpansionDecl",
        nameForDiagnostics: "pound literal declaration",
        kind: "Decl",

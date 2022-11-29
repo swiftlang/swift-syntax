@@ -219,6 +219,7 @@ extension EnumCaseElementSyntax: WithTrailingCommaSyntax {}
 extension EnumDeclSyntax: IdentifiedDeclSyntax {}
 extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
 extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax {}
+extension MacroDeclSyntax: IdentifiedDeclSyntax {}
 extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {}
 extension TargetFunctionEntrySyntax: WithTrailingCommaSyntax {}
 extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {}

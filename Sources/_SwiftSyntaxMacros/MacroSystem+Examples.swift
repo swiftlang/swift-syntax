@@ -14,20 +14,8 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 // Macros used for testing purposes
-struct StringifyMacro: ExpressionMacro {
-  static var name: String { "stringify" }
-
-  static var documentation: String {
-    "An example macro that produces the value of an expression and its source text"
-  }
-
-  static var genericSignature: GenericParameterClauseSyntax? = "<T>"
-
-  static var signature: TypeSyntax = "(T) -> (T, String)"
-
-  static var owningModule: String = "Swift"
-
-  static func apply(
+public struct StringifyMacro: ExpressionMacro {
+  public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     guard let argument = macro.argumentList.first?.expression else {
@@ -42,7 +30,7 @@ struct StringifyMacro: ExpressionMacro {
 extension MacroSystem {
   public static var exampleSystem: MacroSystem = {
     var macroSystem = builtinMacroSystem
-    try! macroSystem.add(StringifyMacro.self)
+    try! macroSystem.add(StringifyMacro.self, name: "stringify")
     return macroSystem
   }()
 }

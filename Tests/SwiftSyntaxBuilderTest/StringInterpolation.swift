@@ -79,6 +79,20 @@ final class StringInterpolationTests: XCTestCase {
 
     let structNode: DeclSyntax =
        """
+       struct \(raw: name) {
+         static var id = \(raw: id)
+       }
+       """
+    XCTAssertTrue(structNode.is(StructDeclSyntax.self))
+  }
+
+  @available(*, deprecated)
+  func testStructGeneratorDeprecated() {
+    let name = "Type"
+    let id = 17
+
+    let structNode: DeclSyntax =
+       """
        struct \(name) {
          static var id = \(id)
        }
@@ -117,6 +131,43 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testParserBuilderInStringInterpolation() {
+    let cases = SwitchCaseList {
+      for i in 0..<2 {
+        SwitchCase("""
+        case \(raw: i):
+          return \(raw: i + 1)
+        """)
+      }
+      SwitchCase("""
+      default:
+        return -1
+      """)
+    }
+    let plusOne = FunctionDeclSyntax("""
+    func plusOne(base: Int) -> Int {
+      switch base {
+      \(cases, format: TwoSpacesFormat())
+      }
+    }
+    """)
+
+    AssertStringsEqualWithDiff(plusOne.description.trimmingTrailingWhitespace(), """
+    func plusOne(base: Int) -> Int {
+      switch base {
+
+      case 0:
+        return 1
+      case 1:
+        return 2
+      default:
+        return -1
+      }
+    }
+    """)
+  }
+
+  @available(*, deprecated)
+  func testParserBuilderInStringInterpolationDeprecated() {
     let cases = SwitchCaseList {
       for i in 0..<2 {
         SwitchCase("""

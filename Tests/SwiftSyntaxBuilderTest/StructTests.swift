@@ -82,7 +82,7 @@ final class StructTests: XCTestCase {
         if i.isMultiple(of: 2) {
           VariableDecl(letOrVarKeyword: .let) {
             PatternBinding(
-              pattern: IdentifierPattern("var\(i)"),
+              pattern: IdentifierPattern("var\(raw: i)"),
               typeAnnotation: TypeAnnotation(type: Type("String"))
             )
           }

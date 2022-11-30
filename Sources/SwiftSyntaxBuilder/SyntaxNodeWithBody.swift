@@ -38,7 +38,7 @@ public protocol HasTrailingCodeBlock {
 
 public extension HasTrailingCodeBlock where Self: SyntaxExpressibleByStringInterpolation {
   init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax) {
-    self = "\(signature) {}"
+    self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
   }
 }
@@ -58,7 +58,7 @@ public protocol HasTrailingOptionalCodeBlock {
 
 public extension HasTrailingOptionalCodeBlock where Self: SyntaxExpressibleByStringInterpolation {
   init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemListSyntax) {
-    self = "\(signature) {}"
+    self = "\(raw: signature) {}"
     self.body = CodeBlock(statements: bodyBuilder())
   }
 }
@@ -77,7 +77,7 @@ public protocol HasTrailingMemberDeclBlock {
 
 public extension HasTrailingMemberDeclBlock where Self: SyntaxExpressibleByStringInterpolation {
   init(_ signature: String, @MemberDeclListBuilder membersBuilder: () -> MemberDeclListSyntax) {
-    self = "\(signature) {}"
+    self = "\(raw: signature) {}"
     self.members = MemberDeclBlock(members: membersBuilder())
   }
 }

@@ -62,11 +62,11 @@ private extension TriviaPiece {
     let (label, value) = Mirror(reflecting: self).children.first!
     switch value {
     case let value as String:
-      return FunctionCallExpr(callee: ".\(label!)") {
+      return FunctionCallExpr(callee: ".\(raw: label!)") {
         TupleExprElement(expression: StringLiteralExpr(content: value))
       }
     case let value as Int:
-      return FunctionCallExpr(callee: ".\(label!)") {
+      return FunctionCallExpr(callee: ".\(raw: label!)") {
         TupleExprElement(expression: IntegerLiteralExpr(value))
       }
     default:
@@ -131,7 +131,7 @@ extension SyntaxProtocol {
         tokenInitializerName = String(tokenKindStr[..<tokenKindStr.firstIndex(of: "(")!])
         requiresExplicitText = true
       }
-      return FunctionCallExpr(callee: ".\(tokenInitializerName)") {
+      return FunctionCallExpr(callee: ".\(raw: tokenInitializerName)") {
         if requiresExplicitText {
           TupleExprElement(
             expression: StringLiteralExpr(content: token.text)

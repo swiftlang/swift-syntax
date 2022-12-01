@@ -45,12 +45,19 @@ if (NOT SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
 endif()
 
 # Determine the module triple.
-# FIXME: This is a hack. It's all a hack.
+# FIXME: This is a hack. It's all a hack. Windows isn't setting
+# CMAKE_Swift_COMPILER_TARGET.
 if(CMAKE_Swift_COMPILER_TARGET)
   string(REGEX REPLACE "macosx[0-9]+([.][0-9]+)?" "macos" SWIFT_MODULE_TRIPLE
     ${CMAKE_Swift_COMPILER_TARGET})
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
-  set(SWIFT_MODULE_TRIPLE "${CMAKE_SYSTEM_PROCESSOR}-unknown-windows-msvc")
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
+    set(SWIFT_MODULE_TRIPLE "x86_64-unknown-windows-msvc")
+  elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|ARM64|arm64")
+    set(SWIFT_MODULE_TRIPLE "aarch64-unknown-windows-msvc")
+  else()
+    message(FATAL_ERROR "Unrecognized architecture for Windows host")
+  endif()
 endif()
 
 message(STATUS "Module triple: ${SWIFT_MODULE_TRIPLE}")

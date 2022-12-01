@@ -16,17 +16,12 @@ function(add_swift_host_library name)
   # Add this to the list of exported targets.
   set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS ${name})
 
-  # Determine the module triple based on the target triple.
-  # FIXME: We would prefer to have build-script tell us.
-  string(REGEX REPLACE "macosx[0-9]+([.][0-9]+)?" "macos" module_triple
-    ${CMAKE_Swift_COMPILER_TARGET})
-
   # Determine where Swift modules will be built and installed.
   set(module_dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
   set(module_base "${module_dir}/${name}.swiftmodule")
-  set(module_file "${module_base}/${module_triple}.swiftmodule")
-  set(module_interface_file "${module_base}/${module_triple}.swiftinterface")
-  set(module_sourceinfo_file "${module_base}/${module_triple}.swiftsourceinfo")
+  set(module_file "${module_base}/${SWIFT_MODULE_TRIPLE}.swiftmodule")
+  set(module_interface_file "${module_base}/${SWIFT_MODULE_TRIPLE}.swiftinterface")
+  set(module_sourceinfo_file "${module_base}/${SWIFT_MODULE_TRIPLE}.swiftsourceinfo")
 
   # Add a custom target to create the module directory.
   add_custom_command(

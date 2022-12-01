@@ -44,6 +44,17 @@ if (NOT SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
     $<$<COMPILE_LANGUAGE:Swift>:-disable-implicit-string-processing-module-import>)
 endif()
 
+# Determine the module triple.
+# FIXME: This is a hack. It's all a hack.
+if(CMAKE_Swift_COMPILER_TARGET)
+  string(REGEX REPLACE "macosx[0-9]+([.][0-9]+)?" "macos" SWIFT_MODULE_TRIPLE
+    ${CMAKE_Swift_COMPILER_TARGET})
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+  set(SWIFT_MODULE_TRIPLE "${CMAKE_SYSTEM_PROCESSOR}-unknown-windows-msvc")
+endif()
+
+message(STATUS "Module triple: ${SWIFT_MODULE_TRIPLE}")
+
 # Force single-threaded-only syntax trees to eliminate the Darwin
 # dependency in the compiler.
 add_compile_definitions(

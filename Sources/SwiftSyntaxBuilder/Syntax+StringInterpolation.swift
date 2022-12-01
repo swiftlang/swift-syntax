@@ -420,15 +420,9 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
       // e.g. `.some(nil)`, add a layer of `.some(_:)` around it to preserve the
       // depth of the data structure.
       if containsNil(wrappedExpr) {
-        // TODO: Can't we have something nicer than this? `MemberAccessExpr(name: "some").makeCall(wrapped)`?
-        return FunctionCallExpr(
-          calledExpression: MemberAccessExpr(name: "some"),
-          leftParen: .leftParen,
-          argumentList: TupleExprElementList {
-            TupleExprElement(expression: wrappedExpr)
-          },
-          rightParen: .rightParen
-        )
+        return FunctionCallExpr(callee: MemberAccessExpr(name: "some")) {
+          TupleExprElement(expression: wrappedExpr)
+        }
       }
 
       return wrappedExpr

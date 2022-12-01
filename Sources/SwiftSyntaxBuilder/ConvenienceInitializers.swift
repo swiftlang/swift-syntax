@@ -141,6 +141,7 @@ extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
 // MARK: - FunctionCallExpr
 
 extension FunctionCallExpr {
+  // Need an overload that's explicitly `ExprSyntax` for code literals to work.
   /// A convenience initializer that allows passing in arguments using a result builder
   /// instead of having to wrap them in a `TupleExprElementList`.
   /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
@@ -159,6 +160,23 @@ extension FunctionCallExpr {
       rightParen: shouldOmitParens ? nil : .rightParen,
       trailingClosure: trailingClosure,
       additionalTrailingClosures: additionalTrailingClosures
+    )
+  }
+
+  /// A convenience initializer that allows passing in arguments using a result builder
+  /// instead of having to wrap them in a `TupleExprElementList`.
+  /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
+  public init(
+    callee: ExprSyntaxProtocol,
+    trailingClosure: ClosureExprSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
+    @TupleExprElementListBuilder argumentList: () -> TupleExprElementList = { [] }
+  ) {
+    self.init(
+      callee: ExprSyntax(fromProtocol: callee),
+      trailingClosure: trailingClosure,
+      additionalTrailingClosures: additionalTrailingClosures,
+      argumentList: argumentList
     )
   }
 }

@@ -18,7 +18,7 @@ extension MacroExpansionExprSyntax {
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: MacroExpansionContext,
+    in context: inout MacroExpansionContext,
     errorHandler: (MacroSystemError) -> Void
   ) -> ExprSyntax {
     guard let exprMacro = macro as? ExpressionMacro.Type else {
@@ -27,7 +27,7 @@ extension MacroExpansionExprSyntax {
     }
 
     // Handle the rewrite.
-    let result = exprMacro.apply(self, in: context)
+    let result = exprMacro.apply(self, in: &context)
 
     // Report diagnostics, if there were any.
     if !result.diagnostics.isEmpty {
@@ -65,7 +65,7 @@ extension MacroExpansionDeclSyntax {
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: MacroExpansionContext,
+    in context: inout MacroExpansionContext,
     errorHandler: (MacroSystemError) -> Void
   ) -> Syntax {
     // TODO: declaration/statement macros
@@ -73,7 +73,7 @@ extension MacroExpansionDeclSyntax {
     // Fall back to evaluating as an expression macro.
     return Syntax(
       asMacroExpansionExpr().evaluateMacro(
-        macro, in: context, errorHandler: errorHandler
+        macro, in: &context, errorHandler: errorHandler
       )
     )
   }
@@ -104,7 +104,7 @@ extension Syntax {
   /// some kind.
   public func evaluateMacro(
     with macroSystem: MacroSystem,
-    context: MacroExpansionContext,
+    context: inout MacroExpansionContext,
     errorHandler: (MacroSystemError) -> Void
   ) -> Syntax {
     // If this isn't a macro evaluation node, do nothing.
@@ -121,13 +121,13 @@ extension Syntax {
     switch self.as(SyntaxEnum.self) {
     case .macroExpansionDecl(let expansion):
       return expansion.evaluateMacro(
-        macro, in: context, errorHandler: errorHandler
+        macro, in: &context, errorHandler: errorHandler
       )
 
     case .macroExpansionExpr(let expansion):
       return Syntax(
         expansion.evaluateMacro(
-          macro, in: context, errorHandler: errorHandler
+          macro, in: &context, errorHandler: errorHandler
         )
       )
 

@@ -23,11 +23,11 @@ final class MacroSystemTests: XCTestCase {
       let b = #stringify(x + y)
       #colorLiteral(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       """
-    let context = MacroExpansionContext(
+    var context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: context, errorHandler: { error in }
+      node: sf, in: &context, errorHandler: { error in }
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -46,11 +46,11 @@ final class MacroSystemTests: XCTestCase {
         return true
       })
       """
-    let context = MacroExpansionContext(
+    var context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: context, errorHandler: { error in }
+      node: sf, in: &context, errorHandler: { error in }
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -94,11 +94,11 @@ final class MacroSystemTests: XCTestCase {
         static var staticProp: String = #function
       }
       """
-    let context = MacroExpansionContext(
+    var context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: context, errorHandler: { error in }
+      node: sf, in: &context, errorHandler: { error in }
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -139,11 +139,11 @@ final class MacroSystemTests: XCTestCase {
       """
       let b = #fileID
       """
-    let context = MacroExpansionContext(
+    var context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "taylor.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: context, errorHandler: { error in }
+      node: sf, in: &context, errorHandler: { error in }
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,

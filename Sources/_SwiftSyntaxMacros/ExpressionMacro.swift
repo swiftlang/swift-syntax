@@ -22,7 +22,7 @@ public protocol ExpressionMacro: Macro {
   /// Evaluate a macro described by the given macro expansion expression
   /// within the given context to produce a replacement expression.
   static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroExpansionContext
+    _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> MacroResult<ExprSyntax>
 }
 

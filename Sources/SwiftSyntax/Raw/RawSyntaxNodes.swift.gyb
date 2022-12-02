@@ -39,6 +39,7 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
 %      enums.append(('Element', [(NODE_MAP[choice_name].swift_syntax_kind, NODE_MAP[choice_name].name) for choice_name in node.collection_element_choices]))
 %   end
 %   for (name, choices) in enums:
+  @frozen
   public enum ${name}: RawSyntaxNodeProtocol {
 %     for (swift_name, type_name) in choices:
     case `${swift_name}`(Raw${type_name})

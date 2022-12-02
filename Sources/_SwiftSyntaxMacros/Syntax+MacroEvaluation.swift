@@ -18,7 +18,7 @@ extension MacroExpansionExprSyntax {
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: MacroEvaluationContext,
+    in context: MacroExpansionContext,
     errorHandler: (MacroSystemError) -> Void
   ) -> ExprSyntax {
     guard let exprMacro = macro as? ExpressionMacro.Type else {
@@ -65,7 +65,7 @@ extension MacroExpansionDeclSyntax {
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: MacroEvaluationContext,
+    in context: MacroExpansionContext,
     errorHandler: (MacroSystemError) -> Void
   ) -> Syntax {
     // TODO: declaration/statement macros
@@ -104,7 +104,7 @@ extension Syntax {
   /// some kind.
   public func evaluateMacro(
     with macroSystem: MacroSystem,
-    context: MacroEvaluationContext,
+    context: MacroExpansionContext,
     errorHandler: (MacroSystemError) -> Void
   ) -> Syntax {
     // If this isn't a macro evaluation node, do nothing.

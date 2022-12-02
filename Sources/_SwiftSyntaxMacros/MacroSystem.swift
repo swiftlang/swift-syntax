@@ -62,12 +62,12 @@ public struct MacroSystem {
 /// Syntax rewriter that evaluates any macros encountered along the way.
 class MacroApplication : SyntaxRewriter {
   let macroSystem: MacroSystem
-  let context: MacroEvaluationContext
+  let context: MacroExpansionContext
   let errorHandler: (MacroSystemError) -> Void
 
   init(
     macroSystem: MacroSystem,
-    context: MacroEvaluationContext,
+    context: MacroExpansionContext,
     errorHandler: @escaping (MacroSystemError) -> Void
   ) {
     self.macroSystem = macroSystem
@@ -113,7 +113,7 @@ extension MacroSystem {
   /// - Returns: the syntax tree with all macros evaluated.
   public func evaluateMacros<Node: SyntaxProtocol>(
     node: Node,
-    in context: MacroEvaluationContext,
+    in context: MacroExpansionContext,
     errorHandler: (MacroSystemError) -> Void
   ) -> Syntax {
     return withoutActuallyEscaping(errorHandler) { errorHandler in

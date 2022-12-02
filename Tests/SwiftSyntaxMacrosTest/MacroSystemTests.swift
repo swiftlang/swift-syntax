@@ -23,7 +23,7 @@ final class MacroSystemTests: XCTestCase {
       let b = #stringify(x + y)
       #colorLiteral(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       """
-    let context = MacroEvaluationContext(
+    let context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
@@ -46,7 +46,7 @@ final class MacroSystemTests: XCTestCase {
         return true
       })
       """
-    let context = MacroEvaluationContext(
+    let context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
@@ -94,7 +94,7 @@ final class MacroSystemTests: XCTestCase {
         static var staticProp: String = #function
       }
       """
-    let context = MacroEvaluationContext(
+    let context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
@@ -139,7 +139,7 @@ final class MacroSystemTests: XCTestCase {
       """
       let b = #fileID
       """
-    let context = MacroEvaluationContext(
+    let context = MacroExpansionContext(
       moduleName: "MyModule", fileName: "taylor.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(

@@ -242,7 +242,7 @@ class ExpandMacros: ParsableCommand {
         resultTree = Syntax(tree)
       }
 
-      let context = MacroEvaluationContext(
+      let context = MacroExpansionContext(
         moduleName: "MyModule", fileName: self.sourceFile.withoutPath()
       )
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)

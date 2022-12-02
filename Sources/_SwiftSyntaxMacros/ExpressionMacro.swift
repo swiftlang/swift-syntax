@@ -22,7 +22,7 @@ public protocol ExpressionMacro: Macro {
   /// Evaluate a macro described by the given macro expansion expression
   /// within the given context to produce a replacement expression.
   static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+    _ macro: MacroExpansionExprSyntax, in context: MacroExpansionContext
   ) -> MacroResult<ExprSyntax>
 }
 
@@ -66,7 +66,7 @@ extension ExpressionMacro {
     let sourceFileSyntax = Parser.parse(source: sourceFileTextBuffer)
     let converter = SourceLocationConverter(
       file: filePath, tree: sourceFileSyntax)
-    let context = MacroEvaluationContext(
+    let context = MacroExpansionContext(
       moduleName: targetModuleName, sourceLocationConverter: converter)
     let meePosition = AbsolutePosition(
       utf8Offset: sourceFileText.distance(to: localSourceText))

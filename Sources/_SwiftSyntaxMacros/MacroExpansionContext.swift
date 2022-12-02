@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// System-supplied structure that provides information about the context in
 /// which a given macro is being expanded.
-public struct MacroEvaluationContext {
+public struct MacroExpansionContext {
   /// The name of the module in which the macro is being evaluated.
   public let moduleName: String
 

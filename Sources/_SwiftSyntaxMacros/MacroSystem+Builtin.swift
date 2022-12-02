@@ -116,7 +116,7 @@ public struct FunctionMacro: ExpressionMacro {
   }
 
   public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+    _ macro: MacroExpansionExprSyntax, in context: MacroExpansionContext
   ) -> MacroResult<ExprSyntax> {
     let name = findEnclosingName(macro) ?? context.moduleName
     let literal: ExprSyntax = "\(literal: name)"
@@ -143,7 +143,7 @@ private func replaceFirstLabel(
 
 public struct ColorLiteralMacro: ExpressionMacro {
   public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+    _ macro: MacroExpansionExprSyntax, in context: MacroExpansionContext
   ) -> MacroResult<ExprSyntax> {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "_colorLiteralRed"
@@ -158,7 +158,7 @@ public struct ColorLiteralMacro: ExpressionMacro {
 
 public struct FileLiteralMacro: ExpressionMacro {
   public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+    _ macro: MacroExpansionExprSyntax, in context: MacroExpansionContext
   ) -> MacroResult<ExprSyntax> {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "fileReferenceLiteralResourceName"
@@ -173,7 +173,7 @@ public struct FileLiteralMacro: ExpressionMacro {
 
 public struct ImageLiteralMacro: ExpressionMacro {
   public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+    _ macro: MacroExpansionExprSyntax, in context: MacroExpansionContext
   ) -> MacroResult<ExprSyntax> {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "imageLiteralResourceName"
@@ -188,7 +188,7 @@ public struct ImageLiteralMacro: ExpressionMacro {
 
 public struct FileIDMacro: ExpressionMacro {
   public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
+    _ macro: MacroExpansionExprSyntax, in context: MacroExpansionContext
   ) -> MacroResult<ExprSyntax> {
     // FIXME: Compiler has more sophisticated file ID computation
     let fileID = "\(context.moduleName)/\(context.fileName)"

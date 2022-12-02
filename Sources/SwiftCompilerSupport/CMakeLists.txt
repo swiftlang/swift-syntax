@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(SwiftCompilerSupport STATIC
+add_swift_host_library(SwiftCompilerSupport
   ConsistencyCheck.swift
 )
 
@@ -17,16 +17,3 @@ target_link_libraries(SwiftCompilerSupport PUBLIC
   SwiftParserDiagnostics
   SwiftOperators
 )
-
-set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftCompilerSupport)
-
-# NOTE: workaround for CMake not setting up include flags yet
-set_target_properties(SwiftCompilerSupport PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES
-  "${CMAKE_Swift_MODULE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR}")
-
-install(TARGETS SwiftCompilerSupport
-  EXPORT SwiftSyntaxTargets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)

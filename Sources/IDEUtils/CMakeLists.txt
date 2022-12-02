@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(IDEUtils STATIC
+add_swift_host_library(IDEUtils
   gyb_generated/SyntaxClassification.swift
   Syntax+Classifications.swift
   SyntaxClassifier.swift
@@ -14,15 +14,3 @@ add_library(IDEUtils STATIC
 
 target_link_libraries(IDEUtils PUBLIC
   SwiftSyntax)
-
-set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS IDEUtils)
-
-# NOTE: workaround for CMake not setting up include flags yet
-set_target_properties(IDEUtils PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
-
-install(TARGETS IDEUtils
-  EXPORT SwiftSyntaxTargets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)

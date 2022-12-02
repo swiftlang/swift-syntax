@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(SwiftDiagnostics STATIC
+add_swift_host_library(SwiftDiagnostics
   Diagnostic.swift
   DiagnosticsFormatter.swift
   FixIt.swift
@@ -16,15 +16,3 @@ add_library(SwiftDiagnostics STATIC
 
 target_link_libraries(SwiftDiagnostics PUBLIC
   SwiftSyntax)
-
-set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftDiagnostics)
-
-# NOTE: workaround for CMake not setting up include flags yet
-set_target_properties(SwiftDiagnostics PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
-
-install(TARGETS SwiftDiagnostics
-  EXPORT SwiftSyntaxTargets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)

@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(SwiftParserDiagnostics STATIC
+add_swift_host_library(SwiftParserDiagnostics
   DiagnosticExtensions.swift
   MissingNodesError.swift
   ParserDiagnosticMessages.swift
@@ -20,16 +20,3 @@ target_link_libraries(SwiftParserDiagnostics PUBLIC
   SwiftDiagnostics
   SwiftParser
   SwiftSyntax)
-
-set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftParserDiagnostics)
-
-# NOTE: workaround for CMake not setting up include flags yet
-set_target_properties(SwiftParserDiagnostics PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES
-  "${CMAKE_Swift_MODULE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR}")
-
-install(TARGETS SwiftParserDiagnostics
-  EXPORT SwiftSyntaxTargets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)

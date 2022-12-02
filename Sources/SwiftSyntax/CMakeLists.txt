@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(SwiftSyntax STATIC
+add_swift_host_library(SwiftSyntax
   AbsolutePosition.swift
   BumpPtrAllocator.swift
   CommonAncestor.swift
@@ -54,15 +54,3 @@ add_library(SwiftSyntax STATIC
   gyb_generated/syntax_nodes/SyntaxStmtNodes.swift
   gyb_generated/syntax_nodes/SyntaxTypeNodes.swift
 )
-
-set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftSyntax)
-
-# NOTE: workaround for CMake not setting up include flags yet
-set_target_properties(SwiftSyntax PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
-
-install(TARGETS SwiftSyntax
-  EXPORT SwiftSyntaxTargets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)

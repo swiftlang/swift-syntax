@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_library(SwiftSyntaxBuilder STATIC
+add_swift_host_library(SwiftSyntaxBuilder
   ConvenienceInitializers.swift
   HasTrailingComma.swift
   Indenter.swift
@@ -29,16 +29,3 @@ target_link_libraries(SwiftSyntaxBuilder PUBLIC
   SwiftParserDiagnostics
   SwiftSyntax
   )
-
-set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftSyntaxBuilder)
-
-# NOTE: workaround for CMake not setting up include flags yet
-set_target_properties(SwiftSyntaxBuilder PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES
-  "${CMAKE_Swift_MODULE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR}")
-
-install(TARGETS SwiftSyntaxBuilder
-  EXPORT SwiftSyntaxTargets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)

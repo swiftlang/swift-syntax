@@ -25,10 +25,21 @@ public struct MacroExpansionContext {
   /// name, so the combination of file and module name is unique.
   public let fileName: String
 
+  /// Counter used to generate names local to the macro.
+  var localNameCounter = 0
+
   /// Create a new macro evaluation context.
   public init(moduleName: String, fileName: String) {
     self.moduleName = moduleName
     self.fileName = fileName
+  }
+
+  /// Generate a unique local name for use in the macro.
+  public mutating func createUniqueLocalName() -> TokenSyntax {
+    let name = "__macro_local_\(localNameCounter)"
+    let token = TokenSyntax(.identifier(name), presence: .present)
+    localNameCounter += 1
+    return token
   }
 
   /// Create a new macro evaluation context.

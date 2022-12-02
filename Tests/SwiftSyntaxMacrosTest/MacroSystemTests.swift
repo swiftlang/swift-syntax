@@ -152,4 +152,15 @@ final class MacroSystemTests: XCTestCase {
       """
     )
   }
+
+  func testContextUniqueLocalNames() {
+    var context = MacroExpansionContext(
+      moduleName: "MyModule", fileName: "taylor.swift"
+    )
+
+    let t1 = context.createUniqueLocalName()
+    let t2 = context.createUniqueLocalName()
+    XCTAssertNotEqual(t1.description, t2.description)
+    XCTAssertEqual(t1.description, "__macro_local_0")
+  }
 }

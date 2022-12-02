@@ -18,14 +18,29 @@ public struct MacroEvaluationContext {
   /// The name of the module in which the macro is being evaluated.
   public let moduleName: String
 
-  /// Used to map the provided syntax nodes into source locations.
-  public let sourceLocationConverter: SourceLocationConverter
+  /// The name of the source file in which the macro is being evaluated,
+  /// without any path information.
+  ///
+  /// Swift prevents two files within the same module from having the same
+  /// name, so the combination of file and module name is unique.
+  public let fileName: String
 
+  /// Create a new macro evaluation context.
+  public init(moduleName: String, fileName: String) {
+    self.moduleName = moduleName
+    self.fileName = fileName
+  }
+
+  /// Create a new macro evaluation context.
+  @available(*, deprecated, message: "Use init(moduleName:fileName:)")
   public init(
     moduleName: String,
     sourceLocationConverter: SourceLocationConverter
   ) {
-    self.moduleName = moduleName
-    self.sourceLocationConverter = sourceLocationConverter
+    let fileName = sourceLocationConverter.location(
+      for: AbsolutePosition(utf8Offset: -1)
+    ).file ?? "unknown.swift"
+
+    self.init(moduleName: moduleName, fileName: fileName)
   }
 }

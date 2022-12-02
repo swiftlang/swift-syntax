@@ -20,15 +20,11 @@ final class MacroSystemTests: XCTestCase {
   func testExpressionExpansion() {
     let sf: SourceFileSyntax =
       """
-      #line
-      let a = (#line)
       let b = #stringify(x + y)
       #colorLiteral(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
-      let c = #column
       """
-    let converter = SourceLocationConverter(file: "test.swift", tree: sf)
     let context = MacroEvaluationContext(
-      moduleName: "MyModule", sourceLocationConverter: converter
+      moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
       node: sf, in: context, errorHandler: { error in }
@@ -36,11 +32,8 @@ final class MacroSystemTests: XCTestCase {
     AssertStringsEqualWithDiff(
       transformedSF.description,
       """
-      1
-      let a = (2)
       let b = (x + y, "x + y")
       .init(_colorLiteralRed: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
-      let c = 9
       """
     )
   }
@@ -53,9 +46,8 @@ final class MacroSystemTests: XCTestCase {
         return true
       })
       """
-    let converter = SourceLocationConverter(file: "test.swift", tree: sf)
     let context = MacroEvaluationContext(
-      moduleName: "MyModule", sourceLocationConverter: converter
+      moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
       node: sf, in: context, errorHandler: { error in }
@@ -102,9 +94,8 @@ final class MacroSystemTests: XCTestCase {
         static var staticProp: String = #function
       }
       """
-    let converter = SourceLocationConverter(file: "test.swift", tree: sf)
     let context = MacroEvaluationContext(
-      moduleName: "MyModule", sourceLocationConverter: converter
+      moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
       node: sf, in: context, errorHandler: { error in }
@@ -146,14 +137,10 @@ final class MacroSystemTests: XCTestCase {
   func testFileExpansions() {
     let sf: SourceFileSyntax =
       """
-      let a = #filePath
       let b = #fileID
       """
-    let converter = SourceLocationConverter(
-      file: "/tmp/src/taylor.swift", tree: sf
-    )
     let context = MacroEvaluationContext(
-      moduleName: "MyModule", sourceLocationConverter: converter
+      moduleName: "MyModule", fileName: "taylor.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
       node: sf, in: context, errorHandler: { error in }
@@ -161,7 +148,6 @@ final class MacroSystemTests: XCTestCase {
     AssertStringsEqualWithDiff(
       transformedSF.description,
       """
-      let a = "/tmp/src/taylor.swift"
       let b = "MyModule/taylor.swift"
       """
     )

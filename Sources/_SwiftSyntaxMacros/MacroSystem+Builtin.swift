@@ -13,28 +13,6 @@
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-public struct ColumnMacro: ExpressionMacro {
-  public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
-  ) -> MacroResult<ExprSyntax> {
-    let line = macro.startLocation(
-      converter: context.sourceLocationConverter
-    ).column ?? 0
-    return .init("\(literal: line)")
-  }
-}
-
-public struct LineMacro: ExpressionMacro {
-  public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
-  ) -> MacroResult<ExprSyntax> {
-    let line = macro.startLocation(
-      converter: context.sourceLocationConverter
-    ).line ?? 0
-    return .init("\(literal: line)")
-  }
-}
-
 extension PatternBindingSyntax {
   /// When the variable is declaring a single binding, produce the name of
   /// that binding.
@@ -208,37 +186,12 @@ public struct ImageLiteralMacro: ExpressionMacro {
   }
 }
 
-public struct FilePathMacro: ExpressionMacro {
-  public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
-  ) -> MacroResult<ExprSyntax> {
-    let fileName = context.sourceLocationConverter.location(
-      for: .init(utf8Offset: 0)
-    ).file ?? "<unknown file>"
-    let fileLiteral: ExprSyntax = "\(literal: fileName)"
-    if let leadingTrivia = macro.leadingTrivia {
-      return MacroResult(fileLiteral.withLeadingTrivia(leadingTrivia))
-    }
-    return MacroResult(fileLiteral)
-  }
-}
-
 public struct FileIDMacro: ExpressionMacro {
   public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
-    var fileName = context.sourceLocationConverter.location(
-      for: .init(utf8Offset: 0)
-    ).file ?? "<unknown file>"
-
-    // Only keep everything after the last slash.
-    if let lastSlash = fileName.lastIndex(of: "/") {
-      fileName = String(fileName[fileName.index(after: lastSlash)...])
-    }
-
     // FIXME: Compiler has more sophisticated file ID computation
-    let fileID = "\(context.moduleName)/\(fileName)"
-
+    let fileID = "\(context.moduleName)/\(context.fileName)"
     let fileLiteral: ExprSyntax = "\(literal: fileID)"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(fileLiteral.withLeadingTrivia(leadingTrivia))
@@ -251,13 +204,9 @@ extension MacroSystem {
   public static var builtinMacroSystem: MacroSystem = {
     var macroSystem = MacroSystem()
     try! macroSystem.add(ColorLiteralMacro.self, name: "colorLiteral")
-    try! macroSystem.add(ColumnMacro.self, name: "column")
     try! macroSystem.add(FileIDMacro.self, name: "fileID")
-    try! macroSystem.add(FileLiteralMacro.self, name: "file")
-    try! macroSystem.add(FilePathMacro.self, name: "filePath")
     try! macroSystem.add(FunctionMacro.self, name: "function")
     try! macroSystem.add(ImageLiteralMacro.self, name: "imageLiteral")
-    try! macroSystem.add(LineMacro.self, name: "line")
     return macroSystem
   }()
 }

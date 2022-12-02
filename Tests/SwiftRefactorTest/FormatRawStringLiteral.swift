@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftParser
 import SwiftRefactor
 import SwiftSyntaxBuilder
-@_spi(RawSyntax) import SwiftSyntax
-@_spi(RawSyntax) import SwiftParser
+import SwiftSyntax
 
 import XCTest
 import _SwiftSyntaxTestSupport
@@ -41,13 +41,8 @@ final class FormatRawStringLiteralTest: XCTestCase {
 }
 
 extension StringLiteralExpr {
-  static func parseWithoutDiagnostics(from string: String) -> StringLiteralExpr? {
-    var source = string
-    source.makeContiguousUTF8()
-    return source.withUTF8 { buffer in
-      var parser = Parser(buffer)
-      return parser.parseStringLiteral().syntax.as(StringLiteralExpr.self)
-    }
+  static func parseWithoutDiagnostics(from source: String) -> StringLiteralExpr? {
+    var parser = Parser(source)
+    return ExprSyntax.parse(from: &parser).as(StringLiteralExpr.self)
   }
 }
-

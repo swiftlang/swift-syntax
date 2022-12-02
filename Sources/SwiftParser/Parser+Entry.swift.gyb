@@ -51,7 +51,8 @@ public protocol SyntaxParseable: SyntaxProtocol {
 extension ${node.name}: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.${node.parser_function}()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 

@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
+import XCTest
 
 public class SyntaxTests: XCTestCase {
 
@@ -24,5 +24,15 @@ public class SyntaxTests: XCTestCase {
 
     XCTAssertTrue(TokenListSyntax([TokenSyntax.funcKeyword(presence: .missing)]).hasError)
     XCTAssertFalse(TokenListSyntax([TokenSyntax.funcKeyword(presence: .present)]).hasError)
+  }
+
+  public func testDetach() {
+    let s = StructDeclSyntax(
+      structKeyword: .structKeyword(),
+      identifier: .identifier("someStruct"),
+      members: MemberDeclBlockSyntax(leftBrace: .leftBrace, members: [], rightBrace: .rightBrace))
+
+    XCTAssertEqual(Syntax(s), s.members.parent)
+    XCTAssertNil(s.members.detach().parent)
   }
 }

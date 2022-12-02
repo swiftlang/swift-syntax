@@ -65,7 +65,7 @@ extension RawSyntax: RawSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
+public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   public typealias SyntaxType = TokenSyntax
 
   @_spi(RawSyntax)
@@ -223,26 +223,5 @@ public struct RawTokenSyntax: RawSyntaxToSyntax, RawSyntaxNodeProtocol {
       presence: .missing,
       arena: arena
     )
-  }
-}
-
-/// Provides the `Syntax` type that a RawSyntax node represents.
-/// All syntax nodes conform to this protocol.
-/// We cannot add `SyntaxType` to `RawSyntaxNodeProtocol` because then
-/// `RawSyntaxNodeProtocol` has associated type requirements, which limits the
-/// places that `RawSyntaxNodeProtocol` can be used.
-@_spi(RawSyntax)
-public protocol RawSyntaxToSyntax: RawSyntaxNodeProtocol {
-  associatedtype SyntaxType: SyntaxProtocol
-}
-
-// TODO: Is it worth having this?
-// The only place that should be using it is the parser, which only converts
-// to `Syntax` in a few places anyway - we could just do the case there.
-@_spi(RawSyntax)
-public extension RawSyntaxToSyntax {
-  /// Realizes a `Syntax` node for this `RawSyntax` node.
-  var syntax: SyntaxType {
-    return Syntax(raw: raw).cast(SyntaxType.self)
   }
 }

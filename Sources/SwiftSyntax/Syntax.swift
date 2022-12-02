@@ -228,6 +228,12 @@ extension SyntaxProtocol {
     return _syntaxNode.data.raw
   }
 
+  /// Return this subtree with this node as the root, ie. detach this node
+  /// from its parent.
+  public func detach() -> Self {
+    return Syntax(raw: self.raw).cast(Self.self)
+  }
+
   public var kind: SyntaxKind {
     return raw.kind
   }

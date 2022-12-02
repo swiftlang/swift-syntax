@@ -10,12 +10,5 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-#if canImport(_CompilerPluginSupport)
-import _CompilerPluginSupport
-#else
-public typealias _CompilerPlugin = Any
-#endif
-
 /// Describes a macro.
-public protocol Macro: _CompilerPlugin { }
+public protocol Macro { }

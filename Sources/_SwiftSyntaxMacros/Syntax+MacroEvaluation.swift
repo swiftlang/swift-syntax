@@ -41,7 +41,7 @@ extension MacroExpansionExprSyntax {
     }
 
     // Handle the rewrite.
-    return exprMacro.apply(disconnectedCopy(), in: &context)
+    return exprMacro.expand(disconnectedCopy(), in: &context)
   }
 }
 

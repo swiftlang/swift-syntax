@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 
 // Macros used for testing purposes
 public struct StringifyMacro: ExpressionMacro {
-  public static func apply(
+  public static func expand(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     guard let argument = macro.argumentList.first?.expression else {

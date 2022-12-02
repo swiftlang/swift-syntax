@@ -19,10 +19,10 @@ import _CompilerPluginSupport
 
 /// Describes a macro that is explicitly expanded as an expression.
 public protocol ExpressionMacro: Macro {
-  /// Expansion a macro described by the given macro expansion expression
+  /// Expand a macro described by the given macro expansion expression
   /// within the given context to produce a replacement expression.
-  static func apply(
-    _ expansion: MacroExpansionExprSyntax,
+  static func expand(
+    _ node: MacroExpansionExprSyntax,
     in context: inout MacroExpansionContext
   ) -> ExprSyntax
 }
@@ -78,7 +78,7 @@ extension ExpressionMacro {
     }
 
     // Evaluate the macro.
-    let evalResult = apply(mee, in: context)
+    let evalResult = expand(mee, in: context)
 
     let rawDiags = UnsafeMutablePointer<_Diagnostic>.allocate(
       capacity: evalResult.diagnostics.count)

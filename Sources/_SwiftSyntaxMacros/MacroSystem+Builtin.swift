@@ -27,7 +27,7 @@ private func replaceFirstLabel(
 }
 
 public struct ColorLiteralMacro: ExpressionMacro {
-  public static func apply(
+  public static func expand(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
@@ -42,7 +42,7 @@ public struct ColorLiteralMacro: ExpressionMacro {
 }
 
 public struct FileLiteralMacro: ExpressionMacro {
-  public static func apply(
+  public static func expand(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
@@ -57,7 +57,7 @@ public struct FileLiteralMacro: ExpressionMacro {
 }
 
 public struct ImageLiteralMacro: ExpressionMacro {
-  public static func apply(
+  public static func expand(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
@@ -72,7 +72,7 @@ public struct ImageLiteralMacro: ExpressionMacro {
 }
 
 public struct FileIDMacro: ExpressionMacro {
-  public static func apply(
+  public static func expand(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     // FIXME: Compiler has more sophisticated file ID computation

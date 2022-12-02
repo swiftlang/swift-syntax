@@ -45,7 +45,7 @@ public extension SyntaxCollection {
 % end
 public struct ${node.name}: SyntaxCollection, SyntaxHashable {
 % if node.collection_element_choices:
-  @frozen
+  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: SyntaxChildChoices {
 %   for choice_name in node.collection_element_choices:
 %     choice = NODE_MAP[choice_name]

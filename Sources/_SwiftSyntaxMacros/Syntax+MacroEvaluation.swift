@@ -14,6 +14,22 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 extension MacroExpansionExprSyntax {
+  private func disconnectedCopy() -> MacroExpansionExprSyntax {
+    MacroExpansionExprSyntax(
+      unexpectedBeforePoundToken, poundToken: poundToken,
+      unexpectedBetweenPoundTokenAndMacro, macro: macro,
+      genericArguments: genericArguments,
+      unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList,
+      unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures
+    )
+  }
+
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
@@ -27,7 +43,7 @@ extension MacroExpansionExprSyntax {
     }
 
     // Handle the rewrite.
-    let result = exprMacro.apply(self, in: &context)
+    let result = exprMacro.apply(disconnectedCopy(), in: &context)
 
     // Report diagnostics, if there were any.
     if !result.diagnostics.isEmpty {

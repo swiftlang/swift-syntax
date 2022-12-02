@@ -39,8 +39,10 @@ function(add_swift_host_library name)
   target_compile_options("${name}" PRIVATE
     $<$<COMPILE_LANGUAGE:Swift>:
       -module-name;${name};
+      -enable-library-evolution;
       -emit-module-path;${module_file};
-      -emit-module-source-info-path;${module_sourceinfo_file}
+      -emit-module-source-info-path;${module_sourceinfo_file};
+      -emit-module-interface-path;${module_interface_file}
       >)
 
   # NOTE: workaround for CMake not setting up include flags yet

@@ -13,6 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enum to exhaustively switch over all different syntax nodes.
+@frozen
 public enum SyntaxEnum {
   case unknown(UnknownSyntax)
   case token(TokenSyntax)

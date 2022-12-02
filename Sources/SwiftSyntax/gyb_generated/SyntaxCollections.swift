@@ -1289,6 +1289,7 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
+  @frozen
   public enum Element: SyntaxChildChoices {
     case `stringSegment`(StringSegmentSyntax)
     case `expressionSegment`(ExpressionSegmentSyntax)
@@ -6108,6 +6109,7 @@ extension DesignatedTypeListSyntax: BidirectionalCollection {
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashable {
+  @frozen
   public enum Element: SyntaxChildChoices {
     case `precedenceGroupRelation`(PrecedenceGroupRelationSyntax)
     case `precedenceGroupAssignment`(PrecedenceGroupAssignmentSyntax)
@@ -7160,6 +7162,7 @@ extension NonEmptyTokenListSyntax: BidirectionalCollection {
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
+  @frozen
   public enum Element: SyntaxChildChoices {
     case `attribute`(AttributeSyntax)
     case `customAttribute`(CustomAttributeSyntax)
@@ -7455,6 +7458,7 @@ extension AttributeListSyntax: BidirectionalCollection {
 /// A collection of arguments for the `@_specialize` attribute
 /// 
 public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashable {
+  @frozen
   public enum Element: SyntaxChildChoices {
     case `labeledSpecializeEntry`(LabeledSpecializeEntrySyntax)
     case `availabilityEntry`(AvailabilityEntrySyntax)
@@ -8517,6 +8521,7 @@ extension BackDeployVersionListSyntax: BidirectionalCollection {
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
+  @frozen
   public enum Element: SyntaxChildChoices {
     case `switchCase`(SwitchCaseSyntax)
     case `ifConfigDecl`(IfConfigDeclSyntax)

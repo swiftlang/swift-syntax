@@ -82,10 +82,18 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   }
 
   // Append a value of any CustomStringConvertible type as source text.
+  // Deprecated because this can cause code injection bugs (and we want the
+  // error message to tell users what to do instead).
+  @available(*, deprecated, renamed: "appendInterpolation(raw:)", message: "use '\\(raw: <value>)' to interpolate a plain string directly into Swift code, or use '\\(literal: <value>)' to add it in a literal")
   public mutating func appendInterpolation<T: CustomStringConvertible>(
     _ value: T
   ) {
     sourceText.append(contentsOf: value.description.utf8)
+    self.lastIndentation = nil
+  }
+
+  public mutating func appendInterpolation<T>(raw value: T) {
+    sourceText.append(contentsOf: String(describing: value).utf8)
     self.lastIndentation = nil
   }
 
@@ -102,6 +110,28 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     format: BasicFormat = BasicFormat()
   ) {
     self.appendInterpolation(buildable.formatted(using: format))
+  }
+
+  /// Interpolates a literal or similar expression syntax equivalent to `value`.
+  ///
+  /// - SeeAlso: ``Expr.init(literal:)``
+  public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
+    literal value: Literal,
+    format: BasicFormat = BasicFormat()
+  ) {
+    self.appendInterpolation(Expr(literal: value), format: format)
+  }
+
+  // This overload is technically redundant with the previous one, except that
+  // it silences a warning about interpolating Optionals.
+  /// Interpolates a literal or similar expression syntax equivalent to `value`.
+  ///
+  /// - SeeAlso: ``Expr.init(literal:)``
+  public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
+    literal value: Literal?,
+    format: BasicFormat = BasicFormat()
+  ) {
+    self.appendInterpolation(Expr(literal: value), format: format)
   }
 }
 
@@ -127,6 +157,58 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
       return "\n" + DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
     }
   }
+}
+
+/// A Swift type whose value can be represented directly in source code by a
+/// Swift literal.
+///
+/// Conforming types do not *contain* Swift source code; rather, they can be
+/// *expressed* in Swift source code, and this protocol can be used to get
+/// whatever source code would do that. For example, `String` is
+/// `ExpressibleByLiteralSyntax` but `StringLiteralExprSyntax` is not.
+///
+/// This protocol is usually not used directly. Instead, conforming types can
+/// be turned into syntax trees using ``Expr.init(literal:)``:
+///
+///     let expr2 = Expr(literal: [0+1, 1+1, 2+1])
+///     // `expr2` is a syntax tree for `[1, 2, 3]`.
+///
+/// Or interpolated into a Swift source code literal with the syntax
+/// `\(literal: <value>)`:
+///
+///     let greeting = "Hello, world!"
+///     let expr1 = ExprSyntax("print(\(literal: greeting))")
+///     // `expr1` is a syntax tree for `print("Hello, world!")`
+///
+/// Note that quote marks are automatically added around the contents of string
+/// literals; you don't have to write them yourself. The conformance for
+/// `String` will automatically ensure the contents are correctly escaped,
+/// possibly by using raw literals or other language features:
+///
+///     let msPath = "c:\\windows\\system32"
+///     let expr3 = ExprSyntax("open(\(literal: msPath))")
+///     // `expr3` might be a syntax tree for `open(#"c:\windows\system32"#)`
+///     // or for `open("c:\\windows\\system32")`.
+///
+/// Other conformances have similar intelligent behaviors: floating-point types
+/// produce correct syntax trees for infinities and NaNs, nested optionals
+/// produce `.some(nil)` where appropriate, etc.
+public protocol ExpressibleByLiteralSyntax {
+  /// Returns a syntax tree that represents the value of this instance.
+  ///
+  /// This method is usually not called directly. Instead, conforming types can
+  /// be turned into syntax trees using ``Expr.init(literal:)``:
+  ///
+  ///     let expr2 = Expr(literal: [0+1, 1+1, 2+1])
+  ///     // `expr2` is a syntax tree for `[1, 2, 3]`.
+  ///
+  /// Or interpolated into a Swift source code literal with the syntax
+  /// `\(literal: <value>)`:
+  ///
+  ///     let greeting = "Hello, world!"
+  ///     let expr1 = ExprSyntax("print(\(literal: greeting))")
+  ///     // `expr1` is a syntax tree for `print("Hello, world!")`
+  func makeLiteralSyntax() -> ExprSyntaxProtocol
 }
 
 extension SyntaxExpressibleByStringInterpolation {
@@ -160,3 +242,191 @@ extension SyntaxExpressibleByStringInterpolation {
     try self.init(stringInterpolationOrThrow: interpolation)
   }
 }
+
+// MARK: ExpressibleByLiteralSyntax conformances
+
+extension Substring: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    String(self).makeLiteralSyntax()
+  }
+}
+
+extension String: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // TODO: Use a multi-line literal if there are more than N inner newlines.
+    StringLiteralExpr(content: self)
+  }
+}
+
+extension ExpressibleByLiteralSyntax where Self: BinaryInteger {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // TODO: Radix selection? Thousands separators?
+    let digits = String(self, radix: 10)
+    return IntegerLiteralExpr(digits: digits)
+  }
+}
+extension Int: ExpressibleByLiteralSyntax {}
+extension Int8: ExpressibleByLiteralSyntax {}
+extension Int16: ExpressibleByLiteralSyntax {}
+extension Int32: ExpressibleByLiteralSyntax {}
+extension Int64: ExpressibleByLiteralSyntax {}
+extension UInt: ExpressibleByLiteralSyntax {}
+extension UInt8: ExpressibleByLiteralSyntax {}
+extension UInt16: ExpressibleByLiteralSyntax {}
+extension UInt32: ExpressibleByLiteralSyntax {}
+extension UInt64: ExpressibleByLiteralSyntax {}
+
+extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessStringConvertible {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    switch floatingPointClass {
+    case .positiveInfinity:
+      return MemberAccessExpr(name: "infinity")
+
+    case .quietNaN:
+      return MemberAccessExpr(name: "nan")
+
+    case .signalingNaN:
+      return MemberAccessExpr(name: "signalingNaN")
+
+    case .negativeInfinity, .negativeZero:
+      return PrefixOperatorExpr(
+        operatorToken: "-",
+        postfixExpression: (-self).makeLiteralSyntax()
+      )
+
+    case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
+      // TODO: Thousands separators?
+      let digits = String(self)
+      return FloatLiteralExpr(floatingDigits: digits)
+    }
+
+  }
+}
+extension Float: ExpressibleByLiteralSyntax {}
+extension Double: ExpressibleByLiteralSyntax {}
+
+#if !((os(macOS) || targetEnvironment(macCatalyst)) && arch(x86_64))
+@available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
+extension Float16: ExpressibleByLiteralSyntax {}
+#endif
+
+extension Bool: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    BooleanLiteralExpr(self)
+  }
+}
+
+extension ArraySlice: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    ArrayExpr(
+      leftSquare: .leftSquareBracket,
+      elements: ArrayElementList {
+        for elem in self {
+          ArrayElement(expression: elem.makeLiteralSyntax())
+        }
+      },
+      rightSquare: .rightSquareBracket
+    )
+  }
+}
+
+extension Array: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    self[...].makeLiteralSyntax()
+  }
+}
+
+extension Set: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // Sets are unordered. Sort the elements by their source-code representation to emit them in a stable order.
+    let elemSyntaxes = map {
+      $0.makeLiteralSyntax()
+    }.sorted {
+      $0.syntaxTextBytes.lexicographicallyPrecedes($1.syntaxTextBytes)
+    }
+
+    return ArrayExpr(
+      leftSquare: .leftSquareBracket,
+      elements: ArrayElementList {
+        for elemSyntax in elemSyntaxes {
+          ArrayElement(expression: elemSyntax)
+        }
+      },
+      rightSquare: .rightSquareBracket
+    )
+  }
+}
+
+extension KeyValuePairs: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    DictionaryExpr(leftSquare: .leftSquareBracket, rightSquare: .rightSquareBracket) {
+      for elem in self {
+        DictionaryElement(
+          keyExpression: elem.key.makeLiteralSyntax(),
+          colon: .colon,
+          valueExpression: elem.value.makeLiteralSyntax()
+        )
+      }
+    }
+  }
+}
+
+extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    // Dictionaries are unordered. Sort the elements by their keys' source-code representation to emit them in a stable order.
+    let elemSyntaxes = map {
+      (key: $0.key.makeLiteralSyntax(), value: $0.value.makeLiteralSyntax())
+    }.sorted {
+      $0.key.syntaxTextBytes.lexicographicallyPrecedes($1.key.syntaxTextBytes)
+    }
+
+    return DictionaryExpr(leftSquare: .leftSquareBracket, rightSquare: .rightSquareBracket) {
+      for elemSyntax in elemSyntaxes {
+        DictionaryElement(
+          keyExpression: elemSyntax.key,
+          colon: .colon,
+          valueExpression: elemSyntax.value
+        )
+      }
+    }
+  }
+}
+
+extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiteralSyntax {
+  public func makeLiteralSyntax() -> ExprSyntaxProtocol {
+    func containsNil(_ expr: ExprSyntaxProtocol) -> Bool {
+      if expr.is(NilLiteralExpr.self) {
+        return true
+      }
+
+      if let call = expr.as(FunctionCallExpr.self),
+         let memberAccess = call.calledExpression.as(MemberAccessExpr.self),
+         memberAccess.name.text == "some",
+         let argument = call.argumentList.first?.expression {
+        return containsNil(argument)
+      }
+
+      return false
+    }
+
+    switch self {
+    case nil:
+      return NilLiteralExpr()
+
+    case let wrapped?:
+      let wrappedExpr = wrapped.makeLiteralSyntax()
+
+      // If this is a nested optional type, and the wrapped value is `nil` or
+      // e.g. `.some(nil)`, add a layer of `.some(_:)` around it to preserve the
+      // depth of the data structure.
+      if containsNil(wrappedExpr) {
+        return FunctionCallExpr(callee: MemberAccessExpr(name: "some")) {
+          TupleExprElement(expression: wrappedExpr)
+        }
+      }
+
+      return wrappedExpr
+    }
+  }
+}
+

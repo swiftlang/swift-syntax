@@ -20,7 +20,7 @@ public struct ColumnMacro: ExpressionMacro {
     let line = macro.startLocation(
       converter: context.sourceLocationConverter
     ).column ?? 0
-    return .init("\(line)")
+    return .init("\(literal: line)")
   }
 }
 
@@ -31,7 +31,7 @@ public struct LineMacro: ExpressionMacro {
     let line = macro.startLocation(
       converter: context.sourceLocationConverter
     ).line ?? 0
-    return .init("\(line)")
+    return .init("\(literal: line)")
   }
 }
 
@@ -141,7 +141,7 @@ public struct FunctionMacro: ExpressionMacro {
     _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
   ) -> MacroResult<ExprSyntax> {
     let name = findEnclosingName(macro) ?? context.moduleName
-    let literal: ExprSyntax = #""\#(name)""#
+    let literal: ExprSyntax = "\(literal: name)"
     if let leadingTrivia = macro.leadingTrivia {
       return .init(literal.withLeadingTrivia(leadingTrivia))
     }
@@ -215,7 +215,7 @@ public struct FilePathMacro: ExpressionMacro {
     let fileName = context.sourceLocationConverter.location(
       for: .init(utf8Offset: 0)
     ).file ?? "<unknown file>"
-    let fileLiteral: ExprSyntax = #""\#(fileName)""#
+    let fileLiteral: ExprSyntax = "\(literal: fileName)"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(fileLiteral.withLeadingTrivia(leadingTrivia))
     }
@@ -236,7 +236,10 @@ public struct FileIDMacro: ExpressionMacro {
       fileName = String(fileName[fileName.index(after: lastSlash)...])
     }
 
-    let fileLiteral: ExprSyntax = #""\#(context.moduleName)/\#(fileName)""#
+    // FIXME: Compiler has more sophisticated file ID computation
+    let fileID = "\(context.moduleName)/\(fileName)"
+
+    let fileLiteral: ExprSyntax = "\(literal: fileID)"
     if let leadingTrivia = macro.leadingTrivia {
       return MacroResult(fileLiteral.withLeadingTrivia(leadingTrivia))
     }

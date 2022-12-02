@@ -81,12 +81,57 @@ final class StringLiteralTests: XCTestCase {
     ##"""
     #"\"#
     """##)
+
+    AssertBuildResult(StringLiteralExpr(content: ##"\#n"##),
+    ##"""
+    ##"\#n"##
+    """##)
+
+    AssertBuildResult(StringLiteralExpr(content: ##"\#\"##),
+    ##"""
+    ##"\#\"##
+    """##)
+
+    AssertBuildResult(StringLiteralExpr(content: ##"\#"##),
+    ##"""
+    ##"\#"##
+    """##)
   }
 
   func testNewlines() {
     AssertBuildResult(
-      StringLiteralExpr(content: "linux\nwindows\r\na"),
-      #""linux\nwindows\r\na""#
+      StringLiteralExpr(content: "linux\nwindows\r\nunicode\u{2028}a"),
+      #""linux\nwindows\r\nunicode\u{2028}a""#
+    )
+
+    AssertBuildResult(
+      StringLiteralExpr(content: "\\linux\nwindows\r\nunicode\u{2028}a"),
+      ##"#"\linux\#nwindows\#r\#nunicode\#u{2028}a"#"##
+    )
+  }
+
+  func testNul() {
+    AssertBuildResult(
+      StringLiteralExpr(content: "before\0after"),
+      #""before\0after""#
+    )
+
+    AssertBuildResult(
+      StringLiteralExpr(content: "\\before\0after"),
+      ##"#"\before\#0after"#"##
+    )
+  }
+
+  func testControlChars() {
+    // Note that tabs do *not* get escaped.
+    AssertBuildResult(
+      StringLiteralExpr(content: "before\u{07}\t\u{7f}after"),
+      #""before\u{7}\#t\u{7f}after""#
+    )
+
+    AssertBuildResult(
+      StringLiteralExpr(content: "\\before\u{07}\t\u{7f}after"),
+      ##"#"\before\#u{7}\##t\#u{7f}after"#"##
     )
   }
 }

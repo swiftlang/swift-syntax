@@ -90,6 +90,42 @@ extension DictionaryExpr {
   }
 }
 
+// MARK: - Expr
+
+extension Expr {
+  /// Returns a syntax tree for an expression that represents the value of the
+  /// provided instance. For example, passing an `Array<String>` will result in
+  /// an array literal containing string literals:
+  ///
+  ///     let arrayExpr = Expr(literal: ["a", "b", "c"])
+  ///     // `arrayExpr` is a syntax tree like `["a", "b", "c"]`
+  ///
+  /// This initializer is compatible with types that conform to
+  /// ``ExpressibleByLiteralSyntax``. These include:
+  ///
+  /// * `String` and `Substring`
+  /// * `Int` and other integer types
+  /// * `Double` and other floating-point types
+  /// * `Bool`
+  /// * `Array` and `Set` of conforming elements
+  /// * `Dictionary` and `KeyValuePairs` of conforming keys and values
+  /// * `Optional` of conforming wrapped value
+  ///
+  /// Conformances will generally handle edge cases sensibly: `String` will
+  /// use raw literals and escapes as needed, `Optional` will wrap a nested
+  /// `nil` in `.some`, `Double` wil represent special values like infinities
+  /// as code sequences like `.infinity`, etc. `Set` and `Dictionary` sort
+  /// thier elements to improve stability.
+  ///
+  /// Because of that intelligent behavior, this initializer is not guaranteed
+  /// to produce a literal as the outermost syntax node, or even to have a
+  /// literal anywhere in its syntax tree. Use a convenience initializer on a
+  /// specific type if you need that exact type in the syntax tree.
+  public init<Literal: ExpressibleByLiteralSyntax>(literal: Literal) {
+    self.init(fromProtocol: literal.makeLiteralSyntax())
+  }
+}
+
 // MARK: - FloatLiteralExprSyntax
 
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
@@ -105,6 +141,7 @@ extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
 // MARK: - FunctionCallExpr
 
 extension FunctionCallExpr {
+  // Need an overload that's explicitly `ExprSyntax` for code literals to work.
   /// A convenience initializer that allows passing in arguments using a result builder
   /// instead of having to wrap them in a `TupleExprElementList`.
   /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
@@ -123,6 +160,23 @@ extension FunctionCallExpr {
       rightParen: shouldOmitParens ? nil : .rightParen,
       trailingClosure: trailingClosure,
       additionalTrailingClosures: additionalTrailingClosures
+    )
+  }
+
+  /// A convenience initializer that allows passing in arguments using a result builder
+  /// instead of having to wrap them in a `TupleExprElementList`.
+  /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
+  public init(
+    callee: ExprSyntaxProtocol,
+    trailingClosure: ClosureExprSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
+    @TupleExprElementListBuilder argumentList: () -> TupleExprElementList = { [] }
+  ) {
+    self.init(
+      callee: ExprSyntax(fromProtocol: callee),
+      trailingClosure: trailingClosure,
+      additionalTrailingClosures: additionalTrailingClosures,
+      argumentList: argumentList
     )
   }
 }
@@ -199,24 +253,39 @@ extension MemberAccessExpr {
 // MARK: - StringLiteralExpr
 
 extension String {
-  /// Replace literal newlines with "\r", "\n".
-  fileprivate func replacingNewlines() -> String {
-    var result = ""
-    var input = self[...]
-    while let firstNewline = input.firstIndex(where: { $0.isNewline }) {
-      result += input[..<firstNewline]
-      if input[firstNewline] == "\r" {
-        result += "\\r"
-      } else if input[firstNewline] == "\r\n" {
-        result += "\\r\\n"
-      } else {
-        result += "\\n"
-      }
-      input = input[input.index(after: firstNewline)...]
-      continue
+  /// Replace literal newlines with "\r", "\n", "\u{2028}", and ASCII control characters with "\0", "\u{7}"
+  fileprivate func escapingForStringLiteral(usingDelimiter delimiter: String) -> String {
+    // String literals cannot contain "unprintable" ASCII characters (control
+    // characters, etc.) besides tab. As a matter of style, we also choose to
+    // escape Unicode newlines like "\u{2028}" even though swiftc will allow
+    // them in string literals.
+    func needsEscaping(_ scalar: UnicodeScalar) -> Bool {
+      return (scalar.isASCII && scalar != "\t" && !scalar.isPrintableASCII)
+              || Character(scalar).isNewline
     }
 
-    return result + input
+    // Work at the Unicode scalar level so that "\r\n" isn't combined.
+    var result = String.UnicodeScalarView()
+    var input = self.unicodeScalars[...]
+    while let firstNewline = input.firstIndex(where: needsEscaping(_:)) {
+      result += input[..<firstNewline]
+
+      result += "\\\(delimiter)".unicodeScalars
+      switch input[firstNewline] {
+      case "\r":
+        result += "r".unicodeScalars
+      case "\n":
+        result += "n".unicodeScalars
+      case "\0":
+        result += "0".unicodeScalars
+      case let other:
+        result += "u{\(String(other.value, radix: 16))}".unicodeScalars
+      }
+      input = input[input.index(after: firstNewline)...]
+    }
+    result += input
+
+    return String(result)
   }
 }
 
@@ -226,34 +295,28 @@ extension StringLiteralExpr {
   }
 
   private static func requiresEscaping(_ content: String) -> (Bool, poundCount: Int) {
-    var state: PoundState = .none
+    var countingPounds = false
     var consecutivePounds = 0
     var maxPounds = 0
     var requiresEscaping = false
 
     for c in content {
-      switch c {
-      case "#":
+      switch (countingPounds, c) {
+      // Normal mode: scanning for characters that can be followed by pounds.
+      case (false, "\""), (false, "\\"):
+        countingPounds = true
+        requiresEscaping = true
+      case (false, _):
+        continue
+
+      // Special mode: counting a sequence of pounds until we reach its end.
+      case (true, "#"):
         consecutivePounds += 1
-      case "\"":
-        state = .afterQuote
-        consecutivePounds = 0
-      case "\\":
-        state = .afterBackslash
-        consecutivePounds = 0
-      case "(" where state == .afterBackslash:
         maxPounds = max(maxPounds, consecutivePounds)
-        fallthrough
-      default:
+      case (true, _):
+        countingPounds = false
         consecutivePounds = 0
-        state = .none
       }
-
-      if state == .afterQuote {
-        maxPounds = max(maxPounds, consecutivePounds)
-      }
-
-      requiresEscaping = requiresEscaping || state != .none
     }
 
     return (requiresEscaping, poundCount: maxPounds)
@@ -269,10 +332,6 @@ extension StringLiteralExpr {
     closeQuote: Token = .stringQuote,
     closeDelimiter: Token? = nil
   ) {
-    let contentToken = Token.stringSegment(content.replacingNewlines())
-    let segment = StringSegment(content: contentToken)
-    let segments = StringLiteralSegments([.stringSegment(segment)])
-
     var openDelimiter = openDelimiter
     var closeDelimiter = closeDelimiter
     if openDelimiter == nil, closeDelimiter == nil {
@@ -284,6 +343,11 @@ extension StringLiteralExpr {
         closeDelimiter = openDelimiter
       }
     }
+
+    let escapedContent = content.escapingForStringLiteral(usingDelimiter: closeDelimiter?.text ?? "")
+    let contentToken = Token.stringSegment(escapedContent)
+    let segment = StringSegment(content: contentToken)
+    let segments = StringLiteralSegments([.stringSegment(segment)])
 
     self.init(
       openDelimiter: openDelimiter,

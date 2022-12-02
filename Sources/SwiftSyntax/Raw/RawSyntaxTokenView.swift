@@ -153,6 +153,7 @@ public struct RawSyntaxTokenView {
         kind: newValue,
         leadingTrivia: formLeadingTrivia(),
         trailingTrivia: formTrailingTrivia(),
+        presence: presence,
         arena: arena)
     case .materializedToken(var payload):
       let decomposed = newValue.decomposeToRaw()

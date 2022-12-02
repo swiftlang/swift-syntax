@@ -21,7 +21,7 @@ import _SwiftSyntaxTestSupport
 struct CheckContextIndependenceMacro: ExpressionMacro {
   static func apply(
     _ macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext) -> MacroResult<ExprSyntax> {
+    in context: inout MacroExpansionContext) -> ExprSyntax {
 
     // Should not have a parent.
     XCTAssertNil(macro.parent)
@@ -29,7 +29,7 @@ struct CheckContextIndependenceMacro: ExpressionMacro {
     // Absolute starting position should be zero.
     XCTAssertEqual(macro.position.utf8Offset, 0)
 
-    return .init(ExprSyntax(macro))
+    return ExprSyntax(macro)
   }
 }
 
@@ -44,7 +44,7 @@ final class MacroSystemTests: XCTestCase {
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: &context, errorHandler: { error in }
+      node: sf, in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -67,7 +67,7 @@ final class MacroSystemTests: XCTestCase {
       moduleName: "MyModule", fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: &context, errorHandler: { error in }
+      node: sf, in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -89,7 +89,7 @@ final class MacroSystemTests: XCTestCase {
       moduleName: "MyModule", fileName: "taylor.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: &context, errorHandler: { error in }
+      node: sf, in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -122,7 +122,7 @@ final class MacroSystemTests: XCTestCase {
       moduleName: "MyModule", fileName: "taylor.swift"
     )
     let transformedSF = system.evaluateMacros(
-      node: sf, in: &context, errorHandler: { error in }
+      node: sf, in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,

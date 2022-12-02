@@ -29,59 +29,59 @@ private func replaceFirstLabel(
 public struct ColorLiteralMacro: ExpressionMacro {
   public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
-  ) -> MacroResult<ExprSyntax> {
+  ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "_colorLiteralRed"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
-      return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
+      return initSyntax.withLeadingTrivia(leadingTrivia)
     }
-    return MacroResult(initSyntax)
+    return initSyntax
   }
 }
 
 public struct FileLiteralMacro: ExpressionMacro {
   public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
-  ) -> MacroResult<ExprSyntax> {
+  ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "fileReferenceLiteralResourceName"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
-      return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
+      return initSyntax.withLeadingTrivia(leadingTrivia)
     }
-    return MacroResult(initSyntax)
+    return initSyntax
   }
 }
 
 public struct ImageLiteralMacro: ExpressionMacro {
   public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
-  ) -> MacroResult<ExprSyntax> {
+  ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "imageLiteralResourceName"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
-      return MacroResult(initSyntax.withLeadingTrivia(leadingTrivia))
+      return initSyntax.withLeadingTrivia(leadingTrivia)
     }
-    return MacroResult(initSyntax)
+    return initSyntax
   }
 }
 
 public struct FileIDMacro: ExpressionMacro {
   public static func apply(
     _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
-  ) -> MacroResult<ExprSyntax> {
+  ) -> ExprSyntax {
     // FIXME: Compiler has more sophisticated file ID computation
     let fileID = "\(context.moduleName)/\(context.fileName)"
     let fileLiteral: ExprSyntax = "\(literal: fileID)"
     if let leadingTrivia = macro.leadingTrivia {
-      return MacroResult(fileLiteral.withLeadingTrivia(leadingTrivia))
+      return fileLiteral.withLeadingTrivia(leadingTrivia)
     }
-    return MacroResult(fileLiteral)
+    return fileLiteral
   }
 }
 

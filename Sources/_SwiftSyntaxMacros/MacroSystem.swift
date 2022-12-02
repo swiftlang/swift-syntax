@@ -63,16 +63,13 @@ public struct MacroSystem {
 class MacroApplication : SyntaxRewriter {
   let macroSystem: MacroSystem
   var context: MacroExpansionContext
-  let errorHandler: (MacroSystemError) -> Void
 
   init(
     macroSystem: MacroSystem,
-    context: MacroExpansionContext,
-    errorHandler: @escaping (MacroSystemError) -> Void
+    context: MacroExpansionContext
   ) {
     self.macroSystem = macroSystem
     self.context = context
-    self.errorHandler = errorHandler
   }
 
   override func visitAny(_ node: Syntax) -> Syntax? {
@@ -81,7 +78,7 @@ class MacroApplication : SyntaxRewriter {
     }
 
     return node.evaluateMacro(
-      with: macroSystem, context: &context, errorHandler: errorHandler
+      with: macroSystem, context: &context
     )
   }
 
@@ -108,19 +105,14 @@ extension MacroSystem {
   ///
   /// - Parameter node: The syntax node in which macros will be evaluated.
   /// - Parameter context: The context in which macros are evaluated.
-  /// - Parameter errorHandler: Errors encountered during traversal will
-  ///   be passed to the error handler.
   /// - Returns: the syntax tree with all macros evaluated.
   public func evaluateMacros<Node: SyntaxProtocol>(
     node: Node,
-    in context: inout MacroExpansionContext,
-    errorHandler: (MacroSystemError) -> Void
+    in context: inout MacroExpansionContext
   ) -> Syntax {
-    return withoutActuallyEscaping(errorHandler) { errorHandler in
-      let applier = MacroApplication(
-        macroSystem: self, context: context, errorHandler: errorHandler
-      )
-      return applier.visit(Syntax(node))
-    }
+    let applier = MacroApplication(
+      macroSystem: self, context: context
+    )
+    return applier.visit(Syntax(node))
   }
 }

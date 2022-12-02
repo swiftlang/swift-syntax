@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
+import SwiftDiagnostics
 
 /// System-supplied structure that provides information about the context in
 /// which a given macro is being expanded.
@@ -27,6 +28,10 @@ public struct MacroExpansionContext {
 
   /// Counter used to generate names local to the macro.
   var localNameCounter = 0
+
+  /// The set of diagnostics that were emitted as part of expanding the
+  /// macro.
+  public private(set) var diagnostics: [Diagnostic] = []
 
   /// Create a new macro evaluation context.
   public init(moduleName: String, fileName: String) {
@@ -53,5 +58,10 @@ public struct MacroExpansionContext {
     ).file ?? "unknown.swift"
 
     self.init(moduleName: moduleName, fileName: fileName)
+  }
+
+  /// Produce a diagnostic while expanding the macro.
+  public mutating func diagnose(_ diagnostic: Diagnostic) {
+    diagnostics.append(diagnostic)
   }
 }

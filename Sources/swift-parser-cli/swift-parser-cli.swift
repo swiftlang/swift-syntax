@@ -248,11 +248,9 @@ class ExpandMacros: ParsableCommand {
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
       let transformedTree = MacroSystem.exampleSystem.evaluateMacros(
         node: resultTree, in: &context
-      ) { error in
-        if case let .evaluationDiagnostics(_, diagnostics) = error {
-          diags.append(contentsOf: diagnostics)
-        }
-      }
+      )
+
+      diags.append(contentsOf: context.diagnostics)
 
       print(transformedTree)
       print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))

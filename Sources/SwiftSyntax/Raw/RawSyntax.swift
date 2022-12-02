@@ -219,6 +219,7 @@ extension RawSyntax {
         kind: tokenView.formKind(),
         leadingTrivia: leadingTrivia,
         trailingTrivia: tokenView.formTrailingTrivia(),
+        presence: tokenView.presence,
         arena: arena)
     case .layout(let layoutView):
       for (index, child) in layoutView.children.enumerated() {
@@ -242,6 +243,7 @@ extension RawSyntax {
         kind: tokenView.formKind(),
         leadingTrivia: tokenView.formLeadingTrivia(),
         trailingTrivia: trailingTrivia,
+        presence: tokenView.presence,
         arena: arena)
     case .layout(let layoutView):
       for (index, child) in layoutView.children.enumerated().reversed() {
@@ -545,7 +547,7 @@ extension RawSyntax {
     kind: TokenKind,
     leadingTrivia: Trivia,
     trailingTrivia: Trivia,
-    presence: SourcePresence = .present,
+    presence: SourcePresence,
     arena: SyntaxArena
   ) -> RawSyntax {
     let decomposed = kind.decomposeToRaw()

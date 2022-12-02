@@ -13,6 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
+@frozen
 public enum SyntaxKind {
   case token
   case unknown

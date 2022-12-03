@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the kinds of tokens in the Swift language.
-@frozen
+@frozen // FIXME: Not actually stable, works around a miscompile
 public enum TokenKind: Hashable {
   case eof
   case associatedtypeKeyword
@@ -1132,7 +1132,7 @@ extension TokenKind: Equatable {
 }
 
 /// Plain token kind value, without an associated `String` value.
-@frozen
+@frozen // FIXME: Not actually stable, works around a miscompile
 public enum RawTokenKind: Equatable, Hashable {
   case eof
   case associatedtypeKeyword

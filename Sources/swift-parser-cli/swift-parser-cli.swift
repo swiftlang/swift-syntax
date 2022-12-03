@@ -48,6 +48,18 @@ private func getContentsOfSourceFile(at path: String?) throws -> [UInt8] {
   return [UInt8](source)
 }
 
+extension String {
+  /// Drop everything up to and including the last '/' from the string.
+  fileprivate func withoutPath() -> String {
+    // Only keep everything after the last slash.
+    if let lastSlash = lastIndex(of: "/") {
+      return String(self[index(after: lastSlash)...])
+    }
+
+    return self
+  }
+}
+
 /// Fold all of the sequences in the given source file.
 func foldAllSequences(_ tree: SourceFileSyntax) -> (Syntax, [Diagnostic]) {
   var diags: [Diagnostic] = []
@@ -230,18 +242,15 @@ class ExpandMacros: ParsableCommand {
         resultTree = Syntax(tree)
       }
 
-      let converter = SourceLocationConverter(file: self.sourceFile, tree: resultTree)
-      let context = MacroEvaluationContext(
-        moduleName: "MyModule", sourceLocationConverter: converter
+      var context = MacroExpansionContext(
+        moduleName: "MyModule", fileName: self.sourceFile.withoutPath()
       )
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
       let transformedTree = MacroSystem.exampleSystem.evaluateMacros(
-        node: resultTree, in: context
-      ) { error in
-        if case let .evaluationDiagnostics(_, diagnostics) = error {
-          diags.append(contentsOf: diagnostics)
-        }
-      }
+        node: resultTree, in: &context
+      )
+
+      diags.append(contentsOf: context.diagnostics)
 
       print(transformedTree)
       print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))

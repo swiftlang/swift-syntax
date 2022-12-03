@@ -14,31 +14,34 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 extension MacroExpansionExprSyntax {
+  private func disconnectedCopy() -> MacroExpansionExprSyntax {
+    MacroExpansionExprSyntax(
+      unexpectedBeforePoundToken, poundToken: poundToken,
+      unexpectedBetweenPoundTokenAndMacro, macro: macro,
+      genericArguments: genericArguments,
+      unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList,
+      unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures
+    )
+  }
+
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: MacroEvaluationContext,
-    errorHandler: (MacroSystemError) -> Void
+    in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     guard let exprMacro = macro as? ExpressionMacro.Type else {
-      errorHandler(.requiresExpressionMacro(macro: macro, node: Syntax(self)))
       return ExprSyntax(self)
     }
 
     // Handle the rewrite.
-    let result = exprMacro.apply(self, in: context)
-
-    // Report diagnostics, if there were any.
-    if !result.diagnostics.isEmpty {
-      errorHandler(
-        .evaluationDiagnostics(
-          node: Syntax(self), diagnostics: result.diagnostics
-        )
-      )
-    }
-
-    return result.rewritten
+    return exprMacro.expand(disconnectedCopy(), in: &context)
   }
 }
 
@@ -65,16 +68,13 @@ extension MacroExpansionDeclSyntax {
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
     _ macro: Macro.Type,
-    in context: MacroEvaluationContext,
-    errorHandler: (MacroSystemError) -> Void
+    in context: inout MacroExpansionContext
   ) -> Syntax {
     // TODO: declaration/statement macros
 
     // Fall back to evaluating as an expression macro.
     return Syntax(
-      asMacroExpansionExpr().evaluateMacro(
-        macro, in: context, errorHandler: errorHandler
-      )
+      asMacroExpansionExpr().evaluateMacro(macro, in: &context)
     )
   }
 }
@@ -104,8 +104,7 @@ extension Syntax {
   /// some kind.
   public func evaluateMacro(
     with macroSystem: MacroSystem,
-    context: MacroEvaluationContext,
-    errorHandler: (MacroSystemError) -> Void
+    context: inout MacroExpansionContext
   ) -> Syntax {
     // If this isn't a macro evaluation node, do nothing.
     guard let macroName = evaluatedMacroName else {
@@ -114,21 +113,16 @@ extension Syntax {
 
     // Look for a macro with the given name. Otherwise, fail.
     guard let macro = macroSystem.macros[macroName] else {
-      errorHandler(.unknownMacro(name: macroName, node: self))
       return self
     }
 
     switch self.as(SyntaxEnum.self) {
     case .macroExpansionDecl(let expansion):
-      return expansion.evaluateMacro(
-        macro, in: context, errorHandler: errorHandler
-      )
+      return expansion.evaluateMacro(macro, in: &context)
 
     case .macroExpansionExpr(let expansion):
       return Syntax(
-        expansion.evaluateMacro(
-          macro, in: context, errorHandler: errorHandler
-        )
+        expansion.evaluateMacro(macro, in: &context)
       )
 
     default:

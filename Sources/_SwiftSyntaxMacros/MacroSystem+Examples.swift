@@ -15,15 +15,15 @@ import SwiftSyntaxBuilder
 
 // Macros used for testing purposes
 public struct StringifyMacro: ExpressionMacro {
-  public static func apply(
-    _ macro: MacroExpansionExprSyntax, in context: MacroEvaluationContext
-  ) -> MacroResult<ExprSyntax> {
+  public static func expand(
+    _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+  ) -> ExprSyntax {
     guard let argument = macro.argumentList.first?.expression else {
       // FIXME: Create a diagnostic for the missing argument?
-      return MacroResult(ExprSyntax(macro))
+      return ExprSyntax(macro)
     }
 
-    return MacroResult("(\(argument), \(StringLiteralExprSyntax(content: argument.description)))")
+    return "(\(argument), \(StringLiteralExprSyntax(content: argument.description)))"
   }
 }
 

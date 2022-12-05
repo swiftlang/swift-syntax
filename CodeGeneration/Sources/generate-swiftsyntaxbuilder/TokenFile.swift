@@ -25,17 +25,17 @@ let tokenFile = SourceFile {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {
         VariableDecl("""
-          /// The `\(token.text!)` keyword
-          static var \(token.name.withFirstCharacterLowercased.backticked): Token {
-            return .\(token.swiftKind)()
+          /// The `\(raw: token.text!)` keyword
+          static var \(raw: token.name.withFirstCharacterLowercased.backticked): Token {
+            return .\(raw: token.swiftKind)()
           }
           """
         )
       } else if let text = token.text {
         VariableDecl("""
-          /// The `\(text)` token
-          static var \(token.name.withFirstCharacterLowercased.backticked): TokenSyntax {
-            return .\(token.swiftKind)Token()
+          /// The `\(raw: text)` token
+          static var \(raw: token.name.withFirstCharacterLowercased.backticked): TokenSyntax {
+            return .\(raw: token.swiftKind)Token()
           }
           """
         )

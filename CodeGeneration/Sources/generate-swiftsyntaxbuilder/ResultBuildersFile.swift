@@ -78,7 +78,7 @@ let resultBuildersFile = SourceFile {
             """
             /// If declared, provides contextual type information for statement
             /// expressions to translate them into partial results.
-            public static func buildExpression(_ expression: \(elementChoice)) -> Self.Component {
+            public static func buildExpression(_ expression: \(raw: elementChoice)) -> Self.Component {
               return buildExpression(.init(expression))
             }
             """
@@ -168,8 +168,8 @@ let resultBuildersFile = SourceFile {
       
     ExtensionDecl(
       """
-      public extension \(type.shorthandName) {
-        init(@\(type.resultBuilderBaseName) itemsBuilder: () -> \(type.shorthandName)) {
+      public extension \(raw: type.shorthandName) {
+        init(@\(raw: type.resultBuilderBaseName) itemsBuilder: () -> \(raw: type.shorthandName)) {
           self = itemsBuilder()
         }
       }

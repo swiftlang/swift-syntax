@@ -17,14 +17,19 @@ import SwiftSyntax
 
 open class BasicFormat: SyntaxRewriter {
   public var indentationLevel: Int = 0
+  
   open var indentation: TriviaPiece { 
     .spaces(indentationLevel * 4) 
   }
+  
   public var indentedNewline: Trivia { 
     Trivia(pieces: [.newlines(1), indentation]) 
   }
+  
   private var lastRewrittenToken: TokenSyntax?
+  
   private var putNextTokenOnNewLine: Bool = false
+  
   open override func visitPre(_ node: Syntax) {
     if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
       indentationLevel += 1
@@ -33,11 +38,13 @@ open class BasicFormat: SyntaxRewriter {
       putNextTokenOnNewLine = true
     }
   }
+  
   open override func visitPost(_ node: Syntax) {
     if let keyPath = getKeyPath(node), shouldIndent(keyPath) {
       indentationLevel -= 1
     }
   }
+  
   open override func visit(_ node: TokenSyntax) -> TokenSyntax {
     var leadingTrivia = node.leadingTrivia
     var trailingTrivia = node.trailingTrivia
@@ -62,6 +69,7 @@ open class BasicFormat: SyntaxRewriter {
     putNextTokenOnNewLine = false
     return rewritten
   }
+  
   open func shouldIndent(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
     case \ClosureExprSyntax.statements: 
@@ -76,6 +84,7 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }
   }
+  
   open func requiresLeadingNewline(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
     case \ClosureExprSyntax.rightBrace: 
@@ -90,6 +99,7 @@ open class BasicFormat: SyntaxRewriter {
       return putNextTokenOnNewLine
     }
   }
+  
   open func childrenSeparatedByNewline(_ node: Syntax) -> Bool {
     switch node.as(SyntaxEnum.self) {
     case .codeBlockItemList: 
@@ -102,6 +112,7 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }
   }
+  
   open func requiresLeadingSpace(_ tokenKind: TokenKind) -> Bool {
     switch tokenKind {
     case .whereKeyword: 
@@ -126,6 +137,7 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }
   }
+  
   open func requiresTrailingSpace(_ tokenKind: TokenKind) -> Bool {
     switch tokenKind {
     case .associatedtypeKeyword: 
@@ -296,6 +308,7 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }
   }
+  
   private func getKeyPath(_ node: Syntax) -> AnyKeyPath? {
     guard let parent = node.parent else {
       return nil

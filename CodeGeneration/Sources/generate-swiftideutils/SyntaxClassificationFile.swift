@@ -32,7 +32,7 @@ var node_child_classifications: [ChildClassification] {
 let syntaxClassificationFile = SourceFile {
   ImportDecl(
     """
-    \(copyrightHeader)
+    \(generateCopyrightHeader(for: "generate-ideutils"))
     @_spi(RawSyntax) import SwiftSyntax
     """
   )

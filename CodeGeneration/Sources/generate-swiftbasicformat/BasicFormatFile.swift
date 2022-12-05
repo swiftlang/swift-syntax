@@ -17,7 +17,7 @@ import Utils
 
 let basicFormatFile = SourceFile {
   ImportDecl(
-    leadingTrivia: .docLineComment(copyrightHeader),
+    leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftbasicformat")),
     path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 

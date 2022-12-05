@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport

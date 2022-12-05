@@ -27,8 +27,8 @@ private func replaceFirstLabel(
 }
 
 public struct ColorLiteralMacro: ExpressionMacro {
-  public static func expand(
-    _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+  public static func expansion(
+    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "_colorLiteralRed"
@@ -42,8 +42,8 @@ public struct ColorLiteralMacro: ExpressionMacro {
 }
 
 public struct FileLiteralMacro: ExpressionMacro {
-  public static func expand(
-    _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+  public static func expansion(
+    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "fileReferenceLiteralResourceName"
@@ -57,8 +57,8 @@ public struct FileLiteralMacro: ExpressionMacro {
 }
 
 public struct ImageLiteralMacro: ExpressionMacro {
-  public static func expand(
-    _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+  public static func expansion(
+    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList, with: "imageLiteralResourceName"
@@ -72,8 +72,8 @@ public struct ImageLiteralMacro: ExpressionMacro {
 }
 
 public struct FileIDMacro: ExpressionMacro {
-  public static func expand(
-    _ macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+  public static func expansion(
+    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     // FIXME: Compiler has more sophisticated file ID computation
     let fileID = "\(context.moduleName)/\(context.fileName)"

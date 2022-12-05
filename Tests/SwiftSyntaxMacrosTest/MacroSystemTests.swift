@@ -19,8 +19,8 @@ import _SwiftSyntaxTestSupport
 /// Macro whose only purpose is to ensure that we cannot see "out" of the
 /// macro expansion syntax node we were given.
 struct CheckContextIndependenceMacro: ExpressionMacro {
-  static func expand(
-    _ macro: MacroExpansionExprSyntax,
+  static func expansion(
+    of macro: MacroExpansionExprSyntax,
     in context: inout MacroExpansionContext) -> ExprSyntax {
 
     // Should not have a parent.

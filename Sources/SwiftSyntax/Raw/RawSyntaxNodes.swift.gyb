@@ -28,7 +28,7 @@ public protocol Raw${node.name}NodeProtocol: Raw${node.base_type}NodeProtocol {}
 % for node in SYNTAX_NODES:
 
 @_spi(RawSyntax)
-public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_type}NodeProtocol, RawSyntaxToSyntax {
+public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_type}NodeProtocol {
 %   enums = []
 %   for child in node.children:
 %     if child.node_choices:
@@ -69,7 +69,6 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
   }
 
 %   end
-  public typealias SyntaxType = ${node.name}
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {

@@ -44,70 +44,80 @@ public protocol SyntaxParseable: SyntaxProtocol {
 extension DeclSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseDeclaration()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension ExprSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseExpression()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension StmtSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseStatement()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension TypeSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseType()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension PatternSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parsePattern()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension MemberDeclBlockSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseMemberDeclList()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension SourceFileSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseSourceFile()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension SwitchCaseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseSwitchCase()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension CatchClauseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseCatchClause()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 
 extension GenericParameterClauseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseGenericParameters()
-    return parser.parseRemainder(into: node).syntax
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
   }
 }
 

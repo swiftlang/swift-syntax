@@ -25,8 +25,7 @@ public protocol RawPatternSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
 
 
 @_spi(RawSyntax)
-public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclSyntax
+public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -57,8 +56,7 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ExprSyntax
+public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -89,8 +87,7 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = StmtSyntax
+public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -121,8 +118,7 @@ public struct RawStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TypeSyntax
+public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -153,8 +149,7 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PatternSyntax
+public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -185,8 +180,7 @@ public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawUnknownDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnknownDeclSyntax
+public struct RawUnknownDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -211,8 +205,7 @@ public struct RawUnknownDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawUnknownExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnknownExprSyntax
+public struct RawUnknownExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -237,8 +230,7 @@ public struct RawUnknownExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawUnknownStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnknownStmtSyntax
+public struct RawUnknownStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -263,8 +255,7 @@ public struct RawUnknownStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawUnknownTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnknownTypeSyntax
+public struct RawUnknownTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -289,8 +280,7 @@ public struct RawUnknownTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawUnknownPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnknownPatternSyntax
+public struct RawUnknownPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -315,8 +305,7 @@ public struct RawUnknownPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawMissingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MissingSyntax
+public struct RawMissingSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -348,8 +337,7 @@ public struct RawMissingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MissingDeclSyntax
+public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -409,8 +397,7 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MissingExprSyntax
+public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -442,8 +429,7 @@ public struct RawMissingExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MissingStmtSyntax
+public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -475,8 +461,7 @@ public struct RawMissingStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MissingTypeSyntax
+public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -508,8 +493,7 @@ public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MissingPatternSyntax
+public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -541,7 +525,7 @@ public struct RawMissingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Item: RawSyntaxNodeProtocol {
     case `decl`(RawDeclSyntax)
@@ -589,7 +573,6 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     }
   }
 
-  public typealias SyntaxType = CodeBlockItemSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -659,8 +642,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CodeBlockItemListSyntax
+public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -700,8 +682,7 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CodeBlockSyntax
+public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -771,8 +752,7 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnexpectedNodesSyntax
+public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -812,8 +792,7 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = InOutExprSyntax
+public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -873,8 +852,7 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawPoundColumnExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundColumnExprSyntax
+public struct RawPoundColumnExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -924,8 +902,7 @@ public struct RawPoundColumnExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TupleExprElementListSyntax
+public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -965,8 +942,7 @@ public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ArrayElementListSyntax
+public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1006,8 +982,7 @@ public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DictionaryElementListSyntax
+public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1047,7 +1022,7 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `stringSegment`(RawStringSegmentSyntax)
@@ -1077,7 +1052,6 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
     }
   }
 
-  public typealias SyntaxType = StringLiteralSegmentsSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1117,8 +1091,7 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TryExprSyntax
+public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1188,8 +1161,7 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AwaitExprSyntax
+public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1249,8 +1221,7 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MoveExprSyntax
+public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1310,8 +1281,7 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclNameArgumentSyntax
+public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1371,8 +1341,7 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclNameArgumentListSyntax
+public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1412,8 +1381,7 @@ public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclNameArgumentsSyntax
+public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1483,8 +1451,7 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = IdentifierExprSyntax
+public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1544,8 +1511,7 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SuperRefExprSyntax
+public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1595,8 +1561,7 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = NilLiteralExprSyntax
+public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1646,8 +1611,7 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DiscardAssignmentExprSyntax
+public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1697,8 +1661,7 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AssignmentExprSyntax
+public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1748,8 +1711,7 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SequenceExprSyntax
+public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1799,8 +1761,7 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ExprListSyntax
+public struct RawExprListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1840,8 +1801,7 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawPoundLineExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundLineExprSyntax
+public struct RawPoundLineExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1891,8 +1851,7 @@ public struct RawPoundLineExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawPoundFileExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundFileExprSyntax
+public struct RawPoundFileExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1942,8 +1901,7 @@ public struct RawPoundFileExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawPoundFileIDExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundFileIDExprSyntax
+public struct RawPoundFileIDExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1993,8 +1951,7 @@ public struct RawPoundFileIDExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawPoundFilePathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundFilePathExprSyntax
+public struct RawPoundFilePathExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2044,8 +2001,7 @@ public struct RawPoundFilePathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawPoundFunctionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundFunctionExprSyntax
+public struct RawPoundFunctionExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2095,8 +2051,7 @@ public struct RawPoundFunctionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawPoundDsohandleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundDsohandleExprSyntax
+public struct RawPoundDsohandleExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2146,8 +2101,7 @@ public struct RawPoundDsohandleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawSymbolicReferenceExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SymbolicReferenceExprSyntax
+public struct RawSymbolicReferenceExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2207,8 +2161,7 @@ public struct RawSymbolicReferenceExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrefixOperatorExprSyntax
+public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2268,8 +2221,7 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = BinaryOperatorExprSyntax
+public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2319,8 +2271,7 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ArrowExprSyntax
+public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2390,8 +2341,7 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = InfixOperatorExprSyntax
+public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2461,8 +2411,7 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FloatLiteralExprSyntax
+public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2512,8 +2461,7 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TupleExprSyntax
+public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2583,8 +2531,7 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ArrayExprSyntax
+public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2654,7 +2601,7 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Content: RawSyntaxNodeProtocol {
     case `colon`(RawTokenSyntax)
@@ -2684,7 +2631,6 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
     }
   }
 
-  public typealias SyntaxType = DictionaryExprSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2754,8 +2700,7 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TupleExprElementSyntax
+public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2835,8 +2780,7 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawArrayElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ArrayElementSyntax
+public struct RawArrayElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2896,8 +2840,7 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DictionaryElementSyntax
+public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -2977,8 +2920,7 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = IntegerLiteralExprSyntax
+public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3028,8 +2970,7 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = BooleanLiteralExprSyntax
+public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3079,8 +3020,7 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnresolvedTernaryExprSyntax
+public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3150,8 +3090,7 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TernaryExprSyntax
+public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3241,8 +3180,7 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MemberAccessExprSyntax
+public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3322,8 +3260,7 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnresolvedIsExprSyntax
+public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3373,8 +3310,7 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = IsExprSyntax
+public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3444,8 +3380,7 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnresolvedAsExprSyntax
+public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3505,8 +3440,7 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AsExprSyntax
+public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3586,8 +3520,7 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TypeExprSyntax
+public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3637,8 +3570,7 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClosureCaptureItemSyntax
+public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3728,8 +3660,7 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClosureCaptureItemListSyntax
+public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3769,8 +3700,7 @@ public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClosureCaptureSignatureSyntax
+public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3840,8 +3770,7 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawClosureParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClosureParamSyntax
+public struct RawClosureParamSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3901,8 +3830,7 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClosureParamListSyntax
+public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -3942,7 +3870,7 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Input: RawSyntaxNodeProtocol {
     case `simpleInput`(RawClosureParamListSyntax)
@@ -3972,7 +3900,6 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
     }
   }
 
-  public typealias SyntaxType = ClosureSignatureSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4082,8 +4009,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClosureExprSyntax
+public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4163,8 +4089,7 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnresolvedPatternExprSyntax
+public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4214,8 +4139,7 @@ public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MultipleTrailingClosureElementSyntax
+public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4285,8 +4209,7 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol, Ra
 }
 
 @_spi(RawSyntax)
-public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MultipleTrailingClosureElementListSyntax
+public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4326,8 +4249,7 @@ public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol
 }
 
 @_spi(RawSyntax)
-public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FunctionCallExprSyntax
+public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4427,8 +4349,7 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SubscriptExprSyntax
+public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4528,8 +4449,7 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = OptionalChainingExprSyntax
+public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4589,8 +4509,7 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ForcedValueExprSyntax
+public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4650,8 +4569,7 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PostfixUnaryExprSyntax
+public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4711,8 +4629,7 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SpecializeExprSyntax
+public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4772,8 +4689,7 @@ public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = StringSegmentSyntax
+public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4823,8 +4739,7 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ExpressionSegmentSyntax
+public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -4914,8 +4829,7 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = StringLiteralExprSyntax
+public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5005,8 +4919,7 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = RegexLiteralExprSyntax
+public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5056,8 +4969,7 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = KeyPathExprSyntax
+public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5127,8 +5039,7 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = KeyPathComponentListSyntax
+public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5168,7 +5079,7 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Component: RawSyntaxNodeProtocol {
     case `property`(RawKeyPathPropertyComponentSyntax)
@@ -5204,7 +5115,6 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
     }
   }
 
-  public typealias SyntaxType = KeyPathComponentSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5264,8 +5174,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = KeyPathPropertyComponentSyntax
+public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5335,8 +5244,7 @@ public struct RawKeyPathPropertyComponentSyntax: RawSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = KeyPathSubscriptComponentSyntax
+public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5406,8 +5314,7 @@ public struct RawKeyPathSubscriptComponentSyntax: RawSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = KeyPathOptionalComponentSyntax
+public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5457,7 +5364,7 @@ public struct RawKeyPathOptionalComponentSyntax: RawSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum RootExpr: RawSyntaxNodeProtocol {
     case `identifierExpr`(RawIdentifierExprSyntax)
@@ -5493,7 +5400,6 @@ public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
     }
   }
 
-  public typealias SyntaxType = OldKeyPathExprSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5563,8 +5469,7 @@ public struct RawOldKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawKeyPathBaseExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = KeyPathBaseExprSyntax
+public struct RawKeyPathBaseExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5614,8 +5519,7 @@ public struct RawKeyPathBaseExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawObjcNamePieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ObjcNamePieceSyntax
+public struct RawObjcNamePieceSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5675,8 +5579,7 @@ public struct RawObjcNamePieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawObjcNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ObjcNameSyntax
+public struct RawObjcNameSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5716,8 +5619,7 @@ public struct RawObjcNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawObjcKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ObjcKeyPathExprSyntax
+public struct RawObjcKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5797,8 +5699,7 @@ public struct RawObjcKeyPathExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ObjcSelectorExprSyntax
+public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -5898,8 +5799,7 @@ public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MacroExpansionExprSyntax
+public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6019,8 +5919,7 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PostfixIfConfigExprSyntax
+public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6080,8 +5979,7 @@ public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = EditorPlaceholderExprSyntax
+public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6131,8 +6029,7 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ObjectLiteralExprSyntax
+public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6212,8 +6109,7 @@ public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = YieldExprListSyntax
+public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6253,8 +6149,7 @@ public struct RawYieldExprListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = YieldExprListElementSyntax
+public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6314,8 +6209,7 @@ public struct RawYieldExprListElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TypeInitializerClauseSyntax
+public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6375,8 +6269,7 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TypealiasDeclSyntax
+public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6486,8 +6379,7 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AssociatedtypeDeclSyntax
+public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6597,8 +6489,7 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FunctionParameterListSyntax
+public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6638,8 +6529,7 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ParameterClauseSyntax
+public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6709,8 +6599,7 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ReturnClauseSyntax
+public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6770,8 +6659,7 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FunctionSignatureSyntax
+public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6851,7 +6739,7 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Elements: RawSyntaxNodeProtocol {
     case `statements`(RawCodeBlockItemListSyntax)
@@ -6899,7 +6787,6 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
     }
   }
 
-  public typealias SyntaxType = IfConfigClauseSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6969,8 +6856,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = IfConfigClauseListSyntax
+public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7010,8 +6896,7 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = IfConfigDeclSyntax
+public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7071,8 +6956,7 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawPoundErrorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundErrorDeclSyntax
+public struct RawPoundErrorDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7152,8 +7036,7 @@ public struct RawPoundErrorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawPoundWarningDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundWarningDeclSyntax
+public struct RawPoundWarningDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7233,8 +7116,7 @@ public struct RawPoundWarningDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundSourceLocationSyntax
+public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7314,8 +7196,7 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundSourceLocationArgsSyntax
+public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7425,8 +7306,7 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclModifierDetailSyntax
+public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7496,8 +7376,7 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclModifierSyntax
+public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7557,8 +7436,7 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = InheritedTypeSyntax
+public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7618,8 +7496,7 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = InheritedTypeListSyntax
+public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7659,8 +7536,7 @@ public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TypeInheritanceClauseSyntax
+public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7720,8 +7596,7 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClassDeclSyntax
+public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7841,8 +7716,7 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ActorDeclSyntax
+public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -7962,8 +7836,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = StructDeclSyntax
+public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8083,8 +7956,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ProtocolDeclSyntax
+public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8204,8 +8076,7 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ExtensionDeclSyntax
+public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8315,8 +8186,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MemberDeclBlockSyntax
+public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8386,8 +8256,7 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MemberDeclListSyntax
+public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8427,8 +8296,7 @@ public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MemberDeclListItemSyntax
+public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8488,8 +8356,7 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawSourceFileSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SourceFileSyntax
+public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8549,8 +8416,7 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = InitializerClauseSyntax
+public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8610,8 +8476,7 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FunctionParameterSyntax
+public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8741,8 +8606,7 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawModifierListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ModifierListSyntax
+public struct RawModifierListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8782,8 +8646,7 @@ public struct RawModifierListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FunctionDeclSyntax
+public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -8903,8 +8766,7 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = InitializerDeclSyntax
+public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9024,8 +8886,7 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeinitializerDeclSyntax
+public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9105,7 +8966,7 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
@@ -9135,7 +8996,6 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
     }
   }
 
-  public typealias SyntaxType = SubscriptDeclSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9255,8 +9115,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawAccessLevelModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AccessLevelModifierSyntax
+public struct RawAccessLevelModifierSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9316,8 +9175,7 @@ public struct RawAccessLevelModifierSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AccessPathComponentSyntax
+public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9377,8 +9235,7 @@ public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawAccessPathSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AccessPathSyntax
+public struct RawAccessPathSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9418,8 +9275,7 @@ public struct RawAccessPathSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ImportDeclSyntax
+public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9509,8 +9365,7 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AccessorParameterSyntax
+public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9580,8 +9435,7 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AccessorDeclSyntax
+public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9691,8 +9545,7 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawAccessorListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AccessorListSyntax
+public struct RawAccessorListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9732,8 +9585,7 @@ public struct RawAccessorListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AccessorBlockSyntax
+public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9803,7 +9655,7 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
@@ -9833,7 +9685,6 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
     }
   }
 
-  public typealias SyntaxType = PatternBindingSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9923,8 +9774,7 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PatternBindingListSyntax
+public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -9964,8 +9814,7 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = VariableDeclSyntax
+public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10045,8 +9894,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = EnumCaseElementSyntax
+public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10126,8 +9974,7 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = EnumCaseElementListSyntax
+public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10167,8 +10014,7 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = EnumCaseDeclSyntax
+public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10248,8 +10094,7 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = EnumDeclSyntax
+public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10369,8 +10214,7 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = OperatorDeclSyntax
+public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10460,8 +10304,7 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DesignatedTypeListSyntax
+public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10501,8 +10344,7 @@ public struct RawDesignatedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DesignatedTypeElementSyntax
+public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10562,8 +10404,7 @@ public struct RawDesignatedTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = OperatorPrecedenceAndTypesSyntax
+public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10633,8 +10474,7 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol, RawSyn
 }
 
 @_spi(RawSyntax)
-public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrecedenceGroupDeclSyntax
+public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10744,7 +10584,7 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `precedenceGroupRelation`(RawPrecedenceGroupRelationSyntax)
@@ -10780,7 +10620,6 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol, RawS
     }
   }
 
-  public typealias SyntaxType = PrecedenceGroupAttributeListSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10820,8 +10659,7 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol, RawS
 }
 
 @_spi(RawSyntax)
-public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrecedenceGroupRelationSyntax
+public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10891,8 +10729,7 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrecedenceGroupNameListSyntax
+public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10932,8 +10769,7 @@ public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrecedenceGroupNameElementSyntax
+public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -10993,8 +10829,7 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol, RawSyn
 }
 
 @_spi(RawSyntax)
-public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrecedenceGroupAssignmentSyntax
+public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11064,8 +10899,7 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrecedenceGroupAssociativitySyntax
+public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11135,7 +10969,7 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol, RawS
 }
 
 @_spi(RawSyntax)
-public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Signature: RawSyntaxNodeProtocol {
     case `functionLike`(RawFunctionSignatureSyntax)
@@ -11165,7 +10999,6 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
     }
   }
 
-  public typealias SyntaxType = MacroDeclSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11295,8 +11128,7 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawExternalMacroNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ExternalMacroNameSyntax
+public struct RawExternalMacroNameSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11366,8 +11198,7 @@ public struct RawExternalMacroNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MacroExpansionDeclSyntax
+public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11487,8 +11318,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TokenListSyntax
+public struct RawTokenListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11528,8 +11358,7 @@ public struct RawTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawNonEmptyTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = NonEmptyTokenListSyntax
+public struct RawNonEmptyTokenListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11569,8 +11398,7 @@ public struct RawNonEmptyTokenListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CustomAttributeSyntax
+public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11660,7 +11488,7 @@ public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Argument: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
@@ -11762,7 +11590,6 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     }
   }
 
-  public typealias SyntaxType = AttributeSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11862,7 +11689,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `attribute`(RawAttributeSyntax)
@@ -11898,7 +11725,6 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     }
   }
 
-  public typealias SyntaxType = AttributeListSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -11938,7 +11764,7 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `labeledSpecializeEntry`(RawLabeledSpecializeEntrySyntax)
@@ -11980,7 +11806,6 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSy
     }
   }
 
-  public typealias SyntaxType = SpecializeAttributeSpecListSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12020,8 +11845,7 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSy
 }
 
 @_spi(RawSyntax)
-public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AvailabilityEntrySyntax
+public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12101,8 +11925,7 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = LabeledSpecializeEntrySyntax
+public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12182,8 +12005,7 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TargetFunctionEntrySyntax
+public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12263,7 +12085,7 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum StringOrDeclname: RawSyntaxNodeProtocol {
     case `string`(RawTokenSyntax)
@@ -12293,7 +12115,6 @@ public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawS
     }
   }
 
-  public typealias SyntaxType = NamedAttributeStringArgumentSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12363,8 +12184,7 @@ public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol, RawS
 }
 
 @_spi(RawSyntax)
-public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclNameSyntax
+public struct RawDeclNameSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12424,8 +12244,7 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ImplementsAttributeArgumentsSyntax
+public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12505,8 +12324,7 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawS
 }
 
 @_spi(RawSyntax)
-public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ObjCSelectorPieceSyntax
+public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12566,8 +12384,7 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ObjCSelectorSyntax
+public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12607,8 +12424,7 @@ public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DifferentiableAttributeArgumentsSyntax
+public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12698,7 +12514,7 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol, 
 }
 
 @_spi(RawSyntax)
-public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Parameters: RawSyntaxNodeProtocol {
     case `parameter`(RawDifferentiabilityParamSyntax)
@@ -12728,7 +12544,6 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, Raw
     }
   }
 
-  public typealias SyntaxType = DifferentiabilityParamsClauseSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12798,8 +12613,7 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol, Raw
 }
 
 @_spi(RawSyntax)
-public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DifferentiabilityParamsSyntax
+public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12869,8 +12683,7 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DifferentiabilityParamListSyntax
+public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12910,8 +12723,7 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol, RawSyn
 }
 
 @_spi(RawSyntax)
-public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DifferentiabilityParamSyntax
+public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -12971,8 +12783,7 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DerivativeRegistrationAttributeArgumentsSyntax
+public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13082,8 +12893,7 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
 }
 
 @_spi(RawSyntax)
-public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = QualifiedDeclNameSyntax
+public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13163,8 +12973,7 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FunctionDeclNameSyntax
+public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13224,8 +13033,7 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = BackDeployAttributeSpecListSyntax
+public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13295,8 +13103,7 @@ public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol, RawSy
 }
 
 @_spi(RawSyntax)
-public struct RawBackDeployVersionListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = BackDeployVersionListSyntax
+public struct RawBackDeployVersionListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13336,8 +13143,7 @@ public struct RawBackDeployVersionListSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawBackDeployVersionArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = BackDeployVersionArgumentSyntax
+public struct RawBackDeployVersionArgumentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13397,8 +13203,7 @@ public struct RawBackDeployVersionArgumentSyntax: RawSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = OpaqueReturnTypeOfAttributeArgumentsSyntax
+public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13468,8 +13273,7 @@ public struct RawOpaqueReturnTypeOfAttributeArgumentsSyntax: RawSyntaxNodeProtoc
 }
 
 @_spi(RawSyntax)
-public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ConventionAttributeArgumentsSyntax
+public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13559,8 +13363,7 @@ public struct RawConventionAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawS
 }
 
 @_spi(RawSyntax)
-public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ConventionWitnessMethodAttributeArgumentsSyntax
+public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13630,8 +13433,7 @@ public struct RawConventionWitnessMethodAttributeArgumentsSyntax: RawSyntaxNodeP
 }
 
 @_spi(RawSyntax)
-public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = LabeledStmtSyntax
+public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13701,8 +13503,7 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ContinueStmtSyntax
+public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13762,8 +13563,7 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = WhileStmtSyntax
+public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13833,8 +13633,7 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeferStmtSyntax
+public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13894,8 +13693,7 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ExpressionStmtSyntax
+public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -13945,7 +13743,7 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `switchCase`(RawSwitchCaseSyntax)
@@ -13975,7 +13773,6 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
     }
   }
 
-  public typealias SyntaxType = SwitchCaseListSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14015,8 +13812,7 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = RepeatWhileStmtSyntax
+public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14096,8 +13892,7 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GuardStmtSyntax
+public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14177,8 +13972,7 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = WhereClauseSyntax
+public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14238,8 +14032,7 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ForInStmtSyntax
+public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14379,8 +14172,7 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SwitchStmtSyntax
+public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14470,8 +14262,7 @@ public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CatchClauseListSyntax
+public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14511,8 +14302,7 @@ public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DoStmtSyntax
+public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14582,8 +14372,7 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ReturnStmtSyntax
+public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14643,7 +14432,7 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Yields: RawSyntaxNodeProtocol {
     case `yieldList`(RawYieldListSyntax)
@@ -14673,7 +14462,6 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
     }
   }
 
-  public typealias SyntaxType = YieldStmtSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14733,8 +14521,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawYieldListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = YieldListSyntax
+public struct RawYieldListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14804,8 +14591,7 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FallthroughStmtSyntax
+public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14855,8 +14641,7 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = BreakStmtSyntax
+public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14916,8 +14701,7 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CaseItemListSyntax
+public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14957,8 +14741,7 @@ public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CatchItemListSyntax
+public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -14998,7 +14781,7 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Condition: RawSyntaxNodeProtocol {
     case `expression`(RawExprSyntax)
@@ -15052,7 +14835,6 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
     }
   }
 
-  public typealias SyntaxType = ConditionElementSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15112,8 +14894,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AvailabilityConditionSyntax
+public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15193,8 +14974,7 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MatchingPatternConditionSyntax
+public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15274,8 +15054,7 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = OptionalBindingConditionSyntax
+public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15355,8 +15134,7 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = UnavailabilityConditionSyntax
+public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15436,8 +15214,7 @@ public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawHasSymbolConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = HasSymbolConditionSyntax
+public struct RawHasSymbolConditionSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15517,8 +15294,7 @@ public struct RawHasSymbolConditionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ConditionElementListSyntax
+public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15558,8 +15334,7 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawDeclarationStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DeclarationStmtSyntax
+public struct RawDeclarationStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15609,8 +15384,7 @@ public struct RawDeclarationStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ThrowStmtSyntax
+public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15670,7 +15444,7 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum ElseBody: RawSyntaxNodeProtocol {
     case `ifStmt`(RawIfStmtSyntax)
@@ -15700,7 +15474,6 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
     }
   }
 
-  public typealias SyntaxType = IfStmtSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15790,7 +15563,7 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Label: RawSyntaxNodeProtocol {
     case `default`(RawSwitchDefaultLabelSyntax)
@@ -15820,7 +15593,6 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
     }
   }
 
-  public typealias SyntaxType = SwitchCaseSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15890,8 +15662,7 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SwitchDefaultLabelSyntax
+public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -15951,8 +15722,7 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawCaseItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CaseItemSyntax
+public struct RawCaseItemSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16022,8 +15792,7 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawCatchItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CatchItemSyntax
+public struct RawCatchItemSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16093,8 +15862,7 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SwitchCaseLabelSyntax
+public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16164,8 +15932,7 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CatchClauseSyntax
+public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16235,8 +16002,7 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawPoundAssertStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PoundAssertStmtSyntax
+public struct RawPoundAssertStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16336,8 +16102,7 @@ public struct RawPoundAssertStmtSyntax: RawStmtSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericWhereClauseSyntax
+public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16397,8 +16162,7 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericRequirementListSyntax
+public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16438,7 +16202,7 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Body: RawSyntaxNodeProtocol {
     case `sameTypeRequirement`(RawSameTypeRequirementSyntax)
@@ -16474,7 +16238,6 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
     }
   }
 
-  public typealias SyntaxType = GenericRequirementSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16534,8 +16297,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SameTypeRequirementSyntax
+public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16605,8 +16367,7 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = LayoutRequirementSyntax
+public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16726,8 +16487,7 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynt
 }
 
 @_spi(RawSyntax)
-public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericParameterListSyntax
+public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16767,8 +16527,7 @@ public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericParameterSyntax
+public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16868,8 +16627,7 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrimaryAssociatedTypeListSyntax
+public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16909,8 +16667,7 @@ public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrimaryAssociatedTypeSyntax
+public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -16970,8 +16727,7 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericParameterClauseSyntax
+public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17051,8 +16807,7 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ConformanceRequirementSyntax
+public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17122,8 +16877,7 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PrimaryAssociatedTypeClauseSyntax
+public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17193,8 +16947,7 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol, RawSy
 }
 
 @_spi(RawSyntax)
-public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = SimpleTypeIdentifierSyntax
+public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17254,8 +17007,7 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MemberTypeIdentifierSyntax
+public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17335,8 +17087,7 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ClassRestrictionTypeSyntax
+public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17386,8 +17137,7 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ArrayTypeSyntax
+public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17457,8 +17207,7 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = DictionaryTypeSyntax
+public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17548,8 +17297,7 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = MetatypeTypeSyntax
+public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17619,8 +17367,7 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = OptionalTypeSyntax
+public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17680,8 +17427,7 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ConstrainedSugarTypeSyntax
+public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17741,8 +17487,7 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ImplicitlyUnwrappedOptionalTypeSyntax
+public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17802,8 +17547,7 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
 }
 
 @_spi(RawSyntax)
-public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CompositionTypeElementSyntax
+public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17863,8 +17607,7 @@ public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CompositionTypeElementListSyntax
+public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17904,8 +17647,7 @@ public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyn
 }
 
 @_spi(RawSyntax)
-public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = CompositionTypeSyntax
+public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -17955,8 +17697,7 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = PackExpansionTypeSyntax
+public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18016,8 +17757,7 @@ public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TupleTypeElementSyntax
+public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18137,8 +17877,7 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TupleTypeElementListSyntax
+public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18178,8 +17917,7 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TupleTypeSyntax
+public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18249,8 +17987,7 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
 }
 
 @_spi(RawSyntax)
-public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = FunctionTypeSyntax
+public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18360,8 +18097,7 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSynta
 }
 
 @_spi(RawSyntax)
-public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AttributedTypeSyntax
+public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18431,8 +18167,7 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyn
 }
 
 @_spi(RawSyntax)
-public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericArgumentListSyntax
+public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18472,8 +18207,7 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericArgumentSyntax
+public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18533,8 +18267,7 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = GenericArgumentClauseSyntax
+public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18604,8 +18337,7 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol, RawSyntaxTo
 }
 
 @_spi(RawSyntax)
-public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = NamedOpaqueReturnTypeSyntax
+public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18665,8 +18397,7 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol, RawSynt
 }
 
 @_spi(RawSyntax)
-public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TypeAnnotationSyntax
+public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18726,8 +18457,7 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax 
 }
 
 @_spi(RawSyntax)
-public struct RawEnumCasePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = EnumCasePatternSyntax
+public struct RawEnumCasePatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18807,8 +18537,7 @@ public struct RawEnumCasePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = IsTypePatternSyntax
+public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18868,8 +18597,7 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawOptionalPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = OptionalPatternSyntax
+public struct RawOptionalPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18929,8 +18657,7 @@ public struct RawOptionalPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = IdentifierPatternSyntax
+public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -18980,8 +18707,7 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawAsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AsTypePatternSyntax
+public struct RawAsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19051,8 +18777,7 @@ public struct RawAsTypePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TuplePatternSyntax
+public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19122,8 +18847,7 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = WildcardPatternSyntax
+public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19183,8 +18907,7 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxT
 }
 
 @_spi(RawSyntax)
-public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TuplePatternElementSyntax
+public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19264,8 +18987,7 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol, RawSyntaxToSy
 }
 
 @_spi(RawSyntax)
-public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ExpressionPatternSyntax
+public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19315,8 +19037,7 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol, RawSynta
 }
 
 @_spi(RawSyntax)
-public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = TuplePatternElementListSyntax
+public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19356,8 +19077,7 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol, RawSyntax
 }
 
 @_spi(RawSyntax)
-public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = ValueBindingPatternSyntax
+public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19417,8 +19137,7 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol, RawSyn
 }
 
 @_spi(RawSyntax)
-public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AvailabilitySpecListSyntax
+public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19458,7 +19177,7 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Entry: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
@@ -19500,7 +19219,6 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
     }
   }
 
-  public typealias SyntaxType = AvailabilityArgumentSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19560,7 +19278,7 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToS
 }
 
 @_spi(RawSyntax)
-public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
+public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
   @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Value: RawSyntaxNodeProtocol {
     case `string`(RawTokenSyntax)
@@ -19590,7 +19308,6 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSy
     }
   }
 
-  public typealias SyntaxType = AvailabilityLabeledArgumentSyntax
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19660,8 +19377,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol, RawSy
 }
 
 @_spi(RawSyntax)
-public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = AvailabilityVersionRestrictionSyntax
+public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -19721,8 +19437,7 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol, Ra
 }
 
 @_spi(RawSyntax)
-public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol, RawSyntaxToSyntax {
-  public typealias SyntaxType = VersionTupleSyntax
+public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {

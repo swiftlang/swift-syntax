@@ -37,11 +37,7 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: expected expression
         DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the keyword below...' before 'return' statement"),
-        // TODO: Old parser expected error on line 4: binary operator '+' cannot be applied to operands of type 'Int' and 'String'
-        // TODO: Old parser expected note on line 4: overloads for '+' exist with these partially matching parameter lists: (Int, Int), (String, String)
-        // TODO: Old parser expected error on line 4: no '+' candidates produce the expected contextual result type '()'
       ]
     )
   }
@@ -56,11 +52,7 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected expression
         DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the declaration...' before function"),
-        // TODO: Old parser expected error on line 4: binary operator '+' cannot be applied to operands of type 'Int' and 'String'
-        // TODO: Old parser expected note on line 4: overloads for '+' exist with these partially matching parameter lists: (Int, Int), (String, String)
-        // TODO: Old parser expected error on line 4: no '+' candidates produce the expected contextual result type '()'
       ]
     )
   }
@@ -85,8 +77,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '>' to complete generic argument list
-        // TODO: Old parser expected note on line 2: to match this opening '<'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic argument clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'this greater: >' in subscript"),
@@ -102,10 +92,7 @@ final class RecoveryTests: XCTestCase {
       @xyz class BadAttributes { 
         func exists() -> Bool { return true }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: unknown attribute 'xyz'
-      ]
+      """
     )
   }
 
@@ -115,11 +102,7 @@ final class RecoveryTests: XCTestCase {
       func test(a: BadAttributes) -> () {
         _ = a.exists() // no-warning
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 1: did you mean 'test'?
-        // TODO: Old parser expected note on line 1: 'test' declared here
-      ]
+      """
     )
   }
 
@@ -127,17 +110,15 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       // Here is an extra random close-brace!
-      1️⃣} 
+      1️⃣}
       //===--- Recovery for braced blocks.
       func braceStmt1() {
-        { braceStmt1(); }2️⃣
+        { braceStmt1(); }2️⃣a
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: extraneous '}' at top level, Fix-It replacements: 1 - 3 = ''
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 5: closure expression is unused
-        // TODO: Old parser expected note on line 5: did you mean to use a 'do' statement?, Fix-It replacements: 3 - 3 = 'do '
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'"),
       ]
     )
   }
@@ -145,41 +126,28 @@ final class RecoveryTests: XCTestCase {
   func testRecovery11() {
     AssertParse(
       """
-      1️⃣}
       func braceStmt2() {
-        { () in braceStmt2(); }2️⃣
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 3: closure expression is unused
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
-      ]
+        { () in braceStmt2(); }
+      }
+      """
     )
   }
 
   func testRecovery12() {
     AssertParse(
       """
-      1️⃣}
       func braceStmt3() {
         {  
           undefinedIdentifier {} 
-        }2️⃣
-      """,
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 3: closure expression is unused
-        // TODO: Old parser expected note on line 3: did you mean to use a 'do' statement?, Fix-It replacements: 3 - 3 = 'do '
-        // TODO: Old parser expected error on line 4: cannot find 'undefinedIdentifier' in scope
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
-      ]
+        }
+      }
+      """
     )
   }
 
   func testRecovery13() {
     AssertParse(
       """
-      1️⃣}
       //===--- Recovery for misplaced 'static'.
       static func toplevelStaticFunc() {} 
       static struct StaticStruct {} 
@@ -189,19 +157,17 @@ final class RecoveryTests: XCTestCase {
       class ClassWithStaticDecls {
         class var a = 42 
       }
-      //===--- Recovery for missing controlling expression in statements.
-      func missingControllingExprInIf() {
-        if
+      """
+    )
+  }
+
+  func testRecovery13b() {
+    AssertParse(
+      """
+        if1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code at top level"),
-        // TODO: Old parser expected error on line 3: static methods may only be declared on a type, Fix-It replacements: 1 - 8 = ''
-        // TODO: Old parser expected error on line 4: declaration cannot be marked 'static', Fix-It replacements: 1 - 8 = ''
-        // TODO: Old parser expected error on line 5: declaration cannot be marked 'static', Fix-It replacements: 1 - 8 = ''
-        // TODO: Old parser expected error on line 6: declaration cannot be marked 'static', Fix-It replacements: 1 - 8 = ''
-        // TODO: Old parser expected error on line 7: declaration cannot be marked 'static', Fix-It replacements: 1 - 8 = ''
-        // TODO: Old parser expected error on line 9: class stored properties not supported
-        // TODO: Old parser expected error on line 13: expected expression, var, or let in 'if' condition
+        DiagnosticSpec(message: "expected expression and body in 'if' statement"),
       ]
     )
   }
@@ -268,7 +234,7 @@ final class RecoveryTests: XCTestCase {
   func testRecovery18() {
     AssertParse(
       """
-      if { true }() { //  expected-error 2 {{consecutive statements on a line must be separated by ';'}} expected-error {{closure expression is unused}} expected-note {{did you mean to use a 'do' statement?}} {{17-17=do }} expected-warning {{boolean literal is unused}}
+      if { true }() {
         }
       """,
       diagnostics: [
@@ -295,15 +261,10 @@ final class RecoveryTests: XCTestCase {
   func testRecovery20() {
     AssertParse(
       """
-      1️⃣}
-      func missingControllingExprInWhile() {
-        while2️⃣
+      while1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 3: expected expression, var, or let in 'while' condition
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression and code block in 'while' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(message: "expected expression and code block in 'while' statement"),
       ]
     )
   }
@@ -339,9 +300,9 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       // It is debatable if we should do recovery here and parse { true } as the
-        // body, but the error message should be sensible.
-        while { true } { 
-        }
+      // body, but the error message should be sensible.
+      while { true } {
+      }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: missing condition in 'while' statement
@@ -357,7 +318,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       while { true }() { //  expected-error 2 {{consecutive statements on a line must be separated by ';'}} expected-error {{closure expression is unused}} expected-note {{did you mean to use a 'do' statement?}} {{20-20=do }} expected-warning {{boolean literal is unused}}
-        }
+      }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: missing condition in 'while' statement
@@ -369,7 +330,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       // <rdar://problem/18940198>
-        while { { } }1️⃣
+      while { { } }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: missing condition in 'while' statement
@@ -383,16 +344,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery26() {
     AssertParse(
       """
-      1️⃣}
-      func missingControllingExprInRepeatWhile() {
-        repeat {
-        } while2️⃣
+      repeat {
+      } while1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 4: missing condition in 'while' statement
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected condition in 'repeat' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(message: "expected condition in 'repeat' statement"),
       ]
     )
   }
@@ -401,8 +357,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       { 
-          missingControllingExprInRepeatWhile();
-        }
+        missingControllingExprInRepeatWhile();
+      }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: closure expression is unused
@@ -415,7 +371,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       repeat {
-        } while { true }()
+      } while { true }()
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: missing condition in 'while' statement
@@ -426,19 +382,14 @@ final class RecoveryTests: XCTestCase {
   }
 
   func testRecovery29() {
+    // https://github.com/apple/swift/issues/42787
     AssertParse(
       """
-      1️⃣}
-      // https://github.com/apple/swift/issues/42787
-      func missingWhileInRepeat() {
-        repeat {
-        }2️⃣
+      repeat {
+      }1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 5: expected 'while' after body of 'repeat' statement
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'while' and condition in 'repeat' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(message: "expected 'while' and condition in 'repeat' statement"),
       ]
     )
   }
@@ -446,18 +397,12 @@ final class RecoveryTests: XCTestCase {
   func testRecovery30() {
     AssertParse(
       """
-      1️⃣}
-      func acceptsClosure<T>(t: T) -> Bool { return true }
-      func missingControllingExprInFor() {
-        for 2️⃣; { 
-        }3️⃣
+      for 1️⃣; {
+      }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 4: C-style for statement has been removed in Swift 3
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in', and expression in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected ';' separator"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(message: "expected pattern, 'in', and expression in 'for' statement"),
+        DiagnosticSpec(message: "unexpected ';' separator"),
       ]
     )
   }
@@ -470,7 +415,6 @@ final class RecoveryTests: XCTestCase {
         }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: C-style for statement has been removed in Swift 3
         DiagnosticSpec(message: "expected pattern, 'in', and expression in 'for' statement"),
         DiagnosticSpec(message: "unexpected ';' separator"),
       ]
@@ -481,10 +425,9 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       for 1️⃣; true { 
-        }
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: C-style for statement has been removed in Swift 3
         DiagnosticSpec(message: "expected pattern, 'in', and expression in 'for' statement"),
         DiagnosticSpec(message: "unexpected code '; true' in 'for' statement"),
       ]
@@ -495,11 +438,10 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       for var i 1️⃣= 0; true { 
-          i += 1
-        }
+        i += 1
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: C-style for statement has been removed in Swift 3
         DiagnosticSpec(message: "expected 'in' and expression in 'for' statement"),
         DiagnosticSpec(message: "unexpected code '= 0; true' in 'for' statement"),
       ]
@@ -509,17 +451,10 @@ final class RecoveryTests: XCTestCase {
   func testRecovery34() {
     AssertParse(
       """
-      1️⃣}
-      func missingControllingExprInForEach() {
-        for2️⃣
+      for1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        // TODO: Old parser expected error on line 3: expected pattern
-        // TODO: Old parser expected error on line 3: expected Sequence expression for for-each loop
-        // TODO: Old parser expected error on line 3: expected '{' to start the body of for-each loop
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected pattern, 'in', expression, and body in 'for' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(message: "expected pattern, 'in', expression, and body in 'for' statement"),
       ]
     )
   }
@@ -527,8 +462,8 @@ final class RecoveryTests: XCTestCase {
   func testRecovery35() {
     AssertParse(
       """
-        for 1️⃣{
-        }2️⃣
+      for 1️⃣{
+      }2️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected pattern
@@ -542,12 +477,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery36() {
     AssertParse(
       """
-        for1️⃣
-        {
-        }2️⃣
+      for1️⃣
+      {
+      }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
         // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern and 'in' in 'for' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
@@ -558,11 +492,10 @@ final class RecoveryTests: XCTestCase {
   func testRecovery37() {
     AssertParse(
       """
-        for i 1️⃣{
-        }2️⃣
+      for i 1️⃣{
+      }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected 'in' after for-each pattern
         // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
@@ -573,11 +506,10 @@ final class RecoveryTests: XCTestCase {
   func testRecovery38() {
     AssertParse(
       """
-        for var i 1️⃣{
-        }2️⃣
+      for var i 1️⃣{
+      }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected 'in' after for-each pattern
         // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' in 'for' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
@@ -588,8 +520,8 @@ final class RecoveryTests: XCTestCase {
   func testRecovery39() {
     AssertParse(
       """
-        for 1️⃣in 2️⃣{
-        }3️⃣
+      for 1️⃣in 2️⃣{
+      }3️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected pattern
@@ -604,11 +536,10 @@ final class RecoveryTests: XCTestCase {
   func testRecovery40() {
     AssertParse(
       """
-        for 1️⃣0..<12 {
-        }
+      for 1️⃣0..<12 {
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
         DiagnosticSpec(message: "expected pattern and 'in' in 'for' statement"),
       ]
     )
@@ -617,12 +548,10 @@ final class RecoveryTests: XCTestCase {
   func testRecovery41() {
     AssertParse(
       """
-        for 1️⃣for in {
-        }2️⃣
+      for 1️⃣for in {
+      }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
-        // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
         // TODO: Old parser expected error on line 1: expected '{' to start the body of for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'for' cannot be used as an identifier here"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected code block in 'for' statement"),
@@ -634,7 +563,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       for i in { 
-        }1️⃣
+      }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
@@ -647,7 +576,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       // https://github.com/apple/swift/issues/48502
-        struct User { let name: String? }
+      struct User { let name: String? }
       """
     )
   }
@@ -656,38 +585,40 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       #"""
       let users = [User]()
-        for user in users 1️⃣whe { 
-          if let name = user.name {
-            let key = "\(name)"
-          }
+      for user in users 1️⃣whe {
+        if let name = user.name {
+          let key = "\(name)"
         }
+      }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '{' to start the body of for-each loop
         DiagnosticSpec(message: "unexpected code 'whe' in 'for' statement"),
       ]
     )
   }
 
-  func testRecovery45() {
+  func testRecovery45a() {
     AssertParse(
       """
       for 1️⃣
         2️⃣; 
       }
-      func missingControllingExprInSwitch() {
-        switch3️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected pattern
-        // TODO: Old parser expected error on line 1: Sequence expression for for-each loop
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'for' statement"),
-        // TODO: Old parser expected error on line 2: expected '{' to start the body of for-each loop
         DiagnosticSpec(locationMarker: "2️⃣", message: "standalone ';' statements are not allowed"),
-        // TODO: Old parser expected error on line 5: expected expression in 'switch' statement
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression and '{}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
+      ]
+    )
+  }
+
+  func testRecovery45b() {
+    AssertParse(
+      """
+      switch1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected expression and '{}' to end 'switch' statement")
       ]
     )
   }
@@ -696,7 +627,7 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       switch { 
-        }1️⃣
+      }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
@@ -710,8 +641,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       switch 
-        {
-        }1️⃣
+      {
+      }1️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
@@ -725,8 +656,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       switch { 
-          1️⃣case _: return
-        }2️⃣
+        1️⃣case _: return
+      }2️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
@@ -740,9 +671,9 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       switch { 
-          1️⃣case Int: return 
-          2️⃣case _: return
-        }3️⃣
+        1️⃣case Int: return
+        2️⃣case _: return
+      }3️⃣
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
@@ -758,63 +689,29 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       switch { 42 } { 
-          case _: return 
-        }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        // TODO: Old parser expected error on line 1: all statements inside a switch must be covered by a 'case' or 'default'
-        // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';', Fix-It replacements: 16 - 16 = ';'
-        // TODO: Old parser expected error on line 1: closure expression is unused
-        // TODO: Old parser expected note on line 1: did you mean to use a 'do' statement?, Fix-It replacements: 17 - 17 = 'do '
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
-      ]
+        case _: return
+      }
+      """
     )
   }
 
   func testRecovery51() {
     AssertParse(
       """
-      switch { 42 }() { //  expected-error 2 {{consecutive statements on a line must be separated by ';'}} expected-error{{closure expression is unused}} expected-note{{did you mean to use a 'do' statement?}} {{19-19=do }} 
-          case _: return 
-        }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
-        // TODO: Old parser expected error on line 1: all statements inside a switch must be covered by a 'case' or 'default'
-        // TODO: Old parser expected error on line 2: 'case' label can only appear inside a 'switch' statement
-      ]
-    )
-  }
-
-  func testRecovery52() {
-    AssertParse(
-      """
-      1️⃣}
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "extraneous brace at top level"),
-      ]
-    )
-  }
-
-  func testRecovery53() {
-    AssertParse(
-      """
-      //===--- Recovery for missing braces in nominal type decls.
+      switch { 42 }() {
+        case _: return
+      }
       """
     )
   }
 
+  //===--- Recovery for missing braces in nominal type decls.
   func testRecovery54() {
     AssertParse(
       """
       struct NoBracesStruct11️⃣()
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '{' in struct
         DiagnosticSpec(message: "expected member block in struct"),
       ]
     )
@@ -829,16 +726,12 @@ final class RecoveryTests: XCTestCase {
       extension NoBracesStruct14️⃣()
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '{' in enum
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in enum"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '()' before class"),
-        // TODO: Old parser expected error on line 2: expected '{' in class
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in class"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' before protocol"),
-        // TODO: Old parser expected error on line 3: expected '{' in protocol type
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in protocol"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '()' before extension"),
-        // TODO: Old parser expected error on line 4: expected '{' in extension
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected member block in extension"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end protocol"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end class"),
@@ -857,15 +750,10 @@ final class RecoveryTests: XCTestCase {
       extension NoBracesStruct25️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '{' in struct
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct"),
-        // TODO: Old parser expected error on line 2: expected '{' in enum
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in enum"),
-        // TODO: Old parser expected error on line 3: expected '{' in class
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in class"),
-        // TODO: Old parser expected error on line 4: expected '{' in protocol type
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '{' in protocol"),
-        // TODO: Old parser expected error on line 5: expected '{' in extension
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected member block in extension"),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end protocol"),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end class"),
@@ -875,14 +763,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery57() {
-    AssertParse(
-      """
-      //===--- Recovery for multiple identifiers in decls
-      """
-    )
-  }
-
+  //===--- Recovery for multiple identifiers in decls
   func testRecovery58() {
     AssertParse(
       """
@@ -894,19 +775,6 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery59() {
-    AssertParse(
-      """
-      
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 0: found an unexpected second identifier in protocol declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 0: join the identifiers together, Fix-It replacements: 10 - 21 = 'Multiident'
-        // TODO: Old parser expected note on line 0: join the identifiers together with camel-case, Fix-It replacements: 10 - 21 = 'MultiIdent'
-      ]
-    )
-  }
-
   func testRecovery60() {
     AssertParse(
       """
@@ -914,19 +782,9 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "found an unexpected second identifier in class"),
-      ]
-    )
-  }
-
-  func testRecovery61() {
-    AssertParse(
+      ], fixedSource: """
+      class CCCCCC<T> {}
       """
-      
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 0: found an unexpected second identifier in class declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 0: join the identifiers together, Fix-It replacements: 7 - 14 = 'CCCCCC'
-      ]
     )
   }
 
@@ -939,8 +797,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: found an unexpected second identifier in enum declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 11 = 'EEEE'
         DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in enum"),
         // TODO: Old parser expected error on line 2: found an unexpected second identifier in enum 'case' declaration; is there an accidental break?
         // TODO: Old parser expected note on line 2: join the identifiers together, Fix-It replacements: 8 - 11 = 'aa'
@@ -963,18 +819,12 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: found an unexpected second identifier in struct declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 8 - 13 = 'SSSS'
         DiagnosticSpec(locationMarker: "1️⃣", message: "found an unexpected second identifier in struct"),
         // TODO: Old parser expected error on line 2: found an unexpected second identifier in variable declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 2: join the identifiers together, Fix-It replacements: 15 - 18 = 'ab'
-        // TODO: Old parser expected note on line 2: join the identifiers together with camel-case, Fix-It replacements: 15 - 18 = 'aB'
         // TODO: Old parser expected error on line 2: cannot convert value of type 'String' to specified type 'Int'
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' in type annotation"),
         DiagnosticSpec(locationMarker: "3️⃣", message: #"unexpected code ': Int = ""' before function"#),
         // TODO: Old parser expected error on line 4: found an unexpected second identifier in variable declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 4: join the identifiers together, Fix-It replacements: 9 - 12 = 'cd'
-        // TODO: Old parser expected note on line 4: join the identifiers together with camel-case, Fix-It replacements: 9 - 12 = 'cD'
         // TODO: Old parser expected warning on line 4: initialization of variable 'c' was never used; consider replacing with assignment to '_' or removing it
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ':' in type annotation"),
       ]
@@ -988,8 +838,6 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in constant declaration; is there an accidental break?
-        // TODO: Old parser expected note on line 1: join the identifiers together, Fix-It replacements: 6 - 13 = 'efghij'
-        // TODO: Old parser expected note on line 1: join the identifiers together with camel-case, Fix-It replacements: 6 - 13 = 'efgHij'
         DiagnosticSpec(message: "unexpected code 'hij, foobar' in tuple pattern"),
       ]
     )
@@ -1003,13 +851,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery66() {
-    AssertParse(
-      """
-      //===--- Recovery for parse errors in types.
-      """
-    )
-  }
+  //===--- Recovery for parse errors in types.
 
   func testRecovery67() {
     AssertParse(
@@ -1019,7 +861,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type, Fix-It replacements: 11 - 11 = ' <#type#>'
         DiagnosticSpec(message: "expected type in type annotation"),
       ]
     )
@@ -1050,7 +891,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type
         DiagnosticSpec(message: "expected '>' to end generic argument clause"),
       ]
     )
@@ -1065,7 +905,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type, Fix-It replacements: 16 - 16 = ' <#type#>'
         DiagnosticSpec(message: "expected '>' to end generic argument clause"),
       ]
     )
@@ -1080,8 +919,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '>' to complete generic argument list
-        // TODO: Old parser expected note on line 2: to match this opening '<'
         DiagnosticSpec(message: "expected '>' to end generic argument clause"),
       ]
     )
@@ -1091,15 +928,13 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       struct ErrorTypeInVarDecl6 {
-        var v1 : Int<Int, 
+        var v1 : Intℹ️<Int,
                      Int 1️⃣
         var v2 : Int
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 2: to match this opening '<'
-        // TODO: Old parser expected error on line 3: expected '>' to complete generic argument list
-        DiagnosticSpec(message: "expected '>' to end generic argument clause"),
+        DiagnosticSpec(message: "expected '>' to end generic argument clause", notes: [NoteSpec(message: "to match this opening '<'")]),
       ]
     )
   }
@@ -1113,158 +948,8 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type
         DiagnosticSpec(message: "expected type in generic argument"),
         DiagnosticSpec(message: "expected '>' to end generic argument clause"),
-      ]
-    )
-  }
-
-  func testRecovery74() {
-    AssertParse(
-      """
-      struct ErrorTypeInVarDecl8 {
-        var v1 : 1️⃣protocol2️⃣<FooProtocol 3️⃣
-        var v2 : Int
-      }4️⃣
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '>' to complete protocol-constrained type
-        // TODO: Old parser expected note on line 2: to match this opening '<'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type annotation"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '>' to end primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in protocol"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end struct"),
-      ]
-    )
-  }
-
-  func testRecovery75() {
-    AssertParse(
-      """
-      struct ErrorTypeInVarDecl9 {
-        var v1 : 1️⃣protocol 2️⃣
-        var v2 : Int
-      }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type annotation"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and member block in protocol"),
-      ]
-    )
-  }
-
-  func testRecovery76() {
-    AssertParse(
-      """
-      struct ErrorTypeInVarDecl10 {
-        var v1 : 1️⃣protocol2️⃣<FooProtocol 3️⃣
-        var v2 : Int
-      }4️⃣
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '>' to complete protocol-constrained type
-        // TODO: Old parser expected note on line 2: to match this opening '<'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type annotation"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '>' to end primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in protocol"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end struct"),
-      ]
-    )
-  }
-
-  func testRecovery77() {
-    AssertParse(
-      """
-      struct ErrorTypeInVarDecl11 {
-        var v1 : 1️⃣protocol2️⃣<FooProtocol, 3️⃣
-        var v2 : Int
-      }4️⃣
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected identifier for type name
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in type annotation"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '>' to end primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in protocol"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end struct"),
-      ]
-    )
-  }
-
-  func testRecovery78() {
-    AssertParse(
-      """
-      func ErrorTypeInPattern1(_: 1️⃣protocol2️⃣<3️⃣) { }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected identifier for type name
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in parameter"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '>' to end primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ')' in protocol"),
-      ]
-    )
-  }
-
-  func testRecovery79() {
-    AssertParse(
-      """
-      func ErrorTypeInPattern2(_: 1️⃣protocol2️⃣<F3️⃣) { }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '>' to complete protocol-constrained type
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in parameter"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '>' to end primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ')' in protocol"),
-      ]
-    )
-  }
-
-  func testRecovery80() {
-    AssertParse(
-      """
-      
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 0: to match this opening '<'
-        // TODO: Old parser expected error on line 0: cannot find type 'F' in scope
-      ]
-    )
-  }
-
-  func testRecovery81() {
-    AssertParse(
-      """
-      func ErrorTypeInPattern3(_: 1️⃣protocol2️⃣<F,3️⃣) { }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: expected identifier for type name
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in parameter"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in protocol"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '>' to end primary associated type clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ')' in protocol"),
-      ]
-    )
-  }
-
-  func testRecovery82() {
-    AssertParse(
-      """
-      
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 0: cannot find type 'F' in scope
       ]
     )
   }
@@ -1278,7 +963,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected identifier for type name
         DiagnosticSpec(message: "expected type in type composition"),
       ]
     )
@@ -1293,10 +977,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: in declaration of 'ErrorTypeInVarDecl13'
-        // TODO: Old parser expected error on line 2: expected type
-        // TODO: Old parser expected error on line 2: consecutive declarations on a line must be separated by ';'
-        // TODO: Old parser expected error on line 2: expected declaration
         DiagnosticSpec(message: "expected type in type composition"),
       ]
     )
@@ -1311,7 +991,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected identifier for type name
         DiagnosticSpec(message: "expected type in type composition"),
       ]
     )
@@ -1323,7 +1002,6 @@ final class RecoveryTests: XCTestCase {
       func ErrorTypeInPattern4(_: FooProtocol & 1️⃣) { }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected identifier for type name
         DiagnosticSpec(message: "expected type in type composition"),
       ]
     )
@@ -1335,8 +1013,6 @@ final class RecoveryTests: XCTestCase {
       struct ErrorGenericParameterList1<1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected an identifier to name generic parameter
-        // TODO: Old parser expected error on line 1: expected '{' in struct
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(message: "expected member block in struct"),
       ]
@@ -1349,9 +1025,6 @@ final class RecoveryTests: XCTestCase {
       struct ErrorGenericParameterList2<T1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected '>' to complete generic parameter list
-        // TODO: Old parser expected note on line 1: to match this opening '<'
-        // TODO: Old parser expected error on line 1: expected '{' in struct
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(message: "expected member block in struct"),
       ]
@@ -1364,8 +1037,6 @@ final class RecoveryTests: XCTestCase {
       struct ErrorGenericParameterList3<T,1️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected an identifier to name generic parameter
-        // TODO: Old parser expected error on line 1: expected '{' in struct
         DiagnosticSpec(message: "expected generic parameter in generic parameter clause"),
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(message: "expected member block in struct"),
@@ -1382,7 +1053,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected an identifier to name generic parameter
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
       ]
     )
@@ -1397,8 +1067,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '>' to complete generic parameter list
-        // TODO: Old parser expected note on line 2: to match this opening '<'
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
       ]
     )
@@ -1413,7 +1081,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected an identifier to name generic parameter
         DiagnosticSpec(message: "expected generic parameter in generic parameter clause"),
         DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
       ]
@@ -1429,124 +1096,94 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected type for function result
         DiagnosticSpec(message: "expected type in function type"),
       ]
     )
   }
 
-  func testRecovery94() {
+  func testRecovery98a() {
     AssertParse(
       """
-      struct ErrorTypeInVarDeclArrayType1 {
-        var v1 : Int1️⃣[+] 
-        var v2 : Int
-      }
+      let a1: Swift.Int1️⃣]
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: array types are now written with the brackets around the element type
-        // TODO: Old parser expected error on line 2: expected expression after unary operator
-        // TODO: Old parser expected error on line 2: expected expression
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(message: "unexpected code '[+]' before variable"),
+        DiagnosticSpec(message: "extraneous code ']' at top level"),
       ]
     )
   }
 
-  func testRecovery95() {
+  func testRecovery98b() {
     AssertParse(
       """
-      struct ErrorTypeInVarDeclArrayType2 {
-        var v1 : Int1️⃣[2️⃣+ 3️⃣
-        var v2 : Int 
-      4️⃣}
+      let a2: Set<Int1️⃣]>
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: unary operator cannot be separated from its operand
-        // TODO: Old parser expected error on line 2: expected ']' in array type
-        // TODO: Old parser expected note on line 2: to match this opening '['
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected expression"),
-        // TODO: Old parser expected error on line 3: expected expression
-        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous brace at top level"),
-      ]
-    )
-  }
-
-  func testRecovery96() {
-    AssertParse(
-      """
-      struct ErrorTypeInVarDeclArrayType3 {
-        var v1 : Int1️⃣[ 2️⃣
-        ;  
-        var v2 : Int
-      3️⃣}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected ']' in array type
-        // TODO: Old parser expected note on line 2: to match this opening '['
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
-        // TODO: Old parser expected error on line 3: expected expression
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous brace at top level"),
-      ]
-    )
-  }
-
-  func testRecovery97() {
-    AssertParse(
-      """
-      struct ErrorTypeInVarDeclArrayType4 {
-        var v1 : Int1️⃣[1 2️⃣
-        var v2 : Int3️⃣] 
-      }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: expected ']' in array type
-        // TODO: Old parser expected note on line 2: to match this opening '['
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
-        // TODO: Old parser expected error on line 3: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 12 - 12 = '['
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code at top level"),
-      ]
-    )
-  }
-
-  func testRecovery98() {
-    AssertParse(
-      """
-      struct ErrorTypeInVarDeclArrayType5 { 
-        let a1: Swift.Int1️⃣] 
-        let a2: Set<Int2️⃣]> 
-        let a3: Set<Int>3️⃣] 
-        let a4: Int4️⃣]? 
-        let a5: Int?5️⃣] 
-        let a6: [Int]6️⃣] 
-        let a7: [String: Int]7️⃣] 
-      }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected note on line 1: in declaration of 'ErrorTypeInVarDeclArrayType5'
-        // TODO: Old parser expected error on line 2: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ']' before variable"),
         // TODO: Old parser expected note on line 3: to match this opening '<'
         // TODO: Old parser expected error on line 3: expected '>' to complete generic argument list
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic argument clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ']>' before variable"),
+        DiagnosticSpec(message: "expected '>' to end generic argument clause"),
+        DiagnosticSpec(message: "extraneous code ']>' at top level"),
+      ]
+    )
+  }
+
+  func testRecovery98c() {
+    AssertParse(
+      """
+      let a3: Set<Int>1️⃣]
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 4: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ']' before variable"),
+        DiagnosticSpec(message: "extraneous code ']' at top level"),
+      ]
+    )
+  }
+
+  func testRecovery98d() {
+    AssertParse(
+      """
+      let a4: Int1️⃣]?
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 5: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
         // TODO: Old parser expected error on line 5: expected declaration
         // TODO: Old parser expected error on line 5: consecutive declarations on a line must be separated by ';'
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ']?' before variable"),
+        DiagnosticSpec(message: "extraneous code ']?' at top level"),
+      ]
+    )
+  }
+
+  func testRecovery98e() {
+    AssertParse(
+      """
+      let a5: Int?1️⃣]
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 6: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected code ']' before variable"),
+        DiagnosticSpec(message: "extraneous code ']' at top level"),
+      ]
+    )
+  }
+
+  func testRecovery98f() {
+    AssertParse(
+      """
+      let a6: [Int]1️⃣]
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 7: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(locationMarker: "6️⃣", message: "unexpected code ']' before variable"),
+        DiagnosticSpec(message: "extraneous code ']' at top level"),
+      ]
+    )
+  }
+
+  func testRecovery98g() {
+    AssertParse(
+      """
+      let a7: [String: Int]1️⃣]
+      """,
+      diagnostics: [
         // TODO: Old parser expected error on line 8: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(locationMarker: "7️⃣", message: "unexpected code ']' in struct"),
+        DiagnosticSpec(message: "extraneous code ']' at top level"),
       ]
     )
   }
@@ -1613,7 +1250,6 @@ final class RecoveryTests: XCTestCase {
         // TODO: Old parser expected error on line 2: expected ']' in array type
         // TODO: Old parser expected note on line 2: to match this opening '['
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
-        // TODO: Old parser expected error on line 3: cannot convert return expression of type '[Int]' to return type 'Int'
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous brace at top level"),
       ]
@@ -1706,7 +1342,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected initial value after '='
         DiagnosticSpec(message: "expected expression in variable"),
       ]
     )
@@ -1772,10 +1407,7 @@ final class RecoveryTests: XCTestCase {
           super 
         }
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 3: expected '.' or '[' after 'super'
-      ]
+      """
     )
   }
 
@@ -1814,8 +1446,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected note on line 1: in declaration of 'BracesInsideNominalDecl1'
-        // TODO: Old parser expected error on line 2: expected declaration
         DiagnosticSpec(message: "unexpected code before typealias declaration"),
       ]
     )
@@ -1841,9 +1471,6 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected note on line 3: 'print()' previously declared here
-        // TODO: Old parser expected error on line 3: expected 'func' keyword in instance method declaration
-        // TODO: Old parser expected error on line 3: expected '{' in body of function declaration
         // TODO: Old parser expected error on line 3: expected parameter name followed by ':'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
@@ -1860,9 +1487,6 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration
-        // TODO: Old parser expected error on line 2: expected '{' in body of function declaration
-        // TODO: Old parser expected error on line 2: invalid redeclaration of 'print()'
         // TODO: Old parser expected error on line 2: expected parameter name followed by ':'
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in parameter"),
@@ -2019,14 +1643,7 @@ final class RecoveryTests: XCTestCase {
       """
       // <rdar://problem/18502220> [swift-crashes 078] parser crash on invalid cast in sequence expr
       Base=1 as Base=1
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot convert value of type 'Int' to type 'Base' in coercion
-        // TODO: Old parser expected error on line 2: cannot assign to immutable expression of type 'Base.Type'
-        // TODO: Old parser expected error on line 2: cannot assign to immutable expression of type 'Base'
-        // TODO: Old parser expected error on line 2: cannot assign value of type '()' to type 'Base.Type'
-        // TODO: Old parser expected error on line 2: cannot assign value of type 'Int' to type 'Base'
-      ]
+      """
     )
   }
 
@@ -2106,38 +1723,12 @@ final class RecoveryTests: XCTestCase {
       switch esp {
       case let (jeb):
         class Ceac<1️⃣}2️⃣> {}
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: cannot find 'esp' in scope; did you mean 'test'?
-        // TODO: Old parser expected error on line 4: expected an identifier to name generic parameter
-        // TODO: Old parser expected error on line 4: expected '{' in class
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in class"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code '> {}' at top level"),
-      ]
-    )
-  }
-
-  func testRecovery139() {
-    AssertParse(
-      """
-      1️⃣}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 1: extraneous '}' at top level, Fix-It replacements: 1 - 2 = ''
-        DiagnosticSpec(message: "extraneous brace at top level"),
-      ]
-    )
-  }
-
-  func testRecovery140() {
-    AssertParse(
-      """
-      #if true1️⃣
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected '#endif' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '> {}' in 'switch' statement"),
       ]
     )
   }
@@ -2145,56 +1736,38 @@ final class RecoveryTests: XCTestCase {
   func testRecovery141() {
     AssertParse(
       """
+      #if true
       // rdar://19605164
       struct Foo19605164 {
       func a(s: S1️⃣[{{g2️⃣) -> Int {} 
       }}3️⃣}
+      #endif
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 3: cannot find type 'S' in scope
-        // TODO: Old parser expected note on line 3: to match this opening '['
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ') -> Int {}' in closure"),
-        // TODO: Old parser expected error on line 4: expected ']' in array type
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ']' to end array"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected brace in conditional compilation block"),
       ]
     )
   }
 
-  func testRecovery142() {
-    AssertParse(
-      """
-      1️⃣#endif
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "extraneous '#endif' keyword at top level"),
-      ]
-    )
-  }
 
   func testRecovery143() {
     AssertParse(
       """
       // rdar://19605567
-      func F() { init<1️⃣( 2️⃣} 3️⃣)} // expected-note 2{{did you mean 'F'?}}
+      func F() { init<1️⃣( 2️⃣} 3️⃣)}
       struct InitializerWithName {
         init 4️⃣x() {}5️⃣
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected '(' for initializer parameters
-        // TODO: Old parser expected error on line 2: initializers may only be declared within a type
-        // TODO: Old parser expected error on line 2: expected an identifier to name generic parameter
-        // TODO: Old parser expected error on line 2: consecutive statements on a line must be separated by ';'
-        // TODO: Old parser expected error on line 2: expected expression
-        // TODO: Old parser expected error on line 2: extraneous '}' at top level
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '>' to end generic parameter clause"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type and ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code ')}' before struct"),
-        // TODO: Old parser expected error on line 4: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code 'x' before parameter clause"),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end struct"),
       ]
     )
   }
@@ -2202,15 +1775,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery144() {
     AssertParse(
       """
-      1️⃣}
-      struct InitializerWithNameAndParam {
-        init 2️⃣a(b: Int) {}3️⃣
+      init 1️⃣a(b: Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
         // TODO: Old parser expected error on line 3: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'a' before parameter clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct"),
+        DiagnosticSpec(message: "unexpected code 'a' before parameter clause"),
       ]
     )
   }
@@ -2254,31 +1823,11 @@ final class RecoveryTests: XCTestCase {
   func testRecovery148() {
     AssertParse(
       """
-      1️⃣}
-      struct InitializerWithLabels {
-        init 2️⃣c d: Int 3️⃣{}4️⃣
+      init 1️⃣c d: Int 2️⃣{}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start parameter clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end struct"),
-      ]
-    )
-  }
-
-  func testRecovery149() {
-    AssertParse(
-      """
-      1️⃣}
-      // rdar://20337695
-      func f1() {2️⃣
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 0: expected '(' for initializer parameters
-        // TODO: Old parser expected error on line 0: initializer requires a body
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
       ]
     )
   }
@@ -2286,17 +1835,10 @@ final class RecoveryTests: XCTestCase {
   func testRecovery150() {
     AssertParse(
       """
-        let n 1️⃣== C { get {}  
-        }
+      let n 1️⃣== C { get {}
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: cannot find 'C' in scope
-        // TODO: Old parser expected note on line 1: did you mean 'n'?
-        // TODO: Old parser expected error on line 1: unary operator cannot be separated from its operand, Fix-It replacements: 11 - 12 = ''
-        // TODO: Old parser expected error on line 1: '==' is not a prefix unary operator
-        // TODO: Old parser expected error on line 1: consecutive statements on a line must be separated by ';', Fix-It replacements: 8 - 8 = ';'
-        // TODO: Old parser expected error on line 1: type annotation missing in pattern
-        // TODO: Old parser expected error on line 1: cannot find 'get' in scope
         DiagnosticSpec(message: "extraneous code at top level"),
       ]
     )
@@ -2305,21 +1847,17 @@ final class RecoveryTests: XCTestCase {
   func testRecovery151() {
     AssertParse(
       #"""
-      1️⃣}
       // <rdar://problem/20489838> QoI: Nonsensical error and fixit if "let" is missing between 'if let ... where' clauses
-      func testMultiPatternConditionRecovery(x: Int?) {
-        if let y = x 2️⃣where y == 0, let z = x {
-          _ = y
-          _ = z
-        }3️⃣
+      if let y = x 1️⃣where y == 0, let z = x {
+        _ = y
+        _ = z
+      }2️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
         // TODO: Old parser expected error on line 4: expected ',' joining parts of a multi-clause condition, Fix-It replacements: 15 - 21 = ','
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in 'if' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'where y == 0,' before variable"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end 'if' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'if' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'where y == 0,' before variable"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'if' statement")
       ]
     )
   }
@@ -2328,8 +1866,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       if var y = x, y == 0, var z = x {
-          z = y; y = z
-        }
+        z = y; y = z
+      }
       """
     )
   }
@@ -2338,8 +1876,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       """
       if var y = x, z = x { 
-          z = y; y = z
-        }
+        z = y; y = z
+      }
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected 'var' in conditional, Fix-It replacements: 17 - 17 = 'var '
@@ -2351,20 +1889,8 @@ final class RecoveryTests: XCTestCase {
     AssertParse(
       #"""
       // <rdar://problem/20883210> QoI: Following a "let" condition with boolean condition spouts nonsensical errors
-        guard let x: Int? = 1, x == 1 else {  }
+      guard let x: Int? = 1, x == 1 else {  }
       """#
-    )
-  }
-
-  func testRecovery155() {
-    AssertParse(
-      """
-      1️⃣}
-      """,
-      diagnostics: [
-        // TODO: Old parser expected warning on line 0: explicitly specified type 'Int?' adds an additional level of optional to the initializer, making the optional check always succeed, Fix-It replacements: 16 - 20 = 'Int'
-        DiagnosticSpec(message: "extraneous brace at top level"),
-      ]
     )
   }
 
@@ -2378,9 +1904,6 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 4: consecutive statements on a line must be separated by ';', Fix-It replacements: 8 - 8 = ';'
-        // TODO: Old parser expected error on line 4: expected expression
-        // TODO: Old parser expected error on line 4: type annotation missing in pattern
         DiagnosticSpec(message: "unexpected code '? = e' in function"),
       ]
     )
@@ -2448,11 +1971,7 @@ final class RecoveryTests: XCTestCase {
         case Ace = 1
         case Two = 2.1  
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 2: 'Rank' declares raw type 'Int', but does not conform to RawRepresentable and conformance could not be synthesized
-        // TODO: Old parser expected error on line 4: cannot convert value of type 'Double' to raw type 'Int'
-      ]
+      """
     )
   }
 
@@ -2469,10 +1988,7 @@ final class RecoveryTests: XCTestCase {
           return 42
           }()
       }
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: cannot find 'foo' in scope
-      ]
+      """
     )
   }
 
@@ -2549,10 +2065,7 @@ final class RecoveryTests: XCTestCase {
       func test23550816(ss: [String], s: String) {
         print(ss + s)  
       }
-      """#,
-      diagnostics: [
-        // TODO: Old parser expected error on line 6: '+' is unavailable: Operator '+' cannot be used to append a String to a sequence of strings
-      ]
+      """#
     )
   }
 
@@ -2580,7 +2093,6 @@ final class RecoveryTests: XCTestCase {
       4️⃣}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: '·' is considered an identifier and must not appear within an operator name
         DiagnosticSpec(locationMarker: "1️⃣", message: "'·' is considered an identifier and must not appear within an operator name"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'"),
@@ -2625,8 +2137,6 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 6: expected ']' in expression list
-        // TODO: Old parser expected note on line 6: to match this opening '['
         DiagnosticSpec(message: "expected ']' to end subscript"),
       ]
     )
@@ -2689,17 +2199,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '&& Index == Int' in extension"),
-      ]
-    )
-  }
-
-  func testRecovery178() {
-    AssertParse(
-      """
-      
-      """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 0: expected ',' to separate the requirements of this 'where' clause, Fix-It replacements: 43 - 45 = ','
+        // TODO: Old parser expected error on line 1: expected ',' to separate the requirements of this 'where' clause, Fix-It replacements: 43 - 45 = ','
       ]
     )
   }
@@ -2713,7 +2213,6 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '}' to end function"),
-        // TODO: Old parser expected error on line 2: expected expression
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code at top level"),
       ]
     )
@@ -2727,9 +2226,6 @@ final class RecoveryTests: XCTestCase {
       }2️⃣
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected pattern
-        // TODO: Old parser expected error on line 2: variable binding in a condition requires an initializer
-        // TODO: Old parser expected error on line 2: expected '{' after 'if' condition
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression, '=', and expression in pattern matching"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'if' statement"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end function"),

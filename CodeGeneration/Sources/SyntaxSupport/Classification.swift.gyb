@@ -34,6 +34,23 @@ public class SyntaxClassification {
   }
 }
 
+public class ChildClassification {
+  public let parent: Node
+  public let childIndex: Int
+  public let isToken: Bool
+  public let classification: SyntaxClassification?
+  public let force: Bool
+
+  public init(node: Node, childIndex: Int, child: Child) {
+    self.parent = node
+    self.childIndex = childIndex
+    self.isToken = child.syntaxKind.hasSuffix("Token")
+    self.classification = child.classification
+    self.force = child.forceClassification
+  }
+}
+
+
 public let SYNTAX_CLASSIFICATIONS: [SyntaxClassification] = [
 % for syntaxClassification in SYNTAX_CLASSIFICATIONS:
   SyntaxClassification(name: "${syntaxClassification.name}", description: "${syntaxClassification.description.strip()}"),

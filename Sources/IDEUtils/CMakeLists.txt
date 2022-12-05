@@ -7,7 +7,7 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_host_library(IDEUtils
-  gyb_generated/SyntaxClassification.swift
+  generated/SyntaxClassification.swift
   Syntax+Classifications.swift
   SyntaxClassifier.swift
 )

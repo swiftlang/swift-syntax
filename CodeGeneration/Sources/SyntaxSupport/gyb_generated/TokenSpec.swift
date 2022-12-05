@@ -19,7 +19,7 @@ public class TokenSpec {
   public let nameForDiagnostics: String
   public let unprefixedKind: String
   public let text: String?
-  public let classification: String
+  public let classification: SyntaxClassification?
   public let isKeyword: Bool
   public let requiresLeadingSpace: Bool
   public let requiresTrailingSpace: Bool
@@ -54,7 +54,7 @@ public class TokenSpec {
       self.unprefixedKind = kind
     }
     self.text = text
-    self.classification = classification
+    self.classification = classificationByName(classification)
     self.isKeyword = isKeyword
     self.requiresLeadingSpace = requiresLeadingSpace
     self.requiresTrailingSpace = requiresTrailingSpace
@@ -275,7 +275,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "Colon", kind: "colon", text: ":", requiresTrailingSpace: true),
   PunctuatorSpec(name: "Semicolon", kind: "semi", text: ";"),
   PunctuatorSpec(name: "Equal", kind: "equal", text: "=", requiresLeadingSpace: true, requiresTrailingSpace: true),
-  PunctuatorSpec(name: "AtSign", kind: "at_sign", text: "@"),
+  PunctuatorSpec(name: "AtSign", kind: "at_sign", text: "@", classification: "Attribute"),
   PunctuatorSpec(name: "Pound", kind: "pound", text: "#"),
   PunctuatorSpec(name: "PrefixAmpersand", kind: "amp_prefix", text: "&", requiresLeadingSpace: true, requiresTrailingSpace: true),
   PunctuatorSpec(name: "Arrow", kind: "arrow", text: "->", requiresLeadingSpace: true, requiresTrailingSpace: true),
@@ -284,9 +284,9 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "ExclamationMark", kind: "exclaim_postfix", text: "!"),
   PunctuatorSpec(name: "PostfixQuestionMark", kind: "question_postfix", text: "?"),
   PunctuatorSpec(name: "InfixQuestionMark", kind: "question_infix", text: "?"),
-  PunctuatorSpec(name: "StringQuote", kind: "string_quote", text: "\""),
-  PunctuatorSpec(name: "SingleQuote", kind: "single_quote", text: "\'"),
-  PunctuatorSpec(name: "MultilineStringQuote", kind: "multiline_string_quote", text: "\"\"\""),
+  PunctuatorSpec(name: "StringQuote", kind: "string_quote", text: "\"", classification: "StringLiteral"),
+  PunctuatorSpec(name: "SingleQuote", kind: "single_quote", text: "\'", classification: "StringLiteral"),
+  PunctuatorSpec(name: "MultilineStringQuote", kind: "multiline_string_quote", text: "\"\"\"", classification: "StringLiteral"),
   PoundKeywordSpec(name: "PoundKeyPath", kind: "pound_keyPath", text: "#keyPath"),
   PoundKeywordSpec(name: "PoundLine", kind: "pound_line", text: "#line"),
   PoundKeywordSpec(name: "PoundSelector", kind: "pound_selector", text: "#selector"),
@@ -310,21 +310,21 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PoundObjectLiteralSpec(name: "PoundImageLiteral", kind: "pound_imageLiteral", text: "#imageLiteral", nameForDiagnostics: "image", protocol: "ExpressibleByImageLiteral"),
   PoundObjectLiteralSpec(name: "PoundColorLiteral", kind: "pound_colorLiteral", text: "#colorLiteral", nameForDiagnostics: "color", protocol: "ExpressibleByColorLiteral"),
   PoundConfigSpec(name: "PoundHasSymbol", kind: "pound__hasSymbol", text: "#_hasSymbol"),
-  LiteralSpec(name: "IntegerLiteral", kind: "integer_literal", nameForDiagnostics: "integer literal"),
-  LiteralSpec(name: "FloatingLiteral", kind: "floating_literal", nameForDiagnostics: "floating literal"),
-  LiteralSpec(name: "StringLiteral", kind: "string_literal", nameForDiagnostics: "string literal"),
+  LiteralSpec(name: "IntegerLiteral", kind: "integer_literal", nameForDiagnostics: "integer literal", classification: "IntegerLiteral"),
+  LiteralSpec(name: "FloatingLiteral", kind: "floating_literal", nameForDiagnostics: "floating literal", classification: "FloatingLiteral"),
+  LiteralSpec(name: "StringLiteral", kind: "string_literal", nameForDiagnostics: "string literal", classification: "StringLiteral"),
   LiteralSpec(name: "RegexLiteral", kind: "regex_literal", nameForDiagnostics: "regex literal"),
   MiscSpec(name: "Unknown", kind: "unknown", nameForDiagnostics: "token"),
-  MiscSpec(name: "Identifier", kind: "identifier", nameForDiagnostics: "identifier"),
-  MiscSpec(name: "UnspacedBinaryOperator", kind: "oper_binary_unspaced", nameForDiagnostics: "binary operator"),
-  MiscSpec(name: "SpacedBinaryOperator", kind: "oper_binary_spaced", nameForDiagnostics: "binary operator", requiresLeadingSpace: true, requiresTrailingSpace: true),
-  MiscSpec(name: "PostfixOperator", kind: "oper_postfix", nameForDiagnostics: "postfix operator"),
-  MiscSpec(name: "PrefixOperator", kind: "oper_prefix", nameForDiagnostics: "prefix operator"),
-  MiscSpec(name: "DollarIdentifier", kind: "dollarident", nameForDiagnostics: "dollar identifier"),
-  MiscSpec(name: "ContextualKeyword", kind: "contextual_keyword", nameForDiagnostics: "keyword"),
+  MiscSpec(name: "Identifier", kind: "identifier", nameForDiagnostics: "identifier", classification: "Identifier"),
+  MiscSpec(name: "UnspacedBinaryOperator", kind: "oper_binary_unspaced", nameForDiagnostics: "binary operator", classification: "OperatorIdentifier"),
+  MiscSpec(name: "SpacedBinaryOperator", kind: "oper_binary_spaced", nameForDiagnostics: "binary operator", classification: "OperatorIdentifier", requiresLeadingSpace: true, requiresTrailingSpace: true),
+  MiscSpec(name: "PostfixOperator", kind: "oper_postfix", nameForDiagnostics: "postfix operator", classification: "OperatorIdentifier"),
+  MiscSpec(name: "PrefixOperator", kind: "oper_prefix", nameForDiagnostics: "prefix operator", classification: "OperatorIdentifier"),
+  MiscSpec(name: "DollarIdentifier", kind: "dollarident", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),
+  MiscSpec(name: "ContextualKeyword", kind: "contextual_keyword", nameForDiagnostics: "keyword", classification: "Keyword"),
   MiscSpec(name: "RawStringDelimiter", kind: "raw_string_delimiter", nameForDiagnostics: "raw string delimiter"),
-  MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment"),
-  MiscSpec(name: "StringInterpolationAnchor", kind: "string_interpolation_anchor", nameForDiagnostics: "string interpolation anchor", text: ")"),
+  MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
+  MiscSpec(name: "StringInterpolationAnchor", kind: "string_interpolation_anchor", nameForDiagnostics: "string interpolation anchor", text: ")", classification: "StringInterpolationAnchor"),
   MiscSpec(name: "Yield", kind: "kw_yield", nameForDiagnostics: "yield", text: "yield"),
 ]
 

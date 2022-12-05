@@ -18,7 +18,7 @@ import Utils
 
 let resultBuildersFile = SourceFile {
   ImportDecl(
-    leadingTrivia: .docLineComment(copyrightHeader),
+    leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
     path: [AccessPathComponent(name: "SwiftSyntax")]
   )
   for node in SYNTAX_NODES where node.isSyntaxCollection {

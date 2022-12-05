@@ -19,7 +19,7 @@ import SwiftBasicFormat
 
 let typealiasesFile = SourceFile {
   ImportDecl(
-    leadingTrivia: .docLineComment(copyrightHeader),
+    leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntaxbuilder")),
     path: [AccessPathComponent(name: "SwiftSyntax")]
   )
 

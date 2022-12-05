@@ -413,7 +413,7 @@ public let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "InheritedType",
-       nameForDiagnostics: "type",
+       nameForDiagnostics: "inherited type",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"

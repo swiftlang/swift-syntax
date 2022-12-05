@@ -32,7 +32,7 @@ var node_child_classifications: [ChildClassification] {
 let syntaxClassificationFile = SourceFile {
   ImportDecl(
     """
-    \(generateCopyrightHeader(for: "generate-ideutils"))
+    \(raw: generateCopyrightHeader(for: "generate-ideutils"))
     @_spi(RawSyntax) import SwiftSyntax
     """
   )
@@ -41,8 +41,8 @@ let syntaxClassificationFile = SourceFile {
     for classification in SYNTAX_CLASSIFICATIONS {
       EnumCaseDecl(
         """
-        /// \(classification.description)
-        case \(classification.swiftName)
+        /// \(raw: classification.description)
+        case \(raw: classification.swiftName)
         """
       )
     }
@@ -70,8 +70,8 @@ let syntaxClassificationFile = SourceFile {
           ) {
             SwitchStmtSyntax(expression: ExprSyntax("(parentKind, indexInParent)")) {
               for childClassification in node_child_classifications where childClassification.isToken {
-                SwitchCaseSyntax("case (.\(childClassification.parent.swiftSyntaxKind), \(childClassification.childIndex)):") {
-                  ReturnStmt("return (.\(childClassification.classification!.swiftName), \(childClassification.force))")
+                SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
+                  ReturnStmt("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
                 }
               }
               
@@ -80,8 +80,8 @@ let syntaxClassificationFile = SourceFile {
           } elseBody: {
             SwitchStmtSyntax(expression: ExprSyntax("(parentKind, indexInParent)")) {
               for childClassification in node_child_classifications where !childClassification.isToken {
-                SwitchCaseSyntax("case (.\(childClassification.parent.swiftSyntaxKind), \(childClassification.childIndex)):") {
-                    ReturnStmt("return (.\(childClassification.classification!.swiftName), \(childClassification.force))")
+                SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
+                  ReturnStmt("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
                 }
               }
               
@@ -98,9 +98,9 @@ let syntaxClassificationFile = SourceFile {
       type: TypeAnnotation(type: TypeSyntax("SyntaxClassification"))) {
         SwitchStmt(expression: ExprSyntax("self")) {
           for token in SYNTAX_TOKENS {
-            SwitchCaseSyntax("case .\(token.swiftKind):") {
+            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
               if let classification = token.classification {
-                ReturnStmt("return .\(classification.swiftName)")
+                ReturnStmt("return .\(raw: classification.swiftName)")
               } else {
                 ReturnStmt("return .none)")
               }

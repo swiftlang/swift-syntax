@@ -17,15 +17,27 @@ import SwiftSyntax
 public class CodeGenerationFormat: BasicFormat {
   public override var indentation: TriviaPiece { .spaces(indentationLevel * 2) }
 
+  public func ensuringTwoLeadingNewlines<NodeType: SyntaxProtocol>(node: NodeType) -> NodeType {
+    if node.leadingTrivia?.first?.isNewline ?? false {
+      return node.withLeadingTrivia(indentedNewline + (node.leadingTrivia ?? []))
+    } else {
+      return node.withLeadingTrivia(indentedNewline + indentedNewline + (node.leadingTrivia ?? []))
+    }
+  }
+
   public override func visit(_ node: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
     let formatted = super.visit(node)
-    return formatted.withLeadingTrivia(indentedNewline + (formatted.leadingTrivia ?? []))
+    if node.indexInParent != 0 {
+      return ensuringTwoLeadingNewlines(node: formatted)
+    } else {
+      return formatted
+    }
   }
 
   public override func visit(_ node: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
     if node.parent?.parent?.is(SourceFileSyntax.self) == true, !node.item.is(ImportDeclSyntax.self) {
       let formatted = super.visit(node)
-      return formatted.withLeadingTrivia(indentedNewline + indentedNewline + (formatted.leadingTrivia ?? []))
+      return ensuringTwoLeadingNewlines(node: formatted)
     } else {
       return super.visit(node)
     }

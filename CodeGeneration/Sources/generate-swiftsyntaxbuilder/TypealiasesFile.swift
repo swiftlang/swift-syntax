@@ -25,6 +25,6 @@ let typealiasesFile = SourceFile {
   TypealiasDecl("public typealias Token = TokenSyntax")
   
   for node in SYNTAX_NODES where !node.isUnknown && !node.isMissing {
-    TypealiasDecl("public typealias \(node.type.shorthandName) = \(node.type.syntaxBaseName)")
+    TypealiasDecl("public typealias \(raw: node.type.shorthandName) = \(raw: node.type.syntaxBaseName)")
   }
 }

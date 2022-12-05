@@ -35,7 +35,7 @@ public extension Child {
   }
 
   var parameterType: Type {
-    return self.type.optionalWrapped(type: Type(parameterBaseType))
+    return self.type.optionalWrapped(type: SimpleTypeIdentifier(name: .identifier(parameterBaseType)))
   }
 
   /// If the child node has documentation associated with it, return it as single
@@ -74,7 +74,7 @@ public extension Child {
     }
     for textChoice in choices {
       assertChoices.append(Expr(SequenceExpr {
-        MemberAccessExpr(base: type.forceUnwrappedIfNeeded(expr: Expr(varName)), name: "text")
+        MemberAccessExpr(base: type.forceUnwrappedIfNeeded(expr: IdentifierExpr(identifier: .identifier(varName))), name: "text")
         BinaryOperatorExpr(text: "==")
         StringLiteralExpr(content: textChoice)
       }))

@@ -80,7 +80,7 @@ let basicFormatFile = SourceFile {
       SwitchStmt(expression: Expr("keyPath")) {
         for node in SYNTAX_NODES where !node.isBase {
           for child in node.children where child.isIndented {
-            SwitchCase("case \\\(node.type.syntaxBaseName).\(child.swiftName):") {
+            SwitchCase("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
               ReturnStmt("return true")
             }
           }
@@ -95,7 +95,7 @@ let basicFormatFile = SourceFile {
       SwitchStmt(expression: Expr("keyPath")) {
         for node in SYNTAX_NODES where !node.isBase {
           for child in node.children where child.requiresLeadingNewline {
-            SwitchCase("case \\\(node.type.syntaxBaseName).\(child.swiftName):") {
+            SwitchCase("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
               ReturnStmt("return true")
             }
           }
@@ -110,7 +110,7 @@ let basicFormatFile = SourceFile {
       SwitchStmt(expression: Expr("node.as(SyntaxEnum.self)")) {
         for node in SYNTAX_NODES where !node.isBase {
           if node.elementsSeparatedByNewline {
-            SwitchCase("case .\(node.swiftSyntaxKind):") {
+            SwitchCase("case .\(raw: node.swiftSyntaxKind):") {
               ReturnStmt("return true")
             }
           }
@@ -125,7 +125,7 @@ let basicFormatFile = SourceFile {
       SwitchStmt(expression: Expr("tokenKind")) {
         for token in SYNTAX_TOKENS {
           if token.requiresLeadingSpace {
-            SwitchCase("case .\(token.swiftKind):") {
+            SwitchCase("case .\(raw: token.swiftKind):") {
               ReturnStmt("return true")
             }
           }
@@ -140,7 +140,7 @@ let basicFormatFile = SourceFile {
       SwitchStmt(expression: Expr("tokenKind")) {
         for token in SYNTAX_TOKENS {
           if token.requiresTrailingSpace {
-            SwitchCase("case .\(token.swiftKind):") {
+            SwitchCase("case .\(raw: token.swiftKind):") {
               ReturnStmt("return true")
             }
           }
@@ -178,7 +178,7 @@ private func createChildVisitCall(childType: SyntaxBuildableType, rewrittenExpr:
   }
   if childType.baseType?.baseName != "Syntax", childType.baseType?.isSyntaxCollection != true, childType.baseType != nil {
     let optionalChained = childType.optionalChained(expr: visitCall)
-    return FunctionCallExpr("\(optionalChained).cast(\(childType.syntaxBaseName).self)")
+    return FunctionCallExpr("\(optionalChained).cast(\(raw: childType.syntaxBaseName).self)")
   } else {
     return visitCall
   }
@@ -193,7 +193,7 @@ private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
     let formattedChildrenVarLet = node.elementsSeparatedByNewline ? "var" : "let"
     VariableDecl(
       """
-      \(formattedChildrenVarLet) formattedChildren = node.map {
+      \(raw: formattedChildrenVarLet) formattedChildren = node.map {
         \(createChildVisitCall(childType: node.collectionElementType, rewrittenExpr: IdentifierExpr(identifier: .dollarIdentifier("$0"))))
       }
       """
@@ -211,7 +211,7 @@ private func makeSyntaxCollectionRewriteFunc(node: Node) -> FunctionDecl {
         """
       )
     }
-    ReturnStmt("return \(node.type.syntaxBaseName)(formattedChildren)")
+    ReturnStmt("return \(raw: node.type.syntaxBaseName)(formattedChildren)")
   }
 }
 

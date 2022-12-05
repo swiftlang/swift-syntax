@@ -33,7 +33,7 @@ let buildableCollectionNodesFile = SourceFile {
         InitializerDecl(
           """
           public init(_ elements: \(ArrayType(elementType: elementType.parameterType))) {
-            self = \(node.type.syntaxBaseName)(elements.map { \(elementType.syntax)(fromProtocol: $0) })
+            self = \(raw: node.type.syntaxBaseName)(elements.map { \(elementType.syntax)(fromProtocol: $0) })
           }
           """
         )

@@ -19,40 +19,58 @@
 public enum SyntaxClassification {
   /// The token should not receive syntax coloring.
   case none
+  
   /// A Swift keyword, including contextual keywords.
   case keyword
+  
   /// A generic identifier.
   case identifier
+  
   /// An identifier referring to a type.
   case typeIdentifier
+  
   /// An identifier referring to an operator.
   case operatorIdentifier
+  
   /// An identifier starting with `$` like `$0`.
   case dollarIdentifier
+  
   /// An integer literal.
   case integerLiteral
+  
   /// A floating point literal.
   case floatingLiteral
+  
   /// A string literal including multiline string literals.
   case stringLiteral
+  
   /// The opening and closing parenthesis of string interpolation.
   case stringInterpolationAnchor
+  
   /// A `#` keyword like `#warning`.
   case poundDirectiveKeyword
+  
   /// A build configuration directive like `#if`, `#elseif`, `#else`.
   case buildConfigId
+  
   /// An attribute starting with an `@`.
   case attribute
+  
   /// An image, color, etc. literal.
   case objectLiteral
+  
   /// An editor placeholder of the form `<#content#>`
   case editorPlaceholder
+  
   /// A line comment starting with `//`.
   case lineComment
+  
   /// A doc line comment starting with `///`.
   case docLineComment
+  
   /// A block comment starting with `/**` and ending with `*/.
   case blockComment
+  
   /// A doc block comment starting with `/**` and ending with `*/.
   case docBlockComment
 }

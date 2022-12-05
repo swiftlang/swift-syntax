@@ -155,6 +155,7 @@ extension ExprList: ExpressibleByArrayLiteral {
       ExprSyntax(fromProtocol: $0) 
     })
   }
+  
   public init (arrayLiteral elements: ExprSyntaxProtocol...) {
     self.init (elements)
   }
@@ -335,6 +336,7 @@ extension UnexpectedNodes: ExpressibleByArrayLiteral {
       Syntax(fromProtocol: $0) 
     })
   }
+  
   public init (arrayLiteral elements: SyntaxProtocol...) {
     self.init (elements)
   }

@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
 
 /// Trims leading and trailing whitespace from each line.
 public func dedented<Lines: Sequence>(lines: Lines) -> [String] where Lines.Element: StringProtocol {

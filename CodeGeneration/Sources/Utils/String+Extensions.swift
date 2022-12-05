@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
 
 public extension StringProtocol {
     var withFirstCharacterLowercased: String { prefix(1).lowercased() + dropFirst() }

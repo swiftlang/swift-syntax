@@ -300,7 +300,6 @@ def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
         SYNTAXSUPPORT_DIR,
         SWIFTSYNTAX_DIR,
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
-        SWIFTSYNTAXBUILDER_DIR,
         SWIFTSYNTAX_DOCUMENTATION_DIR,
         SWIFTPARSER_DIR,
     ]

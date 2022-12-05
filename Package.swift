@@ -88,7 +88,6 @@ let package = Package(
       dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics"],
       exclude: [
         "CMakeLists.txt",
-        "SyntaxExpressibleByStringInterpolationConformances.swift.gyb",
       ]
     ),
     .target(

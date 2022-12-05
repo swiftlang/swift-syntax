@@ -645,6 +645,7 @@ public let DECL_NODES: [Node] = [
        traits: [
          "Braced"
        ],
+       parserFunction: "parseMemberDeclList",
        children: [
          Child(name: "LeftBrace",
                kind: "LeftBraceToken",
@@ -693,6 +694,7 @@ public let DECL_NODES: [Node] = [
        traits: [
          "WithStatements"
        ],
+       parserFunction: "parseSourceFile",
        children: [
          Child(name: "Statements",
                kind: "CodeBlockItemList",

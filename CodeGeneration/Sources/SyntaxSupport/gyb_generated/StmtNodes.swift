@@ -560,6 +560,7 @@ public let STMT_NODES: [Node] = [
        traits: [
          "WithStatements"
        ],
+       parserFunction: "parseSwitchCase",
        children: [
          Child(name: "UnknownAttr",
                kind: "Attribute",
@@ -660,6 +661,7 @@ public let STMT_NODES: [Node] = [
        traits: [
          "WithCodeBlock"
        ],
+       parserFunction: "parseCatchClause",
        children: [
          Child(name: "CatchKeyword",
                kind: "CatchToken",

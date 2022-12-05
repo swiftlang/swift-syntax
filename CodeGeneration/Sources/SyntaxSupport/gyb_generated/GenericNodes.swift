@@ -196,6 +196,7 @@ public let GENERIC_NODES: [Node] = [
   Node(name: "GenericParameterClause",
        nameForDiagnostics: "generic parameter clause",
        kind: "Syntax",
+       parserFunction: "parseGenericParameters",
        children: [
          Child(name: "LeftAngleBracket",
                kind: "LeftAngleToken",

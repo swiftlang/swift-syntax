@@ -20,7 +20,7 @@ add_swift_host_library(SwiftSyntaxBuilder
   generated/ResultBuilders.swift
   generated/Token.swift
   generated/Typealiases.swift
-  gyb_generated/SyntaxExpressibleByStringInterpolationConformances.swift
+  generated/SyntaxExpressibleByStringInterpolationConformances.swift
 )
 
 target_link_libraries(SwiftSyntaxBuilder PUBLIC

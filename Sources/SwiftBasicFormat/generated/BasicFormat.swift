@@ -127,8 +127,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .equal: 
       return true
-    case .prefixAmpersand: 
-      return true
     case .arrow: 
       return true
     case .spacedBinaryOperator: 
@@ -249,8 +247,6 @@ open class BasicFormat: SyntaxRewriter {
     case .colon: 
       return true
     case .equal: 
-      return true
-    case .prefixAmpersand: 
       return true
     case .arrow: 
       return true

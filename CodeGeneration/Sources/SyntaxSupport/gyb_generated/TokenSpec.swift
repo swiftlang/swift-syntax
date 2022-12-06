@@ -277,7 +277,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "Equal", kind: "equal", text: "=", requiresLeadingSpace: true, requiresTrailingSpace: true),
   PunctuatorSpec(name: "AtSign", kind: "at_sign", text: "@", classification: "Attribute"),
   PunctuatorSpec(name: "Pound", kind: "pound", text: "#"),
-  PunctuatorSpec(name: "PrefixAmpersand", kind: "amp_prefix", text: "&", requiresLeadingSpace: true, requiresTrailingSpace: true),
+  PunctuatorSpec(name: "PrefixAmpersand", kind: "amp_prefix", text: "&"),
   PunctuatorSpec(name: "Arrow", kind: "arrow", text: "->", requiresLeadingSpace: true, requiresTrailingSpace: true),
   PunctuatorSpec(name: "Backtick", kind: "backtick", text: "`"),
   PunctuatorSpec(name: "Backslash", kind: "backslash", text: "\\"),

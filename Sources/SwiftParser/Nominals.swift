@@ -150,7 +150,7 @@ extension Parser {
     introucerHandle: RecoveryConsumptionHandle
   ) -> T where T: NominalTypeDeclarationTrait {
     let (unexpectedBeforeIntroducerKeyword, introducerKeyword) = self.eat(introucerHandle)
-    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
+    let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
     if unexpectedBeforeName == nil && name.isMissing && self.currentToken.isAtStartOfLine {
       return T.init(
         attributes: attrs.attributes,

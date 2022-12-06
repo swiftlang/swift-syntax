@@ -618,22 +618,26 @@ extension Parser.Lookahead {
       break
     }
 
-    guard self.isAtFunctionTypeArrow() else {
-      return true
+    if self.isAtFunctionTypeArrow() {
+      // Handle type-function if we have an '->' with optional
+      // 'async' and/or 'throws'.
+      var loopProgress = LoopProgressCondition()
+      while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
+        self.eat(handle)
+      }
+
+      guard self.consume(if: .arrow) != nil else {
+        return false
+      }
+
+      return self.canParseType()
     }
 
-    // Handle type-function if we have an '->' with optional
-    // 'async' and/or 'throws'.
-    var loopProgress = LoopProgressCondition()
-    while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
-      self.eat(handle)
+    if self.currentToken.isEllipsis {
+      self.consumeAnyToken()
     }
 
-    guard self.consume(if: .arrow) != nil else {
-      return false
-    }
-
-    return self.canParseType()
+    return true
   }
 
   mutating func canParseTupleBodyType() -> Bool {
@@ -822,14 +826,16 @@ extension Parser.Lookahead {
     }
 
     self.consumePrefix("<", as: .leftAngle)
-    var loopProgress = LoopProgressCondition()
-    repeat {
-      guard self.canParseType() else {
-        return false
-      }
-      // Parse the comma, if the list continues.
-    } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
 
+    if !self.currentToken.starts(with: ">") {
+      var loopProgress = LoopProgressCondition()
+      repeat {
+        guard self.canParseType() else {
+          return false
+        }
+        // Parse the comma, if the list continues.
+      } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
+    }
 
     guard self.currentToken.starts(with: ">") else {
       return false

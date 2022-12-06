@@ -374,6 +374,18 @@ final class TypeParameterPackTests: XCTestCase {
     func f1<T ...>(_ x: T ...) -> (T ...) {}
     """)
   }
+  func testVariadicTypes() {
+    AssertParse(
+    """
+    let _: G< > = G()
+    let _: G<T... > = G()
+    let _: G<Int, T... > = G()
+    let _ = G< >.self
+    let _ = G<T... >.self
+    let _ = G<Int, T... >.self
+    """)
+
+  }
   
   func testMissingCommaInType() throws {
     AssertParse(

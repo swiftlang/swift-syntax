@@ -3,6 +3,7 @@
 import argparse
 import os
 import platform
+import re
 import subprocess
 import sys
 import tempfile
@@ -341,10 +342,15 @@ def generate_gyb_files(
     print("** Done Generating gyb Files **")
 
 
+# If swiftsyntax_checkout is specified, a SwiftSyntax checkout with the commit that's
+# used for CodeGeneration is assumed at that location, otherwise SwiftSyntax will be
+# pulled at the correct commit from the internet. This is useful to verify files
+# generated using CodeGeneration in CI that doesn't have internet access.
 def run_code_generation(
     swiftideutils_destination: str,
     swiftbasicformat_destination: str,
     swiftsyntaxbuilder_destination: str,
+    local_swiftsyntax_checkout: Optional[str],
     toolchain: str,
     verbose: bool
 ) -> None:
@@ -370,6 +376,9 @@ def run_code_generation(
 
         env = dict(os.environ)
         env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+        if local_swiftsyntax_checkout:
+            env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+            env["SWIFTCI_SWIFTSYNTAX_PATH"] = local_swiftsyntax_checkout
         check_call(swiftpm_call, env=env, verbose=verbose)
 
 
@@ -505,6 +514,20 @@ def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
         )
 
 
+# Parses the package manifest of CodeGeneration to find the SwiftSyntax commit it
+# references.
+def get_swiftsyntax_commit_for_codegeneration() -> str:
+    with open(os.path.join(CODE_GENERATION_DIR, 'Package.swift')) as \
+            codegen_package_manifest:
+        for line in codegen_package_manifest:
+            match = re.search(r'.package\(url: "https://github.com/apple/swift-syntax.git", revision: "([0-9a-f]+)"\)', line)  # noqa: E501
+            if match:
+                return match.group(1)
+
+    fatal_error('Could not find commit of SwiftSyntax that CodeGeneration references')
+    return ''  # Make Python's type checker happy
+
+
 def verify_code_generated_files(
     toolchain: str, verbose: bool
 ) -> None:
@@ -522,19 +545,29 @@ def verify_code_generated_files(
     self_swiftbasicformat_generated_dir = tempfile.mkdtemp()
     self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
 
-    try:
-        run_code_generation(
-            swiftideutils_destination=self_swiftideutils_generated_dir,
-            swiftbasicformat_destination=self_swiftsyntaxbuilder_generated_dir,
-            swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
-            toolchain=toolchain,
-            verbose=verbose
-        )
-    except subprocess.CalledProcessError as e:
-        fail_for_called_process_error(
-            "Source generation using SwiftSyntaxBuilder failed",
-            e
-        )
+    with tempfile.TemporaryDirectory(dir=os.path.dirname(PACKAGE_DIR)) as \
+            local_swiftsyntax_checkout:
+        # Perform a local clone of SwiftSyntax that we can check out at the commit that
+        # CodeGeneration expects.
+        check_call(['git', 'clone', PACKAGE_DIR, local_swiftsyntax_checkout],
+                   verbose=verbose)
+        check_call(['git', 'checkout', get_swiftsyntax_commit_for_codegeneration()],
+                   cwd=local_swiftsyntax_checkout, verbose=verbose)
+
+        try:
+            run_code_generation(
+                swiftideutils_destination=self_swiftideutils_generated_dir,
+                swiftbasicformat_destination=self_swiftbasicformat_generated_dir,
+                swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
+                local_swiftsyntax_checkout=local_swiftsyntax_checkout,
+                toolchain=toolchain,
+                verbose=verbose
+            )
+        except subprocess.CalledProcessError as e:
+            fail_for_called_process_error(
+                "Source generation using SwiftSyntaxBuilder failed",
+                e
+            )
 
     print("** Verifing code generated files **")
 
@@ -729,6 +762,7 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
                 swiftideutils_destination=swiftideutils_destination,
                 swiftbasicformat_destination=swiftbasicformat_destination,
                 swiftsyntaxbuilder_destination=swiftsyntaxbuilder_destination,
+                local_swiftsyntax_checkout=None,
                 toolchain=args.toolchain,
                 verbose=args.verbose
             )

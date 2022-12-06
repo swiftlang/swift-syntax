@@ -106,8 +106,6 @@ GENERIC_NODES = [
              Child('LeftAngleBracket', kind='LeftAngleToken'),
              Child('GenericParameterList', kind='GenericParameterList',
                    collection_element_name='GenericParameter'),
-             Child('GenericWhereClause', kind='GenericWhereClause',
-                   is_optional=True),
              Child('RightAngleBracket', kind='RightAngleToken'),
          ]),
 

@@ -452,7 +452,6 @@ extension Parser {
         remainingTokens,
         leftAngleBracket: missingToken(.leftAngle),
         genericParameterList: RawGenericParameterListSyntax(elements: [], arena: self.arena),
-        genericWhereClause: nil,
         rightAngleBracket: missingToken(.rightAngle),
         arena: self.arena
       )
@@ -540,7 +539,7 @@ extension Parser {
     return RawGenericParameterClauseSyntax(
       leftAngleBracket: langle,
       genericParameterList: parameters,
-      genericWhereClause: whereClause,
+      RawUnexpectedNodesSyntax([whereClause], arena: self.arena),
       rightAngleBracket: rangle,
       arena: self.arena
     )

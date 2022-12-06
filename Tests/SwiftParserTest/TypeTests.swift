@@ -158,7 +158,7 @@ final class TypeTests: XCTestCase {
       }
 
       dynamic func lazyMapCollection<C: Collection, T>(_ collection: C, body: @escaping (C.Element) -> T)
-          -> <R: Collection where R.Element == T> R {
+          -> <R: Collection 1️⃣where R.Element == T> R {
         return collection.lazy.map { body($0) }
       }
 
@@ -166,7 +166,10 @@ final class TypeTests: XCTestCase {
         var prop1: Int = 5
         var prop2: <U, V> (U, V) = ("hello", 5)
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'where R.Element == T' in generic parameter clause")
+      ]
     )
   }
 }

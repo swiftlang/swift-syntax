@@ -9032,25 +9032,21 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
       leftAngleBracket: RawTokenSyntax, 
       _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax? = nil, 
       genericParameterList: RawGenericParameterListSyntax, 
-      _ unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
-      genericWhereClause: RawGenericWhereClauseSyntax?, 
-      _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenGenericParameterListAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil, 
       rightAngleBracket: RawTokenSyntax, 
       _ unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericParameterClause, uninitializedCount: 9, arena: arena) { layout in 
+      kind: .genericParameterClause, uninitializedCount: 7, arena: arena) { layout in 
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
       layout[2] = unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw
       layout[3] = genericParameterList.raw
-      layout[4] = unexpectedBetweenGenericParameterListAndGenericWhereClause?.raw
-      layout[5] = genericWhereClause?.raw
-      layout[6] = unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.raw
-      layout[7] = rightAngleBracket.raw
-      layout[8] = unexpectedAfterRightAngleBracket?.raw
+      layout[4] = unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw
+      layout[5] = rightAngleBracket.raw
+      layout[6] = unexpectedAfterRightAngleBracket?.raw
     }
     self.init(raw: raw)
   }
@@ -9071,24 +9067,16 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawGenericParameterListSyntax.init(raw: ))!
   }
   
-  public var unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterListAndRightAngleBracket: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw: ))
   }
   
-  public var genericWhereClause: RawGenericWhereClauseSyntax? {
-    layoutView.children[5].map(RawGenericWhereClauseSyntax.init(raw: ))
-  }
-  
-  public var unexpectedBetweenGenericWhereClauseAndRightAngleBracket: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw: ))
-  }
-  
   public var rightAngleBracket: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw: ))!
+    layoutView.children[5].map(RawTokenSyntax.init(raw: ))!
   }
   
   public var unexpectedAfterRightAngleBracket: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw: ))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw: ))
   }
 }
 

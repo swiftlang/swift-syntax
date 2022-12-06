@@ -128,11 +128,11 @@ final class DeclarationTests: XCTestCase {
       ]
     )
     AssertParse(
-      "class B<where g1️⃣",
+      "class B<1️⃣where g2️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
-        DiagnosticSpec(message: "expected member block in class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'where g' in generic parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '>' to end generic parameter clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class"),
       ]
     )
   }

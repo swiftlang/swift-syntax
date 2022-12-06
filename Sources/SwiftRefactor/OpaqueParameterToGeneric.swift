@@ -161,7 +161,6 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
       newGenericParamClause = GenericParameterClauseSyntax(
         leftAngleBracket: .leftAngleToken(),
         genericParameterList: newGenericParamSyntax,
-        genericWhereClause: nil,
         rightAngleBracket: .rightAngleToken()
       )
     }

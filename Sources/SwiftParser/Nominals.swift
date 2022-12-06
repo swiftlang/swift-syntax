@@ -258,10 +258,18 @@ extension Parser {
           arena: self.arena))
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
-    let rangle = self.consumeAnyToken(remapping: .rightAngle)
+    let unexpectedBeforeRangle: RawUnexpectedNodesSyntax?
+    let rangle: RawTokenSyntax
+    if self.currentToken.starts(with: ">") {
+      unexpectedBeforeRangle = nil
+      rangle = self.consumePrefix(">", as: .rightAngle)
+    } else {
+      (unexpectedBeforeRangle, rangle) = self.expect(.rightAngle)
+    }
     return RawPrimaryAssociatedTypeClauseSyntax(
       leftAngleBracket: langle,
       primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
+      unexpectedBeforeRangle,
       rightAngleBracket: rangle,
       arena: self.arena)
   }

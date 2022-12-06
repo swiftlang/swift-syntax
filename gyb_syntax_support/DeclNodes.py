@@ -190,7 +190,7 @@ DECL_NODES = [
              Child('Detail', kind='DeclModifierDetail', is_optional=True),
          ]),
 
-    Node('InheritedType', name_for_diagnostics='type', kind='Syntax',
+    Node('InheritedType', name_for_diagnostics='inherited type', kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
             Child('TypeName', kind='Type'),

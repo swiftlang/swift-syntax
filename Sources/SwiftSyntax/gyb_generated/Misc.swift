@@ -828,7 +828,7 @@ extension SyntaxKind {
     case .declModifier:
       return "modifier"
     case .inheritedType:
-      return "type"
+      return "inherited type"
     case .inheritedTypeList:
       return nil
     case .typeInheritanceClause:

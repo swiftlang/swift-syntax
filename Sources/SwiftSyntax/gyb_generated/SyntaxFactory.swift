@@ -9852,8 +9852,8 @@ public enum SyntaxFactory {
   }
   @available(*, deprecated, message: "Use TokenSyntax.prefixAmpersandToken instead")
   public static func makePrefixAmpersandToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.prefixAmpersand, presence: .present,
                      leadingTrivia: leadingTrivia,

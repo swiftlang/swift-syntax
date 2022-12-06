@@ -276,8 +276,7 @@ SYNTAX_TOKENS = [
     Punctuator('AtSign', 'at_sign', text='@', classification='Attribute'),
     Punctuator('Pound', 'pound', text='#'),
 
-    Punctuator('PrefixAmpersand', 'amp_prefix', text='&',
-               requires_leading_space=True, requires_trailing_space=True),
+    Punctuator('PrefixAmpersand', 'amp_prefix', text='&'),
     Punctuator('Arrow', 'arrow', text='->', requires_leading_space=True,
                requires_trailing_space=True),
 

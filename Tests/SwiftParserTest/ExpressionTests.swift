@@ -637,11 +637,10 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse("#keyPath(1️⃣(b:2️⃣)",
+    AssertParse("#keyPath((b:1️⃣)2️⃣",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in '#keyPath' expression"),
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected ')' to end '#keyPath' expression"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected value in function call"),
+                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple"),
+                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end pound literal expression"),
                 ])
   }
 

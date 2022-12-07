@@ -50,6 +50,10 @@ function(add_swift_host_library name)
     INTERFACE_INCLUDE_DIRECTORIES ${module_dir}
   )
 
+  set_target_properties(${name} PROPERTIES
+    BUILD_WITH_INSTALL_RPATH YES
+  )
+
   # Install this target
   install(TARGETS ${name}
     EXPORT SwiftSyntaxTargets

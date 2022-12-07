@@ -10,12 +10,6 @@ EXPR_NODES = [
              Child('Expression', kind='Expr'),
          ]),
 
-    # A #column expression.
-    Node('PoundColumnExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundColumn', kind='PoundColumnToken'),
-         ]),
-
     Node('TupleExprElementList', name_for_diagnostics=None, kind='SyntaxCollection',
          element='TupleExprElement'),
 
@@ -134,42 +128,6 @@ EXPR_NODES = [
          A list of expressions connected by operators. This list is contained
          by a `SequenceExprSyntax`.
          '''),
-
-    # A #line expression.
-    Node('PoundLineExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundLine', kind='PoundLineToken'),
-         ]),
-
-    # A #file expression.
-    Node('PoundFileExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFile', kind='PoundFileToken'),
-         ]),
-
-    # A #fileID expression.
-    Node('PoundFileIDExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFileID', kind='PoundFileIDToken'),
-         ]),
-
-    # A #filePath expression.
-    Node('PoundFilePathExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFilePath', kind='PoundFilePathToken'),
-         ]),
-
-    # A #function expression.
-    Node('PoundFunctionExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFunction', kind='PoundFunctionToken'),
-         ]),
-
-    # A #dsohandle expression.
-    Node('PoundDsohandleExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundDsohandle', kind='PoundDsohandleToken'),
-         ]),
 
     # symbolic-reference-expression -> identifier generic-argument-clause?
     Node('SymbolicReferenceExpr', name_for_diagnostics=None, kind='Expr',
@@ -717,21 +675,6 @@ EXPR_NODES = [
          kind='Expr',
          children=[
              Child('Identifier', kind='IdentifierToken'),
-         ]),
-    # #fileLiteral(a, b, c)
-    Node('ObjectLiteralExpr', name_for_diagnostics='object literal', kind='Expr',
-         traits=['Parenthesized'],
-         children=[
-             Child('Identifier', kind='Token',
-                   token_choices=[
-                       'PoundColorLiteralToken',
-                       'PoundFileLiteralToken',
-                       'PoundImageLiteralToken',
-                   ]),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Arguments', kind='TupleExprElementList',
-                   collection_element_name='Argument'),
-             Child('RightParen', kind='RightParenToken'),
          ]),
 
     Node('YieldExprList', name_for_diagnostics='yield list',

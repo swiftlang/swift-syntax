@@ -973,8 +973,6 @@ extension Parser {
   ///     primary-expression → implicit-member-expression
   ///     primary-expression → wildcard-expression
   ///     primary-expression → key-path-expression
-  ///     primary-expression → selector-expression
-  ///     primary-expression → key-path-string-expression
   ///     primary-expression → macro-expansion-expression
   @_spi(RawSyntax)
   public mutating func parsePrimaryExpression(
@@ -1009,36 +1007,6 @@ extension Parser {
       let tok = self.eat(handle)
       return RawExprSyntax(RawBooleanLiteralExprSyntax(
         booleanLiteral: tok,
-        arena: self.arena
-      ))
-    case (.__file__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFileExprSyntax(
-        poundFile: tok,
-        arena: self.arena
-      ))
-    case (.__function__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFunctionExprSyntax(
-        poundFunction: tok,
-        arena: self.arena
-      ))
-    case (.__line__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundLineExprSyntax(
-        poundLine: tok,
-        arena: self.arena
-      ))
-    case (.__column__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundColumnExprSyntax(
-        poundColumn: tok,
-        arena: self.arena
-      ))
-    case (.__dso_handle__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundDsohandleExprSyntax(
-        poundDsohandle: tok,
         arena: self.arena
       ))
     case (.identifier, let handle)?, (.selfKeyword, let handle)?, (.initKeyword, let handle)?:

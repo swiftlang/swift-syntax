@@ -120,11 +120,6 @@ public class TokenTests: XCTestCase {
       TokenKind.trueKeyword,
       TokenKind.tryKeyword,
       TokenKind.throwsKeyword,
-      TokenKind.__file__Keyword,
-      TokenKind.__line__Keyword,
-      TokenKind.__column__Keyword,
-      TokenKind.__function__Keyword,
-      TokenKind.__dso_handle__Keyword,
       TokenKind.wildcardKeyword,
     ]
 

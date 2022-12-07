@@ -121,6 +121,7 @@ extension Parser {
     case typeWrapperIgnored = "typeWrapperIgnored"
     case _noMetadata = "_noMetadata"
     case runtimeMetadata = "runtimeMetadata"
+    case globalConstructor = "globalConstructor"
     case _spi_available = "_spi_available"
   }
 }

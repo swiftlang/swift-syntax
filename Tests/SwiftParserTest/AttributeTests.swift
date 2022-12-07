@@ -260,4 +260,11 @@ final class AttributeTests: XCTestCase {
       }
       """)
   }
+
+  func testGlobalConstructorAttribute() throws {
+    AssertParse("""
+      @globalConstructor func foo() -> Void {}
+      @globalConstructor(priority: 10) func bar() -> Void {}
+      """)
+  }
 }

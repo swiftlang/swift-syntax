@@ -105,8 +105,6 @@ public enum SyntaxEnum {
   case keyPathPropertyComponent(KeyPathPropertyComponentSyntax)
   case keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax)
   case keyPathOptionalComponent(KeyPathOptionalComponentSyntax)
-  case oldKeyPathExpr(OldKeyPathExprSyntax)
-  case keyPathBaseExpr(KeyPathBaseExprSyntax)
   case objcNamePiece(ObjcNamePieceSyntax)
   case objcName(ObjcNameSyntax)
   case objcKeyPathExpr(ObjcKeyPathExprSyntax)
@@ -483,10 +481,6 @@ public extension Syntax {
       return .keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax(self)!)
     case .keyPathOptionalComponent:
       return .keyPathOptionalComponent(KeyPathOptionalComponentSyntax(self)!)
-    case .oldKeyPathExpr:
-      return .oldKeyPathExpr(OldKeyPathExprSyntax(self)!)
-    case .keyPathBaseExpr:
-      return .keyPathBaseExpr(KeyPathBaseExprSyntax(self)!)
     case .objcNamePiece:
       return .objcNamePiece(ObjcNamePieceSyntax(self)!)
     case .objcName:

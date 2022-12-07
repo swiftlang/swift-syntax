@@ -105,8 +105,6 @@ public enum SyntaxKind {
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
   case keyPathOptionalComponent
-  case oldKeyPathExpr
-  case keyPathBaseExpr
   case objcNamePiece
   case objcName
   case objcKeyPathExpr

@@ -105,8 +105,6 @@ extension Syntax {
       .node(KeyPathPropertyComponentSyntax.self),
       .node(KeyPathSubscriptComponentSyntax.self),
       .node(KeyPathOptionalComponentSyntax.self),
-      .node(OldKeyPathExprSyntax.self),
-      .node(KeyPathBaseExprSyntax.self),
       .node(ObjcNamePieceSyntax.self),
       .node(ObjcNameSyntax.self),
       .node(ObjcKeyPathExprSyntax.self),
@@ -394,8 +392,6 @@ extension SyntaxKind {
     case .keyPathPropertyComponent: return KeyPathPropertyComponentSyntax.self
     case .keyPathSubscriptComponent: return KeyPathSubscriptComponentSyntax.self
     case .keyPathOptionalComponent: return KeyPathOptionalComponentSyntax.self
-    case .oldKeyPathExpr: return OldKeyPathExprSyntax.self
-    case .keyPathBaseExpr: return KeyPathBaseExprSyntax.self
     case .objcNamePiece: return ObjcNamePieceSyntax.self
     case .objcName: return ObjcNameSyntax.self
     case .objcKeyPathExpr: return ObjcKeyPathExprSyntax.self
@@ -771,10 +767,6 @@ extension SyntaxKind {
       return "key path subscript component"
     case .keyPathOptionalComponent:
       return "key path optional component"
-    case .oldKeyPathExpr:
-      return "key path"
-    case .keyPathBaseExpr:
-      return nil
     case .objcNamePiece:
       return nil
     case .objcName:

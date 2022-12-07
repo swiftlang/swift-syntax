@@ -1162,41 +1162,6 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
-  Node(name: "OldKeyPathExpr",
-       nameForDiagnostics: "key path",
-       kind: "Expr",
-       children: [
-         Child(name: "Backslash",
-               kind: "BackslashToken",
-               tokenChoices: [
-                 "Backslash"
-               ]),
-         Child(name: "RootExpr",
-               kind: "Expr",
-               isOptional: true,
-               nodeChoices: [
-                 Child(name: "IdentifierExpr",
-                       kind: "IdentifierExpr"),
-                 Child(name: "SpecializeExpr",
-                       kind: "SpecializeExpr"),
-                 Child(name: "OptionalChainingExpr",
-                       kind: "OptionalChainingExpr")
-               ]),
-         Child(name: "Expression",
-               kind: "Expr")
-       ]),
-
-  Node(name: "KeyPathBaseExpr",
-       nameForDiagnostics: nil,
-       kind: "Expr",
-       children: [
-         Child(name: "Period",
-               kind: "PeriodToken",
-               tokenChoices: [
-                 "Period"
-               ])
-       ]),
-
   Node(name: "ObjcNamePiece",
        nameForDiagnostics: nil,
        kind: "Syntax",

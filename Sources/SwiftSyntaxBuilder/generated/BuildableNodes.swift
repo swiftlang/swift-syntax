@@ -2705,19 +2705,6 @@ extension IsTypePattern {
   }
 }
 
-extension KeyPathBaseExpr {
-  /// Creates a `KeyPathBaseExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePeriod: 
-  ///   - period: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePeriod: UnexpectedNodes? = nil, period: Token = Token.`period`) {
-    assert(period.text == ".")
-    self = KeyPathBaseExprSyntax(unexpectedBeforePeriod, period: period)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-}
-
 extension KeyPathComponent {
   /// Creates a `KeyPathComponent` using the provided parameters.
   /// - Parameters:
@@ -3375,23 +3362,6 @@ extension ObjectLiteralExpr {
   }) {
     self.init (unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-  }
-}
-
-extension OldKeyPathExpr {
-  /// Creates a `OldKeyPathExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforeBackslash: 
-  ///   - backslash: 
-  ///   - unexpectedBetweenBackslashAndRootExpr: 
-  ///   - rootExpr: 
-  ///   - unexpectedBetweenRootExprAndExpression: 
-  ///   - expression: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeBackslash: UnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndRootExpr: UnexpectedNodes? = nil, rootExpr: RootExpr? = nil, unexpectedBetweenRootExprAndExpression: UnexpectedNodes? = nil, expression: ExprSyntaxProtocol) {
-    assert(backslash.text == #"\"#)
-    self = OldKeyPathExprSyntax(unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndRootExpr, rootExpr: rootExpr, unexpectedBetweenRootExprAndExpression, expression: ExprSyntax(fromProtocol: expression))
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
   }
 }
 

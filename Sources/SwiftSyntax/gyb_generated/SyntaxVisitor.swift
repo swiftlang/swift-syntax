@@ -921,26 +921,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `KeyPathOptionalComponentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathOptionalComponentSyntax) {}
-  /// Visiting `OldKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: OldKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `OldKeyPathExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: OldKeyPathExprSyntax) {}
-  /// Visiting `KeyPathBaseExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `KeyPathBaseExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: KeyPathBaseExprSyntax) {}
   /// Visiting `ObjcNamePieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3888,28 +3868,6 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOldKeyPathExprSyntax(_ data: SyntaxData) {
-      let node = OldKeyPathExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplKeyPathBaseExprSyntax(_ data: SyntaxData) {
-      let node = KeyPathBaseExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplObjcNamePieceSyntax(_ data: SyntaxData) {
       let node = ObjcNamePieceSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6195,10 +6153,6 @@ open class SyntaxVisitor {
       visitImplKeyPathSubscriptComponentSyntax(data)
     case .keyPathOptionalComponent:
       visitImplKeyPathOptionalComponentSyntax(data)
-    case .oldKeyPathExpr:
-      visitImplOldKeyPathExprSyntax(data)
-    case .keyPathBaseExpr:
-      visitImplKeyPathBaseExprSyntax(data)
     case .objcNamePiece:
       visitImplObjcNamePieceSyntax(data)
     case .objcName:

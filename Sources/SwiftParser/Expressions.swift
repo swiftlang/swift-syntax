@@ -973,8 +973,6 @@ extension Parser {
   ///     primary-expression → implicit-member-expression
   ///     primary-expression → wildcard-expression
   ///     primary-expression → key-path-expression
-  ///     primary-expression → selector-expression
-  ///     primary-expression → key-path-string-expression
   ///     primary-expression → macro-expansion-expression
   @_spi(RawSyntax)
   public mutating func parsePrimaryExpression(
@@ -1081,11 +1079,6 @@ extension Parser {
         self.parseMacroExpansionExpr(pattern: pattern, flavor: flavor)
       )
       
-    case (.poundSelectorKeyword, _)?:
-      return RawExprSyntax(self.parseObjectiveCSelectorLiteral())
-    case (.poundKeyPathKeyword, _)?:
-      return RawExprSyntax(self.parseObjectiveCKeyPathExpression())
-
     case (.leftBrace, _)?:     // expr-closure
       return RawExprSyntax(self.parseClosureExpression())
     case (.period, let handle)?,              //=.foo
@@ -1654,53 +1647,6 @@ extension Parser {
 }
 
 extension Parser {
-  /// Parse an Objective-C #keypath literal.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     key-path-string-expression → '#keyPath' '(' expression ')'
-  @_spi(RawSyntax)
-  public mutating func parseObjectiveCKeyPathExpression() -> RawObjcKeyPathExprSyntax {
-    let (unexpectedBeforeKeyword, keyword) = self.expect(.poundKeyPathKeyword)
-    // Parse the leading '('.
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-
-    // Parse the sequence of unqualified-names.
-    var elements = [RawObjcNamePieceSyntax]()
-    do {
-      var flags: DeclNameOptions = []
-      var keepGoing: RawTokenSyntax? = nil
-      var loopProgress = LoopProgressCondition()
-      repeat {
-        // Parse the next name.
-        let (name, args) = self.parseDeclNameRef(flags)
-        assert(args == nil, "Found arguments but did not pass argument flag?")
-
-        // After the first component, we can start parsing keywords.
-        flags.formUnion(.keywords)
-
-        // Parse the next period to continue the path.
-        keepGoing = self.consume(if: .period)
-        elements.append(RawObjcNamePieceSyntax(
-          name: name, dot: keepGoing, arena: self.arena))
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
-    }
-
-    // Parse the closing ')'.
-    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    return RawObjcKeyPathExprSyntax(
-      unexpectedBeforeKeyword,
-      keyPath: keyword,
-      unexpectedBeforeLParen,
-      leftParen: lparen,
-      name: RawObjcNameSyntax(elements: elements, arena: self.arena),
-      unexpectedBeforeRParen,
-      rightParen: rparen, arena: self.arena)
-  }
-}
-
-extension Parser {
   /// Parse a 'super' reference to the superclass instance of a class.
   ///
   /// Grammar
@@ -1922,48 +1868,6 @@ extension Parser {
       declNameArguments: nil,
       arena: self.arena
     )
-  }
-}
-
-extension Parser {
-  /// Parse a #selector expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     selector-expression → '#selector' '(' expression )
-  ///     selector-expression → '#selector' '(' 'getter' ':' expression ')'
-  ///     selector-expression → '#selector' '(' 'setter' ':' expression ')'
-  @_spi(RawSyntax)
-  public mutating func parseObjectiveCSelectorLiteral() -> RawObjcSelectorExprSyntax {
-    // Consume '#selector'.
-    let (unexpectedBeforeSelector, selector) = self.expect(.poundSelectorKeyword)
-    // Parse the leading '('.
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-
-    // Parse possible 'getter:' or 'setter:' modifiers, and determine
-    // the kind of selector we're working with.
-    let kindAndColon = self.consume(
-      if: { $0.isContextualKeyword(["getter", "setter"])},
-      followedBy: { $0.tokenKind == .colon }
-    )
-    let (kind, colon) = (kindAndColon?.0, kindAndColon?.1)
-
-    // Parse the subexpression.
-    let subexpr = self.parseExpression()
-    // Parse the closing ')'.
-    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    return RawObjcSelectorExprSyntax(
-      unexpectedBeforeSelector,
-      poundSelector: selector,
-      unexpectedBeforeLParen,
-      leftParen: lparen,
-      kind: kind,
-      colon: colon,
-      name: subexpr,
-      unexpectedBeforeRParen,
-      rightParen: rparen,
-      arena: self.arena)
   }
 }
 

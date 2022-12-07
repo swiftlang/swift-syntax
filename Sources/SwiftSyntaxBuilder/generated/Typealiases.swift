@@ -295,8 +295,6 @@ public typealias IsExpr = IsExprSyntax
 
 public typealias IsTypePattern = IsTypePatternSyntax
 
-public typealias KeyPathBaseExpr = KeyPathBaseExprSyntax
-
 public typealias KeyPathComponentList = KeyPathComponentListSyntax
 
 public typealias KeyPathComponent = KeyPathComponentSyntax
@@ -364,8 +362,6 @@ public typealias ObjcName = ObjcNameSyntax
 public typealias ObjcSelectorExpr = ObjcSelectorExprSyntax
 
 public typealias ObjectLiteralExpr = ObjectLiteralExprSyntax
-
-public typealias OldKeyPathExpr = OldKeyPathExprSyntax
 
 public typealias OpaqueReturnTypeOfAttributeArguments = OpaqueReturnTypeOfAttributeArgumentsSyntax
 

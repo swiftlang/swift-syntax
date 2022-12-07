@@ -682,24 +682,6 @@ EXPR_NODES = [
                    ]),
          ]),
 
-    # TODO: Remove this. It is only used by the C++ parser.
-    Node('OldKeyPathExpr', name_for_diagnostics='key path', kind='Expr',
-         children=[
-             Child('Backslash', kind='BackslashToken'),
-             Child('RootExpr', kind='Expr', name_for_diagnostics='root', is_optional=True,
-                   node_choices=[
-                       Child('IdentifierExpr', kind='IdentifierExpr'),
-                       Child('SpecializeExpr', kind='SpecializeExpr'),
-                       Child('OptionalChainingExpr', kind='OptionalChainingExpr')
-                   ]),
-             Child('Expression', kind='Expr', name_for_diagnostics='expression'),
-         ]),
-
-    # TODO: Remove this. It is only used by the C++ parser.
-    Node('KeyPathBaseExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('Period', kind='PeriodToken')
-         ]),
     # e.g. "a." or "a"
     Node('ObjcNamePiece', name_for_diagnostics=None, kind='Syntax',
          children=[

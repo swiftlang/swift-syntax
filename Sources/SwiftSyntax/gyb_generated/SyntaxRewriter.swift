@@ -639,20 +639,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(KeyPathOptionalComponentSyntax.self)
   }
 
-  /// Visit a `OldKeyPathExprSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: OldKeyPathExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
-  }
-
-  /// Visit a `KeyPathBaseExprSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: KeyPathBaseExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
-  }
-
   /// Visit a `ObjcNamePieceSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2995,26 +2981,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOldKeyPathExprSyntax(_ data: SyntaxData) -> Syntax {
-      let node = OldKeyPathExprSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplKeyPathBaseExprSyntax(_ data: SyntaxData) -> Syntax {
-      let node = KeyPathBaseExprSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjcNamePieceSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjcNamePieceSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5142,10 +5108,6 @@ open class SyntaxRewriter {
       return visitImplKeyPathSubscriptComponentSyntax
     case .keyPathOptionalComponent:
       return visitImplKeyPathOptionalComponentSyntax
-    case .oldKeyPathExpr:
-      return visitImplOldKeyPathExprSyntax
-    case .keyPathBaseExpr:
-      return visitImplKeyPathBaseExprSyntax
     case .objcNamePiece:
       return visitImplObjcNamePieceSyntax
     case .objcName:
@@ -5717,10 +5679,6 @@ open class SyntaxRewriter {
       return visitImplKeyPathSubscriptComponentSyntax(data)
     case .keyPathOptionalComponent:
       return visitImplKeyPathOptionalComponentSyntax(data)
-    case .oldKeyPathExpr:
-      return visitImplOldKeyPathExprSyntax(data)
-    case .keyPathBaseExpr:
-      return visitImplKeyPathBaseExprSyntax(data)
     case .objcNamePiece:
       return visitImplObjcNamePieceSyntax(data)
     case .objcName:

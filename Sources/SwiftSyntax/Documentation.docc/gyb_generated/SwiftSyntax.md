@@ -154,8 +154,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/StringLiteralExprSyntax>
 - <doc:SwiftSyntax/RegexLiteralExprSyntax>
 - <doc:SwiftSyntax/KeyPathExprSyntax>
-- <doc:SwiftSyntax/OldKeyPathExprSyntax>
-- <doc:SwiftSyntax/KeyPathBaseExprSyntax>
 - <doc:SwiftSyntax/ObjcKeyPathExprSyntax>
 - <doc:SwiftSyntax/ObjcSelectorExprSyntax>
 - <doc:SwiftSyntax/MacroExpansionExprSyntax>

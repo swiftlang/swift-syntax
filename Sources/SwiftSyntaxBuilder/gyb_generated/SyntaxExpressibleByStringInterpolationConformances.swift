@@ -233,10 +233,6 @@ extension RegexLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { }
 
 extension KeyPathExprSyntax: SyntaxExpressibleByStringInterpolation { }
 
-extension OldKeyPathExprSyntax: SyntaxExpressibleByStringInterpolation { }
-
-extension KeyPathBaseExprSyntax: SyntaxExpressibleByStringInterpolation { }
-
 extension ObjcKeyPathExprSyntax: SyntaxExpressibleByStringInterpolation { }
 
 extension ObjcSelectorExprSyntax: SyntaxExpressibleByStringInterpolation { }

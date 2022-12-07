@@ -372,14 +372,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType
-  /// Visiting `OldKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OldKeyPathExprSyntax) -> ResultType
-  /// Visiting `KeyPathBaseExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: KeyPathBaseExprSyntax) -> ResultType
   /// Visiting `ObjcNamePieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1677,18 +1669,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `OldKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: OldKeyPathExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `KeyPathBaseExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: KeyPathBaseExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `ObjcNamePieceSyntax` specifically.
@@ -3013,10 +2993,6 @@ extension SyntaxTransformVisitor {
     case .keyPathSubscriptComponent(let derived):
       return visit(derived)
     case .keyPathOptionalComponent(let derived):
-      return visit(derived)
-    case .oldKeyPathExpr(let derived):
-      return visit(derived)
-    case .keyPathBaseExpr(let derived):
       return visit(derived)
     case .objcNamePiece(let derived):
       return visit(derived)

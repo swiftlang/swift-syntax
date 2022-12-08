@@ -15,23 +15,28 @@
 public let COMMON_NODES: [Node] = [
   Node(name: "Decl",
        nameForDiagnostics: "declaration",
-       kind: "Syntax"),
+       kind: "Syntax",
+       parserFunction: "parseDeclaration"),
 
   Node(name: "Expr",
        nameForDiagnostics: "expression",
-       kind: "Syntax"),
+       kind: "Syntax",
+       parserFunction: "parseExpression"),
 
   Node(name: "Stmt",
        nameForDiagnostics: "statement",
-       kind: "Syntax"),
+       kind: "Syntax",
+       parserFunction: "parseStatement"),
 
   Node(name: "Type",
        nameForDiagnostics: "type",
-       kind: "Syntax"),
+       kind: "Syntax",
+       parserFunction: "parseType"),
 
   Node(name: "Pattern",
        nameForDiagnostics: "pattern",
-       kind: "Syntax"),
+       kind: "Syntax",
+       parserFunction: "parsePattern"),
 
   Node(name: "UnknownDecl",
        nameForDiagnostics: "declaration",

@@ -29,6 +29,7 @@ struct GenerateSwiftSyntaxBuilder: ParsableCommand {
         (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
         (buildableNodesFile, "BuildableNodes.swift"),
         (resultBuildersFile, "ResultBuilders.swift"),
+        (syntaxExpressibleByStringInterpolationConformancesFile, "SyntaxExpressibleByStringInterpolationConformances.swift"),
         (tokenFile, "Token.swift"),
         (typealiasesFile, "Typealiases.swift")
       ],

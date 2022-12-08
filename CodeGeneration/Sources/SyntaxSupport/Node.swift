@@ -23,6 +23,7 @@ public class Node {
   public let nameForDiagnostics: String?
   public let description: String?
   public let baseKind: String
+  public let parserFunction: String?
   public let traits: [String]
   public let children: [Child]
   public let nonUnexpectedChildren: [Child]
@@ -77,6 +78,7 @@ public class Node {
        description: String? = nil,
        kind: String,
        traits: [String] = [],
+       parserFunction: String? = nil,
        children: [Child] = [],
        element: String = "",
        elementName: String? = nil,
@@ -88,7 +90,7 @@ public class Node {
     self.name = kindToType(kind: self.syntaxKind)
     self.nameForDiagnostics = nameForDiagnostics
     self.description = description
-
+    self.parserFunction = parserFunction
     self.traits = traits
     self.baseKind = kind
 

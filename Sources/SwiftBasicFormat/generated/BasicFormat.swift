@@ -226,16 +226,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .throwsKeyword: 
       return true
-    case .__file__Keyword: 
-      return true
-    case .__line__Keyword: 
-      return true
-    case .__column__Keyword: 
-      return true
-    case .__function__Keyword: 
-      return true
-    case .__dso_handle__Keyword: 
-      return true
     case .wildcardKeyword: 
       return true
     case .leftAngle: 
@@ -249,24 +239,6 @@ open class BasicFormat: SyntaxRewriter {
     case .equal: 
       return true
     case .arrow: 
-      return true
-    case .poundKeyPathKeyword: 
-      return true
-    case .poundLineKeyword: 
-      return true
-    case .poundSelectorKeyword: 
-      return true
-    case .poundFileKeyword: 
-      return true
-    case .poundFileIDKeyword: 
-      return true
-    case .poundFilePathKeyword: 
-      return true
-    case .poundColumnKeyword: 
-      return true
-    case .poundFunctionKeyword: 
-      return true
-    case .poundDsohandleKeyword: 
       return true
     case .poundAssertKeyword: 
       return true
@@ -287,12 +259,6 @@ open class BasicFormat: SyntaxRewriter {
     case .poundAvailableKeyword: 
       return true
     case .poundUnavailableKeyword: 
-      return true
-    case .poundFileLiteralKeyword: 
-      return true
-    case .poundImageLiteralKeyword: 
-      return true
-    case .poundColorLiteralKeyword: 
       return true
     case .poundHasSymbolKeyword: 
       return true

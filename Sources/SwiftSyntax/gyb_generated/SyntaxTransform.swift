@@ -84,10 +84,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InOutExprSyntax) -> ResultType
-  /// Visiting `PoundColumnExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundColumnExprSyntax) -> ResultType
   /// Visiting `TupleExprElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -156,30 +152,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExprListSyntax) -> ResultType
-  /// Visiting `PoundLineExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundLineExprSyntax) -> ResultType
-  /// Visiting `PoundFileExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFileExprSyntax) -> ResultType
-  /// Visiting `PoundFileIDExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFileIDExprSyntax) -> ResultType
-  /// Visiting `PoundFilePathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFilePathExprSyntax) -> ResultType
-  /// Visiting `PoundFunctionExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFunctionExprSyntax) -> ResultType
-  /// Visiting `PoundDsohandleExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundDsohandleExprSyntax) -> ResultType
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -372,22 +344,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType
-  /// Visiting `ObjcNamePieceSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcNamePieceSyntax) -> ResultType
-  /// Visiting `ObjcNameSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcNameSyntax) -> ResultType
-  /// Visiting `ObjcKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcKeyPathExprSyntax) -> ResultType
-  /// Visiting `ObjcSelectorExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcSelectorExprSyntax) -> ResultType
   /// Visiting `MacroExpansionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -400,10 +356,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType
-  /// Visiting `ObjectLiteralExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjectLiteralExprSyntax) -> ResultType
   /// Visiting `YieldExprListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1239,12 +1191,6 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: InOutExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
-  /// Visiting `PoundColumnExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundColumnExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
   /// Visiting `TupleExprElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1345,42 +1291,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExprListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundLineExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundLineExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFileExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFileExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFileIDExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFileIDExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFilePathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFilePathExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFunctionExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFunctionExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundDsohandleExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundDsohandleExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
@@ -1671,30 +1581,6 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
-  /// Visiting `ObjcNamePieceSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcNamePieceSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjcNameSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcNameSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjcKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcKeyPathExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjcSelectorExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcSelectorExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
   /// Visiting `MacroExpansionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1711,12 +1597,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjectLiteralExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjectLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `YieldExprListSyntax` specifically.
@@ -2850,8 +2730,6 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .inOutExpr(let derived):
       return visit(derived)
-    case .poundColumnExpr(let derived):
-      return visit(derived)
     case .tupleExprElementList(let derived):
       return visit(derived)
     case .arrayElementList(let derived):
@@ -2885,18 +2763,6 @@ extension SyntaxTransformVisitor {
     case .sequenceExpr(let derived):
       return visit(derived)
     case .exprList(let derived):
-      return visit(derived)
-    case .poundLineExpr(let derived):
-      return visit(derived)
-    case .poundFileExpr(let derived):
-      return visit(derived)
-    case .poundFileIDExpr(let derived):
-      return visit(derived)
-    case .poundFilePathExpr(let derived):
-      return visit(derived)
-    case .poundFunctionExpr(let derived):
-      return visit(derived)
-    case .poundDsohandleExpr(let derived):
       return visit(derived)
     case .symbolicReferenceExpr(let derived):
       return visit(derived)
@@ -2994,21 +2860,11 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .keyPathOptionalComponent(let derived):
       return visit(derived)
-    case .objcNamePiece(let derived):
-      return visit(derived)
-    case .objcName(let derived):
-      return visit(derived)
-    case .objcKeyPathExpr(let derived):
-      return visit(derived)
-    case .objcSelectorExpr(let derived):
-      return visit(derived)
     case .macroExpansionExpr(let derived):
       return visit(derived)
     case .postfixIfConfigExpr(let derived):
       return visit(derived)
     case .editorPlaceholderExpr(let derived):
-      return visit(derived)
-    case .objectLiteralExpr(let derived):
       return visit(derived)
     case .yieldExprList(let derived):
       return visit(derived)

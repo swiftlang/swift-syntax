@@ -69,11 +69,6 @@ public enum TokenKind: Hashable {
   case trueKeyword
   case tryKeyword
   case throwsKeyword
-  case __file__Keyword
-  case __line__Keyword
-  case __column__Keyword
-  case __function__Keyword
-  case __dso_handle__Keyword
   case wildcardKeyword
   case leftParen
   case rightParen
@@ -102,15 +97,6 @@ public enum TokenKind: Hashable {
   case stringQuote
   case singleQuote
   case multilineStringQuote
-  case poundKeyPathKeyword
-  case poundLineKeyword
-  case poundSelectorKeyword
-  case poundFileKeyword
-  case poundFileIDKeyword
-  case poundFilePathKeyword
-  case poundColumnKeyword
-  case poundFunctionKeyword
-  case poundDsohandleKeyword
   case poundAssertKeyword
   case poundSourceLocationKeyword
   case poundWarningKeyword
@@ -121,9 +107,6 @@ public enum TokenKind: Hashable {
   case poundEndifKeyword
   case poundAvailableKeyword
   case poundUnavailableKeyword
-  case poundFileLiteralKeyword
-  case poundImageLiteralKeyword
-  case poundColorLiteralKeyword
   case poundHasSymbolKeyword
   case integerLiteral(String)
   case floatingLiteral(String)
@@ -252,36 +235,8 @@ public enum TokenKind: Hashable {
       self = .tryKeyword
     case "throws":
       self = .throwsKeyword
-    case "__FILE__":
-      self = .__file__Keyword
-    case "__LINE__":
-      self = .__line__Keyword
-    case "__COLUMN__":
-      self = .__column__Keyword
-    case "__FUNCTION__":
-      self = .__function__Keyword
-    case "__DSO_HANDLE__":
-      self = .__dso_handle__Keyword
     case "_":
       self = .wildcardKeyword
-    case "#keyPath":
-      self = .poundKeyPathKeyword
-    case "#line":
-      self = .poundLineKeyword
-    case "#selector":
-      self = .poundSelectorKeyword
-    case "#file":
-      self = .poundFileKeyword
-    case "#fileID":
-      self = .poundFileIDKeyword
-    case "#filePath":
-      self = .poundFilePathKeyword
-    case "#column":
-      self = .poundColumnKeyword
-    case "#function":
-      self = .poundFunctionKeyword
-    case "#dsohandle":
-      self = .poundDsohandleKeyword
     case "#assert":
       self = .poundAssertKeyword
     case "#sourceLocation":
@@ -302,12 +257,6 @@ public enum TokenKind: Hashable {
       self = .poundAvailableKeyword
     case "#unavailable":
       self = .poundUnavailableKeyword
-    case "#fileLiteral":
-      self = .poundFileLiteralKeyword
-    case "#imageLiteral":
-      self = .poundImageLiteralKeyword
-    case "#colorLiteral":
-      self = .poundColorLiteralKeyword
     case "#_hasSymbol":
       self = .poundHasSymbolKeyword
     default:
@@ -373,11 +322,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return "true"
     case .tryKeyword: return "try"
     case .throwsKeyword: return "throws"
-    case .__file__Keyword: return "__FILE__"
-    case .__line__Keyword: return "__LINE__"
-    case .__column__Keyword: return "__COLUMN__"
-    case .__function__Keyword: return "__FUNCTION__"
-    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
     case .wildcardKeyword: return "_"
     case .leftParen: return "("
     case .rightParen: return ")"
@@ -406,15 +350,6 @@ public enum TokenKind: Hashable {
     case .stringQuote: return "\""
     case .singleQuote: return "\'"
     case .multilineStringQuote: return "\"\"\""
-    case .poundKeyPathKeyword: return "#keyPath"
-    case .poundLineKeyword: return "#line"
-    case .poundSelectorKeyword: return "#selector"
-    case .poundFileKeyword: return "#file"
-    case .poundFileIDKeyword: return "#fileID"
-    case .poundFilePathKeyword: return "#filePath"
-    case .poundColumnKeyword: return "#column"
-    case .poundFunctionKeyword: return "#function"
-    case .poundDsohandleKeyword: return "#dsohandle"
     case .poundAssertKeyword: return "#assert"
     case .poundSourceLocationKeyword: return "#sourceLocation"
     case .poundWarningKeyword: return "#warning"
@@ -425,9 +360,6 @@ public enum TokenKind: Hashable {
     case .poundEndifKeyword: return "#endif"
     case .poundAvailableKeyword: return "#available"
     case .poundUnavailableKeyword: return "#unavailable"
-    case .poundFileLiteralKeyword: return "#fileLiteral"
-    case .poundImageLiteralKeyword: return "#imageLiteral"
-    case .poundColorLiteralKeyword: return "#colorLiteral"
     case .poundHasSymbolKeyword: return "#_hasSymbol"
     case .integerLiteral(let text): return text
     case .floatingLiteral(let text): return text
@@ -509,11 +441,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return true
     case .tryKeyword: return true
     case .throwsKeyword: return true
-    case .__file__Keyword: return true
-    case .__line__Keyword: return true
-    case .__column__Keyword: return true
-    case .__function__Keyword: return true
-    case .__dso_handle__Keyword: return true
     case .wildcardKeyword: return true
     case .leftParen: return false
     case .rightParen: return false
@@ -542,15 +469,6 @@ public enum TokenKind: Hashable {
     case .stringQuote: return false
     case .singleQuote: return false
     case .multilineStringQuote: return false
-    case .poundKeyPathKeyword: return true
-    case .poundLineKeyword: return true
-    case .poundSelectorKeyword: return true
-    case .poundFileKeyword: return true
-    case .poundFileIDKeyword: return true
-    case .poundFilePathKeyword: return true
-    case .poundColumnKeyword: return true
-    case .poundFunctionKeyword: return true
-    case .poundDsohandleKeyword: return true
     case .poundAssertKeyword: return true
     case .poundSourceLocationKeyword: return true
     case .poundWarningKeyword: return true
@@ -561,9 +479,6 @@ public enum TokenKind: Hashable {
     case .poundEndifKeyword: return true
     case .poundAvailableKeyword: return true
     case .poundUnavailableKeyword: return true
-    case .poundFileLiteralKeyword: return true
-    case .poundImageLiteralKeyword: return true
-    case .poundColorLiteralKeyword: return true
     case .poundHasSymbolKeyword: return true
     case .integerLiteral: return false
     case .floatingLiteral: return false
@@ -645,11 +560,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return false
     case .tryKeyword: return false
     case .throwsKeyword: return false
-    case .__file__Keyword: return false
-    case .__line__Keyword: return false
-    case .__column__Keyword: return false
-    case .__function__Keyword: return false
-    case .__dso_handle__Keyword: return false
     case .wildcardKeyword: return false
     case .leftParen: return true
     case .rightParen: return true
@@ -678,15 +588,6 @@ public enum TokenKind: Hashable {
     case .stringQuote: return true
     case .singleQuote: return true
     case .multilineStringQuote: return true
-    case .poundKeyPathKeyword: return false
-    case .poundLineKeyword: return false
-    case .poundSelectorKeyword: return false
-    case .poundFileKeyword: return false
-    case .poundFileIDKeyword: return false
-    case .poundFilePathKeyword: return false
-    case .poundColumnKeyword: return false
-    case .poundFunctionKeyword: return false
-    case .poundDsohandleKeyword: return false
     case .poundAssertKeyword: return false
     case .poundSourceLocationKeyword: return false
     case .poundWarningKeyword: return false
@@ -697,9 +598,6 @@ public enum TokenKind: Hashable {
     case .poundEndifKeyword: return false
     case .poundAvailableKeyword: return false
     case .poundUnavailableKeyword: return false
-    case .poundFileLiteralKeyword: return false
-    case .poundImageLiteralKeyword: return false
-    case .poundColorLiteralKeyword: return false
     case .poundHasSymbolKeyword: return false
     case .integerLiteral: return false
     case .floatingLiteral: return false
@@ -776,11 +674,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return "kw_true"
     case .tryKeyword: return "kw_try"
     case .throwsKeyword: return "kw_throws"
-    case .__file__Keyword: return "kw___FILE__"
-    case .__line__Keyword: return "kw___LINE__"
-    case .__column__Keyword: return "kw___COLUMN__"
-    case .__function__Keyword: return "kw___FUNCTION__"
-    case .__dso_handle__Keyword: return "kw___DSO_HANDLE__"
     case .wildcardKeyword: return "kw__"
     case .leftParen: return "l_paren"
     case .rightParen: return "r_paren"
@@ -809,15 +702,6 @@ public enum TokenKind: Hashable {
     case .stringQuote: return "string_quote"
     case .singleQuote: return "single_quote"
     case .multilineStringQuote: return "multiline_string_quote"
-    case .poundKeyPathKeyword: return "pound_keyPath"
-    case .poundLineKeyword: return "pound_line"
-    case .poundSelectorKeyword: return "pound_selector"
-    case .poundFileKeyword: return "pound_file"
-    case .poundFileIDKeyword: return "pound_fileID"
-    case .poundFilePathKeyword: return "pound_filePath"
-    case .poundColumnKeyword: return "pound_column"
-    case .poundFunctionKeyword: return "pound_function"
-    case .poundDsohandleKeyword: return "pound_dsohandle"
     case .poundAssertKeyword: return "pound_assert"
     case .poundSourceLocationKeyword: return "pound_sourceLocation"
     case .poundWarningKeyword: return "pound_warning"
@@ -828,9 +712,6 @@ public enum TokenKind: Hashable {
     case .poundEndifKeyword: return "pound_endif"
     case .poundAvailableKeyword: return "pound_available"
     case .poundUnavailableKeyword: return "pound_unavailable"
-    case .poundFileLiteralKeyword: return "pound_fileLiteral"
-    case .poundImageLiteralKeyword: return "pound_imageLiteral"
-    case .poundColorLiteralKeyword: return "pound_colorLiteral"
     case .poundHasSymbolKeyword: return "pound__hasSymbol"
     case .integerLiteral(_): return "integer_literal"
     case .floatingLiteral(_): return "floating_literal"
@@ -907,11 +788,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return SourceLength(utf8Length: 4)
     case .tryKeyword: return SourceLength(utf8Length: 3)
     case .throwsKeyword: return SourceLength(utf8Length: 6)
-    case .__file__Keyword: return SourceLength(utf8Length: 8)
-    case .__line__Keyword: return SourceLength(utf8Length: 8)
-    case .__column__Keyword: return SourceLength(utf8Length: 10)
-    case .__function__Keyword: return SourceLength(utf8Length: 12)
-    case .__dso_handle__Keyword: return SourceLength(utf8Length: 14)
     case .wildcardKeyword: return SourceLength(utf8Length: 1)
     case .leftParen: return SourceLength(utf8Length: 1)
     case .rightParen: return SourceLength(utf8Length: 1)
@@ -940,15 +816,6 @@ public enum TokenKind: Hashable {
     case .stringQuote: return SourceLength(utf8Length: 1)
     case .singleQuote: return SourceLength(utf8Length: 1)
     case .multilineStringQuote: return SourceLength(utf8Length: 3)
-    case .poundKeyPathKeyword: return SourceLength(utf8Length: 8)
-    case .poundLineKeyword: return SourceLength(utf8Length: 5)
-    case .poundSelectorKeyword: return SourceLength(utf8Length: 9)
-    case .poundFileKeyword: return SourceLength(utf8Length: 5)
-    case .poundFileIDKeyword: return SourceLength(utf8Length: 7)
-    case .poundFilePathKeyword: return SourceLength(utf8Length: 9)
-    case .poundColumnKeyword: return SourceLength(utf8Length: 7)
-    case .poundFunctionKeyword: return SourceLength(utf8Length: 9)
-    case .poundDsohandleKeyword: return SourceLength(utf8Length: 10)
     case .poundAssertKeyword: return SourceLength(utf8Length: 7)
     case .poundSourceLocationKeyword: return SourceLength(utf8Length: 15)
     case .poundWarningKeyword: return SourceLength(utf8Length: 8)
@@ -959,9 +826,6 @@ public enum TokenKind: Hashable {
     case .poundEndifKeyword: return SourceLength(utf8Length: 6)
     case .poundAvailableKeyword: return SourceLength(utf8Length: 10)
     case .poundUnavailableKeyword: return SourceLength(utf8Length: 12)
-    case .poundFileLiteralKeyword: return SourceLength(utf8Length: 12)
-    case .poundImageLiteralKeyword: return SourceLength(utf8Length: 13)
-    case .poundColorLiteralKeyword: return SourceLength(utf8Length: 13)
     case .poundHasSymbolKeyword: return SourceLength(utf8Length: 11)
     case .integerLiteral(let text): return SourceLength(of: text)
     case .floatingLiteral(let text): return SourceLength(of: text)
@@ -1040,11 +904,6 @@ extension TokenKind: Equatable {
     case (.trueKeyword, .trueKeyword): return true
     case (.tryKeyword, .tryKeyword): return true
     case (.throwsKeyword, .throwsKeyword): return true
-    case (.__file__Keyword, .__file__Keyword): return true
-    case (.__line__Keyword, .__line__Keyword): return true
-    case (.__column__Keyword, .__column__Keyword): return true
-    case (.__function__Keyword, .__function__Keyword): return true
-    case (.__dso_handle__Keyword, .__dso_handle__Keyword): return true
     case (.wildcardKeyword, .wildcardKeyword): return true
     case (.leftParen, .leftParen): return true
     case (.rightParen, .rightParen): return true
@@ -1073,15 +932,6 @@ extension TokenKind: Equatable {
     case (.stringQuote, .stringQuote): return true
     case (.singleQuote, .singleQuote): return true
     case (.multilineStringQuote, .multilineStringQuote): return true
-    case (.poundKeyPathKeyword, .poundKeyPathKeyword): return true
-    case (.poundLineKeyword, .poundLineKeyword): return true
-    case (.poundSelectorKeyword, .poundSelectorKeyword): return true
-    case (.poundFileKeyword, .poundFileKeyword): return true
-    case (.poundFileIDKeyword, .poundFileIDKeyword): return true
-    case (.poundFilePathKeyword, .poundFilePathKeyword): return true
-    case (.poundColumnKeyword, .poundColumnKeyword): return true
-    case (.poundFunctionKeyword, .poundFunctionKeyword): return true
-    case (.poundDsohandleKeyword, .poundDsohandleKeyword): return true
     case (.poundAssertKeyword, .poundAssertKeyword): return true
     case (.poundSourceLocationKeyword, .poundSourceLocationKeyword): return true
     case (.poundWarningKeyword, .poundWarningKeyword): return true
@@ -1092,9 +942,6 @@ extension TokenKind: Equatable {
     case (.poundEndifKeyword, .poundEndifKeyword): return true
     case (.poundAvailableKeyword, .poundAvailableKeyword): return true
     case (.poundUnavailableKeyword, .poundUnavailableKeyword): return true
-    case (.poundFileLiteralKeyword, .poundFileLiteralKeyword): return true
-    case (.poundImageLiteralKeyword, .poundImageLiteralKeyword): return true
-    case (.poundColorLiteralKeyword, .poundColorLiteralKeyword): return true
     case (.poundHasSymbolKeyword, .poundHasSymbolKeyword): return true
     case (.integerLiteral(let lhsText), .integerLiteral(let rhsText)):
       return lhsText == rhsText
@@ -1188,11 +1035,6 @@ public enum RawTokenKind: Equatable, Hashable {
   case trueKeyword
   case tryKeyword
   case throwsKeyword
-  case __file__Keyword
-  case __line__Keyword
-  case __column__Keyword
-  case __function__Keyword
-  case __dso_handle__Keyword
   case wildcardKeyword
   case leftParen
   case rightParen
@@ -1221,15 +1063,6 @@ public enum RawTokenKind: Equatable, Hashable {
   case stringQuote
   case singleQuote
   case multilineStringQuote
-  case poundKeyPathKeyword
-  case poundLineKeyword
-  case poundSelectorKeyword
-  case poundFileKeyword
-  case poundFileIDKeyword
-  case poundFilePathKeyword
-  case poundColumnKeyword
-  case poundFunctionKeyword
-  case poundDsohandleKeyword
   case poundAssertKeyword
   case poundSourceLocationKeyword
   case poundWarningKeyword
@@ -1240,9 +1073,6 @@ public enum RawTokenKind: Equatable, Hashable {
   case poundEndifKeyword
   case poundAvailableKeyword
   case poundUnavailableKeyword
-  case poundFileLiteralKeyword
-  case poundImageLiteralKeyword
-  case poundColorLiteralKeyword
   case poundHasSymbolKeyword
   case integerLiteral
   case floatingLiteral
@@ -1318,11 +1148,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return "true"
     case .tryKeyword: return "try"
     case .throwsKeyword: return "throws"
-    case .__file__Keyword: return "__FILE__"
-    case .__line__Keyword: return "__LINE__"
-    case .__column__Keyword: return "__COLUMN__"
-    case .__function__Keyword: return "__FUNCTION__"
-    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
     case .wildcardKeyword: return "_"
     case .leftParen: return "("
     case .rightParen: return ")"
@@ -1351,15 +1176,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .stringQuote: return "\""
     case .singleQuote: return "\'"
     case .multilineStringQuote: return "\"\"\""
-    case .poundKeyPathKeyword: return "#keyPath"
-    case .poundLineKeyword: return "#line"
-    case .poundSelectorKeyword: return "#selector"
-    case .poundFileKeyword: return "#file"
-    case .poundFileIDKeyword: return "#fileID"
-    case .poundFilePathKeyword: return "#filePath"
-    case .poundColumnKeyword: return "#column"
-    case .poundFunctionKeyword: return "#function"
-    case .poundDsohandleKeyword: return "#dsohandle"
     case .poundAssertKeyword: return "#assert"
     case .poundSourceLocationKeyword: return "#sourceLocation"
     case .poundWarningKeyword: return "#warning"
@@ -1370,9 +1186,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundEndifKeyword: return "#endif"
     case .poundAvailableKeyword: return "#available"
     case .poundUnavailableKeyword: return "#unavailable"
-    case .poundFileLiteralKeyword: return "#fileLiteral"
-    case .poundImageLiteralKeyword: return "#imageLiteral"
-    case .poundColorLiteralKeyword: return "#colorLiteral"
     case .poundHasSymbolKeyword: return "#_hasSymbol"
     case .stringInterpolationAnchor: return ")"
     case .yield: return "yield"
@@ -1436,11 +1249,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return "true"
     case .tryKeyword: return "try"
     case .throwsKeyword: return "throws"
-    case .__file__Keyword: return "__FILE__"
-    case .__line__Keyword: return "__LINE__"
-    case .__column__Keyword: return "__COLUMN__"
-    case .__function__Keyword: return "__FUNCTION__"
-    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
     case .wildcardKeyword: return "_"
     case .leftParen: return "("
     case .rightParen: return ")"
@@ -1469,15 +1277,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .stringQuote: return "\""
     case .singleQuote: return "\'"
     case .multilineStringQuote: return "\"\"\""
-    case .poundKeyPathKeyword: return "#keyPath"
-    case .poundLineKeyword: return "#line"
-    case .poundSelectorKeyword: return "#selector"
-    case .poundFileKeyword: return "#file"
-    case .poundFileIDKeyword: return "#fileID"
-    case .poundFilePathKeyword: return "#filePath"
-    case .poundColumnKeyword: return "#column"
-    case .poundFunctionKeyword: return "#function"
-    case .poundDsohandleKeyword: return "#dsohandle"
     case .poundAssertKeyword: return "#assert"
     case .poundSourceLocationKeyword: return "#sourceLocation"
     case .poundWarningKeyword: return "#warning"
@@ -1488,9 +1287,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundEndifKeyword: return "#endif"
     case .poundAvailableKeyword: return "#available"
     case .poundUnavailableKeyword: return "#unavailable"
-    case .poundFileLiteralKeyword: return "file reference"
-    case .poundImageLiteralKeyword: return "image"
-    case .poundColorLiteralKeyword: return "color"
     case .poundHasSymbolKeyword: return "#_hasSymbol"
     case .integerLiteral: return "integer literal"
     case .floatingLiteral: return "floating literal"
@@ -1572,11 +1368,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return true
     case .tryKeyword: return true
     case .throwsKeyword: return true
-    case .__file__Keyword: return true
-    case .__line__Keyword: return true
-    case .__column__Keyword: return true
-    case .__function__Keyword: return true
-    case .__dso_handle__Keyword: return true
     case .wildcardKeyword: return true
     case .leftParen: return false
     case .rightParen: return false
@@ -1605,15 +1396,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .stringQuote: return false
     case .singleQuote: return false
     case .multilineStringQuote: return false
-    case .poundKeyPathKeyword: return true
-    case .poundLineKeyword: return true
-    case .poundSelectorKeyword: return true
-    case .poundFileKeyword: return true
-    case .poundFileIDKeyword: return true
-    case .poundFilePathKeyword: return true
-    case .poundColumnKeyword: return true
-    case .poundFunctionKeyword: return true
-    case .poundDsohandleKeyword: return true
     case .poundAssertKeyword: return true
     case .poundSourceLocationKeyword: return true
     case .poundWarningKeyword: return true
@@ -1624,9 +1406,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundEndifKeyword: return true
     case .poundAvailableKeyword: return true
     case .poundUnavailableKeyword: return true
-    case .poundFileLiteralKeyword: return true
-    case .poundImageLiteralKeyword: return true
-    case .poundColorLiteralKeyword: return true
     case .poundHasSymbolKeyword: return true
     case .integerLiteral: return false
     case .floatingLiteral: return false
@@ -1708,11 +1487,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return false
     case .tryKeyword: return false
     case .throwsKeyword: return false
-    case .__file__Keyword: return false
-    case .__line__Keyword: return false
-    case .__column__Keyword: return false
-    case .__function__Keyword: return false
-    case .__dso_handle__Keyword: return false
     case .wildcardKeyword: return false
     case .leftParen: return true
     case .rightParen: return true
@@ -1741,15 +1515,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .stringQuote: return true
     case .singleQuote: return true
     case .multilineStringQuote: return true
-    case .poundKeyPathKeyword: return false
-    case .poundLineKeyword: return false
-    case .poundSelectorKeyword: return false
-    case .poundFileKeyword: return false
-    case .poundFileIDKeyword: return false
-    case .poundFilePathKeyword: return false
-    case .poundColumnKeyword: return false
-    case .poundFunctionKeyword: return false
-    case .poundDsohandleKeyword: return false
     case .poundAssertKeyword: return false
     case .poundSourceLocationKeyword: return false
     case .poundWarningKeyword: return false
@@ -1760,9 +1525,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundEndifKeyword: return false
     case .poundAvailableKeyword: return false
     case .poundUnavailableKeyword: return false
-    case .poundFileLiteralKeyword: return false
-    case .poundImageLiteralKeyword: return false
-    case .poundColorLiteralKeyword: return false
     case .poundHasSymbolKeyword: return false
     case .integerLiteral: return false
     case .floatingLiteral: return false
@@ -1836,8 +1598,6 @@ public enum RawTokenKind: Equatable, Hashable {
       case "throw": self = .throwKeyword
       case "false": self = .falseKeyword
       case "super": self = .superKeyword
-      case "#line": self = .poundLineKeyword
-      case "#file": self = .poundFileKeyword
       case "#else": self = .poundElseKeyword
       default: return nil
       }
@@ -1860,8 +1620,6 @@ public enum RawTokenKind: Equatable, Hashable {
       switch text {
       case "private": self = .privateKeyword
       case "default": self = .defaultKeyword
-      case "#fileID": self = .poundFileIDKeyword
-      case "#column": self = .poundColumnKeyword
       case "#assert": self = .poundAssertKeyword
       case "#elseif": self = .poundElseifKeyword
       default: return nil
@@ -1873,9 +1631,6 @@ public enum RawTokenKind: Equatable, Hashable {
       case "internal": self = .internalKeyword
       case "continue": self = .continueKeyword
       case "rethrows": self = .rethrowsKeyword
-      case "__FILE__": self = .__file__Keyword
-      case "__LINE__": self = .__line__Keyword
-      case "#keyPath": self = .poundKeyPathKeyword
       case "#warning": self = .poundWarningKeyword
       default: return nil
       }
@@ -1884,15 +1639,10 @@ public enum RawTokenKind: Equatable, Hashable {
       case "extension": self = .extensionKeyword
       case "subscript": self = .subscriptKeyword
       case "typealias": self = .typealiasKeyword
-      case "#selector": self = .poundSelectorKeyword
-      case "#filePath": self = .poundFilePathKeyword
-      case "#function": self = .poundFunctionKeyword
       default: return nil
       }
     case 10:
       switch text {
-      case "__COLUMN__": self = .__column__Keyword
-      case "#dsohandle": self = .poundDsohandleKeyword
       case "#available": self = .poundAvailableKeyword
       default: return nil
       }
@@ -1905,21 +1655,12 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 12:
       switch text {
-      case "__FUNCTION__": self = .__function__Keyword
       case "#unavailable": self = .poundUnavailableKeyword
-      case "#fileLiteral": self = .poundFileLiteralKeyword
-      default: return nil
-      }
-    case 13:
-      switch text {
-      case "#imageLiteral": self = .poundImageLiteralKeyword
-      case "#colorLiteral": self = .poundColorLiteralKeyword
       default: return nil
       }
     case 14:
       switch text {
       case "associatedtype": self = .associatedtypeKeyword
-      case "__DSO_HANDLE__": self = .__dso_handle__Keyword
       default: return nil
       }
     case 15:
@@ -2098,21 +1839,6 @@ extension TokenKind {
     case .throwsKeyword:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .throwsKeyword
-    case .__file__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__file__Keyword
-    case .__line__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__line__Keyword
-    case .__column__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__column__Keyword
-    case .__function__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__function__Keyword
-    case .__dso_handle__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__dso_handle__Keyword
     case .wildcardKeyword:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .wildcardKeyword
@@ -2197,33 +1923,6 @@ extension TokenKind {
     case .multilineStringQuote:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .multilineStringQuote
-    case .poundKeyPathKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundKeyPathKeyword
-    case .poundLineKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundLineKeyword
-    case .poundSelectorKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundSelectorKeyword
-    case .poundFileKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundFileKeyword
-    case .poundFileIDKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundFileIDKeyword
-    case .poundFilePathKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundFilePathKeyword
-    case .poundColumnKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundColumnKeyword
-    case .poundFunctionKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundFunctionKeyword
-    case .poundDsohandleKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundDsohandleKeyword
     case .poundAssertKeyword:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundAssertKeyword
@@ -2254,15 +1953,6 @@ extension TokenKind {
     case .poundUnavailableKeyword:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundUnavailableKeyword
-    case .poundFileLiteralKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundFileLiteralKeyword
-    case .poundImageLiteralKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundImageLiteralKeyword
-    case .poundColorLiteralKeyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundColorLiteralKeyword
     case .poundHasSymbolKeyword:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .poundHasSymbolKeyword
@@ -2362,11 +2052,6 @@ extension TokenKind {
     case .trueKeyword: return (.trueKeyword, nil)
     case .tryKeyword: return (.tryKeyword, nil)
     case .throwsKeyword: return (.throwsKeyword, nil)
-    case .__file__Keyword: return (.__file__Keyword, nil)
-    case .__line__Keyword: return (.__line__Keyword, nil)
-    case .__column__Keyword: return (.__column__Keyword, nil)
-    case .__function__Keyword: return (.__function__Keyword, nil)
-    case .__dso_handle__Keyword: return (.__dso_handle__Keyword, nil)
     case .wildcardKeyword: return (.wildcardKeyword, nil)
     case .leftParen: return (.leftParen, nil)
     case .rightParen: return (.rightParen, nil)
@@ -2395,15 +2080,6 @@ extension TokenKind {
     case .stringQuote: return (.stringQuote, nil)
     case .singleQuote: return (.singleQuote, nil)
     case .multilineStringQuote: return (.multilineStringQuote, nil)
-    case .poundKeyPathKeyword: return (.poundKeyPathKeyword, nil)
-    case .poundLineKeyword: return (.poundLineKeyword, nil)
-    case .poundSelectorKeyword: return (.poundSelectorKeyword, nil)
-    case .poundFileKeyword: return (.poundFileKeyword, nil)
-    case .poundFileIDKeyword: return (.poundFileIDKeyword, nil)
-    case .poundFilePathKeyword: return (.poundFilePathKeyword, nil)
-    case .poundColumnKeyword: return (.poundColumnKeyword, nil)
-    case .poundFunctionKeyword: return (.poundFunctionKeyword, nil)
-    case .poundDsohandleKeyword: return (.poundDsohandleKeyword, nil)
     case .poundAssertKeyword: return (.poundAssertKeyword, nil)
     case .poundSourceLocationKeyword: return (.poundSourceLocationKeyword, nil)
     case .poundWarningKeyword: return (.poundWarningKeyword, nil)
@@ -2414,9 +2090,6 @@ extension TokenKind {
     case .poundEndifKeyword: return (.poundEndifKeyword, nil)
     case .poundAvailableKeyword: return (.poundAvailableKeyword, nil)
     case .poundUnavailableKeyword: return (.poundUnavailableKeyword, nil)
-    case .poundFileLiteralKeyword: return (.poundFileLiteralKeyword, nil)
-    case .poundImageLiteralKeyword: return (.poundImageLiteralKeyword, nil)
-    case .poundColorLiteralKeyword: return (.poundColorLiteralKeyword, nil)
     case .poundHasSymbolKeyword: return (.poundHasSymbolKeyword, nil)
     case .integerLiteral(let str): return (.integerLiteral, str)
     case .floatingLiteral(let str): return (.floatingLiteral, str)

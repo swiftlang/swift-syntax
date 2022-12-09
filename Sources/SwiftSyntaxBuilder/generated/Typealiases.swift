@@ -353,16 +353,6 @@ public typealias ObjCSelectorPiece = ObjCSelectorPieceSyntax
 
 public typealias ObjCSelector = ObjCSelectorSyntax
 
-public typealias ObjcKeyPathExpr = ObjcKeyPathExprSyntax
-
-public typealias ObjcNamePiece = ObjcNamePieceSyntax
-
-public typealias ObjcName = ObjcNameSyntax
-
-public typealias ObjcSelectorExpr = ObjcSelectorExprSyntax
-
-public typealias ObjectLiteralExpr = ObjectLiteralExprSyntax
-
 public typealias OpaqueReturnTypeOfAttributeArguments = OpaqueReturnTypeOfAttributeArgumentsSyntax
 
 public typealias OperatorDecl = OperatorDeclSyntax
@@ -393,21 +383,7 @@ public typealias PostfixUnaryExpr = PostfixUnaryExprSyntax
 
 public typealias PoundAssertStmt = PoundAssertStmtSyntax
 
-public typealias PoundColumnExpr = PoundColumnExprSyntax
-
-public typealias PoundDsohandleExpr = PoundDsohandleExprSyntax
-
 public typealias PoundErrorDecl = PoundErrorDeclSyntax
-
-public typealias PoundFileExpr = PoundFileExprSyntax
-
-public typealias PoundFileIDExpr = PoundFileIDExprSyntax
-
-public typealias PoundFilePathExpr = PoundFilePathExprSyntax
-
-public typealias PoundFunctionExpr = PoundFunctionExprSyntax
-
-public typealias PoundLineExpr = PoundLineExprSyntax
 
 public typealias PoundSourceLocationArgs = PoundSourceLocationArgsSyntax
 

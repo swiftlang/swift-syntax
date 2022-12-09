@@ -281,31 +281,6 @@ public extension TokenSyntax {
     return .throwsKeyword()
   }
   
-  /// The `__FILE__` keyword
-  static var `__FILE__`: Token {
-    return .__file__Keyword()
-  }
-  
-  /// The `__LINE__` keyword
-  static var `__LINE__`: Token {
-    return .__line__Keyword()
-  }
-  
-  /// The `__COLUMN__` keyword
-  static var `__COLUMN__`: Token {
-    return .__column__Keyword()
-  }
-  
-  /// The `__FUNCTION__` keyword
-  static var `__FUNCTION__`: Token {
-    return .__function__Keyword()
-  }
-  
-  /// The `__DSO_HANDLE__` keyword
-  static var `__DSO_HANDLE__`: Token {
-    return .__dso_handle__Keyword()
-  }
-  
   /// The `_` keyword
   static var `wildcard`: Token {
     return .wildcardKeyword()
@@ -446,51 +421,6 @@ public extension TokenSyntax {
     return .multilineStringQuoteToken()
   }
   
-  /// The `#keyPath` keyword
-  static var `poundKeyPath`: Token {
-    return .poundKeyPathKeyword()
-  }
-  
-  /// The `#line` keyword
-  static var `poundLine`: Token {
-    return .poundLineKeyword()
-  }
-  
-  /// The `#selector` keyword
-  static var `poundSelector`: Token {
-    return .poundSelectorKeyword()
-  }
-  
-  /// The `#file` keyword
-  static var `poundFile`: Token {
-    return .poundFileKeyword()
-  }
-  
-  /// The `#fileID` keyword
-  static var `poundFileID`: Token {
-    return .poundFileIDKeyword()
-  }
-  
-  /// The `#filePath` keyword
-  static var `poundFilePath`: Token {
-    return .poundFilePathKeyword()
-  }
-  
-  /// The `#column` keyword
-  static var `poundColumn`: Token {
-    return .poundColumnKeyword()
-  }
-  
-  /// The `#function` keyword
-  static var `poundFunction`: Token {
-    return .poundFunctionKeyword()
-  }
-  
-  /// The `#dsohandle` keyword
-  static var `poundDsohandle`: Token {
-    return .poundDsohandleKeyword()
-  }
-  
   /// The `#assert` keyword
   static var `poundAssert`: Token {
     return .poundAssertKeyword()
@@ -539,21 +469,6 @@ public extension TokenSyntax {
   /// The `#unavailable` keyword
   static var `poundUnavailable`: Token {
     return .poundUnavailableKeyword()
-  }
-  
-  /// The `#fileLiteral` keyword
-  static var `poundFileLiteral`: Token {
-    return .poundFileLiteralKeyword()
-  }
-  
-  /// The `#imageLiteral` keyword
-  static var `poundImageLiteral`: Token {
-    return .poundImageLiteralKeyword()
-  }
-  
-  /// The `#colorLiteral` keyword
-  static var `poundColorLiteral`: Token {
-    return .poundColorLiteralKeyword()
   }
   
   /// The `#_hasSymbol` keyword

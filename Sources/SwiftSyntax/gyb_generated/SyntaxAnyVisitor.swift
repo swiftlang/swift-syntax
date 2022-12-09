@@ -173,13 +173,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: InOutExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: PoundColumnExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
   override open func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -297,48 +290,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: ExprListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: PoundLineExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: PoundFileExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: PoundFileIDExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: PoundFileIDExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: PoundFilePathExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: PoundFilePathExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: PoundFunctionExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: PoundDsohandleExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind {
@@ -677,34 +628,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: KeyPathOptionalComponentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcNamePieceSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcNameSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcKeyPathExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcSelectorExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
   override open func visit(_ node: MacroExpansionExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -724,13 +647,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: EditorPlaceholderExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjectLiteralExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: YieldExprListSyntax) -> SyntaxVisitorContinueKind {

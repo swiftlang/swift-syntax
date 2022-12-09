@@ -246,16 +246,6 @@ extension RawTokenKind {
       return .keyword
     case .throwsKeyword: 
       return .keyword
-    case .__file__Keyword: 
-      return .keyword
-    case .__line__Keyword: 
-      return .keyword
-    case .__column__Keyword: 
-      return .keyword
-    case .__function__Keyword: 
-      return .keyword
-    case .__dso_handle__Keyword: 
-      return .keyword
     case .wildcardKeyword: 
       return .keyword
     case .leftParen: 
@@ -312,24 +302,6 @@ extension RawTokenKind {
       return .stringLiteral
     case .multilineStringQuote: 
       return .stringLiteral
-    case .poundKeyPathKeyword: 
-      return .keyword
-    case .poundLineKeyword: 
-      return .keyword
-    case .poundSelectorKeyword: 
-      return .keyword
-    case .poundFileKeyword: 
-      return .keyword
-    case .poundFileIDKeyword: 
-      return .keyword
-    case .poundFilePathKeyword: 
-      return .keyword
-    case .poundColumnKeyword: 
-      return .keyword
-    case .poundFunctionKeyword: 
-      return .keyword
-    case .poundDsohandleKeyword: 
-      return .keyword
     case .poundAssertKeyword: 
       return .keyword
     case .poundSourceLocationKeyword: 
@@ -350,12 +322,6 @@ extension RawTokenKind {
       return .keyword
     case .poundUnavailableKeyword: 
       return .keyword
-    case .poundFileLiteralKeyword: 
-      return .objectLiteral
-    case .poundImageLiteralKeyword: 
-      return .objectLiteral
-    case .poundColorLiteralKeyword: 
-      return .objectLiteral
     case .poundHasSymbolKeyword: 
       return .keyword
     case .integerLiteral: 

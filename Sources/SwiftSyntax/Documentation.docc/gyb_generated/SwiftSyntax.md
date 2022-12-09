@@ -108,7 +108,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ExprSyntaxProtocol>
 - <doc:SwiftSyntax/UnknownExprSyntax>
 - <doc:SwiftSyntax/InOutExprSyntax>
-- <doc:SwiftSyntax/PoundColumnExprSyntax>
 - <doc:SwiftSyntax/TryExprSyntax>
 - <doc:SwiftSyntax/AwaitExprSyntax>
 - <doc:SwiftSyntax/MoveExprSyntax>
@@ -118,12 +117,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DiscardAssignmentExprSyntax>
 - <doc:SwiftSyntax/AssignmentExprSyntax>
 - <doc:SwiftSyntax/SequenceExprSyntax>
-- <doc:SwiftSyntax/PoundLineExprSyntax>
-- <doc:SwiftSyntax/PoundFileExprSyntax>
-- <doc:SwiftSyntax/PoundFileIDExprSyntax>
-- <doc:SwiftSyntax/PoundFilePathExprSyntax>
-- <doc:SwiftSyntax/PoundFunctionExprSyntax>
-- <doc:SwiftSyntax/PoundDsohandleExprSyntax>
 - <doc:SwiftSyntax/SymbolicReferenceExprSyntax>
 - <doc:SwiftSyntax/PrefixOperatorExprSyntax>
 - <doc:SwiftSyntax/BinaryOperatorExprSyntax>
@@ -154,12 +147,9 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/StringLiteralExprSyntax>
 - <doc:SwiftSyntax/RegexLiteralExprSyntax>
 - <doc:SwiftSyntax/KeyPathExprSyntax>
-- <doc:SwiftSyntax/ObjcKeyPathExprSyntax>
-- <doc:SwiftSyntax/ObjcSelectorExprSyntax>
 - <doc:SwiftSyntax/MacroExpansionExprSyntax>
 - <doc:SwiftSyntax/PostfixIfConfigExprSyntax>
 - <doc:SwiftSyntax/EditorPlaceholderExprSyntax>
-- <doc:SwiftSyntax/ObjectLiteralExprSyntax>
 
 ### Types
 
@@ -220,8 +210,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MultipleTrailingClosureElementSyntax>
 - <doc:SwiftSyntax/KeyPathComponentListSyntax>
 - <doc:SwiftSyntax/KeyPathComponentSyntax>
-- <doc:SwiftSyntax/ObjcNameSyntax>
-- <doc:SwiftSyntax/ObjcNamePieceSyntax>
 - <doc:SwiftSyntax/YieldExprListSyntax>
 - <doc:SwiftSyntax/YieldExprListElementSyntax>
 - <doc:SwiftSyntax/FunctionParameterListSyntax>
@@ -311,8 +299,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/KeyPathPropertyComponentSyntax>
 - <doc:SwiftSyntax/KeyPathSubscriptComponentSyntax>
 - <doc:SwiftSyntax/KeyPathOptionalComponentSyntax>
-- <doc:SwiftSyntax/ObjcNamePieceSyntax>
-- <doc:SwiftSyntax/ObjcNameSyntax>
 - <doc:SwiftSyntax/YieldExprListSyntax>
 - <doc:SwiftSyntax/YieldExprListElementSyntax>
 - <doc:SwiftSyntax/TypeInitializerClauseSyntax>

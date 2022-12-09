@@ -245,13 +245,6 @@ extension ObjCSelector: ExpressibleByArrayLiteral {
   }
 }
 
-/// `ObjcName` represents a collection of `ObjcNamePieceSyntax`
-extension ObjcName: ExpressibleByArrayLiteral {
-  public init (arrayLiteral elements: Element...) {
-    self.init (elements)
-  }
-}
-
 /// `PatternBindingList` represents a collection of `PatternBindingSyntax`
 extension PatternBindingList: ExpressibleByArrayLiteral {
   public init (arrayLiteral elements: Element...) {

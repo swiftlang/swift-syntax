@@ -285,15 +285,6 @@ extension NamedOpaqueReturnTypeSyntax: SyntaxExpressibleByStringInterpolation {
 extension NilLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension ObjcKeyPathExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension ObjcSelectorExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension ObjectLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension OperatorDeclSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
@@ -338,28 +329,7 @@ extension PostfixUnaryExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension PoundAssertStmtSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension PoundColumnExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension PoundDsohandleExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension PoundErrorDeclSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension PoundFileExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension PoundFileIDExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension PoundFilePathExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension PoundFunctionExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension PoundLineExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension PoundSourceLocationSyntax: SyntaxExpressibleByStringInterpolation { 

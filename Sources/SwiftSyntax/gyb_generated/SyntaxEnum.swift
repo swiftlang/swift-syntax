@@ -33,7 +33,6 @@ public enum SyntaxEnum {
   case codeBlock(CodeBlockSyntax)
   case unexpectedNodes(UnexpectedNodesSyntax)
   case inOutExpr(InOutExprSyntax)
-  case poundColumnExpr(PoundColumnExprSyntax)
   case tupleExprElementList(TupleExprElementListSyntax)
   case arrayElementList(ArrayElementListSyntax)
   case dictionaryElementList(DictionaryElementListSyntax)
@@ -51,12 +50,6 @@ public enum SyntaxEnum {
   case assignmentExpr(AssignmentExprSyntax)
   case sequenceExpr(SequenceExprSyntax)
   case exprList(ExprListSyntax)
-  case poundLineExpr(PoundLineExprSyntax)
-  case poundFileExpr(PoundFileExprSyntax)
-  case poundFileIDExpr(PoundFileIDExprSyntax)
-  case poundFilePathExpr(PoundFilePathExprSyntax)
-  case poundFunctionExpr(PoundFunctionExprSyntax)
-  case poundDsohandleExpr(PoundDsohandleExprSyntax)
   case symbolicReferenceExpr(SymbolicReferenceExprSyntax)
   case prefixOperatorExpr(PrefixOperatorExprSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
@@ -105,14 +98,9 @@ public enum SyntaxEnum {
   case keyPathPropertyComponent(KeyPathPropertyComponentSyntax)
   case keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax)
   case keyPathOptionalComponent(KeyPathOptionalComponentSyntax)
-  case objcNamePiece(ObjcNamePieceSyntax)
-  case objcName(ObjcNameSyntax)
-  case objcKeyPathExpr(ObjcKeyPathExprSyntax)
-  case objcSelectorExpr(ObjcSelectorExprSyntax)
   case macroExpansionExpr(MacroExpansionExprSyntax)
   case postfixIfConfigExpr(PostfixIfConfigExprSyntax)
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
-  case objectLiteralExpr(ObjectLiteralExprSyntax)
   case yieldExprList(YieldExprListSyntax)
   case yieldExprListElement(YieldExprListElementSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
@@ -337,8 +325,6 @@ public extension Syntax {
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .inOutExpr:
       return .inOutExpr(InOutExprSyntax(self)!)
-    case .poundColumnExpr:
-      return .poundColumnExpr(PoundColumnExprSyntax(self)!)
     case .tupleExprElementList:
       return .tupleExprElementList(TupleExprElementListSyntax(self)!)
     case .arrayElementList:
@@ -373,18 +359,6 @@ public extension Syntax {
       return .sequenceExpr(SequenceExprSyntax(self)!)
     case .exprList:
       return .exprList(ExprListSyntax(self)!)
-    case .poundLineExpr:
-      return .poundLineExpr(PoundLineExprSyntax(self)!)
-    case .poundFileExpr:
-      return .poundFileExpr(PoundFileExprSyntax(self)!)
-    case .poundFileIDExpr:
-      return .poundFileIDExpr(PoundFileIDExprSyntax(self)!)
-    case .poundFilePathExpr:
-      return .poundFilePathExpr(PoundFilePathExprSyntax(self)!)
-    case .poundFunctionExpr:
-      return .poundFunctionExpr(PoundFunctionExprSyntax(self)!)
-    case .poundDsohandleExpr:
-      return .poundDsohandleExpr(PoundDsohandleExprSyntax(self)!)
     case .symbolicReferenceExpr:
       return .symbolicReferenceExpr(SymbolicReferenceExprSyntax(self)!)
     case .prefixOperatorExpr:
@@ -481,22 +455,12 @@ public extension Syntax {
       return .keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax(self)!)
     case .keyPathOptionalComponent:
       return .keyPathOptionalComponent(KeyPathOptionalComponentSyntax(self)!)
-    case .objcNamePiece:
-      return .objcNamePiece(ObjcNamePieceSyntax(self)!)
-    case .objcName:
-      return .objcName(ObjcNameSyntax(self)!)
-    case .objcKeyPathExpr:
-      return .objcKeyPathExpr(ObjcKeyPathExprSyntax(self)!)
-    case .objcSelectorExpr:
-      return .objcSelectorExpr(ObjcSelectorExprSyntax(self)!)
     case .macroExpansionExpr:
       return .macroExpansionExpr(MacroExpansionExprSyntax(self)!)
     case .postfixIfConfigExpr:
       return .postfixIfConfigExpr(PostfixIfConfigExprSyntax(self)!)
     case .editorPlaceholderExpr:
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
-    case .objectLiteralExpr:
-      return .objectLiteralExpr(ObjectLiteralExprSyntax(self)!)
     case .yieldExprList:
       return .yieldExprList(YieldExprListSyntax(self)!)
     case .yieldExprListElement:

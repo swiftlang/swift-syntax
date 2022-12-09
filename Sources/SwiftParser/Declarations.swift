@@ -2039,18 +2039,16 @@ extension Parser {
       signature = .functionLike(self.parseFunctionSignature())
     }
 
-    // External macro name
-    let (unexpectedBeforeEqual, equal) = self.expect(.equal)
-    let (unexpectedBeforeModuleName, moduleName) = self.expectIdentifier()
-    let (unexpectedBeforePeriod, period) = self.expect(.period)
-    let (unexpectedBeforeMacroTypeName, macroTypeName) = self.expectIdentifier()
-
-    let externalMacroName = RawExternalMacroNameSyntax(
-      unexpectedBeforeModuleName, moduleName: moduleName,
-      unexpectedBeforePeriod, period: period,
-      unexpectedBeforeMacroTypeName, macroTypeName: macroTypeName,
-      arena: self.arena
-    )
+    // Initializer, if any.
+    let definition: RawInitializerClauseSyntax?
+    if let equal = self.consume(if: .equal) {
+      let expr = self.parseExpression()
+      definition = RawInitializerClauseSyntax(
+        equal: equal, value: expr, arena: self.arena
+      )
+    } else {
+      definition = nil
+    }
 
     // Parse a 'where' clause if present.
     let whereClause: RawGenericWhereClauseSyntax?
@@ -2065,8 +2063,7 @@ extension Parser {
       unexpectedBeforeIntroducerKeyword, macroKeyword: introducerKeyword,
       unexpectedBeforeName, identifier: name,
       genericParameterClause: genericParams,
-      signature: signature, unexpectedBeforeEqual, equal: equal,
-      externalName: externalMacroName,
+      signature: signature, definition: definition,
       genericWhereClause: whereClause,
       arena: self.arena
     )

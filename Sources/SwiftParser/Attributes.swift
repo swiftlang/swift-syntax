@@ -140,9 +140,9 @@ extension Parser {
     let argument: RawAttributeSyntax.Argument
     do {
       if self.peek().tokenKind == .integerLiteral {
-        argument = .availability(self.parseAvailabilitySpecList(from: .available))
+        argument = .availability(self.parseAvailabilitySpecList())
       } else if self.peek().tokenKind  == .floatingLiteral {
-        argument = .availability(self.parseAvailabilitySpecList(from: .available))
+        argument = .availability(self.parseAvailabilitySpecList())
       } else {
         argument = .availability(self.parseExtendedAvailabilitySpecList())
       }
@@ -171,9 +171,9 @@ extension Parser {
     let argument: RawAttributeSyntax.Argument
     do {
       if self.peek().tokenKind == .integerLiteral {
-        argument = .availability(self.parseAvailabilitySpecList(from: .available))
+        argument = .availability(self.parseAvailabilitySpecList())
       } else if self.peek().tokenKind  == .floatingLiteral {
-        argument = .availability(self.parseAvailabilitySpecList(from: .available))
+        argument = .availability(self.parseAvailabilitySpecList())
       } else {
         argument = .availability(self.parseExtendedAvailabilitySpecList())
       }
@@ -561,7 +561,7 @@ extension Parser {
       case (.availability, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let availability = self.parseAvailabilitySpecList(from: .available)
+        let availability = self.parseAvailabilitySpecList()
         let (unexpectedBeforeSemi, semi) = self.expect(.semicolon)
         elements.append(.availabilityEntry(RawAvailabilityEntrySyntax(
           label: ident,

@@ -343,24 +343,18 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parsePoundAvailableConditionElement() -> RawConditionElementSyntax.Condition {
     assert(self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]))
-    let kind: AvailabilitySpecSource = self.at(.poundAvailableKeyword) ? .available : .unavailable
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let spec = self.parseAvailabilitySpecList(from: kind)
+    let spec = self.parseAvailabilitySpecList()
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-    switch kind {
-    case .available, .unavailable:
-      return .availability(RawAvailabilityConditionSyntax(
-        availabilityKeyword: keyword,
-        unexpectedBeforeLParen,
-        leftParen: lparen,
-        availabilitySpec: spec,
-        unexpectedBeforeRParen,
-        rightParen: rparen,
-        arena: self.arena))
-    case .macro:
-      fatalError("Macros are not allowed in this position!")
-    }
+    return .availability(RawAvailabilityConditionSyntax(
+      availabilityKeyword: keyword,
+      unexpectedBeforeLParen,
+      leftParen: lparen,
+      availabilitySpec: spec,
+      unexpectedBeforeRParen,
+      rightParen: rparen,
+      arena: self.arena))
   }
   
   /// Parse a `#_hasSymbol` condition.

@@ -351,14 +351,6 @@ public typealias ObjCSelectorPiece = ObjCSelectorPieceSyntax
 
 public typealias ObjCSelector = ObjCSelectorSyntax
 
-public typealias ObjcKeyPathExpr = ObjcKeyPathExprSyntax
-
-public typealias ObjcNamePiece = ObjcNamePieceSyntax
-
-public typealias ObjcName = ObjcNameSyntax
-
-public typealias ObjcSelectorExpr = ObjcSelectorExprSyntax
-
 public typealias ObjectLiteralExpr = ObjectLiteralExprSyntax
 
 public typealias OpaqueReturnTypeOfAttributeArguments = OpaqueReturnTypeOfAttributeArgumentsSyntax

@@ -677,34 +677,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: KeyPathOptionalComponentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcNamePieceSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcNameSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcKeyPathExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ObjcSelectorExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
   override open func visit(_ node: MacroExpansionExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

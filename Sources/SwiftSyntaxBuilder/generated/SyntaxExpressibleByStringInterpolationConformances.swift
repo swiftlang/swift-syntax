@@ -285,12 +285,6 @@ extension NamedOpaqueReturnTypeSyntax: SyntaxExpressibleByStringInterpolation {
 extension NilLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension ObjcKeyPathExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension ObjcSelectorExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension ObjectLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

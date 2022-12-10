@@ -372,22 +372,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType
-  /// Visiting `ObjcNamePieceSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcNamePieceSyntax) -> ResultType
-  /// Visiting `ObjcNameSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcNameSyntax) -> ResultType
-  /// Visiting `ObjcKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcKeyPathExprSyntax) -> ResultType
-  /// Visiting `ObjcSelectorExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcSelectorExprSyntax) -> ResultType
   /// Visiting `MacroExpansionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1665,30 +1649,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjcNamePieceSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcNamePieceSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjcNameSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcNameSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjcKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcKeyPathExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `ObjcSelectorExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjcSelectorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `MacroExpansionExprSyntax` specifically.
@@ -2983,14 +2943,6 @@ extension SyntaxTransformVisitor {
     case .keyPathSubscriptComponent(let derived):
       return visit(derived)
     case .keyPathOptionalComponent(let derived):
-      return visit(derived)
-    case .objcNamePiece(let derived):
-      return visit(derived)
-    case .objcName(let derived):
-      return visit(derived)
-    case .objcKeyPathExpr(let derived):
-      return visit(derived)
-    case .objcSelectorExpr(let derived):
       return visit(derived)
     case .macroExpansionExpr(let derived):
       return visit(derived)

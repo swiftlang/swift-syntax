@@ -921,46 +921,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `KeyPathOptionalComponentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathOptionalComponentSyntax) {}
-  /// Visiting `ObjcNamePieceSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `ObjcNamePieceSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ObjcNamePieceSyntax) {}
-  /// Visiting `ObjcNameSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `ObjcNameSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ObjcNameSyntax) {}
-  /// Visiting `ObjcKeyPathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `ObjcKeyPathExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ObjcKeyPathExprSyntax) {}
-  /// Visiting `ObjcSelectorExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `ObjcSelectorExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ObjcSelectorExprSyntax) {}
   /// Visiting `MacroExpansionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3858,50 +3818,6 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplObjcNamePieceSyntax(_ data: SyntaxData) {
-      let node = ObjcNamePieceSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplObjcNameSyntax(_ data: SyntaxData) {
-      let node = ObjcNameSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplObjcKeyPathExprSyntax(_ data: SyntaxData) {
-      let node = ObjcKeyPathExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplObjcSelectorExprSyntax(_ data: SyntaxData) {
-      let node = ObjcSelectorExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMacroExpansionExprSyntax(_ data: SyntaxData) {
       let node = MacroExpansionExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6132,14 +6048,6 @@ open class SyntaxVisitor {
       visitImplKeyPathSubscriptComponentSyntax(data)
     case .keyPathOptionalComponent:
       visitImplKeyPathOptionalComponentSyntax(data)
-    case .objcNamePiece:
-      visitImplObjcNamePieceSyntax(data)
-    case .objcName:
-      visitImplObjcNameSyntax(data)
-    case .objcKeyPathExpr:
-      visitImplObjcKeyPathExprSyntax(data)
-    case .objcSelectorExpr:
-      visitImplObjcSelectorExprSyntax(data)
     case .macroExpansionExpr:
       visitImplMacroExpansionExprSyntax(data)
     case .postfixIfConfigExpr:

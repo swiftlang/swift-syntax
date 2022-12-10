@@ -718,21 +718,6 @@ EXPR_NODES = [
          children=[
              Child('Identifier', kind='IdentifierToken'),
          ]),
-    # #fileLiteral(a, b, c)
-    Node('ObjectLiteralExpr', name_for_diagnostics='object literal', kind='Expr',
-         traits=['Parenthesized'],
-         children=[
-             Child('Identifier', kind='Token',
-                   token_choices=[
-                       'PoundColorLiteralToken',
-                       'PoundFileLiteralToken',
-                       'PoundImageLiteralToken',
-                   ]),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Arguments', kind='TupleExprElementList',
-                   collection_element_name='Argument'),
-             Child('RightParen', kind='RightParenToken'),
-         ]),
 
     Node('YieldExprList', name_for_diagnostics='yield list',
          kind='SyntaxCollection',

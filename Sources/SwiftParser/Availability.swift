@@ -32,9 +32,20 @@ extension Parser {
           entry = self.parseAvailabilitySpec()
         }
 
+        let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
         keepGoing = self.consume(if: .comma)
+        if keepGoing == nil, let orOperator = self.consume(if: .spacedBinaryOperator, where: { $0.tokenText == "||" }) {
+          unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([orOperator], arena: self.arena)
+          keepGoing = missingToken(.comma)
+        } else {
+          unexpectedBeforeKeepGoing = nil
+        }
         elements.append(RawAvailabilityArgumentSyntax(
-          entry: entry, trailingComma: keepGoing, arena: self.arena))
+          entry: entry,
+          unexpectedBeforeKeepGoing,
+          trailingComma: keepGoing,
+          arena: self.arena
+        ))
 
         // Before continuing to parse the next specification, we check that it's
         // also in the shorthand syntax and recover from it.

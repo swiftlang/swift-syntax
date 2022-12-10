@@ -1,2 +1,2 @@
-from .utils import make_swift_child, make_swift_node
+from .utils import make_swift_child, make_swift_node, make_swift_attribute
 from .BuilderInitializableTypes import BUILDER_INITIALIZABLE_TYPES

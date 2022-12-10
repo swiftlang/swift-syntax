@@ -10,32 +10,25 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SyntaxSupport
+import Utils
 
-final class SwitchTests: XCTestCase {
-  func testSwitch() {
-    let syntax = SwitchStmt(expression: Expr("count")) {
-      for num in 1..<3 {
-        SwitchCase("case \(raw: num):") {
-          Expr("print(count)")
-        }
-      }
-      SwitchCase("default:") {
-        BreakStmt("break")
+let typeAttributeFile = SourceFile {
+  ImportDecl(
+    """
+    \(raw: generateCopyrightHeader(for: "generate-swiftparser"))
+    @_spi(RawSyntax) import SwiftSyntax
+    
+    """
+  )
+  
+  ExtensionDecl("extension Parser") {
+    EnumDecl("enum TypeAttribute: SyntaxText, ContextualKeywords") {
+      for attribute in TYPE_ATTR_KINDS {
+        EnumCaseDecl("case \(raw: attribute.name) = \"\(raw: attribute.name)\"")
       }
     }
-
-    AssertBuildResult(syntax, """
-    switch count {
-    case 1:
-        print(count)
-    case 2:
-        print(count)
-    default:
-        break
-    }
-    """)
   }
 }

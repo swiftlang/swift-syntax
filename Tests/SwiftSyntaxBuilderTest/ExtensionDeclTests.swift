@@ -19,14 +19,14 @@ final class ExtensionDeclTests: XCTestCase {
     let keywords = ["associatedtype", "class"].map { keyword -> VariableDecl in
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(callee: "TokenSyntax.\(keyword)Keyword")
+        FunctionCallExpr(callee: "TokenSyntax.\(raw: keyword)Keyword")
       }
 
       return VariableDecl(
         modifiers: [DeclModifier(name: .public)],
         letOrVarKeyword: .var
       ) {
-        PatternBinding(pattern: PatternSyntax("`\(keyword)`"),
+        PatternBinding(pattern: PatternSyntax("`\(raw: keyword)`"),
                        typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
                        initializer: nil,
                        accessor: .getter(body))

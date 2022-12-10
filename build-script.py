@@ -301,7 +301,6 @@ def gyb_dir_mapping(temp_directories: bool) -> Dict[str, str]:
         SWIFTSYNTAX_DIR,
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAX_DOCUMENTATION_DIR,
-        SWIFTPARSER_DIR,
     ]
     mapping = {}
     for source_dir in source_dirs:
@@ -343,6 +342,7 @@ def generate_gyb_files(
 def run_code_generation(
     swiftideutils_destination: str,
     swiftbasicformat_destination: str,
+    swiftparser_destination: str,
     swiftsyntaxbuilder_destination: str,
     toolchain: str,
     verbose: bool
@@ -352,6 +352,7 @@ def run_code_generation(
     target_to_dest_dir = {
         "generate-swiftideutils": swiftideutils_destination,
         "generate-swiftbasicformat": swiftbasicformat_destination,
+        "generate-swiftparser": swiftparser_destination,
         "generate-swiftsyntaxbuilder": swiftsyntaxbuilder_destination,
     }
 
@@ -519,12 +520,14 @@ def verify_code_generated_files(
 
     self_swiftideutils_generated_dir = tempfile.mkdtemp()
     self_swiftbasicformat_generated_dir = tempfile.mkdtemp()
+    self_swiftparser_generated_dir = tempfile.mkdtemp()
     self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
 
     try:
         run_code_generation(
             swiftideutils_destination=self_swiftideutils_generated_dir,
             swiftbasicformat_destination=self_swiftsyntaxbuilder_generated_dir,
+            swiftparser_destination=self_swiftparser_generated_dir,
             swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
             toolchain=toolchain,
             verbose=verbose
@@ -722,11 +725,14 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
                 os.path.join(IDEUTILS_DIR, "generated")
             swiftbasicformat_destination = \
                 os.path.join(SWIFTBASICFORMAT_DIR, "generated")
+            swiftparser_destination = \
+                os.path.join(SWIFTPARSER_DIR, "generated")
             swiftsyntaxbuilder_destination = \
                 os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
             run_code_generation(
                 swiftideutils_destination=swiftideutils_destination,
                 swiftbasicformat_destination=swiftbasicformat_destination,
+                swiftparser_destination=swiftparser_destination,
                 swiftsyntaxbuilder_destination=swiftsyntaxbuilder_destination,
                 toolchain=args.toolchain,
                 verbose=args.verbose

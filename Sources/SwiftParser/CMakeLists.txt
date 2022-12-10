@@ -32,10 +32,10 @@ add_swift_host_library(SwiftParser
   TriviaParser.swift
   Types.swift
 
-  gyb_generated/DeclarationAttribute.swift
-  gyb_generated/DeclarationModifier.swift
-  gyb_generated/Parser+Entry.swift
-  gyb_generated/TypeAttribute.swift)
+  generated/DeclarationAttribute.swift
+  generated/DeclarationModifier.swift
+  generated/Parser+Entry.swift
+  generated/TypeAttribute.swift)
 
 target_link_libraries(SwiftParser PUBLIC
   SwiftSyntax

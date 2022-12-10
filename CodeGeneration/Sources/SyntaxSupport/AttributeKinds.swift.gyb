@@ -1,0 +1,152 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_helpers import make_swift_attribute
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From AttributeKinds.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+public class Attribute {
+  public let name: String
+  public let swiftName: String
+  
+  public init(name: String, swiftName: String? = nil) {
+    self.name = name
+    self.swiftName = swiftName ?? name
+  }
+}
+
+public class TypeAttribute: Attribute {
+  public init(name: String) {
+    super.init(name: name)
+  }
+}
+
+public class DeclAttribute: Attribute {
+  public let className: String
+  public let options: [String]
+  public let code: Int
+  
+  public convenience init(name: String, className: String, options: String..., code: Int, swiftName: String? = nil) {
+    self.init(name: name, className: className, options: options, code: code, swiftName: swiftName)
+  }
+  
+  public init(name: String, className: String, options: [String], code: Int, swiftName: String? = nil) {
+    self.className = className
+    self.options = options
+    self.code = code
+    super.init(name: name, swiftName: swiftName)
+  }
+}
+
+public class SimpleDeclAttribute: DeclAttribute { }
+
+public class ContextualDeclAttribute: DeclAttribute {
+  public init(name: String, className: String, options: String..., code: Int) {
+    super.init(name: name, className: className, options: options, code: code)
+  }
+}
+
+public class ContextualSimpleDeclAttribute: SimpleDeclAttribute {
+  public init(name: String, className: String, options: String..., code: Int) {
+    super.init(name: name, className: className, options: options, code: code)
+  }
+}
+
+public class DeclAttributeAlias: Attribute {
+  public let className: String
+  
+  public init(name: String, className: String, swiftName: String? = nil) {
+    self.className = className
+    super.init(name: name, swiftName: swiftName)
+    
+  }
+}
+
+public class ContextualDeclAttributeAlias: DeclAttributeAlias { }
+
+public class BuiltinDeclModifier: Attribute { }
+
+// Type attributes
+public let TYPE_ATTR_KINDS = [
+% for attr in TYPE_ATTR_KINDS:
+  TypeAttribute(name: "${attr.name}"),
+% end
+]
+
+/// Schema for `DeclAttribute`s:
+///
+/// - Attribute name.
+/// - C++ class name without the 'Attr' suffix
+/// - Options for the attribute, including:
+///    * the declarations the attribute can appear on
+///    * whether duplicates are allowed
+/// - Unique attribute identifier used for serialization. This
+///   can never be changed.
+///
+/// SimpleDeclAttribute is the same, but the class becomes
+/// SimpleDeclAttr<DAK_##NAME> on the C++ side.
+///
+/// Please help ease code review/audits:
+/// - Please place the "OnXYZ" flags together on the next line.
+/// - Please place the non-OnXYZ flags together on the next to last line.
+/// - Please place the unique code number on the last line.
+/// - Please sort attributes by serialization number.
+/// - Please create a "NOTE" comment if a unique number is skipped.
+///
+/// If you're adding a new kind of "attribute" that is spelled without a leading
+/// '@' symbol, add an entry to the `DECL_MODIFIER_KINDS` array instead.
+///
+/// If you're adding a new underscored attribute here, please document it in
+/// docs/ReferenceGuides/UnderscoredAttributes.md.
+public let DECL_ATTR_KINDS: [Attribute] = [
+% for attr in DECL_ATTR_KINDS:
+  ${make_swift_attribute(attr)},
+% end
+]
+
+/// Schema for declaration modifiers:
+///
+/// - Modifier name.
+/// - C++ class name without the 'Attr' suffix
+/// - Options for the attribute, including:
+///    * the declarations the attribute can appear on
+///    * whether duplicates are allowed
+/// - Unique attribute identifier used for serialization. This
+///   can never be changed.
+///
+/// SimpleDeclAttribute is the same, but the class becomes
+/// SimpleDeclAttr<DAK_##NAME> on the C++ side.
+///
+/// Please help ease code review/audits:
+/// - Please place the "OnXYZ" flags together on the next line.
+/// - Please place the non-OnXYZ flags together on the next to last line.
+/// - Please place the unique code number on the last line.
+/// - Please sort attributes by serialization number.
+/// - Please create a "NOTE" comment if a unique number is skipped.
+///
+/// If you're adding a new kind of attribute that is spelled with a leading
+/// '@' symbol, add an entry to the `DECL_ATTR_KINDS` array instead.
+public let DECL_MODIFIER_KINDS: [Attribute] = [
+% for attr in DECL_MODIFIER_KINDS:
+  ${make_swift_attribute(attr)},
+% end
+]
+
+public let DEPRECATED_MODIFIER_KINDS: [Attribute] = [
+% for attr in DEPRECATED_MODIFIER_KINDS:
+  ${make_swift_attribute(attr)},
+% end
+]

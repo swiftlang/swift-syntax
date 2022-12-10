@@ -233,7 +233,6 @@ public enum SyntaxEnum {
   case availabilityCondition(AvailabilityConditionSyntax)
   case matchingPatternCondition(MatchingPatternConditionSyntax)
   case optionalBindingCondition(OptionalBindingConditionSyntax)
-  case unavailabilityCondition(UnavailabilityConditionSyntax)
   case hasSymbolCondition(HasSymbolConditionSyntax)
   case conditionElementList(ConditionElementListSyntax)
   case declarationStmt(DeclarationStmtSyntax)
@@ -739,8 +738,6 @@ public extension Syntax {
       return .matchingPatternCondition(MatchingPatternConditionSyntax(self)!)
     case .optionalBindingCondition:
       return .optionalBindingCondition(OptionalBindingConditionSyntax(self)!)
-    case .unavailabilityCondition:
-      return .unavailabilityCondition(UnavailabilityConditionSyntax(self)!)
     case .hasSymbolCondition:
       return .hasSymbolCondition(HasSymbolConditionSyntax(self)!)
     case .conditionElementList:

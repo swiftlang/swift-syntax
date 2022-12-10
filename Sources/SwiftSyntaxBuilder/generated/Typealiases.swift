@@ -533,8 +533,6 @@ public typealias Type = TypeSyntax
 
 public typealias TypealiasDecl = TypealiasDeclSyntax
 
-public typealias UnavailabilityCondition = UnavailabilityConditionSyntax
-
 public typealias UnexpectedNodes = UnexpectedNodesSyntax
 
 public typealias UnresolvedAsExpr = UnresolvedAsExprSyntax

@@ -233,7 +233,6 @@ public enum SyntaxKind {
   case availabilityCondition
   case matchingPatternCondition
   case optionalBindingCondition
-  case unavailabilityCondition
   case hasSymbolCondition
   case conditionElementList
   case declarationStmt

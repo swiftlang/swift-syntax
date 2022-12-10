@@ -426,19 +426,19 @@ extension AvailabilityArgument {
 extension AvailabilityCondition {
   /// Creates a `AvailabilityCondition` using the provided parameters.
   /// - Parameters:
-  ///   - unexpectedBeforePoundAvailableKeyword: 
-  ///   - poundAvailableKeyword: 
-  ///   - unexpectedBetweenPoundAvailableKeywordAndLeftParen: 
+  ///   - unexpectedBeforeAvailabilityKeyword: 
+  ///   - availabilityKeyword: 
+  ///   - unexpectedBetweenAvailabilityKeywordAndLeftParen: 
   ///   - leftParen: 
   ///   - unexpectedBetweenLeftParenAndAvailabilitySpec: 
   ///   - availabilitySpec: 
   ///   - unexpectedBetweenAvailabilitySpecAndRightParen: 
   ///   - rightParen: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundAvailableKeyword: UnexpectedNodes? = nil, poundAvailableKeyword: Token = Token.`poundAvailable`, unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes? = nil, availabilitySpec: AvailabilitySpecList, unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
-    assert(poundAvailableKeyword.text == "#available")
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAvailabilityKeyword: UnexpectedNodes? = nil, availabilityKeyword: Token, unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes? = nil, availabilitySpec: AvailabilitySpecList, unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
+    assert(availabilityKeyword.text == "#available" || availabilityKeyword.text == "#unavailable")
     assert(leftParen.text == "(")
     assert(rightParen.text == ")")
-    self = AvailabilityConditionSyntax(unexpectedBeforePoundAvailableKeyword, poundAvailableKeyword: poundAvailableKeyword, unexpectedBetweenPoundAvailableKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec, availabilitySpec: availabilitySpec, unexpectedBetweenAvailabilitySpecAndRightParen, rightParen: rightParen)
+    self = AvailabilityConditionSyntax(unexpectedBeforeAvailabilityKeyword, availabilityKeyword: availabilityKeyword, unexpectedBetweenAvailabilityKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec, availabilitySpec: availabilitySpec, unexpectedBetweenAvailabilitySpecAndRightParen, rightParen: rightParen)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
     self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
   }
@@ -4973,27 +4973,6 @@ extension TypealiasDecl {
   @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: UnexpectedNodes? = nil, attributes: AttributeList? = nil, unexpectedBetweenAttributesAndModifiers: UnexpectedNodes? = nil, modifiers: ModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodes? = nil, typealiasKeyword: Token = Token.`typealias`, unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes? = nil, genericParameterClause: GenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodes? = nil, initializer: TypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodes? = nil, genericWhereClause: GenericWhereClause? = nil) {
     self.init (unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndTypealiasKeyword, typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-  }
-}
-
-extension UnavailabilityCondition {
-  /// Creates a `UnavailabilityCondition` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePoundUnavailableKeyword: 
-  ///   - poundUnavailableKeyword: 
-  ///   - unexpectedBetweenPoundUnavailableKeywordAndLeftParen: 
-  ///   - leftParen: 
-  ///   - unexpectedBetweenLeftParenAndAvailabilitySpec: 
-  ///   - availabilitySpec: 
-  ///   - unexpectedBetweenAvailabilitySpecAndRightParen: 
-  ///   - rightParen: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundUnavailableKeyword: UnexpectedNodes? = nil, poundUnavailableKeyword: Token = Token.`poundUnavailable`, unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes? = nil, availabilitySpec: AvailabilitySpecList, unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
-    assert(poundUnavailableKeyword.text == "#unavailable")
-    assert(leftParen.text == "(")
-    assert(rightParen.text == ")")
-    self = UnavailabilityConditionSyntax(unexpectedBeforePoundUnavailableKeyword, poundUnavailableKeyword: poundUnavailableKeyword, unexpectedBetweenPoundUnavailableKeywordAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec, availabilitySpec: availabilitySpec, unexpectedBetweenAvailabilitySpecAndRightParen, rightParen: rightParen)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
   }
 }
 

@@ -18791,7 +18791,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Condition: SyntaxChildChoices {
     case `expression`(ExprSyntax)
     case `availability`(AvailabilityConditionSyntax)
-    case `unavailability`(UnavailabilityConditionSyntax)
     case `matchingPattern`(MatchingPatternConditionSyntax)
     case `optionalBinding`(OptionalBindingConditionSyntax)
     case `hasSymbol`(HasSymbolConditionSyntax)
@@ -18799,7 +18798,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
       switch self {
       case .expression(let node): return node._syntaxNode
       case .availability(let node): return node._syntaxNode
-      case .unavailability(let node): return node._syntaxNode
       case .matchingPattern(let node): return node._syntaxNode
       case .optionalBinding(let node): return node._syntaxNode
       case .hasSymbol(let node): return node._syntaxNode
@@ -18811,9 +18809,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: AvailabilityConditionSyntax) {
       self = .availability(node)
-    }
-    public init(_ node: UnavailabilityConditionSyntax) {
-      self = .unavailability(node)
     }
     public init(_ node: MatchingPatternConditionSyntax) {
       self = .matchingPattern(node)
@@ -18831,10 +18826,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
       }
       if let node = node.as(AvailabilityConditionSyntax.self) {
         self = .availability(node)
-        return
-      }
-      if let node = node.as(UnavailabilityConditionSyntax.self) {
-        self = .unavailability(node)
         return
       }
       if let node = node.as(MatchingPatternConditionSyntax.self) {
@@ -18856,7 +18847,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
       return .choices([
         .node(ExprSyntax.self),
         .node(AvailabilityConditionSyntax.self),
-        .node(UnavailabilityConditionSyntax.self),
         .node(MatchingPatternConditionSyntax.self),
         .node(OptionalBindingConditionSyntax.self),
         .node(HasSymbolConditionSyntax.self),
@@ -19064,9 +19054,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ unexpectedBeforePoundAvailableKeyword: UnexpectedNodesSyntax? = nil,
-    poundAvailableKeyword: TokenSyntax,
-    _ unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeAvailabilityKeyword: UnexpectedNodesSyntax? = nil,
+    availabilityKeyword: TokenSyntax,
+    _ unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
     _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
     availabilitySpec: AvailabilitySpecListSyntax,
@@ -19075,9 +19065,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
-      unexpectedBeforePoundAvailableKeyword?.raw,
-      poundAvailableKeyword.raw,
-      unexpectedBetweenPoundAvailableKeywordAndLeftParen?.raw,
+      unexpectedBeforeAvailabilityKeyword?.raw,
+      availabilityKeyword.raw,
+      unexpectedBetweenAvailabilityKeywordAndLeftParen?.raw,
       leftParen.raw,
       unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
       availabilitySpec.raw,
@@ -19093,62 +19083,62 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var unexpectedBeforePoundAvailableKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeAvailabilityKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforePoundAvailableKeyword(value)
+      self = withUnexpectedBeforeAvailabilityKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBeforePoundAvailableKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforePoundAvailableKeyword` to replace the node's
-  ///                   current `unexpectedBeforePoundAvailableKeyword`, if present.
-  public func withUnexpectedBeforePoundAvailableKeyword(_ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAvailabilityKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeAvailabilityKeyword` to replace the node's
+  ///                   current `unexpectedBeforeAvailabilityKeyword`, if present.
+  public func withUnexpectedBeforeAvailabilityKeyword(_ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return AvailabilityConditionSyntax(newData)
   }
 
-  public var poundAvailableKeyword: TokenSyntax {
+  public var availabilityKeyword: TokenSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withPoundAvailableKeyword(value)
+      self = withAvailabilityKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `poundAvailableKeyword` replaced.
-  /// - param newChild: The new `poundAvailableKeyword` to replace the node's
-  ///                   current `poundAvailableKeyword`, if present.
-  public func withPoundAvailableKeyword(_ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `availabilityKeyword` replaced.
+  /// - param newChild: The new `availabilityKeyword` to replace the node's
+  ///                   current `availabilityKeyword`, if present.
+  public func withAvailabilityKeyword(_ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundAvailableKeyword, arena: arena)
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AvailabilityConditionSyntax(newData)
   }
 
-  public var unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenPoundAvailableKeywordAndLeftParen(value)
+      self = withUnexpectedBetweenAvailabilityKeywordAndLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenPoundAvailableKeywordAndLeftParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenPoundAvailableKeywordAndLeftParen` to replace the node's
-  ///                   current `unexpectedBetweenPoundAvailableKeywordAndLeftParen`, if present.
-  public func withUnexpectedBetweenPoundAvailableKeywordAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAvailabilityKeywordAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenAvailabilityKeywordAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenAvailabilityKeywordAndLeftParen`, if present.
+  public func withUnexpectedBetweenAvailabilityKeywordAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 2, with: raw, arena: arena)
@@ -19299,9 +19289,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .layout([
-      \Self.unexpectedBeforePoundAvailableKeyword,
-      \Self.poundAvailableKeyword,
-      \Self.unexpectedBetweenPoundAvailableKeywordAndLeftParen,
+      \Self.unexpectedBeforeAvailabilityKeyword,
+      \Self.availabilityKeyword,
+      \Self.unexpectedBetweenAvailabilityKeywordAndLeftParen,
       \Self.leftParen,
       \Self.unexpectedBetweenLeftParenAndAvailabilitySpec,
       \Self.availabilitySpec,
@@ -19340,9 +19330,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension AvailabilityConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforePoundAvailableKeyword": unexpectedBeforePoundAvailableKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "poundAvailableKeyword": Syntax(poundAvailableKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenPoundAvailableKeywordAndLeftParen": unexpectedBetweenPoundAvailableKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAvailabilityKeyword": unexpectedBeforeAvailabilityKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "availabilityKeyword": Syntax(availabilityKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenAvailabilityKeywordAndLeftParen": unexpectedBetweenAvailabilityKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenLeftParenAndAvailabilitySpec": unexpectedBetweenLeftParenAndAvailabilitySpec.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "availabilitySpec": Syntax(availabilitySpec).asProtocol(SyntaxProtocol.self),
@@ -19930,314 +19920,6 @@ extension OptionalBindingConditionSyntax: CustomReflectable {
       "unexpectedBetweenTypeAnnotationAndInitializer": unexpectedBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedAfterInitializer": unexpectedAfterInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - UnavailabilityConditionSyntax
-
-public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .unavailabilityCondition else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `UnavailabilityConditionSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unavailabilityCondition)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    _ unexpectedBeforePoundUnavailableKeyword: UnexpectedNodesSyntax? = nil,
-    poundUnavailableKeyword: TokenSyntax,
-    _ unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax,
-    _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
-    availabilitySpec: AvailabilitySpecListSyntax,
-    _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax,
-    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil
-  ) {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforePoundUnavailableKeyword?.raw,
-      poundUnavailableKeyword.raw,
-      unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.raw,
-      leftParen.raw,
-      unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
-      availabilitySpec.raw,
-      unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
-      rightParen.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unavailabilityCondition,
-        from: layout, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforePoundUnavailableKeyword: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBeforePoundUnavailableKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforePoundUnavailableKeyword` replaced.
-  /// - param newChild: The new `unexpectedBeforePoundUnavailableKeyword` to replace the node's
-  ///                   current `unexpectedBeforePoundUnavailableKeyword`, if present.
-  public func withUnexpectedBeforePoundUnavailableKeyword(_ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var poundUnavailableKeyword: TokenSyntax {
-    get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withPoundUnavailableKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `poundUnavailableKeyword` replaced.
-  /// - param newChild: The new `poundUnavailableKeyword` to replace the node's
-  ///                   current `poundUnavailableKeyword`, if present.
-  public func withPoundUnavailableKeyword(_ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundUnavailableKeyword, arena: arena)
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenPoundUnavailableKeywordAndLeftParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenPoundUnavailableKeywordAndLeftParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenPoundUnavailableKeywordAndLeftParen` to replace the node's
-  ///                   current `unexpectedBetweenPoundUnavailableKeywordAndLeftParen`, if present.
-  public func withUnexpectedBetweenPoundUnavailableKeywordAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var leftParen: TokenSyntax {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLeftParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `leftParen` replaced.
-  /// - param newChild: The new `leftParen` to replace the node's
-  ///                   current `leftParen`, if present.
-  public func withLeftParen(_ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena)
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenLeftParenAndAvailabilitySpec(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndAvailabilitySpec` replaced.
-  /// - param newChild: The new `unexpectedBetweenLeftParenAndAvailabilitySpec` to replace the node's
-  ///                   current `unexpectedBetweenLeftParenAndAvailabilitySpec`, if present.
-  public func withUnexpectedBetweenLeftParenAndAvailabilitySpec(_ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var availabilitySpec: AvailabilitySpecListSyntax {
-    get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      return AvailabilitySpecListSyntax(childData!)
-    }
-    set(value) {
-      self = withAvailabilitySpec(value)
-    }
-  }
-
-  /// Adds the provided `AvailabilityArgument` to the node's `availabilitySpec`
-  /// collection.
-  /// - param element: The new `AvailabilityArgument` to add to the node's
-  ///                  `availabilitySpec` collection.
-  /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
-  ///            appended to its `availabilitySpec` collection.
-  public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> UnavailabilityConditionSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[5] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
-        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 5, with: collection, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  /// Returns a copy of the receiver with its `availabilitySpec` replaced.
-  /// - param newChild: The new `availabilitySpec` to replace the node's
-  ///                   current `availabilitySpec`, if present.
-  public func withAvailabilitySpec(_ newChild: AvailabilitySpecListSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: arena)
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenAvailabilitySpecAndRightParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenAvailabilitySpecAndRightParen` replaced.
-  /// - param newChild: The new `unexpectedBetweenAvailabilitySpecAndRightParen` to replace the node's
-  ///                   current `unexpectedBetweenAvailabilitySpecAndRightParen`, if present.
-  public func withUnexpectedBetweenAvailabilitySpecAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var rightParen: TokenSyntax {
-    get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withRightParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `rightParen` replaced.
-  /// - param newChild: The new `rightParen` to replace the node's
-  ///                   current `rightParen`, if present.
-  public func withRightParen(_ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
-    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 8, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterRightParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
-  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
-  ///                   current `unexpectedAfterRightParen`, if present.
-  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
-    return UnavailabilityConditionSyntax(newData)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforePoundUnavailableKeyword,
-      \Self.poundUnavailableKeyword,
-      \Self.unexpectedBetweenPoundUnavailableKeywordAndLeftParen,
-      \Self.leftParen,
-      \Self.unexpectedBetweenLeftParenAndAvailabilitySpec,
-      \Self.availabilitySpec,
-      \Self.unexpectedBetweenAvailabilitySpecAndRightParen,
-      \Self.rightParen,
-      \Self.unexpectedAfterRightParen,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return nil
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
-    case 7:
-      return nil
-    case 8:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension UnavailabilityConditionSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforePoundUnavailableKeyword": unexpectedBeforePoundUnavailableKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "poundUnavailableKeyword": Syntax(poundUnavailableKeyword).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenPoundUnavailableKeywordAndLeftParen": unexpectedBetweenPoundUnavailableKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenLeftParenAndAvailabilitySpec": unexpectedBetweenLeftParenAndAvailabilitySpec.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "availabilitySpec": Syntax(availabilitySpec).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenAvailabilitySpecAndRightParen": unexpectedBetweenAvailabilitySpecAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

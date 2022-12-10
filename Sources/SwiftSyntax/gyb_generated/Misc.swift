@@ -233,7 +233,6 @@ extension Syntax {
       .node(AvailabilityConditionSyntax.self),
       .node(MatchingPatternConditionSyntax.self),
       .node(OptionalBindingConditionSyntax.self),
-      .node(UnavailabilityConditionSyntax.self),
       .node(HasSymbolConditionSyntax.self),
       .node(ConditionElementListSyntax.self),
       .node(DeclarationStmtSyntax.self),
@@ -522,7 +521,6 @@ extension SyntaxKind {
     case .availabilityCondition: return AvailabilityConditionSyntax.self
     case .matchingPatternCondition: return MatchingPatternConditionSyntax.self
     case .optionalBindingCondition: return OptionalBindingConditionSyntax.self
-    case .unavailabilityCondition: return UnavailabilityConditionSyntax.self
     case .hasSymbolCondition: return HasSymbolConditionSyntax.self
     case .conditionElementList: return ConditionElementListSyntax.self
     case .declarationStmt: return DeclarationStmtSyntax.self
@@ -1022,13 +1020,11 @@ extension SyntaxKind {
     case .conditionElement:
       return nil
     case .availabilityCondition:
-      return "'#availabile' condition"
+      return "availability condition"
     case .matchingPatternCondition:
       return "pattern matching"
     case .optionalBindingCondition:
       return "optional binding"
-    case .unavailabilityCondition:
-      return "'#unavailable' condition"
     case .hasSymbolCondition:
       return "'#_hasSymbol' condition"
     case .conditionElementList:

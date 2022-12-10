@@ -72,13 +72,13 @@ AVAILABILITY_NODES = [
                    restricted or 'swift' if the availability should be
                    restricted based on a Swift version.
                    '''),
-             Child('Version', kind='VersionTuple', name_for_diagnostics='version', is_optional=True),
+             Child('Version', kind='VersionTuple', name_for_diagnostics='version'),
          ]),
 
     # version-tuple -> integer-literal
     #                | float-literal
     #                | float-literal '.' integer-literal
-    Node('VersionTuple', name_for_diagnostics='version tuple', kind='Syntax',
+    Node('VersionTuple', name_for_diagnostics='version number', kind='Syntax',
          description='''
          A version number of the form major.minor.patch in which the minor
          and patch part may be omitted.

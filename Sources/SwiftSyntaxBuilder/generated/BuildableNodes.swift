@@ -507,7 +507,7 @@ extension AvailabilityVersionRestriction {
   ///   - platform: The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.
   ///   - unexpectedBetweenPlatformAndVersion: 
   ///   - version: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePlatform: UnexpectedNodes? = nil, platform: Token, unexpectedBetweenPlatformAndVersion: UnexpectedNodes? = nil, version: VersionTuple? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePlatform: UnexpectedNodes? = nil, platform: Token, unexpectedBetweenPlatformAndVersion: UnexpectedNodes? = nil, version: VersionTuple) {
     self = AvailabilityVersionRestrictionSyntax(unexpectedBeforePlatform, platform: platform, unexpectedBetweenPlatformAndVersion, version: version)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
     self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
@@ -516,7 +516,7 @@ extension AvailabilityVersionRestriction {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforePlatform: UnexpectedNodes? = nil, platform: String, unexpectedBetweenPlatformAndVersion: UnexpectedNodes? = nil, version: VersionTuple? = nil) {
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforePlatform: UnexpectedNodes? = nil, platform: String, unexpectedBetweenPlatformAndVersion: UnexpectedNodes? = nil, version: VersionTuple) {
     self.init (unexpectedBeforePlatform, platform: Token.`identifier`(platform), unexpectedBetweenPlatformAndVersion, version: version)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
   }

@@ -26413,14 +26413,14 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
     _ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil,
     platform: TokenSyntax,
     _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil,
-    version: VersionTupleSyntax?,
+    version: VersionTupleSyntax,
     _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePlatform?.raw,
       platform.raw,
       unexpectedBetweenPlatformAndVersion?.raw,
-      version?.raw,
+      version.raw,
       unexpectedAfterVersion?.raw,
     ]
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
@@ -26498,10 +26498,9 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
     return AvailabilityVersionRestrictionSyntax(newData)
   }
 
-  public var version: VersionTupleSyntax? {
+  public var version: VersionTupleSyntax {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
       return VersionTupleSyntax(childData!)
     }
     set(value) {
@@ -26514,7 +26513,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   ///                   current `version`, if present.
   public func withVersion(_ newChild: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.versionTuple, arena: arena)
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return AvailabilityVersionRestrictionSyntax(newData)
   }
@@ -26574,7 +26573,7 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
       "unexpectedBeforePlatform": unexpectedBeforePlatform.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "platform": Syntax(platform).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenPlatformAndVersion": unexpectedBetweenPlatformAndVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "version": version.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "version": Syntax(version).asProtocol(SyntaxProtocol.self),
       "unexpectedAfterVersion": unexpectedAfterVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }

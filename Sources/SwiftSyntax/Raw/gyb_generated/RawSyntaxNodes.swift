@@ -19317,7 +19317,7 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBeforePlatform: RawUnexpectedNodesSyntax? = nil,
     platform: RawTokenSyntax,
     _ unexpectedBetweenPlatformAndVersion: RawUnexpectedNodesSyntax? = nil,
-    version: RawVersionTupleSyntax?,
+    version: RawVersionTupleSyntax,
     _ unexpectedAfterVersion: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -19327,7 +19327,7 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
       layout[0] = unexpectedBeforePlatform?.raw
       layout[1] = platform.raw
       layout[2] = unexpectedBetweenPlatformAndVersion?.raw
-      layout[3] = version?.raw
+      layout[3] = version.raw
       layout[4] = unexpectedAfterVersion?.raw
     }
     self.init(raw: raw)
@@ -19342,8 +19342,8 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
   public var unexpectedBetweenPlatformAndVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var version: RawVersionTupleSyntax? {
-    layoutView.children[3].map(RawVersionTupleSyntax.init(raw:))
+  public var version: RawVersionTupleSyntax {
+    layoutView.children[3].map(RawVersionTupleSyntax.init(raw:))!
   }
   public var unexpectedAfterVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))

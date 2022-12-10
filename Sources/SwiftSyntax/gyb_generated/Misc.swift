@@ -1150,7 +1150,7 @@ extension SyntaxKind {
     case .availabilityVersionRestriction:
       return "availability argument"
     case .versionTuple:
-      return "version tuple"
+      return "version number"
     }
   }
 }

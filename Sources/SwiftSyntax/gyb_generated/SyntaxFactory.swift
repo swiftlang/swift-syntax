@@ -9058,12 +9058,12 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on AvailabilityVersionRestrictionSyntax")
-  public static func makeAvailabilityVersionRestriction(_ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil, platform: TokenSyntax, _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil, version: VersionTupleSyntax?, _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil) -> AvailabilityVersionRestrictionSyntax {
+  public static func makeAvailabilityVersionRestriction(_ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil, platform: TokenSyntax, _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil, version: VersionTupleSyntax, _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil) -> AvailabilityVersionRestrictionSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforePlatform?.raw,
       platform.raw,
       unexpectedBetweenPlatformAndVersion?.raw,
-      version?.raw,
+      version.raw,
       unexpectedAfterVersion?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
@@ -9082,7 +9082,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
-        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.versionTuple, arena: arena),
         nil,
       ], arena: arena))
       return AvailabilityVersionRestrictionSyntax(data)

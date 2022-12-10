@@ -93,12 +93,11 @@ public let AVAILABILITY_NODES: [Node] = [
                ],
                classification: "Keyword"),
          Child(name: "Version",
-               kind: "VersionTuple",
-               isOptional: true)
+               kind: "VersionTuple")
        ]),
 
   Node(name: "VersionTuple",
-       nameForDiagnostics: "version tuple",
+       nameForDiagnostics: "version number",
        description: "A version number of the form major.minor.patch in which the minorand patch part may be omitted.",
        kind: "Syntax",
        children: [

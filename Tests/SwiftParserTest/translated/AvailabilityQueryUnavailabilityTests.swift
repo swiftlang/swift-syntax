@@ -127,7 +127,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected version number
+        DiagnosticSpec(message: "expected version number in availability argument"),
         DiagnosticSpec(message: "expected ')' to end availability condition", notes: [
           NoteSpec(message: "to match this opening '('")
         ]),
@@ -138,11 +138,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability8() {
     AssertParse(
       """
-      if #unavailable(OSX) { 
+      if #unavailable(OSX1️⃣) {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected version number
+        DiagnosticSpec(message: "expected version number in availability argument")
       ]
     )
   }
@@ -237,9 +237,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
   func testAvailabilityQueryUnavailability18() {
     AssertParse(
       """
-      if #unavailable(iOSApplicationExtension, unavailable) { // expected-error 2{{expected version number}}
+      if #unavailable(iOSApplicationExtension1️⃣, unavailable) {
       }
-      """
+      """, diagnostics: [
+        DiagnosticSpec(message: "expected version number in availability argument")
+      ]
     )
   }
 
@@ -312,7 +314,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected version number
+        DiagnosticSpec(message: "expected version number in availability argument"),
         DiagnosticSpec(message: "expected ')' to end availability condition", notes: [
           NoteSpec(message: "to match this opening '('")
         ]),
@@ -361,7 +363,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: version comparison not needed, Fix-It replacements: 21 - 24 = ''
+        DiagnosticSpec(message: "expected version number in availability argument"),
         DiagnosticSpec(message: "unexpected code '>= 10.51' in availability condition"),
       ]
     )

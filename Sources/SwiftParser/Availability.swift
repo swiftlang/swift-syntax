@@ -224,19 +224,16 @@ extension Parser {
   ///
   ///     availability-argument → macro-name platform-version
   mutating func parseAvailabilityMacro() -> RawAvailabilityVersionRestrictionSyntax {
-    let platform = self.consumeAnyToken()
+    let (unexpectedBeforePlatform, platform) = self.expect(.identifier)
 
-    let version: RawVersionTupleSyntax?
-    if self.at(.integerLiteral) {
-      version = self.parseVersionTuple()
-    } else if self.at(.floatingLiteral) {
-      version = self.parseVersionTuple()
-    } else {
-      version = nil
-    }
-
+    let version = self.parseVersionTuple()
+    
     return RawAvailabilityVersionRestrictionSyntax(
-      platform: platform, version: version, arena: self.arena)
+      unexpectedBeforePlatform,
+      platform: platform,
+      version: version,
+      arena: self.arena
+    )
   }
 
   /// Parse a dot-separated list of version numbers.

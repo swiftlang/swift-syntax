@@ -702,6 +702,8 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case pound
   case poundKeyPathKeyword
   case poundSelectorKeyword
+  case poundAvailableKeyword // For recovery
+  case poundUnavailableKeyword // For recovery
   case prefixPeriod
   case regexLiteral
   case selfKeyword
@@ -731,6 +733,8 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: self = .nilKeyword
     case .period: self = .period
     case .pound: self = .pound
+    case .poundAvailableKeyword: self = .poundAvailableKeyword
+    case .poundUnavailableKeyword: self = .poundUnavailableKeyword
     case .poundKeyPathKeyword: self = .poundKeyPathKeyword
     case .poundSelectorKeyword: self = .poundSelectorKeyword
     case .prefixPeriod: self = .prefixPeriod
@@ -765,6 +769,8 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .nilKeyword: return .nilKeyword
     case .period: return .period
     case .pound: return .pound
+    case .poundAvailableKeyword: return .poundAvailableKeyword
+    case .poundUnavailableKeyword: return .poundUnavailableKeyword
     case .poundKeyPathKeyword: return .poundKeyPathKeyword
     case .poundSelectorKeyword: return .poundSelectorKeyword
     case .prefixPeriod: return .prefixPeriod

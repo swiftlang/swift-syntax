@@ -440,10 +440,43 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.identifier.presence == .missing,
-       let unexpected = node.unexpectedBeforeIdentifier,
-       unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound {
-      addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.identifier.id])
+    if node.identifier.presence == .missing, let unexpected = node.unexpectedBeforeIdentifier {
+      if unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound {
+        addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.identifier.id])
+      } else if let availability = unexpected.first?.as(AvailabilityConditionSyntax.self) {
+        if let prefixOperatorExpr = node.parent?.as(PrefixOperatorExprSyntax.self),
+           let operatorToken = prefixOperatorExpr.operatorToken,
+            operatorToken.text == "!",
+           let conditionElement = prefixOperatorExpr.parent?.as(ConditionElementSyntax.self) {
+          // Diagnose !#available(...) and !#unavailable
+          let negatedAvailabilityKeyword: TokenSyntax
+          switch availability.availabilityKeyword.tokenKind {
+          case .poundAvailableKeyword:
+            negatedAvailabilityKeyword = availability.availabilityKeyword.withKind(.poundUnavailableKeyword)
+          case .poundUnavailableKeyword:
+            negatedAvailabilityKeyword = availability.availabilityKeyword.withKind(.poundAvailableKeyword)
+          default:
+            assertionFailure("The availability token of an AvailabilityConditionSyntax should always be #available or #unavailable")
+            negatedAvailabilityKeyword = availability.availabilityKeyword
+          }
+          let negatedCoditionElement = ConditionElementSyntax(
+            condition: .availability(availability.withAvailabilityKeyword(negatedAvailabilityKeyword)),
+            trailingComma: conditionElement.trailingComma
+          )
+          addDiagnostic(
+            unexpected,
+            NegatedAvailabilityCondition(avaialabilityCondition: availability, negatedAvailabilityKeyword: negatedAvailabilityKeyword),
+            fixIts: [
+              FixIt(message: ReplaceTokensFixIt(replaceTokens: [operatorToken, availability.availabilityKeyword], replacement: negatedAvailabilityKeyword), changes: [
+                .replace(oldNode: Syntax(conditionElement), newNode: Syntax(negatedCoditionElement))
+              ])
+            ],
+            handledNodes: [unexpected.id, node.identifier.id]
+          )
+        } else {
+          addDiagnostic(unexpected, AvailabilityConditionInExpression(avaialabilityCondition: availability), handledNodes: [unexpected.id, node.identifier.id])
+        }
+      }
     }
     return .visitChildren
   }

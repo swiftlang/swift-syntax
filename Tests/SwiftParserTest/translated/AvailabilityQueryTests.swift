@@ -31,9 +31,7 @@ final class AvailabilityQueryTests: XCTestCase {
       if (1️⃣#available(OSX 10.51, *)) {}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: #available may only be used as condition of an 'if', 'guard'
-        DiagnosticSpec(message: "expected value in tuple"),
-        DiagnosticSpec(message: "unexpected code '#available(OSX 10.51, *)' in tuple"),
+        DiagnosticSpec(message: "availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'"),
       ]
     )
   }
@@ -44,9 +42,7 @@ final class AvailabilityQueryTests: XCTestCase {
       let x = 1️⃣#available(OSX 10.51, *)
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: #available may only be used as condition of
-        DiagnosticSpec(message: "expected expression in variable"),
-        DiagnosticSpec(message: "extraneous code '#available(OSX 10.51, *)' at top level"),
+        DiagnosticSpec(message: "availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'"),
       ]
     )
   }
@@ -57,28 +53,34 @@ final class AvailabilityQueryTests: XCTestCase {
       (1️⃣#available(OSX 10.51, *) ? 1 : 0)
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: #available may only be used as condition of an
-        DiagnosticSpec(message: "expected value in tuple"),
-        DiagnosticSpec(message: "unexpected code '#available(OSX 10.51, *) ? 1 : 0' in tuple"),
+        DiagnosticSpec(message: "availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'"),
       ]
     )
   }
 
-  func testAvailabilityQuery5() {
+  func testAvailabilityQuery5a() {
     AssertParse(
       """
       if !1️⃣#available(OSX 10.52, *) { 
       }
-      if let _ = Optional(5), !2️⃣#available(OSX 10.52, *) { 
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "availability condition cannot be used in an expression; did you mean '#unavailable'?", fixIts: ["replace '!#available' by '#unavailable'"]),
+      ], fixedSource: """
+      if #unavailable(OSX 10.52, *) {
+      }
+      """
+    )
+  }
+
+  func testAvailabilityQuery5b() {
+    AssertParse(
+      """
+      if let _ = Optional(5), !1️⃣#available(OSX 10.52, *) {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 4 - 15 = '#unavailable'
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '#available(OSX 10.52, *)' in 'if' statement"),
-        // TODO: Old parser expected error on line 3: #available cannot be used as an expression, did you mean to use '#unavailable'?, Fix-It replacements: 25 - 36 = '#unavailable'
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in prefix operator expression"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '#available(OSX 10.52, *)' in 'if' statement"),
+        DiagnosticSpec(message: "availability condition cannot be used in an expression; did you mean '#unavailable'?", fixIts: ["replace '!#available' by '#unavailable'"]),
       ]
     )
   }

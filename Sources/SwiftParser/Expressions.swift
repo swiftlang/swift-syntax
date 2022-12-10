@@ -1080,7 +1080,14 @@ extension Parser {
       return RawExprSyntax(
         self.parseMacroExpansionExpr(pattern: pattern, flavor: flavor)
       )
-      
+    case (.poundAvailableKeyword, _)?, (.poundUnavailableKeyword, _)?:
+      let poundAvailable = self.parsePoundAvailableConditionElement()
+      return RawExprSyntax(RawIdentifierExprSyntax(
+        RawUnexpectedNodesSyntax([poundAvailable], arena: self.arena),
+        identifier: missingToken(.identifier),
+        declNameArguments: nil,
+        arena: self.arena
+      ))
     case (.poundSelectorKeyword, _)?:
       return RawExprSyntax(self.parseObjectiveCSelectorLiteral())
     case (.poundKeyPathKeyword, _)?:

@@ -11,6 +11,7 @@ let package = Package(
     .executable(name: "generate-swiftbasicformat", targets: ["generate-swiftbasicformat"]),
     .executable(name: "generate-swiftideutils", targets: ["generate-swiftideutils"]),
     .executable(name: "generate-swiftparser", targets: ["generate-swiftparser"]),
+    .executable(name: "generate-swiftsyntax", targets: ["generate-swiftsyntax"]),
     .executable(name: "generate-swiftsyntaxbuilder", targets: ["generate-swiftsyntaxbuilder"]),
   ],
   dependencies: [
@@ -49,6 +50,16 @@ let package = Package(
       ]
     ),
     .executableTarget(
+      name: "generate-swiftsyntax",
+      dependencies: [
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        "SyntaxSupport",
+        "Utils"
+      ]
+    ),
+      .executableTarget(
       name: "generate-swiftsyntaxbuilder",
       dependencies: [
         .product(name: "SwiftSyntax", package: "swift-syntax"),
@@ -62,6 +73,7 @@ let package = Package(
       name: "SyntaxSupport",
       exclude: [
         "gyb_helpers",
+        "AttributeKinds.swift.gyb",
         "AttributeNodes.swift.gyb",
         "AvailabilityNodes.swift.gyb",
         "BuilderInitializableTypes.swift.gyb",

@@ -213,8 +213,6 @@ public typealias ExpressionStmt = ExpressionStmtSyntax
 
 public typealias ExtensionDecl = ExtensionDeclSyntax
 
-public typealias ExternalMacroName = ExternalMacroNameSyntax
-
 public typealias FallthroughStmt = FallthroughStmtSyntax
 
 public typealias FloatLiteralExpr = FloatLiteralExprSyntax

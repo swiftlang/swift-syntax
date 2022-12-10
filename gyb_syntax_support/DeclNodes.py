@@ -933,17 +933,9 @@ DECL_NODES = [
                        Child('FunctionLike', kind='FunctionSignature', name_for_diagnostics="macro signature"),
                        Child('ValueLike', kind='TypeAnnotation', name_for_diagnostics="macro signature"),
                    ]),
-             Child('Equal', kind='EqualToken'),
-             Child('ExternalName', kind='ExternalMacroName', name_for_diagnostics='external macro name', is_optional = True),
+             Child('Definition', kind='InitializerClause', name_for_diagnostics='macro definition', is_optional=True),
              Child('GenericWhereClause', kind='GenericWhereClause', name_for_diagnostics='generic where clause',
                    is_optional=True),
-         ]),
-
-    Node('ExternalMacroName', name_for_diagnostics='external macro name', kind='Syntax',
-         children=[
-             Child('ModuleName', kind='IdentifierToken', name_for_diagnostics='module name'),
-             Child('Period', kind='PeriodToken'),
-             Child('MacroTypeName', kind='IdentifierToken', name_for_diagnostics='macro type name'),
          ]),
 
     # e.g., "#embed("filename.txt")"

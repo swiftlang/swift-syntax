@@ -177,7 +177,6 @@ extension Syntax {
       .node(PrecedenceGroupAssignmentSyntax.self),
       .node(PrecedenceGroupAssociativitySyntax.self),
       .node(MacroDeclSyntax.self),
-      .node(ExternalMacroNameSyntax.self),
       .node(MacroExpansionDeclSyntax.self),
       .node(TokenListSyntax.self),
       .node(NonEmptyTokenListSyntax.self),
@@ -464,7 +463,6 @@ extension SyntaxKind {
     case .precedenceGroupAssignment: return PrecedenceGroupAssignmentSyntax.self
     case .precedenceGroupAssociativity: return PrecedenceGroupAssociativitySyntax.self
     case .macroDecl: return MacroDeclSyntax.self
-    case .externalMacroName: return ExternalMacroNameSyntax.self
     case .macroExpansionDecl: return MacroExpansionDeclSyntax.self
     case .tokenList: return TokenListSyntax.self
     case .nonEmptyTokenList: return NonEmptyTokenListSyntax.self
@@ -911,8 +909,6 @@ extension SyntaxKind {
       return "'associativity' property of precedencegroup"
     case .macroDecl:
       return "macro"
-    case .externalMacroName:
-      return "external macro name"
     case .macroExpansionDecl:
       return "pound literal declaration"
     case .tokenList:

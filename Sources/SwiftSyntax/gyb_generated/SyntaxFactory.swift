@@ -5128,7 +5128,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on MacroDeclSyntax")
-  public static func makeMacroDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil, macroKeyword: TokenSyntax, _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: Syntax, _ unexpectedBetweenSignatureAndEqual: UnexpectedNodesSyntax? = nil, equal: TokenSyntax, _ unexpectedBetweenEqualAndExternalName: UnexpectedNodesSyntax? = nil, externalName: ExternalMacroNameSyntax?, _ unexpectedBetweenExternalNameAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil) -> MacroDeclSyntax {
+  public static func makeMacroDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil, macroKeyword: TokenSyntax, _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: Syntax, _ unexpectedBetweenSignatureAndDefinition: UnexpectedNodesSyntax? = nil, definition: InitializerClauseSyntax?, _ unexpectedBetweenDefinitionAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil) -> MacroDeclSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
@@ -5142,11 +5142,9 @@ public enum SyntaxFactory {
       genericParameterClause?.raw,
       unexpectedBetweenGenericParameterClauseAndSignature?.raw,
       signature.raw,
-      unexpectedBetweenSignatureAndEqual?.raw,
-      equal.raw,
-      unexpectedBetweenEqualAndExternalName?.raw,
-      externalName?.raw,
-      unexpectedBetweenExternalNameAndGenericWhereClause?.raw,
+      unexpectedBetweenSignatureAndDefinition?.raw,
+      definition?.raw,
+      unexpectedBetweenDefinitionAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
       unexpectedAfterGenericWhereClause?.raw,
     ]
@@ -5176,49 +5174,12 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: arena),
-        nil,
         nil,
         nil,
         nil,
         nil,
       ], arena: arena))
       return MacroDeclSyntax(data)
-    }
-  }
-  @available(*, deprecated, message: "Use initializer on ExternalMacroNameSyntax")
-  public static func makeExternalMacroName(_ unexpectedBeforeModuleName: UnexpectedNodesSyntax? = nil, moduleName: TokenSyntax, _ unexpectedBetweenModuleNameAndPeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax, _ unexpectedBetweenPeriodAndMacroTypeName: UnexpectedNodesSyntax? = nil, macroTypeName: TokenSyntax, _ unexpectedAfterMacroTypeName: UnexpectedNodesSyntax? = nil) -> ExternalMacroNameSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeModuleName?.raw,
-      moduleName.raw,
-      unexpectedBetweenModuleNameAndPeriod?.raw,
-      period.raw,
-      unexpectedBetweenPeriodAndMacroTypeName?.raw,
-      macroTypeName.raw,
-      unexpectedAfterMacroTypeName?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.externalMacroName,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return ExternalMacroNameSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on ExternalMacroNameSyntax")
-  public static func makeBlankExternalMacroName(presence: SourcePresence = .present) -> ExternalMacroNameSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .externalMacroName,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.period, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
-        nil,
-      ], arena: arena))
-      return ExternalMacroNameSyntax(data)
     }
   }
   @available(*, deprecated, message: "Use initializer on MacroExpansionDeclSyntax")

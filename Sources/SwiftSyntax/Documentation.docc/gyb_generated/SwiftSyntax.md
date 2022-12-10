@@ -354,7 +354,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PrecedenceGroupNameElementSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAssignmentSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupAssociativitySyntax>
-- <doc:SwiftSyntax/ExternalMacroNameSyntax>
 - <doc:SwiftSyntax/TokenListSyntax>
 - <doc:SwiftSyntax/NonEmptyTokenListSyntax>
 - <doc:SwiftSyntax/CustomAttributeSyntax>

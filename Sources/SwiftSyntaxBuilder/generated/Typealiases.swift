@@ -351,8 +351,6 @@ public typealias ObjCSelectorPiece = ObjCSelectorPieceSyntax
 
 public typealias ObjCSelector = ObjCSelectorSyntax
 
-public typealias ObjectLiteralExpr = ObjectLiteralExprSyntax
-
 public typealias OpaqueReturnTypeOfAttributeArguments = OpaqueReturnTypeOfAttributeArgumentsSyntax
 
 public typealias OperatorDecl = OperatorDeclSyntax

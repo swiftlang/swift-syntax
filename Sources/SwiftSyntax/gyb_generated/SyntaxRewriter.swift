@@ -660,13 +660,6 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ObjectLiteralExprSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ObjectLiteralExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
-  }
-
   /// Visit a `YieldExprListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2976,16 +2969,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplObjectLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-      let node = ObjectLiteralExprSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplYieldExprListSyntax(_ data: SyntaxData) -> Syntax {
       let node = YieldExprListSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5029,8 +5012,6 @@ open class SyntaxRewriter {
       return visitImplPostfixIfConfigExprSyntax
     case .editorPlaceholderExpr:
       return visitImplEditorPlaceholderExprSyntax
-    case .objectLiteralExpr:
-      return visitImplObjectLiteralExprSyntax
     case .yieldExprList:
       return visitImplYieldExprListSyntax
     case .yieldExprListElement:
@@ -5590,8 +5571,6 @@ open class SyntaxRewriter {
       return visitImplPostfixIfConfigExprSyntax(data)
     case .editorPlaceholderExpr:
       return visitImplEditorPlaceholderExprSyntax(data)
-    case .objectLiteralExpr:
-      return visitImplObjectLiteralExprSyntax(data)
     case .yieldExprList:
       return visitImplYieldExprListSyntax(data)
     case .yieldExprListElement:

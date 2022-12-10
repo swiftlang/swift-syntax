@@ -1226,35 +1226,6 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
-  Node(name: "ObjectLiteralExpr",
-       nameForDiagnostics: "object literal",
-       kind: "Expr",
-       traits: [
-         "Parenthesized"
-       ],
-       children: [
-         Child(name: "Identifier",
-               kind: "Token",
-               tokenChoices: [
-                 "PoundColorLiteral",
-                 "PoundFileLiteral",
-                 "PoundImageLiteral"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Arguments",
-               kind: "TupleExprElementList",
-               collectionElementName: "Argument"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
-       ]),
-
   Node(name: "YieldExprList",
        nameForDiagnostics: "yield list",
        kind: "SyntaxCollection",

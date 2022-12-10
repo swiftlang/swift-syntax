@@ -285,9 +285,6 @@ extension NamedOpaqueReturnTypeSyntax: SyntaxExpressibleByStringInterpolation {
 extension NilLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension ObjectLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension OperatorDeclSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

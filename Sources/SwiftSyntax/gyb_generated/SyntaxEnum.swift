@@ -108,7 +108,6 @@ public enum SyntaxEnum {
   case macroExpansionExpr(MacroExpansionExprSyntax)
   case postfixIfConfigExpr(PostfixIfConfigExprSyntax)
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
-  case objectLiteralExpr(ObjectLiteralExprSyntax)
   case yieldExprList(YieldExprListSyntax)
   case yieldExprListElement(YieldExprListElementSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
@@ -482,8 +481,6 @@ public extension Syntax {
       return .postfixIfConfigExpr(PostfixIfConfigExprSyntax(self)!)
     case .editorPlaceholderExpr:
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
-    case .objectLiteralExpr:
-      return .objectLiteralExpr(ObjectLiteralExprSyntax(self)!)
     case .yieldExprList:
       return .yieldExprList(YieldExprListSyntax(self)!)
     case .yieldExprListElement:

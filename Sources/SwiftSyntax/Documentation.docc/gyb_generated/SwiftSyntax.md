@@ -157,7 +157,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MacroExpansionExprSyntax>
 - <doc:SwiftSyntax/PostfixIfConfigExprSyntax>
 - <doc:SwiftSyntax/EditorPlaceholderExprSyntax>
-- <doc:SwiftSyntax/ObjectLiteralExprSyntax>
 
 ### Types
 

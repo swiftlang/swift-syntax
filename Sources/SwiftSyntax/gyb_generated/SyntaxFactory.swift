@@ -2661,45 +2661,6 @@ public enum SyntaxFactory {
       return EditorPlaceholderExprSyntax(data)
     }
   }
-  @available(*, deprecated, message: "Use initializer on ObjectLiteralExprSyntax")
-  public static func makeObjectLiteralExpr(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil, arguments: TupleExprElementListSyntax, _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> ObjectLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeIdentifier?.raw,
-      identifier.raw,
-      unexpectedBetweenIdentifierAndLeftParen?.raw,
-      leftParen.raw,
-      unexpectedBetweenLeftParenAndArguments?.raw,
-      arguments.raw,
-      unexpectedBetweenArgumentsAndRightParen?.raw,
-      rightParen.raw,
-      unexpectedAfterRightParen?.raw,
-    ]
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.objectLiteralExpr,
-        from: layout, arena: arena)
-      let data = SyntaxData.forRoot(raw)
-      return ObjectLiteralExprSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on ObjectLiteralExprSyntax")
-  public static func makeBlankObjectLiteralExpr(presence: SourcePresence = .present) -> ObjectLiteralExprSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .objectLiteralExpr,
-        from: [
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.poundColorLiteralKeyword, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: arena),
-        nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: arena),
-        nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena),
-        nil,
-      ], arena: arena))
-      return ObjectLiteralExprSyntax(data)
-    }
-  }
   @available(*, deprecated, message: "Use initializer on YieldExprListSyntax")
   public static func makeYieldExprList(
     _ elements: [YieldExprListElementSyntax]) -> YieldExprListSyntax {

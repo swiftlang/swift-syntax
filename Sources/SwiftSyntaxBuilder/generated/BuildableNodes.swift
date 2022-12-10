@@ -3225,37 +3225,6 @@ extension ObjCSelectorPiece {
   }
 }
 
-extension ObjectLiteralExpr {
-  /// Creates a `ObjectLiteralExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforeIdentifier: 
-  ///   - identifier: 
-  ///   - unexpectedBetweenIdentifierAndLeftParen: 
-  ///   - leftParen: 
-  ///   - unexpectedBetweenLeftParenAndArguments: 
-  ///   - arguments: 
-  ///   - unexpectedBetweenArgumentsAndRightParen: 
-  ///   - rightParen: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeIdentifier: UnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndLeftParen: UnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: UnexpectedNodes? = nil, arguments: TupleExprElementList, unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
-    assert(identifier.text == "#colorLiteral" || identifier.text == "#fileLiteral" || identifier.text == "#imageLiteral")
-    assert(leftParen.text == "(")
-    assert(rightParen.text == ")")
-    self = ObjectLiteralExprSyntax(unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments, arguments: arguments, unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-  
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: UnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndLeftParen: UnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: UnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder argumentsBuilder: () -> TupleExprElementListSyntax = {
-    TupleExprElementListSyntax([])
-  }) {
-    self.init (unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-  }
-}
-
 /// The arguments for the '@_opaqueReturnTypeOf()'.
 extension OpaqueReturnTypeOfAttributeArguments {
   /// Creates a `OpaqueReturnTypeOfAttributeArguments` using the provided parameters.

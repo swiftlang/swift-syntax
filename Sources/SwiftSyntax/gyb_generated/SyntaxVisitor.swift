@@ -951,16 +951,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `EditorPlaceholderExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EditorPlaceholderExprSyntax) {}
-  /// Visiting `ObjectLiteralExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `ObjectLiteralExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ObjectLiteralExprSyntax) {}
   /// Visiting `YieldExprListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3851,17 +3841,6 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplObjectLiteralExprSyntax(_ data: SyntaxData) {
-      let node = ObjectLiteralExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplYieldExprListSyntax(_ data: SyntaxData) {
       let node = YieldExprListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6054,8 +6033,6 @@ open class SyntaxVisitor {
       visitImplPostfixIfConfigExprSyntax(data)
     case .editorPlaceholderExpr:
       visitImplEditorPlaceholderExprSyntax(data)
-    case .objectLiteralExpr:
-      visitImplObjectLiteralExprSyntax(data)
     case .yieldExprList:
       visitImplYieldExprListSyntax(data)
     case .yieldExprListElement:

@@ -108,7 +108,6 @@ extension Syntax {
       .node(MacroExpansionExprSyntax.self),
       .node(PostfixIfConfigExprSyntax.self),
       .node(EditorPlaceholderExprSyntax.self),
-      .node(ObjectLiteralExprSyntax.self),
       .node(YieldExprListSyntax.self),
       .node(YieldExprListElementSyntax.self),
       .node(TypeInitializerClauseSyntax.self),
@@ -390,7 +389,6 @@ extension SyntaxKind {
     case .macroExpansionExpr: return MacroExpansionExprSyntax.self
     case .postfixIfConfigExpr: return PostfixIfConfigExprSyntax.self
     case .editorPlaceholderExpr: return EditorPlaceholderExprSyntax.self
-    case .objectLiteralExpr: return ObjectLiteralExprSyntax.self
     case .yieldExprList: return YieldExprListSyntax.self
     case .yieldExprListElement: return YieldExprListElementSyntax.self
     case .typeInitializerClause: return TypeInitializerClauseSyntax.self
@@ -763,8 +761,6 @@ extension SyntaxKind {
       return nil
     case .editorPlaceholderExpr:
       return "editor placeholder"
-    case .objectLiteralExpr:
-      return "object literal"
     case .yieldExprList:
       return "yield list"
     case .yieldExprListElement:

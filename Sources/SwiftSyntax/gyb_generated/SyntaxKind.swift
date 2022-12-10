@@ -108,7 +108,6 @@ public enum SyntaxKind {
   case macroExpansionExpr
   case postfixIfConfigExpr
   case editorPlaceholderExpr
-  case objectLiteralExpr
   case yieldExprList
   case yieldExprListElement
   case typeInitializerClause

@@ -123,6 +123,14 @@ TYPE_NODES = [
              Child('Ellipsis', kind='EllipsisToken')
          ]),
 
+    # pack-reference-type -> 'each' type
+    Node('PackReferenceType', name_for_diagnostics='pack reference', kind='Type',
+         children=[
+             Child('EachKeyword', kind='ContextualKeyworkToken',
+                   text_choices=['each'], is_optional=False),
+             Child('PackType', kind='Type')
+         ]),
+
     # tuple-type-element -> identifier? ':'? type-annotation ','?
     Node('TupleTypeElement', name_for_diagnostics=None, kind='Syntax',
          traits=['WithTrailingComma'],

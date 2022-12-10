@@ -1144,11 +1144,11 @@ extension SyntaxKind {
     case .availabilitySpecList:
       return "'@availability' arguments"
     case .availabilityArgument:
-      return "'@available' argument"
+      return "availability argument"
     case .availabilityLabeledArgument:
-      return "'@available' argument"
+      return "availability argument"
     case .availabilityVersionRestriction:
-      return "'@available' argument"
+      return "availability argument"
     case .versionTuple:
       return "version tuple"
     }

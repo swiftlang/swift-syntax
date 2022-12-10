@@ -194,10 +194,14 @@ extension Parser {
   ///     platform-name → tvOS
   mutating func parsePlatformVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
     // Register the platform name as a keyword token.
-    let plaform = self.consumeAnyToken(remapping: .contextualKeyword)
+    let (unexpectedBeforePlatform, plaform) = self.expect(.identifier, remapping: .contextualKeyword)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
-      platform: plaform, version: version, arena: self.arena)
+      unexpectedBeforePlatform,
+      platform: plaform,
+      version: version,
+      arena: self.arena
+    )
   }
 
   /// Parse an availability macro.
@@ -233,24 +237,31 @@ extension Parser {
   ///     platform-version → decimal-digits '.' decimal-digits
   ///     platform-version → decimal-digits '.' decimal-digits '.' decimal-digits
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
-    if let major = self.consume(if: .integerLiteral) {
-      return RawVersionTupleSyntax(
-        majorMinor: major, patchPeriod: nil, patchVersion: nil,
-        arena: self.arena)
-    }
-
-    let majorMinor = self.consumeAnyToken()
-    let period = self.consume(if: .period)
-
+    let (unexpectedBeforeMajorMinor, majorMinor) = self.expectAny([.integerLiteral, .floatingLiteral], default: .integerLiteral)
+    let patchPeriod: RawTokenSyntax?
+    let unexpectedBeforePatch: RawUnexpectedNodesSyntax?
     let patch: RawTokenSyntax?
-    if period != nil {
-      patch = self.consumeAnyToken()
+    if majorMinor.tokenKind == .floatingLiteral {
+      patchPeriod = self.consume(if: .period)
+      if patchPeriod != nil {
+        (unexpectedBeforePatch, patch) = self.expect(.integerLiteral)
+      } else {
+        unexpectedBeforePatch = nil
+        patch = nil
+      }
     } else {
+      patchPeriod = nil
+      unexpectedBeforePatch = nil
       patch = nil
     }
 
     return RawVersionTupleSyntax(
-      majorMinor: majorMinor, patchPeriod: period, patchVersion: patch,
-      arena: self.arena)
+      unexpectedBeforeMajorMinor,
+      majorMinor: majorMinor,
+      patchPeriod: patchPeriod,
+      unexpectedBeforePatch,
+      patchVersion: patch,
+      arena: self.arena
+    )
   }
 }

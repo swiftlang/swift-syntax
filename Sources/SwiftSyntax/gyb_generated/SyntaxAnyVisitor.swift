@@ -1181,13 +1181,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: MacroDeclSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: ExternalMacroNameSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ExternalMacroNameSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
   override open func visit(_ node: MacroExpansionDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

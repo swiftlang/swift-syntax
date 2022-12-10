@@ -177,7 +177,6 @@ public enum SyntaxEnum {
   case precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax)
   case precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax)
   case macroDecl(MacroDeclSyntax)
-  case externalMacroName(ExternalMacroNameSyntax)
   case macroExpansionDecl(MacroExpansionDeclSyntax)
   case tokenList(TokenListSyntax)
   case nonEmptyTokenList(NonEmptyTokenListSyntax)
@@ -625,8 +624,6 @@ public extension Syntax {
       return .precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax(self)!)
     case .macroDecl:
       return .macroDecl(MacroDeclSyntax(self)!)
-    case .externalMacroName:
-      return .externalMacroName(ExternalMacroNameSyntax(self)!)
     case .macroExpansionDecl:
       return .macroExpansionDecl(MacroExpansionDeclSyntax(self)!)
     case .tokenList:

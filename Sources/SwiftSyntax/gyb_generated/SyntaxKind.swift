@@ -177,7 +177,6 @@ public enum SyntaxKind {
   case precedenceGroupAssignment
   case precedenceGroupAssociativity
   case macroDecl
-  case externalMacroName
   case macroExpansionDecl
   case tokenList
   case nonEmptyTokenList

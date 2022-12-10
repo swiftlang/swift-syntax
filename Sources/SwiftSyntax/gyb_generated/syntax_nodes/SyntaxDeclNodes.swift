@@ -10139,11 +10139,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     genericParameterClause: GenericParameterClauseSyntax?,
     _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil,
     signature: Signature,
-    _ unexpectedBetweenSignatureAndEqual: UnexpectedNodesSyntax? = nil,
-    equal: TokenSyntax,
-    _ unexpectedBetweenEqualAndExternalName: UnexpectedNodesSyntax? = nil,
-    externalName: ExternalMacroNameSyntax?,
-    _ unexpectedBetweenExternalNameAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenSignatureAndDefinition: UnexpectedNodesSyntax? = nil,
+    definition: InitializerClauseSyntax?,
+    _ unexpectedBetweenDefinitionAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax?,
     _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil
   ) {
@@ -10160,11 +10158,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericParameterClause?.raw,
       unexpectedBetweenGenericParameterClauseAndSignature?.raw,
       signature.raw,
-      unexpectedBetweenSignatureAndEqual?.raw,
-      equal.raw,
-      unexpectedBetweenEqualAndExternalName?.raw,
-      externalName?.raw,
-      unexpectedBetweenExternalNameAndGenericWhereClause?.raw,
+      unexpectedBetweenSignatureAndDefinition?.raw,
+      definition?.raw,
+      unexpectedBetweenDefinitionAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
       unexpectedAfterGenericWhereClause?.raw,
     ]
@@ -10463,113 +10459,72 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return MacroDeclSyntax(newData)
   }
 
-  public var unexpectedBetweenSignatureAndEqual: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenSignatureAndDefinition: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenSignatureAndEqual(value)
+      self = withUnexpectedBetweenSignatureAndDefinition(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenSignatureAndEqual` replaced.
-  /// - param newChild: The new `unexpectedBetweenSignatureAndEqual` to replace the node's
-  ///                   current `unexpectedBetweenSignatureAndEqual`, if present.
-  public func withUnexpectedBetweenSignatureAndEqual(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenSignatureAndDefinition` replaced.
+  /// - param newChild: The new `unexpectedBetweenSignatureAndDefinition` to replace the node's
+  ///                   current `unexpectedBetweenSignatureAndDefinition`, if present.
+  public func withUnexpectedBetweenSignatureAndDefinition(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return MacroDeclSyntax(newData)
   }
 
-  public var equal: TokenSyntax {
+  public var definition: InitializerClauseSyntax? {
     get {
       let childData = data.child(at: 13, parent: Syntax(self))
-      return TokenSyntax(childData!)
+      if childData == nil { return nil }
+      return InitializerClauseSyntax(childData!)
     }
     set(value) {
-      self = withEqual(value)
+      self = withDefinition(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `equal` replaced.
-  /// - param newChild: The new `equal` to replace the node's
-  ///                   current `equal`, if present.
-  public func withEqual(_ newChild: TokenSyntax?) -> MacroDeclSyntax {
+  /// Returns a copy of the receiver with its `definition` replaced.
+  /// - param newChild: The new `definition` to replace the node's
+  ///                   current `definition`, if present.
+  public func withDefinition(_ newChild: InitializerClauseSyntax?) -> MacroDeclSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: arena)
+    let raw = newChild?.raw
     let newData = data.replacingChild(at: 13, with: raw, arena: arena)
     return MacroDeclSyntax(newData)
   }
 
-  public var unexpectedBetweenEqualAndExternalName: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenDefinitionAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenEqualAndExternalName(value)
+      self = withUnexpectedBetweenDefinitionAndGenericWhereClause(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenEqualAndExternalName` replaced.
-  /// - param newChild: The new `unexpectedBetweenEqualAndExternalName` to replace the node's
-  ///                   current `unexpectedBetweenEqualAndExternalName`, if present.
-  public func withUnexpectedBetweenEqualAndExternalName(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDefinitionAndGenericWhereClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenDefinitionAndGenericWhereClause` to replace the node's
+  ///                   current `unexpectedBetweenDefinitionAndGenericWhereClause`, if present.
+  public func withUnexpectedBetweenDefinitionAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 14, with: raw, arena: arena)
     return MacroDeclSyntax(newData)
   }
 
-  public var externalName: ExternalMacroNameSyntax? {
-    get {
-      let childData = data.child(at: 15, parent: Syntax(self))
-      if childData == nil { return nil }
-      return ExternalMacroNameSyntax(childData!)
-    }
-    set(value) {
-      self = withExternalName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `externalName` replaced.
-  /// - param newChild: The new `externalName` to replace the node's
-  ///                   current `externalName`, if present.
-  public func withExternalName(_ newChild: ExternalMacroNameSyntax?) -> MacroDeclSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
-    return MacroDeclSyntax(newData)
-  }
-
-  public var unexpectedBetweenExternalNameAndGenericWhereClause: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 16, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenExternalNameAndGenericWhereClause(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenExternalNameAndGenericWhereClause` replaced.
-  /// - param newChild: The new `unexpectedBetweenExternalNameAndGenericWhereClause` to replace the node's
-  ///                   current `unexpectedBetweenExternalNameAndGenericWhereClause`, if present.
-  public func withUnexpectedBetweenExternalNameAndGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
-    return MacroDeclSyntax(newData)
-  }
-
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: 17, parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -10584,13 +10539,13 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(_ newChild: GenericWhereClauseSyntax?) -> MacroDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 17, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 15, with: raw, arena: arena)
     return MacroDeclSyntax(newData)
   }
 
   public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 18, parent: Syntax(self))
+      let childData = data.child(at: 16, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -10605,7 +10560,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedAfterGenericWhereClause(_ newChild: UnexpectedNodesSyntax?) -> MacroDeclSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
-    let newData = data.replacingChild(at: 18, with: raw, arena: arena)
+    let newData = data.replacingChild(at: 16, with: raw, arena: arena)
     return MacroDeclSyntax(newData)
   }
 
@@ -10623,11 +10578,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       \Self.genericParameterClause,
       \Self.unexpectedBetweenGenericParameterClauseAndSignature,
       \Self.signature,
-      \Self.unexpectedBetweenSignatureAndEqual,
-      \Self.equal,
-      \Self.unexpectedBetweenEqualAndExternalName,
-      \Self.externalName,
-      \Self.unexpectedBetweenExternalNameAndGenericWhereClause,
+      \Self.unexpectedBetweenSignatureAndDefinition,
+      \Self.definition,
+      \Self.unexpectedBetweenDefinitionAndGenericWhereClause,
       \Self.genericWhereClause,
       \Self.unexpectedAfterGenericWhereClause,
     ])
@@ -10662,16 +10615,12 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case 12:
       return nil
     case 13:
-      return nil
+      return "macro definition"
     case 14:
       return nil
     case 15:
-      return "external macro name"
-    case 16:
-      return nil
-    case 17:
       return "generic where clause"
-    case 18:
+    case 16:
       return nil
     default:
       fatalError("Invalid index")
@@ -10694,11 +10643,9 @@ extension MacroDeclSyntax: CustomReflectable {
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenGenericParameterClauseAndSignature": unexpectedBetweenGenericParameterClauseAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "signature": Syntax(signature).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenSignatureAndEqual": unexpectedBetweenSignatureAndEqual.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "equal": Syntax(equal).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenEqualAndExternalName": unexpectedBetweenEqualAndExternalName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "externalName": externalName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenExternalNameAndGenericWhereClause": unexpectedBetweenExternalNameAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenSignatureAndDefinition": unexpectedBetweenSignatureAndDefinition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "definition": definition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDefinitionAndGenericWhereClause": unexpectedBetweenDefinitionAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedAfterGenericWhereClause": unexpectedAfterGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])

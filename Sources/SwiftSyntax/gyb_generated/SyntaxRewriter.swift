@@ -1143,13 +1143,6 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `ExternalMacroNameSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ExternalMacroNameSyntax) -> ExternalMacroNameSyntax {
-    return Syntax(visitChildren(node)).cast(ExternalMacroNameSyntax.self)
-  }
-
   /// Visit a `MacroExpansionDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3701,16 +3694,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExternalMacroNameSyntax(_ data: SyntaxData) -> Syntax {
-      let node = ExternalMacroNameSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMacroExpansionDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = MacroExpansionDeclSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5252,8 +5235,6 @@ open class SyntaxRewriter {
       return visitImplPrecedenceGroupAssociativitySyntax
     case .macroDecl:
       return visitImplMacroDeclSyntax
-    case .externalMacroName:
-      return visitImplExternalMacroNameSyntax
     case .macroExpansionDecl:
       return visitImplMacroExpansionDeclSyntax
     case .tokenList:
@@ -5823,8 +5804,6 @@ open class SyntaxRewriter {
       return visitImplPrecedenceGroupAssociativitySyntax(data)
     case .macroDecl:
       return visitImplMacroDeclSyntax(data)
-    case .externalMacroName:
-      return visitImplExternalMacroNameSyntax(data)
     case .macroExpansionDecl:
       return visitImplMacroExpansionDeclSyntax(data)
     case .tokenList:

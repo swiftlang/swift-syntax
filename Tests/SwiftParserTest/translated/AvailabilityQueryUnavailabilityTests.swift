@@ -78,8 +78,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: expected ',' joining parts of a multi-clause condition, Fix-It replacements: 27 - 30 = ','
-        DiagnosticSpec(message: "unexpected code '&& #unavailable(OSX 10.52)' in 'if' statement"),
+        DiagnosticSpec(message: "expected ',' joining parts of a multi-clause condition", fixIts: ["replace '&&' by ','"]),
       ]
     )
   }

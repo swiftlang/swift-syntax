@@ -131,6 +131,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var invalidFlagAfterPrecedenceGroupAssignment: Self {
     .init("expected 'true' or 'false' after 'assignment'")
   }
+  public static var joinConditionsUsingComma: Self {
+    .init("expected ',' joining parts of a multi-clause condition")
+  }
   public static var missingColonAndExprInTernaryExpr: Self {
     .init("expected ':' and expression after '? ...' in ternary expression")
   }

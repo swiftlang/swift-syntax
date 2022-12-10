@@ -209,9 +209,18 @@ extension Parser {
     var loopProgress = LoopProgressCondition()
     repeat {
       let condition = self.parseConditionElement()
+      let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
       keepGoing = self.consume(if: .comma)
+      if keepGoing == nil, let andOperator = self.consume(if: .spacedBinaryOperator, where: { $0.tokenText == "&&" }) {
+        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([andOperator], arena: self.arena)
+        keepGoing = missingToken(.comma)
+      } else {
+        unexpectedBeforeKeepGoing = nil
+      }
       elements.append(RawConditionElementSyntax(
-        condition: condition, trailingComma: keepGoing,
+        condition: condition,
+        unexpectedBeforeKeepGoing,
+        trailingComma: keepGoing,
         arena: self.arena))
     } while keepGoing != nil && loopProgress.evaluate(currentToken)
 

@@ -41,56 +41,6 @@ open class SyntaxVisitor {
     visit(node.data)
   }
 
-  /// Visiting `UnknownDeclSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `UnknownDeclSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnknownDeclSyntax) {}
-  /// Visiting `UnknownExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `UnknownExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnknownExprSyntax) {}
-  /// Visiting `UnknownStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `UnknownStmtSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnknownStmtSyntax) {}
-  /// Visiting `UnknownTypeSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `UnknownTypeSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnknownTypeSyntax) {}
-  /// Visiting `UnknownPatternSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `UnknownPatternSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnknownPatternSyntax) {}
   /// Visiting `MissingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2725,2984 +2675,2874 @@ open class SyntaxVisitor {
   open func visitPost(_ node: UnknownSyntax) {}
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclSyntax(_ data: SyntaxData) {
-      let node = UnknownDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExprSyntax(_ data: SyntaxData) {
-      let node = UnknownExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplStmtSyntax(_ data: SyntaxData) {
-      let node = UnknownStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypeSyntax(_ data: SyntaxData) {
-      let node = UnknownTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPatternSyntax(_ data: SyntaxData) {
-      let node = UnknownPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnknownDeclSyntax(_ data: SyntaxData) {
-      let node = UnknownDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnknownExprSyntax(_ data: SyntaxData) {
-      let node = UnknownExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnknownStmtSyntax(_ data: SyntaxData) {
-      let node = UnknownStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnknownTypeSyntax(_ data: SyntaxData) {
-      let node = UnknownTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnknownPatternSyntax(_ data: SyntaxData) {
-      let node = UnknownPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingSyntax(_ data: SyntaxData) {
-      let node = MissingSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MissingSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingDeclSyntax(_ data: SyntaxData) {
-      let node = MissingDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MissingDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingExprSyntax(_ data: SyntaxData) {
-      let node = MissingExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MissingExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingStmtSyntax(_ data: SyntaxData) {
-      let node = MissingStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MissingStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingTypeSyntax(_ data: SyntaxData) {
-      let node = MissingTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MissingTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingPatternSyntax(_ data: SyntaxData) {
-      let node = MissingPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MissingPatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCodeBlockItemSyntax(_ data: SyntaxData) {
-      let node = CodeBlockItemSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CodeBlockItemSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCodeBlockItemListSyntax(_ data: SyntaxData) {
-      let node = CodeBlockItemListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CodeBlockItemListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCodeBlockSyntax(_ data: SyntaxData) {
-      let node = CodeBlockSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CodeBlockSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnexpectedNodesSyntax(_ data: SyntaxData) {
-      let node = UnexpectedNodesSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = UnexpectedNodesSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInOutExprSyntax(_ data: SyntaxData) {
-      let node = InOutExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = InOutExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundColumnExprSyntax(_ data: SyntaxData) {
-      let node = PoundColumnExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PoundColumnExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleExprElementListSyntax(_ data: SyntaxData) {
-      let node = TupleExprElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TupleExprElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplArrayElementListSyntax(_ data: SyntaxData) {
-      let node = ArrayElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ArrayElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDictionaryElementListSyntax(_ data: SyntaxData) {
-      let node = DictionaryElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DictionaryElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplStringLiteralSegmentsSyntax(_ data: SyntaxData) {
-      let node = StringLiteralSegmentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = StringLiteralSegmentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTryExprSyntax(_ data: SyntaxData) {
-      let node = TryExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TryExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAwaitExprSyntax(_ data: SyntaxData) {
-      let node = AwaitExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AwaitExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMoveExprSyntax(_ data: SyntaxData) {
-      let node = MoveExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MoveExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclNameArgumentSyntax(_ data: SyntaxData) {
-      let node = DeclNameArgumentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeclNameArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclNameArgumentListSyntax(_ data: SyntaxData) {
-      let node = DeclNameArgumentListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeclNameArgumentListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclNameArgumentsSyntax(_ data: SyntaxData) {
-      let node = DeclNameArgumentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeclNameArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIdentifierExprSyntax(_ data: SyntaxData) {
-      let node = IdentifierExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IdentifierExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSuperRefExprSyntax(_ data: SyntaxData) {
-      let node = SuperRefExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SuperRefExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplNilLiteralExprSyntax(_ data: SyntaxData) {
-      let node = NilLiteralExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = NilLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDiscardAssignmentExprSyntax(_ data: SyntaxData) {
-      let node = DiscardAssignmentExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DiscardAssignmentExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAssignmentExprSyntax(_ data: SyntaxData) {
-      let node = AssignmentExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AssignmentExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSequenceExprSyntax(_ data: SyntaxData) {
-      let node = SequenceExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SequenceExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplExprListSyntax(_ data: SyntaxData) {
-      let node = ExprListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ExprListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSymbolicReferenceExprSyntax(_ data: SyntaxData) {
-      let node = SymbolicReferenceExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SymbolicReferenceExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrefixOperatorExprSyntax(_ data: SyntaxData) {
-      let node = PrefixOperatorExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrefixOperatorExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBinaryOperatorExprSyntax(_ data: SyntaxData) {
-      let node = BinaryOperatorExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = BinaryOperatorExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplArrowExprSyntax(_ data: SyntaxData) {
-      let node = ArrowExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ArrowExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInfixOperatorExprSyntax(_ data: SyntaxData) {
-      let node = InfixOperatorExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = InfixOperatorExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) {
-      let node = FloatLiteralExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FloatLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleExprSyntax(_ data: SyntaxData) {
-      let node = TupleExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TupleExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplArrayExprSyntax(_ data: SyntaxData) {
-      let node = ArrayExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ArrayExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDictionaryExprSyntax(_ data: SyntaxData) {
-      let node = DictionaryExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DictionaryExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleExprElementSyntax(_ data: SyntaxData) {
-      let node = TupleExprElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TupleExprElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplArrayElementSyntax(_ data: SyntaxData) {
-      let node = ArrayElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ArrayElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDictionaryElementSyntax(_ data: SyntaxData) {
-      let node = DictionaryElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DictionaryElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) {
-      let node = IntegerLiteralExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IntegerLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) {
-      let node = BooleanLiteralExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = BooleanLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnresolvedTernaryExprSyntax(_ data: SyntaxData) {
-      let node = UnresolvedTernaryExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = UnresolvedTernaryExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTernaryExprSyntax(_ data: SyntaxData) {
-      let node = TernaryExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TernaryExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMemberAccessExprSyntax(_ data: SyntaxData) {
-      let node = MemberAccessExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MemberAccessExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnresolvedIsExprSyntax(_ data: SyntaxData) {
-      let node = UnresolvedIsExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = UnresolvedIsExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIsExprSyntax(_ data: SyntaxData) {
-      let node = IsExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IsExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnresolvedAsExprSyntax(_ data: SyntaxData) {
-      let node = UnresolvedAsExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = UnresolvedAsExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAsExprSyntax(_ data: SyntaxData) {
-      let node = AsExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AsExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypeExprSyntax(_ data: SyntaxData) {
-      let node = TypeExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TypeExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureCaptureItemSyntax(_ data: SyntaxData) {
-      let node = ClosureCaptureItemSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClosureCaptureItemSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureCaptureItemListSyntax(_ data: SyntaxData) {
-      let node = ClosureCaptureItemListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClosureCaptureItemListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureCaptureSignatureSyntax(_ data: SyntaxData) {
-      let node = ClosureCaptureSignatureSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClosureCaptureSignatureSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureParamSyntax(_ data: SyntaxData) {
-      let node = ClosureParamSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClosureParamSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureParamListSyntax(_ data: SyntaxData) {
-      let node = ClosureParamListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClosureParamListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureSignatureSyntax(_ data: SyntaxData) {
-      let node = ClosureSignatureSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClosureSignatureSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureExprSyntax(_ data: SyntaxData) {
-      let node = ClosureExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClosureExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnresolvedPatternExprSyntax(_ data: SyntaxData) {
-      let node = UnresolvedPatternExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = UnresolvedPatternExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMultipleTrailingClosureElementSyntax(_ data: SyntaxData) {
-      let node = MultipleTrailingClosureElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MultipleTrailingClosureElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMultipleTrailingClosureElementListSyntax(_ data: SyntaxData) {
-      let node = MultipleTrailingClosureElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MultipleTrailingClosureElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) {
-      let node = FunctionCallExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FunctionCallExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSubscriptExprSyntax(_ data: SyntaxData) {
-      let node = SubscriptExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SubscriptExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOptionalChainingExprSyntax(_ data: SyntaxData) {
-      let node = OptionalChainingExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = OptionalChainingExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplForcedValueExprSyntax(_ data: SyntaxData) {
-      let node = ForcedValueExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ForcedValueExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPostfixUnaryExprSyntax(_ data: SyntaxData) {
-      let node = PostfixUnaryExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PostfixUnaryExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSpecializeExprSyntax(_ data: SyntaxData) {
-      let node = SpecializeExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SpecializeExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplStringSegmentSyntax(_ data: SyntaxData) {
-      let node = StringSegmentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = StringSegmentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) {
-      let node = ExpressionSegmentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ExpressionSegmentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplStringLiteralExprSyntax(_ data: SyntaxData) {
-      let node = StringLiteralExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = StringLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplRegexLiteralExprSyntax(_ data: SyntaxData) {
-      let node = RegexLiteralExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = RegexLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplKeyPathExprSyntax(_ data: SyntaxData) {
-      let node = KeyPathExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = KeyPathExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplKeyPathComponentListSyntax(_ data: SyntaxData) {
-      let node = KeyPathComponentListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = KeyPathComponentListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplKeyPathComponentSyntax(_ data: SyntaxData) {
-      let node = KeyPathComponentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = KeyPathComponentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplKeyPathPropertyComponentSyntax(_ data: SyntaxData) {
-      let node = KeyPathPropertyComponentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = KeyPathPropertyComponentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplKeyPathSubscriptComponentSyntax(_ data: SyntaxData) {
-      let node = KeyPathSubscriptComponentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = KeyPathSubscriptComponentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplKeyPathOptionalComponentSyntax(_ data: SyntaxData) {
-      let node = KeyPathOptionalComponentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = KeyPathOptionalComponentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMacroExpansionExprSyntax(_ data: SyntaxData) {
-      let node = MacroExpansionExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MacroExpansionExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPostfixIfConfigExprSyntax(_ data: SyntaxData) {
-      let node = PostfixIfConfigExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PostfixIfConfigExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) {
-      let node = EditorPlaceholderExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = EditorPlaceholderExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplYieldExprListSyntax(_ data: SyntaxData) {
-      let node = YieldExprListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = YieldExprListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplYieldExprListElementSyntax(_ data: SyntaxData) {
-      let node = YieldExprListElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = YieldExprListElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) {
-      let node = TypeInitializerClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TypeInitializerClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypealiasDeclSyntax(_ data: SyntaxData) {
-      let node = TypealiasDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TypealiasDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAssociatedtypeDeclSyntax(_ data: SyntaxData) {
-      let node = AssociatedtypeDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AssociatedtypeDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionParameterListSyntax(_ data: SyntaxData) {
-      let node = FunctionParameterListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FunctionParameterListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) {
-      let node = ParameterClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ParameterClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplReturnClauseSyntax(_ data: SyntaxData) {
-      let node = ReturnClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ReturnClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionSignatureSyntax(_ data: SyntaxData) {
-      let node = FunctionSignatureSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FunctionSignatureSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIfConfigClauseSyntax(_ data: SyntaxData) {
-      let node = IfConfigClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IfConfigClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIfConfigClauseListSyntax(_ data: SyntaxData) {
-      let node = IfConfigClauseListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IfConfigClauseListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIfConfigDeclSyntax(_ data: SyntaxData) {
-      let node = IfConfigDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IfConfigDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundErrorDeclSyntax(_ data: SyntaxData) {
-      let node = PoundErrorDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PoundErrorDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundWarningDeclSyntax(_ data: SyntaxData) {
-      let node = PoundWarningDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PoundWarningDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundSourceLocationSyntax(_ data: SyntaxData) {
-      let node = PoundSourceLocationSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PoundSourceLocationSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundSourceLocationArgsSyntax(_ data: SyntaxData) {
-      let node = PoundSourceLocationArgsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PoundSourceLocationArgsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) {
-      let node = DeclModifierDetailSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeclModifierDetailSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclModifierSyntax(_ data: SyntaxData) {
-      let node = DeclModifierSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeclModifierSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInheritedTypeSyntax(_ data: SyntaxData) {
-      let node = InheritedTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = InheritedTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInheritedTypeListSyntax(_ data: SyntaxData) {
-      let node = InheritedTypeListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = InheritedTypeListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypeInheritanceClauseSyntax(_ data: SyntaxData) {
-      let node = TypeInheritanceClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TypeInheritanceClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClassDeclSyntax(_ data: SyntaxData) {
-      let node = ClassDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClassDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplActorDeclSyntax(_ data: SyntaxData) {
-      let node = ActorDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ActorDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplStructDeclSyntax(_ data: SyntaxData) {
-      let node = StructDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = StructDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplProtocolDeclSyntax(_ data: SyntaxData) {
-      let node = ProtocolDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ProtocolDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplExtensionDeclSyntax(_ data: SyntaxData) {
-      let node = ExtensionDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ExtensionDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMemberDeclBlockSyntax(_ data: SyntaxData) {
-      let node = MemberDeclBlockSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MemberDeclBlockSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMemberDeclListSyntax(_ data: SyntaxData) {
-      let node = MemberDeclListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MemberDeclListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMemberDeclListItemSyntax(_ data: SyntaxData) {
-      let node = MemberDeclListItemSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MemberDeclListItemSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSourceFileSyntax(_ data: SyntaxData) {
-      let node = SourceFileSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SourceFileSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInitializerClauseSyntax(_ data: SyntaxData) {
-      let node = InitializerClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = InitializerClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionParameterSyntax(_ data: SyntaxData) {
-      let node = FunctionParameterSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FunctionParameterSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplModifierListSyntax(_ data: SyntaxData) {
-      let node = ModifierListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ModifierListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionDeclSyntax(_ data: SyntaxData) {
-      let node = FunctionDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FunctionDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInitializerDeclSyntax(_ data: SyntaxData) {
-      let node = InitializerDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = InitializerDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeinitializerDeclSyntax(_ data: SyntaxData) {
-      let node = DeinitializerDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeinitializerDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSubscriptDeclSyntax(_ data: SyntaxData) {
-      let node = SubscriptDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SubscriptDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessLevelModifierSyntax(_ data: SyntaxData) {
-      let node = AccessLevelModifierSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AccessLevelModifierSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessPathComponentSyntax(_ data: SyntaxData) {
-      let node = AccessPathComponentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AccessPathComponentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessPathSyntax(_ data: SyntaxData) {
-      let node = AccessPathSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AccessPathSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplImportDeclSyntax(_ data: SyntaxData) {
-      let node = ImportDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ImportDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorParameterSyntax(_ data: SyntaxData) {
-      let node = AccessorParameterSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AccessorParameterSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorDeclSyntax(_ data: SyntaxData) {
-      let node = AccessorDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AccessorDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorListSyntax(_ data: SyntaxData) {
-      let node = AccessorListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AccessorListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorBlockSyntax(_ data: SyntaxData) {
-      let node = AccessorBlockSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AccessorBlockSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPatternBindingSyntax(_ data: SyntaxData) {
-      let node = PatternBindingSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PatternBindingSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPatternBindingListSyntax(_ data: SyntaxData) {
-      let node = PatternBindingListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PatternBindingListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplVariableDeclSyntax(_ data: SyntaxData) {
-      let node = VariableDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = VariableDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEnumCaseElementSyntax(_ data: SyntaxData) {
-      let node = EnumCaseElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = EnumCaseElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEnumCaseElementListSyntax(_ data: SyntaxData) {
-      let node = EnumCaseElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = EnumCaseElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEnumCaseDeclSyntax(_ data: SyntaxData) {
-      let node = EnumCaseDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = EnumCaseDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEnumDeclSyntax(_ data: SyntaxData) {
-      let node = EnumDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = EnumDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOperatorDeclSyntax(_ data: SyntaxData) {
-      let node = OperatorDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = OperatorDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDesignatedTypeListSyntax(_ data: SyntaxData) {
-      let node = DesignatedTypeListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DesignatedTypeListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDesignatedTypeElementSyntax(_ data: SyntaxData) {
-      let node = DesignatedTypeElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DesignatedTypeElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOperatorPrecedenceAndTypesSyntax(_ data: SyntaxData) {
-      let node = OperatorPrecedenceAndTypesSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = OperatorPrecedenceAndTypesSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupDeclSyntax(_ data: SyntaxData) {
-      let node = PrecedenceGroupDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrecedenceGroupDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupAttributeListSyntax(_ data: SyntaxData) {
-      let node = PrecedenceGroupAttributeListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrecedenceGroupAttributeListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupRelationSyntax(_ data: SyntaxData) {
-      let node = PrecedenceGroupRelationSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrecedenceGroupRelationSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupNameListSyntax(_ data: SyntaxData) {
-      let node = PrecedenceGroupNameListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrecedenceGroupNameListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupNameElementSyntax(_ data: SyntaxData) {
-      let node = PrecedenceGroupNameElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrecedenceGroupNameElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupAssignmentSyntax(_ data: SyntaxData) {
-      let node = PrecedenceGroupAssignmentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrecedenceGroupAssignmentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrecedenceGroupAssociativitySyntax(_ data: SyntaxData) {
-      let node = PrecedenceGroupAssociativitySyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrecedenceGroupAssociativitySyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMacroDeclSyntax(_ data: SyntaxData) {
-      let node = MacroDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MacroDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMacroExpansionDeclSyntax(_ data: SyntaxData) {
-      let node = MacroExpansionDeclSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MacroExpansionDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTokenListSyntax(_ data: SyntaxData) {
-      let node = TokenListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TokenListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplNonEmptyTokenListSyntax(_ data: SyntaxData) {
-      let node = NonEmptyTokenListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = NonEmptyTokenListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCustomAttributeSyntax(_ data: SyntaxData) {
-      let node = CustomAttributeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CustomAttributeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAttributeSyntax(_ data: SyntaxData) {
-      let node = AttributeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AttributeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAttributeListSyntax(_ data: SyntaxData) {
-      let node = AttributeListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AttributeListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSpecializeAttributeSpecListSyntax(_ data: SyntaxData) {
-      let node = SpecializeAttributeSpecListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SpecializeAttributeSpecListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityEntrySyntax(_ data: SyntaxData) {
-      let node = AvailabilityEntrySyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AvailabilityEntrySyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) {
-      let node = LabeledSpecializeEntrySyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = LabeledSpecializeEntrySyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTargetFunctionEntrySyntax(_ data: SyntaxData) {
-      let node = TargetFunctionEntrySyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TargetFunctionEntrySyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) {
-      let node = NamedAttributeStringArgumentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = NamedAttributeStringArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclNameSyntax(_ data: SyntaxData) {
-      let node = DeclNameSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeclNameSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplImplementsAttributeArgumentsSyntax(_ data: SyntaxData) {
-      let node = ImplementsAttributeArgumentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ImplementsAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplObjCSelectorPieceSyntax(_ data: SyntaxData) {
-      let node = ObjCSelectorPieceSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ObjCSelectorPieceSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplObjCSelectorSyntax(_ data: SyntaxData) {
-      let node = ObjCSelectorSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ObjCSelectorSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDifferentiableAttributeArgumentsSyntax(_ data: SyntaxData) {
-      let node = DifferentiableAttributeArgumentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DifferentiableAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDifferentiabilityParamsClauseSyntax(_ data: SyntaxData) {
-      let node = DifferentiabilityParamsClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DifferentiabilityParamsClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDifferentiabilityParamsSyntax(_ data: SyntaxData) {
-      let node = DifferentiabilityParamsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DifferentiabilityParamsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDifferentiabilityParamListSyntax(_ data: SyntaxData) {
-      let node = DifferentiabilityParamListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DifferentiabilityParamListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDifferentiabilityParamSyntax(_ data: SyntaxData) {
-      let node = DifferentiabilityParamSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DifferentiabilityParamSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDerivativeRegistrationAttributeArgumentsSyntax(_ data: SyntaxData) {
-      let node = DerivativeRegistrationAttributeArgumentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DerivativeRegistrationAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplQualifiedDeclNameSyntax(_ data: SyntaxData) {
-      let node = QualifiedDeclNameSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = QualifiedDeclNameSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionDeclNameSyntax(_ data: SyntaxData) {
-      let node = FunctionDeclNameSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FunctionDeclNameSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) {
-      let node = BackDeployAttributeSpecListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = BackDeployAttributeSpecListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBackDeployVersionListSyntax(_ data: SyntaxData) {
-      let node = BackDeployVersionListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = BackDeployVersionListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBackDeployVersionArgumentSyntax(_ data: SyntaxData) {
-      let node = BackDeployVersionArgumentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = BackDeployVersionArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(_ data: SyntaxData) {
-      let node = OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConventionAttributeArgumentsSyntax(_ data: SyntaxData) {
-      let node = ConventionAttributeArgumentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ConventionAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) {
-      let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLabeledStmtSyntax(_ data: SyntaxData) {
-      let node = LabeledStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = LabeledStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplContinueStmtSyntax(_ data: SyntaxData) {
-      let node = ContinueStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ContinueStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplWhileStmtSyntax(_ data: SyntaxData) {
-      let node = WhileStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = WhileStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeferStmtSyntax(_ data: SyntaxData) {
-      let node = DeferStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeferStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplExpressionStmtSyntax(_ data: SyntaxData) {
-      let node = ExpressionStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ExpressionStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) {
-      let node = SwitchCaseListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SwitchCaseListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplRepeatWhileStmtSyntax(_ data: SyntaxData) {
-      let node = RepeatWhileStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = RepeatWhileStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGuardStmtSyntax(_ data: SyntaxData) {
-      let node = GuardStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GuardStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplWhereClauseSyntax(_ data: SyntaxData) {
-      let node = WhereClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = WhereClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplForInStmtSyntax(_ data: SyntaxData) {
-      let node = ForInStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ForInStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSwitchStmtSyntax(_ data: SyntaxData) {
-      let node = SwitchStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SwitchStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCatchClauseListSyntax(_ data: SyntaxData) {
-      let node = CatchClauseListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CatchClauseListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDoStmtSyntax(_ data: SyntaxData) {
-      let node = DoStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DoStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplReturnStmtSyntax(_ data: SyntaxData) {
-      let node = ReturnStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ReturnStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplYieldStmtSyntax(_ data: SyntaxData) {
-      let node = YieldStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = YieldStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplYieldListSyntax(_ data: SyntaxData) {
-      let node = YieldListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = YieldListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFallthroughStmtSyntax(_ data: SyntaxData) {
-      let node = FallthroughStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FallthroughStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBreakStmtSyntax(_ data: SyntaxData) {
-      let node = BreakStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = BreakStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCaseItemListSyntax(_ data: SyntaxData) {
-      let node = CaseItemListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CaseItemListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCatchItemListSyntax(_ data: SyntaxData) {
-      let node = CatchItemListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CatchItemListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConditionElementSyntax(_ data: SyntaxData) {
-      let node = ConditionElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ConditionElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityConditionSyntax(_ data: SyntaxData) {
-      let node = AvailabilityConditionSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AvailabilityConditionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMatchingPatternConditionSyntax(_ data: SyntaxData) {
-      let node = MatchingPatternConditionSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MatchingPatternConditionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOptionalBindingConditionSyntax(_ data: SyntaxData) {
-      let node = OptionalBindingConditionSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = OptionalBindingConditionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnavailabilityConditionSyntax(_ data: SyntaxData) {
-      let node = UnavailabilityConditionSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = UnavailabilityConditionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplHasSymbolConditionSyntax(_ data: SyntaxData) {
-      let node = HasSymbolConditionSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = HasSymbolConditionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConditionElementListSyntax(_ data: SyntaxData) {
-      let node = ConditionElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ConditionElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclarationStmtSyntax(_ data: SyntaxData) {
-      let node = DeclarationStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DeclarationStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplThrowStmtSyntax(_ data: SyntaxData) {
-      let node = ThrowStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ThrowStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIfStmtSyntax(_ data: SyntaxData) {
-      let node = IfStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IfStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSwitchCaseSyntax(_ data: SyntaxData) {
-      let node = SwitchCaseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SwitchCaseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) {
-      let node = SwitchDefaultLabelSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SwitchDefaultLabelSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCaseItemSyntax(_ data: SyntaxData) {
-      let node = CaseItemSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CaseItemSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCatchItemSyntax(_ data: SyntaxData) {
-      let node = CatchItemSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CatchItemSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) {
-      let node = SwitchCaseLabelSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SwitchCaseLabelSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCatchClauseSyntax(_ data: SyntaxData) {
-      let node = CatchClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CatchClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundAssertStmtSyntax(_ data: SyntaxData) {
-      let node = PoundAssertStmtSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PoundAssertStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericWhereClauseSyntax(_ data: SyntaxData) {
-      let node = GenericWhereClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericWhereClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericRequirementListSyntax(_ data: SyntaxData) {
-      let node = GenericRequirementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericRequirementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericRequirementSyntax(_ data: SyntaxData) {
-      let node = GenericRequirementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericRequirementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSameTypeRequirementSyntax(_ data: SyntaxData) {
-      let node = SameTypeRequirementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SameTypeRequirementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLayoutRequirementSyntax(_ data: SyntaxData) {
-      let node = LayoutRequirementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = LayoutRequirementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericParameterListSyntax(_ data: SyntaxData) {
-      let node = GenericParameterListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericParameterListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericParameterSyntax(_ data: SyntaxData) {
-      let node = GenericParameterSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericParameterSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrimaryAssociatedTypeListSyntax(_ data: SyntaxData) {
-      let node = PrimaryAssociatedTypeListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrimaryAssociatedTypeListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrimaryAssociatedTypeSyntax(_ data: SyntaxData) {
-      let node = PrimaryAssociatedTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrimaryAssociatedTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericParameterClauseSyntax(_ data: SyntaxData) {
-      let node = GenericParameterClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericParameterClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConformanceRequirementSyntax(_ data: SyntaxData) {
-      let node = ConformanceRequirementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ConformanceRequirementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPrimaryAssociatedTypeClauseSyntax(_ data: SyntaxData) {
-      let node = PrimaryAssociatedTypeClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PrimaryAssociatedTypeClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) {
-      let node = SimpleTypeIdentifierSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = SimpleTypeIdentifierSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMemberTypeIdentifierSyntax(_ data: SyntaxData) {
-      let node = MemberTypeIdentifierSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MemberTypeIdentifierSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClassRestrictionTypeSyntax(_ data: SyntaxData) {
-      let node = ClassRestrictionTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ClassRestrictionTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplArrayTypeSyntax(_ data: SyntaxData) {
-      let node = ArrayTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ArrayTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDictionaryTypeSyntax(_ data: SyntaxData) {
-      let node = DictionaryTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = DictionaryTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMetatypeTypeSyntax(_ data: SyntaxData) {
-      let node = MetatypeTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = MetatypeTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOptionalTypeSyntax(_ data: SyntaxData) {
-      let node = OptionalTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = OptionalTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConstrainedSugarTypeSyntax(_ data: SyntaxData) {
-      let node = ConstrainedSugarTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ConstrainedSugarTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplImplicitlyUnwrappedOptionalTypeSyntax(_ data: SyntaxData) {
-      let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCompositionTypeElementSyntax(_ data: SyntaxData) {
-      let node = CompositionTypeElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CompositionTypeElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCompositionTypeElementListSyntax(_ data: SyntaxData) {
-      let node = CompositionTypeElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CompositionTypeElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCompositionTypeSyntax(_ data: SyntaxData) {
-      let node = CompositionTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = CompositionTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPackExpansionTypeSyntax(_ data: SyntaxData) {
-      let node = PackExpansionTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = PackExpansionTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleTypeElementSyntax(_ data: SyntaxData) {
-      let node = TupleTypeElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TupleTypeElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleTypeElementListSyntax(_ data: SyntaxData) {
-      let node = TupleTypeElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TupleTypeElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleTypeSyntax(_ data: SyntaxData) {
-      let node = TupleTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TupleTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionTypeSyntax(_ data: SyntaxData) {
-      let node = FunctionTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = FunctionTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAttributedTypeSyntax(_ data: SyntaxData) {
-      let node = AttributedTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AttributedTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericArgumentListSyntax(_ data: SyntaxData) {
-      let node = GenericArgumentListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericArgumentListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericArgumentSyntax(_ data: SyntaxData) {
-      let node = GenericArgumentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericArgumentClauseSyntax(_ data: SyntaxData) {
-      let node = GenericArgumentClauseSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = GenericArgumentClauseSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplNamedOpaqueReturnTypeSyntax(_ data: SyntaxData) {
-      let node = NamedOpaqueReturnTypeSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = NamedOpaqueReturnTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypeAnnotationSyntax(_ data: SyntaxData) {
-      let node = TypeAnnotationSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TypeAnnotationSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEnumCasePatternSyntax(_ data: SyntaxData) {
-      let node = EnumCasePatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = EnumCasePatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIsTypePatternSyntax(_ data: SyntaxData) {
-      let node = IsTypePatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IsTypePatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOptionalPatternSyntax(_ data: SyntaxData) {
-      let node = OptionalPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = OptionalPatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIdentifierPatternSyntax(_ data: SyntaxData) {
-      let node = IdentifierPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = IdentifierPatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAsTypePatternSyntax(_ data: SyntaxData) {
-      let node = AsTypePatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AsTypePatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTuplePatternSyntax(_ data: SyntaxData) {
-      let node = TuplePatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TuplePatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplWildcardPatternSyntax(_ data: SyntaxData) {
-      let node = WildcardPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = WildcardPatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTuplePatternElementSyntax(_ data: SyntaxData) {
-      let node = TuplePatternElementSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TuplePatternElementSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplExpressionPatternSyntax(_ data: SyntaxData) {
-      let node = ExpressionPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ExpressionPatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTuplePatternElementListSyntax(_ data: SyntaxData) {
-      let node = TuplePatternElementListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = TuplePatternElementListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplValueBindingPatternSyntax(_ data: SyntaxData) {
-      let node = ValueBindingPatternSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ValueBindingPatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilitySpecListSyntax(_ data: SyntaxData) {
-      let node = AvailabilitySpecListSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AvailabilitySpecListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) {
-      let node = AvailabilityArgumentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AvailabilityArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) {
-      let node = AvailabilityLabeledArgumentSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AvailabilityLabeledArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityVersionRestrictionSyntax(_ data: SyntaxData) {
-      let node = AvailabilityVersionRestrictionSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = AvailabilityVersionRestrictionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplVersionTupleSyntax(_ data: SyntaxData) {
-      let node = VersionTupleSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = VersionTupleSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
 
@@ -5725,16 +5565,6 @@ open class SyntaxVisitor {
     // circumvents an issue where the compiler allocates stack space for every
     // case statement next to each other in debug builds, causing it to allocate
     // ~50KB per call to this function. rdar://55929175
-    case .unknownDecl:
-      visitImplUnknownDeclSyntax(data)
-    case .unknownExpr:
-      visitImplUnknownExprSyntax(data)
-    case .unknownStmt:
-      visitImplUnknownStmtSyntax(data)
-    case .unknownType:
-      visitImplUnknownTypeSyntax(data)
-    case .unknownPattern:
-      visitImplUnknownPatternSyntax(data)
     case .missing:
       visitImplMissingSyntax(data)
     case .missingDecl:

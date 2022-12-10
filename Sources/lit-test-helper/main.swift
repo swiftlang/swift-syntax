@@ -446,7 +446,6 @@ class NodePrinter: SyntaxAnyVisitor {
   }
 
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    assert(!node.isUnknown)
     print("<\(type(of: node.asProtocol(SyntaxProtocol.self)))>", terminator: "")
     return .visitChildren
   }
@@ -521,32 +520,11 @@ func diagnose(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
   let versionInfo = getSwiftLanguageVersionInfo(args: args)
 
-  let tree = try SyntaxParser.parse(treeURL, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral, diagnosticHandler: printDiagnostic)
-
-  class DiagnoseUnknown: SyntaxAnyVisitor {
-    let diagnosticHandler: ((Diagnostic) -> Void)
-    let converter: SourceLocationConverter
-    init(diagnosticHandler: @escaping ((Diagnostic) -> Void), _ converter: SourceLocationConverter) {
-      self.diagnosticHandler = diagnosticHandler
-      self.converter = converter
-      super.init(viewMode: .all)
-    }
-    override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-      if node.isUnknown {
-        diagnosticHandler(Diagnostic(
-          message: Diagnostic.Message(.warning, "unknown syntax exists"),
-          location: node.startLocation(converter: converter, afterLeadingTrivia: true),
-          actions: nil
-        ))
-      }
-      return .visitChildren
-    }
-  }
-  let visitor = DiagnoseUnknown(
-    diagnosticHandler: printDiagnostic,
-    SourceLocationConverter(file: treeURL.path, tree: tree)
-  )
-  visitor.walk(tree)
+  _ = try SyntaxParser.parse(
+    treeURL, 
+    languageVersion: versionInfo.languageVersion,
+    enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral,
+    diagnosticHandler: printDiagnostic)
 }
 
 do {

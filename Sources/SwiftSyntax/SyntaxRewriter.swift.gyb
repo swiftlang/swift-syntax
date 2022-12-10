@@ -100,24 +100,15 @@ open class SyntaxRewriter {
 
 % end
 
-% for node in SYNTAX_NODES:
+% for node in NON_BASE_SYNTAX_NODES:
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImpl${node.name}(_ data: SyntaxData) -> Syntax {
-%   if node.is_base():
-      let node = Unknown${node.name}(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-%   else:
-      let node = ${node.name}(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-%   end
+    let node = ${node.name}(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
   }
 
 % end

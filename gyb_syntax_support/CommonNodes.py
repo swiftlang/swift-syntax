@@ -12,11 +12,6 @@ COMMON_NODES = [
          parser_function='parseType'),
     Node('Pattern', name_for_diagnostics='pattern', kind='Syntax',
          parser_function='parsePattern'),
-    Node('UnknownDecl', name_for_diagnostics='declaration', kind='Decl'),
-    Node('UnknownExpr', name_for_diagnostics='expression', kind='Expr'),
-    Node('UnknownStmt', name_for_diagnostics='statement', kind='Stmt'),
-    Node('UnknownType', name_for_diagnostics='type', kind='Type'),
-    Node('UnknownPattern', name_for_diagnostics='pattern', kind='Pattern'),
     Node('Missing', name_for_diagnostics=None, kind='Syntax'),
     Node('MissingDecl', name_for_diagnostics='declaration', kind='Decl', children=[
         Child('Attributes', kind='AttributeList',

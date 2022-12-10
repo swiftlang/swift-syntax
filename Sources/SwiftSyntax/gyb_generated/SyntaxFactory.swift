@@ -47,56 +47,6 @@ public enum SyntaxFactory {
 
 
 
-  @available(*, deprecated, message: "Use initializer on UnknownDeclSyntax")
-  public static func makeBlankUnknownDecl(presence: SourcePresence = .present) -> UnknownDeclSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unknownDecl,
-        from: [
-      ], arena: arena))
-      return UnknownDeclSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on UnknownExprSyntax")
-  public static func makeBlankUnknownExpr(presence: SourcePresence = .present) -> UnknownExprSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unknownExpr,
-        from: [
-      ], arena: arena))
-      return UnknownExprSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on UnknownStmtSyntax")
-  public static func makeBlankUnknownStmt(presence: SourcePresence = .present) -> UnknownStmtSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unknownStmt,
-        from: [
-      ], arena: arena))
-      return UnknownStmtSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on UnknownTypeSyntax")
-  public static func makeBlankUnknownType(presence: SourcePresence = .present) -> UnknownTypeSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unknownType,
-        from: [
-      ], arena: arena))
-      return UnknownTypeSyntax(data)
-    }
-  }
-
-  @available(*, deprecated, message: "Use initializer on UnknownPatternSyntax")
-  public static func makeBlankUnknownPattern(presence: SourcePresence = .present) -> UnknownPatternSyntax {
-    return withExtendedLifetime(SyntaxArena()) { arena in
-      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unknownPattern,
-        from: [
-      ], arena: arena))
-      return UnknownPatternSyntax(data)
-    }
-  }
-
   @available(*, deprecated, message: "Use initializer on MissingSyntax")
   public static func makeBlankMissing(presence: SourcePresence = .missing) -> MissingSyntax {
     return withExtendedLifetime(SyntaxArena()) { arena in

@@ -61,41 +61,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnknownDeclSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnknownExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnknownStmtSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnknownTypeSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnknownPatternSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
   override open func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

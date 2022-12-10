@@ -13,56 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 
-// MARK: - UnknownTypeSyntax
-
-public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .unknownType else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `UnknownTypeSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unknownType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-  ) {
-    let layout: [RawSyntax?] = [
-    ]
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unknownType,
-        from: layout, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension UnknownTypeSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-    ])
-  }
-}
-
 // MARK: - MissingTypeSyntax
 
 public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {

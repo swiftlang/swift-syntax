@@ -20,26 +20,6 @@ public protocol SyntaxTransformVisitor {
   func visit(_ token: TokenSyntax) -> ResultType
   func visit(_ node: UnknownSyntax) -> ResultType
   
-  /// Visiting `UnknownDeclSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownDeclSyntax) -> ResultType
-  /// Visiting `UnknownExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownExprSyntax) -> ResultType
-  /// Visiting `UnknownStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownStmtSyntax) -> ResultType
-  /// Visiting `UnknownTypeSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownTypeSyntax) -> ResultType
-  /// Visiting `UnknownPatternSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownPatternSyntax) -> ResultType
   /// Visiting `MissingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1095,36 +1075,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
 
-  /// Visiting `UnknownDeclSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnknownDeclSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `UnknownExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnknownExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `UnknownStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnknownStmtSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `UnknownTypeSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnknownTypeSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `UnknownPatternSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnknownPatternSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
   /// Visiting `MissingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2698,16 +2648,6 @@ extension SyntaxTransformVisitor {
       return visit(node)
     case .unknown(let node):
       return visit(node)
-    case .unknownDecl(let derived):
-      return visit(derived)
-    case .unknownExpr(let derived):
-      return visit(derived)
-    case .unknownStmt(let derived):
-      return visit(derived)
-    case .unknownType(let derived):
-      return visit(derived)
-    case .unknownPattern(let derived):
-      return visit(derived)
     case .missing(let derived):
       return visit(derived)
     case .missingDecl(let derived):

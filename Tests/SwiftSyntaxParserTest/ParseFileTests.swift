@@ -44,7 +44,6 @@ public class ParseFileTests: XCTestCase {
       let fileContents = try String(contentsOf: currentFile)
       let parsed = try SyntaxParser.parse(currentFile)
       XCTAssertEqual("\(parsed)", fileContents)
-      try SyntaxVerifier.verify(Syntax(parsed))
     }())
   }
 

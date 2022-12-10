@@ -195,22 +195,6 @@ public class SyntaxCreationTests: XCTestCase {
     XCTAssertNil(call3.rightParen)
   }
 
-  public func testUnknownSyntax() {
-    let expr = StringLiteralExprSyntax(
-      openDelimiter: nil,
-      openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
-      closeQuote: .stringQuoteToken(),
-      closeDelimiter: nil
-    )
-    XCTAssertFalse(expr.isUnknown)
-    let unknown = UnknownSyntax(
-      tokens: [.leftBraceToken()])
-    XCTAssertTrue(unknown.isUnknown)
-    XCTAssertNoThrow(try SyntaxVerifier.verify(Syntax(expr)))
-    XCTAssertThrowsError(try SyntaxVerifier.verify(Syntax(unknown)))
-  }
-
   public func testMakeStringLiteralExpr() {
     let expr = StringLiteralExprSyntax(
       openDelimiter: nil,

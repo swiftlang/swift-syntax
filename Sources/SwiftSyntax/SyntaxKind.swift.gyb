@@ -39,18 +39,6 @@ public enum SyntaxKind {
     }
   }
 
-  public var isUnknown: Bool {
-    switch self {
-% for name in SYNTAX_BASE_KINDS:
-%   if name not in ["Syntax", "SyntaxCollection"]:
-    case .unknown${name}: return true
-%   end
-% end
-    case .unknown: return true
-    default: return false
-    }
-  }
-
   public var isMissing: Bool {
     switch self {
 % for name in SYNTAX_BASE_KINDS:

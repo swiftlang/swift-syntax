@@ -19,7 +19,7 @@ public class SyntaxChildrenTests: XCTestCase {
   public func testIterateWithAllPresent() throws {
     let returnStmt = ReturnStmtSyntax(
       returnKeyword: .returnKeyword(),
-      expression: ExprSyntax(UnknownExprSyntax()))
+      expression: ExprSyntax(MissingExprSyntax()))
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
     try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }

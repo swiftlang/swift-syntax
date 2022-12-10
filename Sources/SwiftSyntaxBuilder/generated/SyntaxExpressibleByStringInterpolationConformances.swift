@@ -459,21 +459,6 @@ extension TypeSyntax: SyntaxExpressibleByStringInterpolation {
 extension TypealiasDeclSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension UnknownDeclSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension UnknownExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension UnknownPatternSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension UnknownStmtSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension UnknownTypeSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension UnresolvedAsExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

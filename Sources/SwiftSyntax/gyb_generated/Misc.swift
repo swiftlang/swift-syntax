@@ -17,11 +17,6 @@ extension Syntax {
     return .choices([
       .node(UnknownSyntax.self),
       .node(TokenSyntax.self),
-      .node(UnknownDeclSyntax.self),
-      .node(UnknownExprSyntax.self),
-      .node(UnknownStmtSyntax.self),
-      .node(UnknownTypeSyntax.self),
-      .node(UnknownPatternSyntax.self),
       .node(MissingSyntax.self),
       .node(MissingDeclSyntax.self),
       .node(MissingExprSyntax.self),
@@ -292,11 +287,6 @@ extension SyntaxKind {
     switch self {
     case .token: return TokenSyntax.self
     case .unknown: return UnknownSyntax.self
-    case .unknownDecl: return UnknownDeclSyntax.self
-    case .unknownExpr: return UnknownExprSyntax.self
-    case .unknownStmt: return UnknownStmtSyntax.self
-    case .unknownType: return UnknownTypeSyntax.self
-    case .unknownPattern: return UnknownPatternSyntax.self
     case .missing: return MissingSyntax.self
     case .missingDecl: return MissingDeclSyntax.self
     case .missingExpr: return MissingExprSyntax.self
@@ -567,16 +557,6 @@ extension SyntaxKind {
       return nil
     case .token:
       return "token"
-    case .unknownDecl:
-      return "declaration"
-    case .unknownExpr:
-      return "expression"
-    case .unknownStmt:
-      return "statement"
-    case .unknownType:
-      return "type"
-    case .unknownPattern:
-      return "pattern"
     case .missing:
       return nil
     case .missingDecl:

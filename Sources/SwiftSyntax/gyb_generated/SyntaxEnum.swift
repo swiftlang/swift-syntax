@@ -17,11 +17,6 @@
 public enum SyntaxEnum {
   case unknown(UnknownSyntax)
   case token(TokenSyntax)
-  case unknownDecl(UnknownDeclSyntax)
-  case unknownExpr(UnknownExprSyntax)
-  case unknownStmt(UnknownStmtSyntax)
-  case unknownType(UnknownTypeSyntax)
-  case unknownPattern(UnknownPatternSyntax)
   case missing(MissingSyntax)
   case missingDecl(MissingDeclSyntax)
   case missingExpr(MissingExprSyntax)
@@ -293,16 +288,6 @@ public extension Syntax {
       return .token(TokenSyntax(self)!)
     case .unknown:
       return .unknown(UnknownSyntax(self)!)
-    case .unknownDecl:
-      return .unknownDecl(UnknownDeclSyntax(self)!)
-    case .unknownExpr:
-      return .unknownExpr(UnknownExprSyntax(self)!)
-    case .unknownStmt:
-      return .unknownStmt(UnknownStmtSyntax(self)!)
-    case .unknownType:
-      return .unknownType(UnknownTypeSyntax(self)!)
-    case .unknownPattern:
-      return .unknownPattern(UnknownPatternSyntax(self)!)
     case .missing:
       return .missing(MissingSyntax(self)!)
     case .missingDecl:

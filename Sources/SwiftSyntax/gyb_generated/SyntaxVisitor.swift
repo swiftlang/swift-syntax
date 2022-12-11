@@ -2663,17 +2663,6 @@ open class SyntaxVisitor {
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TokenSyntax) {}
 
-  /// Visiting `UnknownSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting the node and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnknownSyntax) {}
-
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingSyntax(_ data: SyntaxData) {
     let node = MissingSyntax(data)
@@ -5552,14 +5541,6 @@ open class SyntaxVisitor {
       let node = TokenSyntax(data)
       _ = visit(node)
       // No children to visit.
-      visitPost(node)
-    case .unknown:
-      let node = UnknownSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
       visitPost(node)
     // The implementation of every generated case goes into its own function. This
     // circumvents an issue where the compiler allocates stack space for every

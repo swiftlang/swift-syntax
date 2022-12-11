@@ -53,14 +53,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  override open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnknownSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

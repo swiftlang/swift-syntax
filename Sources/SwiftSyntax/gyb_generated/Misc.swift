@@ -15,7 +15,6 @@
 extension Syntax {
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(UnknownSyntax.self),
       .node(TokenSyntax.self),
       .node(MissingSyntax.self),
       .node(MissingDeclSyntax.self),
@@ -286,7 +285,6 @@ extension SyntaxKind {
   public var syntaxNodeType: SyntaxProtocol.Type {
     switch self {
     case .token: return TokenSyntax.self
-    case .unknown: return UnknownSyntax.self
     case .missing: return MissingSyntax.self
     case .missingDecl: return MissingDeclSyntax.self
     case .missingExpr: return MissingExprSyntax.self
@@ -553,8 +551,6 @@ extension SyntaxKind {
 
   public var nameForDiagnostics: String? {
     switch self {
-    case .unknown:
-      return nil
     case .token:
       return "token"
     case .missing:

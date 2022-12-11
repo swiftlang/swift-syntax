@@ -15,7 +15,6 @@
 /// Enum to exhaustively switch over all different syntax nodes.
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxEnum {
-  case unknown(UnknownSyntax)
   case token(TokenSyntax)
   case missing(MissingSyntax)
   case missingDecl(MissingDeclSyntax)
@@ -286,8 +285,6 @@ public extension Syntax {
     switch raw.kind {
     case .token:
       return .token(TokenSyntax(self)!)
-    case .unknown:
-      return .unknown(UnknownSyntax(self)!)
     case .missing:
       return .missing(MissingSyntax(self)!)
     case .missingDecl:

@@ -22,7 +22,6 @@
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxKind {
   case token
-  case unknown
 % for node in NON_BASE_SYNTAX_NODES:
   case ${node.swift_syntax_kind}
 % end
@@ -34,7 +33,6 @@ public enum SyntaxKind {
     case .${node.swift_syntax_kind}: return true
 %   end
 % end
-    case .unknown: return true
     default: return false
     }
   }

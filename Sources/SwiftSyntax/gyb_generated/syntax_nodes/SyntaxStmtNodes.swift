@@ -3214,7 +3214,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `yields`, if present.
   public func withYields(_ newChild: Yields?) -> YieldStmtSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return YieldStmtSyntax(newData)
   }

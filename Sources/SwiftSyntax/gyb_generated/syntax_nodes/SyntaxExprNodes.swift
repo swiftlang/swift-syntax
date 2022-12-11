@@ -3601,7 +3601,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `content`, if present.
   public func withContent(_ newChild: Content?) -> DictionaryExprSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return DictionaryExprSyntax(newData)
   }

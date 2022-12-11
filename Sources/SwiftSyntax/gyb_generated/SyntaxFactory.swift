@@ -34,11 +34,6 @@ public enum SyntaxFactory {
       presence: presence)
   }
 
-  @available(*, deprecated, message: "Use initializer on UnknownSyntax")
-  public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> UnknownSyntax {
-    UnknownSyntax(tokens: tokens)
-  }
-
 /// MARK: Syntax Node Creation APIs
 
 
@@ -152,7 +147,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .codeBlockItem,
         from: [
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         nil,
         nil,
@@ -1027,7 +1022,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: arena),
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: arena),
         nil,
@@ -2233,7 +2228,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
       ], arena: arena))
       return KeyPathComponentSyntax(data)
@@ -4784,7 +4779,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         nil,
         nil,
@@ -5165,7 +5160,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
       ], arena: arena))
       return NamedAttributeStringArgumentSyntax(data)
@@ -5364,7 +5359,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
       ], arena: arena))
       return DifferentiabilityParamsClauseSyntax(data)
@@ -6281,7 +6276,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.yield, arena: arena),
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
       ], arena: arena))
       return YieldStmtSyntax(data)
@@ -6443,7 +6438,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .conditionElement,
         from: [
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         nil,
         nil,
@@ -6794,7 +6789,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: arena),
         nil,
@@ -7094,7 +7089,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .genericRequirement,
         from: [
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         nil,
         nil,
@@ -8564,7 +8559,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .availabilityArgument,
         from: [
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         nil,
         nil,
@@ -8601,7 +8596,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
       ], arena: arena))
       return AvailabilityLabeledArgumentSyntax(data)

@@ -10,49 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-// MARK: UnknownSyntax
-
-/// A wrapper around a raw Syntax layout.
-public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .unknown else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates an `UnknownSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unknown)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(tokens: [TokenSyntax]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: .unknown,
-        from: tokens.map { $0.raw }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    return nil
-  }
-}
-
-extension UnknownSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [:])
-  }
-}
-
 // MARK: TokenSyntax
 
 /// A Syntax node representing a single token.

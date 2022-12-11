@@ -133,7 +133,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/${node.name}>
 %   end
 % end
-- <doc:SwiftSyntax/UnknownSyntax>
 
 ### Traits
 

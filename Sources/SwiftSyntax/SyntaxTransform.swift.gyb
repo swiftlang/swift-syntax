@@ -23,8 +23,7 @@ public protocol SyntaxTransformVisitor {
   func visitAny(_ node: Syntax) -> ResultType
   
   func visit(_ token: TokenSyntax) -> ResultType
-  func visit(_ node: UnknownSyntax) -> ResultType
-  
+
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   /// Visiting `${node.name}` specifically.
@@ -38,10 +37,6 @@ public protocol SyntaxTransformVisitor {
 extension SyntaxTransformVisitor {
   public func visit(_ token: TokenSyntax) -> ResultType {
     visitAny(Syntax(token))
-  }
-
-  public func visit(_ node: UnknownSyntax) -> ResultType {
-    visitAny(Syntax(node))
   }
 
 % for node in SYNTAX_NODES:
@@ -58,8 +53,6 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: Syntax) -> ResultType {
     switch node.as(SyntaxEnum.self) {
     case .token(let node):
-      return visit(node)
-    case .unknown(let node):
       return visit(node)
 % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}(let derived):

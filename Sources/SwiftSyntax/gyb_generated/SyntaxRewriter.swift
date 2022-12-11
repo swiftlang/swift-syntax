@@ -1857,13 +1857,6 @@ open class SyntaxRewriter {
   open func visit(_ token: TokenSyntax) -> TokenSyntax {
     return token
   }
-  
-  /// Visit an `UnknownSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: UnknownSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
-  }
 
   /// The function called before visiting the node and its descendents.
   ///   - node: the node we are about to visit.
@@ -4552,16 +4545,6 @@ open class SyntaxRewriter {
     return Syntax(visit(node))
   }
 
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnknownSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnknownSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return visit(node)
-  }
-
 // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
 // rewriting. In scenarios with reduced stack space (in particular dispatch 
 // queues), this easily results in a stack overflow. To work around this issue, 
@@ -4591,8 +4574,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax
-    case .unknown:
-      return visitImplUnknownSyntax
     case .missing:
       return visitImplMissingSyntax
     case .missingDecl:
@@ -5128,8 +5109,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax(data)
-    case .unknown:
-      return visitImplUnknownSyntax(data)
     case .missing:
       return visitImplMissingSyntax(data)
     case .missingDecl:

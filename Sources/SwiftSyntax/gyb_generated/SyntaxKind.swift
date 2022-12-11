@@ -16,7 +16,6 @@
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxKind {
   case token
-  case unknown
   case missing
   case missingDecl
   case missingExpr
@@ -326,7 +325,6 @@ public enum SyntaxKind {
     case .genericArgumentList: return true
     case .tuplePatternElementList: return true
     case .availabilitySpecList: return true
-    case .unknown: return true
     default: return false
     }
   }

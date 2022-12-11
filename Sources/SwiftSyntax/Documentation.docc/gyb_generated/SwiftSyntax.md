@@ -417,7 +417,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MissingStmtSyntax>
 - <doc:SwiftSyntax/MissingTypeSyntax>
 - <doc:SwiftSyntax/MissingPatternSyntax>
-- <doc:SwiftSyntax/UnknownSyntax>
 
 ### Traits
 

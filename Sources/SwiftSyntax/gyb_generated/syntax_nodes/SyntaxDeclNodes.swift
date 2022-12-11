@@ -10404,7 +10404,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                   current `signature`, if present.
   public func withSignature(_ newChild: Signature?) -> MacroDeclSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 11, with: raw, arena: arena)
     return MacroDeclSyntax(newData)
   }

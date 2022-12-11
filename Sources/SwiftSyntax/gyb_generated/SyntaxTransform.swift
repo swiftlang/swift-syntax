@@ -18,8 +18,7 @@ public protocol SyntaxTransformVisitor {
   func visitAny(_ node: Syntax) -> ResultType
   
   func visit(_ token: TokenSyntax) -> ResultType
-  func visit(_ node: UnknownSyntax) -> ResultType
-  
+
   /// Visiting `MissingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1069,10 +1068,6 @@ public protocol SyntaxTransformVisitor {
 extension SyntaxTransformVisitor {
   public func visit(_ token: TokenSyntax) -> ResultType {
     visitAny(Syntax(token))
-  }
-
-  public func visit(_ node: UnknownSyntax) -> ResultType {
-    visitAny(Syntax(node))
   }
 
   /// Visiting `MissingSyntax` specifically.
@@ -2645,8 +2640,6 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: Syntax) -> ResultType {
     switch node.as(SyntaxEnum.self) {
     case .token(let node):
-      return visit(node)
-    case .unknown(let node):
       return visit(node)
     case .missing(let derived):
       return visit(derived)

@@ -287,42 +287,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       assertNoError(kind, index, verify(element, as: RawExprSyntax.self))
     }
     break
-  case .poundLineExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .poundFileExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .poundFileIDExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .poundFilePathExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .poundFunctionExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    break
-  case .poundDsohandleExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    break
   case .symbolicReferenceExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))

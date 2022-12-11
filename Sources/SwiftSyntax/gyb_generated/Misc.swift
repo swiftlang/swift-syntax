@@ -51,12 +51,6 @@ extension Syntax {
       .node(AssignmentExprSyntax.self),
       .node(SequenceExprSyntax.self),
       .node(ExprListSyntax.self),
-      .node(PoundLineExprSyntax.self),
-      .node(PoundFileExprSyntax.self),
-      .node(PoundFileIDExprSyntax.self),
-      .node(PoundFilePathExprSyntax.self),
-      .node(PoundFunctionExprSyntax.self),
-      .node(PoundDsohandleExprSyntax.self),
       .node(SymbolicReferenceExprSyntax.self),
       .node(PrefixOperatorExprSyntax.self),
       .node(BinaryOperatorExprSyntax.self),
@@ -332,12 +326,6 @@ extension SyntaxKind {
     case .assignmentExpr: return AssignmentExprSyntax.self
     case .sequenceExpr: return SequenceExprSyntax.self
     case .exprList: return ExprListSyntax.self
-    case .poundLineExpr: return PoundLineExprSyntax.self
-    case .poundFileExpr: return PoundFileExprSyntax.self
-    case .poundFileIDExpr: return PoundFileIDExprSyntax.self
-    case .poundFilePathExpr: return PoundFilePathExprSyntax.self
-    case .poundFunctionExpr: return PoundFunctionExprSyntax.self
-    case .poundDsohandleExpr: return PoundDsohandleExprSyntax.self
     case .symbolicReferenceExpr: return SymbolicReferenceExprSyntax.self
     case .prefixOperatorExpr: return PrefixOperatorExprSyntax.self
     case .binaryOperatorExpr: return BinaryOperatorExprSyntax.self
@@ -646,18 +634,6 @@ extension SyntaxKind {
     case .sequenceExpr:
       return nil
     case .exprList:
-      return nil
-    case .poundLineExpr:
-      return nil
-    case .poundFileExpr:
-      return nil
-    case .poundFileIDExpr:
-      return nil
-    case .poundFilePathExpr:
-      return nil
-    case .poundFunctionExpr:
-      return nil
-    case .poundDsohandleExpr:
       return nil
     case .symbolicReferenceExpr:
       return nil

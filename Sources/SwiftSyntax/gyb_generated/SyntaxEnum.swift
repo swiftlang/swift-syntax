@@ -51,12 +51,6 @@ public enum SyntaxEnum {
   case assignmentExpr(AssignmentExprSyntax)
   case sequenceExpr(SequenceExprSyntax)
   case exprList(ExprListSyntax)
-  case poundLineExpr(PoundLineExprSyntax)
-  case poundFileExpr(PoundFileExprSyntax)
-  case poundFileIDExpr(PoundFileIDExprSyntax)
-  case poundFilePathExpr(PoundFilePathExprSyntax)
-  case poundFunctionExpr(PoundFunctionExprSyntax)
-  case poundDsohandleExpr(PoundDsohandleExprSyntax)
   case symbolicReferenceExpr(SymbolicReferenceExprSyntax)
   case prefixOperatorExpr(PrefixOperatorExprSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
@@ -367,18 +361,6 @@ public extension Syntax {
       return .sequenceExpr(SequenceExprSyntax(self)!)
     case .exprList:
       return .exprList(ExprListSyntax(self)!)
-    case .poundLineExpr:
-      return .poundLineExpr(PoundLineExprSyntax(self)!)
-    case .poundFileExpr:
-      return .poundFileExpr(PoundFileExprSyntax(self)!)
-    case .poundFileIDExpr:
-      return .poundFileIDExpr(PoundFileIDExprSyntax(self)!)
-    case .poundFilePathExpr:
-      return .poundFilePathExpr(PoundFilePathExprSyntax(self)!)
-    case .poundFunctionExpr:
-      return .poundFunctionExpr(PoundFunctionExprSyntax(self)!)
-    case .poundDsohandleExpr:
-      return .poundDsohandleExpr(PoundDsohandleExprSyntax(self)!)
     case .symbolicReferenceExpr:
       return .symbolicReferenceExpr(SymbolicReferenceExprSyntax(self)!)
     case .prefixOperatorExpr:

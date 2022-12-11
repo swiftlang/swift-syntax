@@ -381,66 +381,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `ExprListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExprListSyntax) {}
-  /// Visiting `PoundLineExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `PoundLineExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundLineExprSyntax) {}
-  /// Visiting `PoundFileExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `PoundFileExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundFileExprSyntax) {}
-  /// Visiting `PoundFileIDExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundFileIDExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `PoundFileIDExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundFileIDExprSyntax) {}
-  /// Visiting `PoundFilePathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundFilePathExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `PoundFilePathExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundFilePathExprSyntax) {}
-  /// Visiting `PoundFunctionExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `PoundFunctionExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundFunctionExprSyntax) {}
-  /// Visiting `PoundDsohandleExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `PoundDsohandleExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundDsohandleExprSyntax) {}
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3214,72 +3154,6 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundLineExprSyntax(_ data: SyntaxData) {
-      let node = PoundLineExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundFileExprSyntax(_ data: SyntaxData) {
-      let node = PoundFileExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundFileIDExprSyntax(_ data: SyntaxData) {
-      let node = PoundFileIDExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundFilePathExprSyntax(_ data: SyntaxData) {
-      let node = PoundFilePathExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundFunctionExprSyntax(_ data: SyntaxData) {
-      let node = PoundFunctionExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundDsohandleExprSyntax(_ data: SyntaxData) {
-      let node = PoundDsohandleExprSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSymbolicReferenceExprSyntax(_ data: SyntaxData) {
       let node = SymbolicReferenceExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5919,18 +5793,6 @@ open class SyntaxVisitor {
       visitImplSequenceExprSyntax(data)
     case .exprList:
       visitImplExprListSyntax(data)
-    case .poundLineExpr:
-      visitImplPoundLineExprSyntax(data)
-    case .poundFileExpr:
-      visitImplPoundFileExprSyntax(data)
-    case .poundFileIDExpr:
-      visitImplPoundFileIDExprSyntax(data)
-    case .poundFilePathExpr:
-      visitImplPoundFilePathExprSyntax(data)
-    case .poundFunctionExpr:
-      visitImplPoundFunctionExprSyntax(data)
-    case .poundDsohandleExpr:
-      visitImplPoundDsohandleExprSyntax(data)
     case .symbolicReferenceExpr:
       visitImplSymbolicReferenceExprSyntax(data)
     case .prefixOperatorExpr:

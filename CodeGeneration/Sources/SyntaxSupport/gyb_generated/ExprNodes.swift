@@ -1162,97 +1162,6 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
-  Node(name: "ObjcNamePiece",
-       nameForDiagnostics: nil,
-       kind: "Syntax",
-       children: [
-         Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
-         Child(name: "Dot",
-               kind: "PeriodToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Period"
-               ])
-       ]),
-
-  Node(name: "ObjcName",
-       nameForDiagnostics: nil,
-       kind: "SyntaxCollection",
-       element: "ObjcNamePiece"),
-
-  Node(name: "ObjcKeyPathExpr",
-       nameForDiagnostics: "'#keyPath' expression",
-       kind: "Expr",
-       traits: [
-         "Parenthesized"
-       ],
-       children: [
-         Child(name: "KeyPath",
-               kind: "PoundKeyPathToken",
-               tokenChoices: [
-                 "PoundKeyPath"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Name",
-               kind: "ObjcName",
-               collectionElementName: "NamePiece"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
-       ]),
-
-  Node(name: "ObjcSelectorExpr",
-       nameForDiagnostics: "'#selector' expression",
-       kind: "Expr",
-       traits: [
-         "Parenthesized"
-       ],
-       children: [
-         Child(name: "PoundSelector",
-               kind: "PoundSelectorToken",
-               tokenChoices: [
-                 "PoundSelector"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Kind",
-               kind: "ContextualKeywordToken",
-               isOptional: true,
-               tokenChoices: [
-                 "ContextualKeyword"
-               ],
-               textChoices: [
-                 "getter",
-                 "setter"
-               ]),
-         Child(name: "Colon",
-               kind: "ColonToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Colon"
-               ]),
-         Child(name: "Name",
-               kind: "Expr"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
-               ])
-       ]),
-
   Node(name: "MacroExpansionExpr",
        nameForDiagnostics: "pound literal expression",
        kind: "Expr",
@@ -1314,35 +1223,6 @@ public let EXPR_NODES: [Node] = [
                kind: "IdentifierToken",
                tokenChoices: [
                  "Identifier"
-               ])
-       ]),
-
-  Node(name: "ObjectLiteralExpr",
-       nameForDiagnostics: "object literal",
-       kind: "Expr",
-       traits: [
-         "Parenthesized"
-       ],
-       children: [
-         Child(name: "Identifier",
-               kind: "Token",
-               tokenChoices: [
-                 "PoundColorLiteral",
-                 "PoundFileLiteral",
-                 "PoundImageLiteral"
-               ]),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               tokenChoices: [
-                 "LeftParen"
-               ]),
-         Child(name: "Arguments",
-               kind: "TupleExprElementList",
-               collectionElementName: "Argument"),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
-               tokenChoices: [
-                 "RightParen"
                ])
        ]),
 

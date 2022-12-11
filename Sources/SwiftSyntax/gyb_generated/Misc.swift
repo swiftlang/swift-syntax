@@ -105,14 +105,9 @@ extension Syntax {
       .node(KeyPathPropertyComponentSyntax.self),
       .node(KeyPathSubscriptComponentSyntax.self),
       .node(KeyPathOptionalComponentSyntax.self),
-      .node(ObjcNamePieceSyntax.self),
-      .node(ObjcNameSyntax.self),
-      .node(ObjcKeyPathExprSyntax.self),
-      .node(ObjcSelectorExprSyntax.self),
       .node(MacroExpansionExprSyntax.self),
       .node(PostfixIfConfigExprSyntax.self),
       .node(EditorPlaceholderExprSyntax.self),
-      .node(ObjectLiteralExprSyntax.self),
       .node(YieldExprListSyntax.self),
       .node(YieldExprListElementSyntax.self),
       .node(TypeInitializerClauseSyntax.self),
@@ -391,14 +386,9 @@ extension SyntaxKind {
     case .keyPathPropertyComponent: return KeyPathPropertyComponentSyntax.self
     case .keyPathSubscriptComponent: return KeyPathSubscriptComponentSyntax.self
     case .keyPathOptionalComponent: return KeyPathOptionalComponentSyntax.self
-    case .objcNamePiece: return ObjcNamePieceSyntax.self
-    case .objcName: return ObjcNameSyntax.self
-    case .objcKeyPathExpr: return ObjcKeyPathExprSyntax.self
-    case .objcSelectorExpr: return ObjcSelectorExprSyntax.self
     case .macroExpansionExpr: return MacroExpansionExprSyntax.self
     case .postfixIfConfigExpr: return PostfixIfConfigExprSyntax.self
     case .editorPlaceholderExpr: return EditorPlaceholderExprSyntax.self
-    case .objectLiteralExpr: return ObjectLiteralExprSyntax.self
     case .yieldExprList: return YieldExprListSyntax.self
     case .yieldExprListElement: return YieldExprListElementSyntax.self
     case .typeInitializerClause: return TypeInitializerClauseSyntax.self
@@ -765,22 +755,12 @@ extension SyntaxKind {
       return "key path subscript component"
     case .keyPathOptionalComponent:
       return "key path optional component"
-    case .objcNamePiece:
-      return nil
-    case .objcName:
-      return nil
-    case .objcKeyPathExpr:
-      return "'#keyPath' expression"
-    case .objcSelectorExpr:
-      return "'#selector' expression"
     case .macroExpansionExpr:
       return "pound literal expression"
     case .postfixIfConfigExpr:
       return nil
     case .editorPlaceholderExpr:
       return "editor placeholder"
-    case .objectLiteralExpr:
-      return "object literal"
     case .yieldExprList:
       return "yield list"
     case .yieldExprListElement:

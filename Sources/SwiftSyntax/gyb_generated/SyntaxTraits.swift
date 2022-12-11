@@ -192,9 +192,6 @@ extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {}
 extension ClosureParamSyntax: WithTrailingCommaSyntax {}
 extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {}
 extension ExpressionSegmentSyntax: ParenthesizedSyntax {}
-extension ObjcKeyPathExprSyntax: ParenthesizedSyntax {}
-extension ObjcSelectorExprSyntax: ParenthesizedSyntax {}
-extension ObjectLiteralExprSyntax: ParenthesizedSyntax {}
 extension TypealiasDeclSyntax: IdentifiedDeclSyntax {}
 extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax {}
 extension ParameterClauseSyntax: ParenthesizedSyntax {}

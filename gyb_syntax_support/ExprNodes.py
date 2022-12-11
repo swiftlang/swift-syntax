@@ -682,43 +682,6 @@ EXPR_NODES = [
                    ]),
          ]),
 
-    # e.g. "a." or "a"
-    Node('ObjcNamePiece', name_for_diagnostics=None, kind='Syntax',
-         children=[
-             Child('Name', kind='IdentifierToken'),
-             Child('Dot', kind='PeriodToken', is_optional=True),
-         ]),
-
-    # e.g. "a.b.c"
-    Node('ObjcName', name_for_diagnostics=None, kind='SyntaxCollection',
-         element='ObjcNamePiece'),
-
-    # e.g. "#keyPath(a.b.c)"
-    Node('ObjcKeyPathExpr', name_for_diagnostics="'#keyPath' expression", kind='Expr',
-         traits=['Parenthesized'],
-         children=[
-             Child('KeyPath', kind='PoundKeyPathToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Name', kind='ObjcName', name_for_diagnostics='name',
-                   collection_element_name='NamePiece'),
-             Child('RightParen', kind='RightParenToken'),
-         ]),
-
-    # e.g. "#selector(getter:Foo.bar)"
-    Node('ObjcSelectorExpr', name_for_diagnostics="'#selector' expression", kind='Expr',
-         traits=['Parenthesized'],
-         children=[
-             Child('PoundSelector', kind='PoundSelectorToken'),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Kind', kind='ContextualKeywordToken',
-                   text_choices=['getter', 'setter'],
-                   is_optional=True),
-             Child('Colon', kind='ColonToken',
-                   is_optional=True),
-             Child('Name', kind='Expr', name_for_diagnostics='name'),
-             Child('RightParen', kind='RightParenToken'),
-         ]),
-
     # e.g., "#embed("filename.txt")"
     Node('MacroExpansionExpr',
          name_for_diagnostics="pound literal expression", kind='Expr',
@@ -754,21 +717,6 @@ EXPR_NODES = [
          kind='Expr',
          children=[
              Child('Identifier', kind='IdentifierToken'),
-         ]),
-    # #fileLiteral(a, b, c)
-    Node('ObjectLiteralExpr', name_for_diagnostics='object literal', kind='Expr',
-         traits=['Parenthesized'],
-         children=[
-             Child('Identifier', kind='Token',
-                   token_choices=[
-                       'PoundColorLiteralToken',
-                       'PoundFileLiteralToken',
-                       'PoundImageLiteralToken',
-                   ]),
-             Child('LeftParen', kind='LeftParenToken'),
-             Child('Arguments', kind='TupleExprElementList',
-                   collection_element_name='Argument'),
-             Child('RightParen', kind='RightParenToken'),
          ]),
 
     Node('YieldExprList', name_for_diagnostics='yield list',

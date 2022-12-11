@@ -244,12 +244,6 @@ SYNTAX_TOKENS = [
     ExprKeyword('Try', 'try'),
     ExprKeyword('Throws', 'throws'),
 
-    Keyword('__FILE__', '__FILE__'),
-    Keyword('__LINE__', '__LINE__'),
-    Keyword('__COLUMN__', '__COLUMN__'),
-    Keyword('__FUNCTION__', '__FUNCTION__'),
-    Keyword('__DSO_HANDLE__', '__DSO_HANDLE__'),
-
     # Pattern keywords
     PatternKeyword('Wildcard', '_'),
 

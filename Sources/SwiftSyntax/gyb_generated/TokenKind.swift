@@ -69,11 +69,6 @@ public enum TokenKind: Hashable {
   case trueKeyword
   case tryKeyword
   case throwsKeyword
-  case __file__Keyword
-  case __line__Keyword
-  case __column__Keyword
-  case __function__Keyword
-  case __dso_handle__Keyword
   case wildcardKeyword
   case leftParen
   case rightParen
@@ -252,16 +247,6 @@ public enum TokenKind: Hashable {
       self = .tryKeyword
     case "throws":
       self = .throwsKeyword
-    case "__FILE__":
-      self = .__file__Keyword
-    case "__LINE__":
-      self = .__line__Keyword
-    case "__COLUMN__":
-      self = .__column__Keyword
-    case "__FUNCTION__":
-      self = .__function__Keyword
-    case "__DSO_HANDLE__":
-      self = .__dso_handle__Keyword
     case "_":
       self = .wildcardKeyword
     case "#keyPath":
@@ -373,11 +358,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return "true"
     case .tryKeyword: return "try"
     case .throwsKeyword: return "throws"
-    case .__file__Keyword: return "__FILE__"
-    case .__line__Keyword: return "__LINE__"
-    case .__column__Keyword: return "__COLUMN__"
-    case .__function__Keyword: return "__FUNCTION__"
-    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
     case .wildcardKeyword: return "_"
     case .leftParen: return "("
     case .rightParen: return ")"
@@ -509,11 +489,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return true
     case .tryKeyword: return true
     case .throwsKeyword: return true
-    case .__file__Keyword: return true
-    case .__line__Keyword: return true
-    case .__column__Keyword: return true
-    case .__function__Keyword: return true
-    case .__dso_handle__Keyword: return true
     case .wildcardKeyword: return true
     case .leftParen: return false
     case .rightParen: return false
@@ -645,11 +620,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return false
     case .tryKeyword: return false
     case .throwsKeyword: return false
-    case .__file__Keyword: return false
-    case .__line__Keyword: return false
-    case .__column__Keyword: return false
-    case .__function__Keyword: return false
-    case .__dso_handle__Keyword: return false
     case .wildcardKeyword: return false
     case .leftParen: return true
     case .rightParen: return true
@@ -776,11 +746,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return "kw_true"
     case .tryKeyword: return "kw_try"
     case .throwsKeyword: return "kw_throws"
-    case .__file__Keyword: return "kw___FILE__"
-    case .__line__Keyword: return "kw___LINE__"
-    case .__column__Keyword: return "kw___COLUMN__"
-    case .__function__Keyword: return "kw___FUNCTION__"
-    case .__dso_handle__Keyword: return "kw___DSO_HANDLE__"
     case .wildcardKeyword: return "kw__"
     case .leftParen: return "l_paren"
     case .rightParen: return "r_paren"
@@ -907,11 +872,6 @@ public enum TokenKind: Hashable {
     case .trueKeyword: return SourceLength(utf8Length: 4)
     case .tryKeyword: return SourceLength(utf8Length: 3)
     case .throwsKeyword: return SourceLength(utf8Length: 6)
-    case .__file__Keyword: return SourceLength(utf8Length: 8)
-    case .__line__Keyword: return SourceLength(utf8Length: 8)
-    case .__column__Keyword: return SourceLength(utf8Length: 10)
-    case .__function__Keyword: return SourceLength(utf8Length: 12)
-    case .__dso_handle__Keyword: return SourceLength(utf8Length: 14)
     case .wildcardKeyword: return SourceLength(utf8Length: 1)
     case .leftParen: return SourceLength(utf8Length: 1)
     case .rightParen: return SourceLength(utf8Length: 1)
@@ -1040,11 +1000,6 @@ extension TokenKind: Equatable {
     case (.trueKeyword, .trueKeyword): return true
     case (.tryKeyword, .tryKeyword): return true
     case (.throwsKeyword, .throwsKeyword): return true
-    case (.__file__Keyword, .__file__Keyword): return true
-    case (.__line__Keyword, .__line__Keyword): return true
-    case (.__column__Keyword, .__column__Keyword): return true
-    case (.__function__Keyword, .__function__Keyword): return true
-    case (.__dso_handle__Keyword, .__dso_handle__Keyword): return true
     case (.wildcardKeyword, .wildcardKeyword): return true
     case (.leftParen, .leftParen): return true
     case (.rightParen, .rightParen): return true
@@ -1188,11 +1143,6 @@ public enum RawTokenKind: Equatable, Hashable {
   case trueKeyword
   case tryKeyword
   case throwsKeyword
-  case __file__Keyword
-  case __line__Keyword
-  case __column__Keyword
-  case __function__Keyword
-  case __dso_handle__Keyword
   case wildcardKeyword
   case leftParen
   case rightParen
@@ -1318,11 +1268,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return "true"
     case .tryKeyword: return "try"
     case .throwsKeyword: return "throws"
-    case .__file__Keyword: return "__FILE__"
-    case .__line__Keyword: return "__LINE__"
-    case .__column__Keyword: return "__COLUMN__"
-    case .__function__Keyword: return "__FUNCTION__"
-    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
     case .wildcardKeyword: return "_"
     case .leftParen: return "("
     case .rightParen: return ")"
@@ -1436,11 +1381,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return "true"
     case .tryKeyword: return "try"
     case .throwsKeyword: return "throws"
-    case .__file__Keyword: return "__FILE__"
-    case .__line__Keyword: return "__LINE__"
-    case .__column__Keyword: return "__COLUMN__"
-    case .__function__Keyword: return "__FUNCTION__"
-    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
     case .wildcardKeyword: return "_"
     case .leftParen: return "("
     case .rightParen: return ")"
@@ -1572,11 +1512,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return true
     case .tryKeyword: return true
     case .throwsKeyword: return true
-    case .__file__Keyword: return true
-    case .__line__Keyword: return true
-    case .__column__Keyword: return true
-    case .__function__Keyword: return true
-    case .__dso_handle__Keyword: return true
     case .wildcardKeyword: return true
     case .leftParen: return false
     case .rightParen: return false
@@ -1708,11 +1643,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .trueKeyword: return false
     case .tryKeyword: return false
     case .throwsKeyword: return false
-    case .__file__Keyword: return false
-    case .__line__Keyword: return false
-    case .__column__Keyword: return false
-    case .__function__Keyword: return false
-    case .__dso_handle__Keyword: return false
     case .wildcardKeyword: return false
     case .leftParen: return true
     case .rightParen: return true
@@ -1873,8 +1803,6 @@ public enum RawTokenKind: Equatable, Hashable {
       case "internal": self = .internalKeyword
       case "continue": self = .continueKeyword
       case "rethrows": self = .rethrowsKeyword
-      case "__FILE__": self = .__file__Keyword
-      case "__LINE__": self = .__line__Keyword
       case "#keyPath": self = .poundKeyPathKeyword
       case "#warning": self = .poundWarningKeyword
       default: return nil
@@ -1891,7 +1819,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 10:
       switch text {
-      case "__COLUMN__": self = .__column__Keyword
       case "#dsohandle": self = .poundDsohandleKeyword
       case "#available": self = .poundAvailableKeyword
       default: return nil
@@ -1905,7 +1832,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 12:
       switch text {
-      case "__FUNCTION__": self = .__function__Keyword
       case "#unavailable": self = .poundUnavailableKeyword
       case "#fileLiteral": self = .poundFileLiteralKeyword
       default: return nil
@@ -1919,7 +1845,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case 14:
       switch text {
       case "associatedtype": self = .associatedtypeKeyword
-      case "__DSO_HANDLE__": self = .__dso_handle__Keyword
       default: return nil
       }
     case 15:
@@ -2098,21 +2023,6 @@ extension TokenKind {
     case .throwsKeyword:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .throwsKeyword
-    case .__file__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__file__Keyword
-    case .__line__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__line__Keyword
-    case .__column__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__column__Keyword
-    case .__function__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__function__Keyword
-    case .__dso_handle__Keyword:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .__dso_handle__Keyword
     case .wildcardKeyword:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .wildcardKeyword
@@ -2362,11 +2272,6 @@ extension TokenKind {
     case .trueKeyword: return (.trueKeyword, nil)
     case .tryKeyword: return (.tryKeyword, nil)
     case .throwsKeyword: return (.throwsKeyword, nil)
-    case .__file__Keyword: return (.__file__Keyword, nil)
-    case .__line__Keyword: return (.__line__Keyword, nil)
-    case .__column__Keyword: return (.__column__Keyword, nil)
-    case .__function__Keyword: return (.__function__Keyword, nil)
-    case .__dso_handle__Keyword: return (.__dso_handle__Keyword, nil)
     case .wildcardKeyword: return (.wildcardKeyword, nil)
     case .leftParen: return (.leftParen, nil)
     case .rightParen: return (.rightParen, nil)

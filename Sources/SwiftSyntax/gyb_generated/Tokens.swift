@@ -658,66 +658,6 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  public static func __file__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .__file__Keyword,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-    )
-  }
-  public static func __line__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .__line__Keyword,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-    )
-  }
-  public static func __column__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .__column__Keyword,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-    )
-  }
-  public static func __function__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .__function__Keyword,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-    )
-  }
-  public static func __dso_handle__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .__dso_handle__Keyword,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-    )
-  }
   public static func wildcardKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],

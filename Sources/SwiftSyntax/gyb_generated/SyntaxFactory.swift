@@ -9366,51 +9366,6 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  @available(*, deprecated, message: "Use TokenSyntax.__file__KeywordKeyword instead")
-  public static func make__FILE__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.__file__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.__line__KeywordKeyword instead")
-  public static func make__LINE__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.__line__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.__column__KeywordKeyword instead")
-  public static func make__COLUMN__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.__column__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.__function__KeywordKeyword instead")
-  public static func make__FUNCTION__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.__function__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.__dso_handle__KeywordKeyword instead")
-  public static func make__DSO_HANDLE__Keyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.__dso_handle__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
   @available(*, deprecated, message: "Use TokenSyntax.wildcardKeywordKeyword instead")
   public static func makeWildcardKeyword(
     leadingTrivia: Trivia = [],

@@ -120,6 +120,13 @@ extension Parser {
   ///     protocol-composition-continuation → type-identifier | protocol-composition-type
   @_spi(RawSyntax)
   public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
+    // 'each' is a contextual keyword for a pack reference.
+    if let each = consume(ifAny: [], contextualKeywords: ["each"]) {
+      let packType = parseSimpleType()
+      return RawTypeSyntax(RawPackReferenceTypeSyntax(
+        eachKeyword: each, packType: packType, arena: self.arena))
+    }
+
     let someOrAny = self.consume(ifAny: [], contextualKeywords: ["some", "any"])
 
     var base = self.parseSimpleType()

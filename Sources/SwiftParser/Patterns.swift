@@ -350,7 +350,8 @@ extension Parser.Lookahead {
       // If the first name wasn't "isolated", we're done.
       if !self.atContextualKeyword("isolated") &&
           !self.atContextualKeyword("some") &&
-          !self.atContextualKeyword("any") {
+          !self.atContextualKeyword("any") &&
+          !self.atContextualKeyword("each") {
         return true
       }
 

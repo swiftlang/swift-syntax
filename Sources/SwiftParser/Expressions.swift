@@ -1009,36 +1009,6 @@ extension Parser {
         booleanLiteral: tok,
         arena: self.arena
       ))
-    case (.__file__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFileExprSyntax(
-        poundFile: tok,
-        arena: self.arena
-      ))
-    case (.__function__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundFunctionExprSyntax(
-        poundFunction: tok,
-        arena: self.arena
-      ))
-    case (.__line__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundLineExprSyntax(
-        poundLine: tok,
-        arena: self.arena
-      ))
-    case (.__column__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundColumnExprSyntax(
-        poundColumn: tok,
-        arena: self.arena
-      ))
-    case (.__dso_handle__Keyword, let handle)?:
-      let tok = self.eat(handle)
-      return RawExprSyntax(RawPoundDsohandleExprSyntax(
-        poundDsohandle: tok,
-        arena: self.arena
-      ))
     case (.identifier, let handle)?, (.selfKeyword, let handle)?, (.initKeyword, let handle)?:
       // If we have "case let x." or "case let x(", we parse x as a normal
       // name, not a binding, because it is the start of an enum pattern or

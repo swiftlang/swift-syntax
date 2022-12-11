@@ -251,6 +251,7 @@ public enum SyntaxEnum {
   case compositionTypeElementList(CompositionTypeElementListSyntax)
   case compositionType(CompositionTypeSyntax)
   case packExpansionType(PackExpansionTypeSyntax)
+  case packReferenceType(PackReferenceTypeSyntax)
   case tupleTypeElement(TupleTypeElementSyntax)
   case tupleTypeElementList(TupleTypeElementListSyntax)
   case tupleType(TupleTypeSyntax)
@@ -755,6 +756,8 @@ public extension Syntax {
       return .compositionType(CompositionTypeSyntax(self)!)
     case .packExpansionType:
       return .packExpansionType(PackExpansionTypeSyntax(self)!)
+    case .packReferenceType:
+      return .packReferenceType(PackReferenceTypeSyntax(self)!)
     case .tupleTypeElement:
       return .tupleTypeElement(TupleTypeElementSyntax(self)!)
     case .tupleTypeElementList:

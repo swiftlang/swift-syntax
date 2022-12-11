@@ -251,6 +251,7 @@ public enum SyntaxKind {
   case compositionTypeElementList
   case compositionType
   case packExpansionType
+  case packReferenceType
   case tupleTypeElement
   case tupleTypeElementList
   case tupleType

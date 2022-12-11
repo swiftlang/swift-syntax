@@ -216,6 +216,19 @@ public let TYPE_NODES: [Node] = [
                ])
        ]),
   
+  Node(name: "PackReferenceType",
+       nameForDiagnostics: "pack reference",
+       kind: "Type",
+       children: [
+         Child(name: "EachKeyword",
+               kind: "ContextualKeyworkToken",
+               textChoices: [
+                 "each"
+               ]),
+         Child(name: "PackType",
+               kind: "Type")
+       ]),
+  
   Node(name: "TupleTypeElement",
        nameForDiagnostics: nil,
        kind: "Syntax",

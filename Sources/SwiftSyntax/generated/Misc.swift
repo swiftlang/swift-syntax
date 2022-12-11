@@ -198,6 +198,7 @@ extension Syntax {
     .node(OptionalPatternSyntax.self), 
     .node(OptionalTypeSyntax.self), 
     .node(PackExpansionTypeSyntax.self), 
+    .node(PackReferenceTypeSyntax.self), 
     .node(ParameterClauseSyntax.self), 
     .node(PatternBindingListSyntax.self), 
     .node(PatternBindingSyntax.self), 
@@ -646,6 +647,8 @@ extension SyntaxKind {
       return OptionalTypeSyntax.self
     case .packExpansionType: 
       return PackExpansionTypeSyntax.self
+    case .packReferenceType: 
+      return PackReferenceTypeSyntax.self
     case .parameterClause: 
       return ParameterClauseSyntax.self
     case .patternBindingList: 
@@ -1175,6 +1178,8 @@ extension SyntaxKind {
       return "optional type"
     case .packExpansionType: 
       return "variadic expansion"
+    case .packReferenceType: 
+      return "pack reference"
     case .parameterClause: 
       return "parameter clause"
     case .patternBindingList: 

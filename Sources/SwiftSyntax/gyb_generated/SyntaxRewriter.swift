@@ -1668,6 +1668,13 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node))
   }
 
+  /// Visit a `PackReferenceTypeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackReferenceTypeSyntax) -> TypeSyntax {
+    return TypeSyntax(visitChildren(node))
+  }
+
   /// Visit a `TupleTypeElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -4275,6 +4282,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackReferenceTypeSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackReferenceTypeSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleTypeElementSyntax(_ data: SyntaxData) -> Syntax {
     let node = TupleTypeElementSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5044,6 +5061,8 @@ open class SyntaxRewriter {
       return visitImplCompositionTypeSyntax
     case .packExpansionType:
       return visitImplPackExpansionTypeSyntax
+    case .packReferenceType:
+      return visitImplPackReferenceTypeSyntax
     case .tupleTypeElement:
       return visitImplTupleTypeElementSyntax
     case .tupleTypeElementList:
@@ -5579,6 +5598,8 @@ open class SyntaxRewriter {
       return visitImplCompositionTypeSyntax(data)
     case .packExpansionType:
       return visitImplPackExpansionTypeSyntax(data)
+    case .packReferenceType:
+      return visitImplPackReferenceTypeSyntax(data)
     case .tupleTypeElement:
       return visitImplTupleTypeElementSyntax(data)
     case .tupleTypeElementList:

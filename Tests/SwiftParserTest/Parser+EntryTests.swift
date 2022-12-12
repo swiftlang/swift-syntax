@@ -20,7 +20,7 @@ public class EntryTests: XCTestCase {
   }
 
   func testTopLevelBufferParse() throws {
-    AssertParse("func test() {}", { source in
+    AssertParse("func test() {}", { (source: String) -> SourceFileSyntax in
       var source = source
       source.makeContiguousUTF8()
       return source.withUTF8 { Parser.parse(source: $0) }

@@ -126,7 +126,7 @@ def make_missing_swift_child(child):
             'arena: arena)'
     else:
         if child.syntax_kind == "Syntax":
-            missing_kind = "unknown"
+            missing_kind = "missing"
         elif child.syntax_kind in SYNTAX_BASE_KINDS:
             missing_kind = f"missing{child.syntax_kind}"
         else:

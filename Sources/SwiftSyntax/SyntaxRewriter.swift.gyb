@@ -52,13 +52,6 @@ open class SyntaxRewriter {
   open func visit(_ token: TokenSyntax) -> TokenSyntax {
     return token
   }
-  
-  /// Visit an `UnknownSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: UnknownSyntax) -> Syntax {
-    return Syntax(visitChildren(node))
-  }
 
   /// The function called before visiting the node and its descendents.
   ///   - node: the node we are about to visit.
@@ -100,24 +93,15 @@ open class SyntaxRewriter {
 
 % end
 
-% for node in SYNTAX_NODES:
+% for node in NON_BASE_SYNTAX_NODES:
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImpl${node.name}(_ data: SyntaxData) -> Syntax {
-%   if node.is_base():
-      let node = Unknown${node.name}(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-%   else:
-      let node = ${node.name}(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return Syntax(visit(node))
-%   end
+    let node = ${node.name}(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
   }
 
 % end
@@ -130,16 +114,6 @@ open class SyntaxRewriter {
     defer { visitPost(node._syntaxNode) }
     if let newNode = visitAny(node._syntaxNode) { return newNode }
     return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnknownSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnknownSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return visit(node)
   }
 
 // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
@@ -171,8 +145,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax
-    case .unknown:
-      return visitImplUnknownSyntax
   % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}:
       return visitImpl${node.name}
@@ -190,8 +162,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax(data)
-    case .unknown:
-      return visitImplUnknownSyntax(data)
   % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}:
       return visitImpl${node.name}(data)

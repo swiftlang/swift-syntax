@@ -39,11 +39,6 @@ public enum SyntaxFactory {
       presence: presence)
   }
 
-  @available(*, deprecated, message: "Use initializer on UnknownSyntax")
-  public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> UnknownSyntax {
-    UnknownSyntax(tokens: tokens)
-  }
-
 /// MARK: Syntax Node Creation APIs
 
 % for node in SYNTAX_NODES:

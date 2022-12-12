@@ -67,7 +67,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .unknownDecl, .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroDecl, .macroExpansionDecl:
+    case .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroDecl, .macroExpansionDecl:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -81,7 +81,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     // Assert that the kind of the given data matches in debug builds.
 #if DEBUG
     switch data.raw.kind {
-    case .unknownDecl, .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroDecl, .macroExpansionDecl:
+    case .missingDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl, .macroDecl, .macroExpansionDecl:
       break
     default:
       fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
@@ -119,7 +119,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(UnknownDeclSyntax.self),
       .node(MissingDeclSyntax.self),
       .node(TypealiasDeclSyntax.self),
       .node(AssociatedtypeDeclSyntax.self),
@@ -216,7 +215,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .unknownExpr, .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .unresolvedIsExpr, .isExpr, .unresolvedAsExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .macroExpansionExpr, .postfixIfConfigExpr, .editorPlaceholderExpr:
+    case .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .unresolvedIsExpr, .isExpr, .unresolvedAsExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .macroExpansionExpr, .postfixIfConfigExpr, .editorPlaceholderExpr:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -230,7 +229,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     // Assert that the kind of the given data matches in debug builds.
 #if DEBUG
     switch data.raw.kind {
-    case .unknownExpr, .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .unresolvedIsExpr, .isExpr, .unresolvedAsExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .macroExpansionExpr, .postfixIfConfigExpr, .editorPlaceholderExpr:
+    case .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .unresolvedIsExpr, .isExpr, .unresolvedAsExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .macroExpansionExpr, .postfixIfConfigExpr, .editorPlaceholderExpr:
       break
     default:
       fatalError("Unable to create ExprSyntax from \(data.raw.kind)")
@@ -268,7 +267,6 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(UnknownExprSyntax.self),
       .node(MissingExprSyntax.self),
       .node(InOutExprSyntax.self),
       .node(PoundColumnExprSyntax.self),
@@ -385,7 +383,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .unknownStmt, .missingStmt, .labeledStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
+    case .missingStmt, .labeledStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -399,7 +397,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     // Assert that the kind of the given data matches in debug builds.
 #if DEBUG
     switch data.raw.kind {
-    case .unknownStmt, .missingStmt, .labeledStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
+    case .missingStmt, .labeledStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
       break
     default:
       fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
@@ -437,7 +435,6 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(UnknownStmtSyntax.self),
       .node(MissingStmtSyntax.self),
       .node(LabeledStmtSyntax.self),
       .node(ContinueStmtSyntax.self),
@@ -528,7 +525,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .unknownType, .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
+    case .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -542,7 +539,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // Assert that the kind of the given data matches in debug builds.
 #if DEBUG
     switch data.raw.kind {
-    case .unknownType, .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
+    case .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
       break
     default:
       fatalError("Unable to create TypeSyntax from \(data.raw.kind)")
@@ -580,7 +577,6 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(UnknownTypeSyntax.self),
       .node(MissingTypeSyntax.self),
       .node(SimpleTypeIdentifierSyntax.self),
       .node(MemberTypeIdentifierSyntax.self),
@@ -668,7 +664,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .unknownPattern, .missingPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
+    case .missingPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -682,7 +678,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     // Assert that the kind of the given data matches in debug builds.
 #if DEBUG
     switch data.raw.kind {
-    case .unknownPattern, .missingPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
+    case .missingPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
       break
     default:
       fatalError("Unable to create PatternSyntax from \(data.raw.kind)")
@@ -720,7 +716,6 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(UnknownPatternSyntax.self),
       .node(MissingPatternSyntax.self),
       .node(EnumCasePatternSyntax.self),
       .node(IsTypePatternSyntax.self),

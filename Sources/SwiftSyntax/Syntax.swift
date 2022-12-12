@@ -272,11 +272,6 @@ public extension SyntaxProtocol {
     return raw.kind.isSyntaxCollection
   }
 
-  /// Whether or not this node represents an unknown node.
-  var isUnknown: Bool {
-    return raw.kind.isUnknown
-  }
-
   /// Whether this tree contains a missing token or unexpected node.
   var hasError: Bool {
     return raw.recursiveFlags.contains(.hasError)

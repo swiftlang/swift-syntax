@@ -30,9 +30,9 @@ public class CustomReflectableTests: XCTestCase {
     }
 
     let testCases: [UInt: TestCase] = [
-      #line: .init(syntax: UnknownSyntax(tokens: []),
+      #line: .init(syntax: TokenListSyntax([]),
                    expectedDumped: """
-                                   - UnknownSyntax
+                                   - TokenListSyntax
 
                                    """),
       #line: .init(syntax: TokenSyntax.associatedtypeKeyword(leadingTrivia: [], trailingTrivia: []),

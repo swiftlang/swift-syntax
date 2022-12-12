@@ -38,26 +38,6 @@ public let COMMON_NODES: [Node] = [
        kind: "Syntax",
        parserFunction: "parsePattern"),
 
-  Node(name: "UnknownDecl",
-       nameForDiagnostics: "declaration",
-       kind: "Decl"),
-
-  Node(name: "UnknownExpr",
-       nameForDiagnostics: "expression",
-       kind: "Expr"),
-
-  Node(name: "UnknownStmt",
-       nameForDiagnostics: "statement",
-       kind: "Stmt"),
-
-  Node(name: "UnknownType",
-       nameForDiagnostics: "type",
-       kind: "Type"),
-
-  Node(name: "UnknownPattern",
-       nameForDiagnostics: "pattern",
-       kind: "Pattern"),
-
   Node(name: "Missing",
        nameForDiagnostics: nil,
        kind: "Syntax"),

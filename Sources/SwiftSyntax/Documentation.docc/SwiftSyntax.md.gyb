@@ -49,8 +49,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/SyntaxVisitor>
 - <doc:SwiftSyntax/SyntaxAnyVisitor>
 - <doc:SwiftSyntax/SyntaxRewriter>
-- <doc:SwiftSyntax/SyntaxVerifier>
-- <doc:SwiftSyntax/SyntaxVerifierError>
 - <doc:SwiftSyntax/SyntaxTreeViewMode>
 - <doc:SwiftSyntax/SyntaxVisitorContinueKind>
 - <doc:SwiftSyntax/ReversedTokenSequence>
@@ -135,7 +133,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/${node.name}>
 %   end
 % end
-- <doc:SwiftSyntax/UnknownSyntax>
 
 ### Traits
 

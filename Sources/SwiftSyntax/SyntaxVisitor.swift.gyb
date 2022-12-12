@@ -72,37 +72,16 @@ open class SyntaxVisitor {
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TokenSyntax) {}
 
-  /// Visiting `UnknownSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting the node and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnknownSyntax) {}
-
-% for node in SYNTAX_NODES:
+% for node in NON_BASE_SYNTAX_NODES:
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImpl${node.name}(_ data: SyntaxData) {
-%   if node.is_base():
-      let node = Unknown${node.name}(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-%   else:
-      let node = ${node.name}(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
-      visitPost(node)
-%   end
+    let node = ${node.name}(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
   }
 
 % end
@@ -113,14 +92,6 @@ open class SyntaxVisitor {
       let node = TokenSyntax(data)
       _ = visit(node)
       // No children to visit.
-      visitPost(node)
-    case .unknown:
-      let node = UnknownSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && !node.raw.layoutView!.children.isEmpty {
-        visitChildren(node)
-      }
       visitPost(node)
     // The implementation of every generated case goes into its own function. This
     // circumvents an issue where the compiler allocates stack space for every

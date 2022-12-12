@@ -16,12 +16,6 @@
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxKind {
   case token
-  case unknown
-  case unknownDecl
-  case unknownExpr
-  case unknownStmt
-  case unknownType
-  case unknownPattern
   case missing
   case missingDecl
   case missingExpr
@@ -331,19 +325,6 @@ public enum SyntaxKind {
     case .genericArgumentList: return true
     case .tuplePatternElementList: return true
     case .availabilitySpecList: return true
-    case .unknown: return true
-    default: return false
-    }
-  }
-
-  public var isUnknown: Bool {
-    switch self {
-    case .unknownDecl: return true
-    case .unknownExpr: return true
-    case .unknownPattern: return true
-    case .unknownStmt: return true
-    case .unknownType: return true
-    case .unknown: return true
     default: return false
     }
   }

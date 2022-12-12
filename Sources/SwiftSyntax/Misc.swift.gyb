@@ -22,7 +22,6 @@
 extension Syntax {
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(UnknownSyntax.self),
       .node(TokenSyntax.self),
 % for node in NON_BASE_SYNTAX_NODES:
 %   if node.is_base():
@@ -39,7 +38,6 @@ extension SyntaxKind {
   public var syntaxNodeType: SyntaxProtocol.Type {
     switch self {
     case .token: return TokenSyntax.self
-    case .unknown: return UnknownSyntax.self
 % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}: return ${node.name}.self
 % end
@@ -48,8 +46,6 @@ extension SyntaxKind {
 
   public var nameForDiagnostics: String? {
     switch self {
-    case .unknown:
-      return nil
     case .token:
       return "token"
 % for node in NON_BASE_SYNTAX_NODES:

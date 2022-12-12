@@ -13,56 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 
-// MARK: - UnknownStmtSyntax
-
-public struct UnknownStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .unknownStmt else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `UnknownStmtSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unknownStmt)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-  ) {
-    let layout: [RawSyntax?] = [
-    ]
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unknownStmt,
-        from: layout, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension UnknownStmtSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-    ])
-  }
-}
-
 // MARK: - MissingStmtSyntax
 
 public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
@@ -3264,7 +3214,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `yields`, if present.
   public func withYields(_ newChild: Yields?) -> YieldStmtSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return YieldStmtSyntax(newData)
   }

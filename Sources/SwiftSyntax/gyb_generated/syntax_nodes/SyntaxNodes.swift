@@ -214,7 +214,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `item`, if present.
   public func withItem(_ newChild: Item?) -> CodeBlockItemSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return CodeBlockItemSyntax(newData)
   }
@@ -4040,7 +4040,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `component`, if present.
   public func withComponent(_ newChild: Component?) -> KeyPathComponentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return KeyPathComponentSyntax(newData)
   }
@@ -13829,7 +13829,7 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `stringOrDeclname`, if present.
   public func withStringOrDeclname(_ newChild: StringOrDeclname?) -> NamedAttributeStringArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return NamedAttributeStringArgumentSyntax(newData)
   }
@@ -15154,7 +15154,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   ///                   current `parameters`, if present.
   public func withParameters(_ newChild: Parameters?) -> DifferentiabilityParamsClauseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
@@ -18517,7 +18517,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `condition`, if present.
   public func withCondition(_ newChild: Condition?) -> ConditionElementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return ConditionElementSyntax(newData)
   }
@@ -20269,7 +20269,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `label`, if present.
   public func withLabel(_ newChild: Label?) -> SwitchCaseSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return SwitchCaseSyntax(newData)
   }
@@ -21898,7 +21898,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `body`, if present.
   public func withBody(_ newChild: Body?) -> GenericRequirementSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return GenericRequirementSyntax(newData)
   }
@@ -25894,7 +25894,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `entry`, if present.
   public func withEntry(_ newChild: Entry?) -> AvailabilityArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)
     return AvailabilityArgumentSyntax(newData)
   }
@@ -26211,7 +26211,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `value`, if present.
   public func withValue(_ newChild: Value?) -> AvailabilityLabeledArgumentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena)
     let newData = data.replacingChild(at: 5, with: raw, arena: arena)
     return AvailabilityLabeledArgumentSyntax(newData)
   }

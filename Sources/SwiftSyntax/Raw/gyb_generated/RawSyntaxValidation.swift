@@ -85,20 +85,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   }
 
   switch kind {
-  case .unknown:
-    break
   case .token:
     assertionFailure("validateLayout for .token kind is not supported")
-  case .unknownDecl:
-    break
-  case .unknownExpr:
-    break
-  case .unknownStmt:
-    break
-  case .unknownType:
-    break
-  case .unknownPattern:
-    break
   case .missing:
     assert(layout.count == 0)
     break

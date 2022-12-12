@@ -65,8 +65,6 @@ let package = Package(
         "CMakeLists.txt",
         "Raw/RawSyntaxNodes.swift.gyb",
         "Raw/RawSyntaxValidation.swift.gyb",
-        "SyntaxAnyVisitor.swift.gyb",
-        "SyntaxBaseNodes.swift.gyb",
         "SyntaxCollections.swift.gyb",
         "SyntaxEnum.swift.gyb",
         "SyntaxFactory.swift.gyb",

@@ -27,6 +27,8 @@ struct GenerateSwiftSyntax: ParsableCommand {
     try generateTemplates(
       templates: [
         (miscFile, "Misc.swift"),
+        (syntaxAnyVisitorFile, "SyntaxAnyVisitor.swift"),
+        (syntaxBaseNodesFile, "SyntaxBaseNodes.swift"),
       ],
       destination: URL(fileURLWithPath: generatedPath),
       verbose: verbose

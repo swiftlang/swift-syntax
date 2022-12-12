@@ -25,6 +25,20 @@ final class VariableTests: XCTestCase {
     AssertBuildResult(buildable, "␣let a: [Int]")
   }
 
+  func testVariableDeclWithTry() {
+    let testCases: [UInt: (VariableDecl, String)] = [
+      #line: (VariableDecl("let content = try? String(contentsOf: url)"),
+              "let content = try? String(contentsOf: url)"),
+      #line: (VariableDecl("let content = try! String(contentsOf: url)"),
+              "let content = try! String(contentsOf: url)"),
+    ]
+
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
+    }
+  }
+  
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 

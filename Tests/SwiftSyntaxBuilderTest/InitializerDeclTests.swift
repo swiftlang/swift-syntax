@@ -14,9 +14,24 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class MemberAccessTests: XCTestCase {
-  func testMemberAccessExprConvenienceInitializers() {
-    let builder = MemberAccessExpr(base: "Foo", name: "bar")
-    AssertBuildResult(builder, "Foo.bar")
+final class InitializerDeclTests: XCTestCase {
+  func testInitializerDecl() {
+    let builder = InitializerDecl("""
+      public init?(errorCode: Int) {
+        guard errorCode > 0 else { return nil }
+        self.code = errorCode
+      }
+      """)
+    
+    print(builder.formatted().description)
+    
+    AssertBuildResult(builder, """
+      public init?(errorCode: Int) {
+          guard errorCode > 0 else {
+              return nil
+          }
+          self.code = errorCode
+      }
+      """)
   }
 }

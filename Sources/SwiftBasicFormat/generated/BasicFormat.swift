@@ -48,10 +48,10 @@ open class BasicFormat: SyntaxRewriter {
   open override func visit(_ node: TokenSyntax) -> TokenSyntax {
     var leadingTrivia = node.leadingTrivia
     var trailingTrivia = node.trailingTrivia
-    if requiresLeadingSpace(node.tokenKind) && leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+    if requiresLeadingSpace(node) && leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
       leadingTrivia += .space
     }
-    if requiresTrailingSpace(node.tokenKind) && trailingTrivia.isEmpty {
+    if requiresTrailingSpace(node) && trailingTrivia.isEmpty {
       trailingTrivia += .space
     }
     if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false) {
@@ -113,8 +113,8 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
   
-  open func requiresLeadingSpace(_ tokenKind: TokenKind) -> Bool {
-    switch tokenKind {
+  open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
+    switch token.tokenKind {
     case .whereKeyword: 
       return true
     case .catchKeyword: 
@@ -136,8 +136,18 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
   
-  open func requiresTrailingSpace(_ tokenKind: TokenKind) -> Bool {
-    switch tokenKind {
+  open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
+    switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
+    case (.asKeyword, .exclamationMark), 
+     (.asKeyword, .postfixQuestionMark), 
+     (.initKeyword, .postfixQuestionMark), 
+     (.tryKeyword, .exclamationMark), 
+     (.tryKeyword, .postfixQuestionMark): 
+      return false
+    default: 
+      break 
+    }
+    switch token.tokenKind {
     case .associatedtypeKeyword: 
       return true
     case .classKeyword: 

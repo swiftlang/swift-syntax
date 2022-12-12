@@ -383,19 +383,7 @@ public typealias PoundAssertStmt = PoundAssertStmtSyntax
 
 public typealias PoundColumnExpr = PoundColumnExprSyntax
 
-public typealias PoundDsohandleExpr = PoundDsohandleExprSyntax
-
 public typealias PoundErrorDecl = PoundErrorDeclSyntax
-
-public typealias PoundFileExpr = PoundFileExprSyntax
-
-public typealias PoundFileIDExpr = PoundFileIDExprSyntax
-
-public typealias PoundFilePathExpr = PoundFilePathExprSyntax
-
-public typealias PoundFunctionExpr = PoundFunctionExprSyntax
-
-public typealias PoundLineExpr = PoundLineExprSyntax
 
 public typealias PoundSourceLocationArgs = PoundSourceLocationArgsSyntax
 

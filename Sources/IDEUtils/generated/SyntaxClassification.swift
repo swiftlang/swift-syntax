@@ -246,16 +246,6 @@ extension RawTokenKind {
       return .keyword
     case .throwsKeyword: 
       return .keyword
-    case .__file__Keyword: 
-      return .keyword
-    case .__line__Keyword: 
-      return .keyword
-    case .__column__Keyword: 
-      return .keyword
-    case .__function__Keyword: 
-      return .keyword
-    case .__dso_handle__Keyword: 
-      return .keyword
     case .wildcardKeyword: 
       return .keyword
     case .leftParen: 

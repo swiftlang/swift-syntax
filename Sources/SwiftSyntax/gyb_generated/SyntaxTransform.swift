@@ -156,30 +156,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExprListSyntax) -> ResultType
-  /// Visiting `PoundLineExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundLineExprSyntax) -> ResultType
-  /// Visiting `PoundFileExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFileExprSyntax) -> ResultType
-  /// Visiting `PoundFileIDExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFileIDExprSyntax) -> ResultType
-  /// Visiting `PoundFilePathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFilePathExprSyntax) -> ResultType
-  /// Visiting `PoundFunctionExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFunctionExprSyntax) -> ResultType
-  /// Visiting `PoundDsohandleExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundDsohandleExprSyntax) -> ResultType
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1321,42 +1297,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExprListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundLineExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundLineExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFileExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFileExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFileIDExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFileIDExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFilePathExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFilePathExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundFunctionExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundFunctionExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  /// Visiting `PoundDsohandleExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PoundDsohandleExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
@@ -2825,18 +2765,6 @@ extension SyntaxTransformVisitor {
     case .sequenceExpr(let derived):
       return visit(derived)
     case .exprList(let derived):
-      return visit(derived)
-    case .poundLineExpr(let derived):
-      return visit(derived)
-    case .poundFileExpr(let derived):
-      return visit(derived)
-    case .poundFileIDExpr(let derived):
-      return visit(derived)
-    case .poundFilePathExpr(let derived):
-      return visit(derived)
-    case .poundFunctionExpr(let derived):
-      return visit(derived)
-    case .poundDsohandleExpr(let derived):
       return visit(derived)
     case .symbolicReferenceExpr(let derived):
       return visit(derived)

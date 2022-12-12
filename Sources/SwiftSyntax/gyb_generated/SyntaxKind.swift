@@ -51,12 +51,6 @@ public enum SyntaxKind {
   case assignmentExpr
   case sequenceExpr
   case exprList
-  case poundLineExpr
-  case poundFileExpr
-  case poundFileIDExpr
-  case poundFilePathExpr
-  case poundFunctionExpr
-  case poundDsohandleExpr
   case symbolicReferenceExpr
   case prefixOperatorExpr
   case binaryOperatorExpr

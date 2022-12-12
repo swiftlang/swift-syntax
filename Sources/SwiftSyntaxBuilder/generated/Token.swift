@@ -281,31 +281,6 @@ public extension TokenSyntax {
     return .throwsKeyword()
   }
   
-  /// The `__FILE__` keyword
-  static var `__FILE__`: Token {
-    return .__file__Keyword()
-  }
-  
-  /// The `__LINE__` keyword
-  static var `__LINE__`: Token {
-    return .__line__Keyword()
-  }
-  
-  /// The `__COLUMN__` keyword
-  static var `__COLUMN__`: Token {
-    return .__column__Keyword()
-  }
-  
-  /// The `__FUNCTION__` keyword
-  static var `__FUNCTION__`: Token {
-    return .__function__Keyword()
-  }
-  
-  /// The `__DSO_HANDLE__` keyword
-  static var `__DSO_HANDLE__`: Token {
-    return .__dso_handle__Keyword()
-  }
-  
   /// The `_` keyword
   static var `wildcard`: Token {
     return .wildcardKeyword()

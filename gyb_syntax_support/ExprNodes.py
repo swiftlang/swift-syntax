@@ -135,42 +135,6 @@ EXPR_NODES = [
          by a `SequenceExprSyntax`.
          '''),
 
-    # A #line expression.
-    Node('PoundLineExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundLine', kind='PoundLineToken'),
-         ]),
-
-    # A #file expression.
-    Node('PoundFileExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFile', kind='PoundFileToken'),
-         ]),
-
-    # A #fileID expression.
-    Node('PoundFileIDExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFileID', kind='PoundFileIDToken'),
-         ]),
-
-    # A #filePath expression.
-    Node('PoundFilePathExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFilePath', kind='PoundFilePathToken'),
-         ]),
-
-    # A #function expression.
-    Node('PoundFunctionExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundFunction', kind='PoundFunctionToken'),
-         ]),
-
-    # A #dsohandle expression.
-    Node('PoundDsohandleExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundDsohandle', kind='PoundDsohandleToken'),
-         ]),
-
     # symbolic-reference-expression -> identifier generic-argument-clause?
     Node('SymbolicReferenceExpr', name_for_diagnostics=None, kind='Expr',
          children=[

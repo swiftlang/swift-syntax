@@ -3521,19 +3521,6 @@ extension PoundColumnExpr {
   }
 }
 
-extension PoundDsohandleExpr {
-  /// Creates a `PoundDsohandleExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePoundDsohandle: 
-  ///   - poundDsohandle: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundDsohandle: UnexpectedNodes? = nil, poundDsohandle: Token = Token.`poundDsohandle`) {
-    assert(poundDsohandle.text == "#dsohandle")
-    self = PoundDsohandleExprSyntax(unexpectedBeforePoundDsohandle, poundDsohandle: poundDsohandle)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-}
-
 extension PoundErrorDecl {
   /// Creates a `PoundErrorDecl` using the provided parameters.
   /// - Parameters:
@@ -3550,71 +3537,6 @@ extension PoundErrorDecl {
     assert(leftParen.text == "(")
     assert(rightParen.text == ")")
     self = PoundErrorDeclSyntax(unexpectedBeforePoundError, poundError: poundError, unexpectedBetweenPoundErrorAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndMessage, message: message, unexpectedBetweenMessageAndRightParen, rightParen: rightParen)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-}
-
-extension PoundFileExpr {
-  /// Creates a `PoundFileExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePoundFile: 
-  ///   - poundFile: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundFile: UnexpectedNodes? = nil, poundFile: Token = Token.`poundFile`) {
-    assert(poundFile.text == "#file")
-    self = PoundFileExprSyntax(unexpectedBeforePoundFile, poundFile: poundFile)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-}
-
-extension PoundFileIDExpr {
-  /// Creates a `PoundFileIDExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePoundFileID: 
-  ///   - poundFileID: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundFileID: UnexpectedNodes? = nil, poundFileID: Token = Token.`poundFileID`) {
-    assert(poundFileID.text == "#fileID")
-    self = PoundFileIDExprSyntax(unexpectedBeforePoundFileID, poundFileID: poundFileID)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-}
-
-extension PoundFilePathExpr {
-  /// Creates a `PoundFilePathExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePoundFilePath: 
-  ///   - poundFilePath: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundFilePath: UnexpectedNodes? = nil, poundFilePath: Token = Token.`poundFilePath`) {
-    assert(poundFilePath.text == "#filePath")
-    self = PoundFilePathExprSyntax(unexpectedBeforePoundFilePath, poundFilePath: poundFilePath)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-}
-
-extension PoundFunctionExpr {
-  /// Creates a `PoundFunctionExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePoundFunction: 
-  ///   - poundFunction: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundFunction: UnexpectedNodes? = nil, poundFunction: Token = Token.`poundFunction`) {
-    assert(poundFunction.text == "#function")
-    self = PoundFunctionExprSyntax(unexpectedBeforePoundFunction, poundFunction: poundFunction)
-    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
-    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
-  }
-}
-
-extension PoundLineExpr {
-  /// Creates a `PoundLineExpr` using the provided parameters.
-  /// - Parameters:
-  ///   - unexpectedBeforePoundLine: 
-  ///   - poundLine: 
-  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePoundLine: UnexpectedNodes? = nil, poundLine: Token = Token.`poundLine`) {
-    assert(poundLine.text == "#line")
-    self = PoundLineExprSyntax(unexpectedBeforePoundLine, poundLine: poundLine)
     self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
     self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
   }

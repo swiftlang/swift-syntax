@@ -226,16 +226,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .throwsKeyword: 
       return true
-    case .__file__Keyword: 
-      return true
-    case .__line__Keyword: 
-      return true
-    case .__column__Keyword: 
-      return true
-    case .__function__Keyword: 
-      return true
-    case .__dso_handle__Keyword: 
-      return true
     case .wildcardKeyword: 
       return true
     case .leftAngle: 

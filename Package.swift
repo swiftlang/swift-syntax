@@ -63,7 +63,6 @@ let package = Package(
       dependencies: [],
       exclude: [
         "CMakeLists.txt",
-        "Misc.swift.gyb",
         "Raw/RawSyntaxNodes.swift.gyb",
         "Raw/RawSyntaxValidation.swift.gyb",
         "SyntaxAnyVisitor.swift.gyb",

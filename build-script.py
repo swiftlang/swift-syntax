@@ -340,9 +340,10 @@ def generate_gyb_files(
 
 
 def run_code_generation(
-    swiftideutils_destination: str,
     swiftbasicformat_destination: str,
+    swiftideutils_destination: str,
     swiftparser_destination: str,
+    swiftsyntax_destination: str,
     swiftsyntaxbuilder_destination: str,
     toolchain: str,
     verbose: bool
@@ -350,9 +351,10 @@ def run_code_generation(
     print("** Running code generation **")
 
     target_to_dest_dir = {
-        "generate-swiftideutils": swiftideutils_destination,
         "generate-swiftbasicformat": swiftbasicformat_destination,
+        "generate-swiftideutils": swiftideutils_destination,
         "generate-swiftparser": swiftparser_destination,
+        "generate-swiftsyntax": swiftsyntax_destination,
         "generate-swiftsyntaxbuilder": swiftsyntaxbuilder_destination,
     }
 
@@ -508,26 +510,32 @@ def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
 def verify_code_generated_files(
     toolchain: str, verbose: bool
 ) -> None:
+    
+    user_swiftbasicformat_generated_dir = os.path.join(
+        SWIFTBASICFORMAT_DIR, "generated"
+    )
     user_swiftideutils_generated_dir = os.path.join(
         IDEUTILS_DIR, "generated"
     )
-    user_swiftbasicformat_generated_dir = os.path.join(
-        SWIFTBASICFORMAT_DIR, "generated"
+    user_swiftsyntax_generated_dir = os.path.join(
+        SWIFTSYNTAX_DIR, "generated"
     )
     user_swiftsyntaxbuilder_generated_dir = os.path.join(
         SWIFTSYNTAXBUILDER_DIR, "generated"
     )
 
-    self_swiftideutils_generated_dir = tempfile.mkdtemp()
     self_swiftbasicformat_generated_dir = tempfile.mkdtemp()
+    self_swiftideutils_generated_dir = tempfile.mkdtemp()
     self_swiftparser_generated_dir = tempfile.mkdtemp()
+    self_swiftsyntax_generated_dir = tempfile.mkdtemp()
     self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
 
     try:
         run_code_generation(
-            swiftideutils_destination=self_swiftideutils_generated_dir,
             swiftbasicformat_destination=self_swiftsyntaxbuilder_generated_dir,
+            swiftideutils_destination=self_swiftideutils_generated_dir,
             swiftparser_destination=self_swiftparser_generated_dir,
+            swiftsyntax_destination=self_swiftsyntax_generated_dir,
             swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
             toolchain=toolchain,
             verbose=verbose
@@ -541,12 +549,16 @@ def verify_code_generated_files(
     print("** Verifing code generated files **")
 
     check_generated_files_match(
+        self_swiftbasicformat_generated_dir,
+        user_swiftbasicformat_generated_dir
+    )
+    check_generated_files_match(
         self_swiftideutils_generated_dir,
         user_swiftideutils_generated_dir
     )
     check_generated_files_match(
-        self_swiftbasicformat_generated_dir,
-        user_swiftbasicformat_generated_dir
+        self_swiftsyntax_generated_dir,
+        user_swiftsyntax_generated_dir
     )
     check_generated_files_match(
         self_swiftsyntaxbuilder_generated_dir,
@@ -721,18 +733,21 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
 
     try:
         if not args.gyb_only:
-            swiftideutils_destination = \
-                os.path.join(IDEUTILS_DIR, "generated")
             swiftbasicformat_destination = \
                 os.path.join(SWIFTBASICFORMAT_DIR, "generated")
+            swiftideutils_destination = \
+                os.path.join(IDEUTILS_DIR, "generated")
             swiftparser_destination = \
                 os.path.join(SWIFTPARSER_DIR, "generated")
+            swiftsyntax_destination = \
+                os.path.join(SWIFTSYNTAX_DIR, "generated")
             swiftsyntaxbuilder_destination = \
                 os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
             run_code_generation(
-                swiftideutils_destination=swiftideutils_destination,
                 swiftbasicformat_destination=swiftbasicformat_destination,
+                swiftideutils_destination=swiftideutils_destination,
                 swiftparser_destination=swiftparser_destination,
+                swiftsyntax_destination=swiftsyntax_destination,
                 swiftsyntaxbuilder_destination=swiftsyntaxbuilder_destination,
                 toolchain=args.toolchain,
                 verbose=args.verbose

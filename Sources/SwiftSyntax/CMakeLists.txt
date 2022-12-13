@@ -31,7 +31,7 @@ add_swift_host_library(SwiftSyntax
   Raw/gyb_generated/RawSyntaxNodes.swift
   Raw/gyb_generated/RawSyntaxValidation.swift
 
-  gyb_generated/Misc.swift
+  generated/Misc.swift
   gyb_generated/SyntaxAnyVisitor.swift
   gyb_generated/SyntaxBaseNodes.swift
   gyb_generated/SyntaxCollections.swift

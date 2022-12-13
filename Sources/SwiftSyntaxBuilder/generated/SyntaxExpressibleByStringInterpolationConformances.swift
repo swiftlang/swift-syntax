@@ -300,6 +300,9 @@ extension OptionalTypeSyntax: SyntaxExpressibleByStringInterpolation {
 extension PackExpansionTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension PackReferenceTypeSyntax: SyntaxExpressibleByStringInterpolation { 
+}
+
 extension PatternSyntaxProtocol {
   public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 

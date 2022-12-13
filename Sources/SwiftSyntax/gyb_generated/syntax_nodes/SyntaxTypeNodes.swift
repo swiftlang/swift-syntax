@@ -2362,6 +2362,189 @@ extension PackExpansionTypeSyntax: CustomReflectable {
   }
 }
 
+// MARK: - PackReferenceTypeSyntax
+
+public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .packReferenceType else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `PackReferenceTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .packReferenceType)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
+    eachKeyword: TokenSyntax,
+    _ unexpectedBetweenEachKeywordAndPackType: UnexpectedNodesSyntax? = nil,
+    packType: TypeSyntax,
+    _ unexpectedAfterPackType: UnexpectedNodesSyntax? = nil
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeEachKeyword?.raw,
+      eachKeyword.raw,
+      unexpectedBetweenEachKeywordAndPackType?.raw,
+      packType.raw,
+      unexpectedAfterPackType?.raw,
+    ]
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.packReferenceType,
+        from: layout, arena: arena)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeEachKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeEachKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeEachKeyword` to replace the node's
+  ///                   current `unexpectedBeforeEachKeyword`, if present.
+  public func withUnexpectedBeforeEachKeyword(_ newChild: UnexpectedNodesSyntax?) -> PackReferenceTypeSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return PackReferenceTypeSyntax(newData)
+  }
+
+  public var eachKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEachKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `eachKeyword` replaced.
+  /// - param newChild: The new `eachKeyword` to replace the node's
+  ///                   current `eachKeyword`, if present.
+  public func withEachKeyword(_ newChild: TokenSyntax?) -> PackReferenceTypeSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return PackReferenceTypeSyntax(newData)
+  }
+
+  public var unexpectedBetweenEachKeywordAndPackType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenEachKeywordAndPackType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenEachKeywordAndPackType` replaced.
+  /// - param newChild: The new `unexpectedBetweenEachKeywordAndPackType` to replace the node's
+  ///                   current `unexpectedBetweenEachKeywordAndPackType`, if present.
+  public func withUnexpectedBetweenEachKeywordAndPackType(_ newChild: UnexpectedNodesSyntax?) -> PackReferenceTypeSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return PackReferenceTypeSyntax(newData)
+  }
+
+  public var packType: TypeSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withPackType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `packType` replaced.
+  /// - param newChild: The new `packType` to replace the node's
+  ///                   current `packType`, if present.
+  public func withPackType(_ newChild: TypeSyntax?) -> PackReferenceTypeSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return PackReferenceTypeSyntax(newData)
+  }
+
+  public var unexpectedAfterPackType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterPackType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterPackType` replaced.
+  /// - param newChild: The new `unexpectedAfterPackType` to replace the node's
+  ///                   current `unexpectedAfterPackType`, if present.
+  public func withUnexpectedAfterPackType(_ newChild: UnexpectedNodesSyntax?) -> PackReferenceTypeSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return PackReferenceTypeSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeEachKeyword,
+      \Self.eachKeyword,
+      \Self.unexpectedBetweenEachKeywordAndPackType,
+      \Self.packType,
+      \Self.unexpectedAfterPackType,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension PackReferenceTypeSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeEachKeyword": unexpectedBeforeEachKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "eachKeyword": Syntax(eachKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenEachKeywordAndPackType": unexpectedBetweenEachKeywordAndPackType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "packType": Syntax(packType).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterPackType": unexpectedAfterPackType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - TupleTypeSyntax
 
 public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {

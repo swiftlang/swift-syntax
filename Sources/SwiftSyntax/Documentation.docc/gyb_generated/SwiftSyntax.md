@@ -162,6 +162,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ImplicitlyUnwrappedOptionalTypeSyntax>
 - <doc:SwiftSyntax/CompositionTypeSyntax>
 - <doc:SwiftSyntax/PackExpansionTypeSyntax>
+- <doc:SwiftSyntax/PackReferenceTypeSyntax>
 - <doc:SwiftSyntax/TupleTypeSyntax>
 - <doc:SwiftSyntax/FunctionTypeSyntax>
 - <doc:SwiftSyntax/AttributedTypeSyntax>

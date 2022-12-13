@@ -525,7 +525,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
+    case .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .packReferenceType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -539,7 +539,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // Assert that the kind of the given data matches in debug builds.
 #if DEBUG
     switch data.raw.kind {
-    case .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
+    case .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .packReferenceType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType:
       break
     default:
       fatalError("Unable to create TypeSyntax from \(data.raw.kind)")
@@ -589,6 +589,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
       .node(CompositionTypeSyntax.self),
       .node(PackExpansionTypeSyntax.self),
+      .node(PackReferenceTypeSyntax.self),
       .node(TupleTypeSyntax.self),
       .node(FunctionTypeSyntax.self),
       .node(AttributedTypeSyntax.self),

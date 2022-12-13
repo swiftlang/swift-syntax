@@ -3378,6 +3378,21 @@ extension PackExpansionType {
   }
 }
 
+extension PackReferenceType {
+  /// Creates a `PackReferenceType` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeEachKeyword: 
+  ///   - eachKeyword: 
+  ///   - unexpectedBetweenEachKeywordAndPackType: 
+  ///   - packType: 
+  @_disfavoredOverload public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeEachKeyword: UnexpectedNodes? = nil, eachKeyword: Token, unexpectedBetweenEachKeywordAndPackType: UnexpectedNodes? = nil, packType: TypeSyntaxProtocol) {
+    assert(eachKeyword.text == "each")
+    self = PackReferenceTypeSyntax(unexpectedBeforeEachKeyword, eachKeyword: eachKeyword, unexpectedBetweenEachKeywordAndPackType, packType: TypeSyntax(fromProtocol: packType))
+    self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])
+    self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])
+  }
+}
+
 extension ParameterClause {
   /// Creates a `ParameterClause` using the provided parameters.
   /// - Parameters:

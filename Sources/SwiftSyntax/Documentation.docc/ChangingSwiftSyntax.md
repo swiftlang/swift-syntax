@@ -50,10 +50,10 @@ and building all of the files in this repository.
 To invoke `build-script.py` to regenerate source code, run
 
 ```
-$ ./build-script.py generate-source-code --toolchain /Path/To/Toolchain
+$ ./build-script.py generate-source-code --toolchain /path/to/toolchain/usr
 ```
 
-where `/Path/To/Toolchain` can point either to the `XcodeDefault.xctoolchain`
+where `/path/to/toolchain` can point either to the `XcodeDefault.xctoolchain`
 installed with Xcode, or to a [toolchain downloaded from swift.org][SwiftToolchains].
 
 - Note: To see the raw commands that `build-script.py` is running, use the `-v`
@@ -67,7 +67,7 @@ the version control system.
 To invoke `build-script.py` in verification mode, run
 
 ```
-$ ./build-script.py verify-source-code --toolchain /Path/To/Toolchain
+$ ./build-script.py verify-source-code --toolchain /path/to/toolchain/usr
 ```
 
 ## Adding and Removing Syntax Nodes

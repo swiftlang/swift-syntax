@@ -337,7 +337,7 @@ func AssertParse<S: SyntaxProtocol>(
 ) {
   AssertParse(
     markedSource,
-    { source in
+    { (source: String) -> S in
       var parser = Parser(source)
       return parse(&parser)
     },

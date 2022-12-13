@@ -103,11 +103,12 @@ extension SyntaxProtocol {
   /// Returns a Swift expression that, when parsed, constructs this syntax node
   /// (or at least an expression that's very close to constructing this node, the addition of a few manual upcast by hand is still needed).
   /// The intended use case for this is to print a syntax tree and create a substructure assertion from the generated expression.
-  public var debugInitCall: String {
-    return self.debugInitCallExpr.formatted(using: InitializerExprFormat()).description
+  /// When `includeTrivia` is set to `false`, the token's leading and trailing trivia will not be included in the generated expression.
+  public func debugInitCall(includeTrivia: Bool = true) -> String {
+    return self.debugInitCallExpr(includeTrivia: includeTrivia).formatted(using: InitializerExprFormat()).description
   }
 
-  private var debugInitCallExpr: ExprSyntax {
+  private func debugInitCallExpr(includeTrivia: Bool) -> ExprSyntax {
     let mirror = Mirror(reflecting: self)
     if self.isCollection {
       let typeName = String(describing: type(of: self))
@@ -117,7 +118,7 @@ extension SyntaxProtocol {
             expression: ArrayExpr {
               for child in mirror.children {
                 let value = child.value as! SyntaxProtocol?
-                ArrayElement(expression: value?.debugInitCallExpr ?? ExprSyntax(NilLiteralExpr()))
+                ArrayElement(expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExpr()))
               }
             }
           )
@@ -145,14 +146,14 @@ extension SyntaxProtocol {
               expression: StringLiteralExpr(content: token.text)
             )
           }
-          if !token.leadingTrivia.isEmpty {
+          if includeTrivia && !token.leadingTrivia.isEmpty {
             TupleExprElement(
               label: .identifier("leadingTrivia"),
               colon: .colon,
               expression: token.leadingTrivia.initializerExpr
             )
           }
-          if !token.trailingTrivia.isEmpty {
+          if includeTrivia && !token.trailingTrivia.isEmpty {
             TupleExprElement(
               label: .identifier("trailingTrivia"),
               colon: .colon,
@@ -180,7 +181,7 @@ extension SyntaxProtocol {
               TupleExprElement(
                 label: isUnexpected ? nil : .identifier(label),
                 colon: isUnexpected ? nil : .colon,
-                expression: value?.debugInitCallExpr ?? ExprSyntax(NilLiteralExpr())
+                expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExpr())
               )
             }
           }

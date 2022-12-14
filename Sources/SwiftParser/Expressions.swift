@@ -1020,13 +1020,20 @@ extension Parser {
         return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))
       }
 
-      // 'any' followed by another identifier is an existential type.
-      if self.atContextualKeyword("any"),
-         self.peek().tokenKind == .identifier,
-         !self.peek().isAtStartOfLine
-      {
-        let ty = self.parseType()
-        return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))
+      // We might have a contextual keyword followed by an identifier.
+      // 'each <identifier>' is a pack element expr, and 'any <identifier>'
+      // is an existential type expr.
+      if self.peek().tokenKind == .identifier, !self.peek().isAtStartOfLine {
+        if self.atContextualKeyword("any") {
+          let ty = self.parseType()
+          return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))
+        }
+
+        if let each = self.consumeIfContextualKeyword("each") {
+          let packRef = self.parseExpression()
+          return RawExprSyntax(RawPackElementExprSyntax(
+            eachKeyword: each, packRefExpr: packRef, arena: self.arena))
+        }
       }
 
       return RawExprSyntax(self.parseIdentifierExpression())

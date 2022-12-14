@@ -43,6 +43,7 @@ public enum SyntaxKind {
   case nilLiteralExpr
   case discardAssignmentExpr
   case assignmentExpr
+  case packElementExpr
   case sequenceExpr
   case exprList
   case symbolicReferenceExpr

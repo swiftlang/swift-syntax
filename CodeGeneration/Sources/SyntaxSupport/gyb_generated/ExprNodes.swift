@@ -213,6 +213,22 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "PackElementExpr",
+       nameForDiagnostics: nil,
+       kind: "Expr",
+       children: [
+         Child(name: "EachKeyword",
+               kind: "ContextualKeywordToken",
+               tokenChoices: [
+                 "ContextualKeyword"
+               ],
+               textChoices: [
+                 "each"
+               ]),
+         Child(name: "PackRefExpr",
+               kind: "Expr")
+       ]),
+
   Node(name: "SequenceExpr",
        nameForDiagnostics: nil,
        kind: "Expr",

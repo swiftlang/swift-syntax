@@ -242,6 +242,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: AssignmentExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: PackElementExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: PackElementExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

@@ -21,5 +21,5 @@ public protocol ExpressionMacro: Macro {
   static func expansion(
     of node: MacroExpansionExprSyntax,
     in context: inout MacroExpansionContext
-  ) -> ExprSyntax
+  ) throws -> ExprSyntax
 }

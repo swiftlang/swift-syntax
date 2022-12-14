@@ -13,6 +13,17 @@
 import SwiftDiagnostics
 import SwiftSyntax
 
+/// Diagnostic message used for thrown errors.
+struct ThrownErrorDiagnostic: DiagnosticMessage {
+  let message: String
+
+  var severity: DiagnosticSeverity { .error }
+
+  var diagnosticID: MessageID {
+    .init(domain: "SwiftSyntaxMacros", id: "ThrownErrorDiagnostic")
+  }
+}
+
 extension MacroExpansionExprSyntax {
   private func disconnectedCopy() -> MacroExpansionExprSyntax {
     MacroExpansionExprSyntax(
@@ -41,7 +52,19 @@ extension MacroExpansionExprSyntax {
     }
 
     // Handle the rewrite.
-    return exprMacro.expansion(of: disconnectedCopy(), in: &context)
+    do {
+      return try exprMacro.expansion(of: disconnectedCopy(), in: &context)
+    } catch {
+      // Record the error
+      context.diagnose(
+        Diagnostic(
+          node: Syntax(self),
+          message: ThrownErrorDiagnostic(message: String(describing: error))
+        )
+      )
+
+      return ExprSyntax(self)
+    }
   }
 }
 

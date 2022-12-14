@@ -302,6 +302,13 @@ class Reduce: ParsableCommand {
   /// Invoke `swift-parser-cli verify-round-trip` with the same arguments as this `reduce` subcommand.
   /// Returns the exit code of the invocation.
   private func runVerifyRoundTripInSeparateProcess(source: [UInt8]) throws -> ProcessExit {
+#if os(iOS) || os(tvOS) || os(watchOS)
+    // We cannot launch a new process on iOS-like platforms.
+    // Default to running verification in-process.
+    // Honestly, this isn't very important because you can't launch swift-parser-cli
+    // on iOS anyway but this fixes a compilation error of the pacakge on iOS.
+    return try runVerifyRoundTripInCurrentProcess(source: source) ? ProcessExit.success : ProcessExit.potentialCrash
+#else
     return try withTemporaryFile(contents: source) { tempFileURL in
       let process = Process()
       process.executableURL = URL(fileURLWithPath: ProcessInfo.processInfo.arguments[0])
@@ -337,6 +344,7 @@ class Reduce: ParsableCommand {
         return .potentialCrash
       }
     }
+#endif
   }
 
   /// Runs the `verify-round-trip` subcommand in process.

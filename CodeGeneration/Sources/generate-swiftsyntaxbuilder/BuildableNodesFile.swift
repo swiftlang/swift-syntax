@@ -153,7 +153,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       }
     )
   ) {
-    FunctionCallExpr(callee: "self.init") {
+    FunctionCallExpr(callee: Expr("self.init")) {
       TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
       for arg in delegatedInitArgs {
         arg

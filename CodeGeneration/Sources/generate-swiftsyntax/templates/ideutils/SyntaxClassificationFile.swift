@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 // Collects the list of classifications to use for contextual classification.
-var node_child_classifications: [ChildClassification] {
+fileprivate var node_child_classifications: [ChildClassification] {
   var result = [ChildClassification]()
   for node in SYNTAX_NODES {
     for (index, child) in node.children.enumerated() where child.classification?.name != nil {

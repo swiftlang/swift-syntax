@@ -25,22 +25,6 @@ struct ThrownErrorDiagnostic: DiagnosticMessage {
 }
 
 extension MacroExpansionExprSyntax {
-  private func disconnectedCopy() -> MacroExpansionExprSyntax {
-    MacroExpansionExprSyntax(
-      unexpectedBeforePoundToken, poundToken: poundToken,
-      unexpectedBetweenPoundTokenAndMacro, macro: macro,
-      genericArguments: genericArguments,
-      unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen,
-      unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList,
-      unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen,
-      unexpectedBetweenRightParenAndTrailingClosure,
-      trailingClosure: trailingClosure,
-      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
-      additionalTrailingClosures: additionalTrailingClosures,
-      unexpectedAfterAdditionalTrailingClosures
-    )
-  }
-
   /// Evaluate the given macro for this syntax node, producing the expanded
   /// result and (possibly) some diagnostics.
   func evaluateMacro(
@@ -53,7 +37,7 @@ extension MacroExpansionExprSyntax {
 
     // Handle the rewrite.
     do {
-      return try exprMacro.expansion(of: disconnectedCopy(), in: &context)
+      return try exprMacro.expansion(of: detach(), in: &context)
     } catch {
       // Record the error
       context.diagnose(

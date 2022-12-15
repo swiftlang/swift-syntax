@@ -17,13 +17,25 @@ import SwiftSyntaxBuilder
 final class InitializerDeclTests: XCTestCase {
   func testInitializerDecl() {
     let builder = InitializerDecl("""
+      public init(errorCode: Int) {
+        self.code = errorCode
+      }
+      """)
+    
+    AssertBuildResult(builder, """
+      public init(errorCode: Int) {
+          self.code = errorCode
+      }
+      """)
+  }
+  
+  func testFailableInitializerDecl() {
+    let builder = InitializerDecl("""
       public init?(errorCode: Int) {
         guard errorCode > 0 else { return nil }
         self.code = errorCode
       }
       """)
-    
-    print(builder.formatted().description)
     
     AssertBuildResult(builder, """
       public init?(errorCode: Int) {

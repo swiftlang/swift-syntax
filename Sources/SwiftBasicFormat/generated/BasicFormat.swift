@@ -140,6 +140,7 @@ open class BasicFormat: SyntaxRewriter {
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
     case (.asKeyword, .exclamationMark), 
      (.asKeyword, .postfixQuestionMark), 
+     (.initKeyword, .leftParen), 
      (.initKeyword, .postfixQuestionMark), 
      (.tryKeyword, .exclamationMark), 
      (.tryKeyword, .postfixQuestionMark): 

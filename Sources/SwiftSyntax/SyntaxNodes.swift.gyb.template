@@ -113,35 +113,60 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public init(
-%     for (index, child) in enumerate(node.children):
-%       comma = ',' if index != len(node.children) - 1 else ''
-%       param_type = child.name if child.node_choices else child.type_name
-%       if child.is_optional:
-%         param_type = param_type + "?"
-%       if child.is_unexpected_nodes():
-    _ ${child.swift_name}: ${param_type} = nil${comma}
-%       else:
-    ${child.swift_name}: ${param_type}${comma}
-%       end
-%     end
-  ) {
+  ${node.generate_initializer_decl(optional_base_as_missing=False, current_indentation="  ")} {
+%     if node.children:
     let layout: [RawSyntax?] = [
-%     for child in node.children:
-%       if child.is_optional:
+%       for child in node.children:
+%         if child.is_optional:
       ${child.swift_name}?.raw,
-%       else:
+%         else:
       ${child.swift_name}.raw,
+%         end
 %       end
-%     end
     ]
+%     end
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
-        from: layout, arena: arena)
+%     if node.children:
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.${node.swift_syntax_kind}, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+%     else:
+      let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.${node.swift_syntax_kind}, arena: arena)
+%     end
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
   }
+%     if node.has_optional_base_type_child():
+
+% # TODO: Remove when we no longer support compiling in Swift 5.6. Change the
+% # above constructor to use `Optional<BaseType.none` instead.
+  /// This initializer exists solely because Swift 5.6 does not support
+  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
+  /// The above initializer thus defaults to `nil` instead, but that means it
+  /// is not actually callable when either not passing the defaulted parameter,
+  /// or passing `nil`.
+  ///
+  /// Hack around that limitation using this initializer, which takes a
+  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
+  /// the base type would allow implicit conversion from a string literal,
+  /// which the above initializer doesn't support.
+  ${node.generate_initializer_decl(optional_base_as_missing=True, current_indentation="  ")} {
+    self.init(
+      leadingTrivia: leadingTrivia,
+%     for child in node.children:
+%       if child.has_optional_base_type():
+      ${child.swift_name}: Optional<${child.type_name}>.none,
+%       elif child.is_unexpected_nodes():
+      ${child.swift_name},
+%       else:
+      ${child.swift_name}: ${child.swift_name},
+%       end
+%     end
+      trailingTrivia: trailingTrivia
+    )
+  }
+%     end
 %     for (idx, child) in enumerate(node.children):
 %       child_node = NODE_MAP.get(child.syntax_kind)
 %

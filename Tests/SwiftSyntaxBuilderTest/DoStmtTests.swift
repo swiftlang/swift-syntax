@@ -18,14 +18,14 @@ final class DoStmtTests: XCTestCase {
   func testDoStmt() {
     let buildable = DoStmt(
       body: CodeBlock(statementsBuilder: {
-        TryExpr(expression: FunctionCallExpr(callee: "a.b"))
+        TryExpr(expression: FunctionCallExpr(callee: ExprSyntax("a.b")))
       }),
       catchClauses: [
         CatchClause(CatchItemList {
           CatchItem(pattern: PatternSyntax("Error1"))
           CatchItem(pattern: PatternSyntax("Error2"))
         }) {
-          FunctionCallExpr(callee: "print") {
+          FunctionCallExpr(callee: ExprSyntax("print")) {
             TupleExprElement(expression: StringLiteralExpr(content: "Known error"))
           }
         },
@@ -36,7 +36,7 @@ final class DoStmtTests: XCTestCase {
           ThrowStmt(expression: MemberAccessExpr(base: "Error4", name: "error3"))
         },
         CatchClause {
-          FunctionCallExpr(callee: "print") {
+          FunctionCallExpr(callee: ExprSyntax("print")) {
             TupleExprElement(expression: "error")
           }
         }

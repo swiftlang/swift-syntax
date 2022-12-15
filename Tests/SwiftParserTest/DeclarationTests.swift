@@ -79,15 +79,10 @@ final class DeclarationTests: XCTestCase {
       func name(_ default: Int) {}
       """,
       substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
         firstName: .wildcardKeyword(),
         secondName: .identifier("default"),
-        colon: TokenSyntax.colonToken(),
-        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Int"), genericArgumentClause: nil)),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil))
+        colon: .colonToken(),
+        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
     )
   }
 
@@ -643,23 +638,15 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       substructure: Syntax(FunctionDeclSyntax(
-        attributes: nil,
-        modifiers: nil,
         funcKeyword: .funcKeyword(),
         identifier: .identifier("withoutParameters"),
-        genericParameterClause: nil,
         signature: FunctionSignatureSyntax(
           input: ParameterClauseSyntax(
             leftParen: .leftParenToken(presence: .missing),
             parameterList: FunctionParameterListSyntax([]),
             rightParen: .rightParenToken(presence: .missing)
-          ),
-          asyncOrReasyncKeyword: nil,
-          throwsOrRethrowsKeyword: nil,
-          output: nil
-        ),
-        genericWhereClause: nil,
-        body: nil
+          )
+        )
       )),
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in function signature")
@@ -785,16 +772,11 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func test(first second 1️⃣third: Int)",
       substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
-        firstName: TokenSyntax.identifier("first"),
-        secondName: TokenSyntax.identifier("second"),
-        UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third"))]),
-        colon: TokenSyntax.colonToken(),
-        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Int"), genericArgumentClause: nil)),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        UnexpectedNodesSyntax([TokenSyntax.identifier("third")]),
+        colon: .colonToken(),
+        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
       )),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third' in parameter")
@@ -806,16 +788,11 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func test(first second 1️⃣third fourth: Int)",
       substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
-        firstName: TokenSyntax.identifier("first"),
-        secondName: TokenSyntax.identifier("second"),
-        UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third")), Syntax(TokenSyntax.identifier("fourth"))]),
-        colon: TokenSyntax.colonToken(),
-        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Int"), genericArgumentClause: nil)),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        UnexpectedNodesSyntax([TokenSyntax.identifier("third"), TokenSyntax.identifier("fourth")]),
+        colon: .colonToken(),
+        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
       )),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third fourth' in parameter")
@@ -827,15 +804,10 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func foo(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
       substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
         firstName: .identifier("first"),
         secondName: .identifier("second"),
         colon: .colonToken(presence: .missing),
-        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("third"), genericArgumentClause: nil)),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
+        type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
@@ -850,21 +822,16 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func test(first second 1️⃣[third fourth]: Int)",
       substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
-        firstName: TokenSyntax.identifier("first"),
-        secondName: TokenSyntax.identifier("second"),
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
         UnexpectedNodesSyntax([
-          Syntax(TokenSyntax.leftSquareBracketToken()),
-          Syntax(TokenSyntax.identifier("third")),
-          Syntax(TokenSyntax.identifier("fourth")),
-          Syntax(TokenSyntax.rightSquareBracketToken())
+          TokenSyntax.leftSquareBracketToken(),
+          TokenSyntax.identifier("third"),
+          TokenSyntax.identifier("fourth"),
+          TokenSyntax.rightSquareBracketToken()
         ]),
-        colon: TokenSyntax.colonToken(),
-        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Int"), genericArgumentClause: nil)),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
+        colon: .colonToken(),
+        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
       )),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '[third fourth]' in parameter")
@@ -876,19 +843,14 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "func foo(first second 1️⃣[third 2️⃣fourth: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
-        firstName: TokenSyntax.identifier("first"),
-        secondName: TokenSyntax.identifier("second"),
-        colon: TokenSyntax(.colon, presence: .missing),
-        type: TypeSyntax(ArrayTypeSyntax(
-          leftSquareBracket: TokenSyntax.leftSquareBracketToken(),
-          elementType: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("third"), genericArgumentClause: nil)),
-          rightSquareBracket: TokenSyntax(.rightSquareBracket, presence: .missing)
-        )),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        colon: .colonToken(presence: .missing),
+        type: ArrayTypeSyntax(
+          leftSquareBracket: .leftSquareBracketToken(),
+          elementType: SimpleTypeIdentifierSyntax(name: .identifier("third")),
+          rightSquareBracket: .rightSquareBracketToken(presence: .missing)
+        )
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
@@ -905,15 +867,10 @@ final class DeclarationTests: XCTestCase {
       3️⃣: Int) {}
       """,
       substructure: Syntax(FunctionParameterSyntax(
-        attributes: nil,
-        modifiers: nil,
-        firstName: TokenSyntax.identifier("first"),
-        secondName: TokenSyntax.identifier("second"),
-        colon: TokenSyntax(.colon, presence: .missing),
-        type: TypeSyntax(SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("third"), genericArgumentClause: nil)),
-        ellipsis: nil,
-        defaultArgument: nil,
-        trailingComma: nil
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        colon: .colonToken(presence: .missing),
+        type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
@@ -1238,62 +1195,39 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(CodeBlockItemListSyntax([
           CodeBlockItemSyntax(
             item: .init(ClassDeclSyntax(
-              attributes: nil,
-              modifiers: nil,
               classKeyword: .classKeyword(),
               identifier: .identifier("A"),
-              genericParameterClause: nil,
-              inheritanceClause: nil,
-              genericWhereClause: nil,
               members: MemberDeclBlockSyntax(
                 leftBrace: .leftBraceToken(),
                 members: MemberDeclListSyntax([
                   MemberDeclListItemSyntax(
                     decl: Decl(FunctionDeclSyntax(
-                      attributes: nil,
-                      modifiers: nil,
                       funcKeyword: .funcKeyword(presence: .missing),
                       identifier: .spacedBinaryOperator("^"),
-                      genericParameterClause: nil,
                       signature: FunctionSignatureSyntax(
                         input: ParameterClauseSyntax(
                           leftParen: .leftParenToken(presence: .missing),
                           parameterList: FunctionParameterListSyntax([]),
                           rightParen: .rightParenToken(presence: .missing)
-                        ),
-                        asyncOrReasyncKeyword: nil,
-                        throwsOrRethrowsKeyword: nil,
-                        output: nil
-                      ),
-                      genericWhereClause: nil,
-                      body: nil
-                    )),
-                    semicolon: nil
+                        )
+                      )
+                    ))
                   )
                 ]),
                 rightBrace: .rightBraceToken()
               )
-            )),
-            semicolon: nil,
-            errorTokens: nil
+            ))
           ),
           CodeBlockItemSyntax(
             item: .init(ClassDeclSyntax(
-              attributes: nil,
-              modifiers: nil,
               classKeyword: .classKeyword(),
               identifier: .identifier("B"),
-              genericParameterClause: nil,
-              inheritanceClause: nil,
-              genericWhereClause: nil,
               members: MemberDeclBlockSyntax(
                 leftBrace: .leftBraceToken(),
                 members: MemberDeclListSyntax([]),
                 rightBrace: .rightBraceToken()
               )
-            )),
-            semicolon: nil,
-            errorTokens: nil
+            ))
           )
         ])
       ),

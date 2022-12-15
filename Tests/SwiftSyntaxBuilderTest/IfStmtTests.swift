@@ -30,11 +30,11 @@ final class IfStmtTests: XCTestCase {
     // Use the convenience initializer from IfStmtConvenienceInitializers
     // with an else branch expressed by a second trailing closure.
     let buildable = IfStmt(conditions: ConditionElementList { BooleanLiteralExpr(true) }) {
-      FunctionCallExpr(callee: "print") {
+      FunctionCallExpr(callee: ExprSyntax("print")) {
         TupleExprElement(expression: StringLiteralExpr(content: "Hello from the if-branch!"))
       }
     } elseBody: {
-      FunctionCallExpr(callee: "print") {
+      FunctionCallExpr(callee: ExprSyntax("print")) {
         TupleExprElement(expression: StringLiteralExpr(content: "Hello from the else-branch!"))
       }
     }

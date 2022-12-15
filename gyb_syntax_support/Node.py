@@ -123,3 +123,51 @@ class Node(object):
         """
         return 'Token' in self.syntax_kind or \
             'Token' in self.collection_element
+
+    def has_optional_base_type_child(self):
+      return any(child.has_optional_base_type() for child in self.children)
+
+    def generate_initializer_decl(self, optional_base_as_missing, current_indentation=""):
+      if not self.children:
+        return "public init()"
+
+      generic_param_names = {}
+      generic_params = []
+      params = []
+
+      if self.children:
+        params.append("leadingTrivia: Trivia? = nil")
+      for child in self.children:
+        if child.node_choices:
+          param_type = child.name
+        elif child.has_base_type():
+          if optional_base_as_missing:
+            param_type = f"Missing{child.type_name}"
+          else:
+            # If we have a base type, make the initializer generic over its
+            # protocol instead.
+            param_type = child.swift_name[0].upper()
+
+            param_count = generic_param_names.get(param_type, 0) + 1
+            generic_param_names[param_type] = param_count
+            if param_count > 1:
+              param_type += str(param_count)
+
+            generic_params.append(f"{param_type}: {child.type_name}Protocol")
+        else:
+          param_type = child.type_name
+
+        if child.is_optional:
+          param_type += "?"
+        label = "_ " if child.is_unexpected_nodes() else ""
+
+        params.append(f"{label}{child.swift_name}: {param_type}{child.generate_default_initialization()}")
+      if self.children:
+        params.append("trailingTrivia: Trivia? = nil")
+
+      param_indentation = current_indentation + "  "
+      separator = ",\n" + param_indentation
+      generics = ""
+      if generic_params:
+        generics = f"<{', '.join(generic_params)}>"
+      return f"public init{generics}(\n{param_indentation}{separator.join(params)}\n{current_indentation})"

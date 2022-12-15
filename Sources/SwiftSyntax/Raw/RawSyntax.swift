@@ -692,9 +692,24 @@ extension RawSyntax {
   static func makeLayout<C: Collection>(
     kind: SyntaxKind,
     from collection: C,
-    arena: SyntaxArena
+    arena: SyntaxArena,
+    leadingTrivia: Trivia? = nil,
+    trailingTrivia: Trivia? = nil
   ) -> RawSyntax where C.Element == RawSyntax? {
-    .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
+    if leadingTrivia != nil || trailingTrivia != nil {
+      var layout = Array(collection)
+      if let leadingTrivia = leadingTrivia,
+         let idx = layout.firstIndex(where: {$0 != nil}) {
+        layout[idx] = layout[idx]!.withLeadingTrivia(leadingTrivia, arena: arena)
+      }
+      if let trailingTrivia = trailingTrivia,
+         let idx = layout.lastIndex(where: {$0 != nil}) {
+        layout[idx] = layout[idx]!.withTrailingTrivia(trailingTrivia, arena: arena)
+      }
+      return .makeLayout(kind: kind, from: layout, arena: arena)
+    }
+
+    return .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
       _ = $0.initialize(from: collection)
     }
   }

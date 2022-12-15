@@ -68,7 +68,12 @@ extension BooleanLiteralExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension BreakStmtSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation { 
+extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {
+  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+      return Self.parse(from: &parser)
+    })
+  }
 }
 
 extension ClassDeclSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -192,7 +197,12 @@ extension FunctionDeclSyntax: SyntaxExpressibleByStringInterpolation {
 extension FunctionTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation { 
+extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {
+  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+      return Self.parse(from: &parser)
+    })
+  }
 }
 
 extension GuardStmtSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -252,28 +262,18 @@ extension MacroExpansionExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension MemberAccessExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension MemberDeclBlockSyntax: SyntaxExpressibleByStringInterpolation { 
+extension MemberDeclBlockSyntax: SyntaxExpressibleByStringInterpolation {
+  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+      return Self.parse(from: &parser)
+    })
+  }
 }
 
 extension MemberTypeIdentifierSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension MetatypeTypeSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingDeclSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingPatternSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingStmtSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension MoveExprSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -368,7 +368,12 @@ extension SequenceExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension SimpleTypeIdentifierSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation { 
+extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation {
+  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+      return Self.parse(from: &parser)
+    })
+  }
 }
 
 extension SpecializeExprSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -409,7 +414,12 @@ extension SubscriptExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension SuperRefExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation { 
+extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {
+  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+      return Self.parse(from: &parser)
+    })
+  }
 }
 
 extension SwitchStmtSyntax: SyntaxExpressibleByStringInterpolation { 

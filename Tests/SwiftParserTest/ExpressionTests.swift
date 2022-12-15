@@ -112,7 +112,6 @@ final class ExpressionTests: XCTestCase {
             item: .init(
               KeyPathExprSyntax(
               backslash: .backslashToken(),
-              root: nil,
               components: KeyPathComponentListSyntax([
                 KeyPathComponentSyntax(
                   period: .periodToken(),
@@ -126,16 +125,12 @@ final class ExpressionTests: XCTestCase {
                   period: .periodToken(),
                   component: .init(
                     KeyPathPropertyComponentSyntax(
-                      identifier: .identifier("foo"),
-                      declNameArguments: nil,
-                      genericArgumentClause: nil
+                      identifier: .identifier("foo")
                     )
                   )
                 )
               ])
-            )),
-            semicolon: nil,
-            errorTokens: nil
+            ))
           )
         ])
       )
@@ -317,30 +312,21 @@ final class ExpressionTests: XCTestCase {
       ]
       """,
       substructure: Syntax(DictionaryElementSyntax.init(
-        keyExpression: ExprSyntax(
-          MacroExpansionExprSyntax(
-            poundToken: .poundToken(), macro: .identifier("line"),
-            leftParen: nil, argumentList: TupleExprElementListSyntax([]),
-            rightParen: nil, trailingClosure: nil,
-            additionalTrailingClosures: nil)),
+        keyExpression: MacroExpansionExprSyntax(
+            poundToken: .poundToken(), macro: .identifier("line"), argumentList: TupleExprElementListSyntax([])),
         colon: .colonToken(),
-        valueExpression: ExprSyntax(FunctionCallExprSyntax(
-          calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("Calendar"), declNameArguments: nil)),
+        valueExpression: FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("Calendar")),
           leftParen: .leftParenToken(),
           argumentList: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               label: .identifier("identifier"),
               colon: .colonToken(),
-              expression: ExprSyntax(MemberAccessExprSyntax(
-                base: nil,
+              expression: MemberAccessExprSyntax(
                 dot: .prefixPeriodToken(),
-                name: .identifier("buddhist"),
-                declNameArguments: nil)),
-              trailingComma: nil)
+                name: .identifier("buddhist")))
           ]),
-          rightParen: .rightParenToken(),
-          trailingClosure: nil,
-          additionalTrailingClosures: nil)),
+          rightParen: .rightParenToken()),
         trailingComma: .commaToken())),
     substructureAfterMarker: "1️⃣")
 

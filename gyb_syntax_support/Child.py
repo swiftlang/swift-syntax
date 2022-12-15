@@ -81,6 +81,20 @@ class Child(object):
         """
         return self.token_kind is not None
 
+    def has_base_type(self):
+        """
+        Returns `True` if this child's type is one of the base syntax kinds and
+        it has no node choices.
+        """
+        return not self.node_choices and self.syntax_kind in SYNTAX_BASE_KINDS
+
+    def has_optional_base_type(self):
+      """
+      Returns `True` if this child's type is one of the base syntax kinds and
+      it's optional.
+      """
+      return self.has_base_type() and self.is_optional
+
     def main_token(self):
         """
         Returns the first choice from the token_choices if there are any,
@@ -92,3 +106,30 @@ class Child(object):
 
     def is_unexpected_nodes(self):
         return self.syntax_kind == 'UnexpectedNodes'
+
+    def generate_default_initialization(self):
+      """
+      If the type has a default value, return an expression of the form
+      ` = default_value` that can be used as the default value to for a
+      function parameter. Otherwise, return an empty string.
+      """
+
+      # Note that this should be Optional<BaseType>.none for defaulted generic,
+      # but that doesn't work in Swift 5.6. To keep source compatibility with
+      # previous SwiftSyntax, we instead create a second initializer that uses
+      # `Missing<Node>` and defaults that to `nil` instead (and `Missing` is
+      # used so that they can't be implicitly converted from a literal).
+      if self.is_optional or self.is_unexpected_nodes():
+        return " = nil"
+
+      if not self.is_token() or not self.token:
+        return ""
+
+      if self.token.is_keyword:
+        return f" = .{self.token.swift_kind()}()"
+      if self.token.text:
+        return f" = .{self.token.swift_kind()}Token()"
+      if self.text_choices and len(self.text_choices) == 1:
+        return f" = .{self.token.swift_kind()}(\"{self.text_choices[0]}\")"
+
+      return ""

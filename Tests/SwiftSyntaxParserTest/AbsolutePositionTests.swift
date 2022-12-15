@@ -82,12 +82,9 @@ public class AbsolutePositionTests: XCTestCase {
       l.append(CodeBlockItemSyntax(
         item: .init(
           ReturnStmtSyntax(
-            returnKeyword: .returnKeyword(trailingTrivia: .newline),
-            expression: nil
+            returnKeyword: .returnKeyword(trailingTrivia: .newline)
           )
-        ),
-        semicolon: nil, 
-        errorTokens: nil)
+        ))
       )
     }
     let root = SourceFileSyntax(
@@ -116,11 +113,8 @@ public class AbsolutePositionTests: XCTestCase {
         returnKeyword: .returnKeyword(
           leadingTrivia: AbsolutePositionTests.leadingTrivia,
           trailingTrivia: AbsolutePositionTests.trailingTrivia
-        ),
-        expression: nil
-      )),
-      semicolon: nil,
-      errorTokens: nil
+        )
+      ))
     ), count: count)
     return SourceFileSyntax(
       statements: CodeBlockItemListSyntax(items),
@@ -184,11 +178,8 @@ public class AbsolutePositionTests: XCTestCase {
     let item = CodeBlockItemSyntax(
       item: .init(
         ReturnStmtSyntax(
-          returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline),
-          expression: nil)
-      ),
-      semicolon: nil,
-      errorTokens: nil)
+          returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline))
+      ))
      XCTAssertEqual(0, item.position.utf8Offset)
      XCTAssertEqual(1, item.positionAfterSkippingLeadingTrivia.utf8Offset)
   }

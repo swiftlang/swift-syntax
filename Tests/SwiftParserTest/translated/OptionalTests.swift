@@ -44,10 +44,7 @@ final class OptionalTests: XCTestCase {
       var c = a?  
       """,
       substructure: Syntax(OptionalChainingExprSyntax(
-        expression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("a"),
-          declNameArguments: nil
-        )),
+        expression: IdentifierExprSyntax(identifier: .identifier("a")),
         questionMark: .postfixQuestionMarkToken()
       ))
     )

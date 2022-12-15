@@ -14,7 +14,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Enum to exhaustively switch over all different syntax nodes.
 @frozen // FIXME: Not actually stable, works around a miscompile
 public enum SyntaxEnum {
   case token(TokenSyntax)

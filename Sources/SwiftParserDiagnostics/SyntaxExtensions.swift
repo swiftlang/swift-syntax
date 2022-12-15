@@ -105,8 +105,9 @@ extension SyntaxProtocol {
   /// of this mode, when it is switched from being missing to present.
   var shouldBeInsertedAfterNextTokenTrivia: Bool {
     if !self.raw.kind.isMissing,
-       let memberDeclItem = self.ancestorOrSelf(mapping: { $0.as(MemberDeclListItemSyntax.self) }),
-       memberDeclItem.firstToken(viewMode: .all) == self.firstToken(viewMode: .all) {
+      let memberDeclItem = self.ancestorOrSelf(mapping: { $0.as(MemberDeclListItemSyntax.self) }),
+      memberDeclItem.firstToken(viewMode: .all) == self.firstToken(viewMode: .all)
+    {
       return true
     } else {
       return false

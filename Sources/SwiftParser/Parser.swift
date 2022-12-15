@@ -114,7 +114,8 @@ public struct Parser {
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
 
     self.arena = ParsingSyntaxArena(
-      parseTriviaFunction: TriviaParser.parseTrivia(_:position:))
+      parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
+    )
 
     var input = input
     input.makeContiguousUTF8()
@@ -148,10 +149,11 @@ public struct Parser {
       self.arena = arena
       sourceBuffer = input
       assert(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
-   } else {
-     self.arena = ParsingSyntaxArena(
-      parseTriviaFunction: TriviaParser.parseTrivia(_:position:))
-     sourceBuffer = self.arena.internSourceBuffer(input)
+    } else {
+      self.arena = ParsingSyntaxArena(
+        parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
+      )
+      sourceBuffer = self.arena.internSourceBuffer(input)
     }
 
     self.lexemes = Lexer.tokenize(sourceBuffer)
@@ -265,12 +267,11 @@ extension Parser {
     }
     var lookahead = self.lookahead()
     return lookahead.canRecoverTo(
-        [],
-        contextualKeywords: [name],
-        recoveryPrecedence: precedence
+      [],
+      contextualKeywords: [name],
+      recoveryPrecedence: precedence
     )
   }
-
 
   /// Checks if it can reach a token whose kind is in `kinds` by skipping
   /// unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
@@ -287,7 +288,6 @@ extension Parser {
     var lookahead = self.lookahead()
     return lookahead.canRecoverTo(kinds)
   }
-
 
   /// Checks if we can reach a token in `subset` by skipping tokens that have
   /// a precedence that have a lower ``TokenPrecedence`` than the minimum
@@ -539,7 +539,7 @@ extension Parser {
     let tok = RawTokenSyntax(
       kind: tokenKind,
       wholeText: SyntaxText(rebasing: current.wholeText[..<endIndex]),
-      textRange: current.textRange.lowerBound ..< endIndex,
+      textRange: current.textRange.lowerBound..<endIndex,
       presence: .present,
       hasLexerError: current.flags.contains(.isErroneous),
       arena: self.arena
@@ -572,9 +572,10 @@ extension Parser {
     //
     //        <<leading trivia>TOKEN<trailing trivia>>
     //                   CURSOR ^
-    let offset = (self.currentToken.trailingTriviaByteLength
-                  + tokenText.count
-                  - prefix.count)
+    let offset =
+      (self.currentToken.trailingTriviaByteLength
+        + tokenText.count
+        - prefix.count)
     self.currentToken = self.lexemes.resetForSplit(of: offset)
     return tok
   }

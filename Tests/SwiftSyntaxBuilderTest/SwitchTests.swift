@@ -27,15 +27,18 @@ final class SwitchTests: XCTestCase {
       }
     }
 
-    AssertBuildResult(syntax, """
-    switch count {
-    case 1:
-        print(count)
-    case 2:
-        print(count)
-    default:
-        break
-    }
-    """)
+    AssertBuildResult(
+      syntax,
+      """
+      switch count {
+      case 1:
+          print(count)
+      case 2:
+          print(count)
+      default:
+          break
+      }
+      """
+    )
   }
 }

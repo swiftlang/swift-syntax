@@ -63,7 +63,7 @@ final class SyntaxTextTests: XCTestCase {
     let emptyDefault = SyntaxText()
     let emptyStatic: SyntaxText = ""
     let emptySlice1 = SyntaxText(rebasing: text[1..<1])
-    let emptySlice2 =  SyntaxText(rebasing: text[6..<6])
+    let emptySlice2 = SyntaxText(rebasing: text[6..<6])
 
     XCTAssertTrue(emptyDefault.baseAddress == nil && emptyDefault.isEmpty)
     XCTAssertTrue(emptyStatic.baseAddress != nil && emptyStatic.isEmpty)
@@ -99,16 +99,16 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertEqual(text.firstRange(of: "abc"), nil)
     XCTAssertEqual(text.firstRange(of: "01234567890123456"), nil)
 
-    XCTAssertEqual(text.firstRange(of: "0"), 0 ..< 1)
-    XCTAssertEqual(text.firstRange(of: "1"), 1 ..< 2)
-    XCTAssertEqual(text.firstRange(of: "5"), 5 ..< 6)
-    XCTAssertEqual(text.firstRange(of: "012"), 0 ..< 3)
-    XCTAssertEqual(text.firstRange(of: "234"), 2 ..< 5)
-    XCTAssertEqual(text.firstRange(of: "9012345"), 9 ..< 16)
+    XCTAssertEqual(text.firstRange(of: "0"), 0..<1)
+    XCTAssertEqual(text.firstRange(of: "1"), 1..<2)
+    XCTAssertEqual(text.firstRange(of: "5"), 5..<6)
+    XCTAssertEqual(text.firstRange(of: "012"), 0..<3)
+    XCTAssertEqual(text.firstRange(of: "234"), 2..<5)
+    XCTAssertEqual(text.firstRange(of: "9012345"), 9..<16)
 
     XCTAssertEqual(SyntaxText(rebasing: text[2..<12]).firstRange(of: "123"), nil)
-    XCTAssertEqual(SyntaxText(rebasing: text[5...]).firstRange(of: "5"), 0 ..< 1)
-    XCTAssertEqual(SyntaxText(rebasing: text[5...]).firstRange(of: "0"), 5 ..< 6)
+    XCTAssertEqual(SyntaxText(rebasing: text[5...]).firstRange(of: "5"), 0..<1)
+    XCTAssertEqual(SyntaxText(rebasing: text[5...]).firstRange(of: "0"), 5..<6)
   }
 
   func testContains() {
@@ -148,4 +148,3 @@ final class SyntaxTextTests: XCTestCase {
     }
   }
 }
-

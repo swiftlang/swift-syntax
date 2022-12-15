@@ -25,23 +25,29 @@ final class EnumCaseElementTests: XCTestCase {
         InheritedType(typeName: Type("Codable"))
         InheritedType(typeName: Type("Equatable"))
       }
-    ) { 
-      MemberDeclListItem(decl: EnumCaseDecl {
-        EnumCaseElement(
-          identifier: "goodMorning",
-          rawValue: InitializerClause(value: StringLiteralExpr(content: "Good Morning")))
-        EnumCaseElement(
-          identifier: "helloWorld",
-          rawValue: InitializerClause(value: StringLiteralExpr(content: "Hello World")))
-        EnumCaseElement(identifier: "hi")
-      })
+    ) {
+      MemberDeclListItem(
+        decl: EnumCaseDecl {
+          EnumCaseElement(
+            identifier: "goodMorning",
+            rawValue: InitializerClause(value: StringLiteralExpr(content: "Good Morning"))
+          )
+          EnumCaseElement(
+            identifier: "helloWorld",
+            rawValue: InitializerClause(value: StringLiteralExpr(content: "Hello World"))
+          )
+          EnumCaseElement(identifier: "hi")
+        }
+      )
     }
 
-    AssertBuildResult(buildable,
+    AssertBuildResult(
+      buildable,
       """
       ␣enum Greeting: String, Codable, Equatable {
           case goodMorning = "Good Morning", helloWorld = "Hello World", hi
       }
-      """)
+      """
+    )
   }
 }

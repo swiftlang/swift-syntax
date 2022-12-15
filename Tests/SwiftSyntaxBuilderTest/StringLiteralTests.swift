@@ -19,17 +19,19 @@ final class StringLiteralTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (String, String)] = [
       #line: ("", #"␣"""#),
-      #line: ("asdf", #"␣"asdf""#)
+      #line: ("asdf", #"␣"asdf""#),
     ]
 
     for (line, testCase) in testCases {
       let (value, expected) = testCase
       let string = Token.stringSegment(value)
       let segment = StringSegment(content: string)
-      let builder = StringLiteralExpr(leadingTrivia: leadingTrivia,
-                                      openQuote: .stringQuote,
-                                      segments: StringLiteralSegments([.stringSegment(segment)]),
-                                      closeQuote: .stringQuote)
+      let builder = StringLiteralExpr(
+        leadingTrivia: leadingTrivia,
+        openQuote: .stringQuote,
+        segments: StringLiteralSegments([.stringSegment(segment)]),
+        closeQuote: .stringQuote
+      )
 
       AssertBuildResult(builder, expected, line: line)
     }
@@ -61,41 +63,51 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testEscapePounds() {
-     AssertBuildResult(
-       StringLiteralExpr(content: ###"#####"foobar"##foobar"#foobar"###),
-       #####"""
-       ###"#####"foobar"##foobar"#foobar"###
-       """#####
-     )
-   }
+    AssertBuildResult(
+      StringLiteralExpr(content: ###"#####"foobar"##foobar"#foobar"###),
+      #####"""
+      ###"#####"foobar"##foobar"#foobar"###
+      """#####
+    )
+  }
 
   func testEscapeInteropolation() {
-    AssertBuildResult(StringLiteralExpr(content: ###"\##(foobar)\#(foobar)"###),
-    ####"""
-    ###"\##(foobar)\#(foobar)"###
-    """####)
+    AssertBuildResult(
+      StringLiteralExpr(content: ###"\##(foobar)\#(foobar)"###),
+      ####"""
+      ###"\##(foobar)\#(foobar)"###
+      """####
+    )
   }
 
   func testEscapeBackslash() {
-    AssertBuildResult(StringLiteralExpr(content: #"\"#),
-    ##"""
-    #"\"#
-    """##)
+    AssertBuildResult(
+      StringLiteralExpr(content: #"\"#),
+      ##"""
+      #"\"#
+      """##
+    )
 
-    AssertBuildResult(StringLiteralExpr(content: ##"\#n"##),
-    ##"""
-    ##"\#n"##
-    """##)
+    AssertBuildResult(
+      StringLiteralExpr(content: ##"\#n"##),
+      ##"""
+      ##"\#n"##
+      """##
+    )
 
-    AssertBuildResult(StringLiteralExpr(content: ##"\#\"##),
-    ##"""
-    ##"\#\"##
-    """##)
+    AssertBuildResult(
+      StringLiteralExpr(content: ##"\#\"##),
+      ##"""
+      ##"\#\"##
+      """##
+    )
 
-    AssertBuildResult(StringLiteralExpr(content: ##"\#"##),
-    ##"""
-    ##"\#"##
-    """##)
+    AssertBuildResult(
+      StringLiteralExpr(content: ##"\#"##),
+      ##"""
+      ##"\#"##
+      """##
+    )
   }
 
   func testNewlines() {

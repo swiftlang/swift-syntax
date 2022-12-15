@@ -84,7 +84,8 @@ extension Parser {
       var firstIteration = true
       var loopProgress = LoopProgressCondition()
       while let poundIfHandle = self.canRecoverTo(any: firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]),
-            loopProgress.evaluate(self.currentToken) {
+        loopProgress.evaluate(self.currentToken)
+      {
         let (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
         firstIteration = false
         // Parse the condition.
@@ -113,12 +114,15 @@ extension Parser {
           }
         }
 
-        clauses.append(RawIfConfigClauseSyntax(
-          unexpectedBeforePoundIf,
-          poundKeyword: poundIf,
-          condition: condition,
-          elements: syntax(&self, elements),
-          arena: self.arena))
+        clauses.append(
+          RawIfConfigClauseSyntax(
+            unexpectedBeforePoundIf,
+            poundKeyword: poundIf,
+            condition: condition,
+            elements: syntax(&self, elements),
+            arena: self.arena
+          )
+        )
       }
     }
 
@@ -127,7 +131,8 @@ extension Parser {
       clauses: RawIfConfigClauseListSyntax(elements: clauses, arena: self.arena),
       unexpectedBeforePoundEndIf,
       poundEndif: poundEndIf,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 

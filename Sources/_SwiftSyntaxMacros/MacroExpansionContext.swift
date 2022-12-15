@@ -53,9 +53,10 @@ public struct MacroExpansionContext {
     moduleName: String,
     sourceLocationConverter: SourceLocationConverter
   ) {
-    let fileName = sourceLocationConverter.location(
-      for: AbsolutePosition(utf8Offset: -1)
-    ).file ?? "unknown.swift"
+    let fileName =
+      sourceLocationConverter.location(
+        for: AbsolutePosition(utf8Offset: -1)
+      ).file ?? "unknown.swift"
 
     self.init(moduleName: moduleName, fileName: fileName)
   }

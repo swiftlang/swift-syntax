@@ -94,11 +94,12 @@ final class VariadicGenericsTests: XCTestCase {
       ),
       leftParen: .leftParen,
       argumentList: TupleExprElementListSyntax([
-        .init(expression:
-                IdentifierExprSyntax(
-                  identifier: .identifier("x")
-                )
-             )
+        .init(
+          expression:
+            IdentifierExprSyntax(
+              identifier: .identifier("x")
+            )
+        )
       ]),
       rightParen: .rightParen
     )

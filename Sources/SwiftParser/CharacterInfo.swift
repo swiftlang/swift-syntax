@@ -19,10 +19,10 @@ extension Character {
     }
 
     static let IDENT_START: Self = .init(rawValue: 0x01)
-    static let IDENT_CONT: Self  = .init(rawValue: 0x02)
-    static let DECIMAL: Self     = .init(rawValue: 0x04)
-    static let HEX: Self         = .init(rawValue: 0x08)
-    static let LETTER: Self      = .init(rawValue: 0x10)
+    static let IDENT_CONT: Self = .init(rawValue: 0x02)
+    static let DECIMAL: Self = .init(rawValue: 0x04)
+    static let HEX: Self = .init(rawValue: 0x08)
+    static let LETTER: Self = .init(rawValue: 0x10)
   }
 }
 
@@ -70,35 +70,30 @@ extension Unicode.Scalar {
   ) -> Bool {
     let info: Character.Info
     switch self.value {
-    case
-      // '0'-'9'
-      48, 49, 50, 51, 52, 53, 54, 55, 56, 57:
+    case  // '0'-'9'
+    48, 49, 50, 51, 52, 53, 54, 55, 56, 57:
       info = [.IDENT_CONT, .DECIMAL, .HEX]
 
-    case
-      // 'A'-'F'
-      65, 66, 67, 68, 69, 70,
+    case  // 'A'-'F'
+    65, 66, 67, 68, 69, 70,
       // 'a'-'f'
       97, 98, 99, 100, 101, 102:
       info = [.IDENT_START, .IDENT_CONT, .HEX, .LETTER]
 
-    case
-      // 'G'-'Z'
-      71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88,
+    case  // 'G'-'Z'
+    71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88,
       89, 90,
       // 'g'-'z'
       103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117,
       118, 119, 120, 121, 122:
       info = [.IDENT_START, .IDENT_CONT, .LETTER]
 
-    case
-      // '_'
-      95:
+    case  // '_'
+    95:
       info = [.IDENT_START, .IDENT_CONT]
 
-    case
-      // '$'
-      36:
+    case  // '$'
+    36:
       info = [.IDENT_CONT]
 
     default:

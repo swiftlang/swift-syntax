@@ -24,7 +24,7 @@ final class IntegerLiteralTests: XCTestCase {
       #line: (IntegerLiteralExpr(1_000), "1000"),
       #line: (IntegerLiteralExpr(-1_000), "-1000"),
       #line: (1_000, "1000"),
-      #line: (-1_000, "-1000")
+      #line: (-1_000, "-1000"),
     ]
 
     for (line, testCase) in testCases {

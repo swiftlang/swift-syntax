@@ -25,13 +25,18 @@ public struct SyntaxChildrenIndexData: Comparable {
   /// See `SyntaxIdentifier.indexIntree`
   let indexInTree: SyntaxIndexInTree
 
-  public static func <(lhs: SyntaxChildrenIndexData,
-                       rhs: SyntaxChildrenIndexData) -> Bool {
+  public static func < (
+    lhs: SyntaxChildrenIndexData,
+    rhs: SyntaxChildrenIndexData
+  ) -> Bool {
     return lhs.indexInParent < rhs.indexInParent
   }
 
-  fileprivate init(offset: UInt32, indexInParent: UInt32,
-                   indexInTree: SyntaxIndexInTree) {
+  fileprivate init(
+    offset: UInt32,
+    indexInParent: UInt32,
+    indexInTree: SyntaxIndexInTree
+  ) {
     self.offset = offset
     self.indexInParent = indexInParent
     self.indexInTree = indexInTree
@@ -63,11 +68,16 @@ public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
   /// switch case comparison.
   let data: SyntaxChildrenIndexData?
 
-  fileprivate init(offset: UInt32, indexInParent: UInt32,
-                   indexInTree: SyntaxIndexInTree) {
-    self.data = SyntaxChildrenIndexData(offset: offset,
-                                        indexInParent: indexInParent,
-                                        indexInTree: indexInTree)
+  fileprivate init(
+    offset: UInt32,
+    indexInParent: UInt32,
+    indexInTree: SyntaxIndexInTree
+  ) {
+    self.data = SyntaxChildrenIndexData(
+      offset: offset,
+      indexInParent: indexInParent,
+      indexInTree: indexInTree
+    )
   }
 
   internal init(_ absoluteSyntaxInfo: AbsoluteSyntaxInfo) {
@@ -75,7 +85,8 @@ public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
   }
 
   public static func < (lhs: SyntaxChildrenIndex, rhs: SyntaxChildrenIndex)
-      -> Bool {
+    -> Bool
+  {
     switch (lhs.data, rhs.data) {
     case (.some(let lhsData), .some(let rhsData)):
       return lhsData < rhsData
@@ -92,10 +103,14 @@ public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
 fileprivate extension AbsoluteSyntaxInfo {
   /// Construct `AbsoluteSyntaxInfo` from the given index data and a `rootId`.
   init(index: SyntaxChildrenIndexData, rootId: UInt) {
-    let position = AbsoluteSyntaxPosition(offset: index.offset,
-                                          indexInParent: index.indexInParent)
-    let identifier = SyntaxIdentifier(rootId: rootId,
-                                      indexInTree: index.indexInTree)
+    let position = AbsoluteSyntaxPosition(
+      offset: index.offset,
+      indexInParent: index.indexInParent
+    )
+    let identifier = SyntaxIdentifier(
+      rootId: rootId,
+      indexInTree: index.indexInTree
+    )
     self.init(position: position, nodeId: identifier)
   }
 }
@@ -162,9 +177,11 @@ struct RawSyntaxChildren: BidirectionalCollection {
       // Compute the next materialized index
       let nodeLength = UInt32(node?.totalLength.utf8Length ?? 0)
       let advancedIndexInTree = index.indexInTree.advancedBy(node)
-      return SyntaxChildrenIndex(offset: index.offset + nodeLength,
-                                 indexInParent: index.indexInParent + 1,
-                                 indexInTree: advancedIndexInTree)
+      return SyntaxChildrenIndex(
+        offset: index.offset + nodeLength,
+        indexInParent: index.indexInParent + 1,
+        indexInTree: advancedIndexInTree
+      )
     } else {
       // We have reached the end of the collection. Return the end index.
       return nil
@@ -182,9 +199,11 @@ struct RawSyntaxChildren: BidirectionalCollection {
       let previousNode = parent.layoutView!.children[Int(index.indexInParent - 1)]
       let previousNodeLength = UInt32(previousNode?.totalLength.utf8Length ?? 0)
       let reversedIndexInTree = index.indexInTree.reversedBy(previousNode)
-      return SyntaxChildrenIndex(offset: index.offset - previousNodeLength,
-                                 indexInParent: index.indexInParent - 1,
-                                 indexInTree: reversedIndexInTree)
+      return SyntaxChildrenIndex(
+        offset: index.offset - previousNodeLength,
+        indexInParent: index.indexInParent - 1,
+        indexInTree: reversedIndexInTree
+      )
     } else {
       // We need to reverse the end index. For this we need to compute a
       // materialized version of the end index that points one past the end of
@@ -198,14 +217,14 @@ struct RawSyntaxChildren: BidirectionalCollection {
 
       // Compute a materialized index.
       let offset = startIndex.offset + UInt32(parent.totalLength.utf8Length)
-      let indexInParent = startIndex.indexInParent +
-                          UInt32(parentLayoutView.children.count)
-      let indexInTree = startIndex.indexInTree.indexInTree +
-                        UInt32(parent.totalNodes) - 1
+      let indexInParent = startIndex.indexInParent + UInt32(parentLayoutView.children.count)
+      let indexInTree = startIndex.indexInTree.indexInTree + UInt32(parent.totalNodes) - 1
       let syntaxIndexInTree = SyntaxIndexInTree(indexInTree: indexInTree)
-      let materialized = SyntaxChildrenIndex(offset: offset,
-                                             indexInParent: indexInParent,
-                                             indexInTree: syntaxIndexInTree)
+      let materialized = SyntaxChildrenIndex(
+        offset: offset,
+        indexInParent: indexInParent,
+        indexInTree: syntaxIndexInTree
+      )
 
       // Reverse index based on the above logic
       return self.index(before: materialized)
@@ -213,7 +232,8 @@ struct RawSyntaxChildren: BidirectionalCollection {
   }
 
   func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex)
-      -> Int {
+    -> Int
+  {
     switch (start.data, end.data) {
     case (.some(let start), .some(let end)):
       return Int(end.indexInParent - start.indexInParent)
@@ -227,7 +247,8 @@ struct RawSyntaxChildren: BidirectionalCollection {
   }
 
   subscript(index: SyntaxChildrenIndex)
-      -> (raw: RawSyntax?, syntaxInfo: AbsoluteSyntaxInfo) {
+    -> (raw: RawSyntax?, syntaxInfo: AbsoluteSyntaxInfo)
+  {
     // Accessing the end index is undefined. So we can assume a non-end index.
     let index = index.data!
 
@@ -245,7 +266,6 @@ struct RawSyntaxChildren: BidirectionalCollection {
     case .token:
       self.numberOfChildren = 0
     }
-
 
     if self.numberOfChildren == 0 {
       self.startIndex = nil
@@ -308,10 +328,13 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
   /// the node at the given index is already present, it is not advanced.
   /// If no present node exists in the given collection after the index, the
   /// collection's `endIndex` is returned.
-  private static func presentIndex(after index: SyntaxChildrenIndex,
-                                   in children: RawSyntaxChildren,
-                                   viewMode: SyntaxTreeViewMode)
-      -> SyntaxChildrenIndex {
+  private static func presentIndex(
+    after index: SyntaxChildrenIndex,
+    in children: RawSyntaxChildren,
+    viewMode: SyntaxTreeViewMode
+  )
+    -> SyntaxChildrenIndex
+  {
     var advancedIndex = index
     while true {
       if advancedIndex != children.endIndex {
@@ -332,34 +355,39 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
   /// Reverses the index to the previous present node in the given collection.
   /// If the node at the given index is already present, it is not reversed.
   /// Behavior is undefined if no present index exists before the given index.
-  private static func presentIndex(before index: SyntaxChildrenIndex,
-                                   in children: RawSyntaxChildren,
-                                   viewMode: SyntaxTreeViewMode)
-      -> SyntaxChildrenIndex {
+  private static func presentIndex(
+    before index: SyntaxChildrenIndex,
+    in children: RawSyntaxChildren,
+    viewMode: SyntaxTreeViewMode
+  )
+    -> SyntaxChildrenIndex
+  {
     var reversedIndex = index
     while true {
       if reversedIndex < children.endIndex,
-          let node = children[reversedIndex].raw,
-         viewMode.shouldTraverse(node: node) {
+        let node = children[reversedIndex].raw,
+        viewMode.shouldTraverse(node: node)
+      {
         return reversedIndex
       }
-#if DEBUG
+      #if DEBUG
       // Reversing any further would result in undefined behaviour of
       // index(before:)
       if reversedIndex == children.startIndex {
-        fatalError("presentIndex(before:) must not be called if there is no " +
-                   "present index before the given one")
+        fatalError("presentIndex(before:) must not be called if there is no " + "present index before the given one")
       }
-#endif
+      #endif
       reversedIndex = children.index(before: reversedIndex)
     }
   }
 
   func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
     let nextIndex = allChildren.index(after: index)
-    return Self.presentIndex(after: nextIndex,
-                             in: allChildren,
-                             viewMode: viewMode)
+    return Self.presentIndex(
+      after: nextIndex,
+      in: allChildren,
+      viewMode: viewMode
+    )
   }
 
   func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
@@ -367,9 +395,11 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
     // contract of the index(before:) function we are not called on the start
     // index. The start index points to the first present node. Hence there is
     // a present node before us.
-    return Self.presentIndex(before: allChildren.index(before: index),
-                             in: allChildren,
-                             viewMode: viewMode)
+    return Self.presentIndex(
+      before: allChildren.index(before: index),
+      in: allChildren,
+      viewMode: viewMode
+    )
   }
 
   subscript(position: SyntaxChildrenIndex) -> AbsoluteRawSyntax {
@@ -382,9 +412,11 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
     let allChildren = RawSyntaxChildren(parent)
 
     self.allChildren = allChildren
-    self.startIndex = Self.presentIndex(after: allChildren.startIndex,
-                                        in: allChildren,
-                                        viewMode: viewMode)
+    self.startIndex = Self.presentIndex(
+      after: allChildren.startIndex,
+      in: allChildren,
+      viewMode: viewMode
+    )
     self.viewMode = viewMode
   }
 

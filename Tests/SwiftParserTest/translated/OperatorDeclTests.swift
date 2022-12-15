@@ -22,7 +22,8 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ], fixedSource: "prefix operator +++"
+      ],
+      fixedSource: "prefix operator +++"
     )
   }
 
@@ -57,9 +58,10 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
-      ], fixedSource: """
-      infix operator +++*
-      """
+      ],
+      fixedSource: """
+        infix operator +++*
+        """
     )
   }
 
@@ -73,7 +75,6 @@ final class OperatorDeclTests: XCTestCase {
       ]
     )
   }
-
 
   func testOperatorDecl2() {
     AssertParse(
@@ -166,7 +167,7 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator %%+
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code before operator declaration"),
+        DiagnosticSpec(message: "unexpected code before operator declaration")
       ]
     )
   }
@@ -209,8 +210,9 @@ final class OperatorDeclTests: XCTestCase {
       postfix operator ?1️⃣$$
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$$' is considered an identifier and must not appear within an operator name", fixIts: ["remove '$$'"]),
-      ], fixedSource: "postfix operator ?"
+        DiagnosticSpec(message: "'$$' is considered an identifier and must not appear within an operator name", fixIts: ["remove '$$'"])
+      ],
+      fixedSource: "postfix operator ?"
     )
   }
 
@@ -221,7 +223,8 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", fixIts: ["remove 'aa'"])
-      ], fixedSource: "infix operator --"
+      ],
+      fixedSource: "infix operator --"
     )
   }
 
@@ -231,8 +234,9 @@ final class OperatorDeclTests: XCTestCase {
       infix operator 1️⃣aa--: A
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", highlight: "aa", fixIts: ["remove 'aa'"]),
-      ], fixedSource: "infix operator --: A"
+        DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", highlight: "aa", fixIts: ["remove 'aa'"])
+      ],
+      fixedSource: "infix operator --: A"
     )
   }
 
@@ -242,8 +246,9 @@ final class OperatorDeclTests: XCTestCase {
       infix operator <<1️⃣$$@<
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$$@<' is not allowed in operator names", fixIts: ["remove '$$@<'"]),
-      ], fixedSource: "infix operator <<"
+        DiagnosticSpec(message: "'$$@<' is not allowed in operator names", fixIts: ["remove '$$@<'"])
+      ],
+      fixedSource: "infix operator <<"
     )
   }
 
@@ -253,7 +258,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator !!1️⃣@aa2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'@aa' is not allowed in operator names"),
+        DiagnosticSpec(message: "'@aa' is not allowed in operator names")
       ]
     )
   }
@@ -264,8 +269,9 @@ final class OperatorDeclTests: XCTestCase {
       infix operator 1️⃣#++=
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'#' is not allowed in operator names", highlight: "#", fixIts: ["remove '#'"]),
-      ], fixedSource: "infix operator ++="
+        DiagnosticSpec(message: "'#' is not allowed in operator names", highlight: "#", fixIts: ["remove '#'"])
+      ],
+      fixedSource: "infix operator ++="
     )
   }
 
@@ -275,7 +281,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator ++=1️⃣#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'#' is not allowed in operator names"),
+        DiagnosticSpec(message: "'#' is not allowed in operator names")
       ]
     )
   }
@@ -286,7 +292,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator ->1️⃣#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'#' is not allowed in operator names"),
+        DiagnosticSpec(message: "'#' is not allowed in operator names")
       ]
     )
   }
@@ -299,7 +305,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator =1️⃣#=
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'#=' is not allowed in operator names"),
+        DiagnosticSpec(message: "'#=' is not allowed in operator names")
       ]
     )
   }
@@ -312,7 +318,7 @@ final class OperatorDeclTests: XCTestCase {
       infix operator --- : 1️⃣;
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected precedence group in operator declaration"),
+        DiagnosticSpec(message: "expected precedence group in operator declaration")
       ]
     )
   }
@@ -325,7 +331,7 @@ final class OperatorDeclTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in precedencegroup"),
+        DiagnosticSpec(message: "expected identifier in precedencegroup")
       ]
     )
   }
@@ -338,11 +344,10 @@ final class OperatorDeclTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in 'associativity' property of precedencegroup"),
+        DiagnosticSpec(message: "expected ':' in 'associativity' property of precedencegroup")
       ]
     )
   }
-
 
   func testOperatorDecl15c() {
     AssertParse(
@@ -352,11 +357,10 @@ final class OperatorDeclTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'precedence 123' in precedencegroup"),
+        DiagnosticSpec(message: "unexpected code 'precedence 123' in precedencegroup")
       ]
     )
   }
-
 
   func testOperatorDecl15d() {
     AssertParse(
@@ -368,7 +372,6 @@ final class OperatorDeclTests: XCTestCase {
     )
   }
 
-
   func testOperatorDecl15e() {
     AssertParse(
       """
@@ -377,11 +380,10 @@ final class OperatorDeclTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'true' or 'false' after 'assignment'"),
+        DiagnosticSpec(message: "expected 'true' or 'false' after 'assignment'")
       ]
     )
   }
-
 
   func testOperatorDecl15() {
     AssertParse(
@@ -391,11 +393,10 @@ final class OperatorDeclTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in 'relation' property of precedencegroup"),
+        DiagnosticSpec(message: "expected name in 'relation' property of precedencegroup")
       ]
     )
   }
-
 
   func testOperatorDecl16() {
     AssertParse(
@@ -471,7 +472,7 @@ final class OperatorDeclTests: XCTestCase {
       postfix operator ++:1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected precedence group in operator declaration"),
+        DiagnosticSpec(message: "expected precedence group in operator declaration")
       ]
     )
   }

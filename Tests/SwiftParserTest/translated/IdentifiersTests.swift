@@ -98,11 +98,12 @@ final class IdentifiersTests: XCTestCase {
       class 1️⃣switch {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
-      ], fixedSource: """
-      // Keywords as identifiers
-      class `switch` {}
-      """
+        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+      ],
+      fixedSource: """
+        // Keywords as identifiers
+        class `switch` {}
+        """
     )
   }
 
@@ -124,7 +125,7 @@ final class IdentifiersTests: XCTestCase {
       protocol 1️⃣enum {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'enum' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'enum' cannot be used as an identifier here")
       ]
     )
   }

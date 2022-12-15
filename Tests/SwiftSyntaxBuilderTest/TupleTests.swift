@@ -19,9 +19,10 @@ final class TupleTests: XCTestCase {
     let builder = TupleExprSyntax("(p1: value1, p2: value2, p3: value3)")
     AssertBuildResult(builder, "(p1: value1, p2: value2, p3: value3)")
   }
-  
+
   func testMultilineTupleExpr() {
-    let builder = TupleExprSyntax("""
+    let builder = TupleExprSyntax(
+      """
       (
       p1: value1,
       p2: value2,
@@ -29,9 +30,12 @@ final class TupleTests: XCTestCase {
       p4: value4,
       p5: value5
       )
-      """)
-    
-    AssertBuildResult(builder, """
+      """
+    )
+
+    AssertBuildResult(
+      builder,
+      """
       (
           p1: value1,
           p2: value2,
@@ -39,11 +43,13 @@ final class TupleTests: XCTestCase {
           p4: value4,
           p5: value5
       )
-      """)
+      """
+    )
   }
-  
+
   func testMultilineTupleType() {
-    let builder = TupleTypeSyntax("""
+    let builder = TupleTypeSyntax(
+      """
       (
       Int,
       p2: Int,
@@ -51,9 +57,12 @@ final class TupleTests: XCTestCase {
       p4: Int,
       Int
       )
-      """)
-    
-    AssertBuildResult(builder, """
+      """
+    )
+
+    AssertBuildResult(
+      builder,
+      """
       (
           Int,
           p2: Int,
@@ -61,6 +70,7 @@ final class TupleTests: XCTestCase {
           p4: Int,
           Int
       )
-      """)
+      """
+    )
   }
 }

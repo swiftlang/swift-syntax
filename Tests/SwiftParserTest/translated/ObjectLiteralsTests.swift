@@ -21,7 +21,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in pound literal expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in pound literal expression")
       ]
     )
   }
@@ -32,7 +32,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#Image(imageLiteral: localResourceNameAsString)#1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in pound literal expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in pound literal expression")
       ]
     )
   }
@@ -43,11 +43,10 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString)#1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in pound literal expression"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in pound literal expression")
       ]
     )
   }
-
 
   func testObjectLiterals2a() {
     AssertParse(
@@ -65,7 +64,6 @@ final class ObjectLiteralsTests: XCTestCase {
     )
   }
 
-
   func testObjectLiterals2c() {
     AssertParse(
       """
@@ -73,7 +71,6 @@ final class ObjectLiteralsTests: XCTestCase {
       """
     )
   }
-
 
   func testObjectLiterals3a() {
     AssertParse(
@@ -117,7 +114,7 @@ final class ObjectLiteralsTests: XCTestCase {
       let _ = [#Color(_: 1, green: 1, 2)2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array")
       ]
     )
   }

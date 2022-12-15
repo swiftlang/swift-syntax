@@ -205,20 +205,21 @@ final class SubscriptingTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
-      ], fixedSource: """
-      struct A0 {
-        subscript(
-          i : (Int)
-           -> Int)  -> <#type#>{
-          get {
-            return stored
-          }
-          set {
-            stored = value
+      ],
+      fixedSource: """
+        struct A0 {
+          subscript(
+            i : (Int)
+             -> Int)  -> <#type#>{
+            get {
+              return stored
+            }
+            set {
+              stored = value
+            }
           }
         }
-      }
-      """
+        """
     )
   }
 
@@ -233,7 +234,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in subscript"),
+        DiagnosticSpec(message: "expected parameter clause in subscript")
       ]
     )
   }
@@ -254,7 +255,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' in subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '->' in subscript")
       ]
     )
   }
@@ -275,7 +276,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected return type in subscript"),
+        DiagnosticSpec(message: "expected return type in subscript")
       ]
     )
   }
@@ -293,7 +294,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(message: "expected '->' and return type in subscript")
       ]
     )
   }
@@ -310,7 +311,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(message: "expected '->' and return type in subscript")
       ]
     )
   }
@@ -337,7 +338,7 @@ final class SubscriptingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '(j: Int)' in subscript"),
+        DiagnosticSpec(message: "unexpected code '(j: Int)' in subscript")
       ]
     )
   }
@@ -401,15 +402,15 @@ final class SubscriptingTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: subscripts cannot have a name, Fix-It replacements: 13 - 14 = ''
-        DiagnosticSpec(message: "subscripts cannot have a name", fixIts: ["remove 'x'"]),
+        DiagnosticSpec(message: "subscripts cannot have a name", fixIts: ["remove 'x'"])
       ],
       fixedSource: """
-      struct A9 {
-        subscript () -> Int {
-          return 0
+        struct A9 {
+          subscript () -> Int {
+            return 0
+          }
         }
-      }
-      """
+        """
     )
   }
 
@@ -428,16 +429,17 @@ final class SubscriptingTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "subscripts cannot have a name", fixIts: ["remove 'x'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "subscripts cannot have a name", fixIts: ["remove 'x'"]),
-      ], fixedSource: """
-      struct A10 {
-        subscript (i: Int) -> Int {
-          return 0
+      ],
+      fixedSource: """
+        struct A10 {
+          subscript (i: Int) -> Int {
+            return 0
+          }
+          subscript <T>(i: T) -> Int {
+            return 0
+          }
         }
-        subscript <T>(i: T) -> Int {
-          return 0
-        }
-      }
-      """
+        """
     )
   }
 
@@ -456,13 +458,14 @@ final class SubscriptingTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '->' and return type in subscript"),
-      ], fixedSource: """
-      struct A11 {
-        subscript( x y : (Int) -> Int)  -> <#type#>{
-          return 0
+      ],
+      fixedSource: """
+        struct A11 {
+          subscript( x y : (Int) -> Int)  -> <#type#>{
+            return 0
+          }
         }
-      }
-      """
+        """
     )
   }
 }

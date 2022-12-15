@@ -16,16 +16,23 @@ import SwiftOperators
 public class SyntaxSynthesisTests: XCTestCase {
   func testInfixOperator() {
     let plus = Operator(
-      kind: .infix, name: "+", precedenceGroup: "AdditivePrecedence")
+      kind: .infix,
+      name: "+",
+      precedenceGroup: "AdditivePrecedence"
+    )
     let plusSyntax = plus.synthesizedSyntax()
     XCTAssertEqual(
-      plusSyntax.description, "infix operator +: AdditivePrecedence")
+      plusSyntax.description,
+      "infix operator +: AdditivePrecedence"
+    )
   }
 
   func testPrecedenceGroup() {
     let group = PrecedenceGroup(
-      name: "MyGroup", associativity: .right, assignment: true,
-      relations: [ .lowerThan("BetterGroup"), .higherThan("WorseGroup")]
+      name: "MyGroup",
+      associativity: .right,
+      assignment: true,
+      relations: [.lowerThan("BetterGroup"), .higherThan("WorseGroup")]
     )
     let groupSyntax = group.synthesizedSyntax()
     XCTAssertEqual(
@@ -37,7 +44,8 @@ public class SyntaxSynthesisTests: XCTestCase {
           lowerThan: BetterGroup
           higherThan: WorseGroup
       }
-      """)
+      """
+    )
   }
 
   func testLogicalOperatorTable() {

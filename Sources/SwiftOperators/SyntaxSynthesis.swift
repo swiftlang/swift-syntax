@@ -31,7 +31,8 @@ extension Operator {
     }
 
     return OperatorDeclSyntax(
-      modifiers: modifiers, operatorKeyword: operatorKeyword,
+      modifiers: modifiers,
+      operatorKeyword: operatorKeyword,
       identifier: identifierSyntax,
       operatorPrecedenceAndTypes: precedenceGroupSyntax
     )
@@ -49,13 +50,14 @@ extension PrecedenceRelation {
     PrecedenceGroupRelationSyntax(
       higherThanOrLowerThan: .contextualKeyword(
         "\(kind)",
-        leadingTrivia: [ .newlines(1), .spaces(indentation) ]
+        leadingTrivia: [.newlines(1), .spaces(indentation)]
       ),
       colon: .colonToken(),
       otherNames: PrecedenceGroupNameListSyntax(
         [
           PrecedenceGroupNameElementSyntax(
-            name: .identifier(groupName, leadingTrivia:  .space))
+            name: .identifier(groupName, leadingTrivia: .space)
+          )
         ]
       )
     )
@@ -81,10 +83,10 @@ extension PrecedenceGroup {
         .init(
           PrecedenceGroupAssociativitySyntax(
             associativityKeyword:
-                .identifier(
-                  "associativity",
-                  leadingTrivia: [ .newlines(1), .spaces(indentation) ]
-                ),
+              .identifier(
+                "associativity",
+                leadingTrivia: [.newlines(1), .spaces(indentation)]
+              ),
             colon: .colonToken(),
             value: .identifier("\(associativity)", leadingTrivia: .space)
           )
@@ -101,10 +103,10 @@ extension PrecedenceGroup {
         .init(
           PrecedenceGroupAssignmentSyntax(
             assignmentKeyword:
-                .identifier(
-                  "assignment",
-                  leadingTrivia: [ .newlines(1), .spaces(indentation) ]
-                ),
+              .identifier(
+                "assignment",
+                leadingTrivia: [.newlines(1), .spaces(indentation)]
+              ),
             colon: .colonToken(),
             flag: .trueKeyword(leadingTrivia: .space)
           )
@@ -126,7 +128,8 @@ extension PrecedenceGroup {
 
     return PrecedenceGroupDeclSyntax(
       precedencegroupKeyword: precedencegroupKeyword,
-      identifier: identifierSyntax, leftBrace: leftBrace,
+      identifier: identifierSyntax,
+      leftBrace: leftBrace,
       groupAttributes: PrecedenceGroupAttributeListSyntax(groupAttributes),
       rightBrace: rightBrace
     )

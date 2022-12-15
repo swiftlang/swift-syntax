@@ -32,10 +32,13 @@ final class TriviaTests: XCTestCase {
       )
     }
 
-    AssertBuildResult(decl, """
+    AssertBuildResult(
+      decl,
+      """
       /// A doc comment
       /* An inline comment */ static var test: String
-      """)
+      """
+    )
   }
 
   func testTriviaConcatenation() {

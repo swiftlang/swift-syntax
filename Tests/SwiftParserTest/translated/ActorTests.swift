@@ -21,7 +21,7 @@ final class ActorTests: XCTestCase {
       actor MyActor11️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected member block in actor"),
+        DiagnosticSpec(message: "expected member block in actor")
       ]
     )
   }
@@ -35,9 +35,12 @@ final class ActorTests: XCTestCase {
       func hello() { }1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end actor", notes: [
-          NoteSpec(message: "to match this opening '{'")
-        ]),
+        DiagnosticSpec(
+          message: "expected '}' to end actor",
+          notes: [
+            NoteSpec(message: "to match this opening '{'")
+          ]
+        )
       ]
     )
   }

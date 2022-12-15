@@ -28,8 +28,10 @@ public enum OperatorError: Error {
 
   /// No associativity relationship between operators.
   case incomparableOperators(
-    leftOperator: ExprSyntax, leftPrecedenceGroup: PrecedenceGroupName,
-    rightOperator: ExprSyntax, rightPrecedenceGroup: PrecedenceGroupName
+    leftOperator: ExprSyntax,
+    leftPrecedenceGroup: PrecedenceGroupName,
+    rightOperator: ExprSyntax,
+    rightPrecedenceGroup: PrecedenceGroupName
   )
 }
 
@@ -42,4 +44,4 @@ public enum OperatorError: Error {
 /// may separately record/drop the error and return without throwing (in
 /// which case the operator-precedence parser will recover).
 public typealias OperatorErrorHandler =
-    (OperatorError) throws -> Void
+  (OperatorError) throws -> Void

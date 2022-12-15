@@ -31,11 +31,13 @@ extension Parser {
 extension Parser {
   mutating func parseAttribute() -> RawAttributeListSyntax.Element {
     if self.at(.poundIfKeyword) {
-      return .ifConfigDecl(self.parsePoundIfDirective { parser -> RawAttributeListSyntax.Element in
-        return parser.parseAttribute()
-      } syntax: { parser, attributes in
-        return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
-      })
+      return .ifConfigDecl(
+        self.parsePoundIfDirective { parser -> RawAttributeListSyntax.Element in
+          return parser.parseAttribute()
+        } syntax: { parser, attributes in
+          return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
+        }
+      )
     }
 
     guard let declAttr = DeclarationAttribute(rawValue: self.peek().tokenText) else {
@@ -71,7 +73,6 @@ extension Parser {
       break
     }
 
-
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforeIdent, ident) = self.expectIdentifierOrRethrows()
     let leftParen = self.consume(if: .leftParen)
@@ -91,17 +92,20 @@ extension Parser {
       unexpectedBeforeRightParen = nil
       rightParen = nil
     }
-    return .attribute(RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeIdent,
-      attributeName: ident,
-      leftParen: leftParen,
-      argument: arg,
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      tokenList: nil,
-      arena: self.arena))
+    return .attribute(
+      RawAttributeSyntax(
+        unexpectedBeforeAtSign,
+        atSignToken: atSign,
+        unexpectedBeforeIdent,
+        attributeName: ident,
+        leftParen: leftParen,
+        argument: arg,
+        unexpectedBeforeRightParen,
+        rightParen: rightParen,
+        tokenList: nil,
+        arena: self.arena
+      )
+    )
   }
 
   mutating func parseCustomAttribute() -> RawCustomAttributeSyntax {
@@ -111,11 +115,16 @@ extension Parser {
     // Custom attributes are stricter than normal attributes about their
     // argument lists "immediately" following the attribute name.
     guard self.lookahead().isCustomAttributeArgument(),
-            let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine }) else {
+      let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine })
+    else {
       return RawCustomAttributeSyntax(
-        atSignToken: atSign, attributeName: attrName,
-        leftParen: nil, argumentList: nil, rightParen: nil,
-        arena: self.arena)
+        atSignToken: atSign,
+        attributeName: attrName,
+        leftParen: nil,
+        argumentList: nil,
+        rightParen: nil,
+        arena: self.arena
+      )
     }
     let arguments = self.parseArgumentListElements(pattern: .none)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -127,7 +136,8 @@ extension Parser {
       argumentList: RawTupleExprElementListSyntax(elements: arguments, arena: self.arena),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -141,7 +151,7 @@ extension Parser {
     do {
       if self.peek().tokenKind == .integerLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
-      } else if self.peek().tokenKind  == .floatingLiteral {
+      } else if self.peek().tokenKind == .floatingLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
       } else {
         argument = .availability(self.parseExtendedAvailabilitySpecList())
@@ -160,7 +170,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   mutating func parseSPIAvailableAttribute() -> RawAttributeSyntax {
@@ -172,7 +183,7 @@ extension Parser {
     do {
       if self.peek().tokenKind == .integerLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
-      } else if self.peek().tokenKind  == .floatingLiteral {
+      } else if self.peek().tokenKind == .floatingLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
       } else {
         argument = .availability(self.parseExtendedAvailabilitySpecList())
@@ -191,7 +202,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -215,7 +227,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   enum DifferentiabilityKind: SyntaxText, ContextualKeywords {
@@ -257,7 +270,8 @@ extension Parser {
       diffParams: diffParams,
       diffParamsComma: diffParamsComma,
       whereClause: whereClause,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   mutating func parseDifferentiabilityParameters() -> RawDifferentiabilityParamsClauseSyntax {
@@ -266,12 +280,13 @@ extension Parser {
 
     guard let leftParen = self.consume(if: .leftParen) else {
       // If no opening '(' for parameter list, parse a single parameter.
-      let param = self.parseDifferentiabilityParameter()
-                  ?? RawDifferentiabilityParamSyntax(
-                    parameter: missingToken(.identifier),
-                    trailingComma: nil,
-                    arena: self.arena
-                  )
+      let param =
+        self.parseDifferentiabilityParameter()
+        ?? RawDifferentiabilityParamSyntax(
+          parameter: missingToken(.identifier),
+          trailingComma: nil,
+          arena: self.arena
+        )
       return RawDifferentiabilityParamsClauseSyntax(
         unexpectedBeforeWrt,
         wrtLabel: wrt,
@@ -338,12 +353,18 @@ extension Parser {
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityParamSyntax(
-        parameter: token, trailingComma: comma, arena: self.arena)
+        parameter: token,
+        trailingComma: comma,
+        arena: self.arena
+      )
     case (.integerLiteral, let handle)?:
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityParamSyntax(
-        parameter: token, trailingComma: comma, arena: self.arena)
+        parameter: token,
+        trailingComma: comma,
+        arena: self.arena
+      )
     case (.selfKeyword, let handle)?:
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
@@ -378,7 +399,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   mutating func parseTransposeAttribute() -> RawAttributeSyntax {
@@ -400,9 +422,9 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
-
 
   mutating func parseDerivativeAttributeArguments() -> RawDerivativeRegistrationAttributeArgumentsSyntax {
     let (unexpectedBeforeOfLabel, ofLabel) = self.expectContextualKeyword("of")
@@ -432,7 +454,8 @@ extension Parser {
       accessorKind: accessor,
       comma: comma,
       diffParams: diffParams,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -464,7 +487,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
@@ -473,11 +497,13 @@ extension Parser {
     while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
       // Empty selector piece.
       if let colon = self.consume(if: .colon) {
-        elements.append(RawObjCSelectorPieceSyntax(
-          name: nil,
-          colon: colon,
-          arena: self.arena
-        ))
+        elements.append(
+          RawObjCSelectorPieceSyntax(
+            name: nil,
+            colon: colon,
+            arena: self.arena
+          )
+        )
         continue
       }
 
@@ -486,19 +512,25 @@ extension Parser {
 
         // If we hit a ')' we may have a zero-argument selector.
         if self.at(.rightParen) && elements.isEmpty {
-          elements.append(RawObjCSelectorPieceSyntax(
-            name: name,
-            colon: nil,
-            arena: self.arena))
+          elements.append(
+            RawObjCSelectorPieceSyntax(
+              name: name,
+              colon: nil,
+              arena: self.arena
+            )
+          )
           break
         }
 
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        elements.append(RawObjCSelectorPieceSyntax(
-          name: name,
-          unexpectedBeforeColon,
-          colon: colon,
-          arena: self.arena))
+        elements.append(
+          RawObjCSelectorPieceSyntax(
+            name: name,
+            unexpectedBeforeColon,
+            colon: colon,
+            arena: self.arena
+          )
+        )
       }
     }
     return RawObjCSelectorSyntax(elements: elements, arena: self.arena)
@@ -523,7 +555,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   enum SpecializeParameter: SyntaxText, ContextualKeywords {
@@ -544,34 +577,43 @@ extension Parser {
       case (.target, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let (targetFunction, args) = self.parseDeclNameRef([ .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators ])
+        let (targetFunction, args) = self.parseDeclNameRef([.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators])
         let declName = RawDeclNameSyntax(
           declBaseName: targetFunction,
           declNameArguments: args,
-          arena: self.arena)
-        let comma = self.consume(if: .comma)
-        elements.append(.targetFunctionEntry(RawTargetFunctionEntrySyntax(
-          label: ident,
-          unexpectedBeforeColon,
-          colon: colon,
-          declname: declName,
-          trailingComma: comma,
           arena: self.arena
-        )))
+        )
+        let comma = self.consume(if: .comma)
+        elements.append(
+          .targetFunctionEntry(
+            RawTargetFunctionEntrySyntax(
+              label: ident,
+              unexpectedBeforeColon,
+              colon: colon,
+              declname: declName,
+              trailingComma: comma,
+              arena: self.arena
+            )
+          )
+        )
       case (.availability, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let availability = self.parseAvailabilitySpecList(from: .available)
         let (unexpectedBeforeSemi, semi) = self.expect(.semicolon)
-        elements.append(.availabilityEntry(RawAvailabilityEntrySyntax(
-          label: ident,
-          unexpectedBeforeColon,
-          colon: colon,
-          availabilityList: availability,
-          unexpectedBeforeSemi,
-          semicolon: semi,
-          arena: self.arena
-        )))
+        elements.append(
+          .availabilityEntry(
+            RawAvailabilityEntrySyntax(
+              label: ident,
+              unexpectedBeforeColon,
+              colon: colon,
+              availabilityList: availability,
+              unexpectedBeforeSemi,
+              semicolon: semi,
+              arena: self.arena
+            )
+          )
+        )
       case (.available, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -579,68 +621,88 @@ extension Parser {
         // tree only allows us to insert a token so we'll take anything.
         let available = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
-        elements.append(.labeledSpecializeEntry(RawLabeledSpecializeEntrySyntax(
-          label: ident,
-          unexpectedBeforeColon,
-          colon: colon,
-          value: available,
-          trailingComma: comma,
-          arena: self.arena
-        )))
+        elements.append(
+          .labeledSpecializeEntry(
+            RawLabeledSpecializeEntrySyntax(
+              label: ident,
+              unexpectedBeforeColon,
+              colon: colon,
+              value: available,
+              trailingComma: comma,
+              arena: self.arena
+            )
+          )
+        )
       case (.exported, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (unexpectedBeforeValue, value) = self.expectAny([.trueKeyword, .falseKeyword], default: .falseKeyword)
         let comma = self.consume(if: .comma)
-        elements.append(.labeledSpecializeEntry(RawLabeledSpecializeEntrySyntax(
-          label: ident,
-          unexpectedBeforeColon,
-          colon: colon,
-          unexpectedBeforeValue,
-          value: value,
-          trailingComma: comma,
-          arena: self.arena
-        )))
+        elements.append(
+          .labeledSpecializeEntry(
+            RawLabeledSpecializeEntrySyntax(
+              label: ident,
+              unexpectedBeforeColon,
+              colon: colon,
+              unexpectedBeforeValue,
+              value: value,
+              trailingComma: comma,
+              arena: self.arena
+            )
+          )
+        )
       case (.kind, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.parseAnyIdentifier()
         let comma = self.consume(if: .comma)
-        elements.append(.labeledSpecializeEntry(RawLabeledSpecializeEntrySyntax(
-          label: ident,
-          unexpectedBeforeColon,
-          colon: colon,
-          value: valueLabel,
-          trailingComma: comma,
-          arena: self.arena
-        )))
+        elements.append(
+          .labeledSpecializeEntry(
+            RawLabeledSpecializeEntrySyntax(
+              label: ident,
+              unexpectedBeforeColon,
+              colon: colon,
+              value: valueLabel,
+              trailingComma: comma,
+              arena: self.arena
+            )
+          )
+        )
       case (.spiModule, let handle)?,
-          (.spi, let handle)?:
+        (.spi, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
-        elements.append(.labeledSpecializeEntry(RawLabeledSpecializeEntrySyntax(
-          label: ident,
-          unexpectedBeforeColon,
-          colon: colon,
-          value: valueLabel,
-          trailingComma: comma,
-          arena: self.arena
-        )))
+        elements.append(
+          .labeledSpecializeEntry(
+            RawLabeledSpecializeEntrySyntax(
+              label: ident,
+              unexpectedBeforeColon,
+              colon: colon,
+              value: valueLabel,
+              trailingComma: comma,
+              arena: self.arena
+            )
+          )
+        )
       case nil:
         let ident = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
-        elements.append(.labeledSpecializeEntry(RawLabeledSpecializeEntrySyntax(
-          label: ident,
-          unexpectedBeforeColon,
-          colon: colon,
-          value: valueLabel,
-          trailingComma: comma,
-          arena: self.arena
-        )))
+        elements.append(
+          .labeledSpecializeEntry(
+            RawLabeledSpecializeEntrySyntax(
+              label: ident,
+              unexpectedBeforeColon,
+              colon: colon,
+              value: valueLabel,
+              trailingComma: comma,
+              arena: self.arena
+            )
+          )
+        )
       }
     }
 
@@ -669,18 +731,21 @@ extension Parser {
       attributeName: privateToken,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      argument: .namedAttributeString(RawNamedAttributeStringArgumentSyntax(
-        unexpectedBeforeLabel,
-        nameTok: label,
-        unexpectedBeforeColon,
-        colon: colon,
-        stringOrDeclname: .string(filename),
-        arena: self.arena
-      )),
+      argument: .namedAttributeString(
+        RawNamedAttributeStringArgumentSyntax(
+          unexpectedBeforeLabel,
+          nameTok: label,
+          unexpectedBeforeColon,
+          colon: colon,
+          stringOrDeclname: .string(filename),
+          arena: self.arena
+        )
+      ),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -710,18 +775,21 @@ extension Parser {
       attributeName: dynamicReplacementToken,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      argument: .namedAttributeString(RawNamedAttributeStringArgumentSyntax(
-        unexpectedBeforeLabel,
-        nameTok: label,
-        unexpectedBeforeColon,
-        colon: colon,
-        stringOrDeclname: .declname(method),
-        arena: self.arena
-      )),
+      argument: .namedAttributeString(
+        RawNamedAttributeStringArgumentSyntax(
+          unexpectedBeforeLabel,
+          nameTok: label,
+          unexpectedBeforeColon,
+          colon: colon,
+          stringOrDeclname: .declname(method),
+          arena: self.arena
+        )
+      ),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: arena)
+      arena: arena
+    )
   }
 }
 
@@ -743,7 +811,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -765,7 +834,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   mutating func parseImplementsAttributeArguments() -> RawImplementsAttributeArgumentsSyntax {
@@ -777,10 +847,12 @@ extension Parser {
     ])
     return RawImplementsAttributeArgumentsSyntax(
       type: type,
-      unexpectedBeforeComma, comma: comma,
+      unexpectedBeforeComma,
+      comma: comma,
       declBaseName: name,
       declNameArguments: args,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -796,7 +868,8 @@ extension Parser {
       comma: comma,
       unexpectedBeforeOrdinal,
       ordinal: ordinal,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -818,7 +891,8 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -827,12 +901,15 @@ extension Parser {
     if let witnessMethod = self.consumeIfContextualKeyword("witness_method") {
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let name = self.parseAnyIdentifier()
-      return .conventionWitnessMethodArguments(RawConventionWitnessMethodAttributeArgumentsSyntax(
-        witnessMethodLabel: witnessMethod,
-        unexpectedBeforeColon,
-        colon: colon,
-        protocolName: name,
-        arena: self.arena))
+      return .conventionWitnessMethodArguments(
+        RawConventionWitnessMethodAttributeArgumentsSyntax(
+          witnessMethodLabel: witnessMethod,
+          unexpectedBeforeColon,
+          colon: colon,
+          protocolName: name,
+          arena: self.arena
+        )
+      )
     } else {
       let label = self.consumeAnyToken()
       let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
@@ -856,16 +933,19 @@ extension Parser {
         unexpectedBeforeCTypeString = nil
         cTypeString = nil
       }
-      return .conventionArguments(RawConventionAttributeArgumentsSyntax(
-        conventionLabel: label,
-        unexpectedBeforeComma,
-        comma: comma,
-        cTypeLabel: cTypeLabel,
-        unexpectedBeforeColon,
-        colon: colon,
-        unexpectedBeforeCTypeString,
-        cTypeString: cTypeString,
-        arena: self.arena))
+      return .conventionArguments(
+        RawConventionAttributeArgumentsSyntax(
+          conventionLabel: label,
+          unexpectedBeforeComma,
+          comma: comma,
+          cTypeLabel: cTypeLabel,
+          unexpectedBeforeColon,
+          colon: colon,
+          unexpectedBeforeCTypeString,
+          cTypeString: cTypeString,
+          arena: self.arena
+        )
+      )
     }
   }
 }
@@ -884,13 +964,13 @@ extension Parser.Lookahead {
     // what follows the attribute.
     switch lookahead.currentToken.tokenKind {
     case .arrow,
-        .throwKeyword,
-        .throwsKeyword,
-        .rethrowsKeyword,
-        .rightParen,
-        .rightBrace,
-        .rightSquareBracket,
-        .rightAngle:
+      .throwKeyword,
+      .throwsKeyword,
+      .rethrowsKeyword,
+      .rightParen,
+      .rightBrace,
+      .rightSquareBracket,
+      .rightAngle:
       return false
     case _ where lookahead.atContextualKeyword("async"):
       return false

@@ -176,10 +176,13 @@ extension FunctionParameter {
     _ source: String,
     for subject: Parser.ParameterSubject
   ) {
-    self = try! performParse(source: Array(source.utf8), parse: {
-      let raw = RawSyntax($0.parseFunctionParameter(for: subject))
-      return Syntax(raw: raw).cast(FunctionParameter.self)
-    })
+    self = try! performParse(
+      source: Array(source.utf8),
+      parse: {
+        let raw = RawSyntax($0.parseFunctionParameter(for: subject))
+        return Syntax(raw: raw).cast(FunctionParameter.self)
+      }
+    )
   }
 }
 
@@ -205,7 +208,6 @@ extension IfStmt {
     )
   }
 }
-
 
 // MARK: - IntegerLiteralExpr
 
@@ -244,7 +246,7 @@ extension String {
     // them in string literals.
     func needsEscaping(_ scalar: UnicodeScalar) -> Bool {
       return (scalar.isASCII && scalar != "\t" && !scalar.isPrintableASCII)
-              || Character(scalar).isNewline
+        || Character(scalar).isNewline
     }
 
     // Work at the Unicode scalar level so that "\r\n" isn't combined.
@@ -378,7 +380,8 @@ extension TupleExprElement {
     self.init(
       label: label.map { .identifier($0) },
       colon: label == nil ? nil : .colonToken(),
-      expression: expression)
+      expression: expression
+    )
   }
 }
 

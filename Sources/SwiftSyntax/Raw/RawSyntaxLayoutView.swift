@@ -42,7 +42,7 @@ public struct RawSyntaxLayoutView {
   private var layoutData: RawSyntaxData.Layout {
     switch raw.rawData.payload {
     case .parsedToken(_),
-        .materializedToken(_):
+      .materializedToken(_):
       preconditionFailure("RawSyntax must be a layout")
     case .layout(let dat):
       return dat
@@ -59,9 +59,11 @@ public struct RawSyntaxLayoutView {
     with elements: C,
     arena: SyntaxArena
   ) -> RawSyntax where C.Element == RawSyntax? {
-    return .makeLayout(kind: raw.kind,
-                       uninitializedCount: elements.count,
-                       arena: arena) { buffer in
+    return .makeLayout(
+      kind: raw.kind,
+      uninitializedCount: elements.count,
+      arena: arena
+    ) { buffer in
       if buffer.isEmpty { return }
       _ = buffer.initialize(from: elements)
     }
@@ -74,9 +76,11 @@ public struct RawSyntaxLayoutView {
     arena: SyntaxArena
   ) -> RawSyntax {
     precondition(children.count >= index)
-    return .makeLayout(kind: raw.kind,
-                       uninitializedCount: children.count + 1,
-                       arena: arena) { buffer in
+    return .makeLayout(
+      kind: raw.kind,
+      uninitializedCount: children.count + 1,
+      arena: arena
+    ) { buffer in
       var childIterator = children.makeIterator()
       let base = buffer.baseAddress!
       for i in 0..<buffer.count {
@@ -93,9 +97,11 @@ public struct RawSyntaxLayoutView {
   ) -> RawSyntax {
     precondition(children.count > index)
     let count = children.count - 1
-    return .makeLayout(kind: raw.kind,
-                       uninitializedCount: count,
-                       arena: arena) { buffer in
+    return .makeLayout(
+      kind: raw.kind,
+      uninitializedCount: count,
+      arena: arena
+    ) { buffer in
       if buffer.isEmpty { return }
       let newBase = buffer.baseAddress!
       let oldBase = children.baseAddress!
@@ -105,8 +111,10 @@ public struct RawSyntaxLayoutView {
 
       // Copy elements from the index + 1.
       newBase.advanced(by: index)
-        .initialize(from: oldBase.advanced(by: index + 1),
-                    count: children.count - index - 1)
+        .initialize(
+          from: oldBase.advanced(by: index + 1),
+          count: children.count - index - 1
+        )
     }
   }
 
@@ -123,9 +131,11 @@ public struct RawSyntaxLayoutView {
   ) -> RawSyntax where C.Element == RawSyntax? {
     precondition(!raw.isToken)
     let newCount = children.count - range.count + elements.count
-    return .makeLayout(kind: raw.kind,
-                       uninitializedCount: newCount,
-                       arena: arena) { buffer in
+    return .makeLayout(
+      kind: raw.kind,
+      uninitializedCount: newCount,
+      arena: arena
+    ) { buffer in
       if buffer.isEmpty { return }
       var current = buffer.baseAddress!
 
@@ -136,8 +146,10 @@ public struct RawSyntaxLayoutView {
         current.initialize(to: elem)
         current += 1
       }
-      current.initialize(from: children.baseAddress!.advanced(by: range.upperBound),
-                         count: children.count - range.upperBound)
+      current.initialize(
+        from: children.baseAddress!.advanced(by: range.upperBound),
+        count: children.count - range.upperBound
+      )
     }
   }
 
@@ -148,9 +160,11 @@ public struct RawSyntaxLayoutView {
     arena: SyntaxArena
   ) -> RawSyntax {
     precondition(!raw.isToken && children.count > index)
-    return .makeLayout(kind: raw.kind,
-                       uninitializedCount: children.count,
-                       arena: arena) { buffer in
+    return .makeLayout(
+      kind: raw.kind,
+      uninitializedCount: children.count,
+      arena: arena
+    ) { buffer in
       _ = buffer.initialize(from: children)
       buffer[index] = newChild
     }
@@ -167,4 +181,3 @@ public struct RawSyntaxLayoutView {
     layoutData.layout
   }
 }
-

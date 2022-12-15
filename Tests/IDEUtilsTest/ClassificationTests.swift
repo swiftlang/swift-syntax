@@ -20,9 +20,9 @@ public class ClassificationTests: XCTestCase {
 
   public func testClassification() {
     let source = """
-    // blah.
-    let x/*yo*/ = 0
-    """
+      // blah.
+      let x/*yo*/ = 0
+      """
     let tree = Parser.parse(source: source)
     do {
       let classif = Array(tree.classifications)

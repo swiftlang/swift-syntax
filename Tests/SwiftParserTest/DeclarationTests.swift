@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(Testing) @_spi(RawSyntax) import SwiftParser
+@_spi(Testing)@_spi(RawSyntax) import SwiftParser
 import SwiftSyntaxBuilder
 import SwiftBasicFormat
 import XCTest
@@ -56,10 +56,11 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'where' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-      ], fixedSource: """
-      func `where`(
-      r)
-      """
+      ],
+      fixedSource: """
+        func `where`(
+        r)
+        """
     )
 
     AssertParse("func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
@@ -68,21 +69,24 @@ final class DeclarationTests: XCTestCase {
       "func 1️⃣/^notoperator^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }",
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in function"),
-        DiagnosticSpec(message: "unexpected code '/^notoperator^/' before parameter clause")
+        DiagnosticSpec(message: "unexpected code '/^notoperator^/' before parameter clause"),
       ]
     )
 
     AssertParse("func /^ (lhs: Int, rhs: Int) -> Int { 1 / 2 }")
-    
+
     AssertParse(
       """
       func name(_ default: Int) {}
       """,
-      substructure: Syntax(FunctionParameterSyntax(
-        firstName: .wildcardKeyword(),
-        secondName: .identifier("default"),
-        colon: .colonToken(),
-        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+      substructure: Syntax(
+        FunctionParameterSyntax(
+          firstName: .wildcardKeyword(),
+          secondName: .identifier("default"),
+          colon: .colonToken(),
+          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+        )
+      )
     )
   }
 
@@ -102,13 +106,13 @@ final class DeclarationTests: XCTestCase {
     AssertParse("class Foo {}")
 
     AssertParse(
-       """
-       @dynamicMemberLookup @available(swift 4.0)
-       public class MyClass {
-         let A: Int
-         let B: Double
-       }
-       """
+      """
+      @dynamicMemberLookup @available(swift 4.0)
+      public class MyClass {
+        let A: Int
+        let B: Double
+      }
+      """
     )
 
     AssertParse(
@@ -116,17 +120,21 @@ final class DeclarationTests: XCTestCase {
       { GenericParameterClauseSyntax.parse(from: &$0) }
     )
 
-    AssertParse("class T where t1️⃣",
-                diagnostics: [
-                  DiagnosticSpec(message: "expected '=' and right-hand type in same type requirement"),
-                  DiagnosticSpec(message: "expected member block in class"),
-                ])
-    AssertParse("class B<where g1️⃣",
-                diagnostics: [
-                  DiagnosticSpec(message: "expected '=' and right-hand type in same type requirement"),
-                  DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
-                  DiagnosticSpec(message: "expected member block in class"),
-                ])
+    AssertParse(
+      "class T where t1️⃣",
+      diagnostics: [
+        DiagnosticSpec(message: "expected '=' and right-hand type in same type requirement"),
+        DiagnosticSpec(message: "expected member block in class"),
+      ]
+    )
+    AssertParse(
+      "class B<where g1️⃣",
+      diagnostics: [
+        DiagnosticSpec(message: "expected '=' and right-hand type in same type requirement"),
+        DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
+        DiagnosticSpec(message: "expected member block in class"),
+      ]
+    )
   }
 
   func testActorParsing() {
@@ -160,8 +168,6 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
-
-
   func testProtocolParsing() {
     AssertParse("protocol Foo {}")
 
@@ -184,7 +190,8 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '{}' before enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in enum case"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end protocol"),
-      ])
+      ]
+    )
   }
 
   func testVariableDeclarations() {
@@ -193,8 +200,9 @@ final class DeclarationTests: XCTestCase {
       z
 
       var x: Double = z
-      """)
-    
+      """
+    )
+
     AssertParse(
       """
       async let a = fetch("1.jpg")
@@ -212,12 +220,12 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "_ = foo/* */?.description1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression"),
+        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression")
       ]
     )
-    
+
     AssertParse("var a = Array<Int>?(from: decoder)")
-    
+
     AssertParse("@Wrapper var café = 42")
 
     AssertParse(
@@ -244,7 +252,7 @@ final class DeclarationTests: XCTestCase {
       }
       """
     )
-    
+
     AssertParse(
       """
       var foo: Int {
@@ -256,7 +264,7 @@ final class DeclarationTests: XCTestCase {
       }
       """
     )
-    
+
     AssertParse(
       """
       var foo: Int {
@@ -286,7 +294,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'set' in modifier"),
-        DiagnosticSpec(message: "unexpected code 'get' in modifier")
+        DiagnosticSpec(message: "unexpected code 'get' in modifier"),
       ]
     )
 
@@ -299,7 +307,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected 'set)' to end modifier"),
         // FIXME: It should print `+` as detail of text.
-        DiagnosticSpec(message: "unexpected code in variable")
+        DiagnosticSpec(message: "unexpected code in variable"),
       ]
     )
 
@@ -335,7 +343,7 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'set)' to end modifier"),
+        DiagnosticSpec(message: "expected 'set)' to end modifier")
       ]
     )
 
@@ -345,7 +353,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'get,' in modifier"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ', didSet' in modifier")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ', didSet' in modifier"),
       ]
     )
 
@@ -355,7 +363,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'set)' to end modifier"),
-        DiagnosticSpec(message: "unexpected code 'get, didSet' in variable")
+        DiagnosticSpec(message: "unexpected code 'get, didSet' in variable"),
       ]
     )
   }
@@ -400,7 +408,8 @@ final class DeclarationTests: XCTestCase {
       infix operator  <*< : MediumPrecedence, InfixMagicOperatorProtocol
       postfix operator ^^ : PostfixMagicOperatorProtocol
       infix operator ^^ : PostfixMagicOperatorProtocol, Class, Struct
-      """)
+      """
+    )
   }
 
   func testObjCAttribute() {
@@ -637,17 +646,19 @@ final class DeclarationTests: XCTestCase {
         func withParameters() {}
       }
       """,
-      substructure: Syntax(FunctionDeclSyntax(
-        funcKeyword: .funcKeyword(),
-        identifier: .identifier("withoutParameters"),
-        signature: FunctionSignatureSyntax(
-          input: ParameterClauseSyntax(
-            leftParen: .leftParenToken(presence: .missing),
-            parameterList: FunctionParameterListSyntax([]),
-            rightParen: .rightParenToken(presence: .missing)
+      substructure: Syntax(
+        FunctionDeclSyntax(
+          funcKeyword: .funcKeyword(),
+          identifier: .identifier("withoutParameters"),
+          signature: FunctionSignatureSyntax(
+            input: ParameterClauseSyntax(
+              leftParen: .leftParenToken(presence: .missing),
+              parameterList: FunctionParameterListSyntax([]),
+              rightParen: .rightParenToken(presence: .missing)
+            )
           )
         )
-      )),
+      ),
       diagnostics: [
         DiagnosticSpec(message: "expected parameter clause in function signature")
       ]
@@ -686,7 +697,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '->' and return type in subscript"),
+        DiagnosticSpec(message: "expected '->' and return type in subscript")
       ]
     )
   }
@@ -735,7 +746,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in pound literal declaration"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected identifier in pound literal declaration"),
-        DiagnosticSpec(locationMarker: "5️⃣", message: #"unexpected code '25 "line-directive.swift"' in struct"#)
+        DiagnosticSpec(locationMarker: "5️⃣", message: #"unexpected code '25 "line-directive.swift"' in struct"#),
       ]
     )
   }
@@ -771,13 +782,15 @@ final class DeclarationTests: XCTestCase {
   func testRecoverOneExtraLabel() {
     AssertParse(
       "func test(first second 1️⃣third: Int)",
-      substructure: Syntax(FunctionParameterSyntax(
-        firstName: .identifier("first"),
-        secondName: .identifier("second"),
-        UnexpectedNodesSyntax([TokenSyntax.identifier("third")]),
-        colon: .colonToken(),
-        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
-      )),
+      substructure: Syntax(
+        FunctionParameterSyntax(
+          firstName: .identifier("first"),
+          secondName: .identifier("second"),
+          UnexpectedNodesSyntax([TokenSyntax.identifier("third")]),
+          colon: .colonToken(),
+          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+        )
+      ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third' in parameter")
       ]
@@ -787,13 +800,15 @@ final class DeclarationTests: XCTestCase {
   func testRecoverTwoExtraLabels() {
     AssertParse(
       "func test(first second 1️⃣third fourth: Int)",
-      substructure: Syntax(FunctionParameterSyntax(
-        firstName: .identifier("first"),
-        secondName: .identifier("second"),
-        UnexpectedNodesSyntax([TokenSyntax.identifier("third"), TokenSyntax.identifier("fourth")]),
-        colon: .colonToken(),
-        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
-      )),
+      substructure: Syntax(
+        FunctionParameterSyntax(
+          firstName: .identifier("first"),
+          secondName: .identifier("second"),
+          UnexpectedNodesSyntax([TokenSyntax.identifier("third"), TokenSyntax.identifier("fourth")]),
+          colon: .colonToken(),
+          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+        )
+      ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third fourth' in parameter")
       ]
@@ -803,12 +818,14 @@ final class DeclarationTests: XCTestCase {
   func testDontRecoverFromDeclKeyword() {
     AssertParse(
       "func foo(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
-      substructure: Syntax(FunctionParameterSyntax(
-        firstName: .identifier("first"),
-        secondName: .identifier("second"),
-        colon: .colonToken(presence: .missing),
-        type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
-      )),
+      substructure: Syntax(
+        FunctionParameterSyntax(
+          firstName: .identifier("first"),
+          secondName: .identifier("second"),
+          colon: .colonToken(presence: .missing),
+          type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
+        )
+      ),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
@@ -821,18 +838,20 @@ final class DeclarationTests: XCTestCase {
   func testRecoverFromParens() {
     AssertParse(
       "func test(first second 1️⃣[third fourth]: Int)",
-      substructure: Syntax(FunctionParameterSyntax(
-        firstName: .identifier("first"),
-        secondName: .identifier("second"),
-        UnexpectedNodesSyntax([
-          TokenSyntax.leftSquareBracketToken(),
-          TokenSyntax.identifier("third"),
-          TokenSyntax.identifier("fourth"),
-          TokenSyntax.rightSquareBracketToken()
-        ]),
-        colon: .colonToken(),
-        type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
-      )),
+      substructure: Syntax(
+        FunctionParameterSyntax(
+          firstName: .identifier("first"),
+          secondName: .identifier("second"),
+          UnexpectedNodesSyntax([
+            TokenSyntax.leftSquareBracketToken(),
+            TokenSyntax.identifier("third"),
+            TokenSyntax.identifier("fourth"),
+            TokenSyntax.rightSquareBracketToken(),
+          ]),
+          colon: .colonToken(),
+          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+        )
+      ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '[third fourth]' in parameter")
       ]
@@ -842,20 +861,22 @@ final class DeclarationTests: XCTestCase {
   func testDontRecoverFromUnbalancedParens() {
     AssertParse(
       "func foo(first second 1️⃣[third 2️⃣fourth: Int) {}",
-      substructure: Syntax(FunctionParameterSyntax(
-        firstName: .identifier("first"),
-        secondName: .identifier("second"),
-        colon: .colonToken(presence: .missing),
-        type: ArrayTypeSyntax(
-          leftSquareBracket: .leftSquareBracketToken(),
-          elementType: SimpleTypeIdentifierSyntax(name: .identifier("third")),
-          rightSquareBracket: .rightSquareBracketToken(presence: .missing)
+      substructure: Syntax(
+        FunctionParameterSyntax(
+          firstName: .identifier("first"),
+          secondName: .identifier("second"),
+          colon: .colonToken(presence: .missing),
+          type: ArrayTypeSyntax(
+            leftSquareBracket: .leftSquareBracketToken(),
+            elementType: SimpleTypeIdentifierSyntax(name: .identifier("third")),
+            rightSquareBracket: .rightSquareBracketToken(presence: .missing)
+          )
         )
-      )),
+      ),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
-        DiagnosticSpec(locationMarker: "2️⃣" , message: "expected ']' to end array type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'fourth: Int' in parameter clause")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ']' to end array type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'fourth: Int' in parameter clause"),
       ]
     )
   }
@@ -866,20 +887,22 @@ final class DeclarationTests: XCTestCase {
       func foo(first second 1️⃣third2️⃣
       3️⃣: Int) {}
       """,
-      substructure: Syntax(FunctionParameterSyntax(
-        firstName: .identifier("first"),
-        secondName: .identifier("second"),
-        colon: .colonToken(presence: .missing),
-        type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
-      )),
+      substructure: Syntax(
+        FunctionParameterSyntax(
+          firstName: .identifier("first"),
+          secondName: .identifier("second"),
+          colon: .colonToken(presence: .missing),
+          type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
+        )
+      ),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in parameter"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ': Int) {}' at top level")
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code ': Int) {}' at top level"),
       ]
     )
   }
-  
+
   func testMalforedStruct() {
     AssertParse(
       """
@@ -893,7 +916,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute in conditional compilation clause"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '#endif' in conditional compilation block"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct")
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct"),
       ]
     )
   }
@@ -910,7 +933,8 @@ final class DeclarationTests: XCTestCase {
         init ?(double: Double) { }
         init ? (char: Character) { }
       }
-      """)
+      """
+    )
   }
 
   func testDeinitializers() {
@@ -919,12 +943,14 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testAttributedMember() {
-    AssertParse(#"""
-    struct Foo {
-      @Argument(help: "xxx")
-      var generatedPath: String
-    }
-    """#)
+    AssertParse(
+      #"""
+      struct Foo {
+        @Argument(help: "xxx")
+        var generatedPath: String
+      }
+      """#
+    )
   }
 
   func testAnyAsParameterLabel() {
@@ -947,7 +973,8 @@ final class DeclarationTests: XCTestCase {
       if let reasync = self.consumeIfContextualKeyword("reasync") {
         return reasync
       }
-      """##)
+      """##
+    )
   }
 
   func testLeadingUnexpectedTokens() {
@@ -961,49 +988,63 @@ final class DeclarationTests: XCTestCase {
         }class C {}
         """
     )
-    AssertParse("1️⃣}enum C2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before enum"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
-                ])
-    AssertParse("1️⃣}protocol C2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before protocol"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
-                ])
-    AssertParse("1️⃣}actor C2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before actor"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in actor"),
-                ])
-    AssertParse("1️⃣}struct C2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
-                ])
-    AssertParse("1️⃣}func C2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-                ])
-    AssertParse("1️⃣}init2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before initializer"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
-                ])
-    AssertParse("1️⃣}subscript2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before subscript"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in subscript"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript"),
-                ])
+    AssertParse(
+      "1️⃣}enum C2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before enum"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum"),
+      ]
+    )
+    AssertParse(
+      "1️⃣}protocol C2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before protocol"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol"),
+      ]
+    )
+    AssertParse(
+      "1️⃣}actor C2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before actor"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in actor"),
+      ]
+    )
+    AssertParse(
+      "1️⃣}struct C2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct"),
+      ]
+    )
+    AssertParse(
+      "1️⃣}func C2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+      ]
+    )
+    AssertParse(
+      "1️⃣}init2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before initializer"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature"),
+      ]
+    )
+    AssertParse(
+      "1️⃣}subscript2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before subscript"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in subscript"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript"),
+      ]
+    )
   }
 
   func testBogusTypeDeclName() {
     AssertParse(
       "associatedtype 1️⃣5s",
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -1031,7 +1072,7 @@ final class DeclarationTests: XCTestCase {
       """
       func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ 1️⃣map: String) {}
       """
-   )
+    )
 
     AssertParse(
       """
@@ -1049,7 +1090,7 @@ final class DeclarationTests: XCTestCase {
       """
       func isolatedConst(isolated _const map1️⃣: String) {}
       """
-   )
+    )
 
     AssertParse(
       """
@@ -1072,7 +1113,8 @@ final class DeclarationTests: XCTestCase {
           await f()
         }
       }
-      """)
+      """
+    )
   }
 
   func testStandaloneAtSignInGenericParameter() {
@@ -1192,43 +1234,50 @@ final class DeclarationTests: XCTestCase {
       class B {
       }
       """,
-      substructure: Syntax(CodeBlockItemListSyntax([
+      substructure: Syntax(
+        CodeBlockItemListSyntax([
           CodeBlockItemSyntax(
-            item: .init(ClassDeclSyntax(
-              classKeyword: .classKeyword(),
-              identifier: .identifier("A"),
-              members: MemberDeclBlockSyntax(
-                leftBrace: .leftBraceToken(),
-                members: MemberDeclListSyntax([
-                  MemberDeclListItemSyntax(
-                    decl: Decl(FunctionDeclSyntax(
-                      funcKeyword: .funcKeyword(presence: .missing),
-                      identifier: .spacedBinaryOperator("^"),
-                      signature: FunctionSignatureSyntax(
-                        input: ParameterClauseSyntax(
-                          leftParen: .leftParenToken(presence: .missing),
-                          parameterList: FunctionParameterListSyntax([]),
-                          rightParen: .rightParenToken(presence: .missing)
+            item: .init(
+              ClassDeclSyntax(
+                classKeyword: .classKeyword(),
+                identifier: .identifier("A"),
+                members: MemberDeclBlockSyntax(
+                  leftBrace: .leftBraceToken(),
+                  members: MemberDeclListSyntax([
+                    MemberDeclListItemSyntax(
+                      decl: Decl(
+                        FunctionDeclSyntax(
+                          funcKeyword: .funcKeyword(presence: .missing),
+                          identifier: .spacedBinaryOperator("^"),
+                          signature: FunctionSignatureSyntax(
+                            input: ParameterClauseSyntax(
+                              leftParen: .leftParenToken(presence: .missing),
+                              parameterList: FunctionParameterListSyntax([]),
+                              rightParen: .rightParenToken(presence: .missing)
+                            )
+                          )
                         )
                       )
-                    ))
-                  )
-                ]),
-                rightBrace: .rightBraceToken()
+                    )
+                  ]),
+                  rightBrace: .rightBraceToken()
+                )
               )
-            ))
+            )
           ),
           CodeBlockItemSyntax(
-            item: .init(ClassDeclSyntax(
-              classKeyword: .classKeyword(),
-              identifier: .identifier("B"),
-              members: MemberDeclBlockSyntax(
-                leftBrace: .leftBraceToken(),
-                members: MemberDeclListSyntax([]),
-                rightBrace: .rightBraceToken()
+            item: .init(
+              ClassDeclSyntax(
+                classKeyword: .classKeyword(),
+                identifier: .identifier("B"),
+                members: MemberDeclBlockSyntax(
+                  leftBrace: .leftBraceToken(),
+                  members: MemberDeclListSyntax([]),
+                  rightBrace: .rightBraceToken()
+                )
               )
-            ))
-          )
+            )
+          ),
         ])
       ),
       diagnostics: [
@@ -1239,30 +1288,35 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testIssue1025() {
-    AssertParse("""
+    AssertParse(
+      """
       struct Math {
         public static let pi = 3.14
         @available(*, unavailable) init() {}
       }
-      """)
+      """
+    )
 
     AssertParse("func foo(body: (isolated String) -> Int) {}")
   }
 
   func testMacroDecl() {
-    AssertParse("""
+    AssertParse(
+      """
       macro m1: Int = A.M1
       macro m2(_: Int) = A.M2
       macro m3(a b: Int) -> Int = A.M3
       macro m4<T>: T = A.M4 where T.Assoc: P
       macro m5<T: P>(_: T)
-      """)
+      """
+    )
 
-    AssertParse("""
+    AssertParse(
+      """
       macro m1 1️⃣= A
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature")
       ]
     )
   }
@@ -1277,11 +1331,10 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in inherited type"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected member block in protocol"),
       ]
-  )
+    )
   }
 }
 
 extension Parser.DeclAttributes {
   static let empty = Parser.DeclAttributes(attributes: nil, modifiers: nil)
 }
-

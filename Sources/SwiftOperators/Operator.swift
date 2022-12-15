@@ -38,7 +38,8 @@ public struct Operator {
   public let syntax: OperatorDeclSyntax?
 
   public init(
-    kind: OperatorKind, name: OperatorName,
+    kind: OperatorKind,
+    name: OperatorName,
     precedenceGroup: PrecedenceGroupName? = nil,
     syntax: OperatorDeclSyntax? = nil
   ) {

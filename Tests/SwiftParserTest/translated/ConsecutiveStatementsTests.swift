@@ -19,7 +19,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
     AssertParse(
       "let x = 21️⃣ let y = 3",
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
       ],
       fixedSource: "let x = 2; let y = 3"
     )
@@ -111,17 +111,18 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ], fixedSource: """
-      class C {
-        // In a sequence of declarations.
-        var a, b : Int; func d() -> Int {}
-        init() {
-          a = 0
-          b = 0
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"])
+      ],
+      fixedSource: """
+        class C {
+          // In a sequence of declarations.
+          var a, b : Int; func d() -> Int {}
+          init() {
+            a = 0
+            b = 0
+          }
         }
-      }
-      """
+        """
     )
   }
 
@@ -133,12 +134,13 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ], fixedSource: """
-      protocol P {
-        func a(); func b()
-      }
-      """
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"])
+      ],
+      fixedSource: """
+        protocol P {
+          func a(); func b()
+        }
+        """
     )
   }
 
@@ -153,12 +155,13 @@ final class ConsecutiveStatementsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-      ], fixedSource: """
-      enum Color {
-        case Red; case Blue
-        func a() {}; func b() {}
-      }
-      """
+      ],
+      fixedSource: """
+        enum Color {
+          case Red; case Blue
+          func a() {}; func b() {}
+        }
+        """
     )
   }
 

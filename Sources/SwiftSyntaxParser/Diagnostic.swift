@@ -108,10 +108,16 @@ public struct Note: Codable {
   public let fixIts: [FixIt]
 
   /// Constructs a new Note from the constituent parts.
-  public init(message: Diagnostic.Message, location: SourceLocation?,
-                highlights: [SourceRange], fixIts: [FixIt]) {
-    precondition(message.severity == .note,
-                 "notes can only have the `note` severity")
+  public init(
+    message: Diagnostic.Message,
+    location: SourceLocation?,
+    highlights: [SourceRange],
+    fixIts: [FixIt]
+  ) {
+    precondition(
+      message.severity == .note,
+      "notes can only have the `note` severity"
+    )
     self.message = message
     self.location = location
     self.highlights = highlights
@@ -120,8 +126,13 @@ public struct Note: Codable {
 
   /// Converts this Note to a Diagnostic for serialization.
   public func asDiagnostic() -> Diagnostic {
-    return Diagnostic(message: message, location: location, notes: [],
-                      highlights: highlights, fixIts: fixIts)
+    return Diagnostic(
+      message: message,
+      location: location,
+      notes: [],
+      highlights: highlights,
+      fixIts: fixIts
+    )
   }
 }
 
@@ -176,7 +187,7 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
     lines.append("\(loc)\(message.debugDescription)")
     fixIts.forEach { lines.append("\($0.debugDescription)") }
     highlights.forEach { lines.append("Highlight: \($0.debugDescription)") }
-    lines.append(contentsOf: notes.map({ loc + $0.asDiagnostic().debugDescription}))
+    lines.append(contentsOf: notes.map({ loc + $0.asDiagnostic().debugDescription }))
     return lines.joined(separator: "\n")
   }
 
@@ -205,12 +216,20 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
     ///   - highlights: Any source ranges that should be highlighted by this
     ///                 note.
     ///   - fixIts: Any FixIts that should be attached to this note.
-    public mutating func note(_ message: Message,
-                              location: SourceLocation? = nil,
-                              highlights: [SourceRange] = [],
-                              fixIts: [FixIt] = []) {
-      self.notes.append(Note(message: message, location: location,
-                             highlights: highlights, fixIts: fixIts))
+    public mutating func note(
+      _ message: Message,
+      location: SourceLocation? = nil,
+      highlights: [SourceRange] = [],
+      fixIts: [FixIt] = []
+    ) {
+      self.notes.append(
+        Note(
+          message: message,
+          location: location,
+          highlights: highlights,
+          fixIts: fixIts
+        )
+      )
     }
 
     /// Adds the provided source ranges as highlights of this diagnostic.
@@ -228,14 +247,16 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
     /// Adds a FixIt to insert the provided text at the provided SourceLocation
     /// in the file where the location resides.
     public mutating
-    func fixItInsert(_ text: String, at sourceLocation: SourceLocation) {
+      func fixItInsert(_ text: String, at sourceLocation: SourceLocation)
+    {
       fixIts.append(.insert(sourceLocation, text))
     }
 
     /// Adds a FixIt to replace the contents of the source file corresponding
     /// to the provided SourceRange with the provided text.
     public mutating
-    func fixItReplace(_ sourceRange: SourceRange, with text: String) {
+      func fixItReplace(_ sourceRange: SourceRange, with text: String)
+    {
       fixIts.append(.replace(sourceRange, text))
     }
   }
@@ -250,12 +271,20 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
   ///   - location: The location the diagnostic is attached to.
   ///   - actions: A closure that's used to attach notes and highlights to
   ///              diagnostics.
-  public init(message: Message, location: SourceLocation?,
-       actions: ((inout Builder) -> Void)?) {
+  public init(
+    message: Message,
+    location: SourceLocation?,
+    actions: ((inout Builder) -> Void)?
+  ) {
     var builder = Builder()
     actions?(&builder)
-    self.init(message: message, location: location, notes: builder.notes,
-              highlights: builder.highlights, fixIts: builder.fixIts)
+    self.init(
+      message: message,
+      location: location,
+      notes: builder.notes,
+      highlights: builder.highlights,
+      fixIts: builder.fixIts
+    )
   }
 
   /// Creates a new Diagnostic with the provided message, pointing to the
@@ -265,8 +294,13 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
   ///   - location: The location the diagnostic is attached to.
   ///   - highlights: An array of SourceRanges which will be highlighted when
   ///                 the diagnostic is presented.
-  public init(message: Message, location: SourceLocation?, notes: [Note],
-       highlights: [SourceRange], fixIts: [FixIt]) {
+  public init(
+    message: Message,
+    location: SourceLocation?,
+    notes: [Note],
+    highlights: [SourceRange],
+    fixIts: [FixIt]
+  ) {
     self.message = message
     self.location = location
     self.notes = notes

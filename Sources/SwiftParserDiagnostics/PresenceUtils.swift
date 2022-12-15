@@ -70,19 +70,21 @@ class PresentMaker: SyntaxRewriter {
     } else {
       leadingTriviaBeforePlaceholder = .newline
     }
-    return DeclSyntax(StructDeclSyntax(
-      node.unexpectedBeforeAttributes,
-      attributes: node.attributes,
-      node.unexpectedBetweenAttributesAndModifiers,
-      modifiers: node.modifiers,
-      structKeyword: .structKeyword(presence: .missing),
-      identifier: .identifier("<#declaration#>", leadingTrivia: leadingTriviaBeforePlaceholder),
-      members: MemberDeclBlockSyntax(
-        leftBrace: .leftBraceToken(presence: .missing),
-        members: MemberDeclListSyntax([]),
-        rightBrace: .rightBraceToken(presence: .missing)
+    return DeclSyntax(
+      StructDeclSyntax(
+        node.unexpectedBeforeAttributes,
+        attributes: node.attributes,
+        node.unexpectedBetweenAttributesAndModifiers,
+        modifiers: node.modifiers,
+        structKeyword: .structKeyword(presence: .missing),
+        identifier: .identifier("<#declaration#>", leadingTrivia: leadingTriviaBeforePlaceholder),
+        members: MemberDeclBlockSyntax(
+          leftBrace: .leftBraceToken(presence: .missing),
+          members: MemberDeclListSyntax([]),
+          rightBrace: .rightBraceToken(presence: .missing)
+        )
       )
-    ))
+    )
   }
 
   override func visit(_ node: MissingExprSyntax) -> ExprSyntax {
@@ -94,8 +96,11 @@ class PresentMaker: SyntaxRewriter {
   }
 
   override func visit(_ node: MissingStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(ExpressionStmtSyntax(
-      expression: IdentifierExprSyntax(identifier: .identifier("<#statement#>"))))
+    return StmtSyntax(
+      ExpressionStmtSyntax(
+        expression: IdentifierExprSyntax(identifier: .identifier("<#statement#>"))
+      )
+    )
   }
 
   override func visit(_ node: MissingTypeSyntax) -> TypeSyntax {

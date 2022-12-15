@@ -20,21 +20,28 @@ public class EntryTests: XCTestCase {
   }
 
   func testTopLevelBufferParse() throws {
-    AssertParse("func test() {}", { (source: String) -> SourceFileSyntax in
-      var source = source
-      source.makeContiguousUTF8()
-      return source.withUTF8 { Parser.parse(source: $0) }
-    })
+    AssertParse(
+      "func test() {}",
+      { (source: String) -> SourceFileSyntax in
+        var source = source
+        source.makeContiguousUTF8()
+        return source.withUTF8 { Parser.parse(source: $0) }
+      }
+    )
   }
 
   func testSyntaxParse() throws {
-    AssertParse("func test() {}",
-                { DeclSyntax.parse(from: &$0) })
+    AssertParse(
+      "func test() {}",
+      { DeclSyntax.parse(from: &$0) }
+    )
   }
 
   func testRemainderUnexpected() throws {
-    AssertParse("func test() {} 1️⃣other tokens",
-                { DeclSyntax.parse(from: &$0) },
-                diagnostics: [DiagnosticSpec(message: "unexpected code 'other tokens' in function")])
+    AssertParse(
+      "func test() {} 1️⃣other tokens",
+      { DeclSyntax.parse(from: &$0) },
+      diagnostics: [DiagnosticSpec(message: "unexpected code 'other tokens' in function")]
+    )
   }
 }

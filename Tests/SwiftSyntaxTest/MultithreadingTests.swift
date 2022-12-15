@@ -39,12 +39,15 @@ public class MultithreadingTests: XCTestCase {
     let methodCall = FunctionCallExprSyntax(
       calledExpression: MemberAccessExprSyntax(
         base: IdentifierExprSyntax(
-          identifier: .identifier("base")),
+          identifier: .identifier("base")
+        ),
         dot: .periodToken(),
-        name: .identifier("member")),
+        name: .identifier("member")
+      ),
       leftParen: .leftParenToken(),
       argumentList: TupleExprElementListSyntax([]),
-      rightParen: .rightParenToken())
+      rightParen: .rightParenToken()
+    )
 
     DispatchQueue.concurrentPerform(iterations: 100) { i in
       var copied = methodCall

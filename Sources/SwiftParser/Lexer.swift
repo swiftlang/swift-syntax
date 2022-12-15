@@ -85,23 +85,29 @@ public struct Lexer {
 
     @_spi(RawSyntax)
     public var textRange: Range<SyntaxText.Index> {
-      leadingTriviaByteLength ..< leadingTriviaByteLength + textByteLength
+      leadingTriviaByteLength..<leadingTriviaByteLength + textByteLength
     }
 
     @_spi(RawSyntax)
     public var tokenText: SyntaxText {
-      SyntaxText(baseAddress: start.advanced(by: leadingTriviaByteLength),
-                 count: textByteLength)
+      SyntaxText(
+        baseAddress: start.advanced(by: leadingTriviaByteLength),
+        count: textByteLength
+      )
     }
     @_spi(RawSyntax)
     public var leadingTriviaText: SyntaxText {
-      SyntaxText(baseAddress: start,
-                 count: leadingTriviaByteLength)
+      SyntaxText(
+        baseAddress: start,
+        count: leadingTriviaByteLength
+      )
     }
     @_spi(RawSyntax)
     public var trailingTriviaText: SyntaxText {
-      SyntaxText(baseAddress: start.advanced(by: leadingTriviaByteLength+textByteLength),
-                 count: trailingTriviaByteLength)
+      SyntaxText(
+        baseAddress: start.advanced(by: leadingTriviaByteLength + textByteLength),
+        count: trailingTriviaByteLength
+      )
     }
 
     public var debugDescription: String {
@@ -132,8 +138,13 @@ extension Lexer {
       defer {
         if self.cursor.isAtEndOfFile {
           self.nextToken = Lexeme(
-            tokenKind: .eof, flags: [], start: self.cursor.pointer,
-            leadingTriviaLength: 0, textLength: 0, trailingTriviaLength: 0)
+            tokenKind: .eof,
+            flags: [],
+            start: self.cursor.pointer,
+            leadingTriviaLength: 0,
+            textLength: 0,
+            trailingTriviaLength: 0
+          )
         } else {
           self.nextToken = self.cursor.nextToken(self.start)
         }
@@ -146,7 +157,7 @@ extension Lexer {
       guard bytes > 0 else {
         return self.advance()
       }
-      
+
       // FIXME: This is kind of ridiculous. We shouldn't have to look backwards
       // in the token stream. We should be fusing together runs of operator and
       // identifier characters in the parser, not splitting and backing up
@@ -177,7 +188,7 @@ extension Lexer {
     from startIndex: Int = 0
   ) -> LexemeSequence {
     assert(input.isEmpty || startIndex < input.endIndex)
-    let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex-1]
+    let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
     let start = Cursor(input: input, previous: UInt8(ascii: "\0"))
     let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar)
     return LexemeSequence(start: start, cursor: cursor)
@@ -215,8 +226,7 @@ extension Lexer {
     }
 
     public func starts<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool
-      where PossiblePrefix: Sequence, PossiblePrefix.Element == UInt8
-    {
+    where PossiblePrefix: Sequence, PossiblePrefix.Element == UInt8 {
       return self.input.starts(with: possiblePrefix)
     }
 
@@ -252,22 +262,24 @@ extension Lexer.Cursor {
     }
 
     switch self.previous {
-    case UInt8(ascii: " "), UInt8(ascii: "\r"), UInt8(ascii: "\n"), UInt8(ascii: "\t"), // whitespace
-      UInt8(ascii: "("), UInt8(ascii: "["), UInt8(ascii: "{"),            // opening delimiters
-      UInt8(ascii: ","), UInt8(ascii: ";"), UInt8(ascii: ":"),              // expression separators
-      0:                          // whitespace / last char in file
+    case UInt8(ascii: " "), UInt8(ascii: "\r"), UInt8(ascii: "\n"), UInt8(ascii: "\t"),  // whitespace
+      UInt8(ascii: "("), UInt8(ascii: "["), UInt8(ascii: "{"),  // opening delimiters
+      UInt8(ascii: ","), UInt8(ascii: ";"), UInt8(ascii: ":"),  // expression separators
+      0:  // whitespace / last char in file
       return false
     case UInt8(ascii: "/"):
       if self.input.baseAddress! - 1 != bufferBegin.input.baseAddress
-          && self.input.baseAddress!.advanced(by: -2).pointee == UInt8(ascii: "*") {
-        return false // End of a slash-star comment, so whitespace.
+        && self.input.baseAddress!.advanced(by: -2).pointee == UInt8(ascii: "*")
+      {
+        return false  // End of a slash-star comment, so whitespace.
       } else {
         return true
       }
     case 0xA0:
       if self.input.baseAddress! - 1 != bufferBegin.input.baseAddress
-          && self.input.baseAddress!.advanced(by: -2).pointee == 0xC2 {
-        return false // End of a Non-breaking whitespace (U+00A0).
+        && self.input.baseAddress!.advanced(by: -2).pointee == 0xC2
+      {
+        return false  // End of a Non-breaking whitespace (U+00A0).
       } else {
         return true
       }
@@ -278,20 +290,20 @@ extension Lexer.Cursor {
 
   func isRightBound(_ isLeftBound: Bool) -> Bool {
     guard !self.isAtEndOfFile else {
-      return false // last char in file
+      return false  // last char in file
     }
 
     switch self.peek() {
-    case UInt8(ascii: " "), UInt8(ascii: "\r"), UInt8(ascii: "\n"), UInt8(ascii: "\t"), // whitespace
-      UInt8(ascii: ")"), UInt8(ascii: "]"), UInt8(ascii: "}"),              // closing delimiters
-      UInt8(ascii: ","), UInt8(ascii: ";"), UInt8(ascii: ":"):              // expression separators
+    case UInt8(ascii: " "), UInt8(ascii: "\r"), UInt8(ascii: "\n"), UInt8(ascii: "\t"),  // whitespace
+      UInt8(ascii: ")"), UInt8(ascii: "]"), UInt8(ascii: "}"),  // closing delimiters
+      UInt8(ascii: ","), UInt8(ascii: ";"), UInt8(ascii: ":"):  // expression separators
       return false
 
     case 0:
       //        if (tokEnd == codeCompletionPtr) {         // code-completion
       //          return true
       //        }
-      return false                            // whitespace / last char in file
+      return false  // whitespace / last char in file
 
     case UInt8(ascii: "."):
       // Prefer the '^' in "x^.y" to be a postfix op, not binary, but the '^' in
@@ -307,7 +319,7 @@ extension Lexer.Cursor {
       }
     case 0xC2:
       if self.input.count > 1, self.peek(at: 1) == 0xA0 {
-        return false // Non-breaking whitespace (U+00A0)
+        return false  // Non-breaking whitespace (U+00A0)
       } else {
         return true
       }
@@ -328,14 +340,14 @@ extension Lexer.Cursor {
 extension Lexer.Cursor {
   fileprivate mutating func backUp(by offset: Int) {
     assert(!self.isAtStartOfFile)
-    self.previous = self.input.baseAddress!.advanced(by: -(offset+1)).pointee
+    self.previous = self.input.baseAddress!.advanced(by: -(offset + 1)).pointee
     self.input = UnsafeBufferPointer(start: self.input.baseAddress!.advanced(by: -offset), count: self.input.count + offset)
   }
 
   mutating func advance() -> UInt8? {
     var input = self.input[...]
     guard let c = input.popFirst() else {
-      return nil // end of input
+      return nil  // end of input
     }
     self.previous = c
     self.input = UnsafeBufferPointer(rebasing: input)
@@ -344,7 +356,7 @@ extension Lexer.Cursor {
 
   mutating func advance(matching: UInt8) -> UInt8? {
     guard !self.input.isEmpty else {
-      return nil // end of input
+      return nil  // end of input
     }
     guard self.peek() == matching else {
       return nil
@@ -354,8 +366,7 @@ extension Lexer.Cursor {
 
   mutating func advance(while predicate: (Unicode.Scalar) -> Bool) {
     var next = self
-    while
-      !next.isAtEndOfFile,
+    while !next.isAtEndOfFile,
       let c = next.validateUTF8CharacterAndAdvance(),
       predicate(c)
     {
@@ -452,10 +463,11 @@ extension Lexer.Cursor {
     return length
   }
 
-
   /// advanceIfMultilineDelimiter - Centralized check for multiline delimiter.
-  mutating func advanceIfMultilineDelimiter(_ CustomDelimiterLen: Int,
-                                            _ IsOpening: Bool = false) -> Bool {
+  mutating func advanceIfMultilineDelimiter(
+    _ CustomDelimiterLen: Int,
+    _ IsOpening: Bool = false
+  ) -> Bool {
     // Test for single-line string literals that resemble multiline delimiter.
     var TmpPtr = self
     _ = TmpPtr.advance()
@@ -472,9 +484,7 @@ extension Lexer.Cursor {
     }
 
     TmpPtr = self
-    if (TmpPtr.previous == UInt8(ascii: #"""#) &&
-        TmpPtr.advance(matching: UInt8(ascii: #"""#)) != nil &&
-        TmpPtr.advance(matching: UInt8(ascii: #"""#)) != nil) {
+    if (TmpPtr.previous == UInt8(ascii: #"""#) && TmpPtr.advance(matching: UInt8(ascii: #"""#)) != nil && TmpPtr.advance(matching: UInt8(ascii: #"""#)) != nil) {
       self = TmpPtr
       return true
     }
@@ -501,8 +511,7 @@ extension Lexer.Cursor {
       return C <= 0x80 || (C >= 0xC2 && C < 0xF5)
     }
     // If this is 0b10XXXXXX, then it is a continuation character.
-    if (EncodedBytes == 1 ||
-        !isStartOfUTF8Character(Unicode.Scalar(CurByte))) {
+    if (EncodedBytes == 1 || !isStartOfUTF8Character(Unicode.Scalar(CurByte))) {
       // Skip until we get the start of another character.  This is guaranteed to
       // at least stop at the nul at the end of the buffer.
       self.advance(while: { !isStartOfUTF8Character($0) })
@@ -539,11 +548,11 @@ extension Lexer.Cursor {
     // If we got here, we read the appropriate number of accumulated bytes.
     // Verify that the encoding was actually minimal.
     // Number of bits in the value, ignoring leading zeros.
-    let NumBits = 32-CharValue.leadingZeroBitCount
-    if (NumBits <= 5+6) {
+    let NumBits = 32 - CharValue.leadingZeroBitCount
+    if (NumBits <= 5 + 6) {
       return EncodedBytes == 2 ? Unicode.Scalar(CharValue) : nil
     }
-    if (NumBits <= 4+6+6) {
+    if (NumBits <= 4 + 6 + 6) {
       return EncodedBytes == 3 ? Unicode.Scalar(CharValue) : nil
     }
     return EncodedBytes == 4 ? Unicode.Scalar(CharValue) : nil
@@ -575,8 +584,10 @@ extension Lexer.Cursor {
   /// the degenerate case of there being no '#' characters surrounding the quotes.
   /// If delimiter matches, advances byte pointer passed in and returns true.
   /// Also used to detect the final delimiter of a string when IsClosing == true.
-  mutating func delimiterMatches(_ customDelimiterLength: Int,
-                                 _ IsClosing: Bool = false) -> Bool {
+  mutating func delimiterMatches(
+    _ customDelimiterLength: Int,
+    _ IsClosing: Bool = false
+  ) -> Bool {
     guard customDelimiterLength > 0 else {
       return true
     }
@@ -599,7 +610,7 @@ extension Lexer.Cursor {
   static func skipToEndOfInterpolatedExpression(_ CurPtr: Lexer.Cursor, _ IsMultilineString: Bool) -> Lexer.Cursor {
     var CurPtr = CurPtr
     var OpenDelimiters = [UInt8]()
-    var AllowNewline = [ IsMultilineString ]
+    var AllowNewline = [IsMultilineString]
     var CustomDelimiter = [Int]()
 
     let inStringLiteral = { () -> Bool in
@@ -620,8 +631,8 @@ extension Lexer.Cursor {
       var CustomDelimiterLen = 0
       let Last = CurPtr
       switch CurPtr.advance() {
-        // String literals in general cannot be split across multiple lines
-        // interpolated ones are no exception - unless multiline literals.
+      // String literals in general cannot be split across multiple lines
+      // interpolated ones are no exception - unless multiline literals.
       case UInt8(ascii: "\n"), UInt8(ascii: "\r"):
         if AllowNewline.last! {
           continue
@@ -641,8 +652,10 @@ extension Lexer.Cursor {
           continue
         }
         CustomDelimiterLen = delim
-        assert(CurPtr.previous == UInt8(ascii: #"""#),
-               "advanceIfCustomDelimiter() must stop at after the quote")
+        assert(
+          CurPtr.previous == UInt8(ascii: #"""#),
+          "advanceIfCustomDelimiter() must stop at after the quote"
+        )
         fallthrough
 
       case UInt8(ascii: #"""#), UInt8(ascii: #"'"#):
@@ -662,8 +675,7 @@ extension Lexer.Cursor {
         }
 
         // Multi-line string can only be closed by '"""'.
-        if (AllowNewline.last! &&
-            !CurPtr.advanceIfMultilineDelimiter(CustomDelimiterLen)) {
+        if (AllowNewline.last! && !CurPtr.advanceIfMultilineDelimiter(CustomDelimiterLen)) {
           continue
         }
 
@@ -680,8 +692,7 @@ extension Lexer.Cursor {
       case UInt8(ascii: "\\"):
         // We ignore invalid escape sequence here. They should be diagnosed in
         // the real lexer functions.
-        if (inStringLiteral() &&
-            CurPtr.delimiterMatches(CustomDelimiter.last!)) {
+        if (inStringLiteral() && CurPtr.delimiterMatches(CustomDelimiter.last!)) {
           let Last = CurPtr
           switch CurPtr.advance() {
           case UInt8(ascii: "("):
@@ -699,7 +710,7 @@ extension Lexer.Cursor {
         }
         continue
 
-        // Paren nesting deeper to support "foo = \((a+b)-(c*d)) bar".
+      // Paren nesting deeper to support "foo = \((a+b)-(c*d)) bar".
       case UInt8(ascii: "("):
         if (!inStringLiteral()) {
           OpenDelimiters.append(UInt8(ascii: "("))
@@ -771,13 +782,16 @@ extension Lexer.Cursor {
     let textStart = self
     var (kind, flags) = self.lexImpl(
       ContentStart: ContentStart,
-      diagnosticHandler: diagnosticHandler)
+      diagnosticHandler: diagnosticHandler
+    )
 
     // Trailing trivia.
     let trailingTriviaStart = self
     let newlineInTrailingTrivia = self.lexTrivia(.trailing)
-    assert(newlineInTrailingTrivia == .absent,
-           "trailingTrivia should not have a newline")
+    assert(
+      newlineInTrailingTrivia == .absent,
+      "trailingTrivia should not have a newline"
+    )
 
     if newlineInLeadingTrivia == .present {
       flags.insert(.isAtStartOfLine)
@@ -788,7 +802,8 @@ extension Lexer.Cursor {
       start: leadingTriviaStart.pointer,
       leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
       textLength: textStart.distance(to: trailingTriviaStart),
-      trailingTriviaLength: trailingTriviaStart.distance(to: self))
+      trailingTriviaLength: trailingTriviaStart.distance(to: self)
+    )
   }
 
   private mutating func lexImpl(
@@ -851,38 +866,38 @@ extension Lexer.Cursor {
       return self.lexOperatorIdentifier(start, ContentStart)
 
     case UInt8(ascii: "="), UInt8(ascii: "-"), UInt8(ascii: "+"),
-         UInt8(ascii: "*"), UInt8(ascii: "%"), UInt8(ascii: "&"),
-         UInt8(ascii: "|"), UInt8(ascii: "^"), UInt8(ascii: "~"),
-         UInt8(ascii: "."):
+      UInt8(ascii: "*"), UInt8(ascii: "%"), UInt8(ascii: "&"),
+      UInt8(ascii: "|"), UInt8(ascii: "^"), UInt8(ascii: "~"),
+      UInt8(ascii: "."):
       return self.lexOperatorIdentifier(start, ContentStart)
     case UInt8(ascii: "A"), UInt8(ascii: "B"), UInt8(ascii: "C"),
-         UInt8(ascii: "D"), UInt8(ascii: "E"), UInt8(ascii: "F"),
-         UInt8(ascii: "G"), UInt8(ascii: "H"), UInt8(ascii: "I"),
-         UInt8(ascii: "J"), UInt8(ascii: "K"), UInt8(ascii: "L"),
-         UInt8(ascii: "M"), UInt8(ascii: "N"), UInt8(ascii: "O"),
-         UInt8(ascii: "P"), UInt8(ascii: "Q"), UInt8(ascii: "R"),
-         UInt8(ascii: "S"), UInt8(ascii: "T"), UInt8(ascii: "U"),
-         UInt8(ascii: "V"), UInt8(ascii: "W"), UInt8(ascii: "X"),
-         UInt8(ascii: "Y"), UInt8(ascii: "Z"),
-         UInt8(ascii: "a"), UInt8(ascii: "b"), UInt8(ascii: "c"),
-         UInt8(ascii: "d"), UInt8(ascii: "e"), UInt8(ascii: "f"),
-         UInt8(ascii: "g"), UInt8(ascii: "h"), UInt8(ascii: "i"),
-         UInt8(ascii: "j"), UInt8(ascii: "k"), UInt8(ascii: "l"),
-         UInt8(ascii: "m"), UInt8(ascii: "n"), UInt8(ascii: "o"),
-         UInt8(ascii: "p"), UInt8(ascii: "q"), UInt8(ascii: "r"),
-         UInt8(ascii: "s"), UInt8(ascii: "t"), UInt8(ascii: "u"),
-         UInt8(ascii: "v"), UInt8(ascii: "w"), UInt8(ascii: "x"),
-         UInt8(ascii: "y"), UInt8(ascii: "z"),
-         UInt8(ascii: "_"):
+      UInt8(ascii: "D"), UInt8(ascii: "E"), UInt8(ascii: "F"),
+      UInt8(ascii: "G"), UInt8(ascii: "H"), UInt8(ascii: "I"),
+      UInt8(ascii: "J"), UInt8(ascii: "K"), UInt8(ascii: "L"),
+      UInt8(ascii: "M"), UInt8(ascii: "N"), UInt8(ascii: "O"),
+      UInt8(ascii: "P"), UInt8(ascii: "Q"), UInt8(ascii: "R"),
+      UInt8(ascii: "S"), UInt8(ascii: "T"), UInt8(ascii: "U"),
+      UInt8(ascii: "V"), UInt8(ascii: "W"), UInt8(ascii: "X"),
+      UInt8(ascii: "Y"), UInt8(ascii: "Z"),
+      UInt8(ascii: "a"), UInt8(ascii: "b"), UInt8(ascii: "c"),
+      UInt8(ascii: "d"), UInt8(ascii: "e"), UInt8(ascii: "f"),
+      UInt8(ascii: "g"), UInt8(ascii: "h"), UInt8(ascii: "i"),
+      UInt8(ascii: "j"), UInt8(ascii: "k"), UInt8(ascii: "l"),
+      UInt8(ascii: "m"), UInt8(ascii: "n"), UInt8(ascii: "o"),
+      UInt8(ascii: "p"), UInt8(ascii: "q"), UInt8(ascii: "r"),
+      UInt8(ascii: "s"), UInt8(ascii: "t"), UInt8(ascii: "u"),
+      UInt8(ascii: "v"), UInt8(ascii: "w"), UInt8(ascii: "x"),
+      UInt8(ascii: "y"), UInt8(ascii: "z"),
+      UInt8(ascii: "_"):
       return self.lexIdentifier(start)
 
     case UInt8(ascii: "$"):
       return self.lexDollarIdentifier(start)
 
     case UInt8(ascii: "0"), UInt8(ascii: "1"), UInt8(ascii: "2"),
-         UInt8(ascii: "3"), UInt8(ascii: "4"), UInt8(ascii: "5"),
-         UInt8(ascii: "6"), UInt8(ascii: "7"), UInt8(ascii: "8"),
-         UInt8(ascii: "9"):
+      UInt8(ascii: "3"), UInt8(ascii: "4"), UInt8(ascii: "5"),
+      UInt8(ascii: "6"), UInt8(ascii: "7"), UInt8(ascii: "8"),
+      UInt8(ascii: "9"):
       return self.lexNumber(start, ContentStart, diagnosticHandler)
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
       return self.lexStringLiteral(start)
@@ -973,11 +988,10 @@ extension Lexer.Cursor {
           break
         }
         continue
-        // Start character of tokens.
-//        case (char)-1: case (char)-2:
-      case
-        // Punctuation.
-        UInt8(ascii: "{"), UInt8(ascii: "["), UInt8(ascii: "("),
+      // Start character of tokens.
+      //        case (char)-1: case (char)-2:
+      case  // Punctuation.
+      UInt8(ascii: "{"), UInt8(ascii: "["), UInt8(ascii: "("),
         UInt8(ascii: "}"), UInt8(ascii: "]"), UInt8(ascii: ")"),
         UInt8(ascii: "@"), UInt8(ascii: ","), UInt8(ascii: ";"),
         UInt8(ascii: ":"), UInt8(ascii: "\\"), UInt8(ascii: "$"),
@@ -1020,7 +1034,8 @@ extension Lexer.Cursor {
         break
       case 0xEF:
         if self.input.count > 2,
-           self.peek(at: 0) == 0xBB, self.peek(at: 1) == 0xBF {
+          self.peek(at: 0) == 0xBB, self.peek(at: 1) == 0xBF
+        {
           // BOM marker.
           _ = self.advance()
           _ = self.advance()
@@ -1079,10 +1094,7 @@ extension Lexer.Cursor {
         // This is the end of string, we are done.
         break DELIMITLOOP
       }
-      if !self.isAtEndOfFile, self.peek() == UInt8(ascii: "\\") &&
-          !TmpPtr.isAtEndOfFile &&
-           TmpPtr.delimiterMatches(customDelimiterLength) &&
-            TmpPtr.peek() == UInt8(ascii: "(") {
+      if !self.isAtEndOfFile, self.peek() == UInt8(ascii: "\\") && !TmpPtr.isAtEndOfFile && TmpPtr.delimiterMatches(customDelimiterLength) && TmpPtr.peek() == UInt8(ascii: "(") {
         // Consume tokens until we hit the corresponding ')'.
         self = Self.skipToEndOfInterpolatedExpression(TmpPtr, IsMultilineString)
         if self.advance(if: { $0 == Unicode.Scalar(")") }) {
@@ -1091,19 +1103,21 @@ extension Lexer.Cursor {
         } else if !self.isAtEndOfFile, ((self.peek() == UInt8(ascii: "\r") || self.peek() == UInt8(ascii: "\n")) && IsMultilineString) {
           // The only case we reach here is unterminated single line string in the
           // interpolation. For better recovery, go on after emitting an error.
-//          diagnose(CurPtr, diag::lex_unterminated_string)
+          //          diagnose(CurPtr, diag::lex_unterminated_string)
           wasErroneous = true
           continue
         } else {
-//          diagnose(TokStart, diag::lex_unterminated_string)
+          //          diagnose(TokStart, diag::lex_unterminated_string)
           return (.unknown, [])
         }
       }
 
       // String literals cannot have \n or \r in them (unless multiline).
-      if !self.isAtEndOfFile, ((self.peek() == UInt8(ascii: "\r") || self.peek() == UInt8(ascii: "\n")) && !IsMultilineString)
-          || self.isAtEndOfFile {
-//        diagnose(TokStart, diag::lex_unterminated_string)
+      if !self.isAtEndOfFile,
+        ((self.peek() == UInt8(ascii: "\r") || self.peek() == UInt8(ascii: "\n")) && !IsMultilineString)
+          || self.isAtEndOfFile
+      {
+        //        diagnose(TokStart, diag::lex_unterminated_string)
         return (.unknown, [])
       }
 
@@ -1120,11 +1134,11 @@ extension Lexer.Cursor {
       }
     }
 
-//    if QuoteChar == UInt8(ascii: #"'"#) {
-//      assert(!IsMultilineString && customDelimiterLength == 0,
-//             "Single quoted string cannot have custom delimitor, nor multiline")
-//      diagnoseSingleQuoteStringLiteral(TokStart, CurPtr)
-//    }
+    //    if QuoteChar == UInt8(ascii: #"'"#) {
+    //      assert(!IsMultilineString && customDelimiterLength == 0,
+    //             "Single quoted string cannot have custom delimitor, nor multiline")
+    //      diagnoseSingleQuoteStringLiteral(TokStart, CurPtr)
+    //    }
 
     var flags: Lexer.Lexeme.Flags = []
     if IsMultilineString {
@@ -1153,8 +1167,11 @@ extension Lexer.Cursor {
   ///
   ///   character_escape  ::= [\][\] | [\]t | [\]n | [\]r | [\]" | [\]' | [\]0
   ///   character_escape  ::= unicode_character_escape
-  mutating func lexCharacter(_ StopQuote: UInt8, _ IsMultilineString: Bool,
-                             _ CustomDelimiterLen: Int) -> CharacterLex {
+  mutating func lexCharacter(
+    _ StopQuote: UInt8,
+    _ IsMultilineString: Bool,
+    _ CustomDelimiterLen: Int
+  ) -> CharacterLex {
     let CharStart = self
 
     switch self.advance() {
@@ -1169,12 +1186,10 @@ extension Lexer.Cursor {
         }
 
         var TmpPtr = self
-        if IsMultilineString &&
-            !TmpPtr.advanceIfMultilineDelimiter(CustomDelimiterLen) {
+        if IsMultilineString && !TmpPtr.advanceIfMultilineDelimiter(CustomDelimiterLen) {
           return .success(Unicode.Scalar(UInt8(ascii: #"""#)))
         }
-        if CustomDelimiterLen > 0 &&
-            !TmpPtr.delimiterMatches(CustomDelimiterLen, /*IsClosing=*/true) {
+        if CustomDelimiterLen > 0 && !TmpPtr.delimiterMatches(CustomDelimiterLen, /*IsClosing=*/ true) {
           return .success(Unicode.Scalar(UInt8(ascii: #"""#)))
         }
         self = TmpPtr
@@ -1225,7 +1240,6 @@ extension Lexer.Cursor {
     }
   }
 
-
   fileprivate mutating func lexEscapedCharacter(_ IsMultilineString: Bool) -> UInt32? {
     guard !self.isAtEndOfFile else {
       return nil
@@ -1233,14 +1247,14 @@ extension Lexer.Cursor {
 
     // Escape processing.  We already ate the "\".
     switch self.peek() {
-      // Simple single-character escapes.
-    case UInt8(ascii: "0"):   _ = self.advance(); return UInt32(UInt8(ascii: "\0"))
-    case UInt8(ascii: "n"):   _ = self.advance(); return UInt32(UInt8(ascii: "\n"))
-    case UInt8(ascii: "r"):   _ = self.advance(); return UInt32(UInt8(ascii: "\r"))
-    case UInt8(ascii: "t"):   _ = self.advance(); return UInt32(UInt8(ascii: "\t"))
+    // Simple single-character escapes.
+    case UInt8(ascii: "0"): _ = self.advance(); return UInt32(UInt8(ascii: "\0"))
+    case UInt8(ascii: "n"): _ = self.advance(); return UInt32(UInt8(ascii: "\n"))
+    case UInt8(ascii: "r"): _ = self.advance(); return UInt32(UInt8(ascii: "\r"))
+    case UInt8(ascii: "t"): _ = self.advance(); return UInt32(UInt8(ascii: "\t"))
     case UInt8(ascii: #"""#): _ = self.advance(); return UInt32(UInt8(ascii: #"""#))
     case UInt8(ascii: #"'"#): _ = self.advance(); return UInt32(UInt8(ascii: #"'"#))
-    case UInt8(ascii: "\\"):  _ = self.advance(); return UInt32(UInt8(ascii: "\\"))
+    case UInt8(ascii: "\\"): _ = self.advance(); return UInt32(UInt8(ascii: "\\"))
 
     case UInt8(ascii: "u"):  //  \u HEX HEX HEX HEX
       _ = self.advance()
@@ -1284,15 +1298,15 @@ extension Lexer.Cursor {
     }
 
     if !self.isAtEndOfFile, self.peek() != UInt8(ascii: "}") {
-//      if (Diags)
-//        Diags->diagnose(CurPtr, diag::lex_invalid_u_escape_rbrace)
+      //      if (Diags)
+      //        Diags->diagnose(CurPtr, diag::lex_invalid_u_escape_rbrace)
       return nil
     }
     _ = self.advance()
 
     if (NumDigits < 1 || NumDigits > 8) {
-//      if (Diags)
-//        Diags->diagnose(CurPtr, diag::lex_invalid_u_escape)
+      //      if (Diags)
+      //        Diags->diagnose(CurPtr, diag::lex_invalid_u_escape)
       return nil
     }
 
@@ -1316,8 +1330,10 @@ extension Lexer.Cursor {
     _ ContentStart: Lexer.Cursor,
     _ diagnosticHandler: ((Int, DiagnosticMessage) -> Void)? = nil
   ) -> (RawTokenKind, Lexer.Lexeme.Flags) {
-    assert((Unicode.Scalar(self.previous).isDigit || self.previous == UInt8(ascii: ".")),
-           "Unexpected start")
+    assert(
+      (Unicode.Scalar(self.previous).isDigit || self.previous == UInt8(ascii: ".")),
+      "Unexpected start"
+    )
 
     if !self.isAtEndOfFile && self.previous == UInt8(ascii: "0") && self.peek() == UInt8(ascii: "x") {
       return self.lexHexNumber(TokStart, diagnosticHandler)
@@ -1329,7 +1345,7 @@ extension Lexer.Cursor {
       if !self.isAtEndOfFile, self.peek() < UInt8(ascii: "0") || self.peek() > UInt8(ascii: "7") {
         diagnosticHandler?(TokStart.distance(to: self), InvalidDigitInIntegerLiteral(kind: .octal(Unicode.Scalar(self.peek()))))
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return (.integerLiteral, [ .isErroneous ])
+        return (.integerLiteral, [.isErroneous])
       }
 
       self.advance(while: {
@@ -1340,7 +1356,7 @@ extension Lexer.Cursor {
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         diagnosticHandler?(TokStart.distance(to: tmp), InvalidDigitInIntegerLiteral(kind: .octal(Unicode.Scalar(tmp.peek()))))
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return (.integerLiteral, [ .isErroneous ])
+        return (.integerLiteral, [.isErroneous])
       }
 
       return (.integerLiteral, [])
@@ -1352,7 +1368,7 @@ extension Lexer.Cursor {
       if !self.isAtEndOfFile, self.peek() != UInt8(ascii: "0") && self.peek() != UInt8(ascii: "1") {
         diagnosticHandler?(TokStart.distance(to: self), InvalidDigitInIntegerLiteral(kind: .binary(Unicode.Scalar(self.peek()))))
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return (.integerLiteral, [ .isErroneous ])
+        return (.integerLiteral, [.isErroneous])
       }
 
       self.advance(while: {
@@ -1363,7 +1379,7 @@ extension Lexer.Cursor {
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         diagnosticHandler?(TokStart.distance(to: tmp), InvalidDigitInIntegerLiteral(kind: .binary(Unicode.Scalar(tmp.peek()))))
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return (.integerLiteral, [ .isErroneous ])
+        return (.integerLiteral, [.isErroneous])
       }
 
       return (.integerLiteral, [])
@@ -1388,7 +1404,7 @@ extension Lexer.Cursor {
         if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
           diagnosticHandler?(TokStart.distance(to: tmp), InvalidDigitInIntegerLiteral(kind: .decimal(Unicode.Scalar(tmp.peek()))))
           self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-          return (.integerLiteral, [ .isErroneous ])
+          return (.integerLiteral, [.isErroneous])
         }
 
         return (.integerLiteral, [])
@@ -1423,7 +1439,7 @@ extension Lexer.Cursor {
         }
 
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return (.floatingLiteral, [ .isErroneous ])
+        return (.floatingLiteral, [.isErroneous])
       }
 
       self.advance(while: { char in
@@ -1434,7 +1450,7 @@ extension Lexer.Cursor {
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         diagnosticHandler?(TokStart.distance(to: tmp), InvalidFloatingPointExponentDigit(kind: .digit(Unicode.Scalar(tmp.peek()))))
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return (.floatingLiteral, [ .isErroneous ])
+        return (.floatingLiteral, [.isErroneous])
       }
     }
 
@@ -1456,7 +1472,7 @@ extension Lexer.Cursor {
         diagnosticHandler?(TokStart.distance(to: self), InvalidDigitInIntegerLiteral(kind: .hex(Unicode.Scalar(self.peek()))))
       }
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-      return (.integerLiteral, [ .isErroneous ])
+      return (.integerLiteral, [.isErroneous])
     }
 
     self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
@@ -1470,7 +1486,7 @@ extension Lexer.Cursor {
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         diagnosticHandler?(TokStart.distance(to: tmp), InvalidDigitInIntegerLiteral(kind: .hex(Unicode.Scalar(tmp.peek()))))
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-        return (.integerLiteral, [ .isErroneous ])
+        return (.integerLiteral, [.isErroneous])
       } else {
         return (.integerLiteral, [])
       }
@@ -1495,7 +1511,7 @@ extension Lexer.Cursor {
           return (.integerLiteral, [])
         }
         diagnosticHandler?(TokStart.distance(to: self), StaticLexerError.expectedBinaryExponentInHexFloatLiteral)
-        return (.integerLiteral, [ .isErroneous ])
+        return (.integerLiteral, [.isErroneous])
       }
     } else {
       PtrOnDot = nil
@@ -1535,7 +1551,7 @@ extension Lexer.Cursor {
         diagnosticHandler?(TokStart.distance(to: tmp), StaticLexerError.expectedDigitInFloatLiteral)
       }
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-      return (.floatingLiteral, [ .isErroneous ])
+      return (.floatingLiteral, [.isErroneous])
     }
 
     self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
@@ -1544,7 +1560,7 @@ extension Lexer.Cursor {
     if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
       diagnosticHandler?(TokStart.distance(to: tmp), InvalidFloatingPointExponentDigit(kind: .character(Unicode.Scalar(tmp.peek()))))
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
-      return (.floatingLiteral, [ .isErroneous ])
+      return (.floatingLiteral, [.isErroneous])
     }
     return (.floatingLiteral, [])
   }
@@ -1651,15 +1667,15 @@ extension Lexer.Cursor {
         break
       }
 
-//      // If we are lexing a `/.../` regex literal, we don't consider `/` to be an
-//      // operator character.
-//      if ForwardSlashRegexMode != LexerForwardSlashRegexMode::None &&
-//          CurPtr.peek() == UInt8(ascii: "/") {
-//        break
-//      }
+      //      // If we are lexing a `/.../` regex literal, we don't consider `/` to be an
+      //      // operator character.
+      //      if ForwardSlashRegexMode != LexerForwardSlashRegexMode::None &&
+      //          CurPtr.peek() == UInt8(ascii: "/") {
+      //        break
+      //      }
     } while self.advance(if: { $0.isOperatorContinuationCodePoint })
 
-    if self.input.baseAddress!-TokStart.input.baseAddress! > 2 {
+    if self.input.baseAddress! - TokStart.input.baseAddress! > 2 {
       // If there is a "//" or "/*" in the middle of an identifier token,
       // it starts a comment.
       var Ptr = TokStart
@@ -1684,13 +1700,13 @@ extension Lexer.Cursor {
       switch TokStart.peek() {
       case UInt8(ascii: "="):
         // Refrain from emitting this message in operator name position.
-//        if (NextToken.isNot(tok::kw_operator) && leftBound != rightBound) {
-//          auto d = diagnose(TokStart, diag::lex_unary_equal)
-//          if (leftBound)
-//            d.fixItInsert(getSourceLoc(TokStart), " ")
-//          else
-//            d.fixItInsert(getSourceLoc(TokStart+1), " ")
-//        }
+        //        if (NextToken.isNot(tok::kw_operator) && leftBound != rightBound) {
+        //          auto d = diagnose(TokStart, diag::lex_unary_equal)
+        //          if (leftBound)
+        //            d.fixItInsert(getSourceLoc(TokStart), " ")
+        //          else
+        //            d.fixItInsert(getSourceLoc(TokStart+1), " ")
+        //        }
         // always emit 'tok::equal' to avoid trickle down parse errors
         return (.equal, [])
       case UInt8(ascii: "&"):
@@ -1716,27 +1732,27 @@ extension Lexer.Cursor {
           _ = AfterHorzWhitespace.advance()
         }
 
-//        // First, when we are code completing "x. <ESC>", then make sure to return
-//        // a tok::period, since that is what the user is wanting to know about.
-//        if (AfterHorzWhitespace.peek() == 0 &&
-//            AfterHorzWhitespace == CodeCompletionPtr) {
-//          diagnose(TokStart, diag::expected_member_name)
-//          return formToken(tok::period, TokStart)
-//        }
+        //        // First, when we are code completing "x. <ESC>", then make sure to return
+        //        // a tok::period, since that is what the user is wanting to know about.
+        //        if (AfterHorzWhitespace.peek() == 0 &&
+        //            AfterHorzWhitespace == CodeCompletionPtr) {
+        //          diagnose(TokStart, diag::expected_member_name)
+        //          return formToken(tok::period, TokStart)
+        //        }
 
-//        if AfterHorzWhitespace.isRightBound(leftBound) &&
-//            // Don't consider comments to be this.  A leading slash is probably
-//            // either // or /* and most likely occurs just in our testsuite for
-//            // expected-error lines.
-//            AfterHorzWhitespace.peek() != UInt8(ascii: "/") {
-//          diagnose(TokStart, diag::extra_whitespace_period)
-//            .fixItRemoveChars(getSourceLoc(CurPtr),
-//                              getSourceLoc(AfterHorzWhitespace))
-//          return formToken(tok::period, TokStart)
-//        }
+        //        if AfterHorzWhitespace.isRightBound(leftBound) &&
+        //            // Don't consider comments to be this.  A leading slash is probably
+        //            // either // or /* and most likely occurs just in our testsuite for
+        //            // expected-error lines.
+        //            AfterHorzWhitespace.peek() != UInt8(ascii: "/") {
+        //          diagnose(TokStart, diag::extra_whitespace_period)
+        //            .fixItRemoveChars(getSourceLoc(CurPtr),
+        //                              getSourceLoc(AfterHorzWhitespace))
+        //          return formToken(tok::period, TokStart)
+        //        }
 
         // Otherwise, it is probably a missing member.
-//        diagnose(TokStart, diag::expected_member_name)
+        //        diagnose(TokStart, diag::expected_member_name)
         return (.unknown, [])
       case UInt8(ascii: "?"):
         if (leftBound) {
@@ -1748,10 +1764,10 @@ extension Lexer.Cursor {
       }
     } else if (self.input.baseAddress! - TokStart.input.baseAddress! == 2) {
       switch (TokStart.peek(), TokStart.peek(at: 1)) {
-      case (UInt8(ascii: "-"), UInt8(ascii: ">")): // ->
+      case (UInt8(ascii: "-"), UInt8(ascii: ">")):  // ->
         return (.arrow, [])
-      case (UInt8(ascii: "*"), UInt8(ascii: "/")): // */
-//        diagnose(TokStart, diag::lex_unexpected_block_comment_end)
+      case (UInt8(ascii: "*"), UInt8(ascii: "/")):  // */
+        //        diagnose(TokStart, diag::lex_unexpected_block_comment_end)
         return (.unknown, [])
       default:
         break
@@ -1760,7 +1776,7 @@ extension Lexer.Cursor {
       // Verify there is no "*/" in the middle of the identifier token, we reject
       // it as potentially ending a block comment.
       if TokStart.textUpTo(self).contains("*/") {
-//        diagnose(TokStart+Pos, diag::lex_unexpected_block_comment_end)
+        //        diagnose(TokStart+Pos, diag::lex_unexpected_block_comment_end)
         return (.unknown, [])
       }
     }
@@ -1881,9 +1897,9 @@ extension Lexer.Cursor {
     if Tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier
       // start, attempt to recover by eating more continuation characters.
-//      if (EmitDiagnosticsIfToken) {
-//        diagnose(CurPtr - 1, diag::lex_invalid_identifier_start_character)
-//      }
+      //      if (EmitDiagnosticsIfToken) {
+      //        diagnose(CurPtr - 1, diag::lex_invalid_identifier_start_character)
+      //      }
       while Tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
 
       }
@@ -1893,31 +1909,31 @@ extension Lexer.Cursor {
 
     // This character isn't allowed in Swift source.
     guard let Codepoint = Tmp.validateUTF8CharacterAndAdvance() else {
-//      diagnose(CurPtr - 1, diag::lex_invalid_utf8)
-//          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
+      //      diagnose(CurPtr - 1, diag::lex_invalid_utf8)
+      //          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
       self = Tmp
-      return false; // Skip presumed whitespace.
+      return false;  // Skip presumed whitespace.
     }
     if (Codepoint.value == 0x000000A0) {
-        // Non-breaking whitespace (U+00A0)
+      // Non-breaking whitespace (U+00A0)
       while (Tmp.peek(at: 0) == 0xC2 && Tmp.peek(at: 1) == 0xA0) {
         _ = Tmp.advance()
         _ = Tmp.advance()
       }
 
-//      SmallString<8> Spaces
-//      Spaces.assign((Tmp - CurPtr + 1) / 2, ' ')
-//      diagnose(CurPtr - 1, diag::lex_nonbreaking_space)
-//        .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp),
-//                           Spaces)
+      //      SmallString<8> Spaces
+      //      Spaces.assign((Tmp - CurPtr + 1) / 2, ' ')
+      //      diagnose(CurPtr - 1, diag::lex_nonbreaking_space)
+      //        .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp),
+      //                           Spaces)
       self = Tmp
       return false
     } else if (Codepoint.value == 0x0000201D) {
       // If this is an end curly quote, just diagnose it with a fixit hint.
-//      if (EmitDiagnosticsIfToken) {
-//        diagnose(CurPtr - 1, diag::lex_invalid_curly_quote)
-//            .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), "\"")
-//      }
+      //      if (EmitDiagnosticsIfToken) {
+      //        diagnose(CurPtr - 1, diag::lex_invalid_curly_quote)
+      //            .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), "\"")
+      //      }
       self = Tmp
       return true
     } else if (Codepoint.value == 0x0000201C) {
@@ -1932,35 +1948,35 @@ extension Lexer.Cursor {
       // This, in turn, works better with our error recovery because we won't
       // diagnose an end curly quote in the middle of a straight quoted
       // literal.
-//      if (EmitDiagnosticsIfToken) {
-//        diagnose(CurPtr - 1, diag::lex_invalid_curly_quote)
-//            .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(EndPtr),
-//                               "\"")
-//      }
+      //      if (EmitDiagnosticsIfToken) {
+      //        diagnose(CurPtr - 1, diag::lex_invalid_curly_quote)
+      //            .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(EndPtr),
+      //                               "\"")
+      //      }
       self = Tmp
       return true
     }
 
-//    diagnose(CurPtr - 1, diag::lex_invalid_character)
-//        .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
+    //    diagnose(CurPtr - 1, diag::lex_invalid_character)
+    //        .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp), " ")
 
-//    char ExpectedCodepoint
-//    if ((ExpectedCodepoint =
-//             confusable::tryConvertConfusableCharacterToASCII(Codepoint))) {
-//
-//      llvm::SmallString<4> ConfusedChar
-//      EncodeToUTF8(Codepoint, ConfusedChar)
-//      llvm::SmallString<1> ExpectedChar
-//      ExpectedChar += ExpectedCodepoint
-//      auto charNames = confusable::getConfusableAndBaseCodepointNames(Codepoint)
-//      diagnose(CurPtr - 1, diag::lex_confusable_character, ConfusedChar,
-//               charNames.first, ExpectedChar, charNames.second)
-//          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp),
-//                             ExpectedChar)
-//    }
+    //    char ExpectedCodepoint
+    //    if ((ExpectedCodepoint =
+    //             confusable::tryConvertConfusableCharacterToASCII(Codepoint))) {
+    //
+    //      llvm::SmallString<4> ConfusedChar
+    //      EncodeToUTF8(Codepoint, ConfusedChar)
+    //      llvm::SmallString<1> ExpectedChar
+    //      ExpectedChar += ExpectedCodepoint
+    //      auto charNames = confusable::getConfusableAndBaseCodepointNames(Codepoint)
+    //      diagnose(CurPtr - 1, diag::lex_confusable_character, ConfusedChar,
+    //               charNames.first, ExpectedChar, charNames.second)
+    //          .fixItReplaceChars(getSourceLoc(CurPtr - 1), getSourceLoc(Tmp),
+    //                             ExpectedChar)
+    //    }
 
     self = Tmp
-    return false; // Skip presumed whitespace.
+    return false;  // Skip presumed whitespace.
   }
 
   enum ConflictMarker {
@@ -2003,7 +2019,7 @@ extension Lexer.Cursor {
     }
 
     // Diagnose at the conflict marker, then jump ahead to the end.
-//    diagnose(CurPtr, diag::lex_conflict_marker_in_file);
+    //    diagnose(CurPtr, diag::lex_conflict_marker_in_file);
     self = End
 
     // Skip ahead to the end of the marker.
@@ -2018,8 +2034,10 @@ extension Lexer.Cursor {
     // Get a reference to the rest of the buffer minus the length of the start
     // of the conflict marker.
     let advanced = CurPtr.input.baseAddress?.advanced(by: CMK.introducer.utf8.count)
-    var restOfBuffer = Lexer.Cursor(input: .init(start: advanced, count: CurPtr.input.count - CMK.introducer.utf8.count),
-                                    previous: CurPtr.input[CMK.introducer.utf8.count-1])
+    var restOfBuffer = Lexer.Cursor(
+      input: .init(start: advanced, count: CurPtr.input.count - CMK.introducer.utf8.count),
+      previous: CurPtr.input[CMK.introducer.utf8.count - 1]
+    )
     while !restOfBuffer.isAtEndOfFile {
       let terminatorStart = CMK.terminator.utf8.first!
       restOfBuffer.advance(while: { byte in
@@ -2037,8 +2055,10 @@ extension Lexer.Cursor {
       }
 
       let advanced = restOfBuffer.input.baseAddress?.advanced(by: CMK.terminator.utf8.count)
-      return Lexer.Cursor(input: .init(start: advanced, count: restOfBuffer.input.count - CMK.terminator.utf8.count),
-                          previous: restOfBuffer.input[CMK.terminator.utf8.count-1])
+      return Lexer.Cursor(
+        input: .init(start: advanced, count: restOfBuffer.input.count - CMK.terminator.utf8.count),
+        previous: restOfBuffer.input[CMK.terminator.utf8.count - 1]
+      )
     }
     return nil
   }
@@ -2074,8 +2094,7 @@ extension Lexer.Cursor {
     //   2
     // }
     //
-    if poundCount == 0 && !Tmp.isAtEndOfFile &&
-        (Tmp.peek() == UInt8(ascii: " ") || Tmp.peek() == UInt8(ascii: "\n") || Tmp.peek() == UInt8(ascii: "\t")) {
+    if poundCount == 0 && !Tmp.isAtEndOfFile && (Tmp.peek() == UInt8(ascii: " ") || Tmp.peek() == UInt8(ascii: "\n") || Tmp.peek() == UInt8(ascii: "\t")) {
       return nil
     }
 
@@ -2104,8 +2123,7 @@ extension Lexer.Cursor {
       case UInt8(ascii: "/"):
         // If we're at the end of the literal, peek ahead to see if the closing
         // slash is actually the start of a comment.
-        if !Tmp.isAtEndOfFile &&
-            (Tmp.peek() == UInt8(ascii: "/") || Tmp.peek() == UInt8(ascii: "*")) {
+        if !Tmp.isAtEndOfFile && (Tmp.peek() == UInt8(ascii: "/") || Tmp.peek() == UInt8(ascii: "*")) {
           return nil
         }
 
@@ -2117,9 +2135,7 @@ extension Lexer.Cursor {
         }
 
         // A regex literal may not end in a space or tab.
-        if !isMultiline && poundCount == 0 &&
-          (previousByte == UInt8(ascii: " ") ||
-           previousByte == UInt8(ascii: "\t")) {
+        if !isMultiline && poundCount == 0 && (previousByte == UInt8(ascii: " ") || previousByte == UInt8(ascii: "\t")) {
           return nil
         }
 
@@ -2142,15 +2158,15 @@ extension Lexer.Cursor {
         _ = Tmp.advance()
         escaped = true
 
-//      case let next
-//        where !next.isPrintableASCII && !(isMultiline && next == "\t"):
-//        // Diagnose unprintable ASCII.
-//        // Note that tabs are allowed in multi-line literals.
-//        // TODO: This matches the string literal behavior, but should we allow
-//        // tabs for single-line regex literals too?
-//        // TODO: Ideally we would recover and continue to lex until the ending
-//        // delimiter.
-//        throw DelimiterLexError(.unprintableASCII, resumeAt: cursor.successor())
+      //      case let next
+      //        where !next.isPrintableASCII && !(isMultiline && next == "\t"):
+      //        // Diagnose unprintable ASCII.
+      //        // Note that tabs are allowed in multi-line literals.
+      //        // TODO: This matches the string literal behavior, but should we allow
+      //        // tabs for single-line regex literals too?
+      //        // TODO: Ideally we would recover and continue to lex until the ending
+      //        // delimiter.
+      //        throw DelimiterLexError(.unprintableASCII, resumeAt: cursor.successor())
 
       case UInt8(ascii: "("):
         parenCount += 1
@@ -2240,10 +2256,7 @@ extension Unicode.Scalar {
     // N1518: Recommendations for extended identifier characters for C and C++
     // Proposed Annex X.2: Ranges of characters disallowed initially
     let c = self.value
-    if ((c >= 0x0300 && c <= 0x036F) ||
-        (c >= 0x1DC0 && c <= 0x1DFF) ||
-        (c >= 0x20D0 && c <= 0x20FF) ||
-        (c >= 0xFE20 && c <= 0xFE2F)) {
+    if ((c >= 0x0300 && c <= 0x036F) || (c >= 0x1DC0 && c <= 0x1DFF) || (c >= 0x20D0 && c <= 0x20FF) || (c >= 0xFE20 && c <= 0xFE2F)) {
       return false
     }
 
@@ -2280,15 +2293,15 @@ extension Unicode.Scalar {
     // Unicode math, symbol, arrow, dingbat, and line/box drawing chars.
     let C = self.value
     return (C >= 0x00A1 && C <= 0x00A7)
-        || C == 0x00A9 || C == 0x00AB || C == 0x00AC || C == 0x00AE
-        || C == 0x00B0 || C == 0x00B1 || C == 0x00B6 || C == 0x00BB
-        || C == 0x00BF || C == 0x00D7 || C == 0x00F7
-        || C == 0x2016 || C == 0x2017 || (C >= 0x2020 && C <= 0x2027)
-        || (C >= 0x2030 && C <= 0x203E) || (C >= 0x2041 && C <= 0x2053)
-        || (C >= 0x2055 && C <= 0x205E) || (C >= 0x2190 && C <= 0x23FF)
-        || (C >= 0x2500 && C <= 0x2775) || (C >= 0x2794 && C <= 0x2BFF)
-        || (C >= 0x2E00 && C <= 0x2E7F) || (C >= 0x3001 && C <= 0x3003)
-        || (C >= 0x3008 && C <= 0x3030)
+      || C == 0x00A9 || C == 0x00AB || C == 0x00AC || C == 0x00AE
+      || C == 0x00B0 || C == 0x00B1 || C == 0x00B6 || C == 0x00BB
+      || C == 0x00BF || C == 0x00D7 || C == 0x00F7
+      || C == 0x2016 || C == 0x2017 || (C >= 0x2020 && C <= 0x2027)
+      || (C >= 0x2030 && C <= 0x203E) || (C >= 0x2041 && C <= 0x2053)
+      || (C >= 0x2055 && C <= 0x205E) || (C >= 0x2190 && C <= 0x23FF)
+      || (C >= 0x2500 && C <= 0x2775) || (C >= 0x2794 && C <= 0x2BFF)
+      || (C >= 0x2E00 && C <= 0x2E7F) || (C >= 0x3001 && C <= 0x3003)
+      || (C >= 0x3008 && C <= 0x3030)
   }
 
   /// isOperatorContinuationCodePoint - Return true if the specified code point
@@ -2301,11 +2314,11 @@ extension Unicode.Scalar {
     // Unicode combining characters and variation selectors.
     let C = self.value
     return (C >= 0x0300 && C <= 0x036F)
-        || (C >= 0x1DC0 && C <= 0x1DFF)
-        || (C >= 0x20D0 && C <= 0x20FF)
-        || (C >= 0xFE00 && C <= 0xFE0F)
-        || (C >= 0xFE20 && C <= 0xFE2F)
-        || (C >= 0xE0100 && C <= 0xE01EF)
+      || (C >= 0x1DC0 && C <= 0x1DFF)
+      || (C >= 0x20D0 && C <= 0x20FF)
+      || (C >= 0xFE00 && C <= 0xFE0F)
+      || (C >= 0xFE20 && C <= 0xFE2F)
+      || (C >= 0xE0100 && C <= 0xE01EF)
   }
 }
 
@@ -2331,7 +2344,7 @@ extension SyntaxText {
         return false
       }
 
-      if self[idx] == UInt8(ascii: "#"), self[idx+1] == UInt8(ascii: ">") {
+      if self[idx] == UInt8(ascii: "#"), self[idx + 1] == UInt8(ascii: ">") {
         return true
       }
     }

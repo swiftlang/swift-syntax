@@ -23,7 +23,7 @@ final class GuardTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'else' and body in 'guard' statement"),
+        DiagnosticSpec(message: "expected 'else' and body in 'guard' statement")
       ]
     )
   }
@@ -36,7 +36,7 @@ final class GuardTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected condition in 'guard' statement"),
+        DiagnosticSpec(message: "expected condition in 'guard' statement")
       ]
     )
   }

@@ -22,7 +22,7 @@ final class AvailabilityTests: XCTestCase {
       // expected-error@-1 {{'introduced' can't be combined with shorthand specification 'OSX 10.0'}}
       // expected-error@-2 {{expected declaration}}
       func shorthandFollowedByIntroduced() {}
-      
+
       @available(iOS 6.0, OSX 10.8, *)
       func availableOnMultiplePlatforms() {}
       """
@@ -38,15 +38,15 @@ final class AvailabilityTests: XCTestCase {
     )
 
     AssertParse(
-       """
-       extension String {
-         @available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *)
-         public func fiddle() { }
+      """
+      extension String {
+        @available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *)
+        public func fiddle() { }
 
-         @available(SwiftStdlib 5.2, *)
-         public func fiddle() { }
-       }
-       """
+        @available(SwiftStdlib 5.2, *)
+        public func fiddle() { }
+      }
+      """
     )
 
     AssertParse(
@@ -67,13 +67,15 @@ final class AvailabilityTests: XCTestCase {
       """
       @available(_iOS9, _macOS10_11, tvOS 11.0, *)
       public func composed() {}
-      """)
+      """
+    )
 
     AssertParse(
       """
       @_specialize(exported: true, availability: SwiftStdlib 5.1, *; where T == Int)
       public func testSemanticsAvailability<T>(_ t: T) {}
-      """)
+      """
+    )
   }
 
   func testSPIAvailabilityAttribute() {
@@ -90,6 +92,7 @@ final class AvailabilityTests: XCTestCase {
 
       @_spi_available(macOS 10.4, *)
       public class SPIClass4 {}
-      """)
+      """
+    )
   }
 }

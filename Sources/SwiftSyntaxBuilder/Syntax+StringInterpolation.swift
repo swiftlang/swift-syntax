@@ -75,7 +75,9 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     sourceText.append(contentsOf: indentedNode.syntaxTextBytes)
     interpolatedSyntaxNodes.append(
       .init(
-        node: Syntax(indentedNode), startIndex: startIndex, endIndex: sourceText.count
+        node: Syntax(indentedNode),
+        startIndex: startIndex,
+        endIndex: sourceText.count
       )
     )
     self.lastIndentation = nil
@@ -138,8 +140,8 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
 /// Syntax nodes that can be formed by a string interpolation involve source
 /// code and interpolated syntax nodes.
 public protocol SyntaxExpressibleByStringInterpolation:
-    ExpressibleByStringInterpolation, SyntaxProtocol
-    where Self.StringInterpolation == SyntaxStringInterpolation {
+  ExpressibleByStringInterpolation, SyntaxProtocol
+where Self.StringInterpolation == SyntaxStringInterpolation {
   init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws
 }
 
@@ -291,10 +293,12 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
       return ExprSyntax(MemberAccessExpr(name: "signalingNaN"))
 
     case .negativeInfinity, .negativeZero:
-      return ExprSyntax(PrefixOperatorExpr(
-        operatorToken: "-",
-        postfixExpression: (-self).makeLiteralSyntax()
-      ))
+      return ExprSyntax(
+        PrefixOperatorExpr(
+          operatorToken: "-",
+          postfixExpression: (-self).makeLiteralSyntax()
+        )
+      )
 
     case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
       // TODO: Thousands separators?
@@ -402,9 +406,10 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
       }
 
       if let call = expr.as(FunctionCallExpr.self),
-         let memberAccess = call.calledExpression.as(MemberAccessExpr.self),
-         memberAccess.name.text == "some",
-         let argument = call.argumentList.first?.expression {
+        let memberAccess = call.calledExpression.as(MemberAccessExpr.self),
+        memberAccess.name.text == "some",
+        let argument = call.argumentList.first?.expression
+      {
         return containsNil(argument)
       }
 
@@ -422,13 +427,14 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
       // e.g. `.some(nil)`, add a layer of `.some(_:)` around it to preserve the
       // depth of the data structure.
       if containsNil(wrappedExpr) {
-        return ExprSyntax(FunctionCallExpr(callee: MemberAccessExpr(name: "some")) {
-          TupleExprElement(expression: wrappedExpr)
-        })
+        return ExprSyntax(
+          FunctionCallExpr(callee: MemberAccessExpr(name: "some")) {
+            TupleExprElement(expression: wrappedExpr)
+          }
+        )
       }
 
       return ExprSyntax(wrappedExpr)
     }
   }
 }
-

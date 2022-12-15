@@ -37,7 +37,7 @@ final class PoundAssertTests: XCTestCase {
       #assert 1️⃣true, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected '(' in '#assert' directive"),
+        DiagnosticSpec(message: "expected '(' in '#assert' directive")
       ]
     )
   }
@@ -48,7 +48,7 @@ final class PoundAssertTests: XCTestCase {
       #assert(1️⃣, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected condition in '#assert' directive"),
+        DiagnosticSpec(message: "expected condition in '#assert' directive")
       ]
     )
   }
@@ -61,9 +61,12 @@ final class PoundAssertTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end '#assert' directive", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#assert' directive",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }
@@ -76,9 +79,12 @@ final class PoundAssertTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end '#assert' directive", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#assert' directive",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }

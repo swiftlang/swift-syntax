@@ -61,7 +61,7 @@ extension FixIt.Changes {
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
   static func makeMissing<SyntaxType: SyntaxProtocol>(_ node: SyntaxType, transferTrivia: Bool = true) -> Self {
-    var changes =  [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))]
+    var changes = [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))]
     if transferTrivia {
       changes += FixIt.Changes.transferTriviaAtSides(from: [node]).changes
     }
@@ -83,32 +83,38 @@ extension FixIt.Changes {
       presentNode = presentNode.withTrailingTrivia(trailingTrivia)
     }
     if node.shouldBeInsertedAfterNextTokenTrivia,
-       let nextToken = node.nextToken(viewMode: .sourceAccurate),
-       leadingTrivia == nil {
+      let nextToken = node.nextToken(viewMode: .sourceAccurate),
+      leadingTrivia == nil
+    {
       return [
         .replace(
           oldNode: Syntax(node),
           newNode: Syntax(presentNode).withLeadingTrivia(nextToken.leadingTrivia)
         ),
-        .replaceLeadingTrivia(token: nextToken, newTrivia: [])
+        .replaceLeadingTrivia(token: nextToken, newTrivia: []),
       ]
     } else if let firstToken = node.firstToken(viewMode: .all),
-              let previousToken = node.previousToken(viewMode: .fixedUp),
-              !firstToken.tokenKind.isPunctuation,
-              !previousToken.tokenKind.isPunctuation,
-              firstToken.leadingTrivia.isEmpty,
-              (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty {
+      let previousToken = node.previousToken(viewMode: .fixedUp),
+      !firstToken.tokenKind.isPunctuation,
+      !previousToken.tokenKind.isPunctuation,
+      firstToken.leadingTrivia.isEmpty,
+      (previousToken.presence == .missing ? BasicFormat().visit(previousToken).trailingTrivia : previousToken.trailingTrivia).isEmpty
+    {
       /// If neither this nor the previous token are punctionation make sure they
       /// are separated by a space.
-      return [.replace(
-        oldNode: Syntax(node),
-        newNode: Syntax(presentNode).withLeadingTrivia(.space)
-      )]
+      return [
+        .replace(
+          oldNode: Syntax(node),
+          newNode: Syntax(presentNode).withLeadingTrivia(.space)
+        )
+      ]
     } else {
-      return [.replace(
-        oldNode: Syntax(node),
-        newNode: Syntax(presentNode)
-      )]
+      return [
+        .replace(
+          oldNode: Syntax(node),
+          newNode: Syntax(presentNode)
+        )
+      ]
     }
   }
 

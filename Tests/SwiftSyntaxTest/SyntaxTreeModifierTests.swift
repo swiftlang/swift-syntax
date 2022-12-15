@@ -21,7 +21,9 @@ fileprivate func cannedVarDecl() -> VariableDeclSyntax {
     pattern: identifierPattern,
     typeAnnotation: TypeAnnotationSyntax(
       colon: .colonToken(trailingTrivia: .space),
-      type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+      type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+    )
+  )
   return VariableDeclSyntax(
     letOrVarKeyword: .letKeyword(trailingTrivia: .space),
     bindings: PatternBindingListSyntax([pattern])

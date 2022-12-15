@@ -16,22 +16,27 @@ import SwiftSyntaxBuilder
 /// Replace the label of the first element in the tuple with the given
 /// new label.
 private func replaceFirstLabel(
-  of tuple: TupleExprElementListSyntax, with newLabel: String
-) -> TupleExprElementListSyntax{
+  of tuple: TupleExprElementListSyntax,
+  with newLabel: String
+) -> TupleExprElementListSyntax {
   guard let firstElement = tuple.first else {
     return tuple
   }
 
   return tuple.replacing(
-    childAt: 0, with: firstElement.withLabel(.identifier(newLabel)))
+    childAt: 0,
+    with: firstElement.withLabel(.identifier(newLabel))
+  )
 }
 
 public struct ColorLiteralMacro: ExpressionMacro {
   public static func expansion(
-    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+    of macro: MacroExpansionExprSyntax,
+    in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
-      of: macro.argumentList, with: "_colorLiteralRed"
+      of: macro.argumentList,
+      with: "_colorLiteralRed"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
@@ -43,10 +48,12 @@ public struct ColorLiteralMacro: ExpressionMacro {
 
 public struct FileLiteralMacro: ExpressionMacro {
   public static func expansion(
-    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+    of macro: MacroExpansionExprSyntax,
+    in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
-      of: macro.argumentList, with: "fileReferenceLiteralResourceName"
+      of: macro.argumentList,
+      with: "fileReferenceLiteralResourceName"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
@@ -58,10 +65,12 @@ public struct FileLiteralMacro: ExpressionMacro {
 
 public struct ImageLiteralMacro: ExpressionMacro {
   public static func expansion(
-    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+    of macro: MacroExpansionExprSyntax,
+    in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
-      of: macro.argumentList, with: "imageLiteralResourceName"
+      of: macro.argumentList,
+      with: "imageLiteralResourceName"
     )
     let initSyntax: ExprSyntax = ".init(\(argList))"
     if let leadingTrivia = macro.leadingTrivia {
@@ -73,7 +82,8 @@ public struct ImageLiteralMacro: ExpressionMacro {
 
 public struct FileIDMacro: ExpressionMacro {
   public static func expansion(
-    of macro: MacroExpansionExprSyntax, in context: inout MacroExpansionContext
+    of macro: MacroExpansionExprSyntax,
+    in context: inout MacroExpansionContext
   ) -> ExprSyntax {
     // FIXME: Compiler has more sophisticated file ID computation
     let fileID = "\(context.moduleName)/\(context.fileName)"

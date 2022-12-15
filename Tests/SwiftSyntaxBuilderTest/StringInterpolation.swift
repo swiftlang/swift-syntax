@@ -33,12 +33,14 @@ final class StringInterpolationTests: XCTestCase {
       }
       """
     XCTAssertTrue(funcSyntax.is(FunctionDeclSyntax.self))
-    XCTAssertEqual(funcSyntax.description,
+    XCTAssertEqual(
+      funcSyntax.description,
       """
       func f(a: Int, b: Int) -> Int {
         a + b
       }
-      """)
+      """
+    )
   }
 
   func testExprInterpolation() {
@@ -64,8 +66,10 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertEqual(tupleSyntax.description, "(Int, name: String)")
     let fnTypeSyntax: TypeSyntax = "(String) async throws -> \(tupleSyntax)"
     XCTAssertTrue(fnTypeSyntax.is(FunctionTypeSyntax.self))
-    XCTAssertEqual(fnTypeSyntax.description,
-                   "(String) async throws -> (Int, name: String)")
+    XCTAssertEqual(
+      fnTypeSyntax.description,
+      "(String) async throws -> (Int, name: String)"
+    )
   }
 
   func testPatternInterpolation() {
@@ -78,11 +82,11 @@ final class StringInterpolationTests: XCTestCase {
     let id = 17
 
     let structNode: DeclSyntax =
-       """
-       struct \(raw: name) {
-         static var id = \(raw: id)
-       }
-       """
+      """
+      struct \(raw: name) {
+        static var id = \(raw: id)
+      }
+      """
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
 
@@ -92,11 +96,11 @@ final class StringInterpolationTests: XCTestCase {
     let id = 17
 
     let structNode: DeclSyntax =
-       """
-       struct \(name) {
-         static var id = \(id)
-       }
-       """
+      """
+      struct \(name) {
+        static var id = \(id)
+      }
+      """
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
 
@@ -224,11 +228,13 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testRewriter() {
-    let sourceFile = Parser.parse(source: """
-      class Foo {
-        func method() {}
-      }
-      """)
+    let sourceFile = Parser.parse(
+      source: """
+        class Foo {
+          func method() {}
+        }
+        """
+    )
     class Rewriter: SyntaxRewriter {
       override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
         let newFunc = DeclSyntax("func newName() {}")
@@ -238,135 +244,167 @@ final class StringInterpolationTests: XCTestCase {
       }
     }
     let rewrittenSourceFile = Rewriter().visit(sourceFile)
-    XCTAssertEqual(rewrittenSourceFile.description, """
+    XCTAssertEqual(
+      rewrittenSourceFile.description,
+      """
       class Foo {
         func newName() {}
       }
-      """)
+      """
+    )
   }
 
   func testParserBuilderInStringInterpolation() {
     let cases = SwitchCaseList {
       for i in 0..<2 {
-        SwitchCase("""
-        case \(raw: i):
-          return \(raw: i + 1)
-        """)
+        SwitchCase(
+          """
+          case \(raw: i):
+            return \(raw: i + 1)
+          """
+        )
       }
-      SwitchCase("""
-      default:
-        return -1
-      """)
+      SwitchCase(
+        """
+        default:
+          return -1
+        """
+      )
     }
-    let plusOne = FunctionDeclSyntax("""
-    func plusOne(base: Int) -> Int {
-      switch base {
-      \(cases, format: TwoSpacesFormat())
+    let plusOne = FunctionDeclSyntax(
+      """
+      func plusOne(base: Int) -> Int {
+        switch base {
+        \(cases, format: TwoSpacesFormat())
+        }
       }
-    }
-    """)
+      """
+    )
 
-    AssertStringsEqualWithDiff(plusOne.description.trimmingTrailingWhitespace(), """
-    func plusOne(base: Int) -> Int {
-      switch base {
+    AssertStringsEqualWithDiff(
+      plusOne.description.trimmingTrailingWhitespace(),
+      """
+      func plusOne(base: Int) -> Int {
+        switch base {
 
-      case 0:
-        return 1
-      case 1:
-        return 2
-      default:
-        return -1
+        case 0:
+          return 1
+        case 1:
+          return 2
+        default:
+          return -1
+        }
       }
-    }
-    """)
+      """
+    )
   }
 
   func testParserBuilderInStringInterpolationLiteral() {
     let cases = SwitchCaseList {
       for i in 0..<2 {
-        SwitchCase("""
-        case \(literal: i):
-          return \(literal: i + 1)
-        """)
+        SwitchCase(
+          """
+          case \(literal: i):
+            return \(literal: i + 1)
+          """
+        )
       }
-      SwitchCase("""
-      default:
-        return -1
-      """)
+      SwitchCase(
+        """
+        default:
+          return -1
+        """
+      )
     }
-    let plusOne = FunctionDeclSyntax("""
-    func plusOne(base: Int) -> Int {
-      switch base {
-      \(cases, format: TwoSpacesFormat())
+    let plusOne = FunctionDeclSyntax(
+      """
+      func plusOne(base: Int) -> Int {
+        switch base {
+        \(cases, format: TwoSpacesFormat())
+        }
       }
-    }
-    """)
+      """
+    )
 
-    AssertStringsEqualWithDiff(plusOne.description.trimmingTrailingWhitespace(), """
-    func plusOne(base: Int) -> Int {
-      switch base {
+    AssertStringsEqualWithDiff(
+      plusOne.description.trimmingTrailingWhitespace(),
+      """
+      func plusOne(base: Int) -> Int {
+        switch base {
 
-      case 0:
-        return 1
-      case 1:
-        return 2
-      default:
-        return -1
+        case 0:
+          return 1
+        case 1:
+          return 2
+        default:
+          return -1
+        }
       }
-    }
-    """)
+      """
+    )
   }
 
   @available(*, deprecated)
   func testParserBuilderInStringInterpolationDeprecated() {
     let cases = SwitchCaseList {
       for i in 0..<2 {
-        SwitchCase("""
-        case \(i):
-          return \(i + 1)
-        """)
+        SwitchCase(
+          """
+          case \(i):
+            return \(i + 1)
+          """
+        )
       }
-      SwitchCase("""
-      default:
-        return -1
-      """)
+      SwitchCase(
+        """
+        default:
+          return -1
+        """
+      )
     }
-    let plusOne = FunctionDeclSyntax("""
-    func plusOne(base: Int) -> Int {
-      switch base {
-      \(cases, format: TwoSpacesFormat())
+    let plusOne = FunctionDeclSyntax(
+      """
+      func plusOne(base: Int) -> Int {
+        switch base {
+        \(cases, format: TwoSpacesFormat())
+        }
       }
-    }
-    """)
+      """
+    )
 
-    AssertStringsEqualWithDiff(plusOne.description.trimmingTrailingWhitespace(), """
-    func plusOne(base: Int) -> Int {
-      switch base {
+    AssertStringsEqualWithDiff(
+      plusOne.description.trimmingTrailingWhitespace(),
+      """
+      func plusOne(base: Int) -> Int {
+        switch base {
 
-      case 0:
-        return 1
-      case 1:
-        return 2
-      default:
-        return -1
+        case 0:
+          return 1
+        case 1:
+          return 2
+        default:
+          return -1
+        }
       }
-    }
-    """)
+      """
+    )
   }
 
   func testStringInterpolationInBuilder() {
     let ext = ExtensionDecl(extendedType: TypeSyntax("MyType")) {
       FunctionDecl(
-      """
-      ///
-      /// Satisfies conformance to `SyntaxBuildable`.
-      func buildSyntax(format: Format) -> Syntax {
-        return Syntax(buildTest(format: format))
-      }
-      """
+        """
+        ///
+        /// Satisfies conformance to `SyntaxBuildable`.
+        func buildSyntax(format: Format) -> Syntax {
+          return Syntax(buildTest(format: format))
+        }
+        """
       )
     }
-    AssertStringsEqualWithDiff(ext.formatted(using: TwoSpacesFormat()).description, """
+    AssertStringsEqualWithDiff(
+      ext.formatted(using: TwoSpacesFormat()).description,
+      """
       extension MyType {
         ///
         /// Satisfies conformance to `SyntaxBuildable`.
@@ -374,6 +412,7 @@ final class StringInterpolationTests: XCTestCase {
           return Syntax(buildTest(format: format))
         }
       }
-      """)
+      """
+    )
   }
 }

@@ -68,7 +68,6 @@ extension DeinitializerDecl: HasTrailingOptionalCodeBlock {}
 extension FunctionDecl: HasTrailingOptionalCodeBlock {}
 extension InitializerDecl: HasTrailingOptionalCodeBlock {}
 
-
 // MARK: HasTrailingMemberDeclBlock
 
 public protocol HasTrailingMemberDeclBlock {
@@ -88,4 +87,3 @@ extension EnumDecl: HasTrailingMemberDeclBlock {}
 extension ExtensionDecl: HasTrailingMemberDeclBlock {}
 extension ProtocolDecl: HasTrailingMemberDeclBlock {}
 extension StructDecl: HasTrailingMemberDeclBlock {}
-

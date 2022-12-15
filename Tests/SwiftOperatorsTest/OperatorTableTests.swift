@@ -26,7 +26,7 @@ private class ExprSequenceSearcher: SyntaxAnyVisitor {
     return .skipChildren
   }
 
-  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind{
+  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     return foundSequenceExpr ? .skipChildren : .visitChildren
   }
 }
@@ -42,19 +42,19 @@ extension SyntaxProtocol {
 
 /// A syntax rewriter that folds explicitly-parenthesized sequence expressions
 /// into  a structured syntax tree.
-class ExplicitParenFolder : SyntaxRewriter {
+class ExplicitParenFolder: SyntaxRewriter {
   override func visit(_ node: TupleExprSyntax) -> ExprSyntax {
     // Identify syntax nodes of the form (x (op) y), which is a
     // TupleExprSyntax(SequenceExpr(x, (op), y)).
     guard node.elementList.count == 1,
-          let firstNode = node.elementList.first,
-          firstNode.label == nil,
-          let sequenceExpr = firstNode.expression.as(SequenceExprSyntax.self),
-          sequenceExpr.elements.count == 3,
-          let leftOperand = sequenceExpr.elements.first,
-          let middleExpr = sequenceExpr.elements.removingFirst().first,
-          let rightOperand =
-            sequenceExpr.elements.removingFirst().removingFirst().first
+      let firstNode = node.elementList.first,
+      firstNode.label == nil,
+      let sequenceExpr = firstNode.expression.as(SequenceExprSyntax.self),
+      sequenceExpr.elements.count == 3,
+      let leftOperand = sequenceExpr.elements.first,
+      let middleExpr = sequenceExpr.elements.removingFirst().first,
+      let rightOperand =
+        sequenceExpr.elements.removingFirst().removingFirst().first
     else {
       return ExprSyntax(node)
     }
@@ -120,7 +120,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     let opPrecedence = OperatorTable.standardOperators
     let parsed = Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
     let sequenceExpr =
-        parsed.statements.first!.item.as(SequenceExprSyntax.self)!
+      parsed.statements.first!.item.as(SequenceExprSyntax.self)!
     let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
     XCTAssertEqual("\(foldedExpr)", "(x + y > 17) && x && y || w && v || z")
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
@@ -156,24 +156,24 @@ public class OperatorPrecedenceTests: XCTestCase {
 
   func testParsedLogicalExprs() throws {
     let logicalOperatorSources =
-    """
-    precedencegroup LogicalDisjunctionPrecedence {
-      associativity: left
-    }
+      """
+      precedencegroup LogicalDisjunctionPrecedence {
+        associativity: left
+      }
 
-    precedencegroup LogicalConjunctionPrecedence {
-      associativity: left
-      higherThan: LogicalDisjunctionPrecedence
-    }
+      precedencegroup LogicalConjunctionPrecedence {
+        associativity: left
+        higherThan: LogicalDisjunctionPrecedence
+      }
 
-    // "Conjunctive"
+      // "Conjunctive"
 
-    infix operator &&: LogicalConjunctionPrecedence
+      infix operator &&: LogicalConjunctionPrecedence
 
-    // "Disjunctive"
+      // "Disjunctive"
 
-    infix operator ||: LogicalDisjunctionPrecedence
-    """
+      infix operator ||: LogicalDisjunctionPrecedence
+      """
 
     let parsedOperatorPrecedence = Parser.parse(source: logicalOperatorSources)
     var opPrecedence = OperatorTable()
@@ -189,20 +189,20 @@ public class OperatorPrecedenceTests: XCTestCase {
 
   func testParseErrors() {
     let sources =
-    """
-    infix operator +
-    infix operator +
+      """
+      infix operator +
+      infix operator +
 
-    precedencegroup A {
-      associativity: none
-      higherThan: B
-    }
+      precedencegroup A {
+        associativity: none
+        higherThan: B
+      }
 
-    precedencegroup A {
-      associativity: none
-      higherThan: B
-    }
-    """
+      precedencegroup A {
+        associativity: none
+        higherThan: B
+      }
+      """
 
     let parsedOperatorPrecedence = Parser.parse(source: sources)
 
@@ -266,28 +266,30 @@ public class OperatorPrecedenceTests: XCTestCase {
   }
 
   func testFoldErrors() throws {
-    let parsedOperatorPrecedence = Parser.parse(source:
-      """
-      precedencegroup A {
-        associativity: none
-      }
+    let parsedOperatorPrecedence = Parser.parse(
+      source:
+        """
+        precedencegroup A {
+          associativity: none
+        }
 
-      precedencegroup C {
-        associativity: none
-        lowerThan: B
-      }
+        precedencegroup C {
+          associativity: none
+          lowerThan: B
+        }
 
-      precedencegroup D {
-        associativity: none
-      }
+        precedencegroup D {
+          associativity: none
+        }
 
-      infix operator +: A
-      infix operator -: A
+        infix operator +: A
+        infix operator -: A
 
-      infix operator *: C
+        infix operator *: C
 
-      infix operator ++: D
-      """)
+        infix operator ++: D
+        """
+    )
 
     var opPrecedence = OperatorTable()
     try opPrecedence.addSourceFile(parsedOperatorPrecedence)
@@ -340,8 +342,10 @@ public class OperatorPrecedenceTests: XCTestCase {
       }
 
       XCTAssertEqual(errors.count, 1)
-      guard case let .incomparableOperators(_, leftGroup, _, rightGroup) =
-              errors[0] else {
+      guard
+        case let .incomparableOperators(_, leftGroup, _, rightGroup) =
+          errors[0]
+      else {
         XCTFail("expected an 'incomparable operator' error")
         return
       }
@@ -349,7 +353,8 @@ public class OperatorPrecedenceTests: XCTestCase {
       XCTAssertEqual(rightGroup, "A")
       XCTAssertEqual(
         errors[0].message,
-        "adjacent operators are in non-associative precedence group 'A'")
+        "adjacent operators are in non-associative precedence group 'A'"
+      )
     }
 
     do {
@@ -362,8 +367,10 @@ public class OperatorPrecedenceTests: XCTestCase {
       }
 
       XCTAssertEqual(errors.count, 1)
-      guard case let .incomparableOperators(_, leftGroup, _, rightGroup) =
-              errors[0] else {
+      guard
+        case let .incomparableOperators(_, leftGroup, _, rightGroup) =
+          errors[0]
+      else {
         XCTFail("expected an 'incomparable operator' error")
         return
       }
@@ -371,7 +378,8 @@ public class OperatorPrecedenceTests: XCTestCase {
       XCTAssertEqual(rightGroup, "A")
       XCTAssertEqual(
         errors[0].message,
-        "adjacent operators are in unordered precedence groups 'D' and 'A'")
+        "adjacent operators are in unordered precedence groups 'D' and 'A'"
+      )
     }
   }
 
@@ -379,14 +387,17 @@ public class OperatorPrecedenceTests: XCTestCase {
     let opPrecedence = OperatorTable.standardOperators
     try opPrecedence.assertExpectedFold(
       "b + c ? y : z ? z2 : z3",
-      "((b + c) ? y : (z ? z2 : z3))")
+      "((b + c) ? y : (z ? z2 : z3))"
+    )
   }
 
   func testTryAwait() throws {
     let opPrecedence = OperatorTable.standardOperators
     try opPrecedence.assertExpectedFold("try x + y", "try (x + y)")
     try opPrecedence.assertExpectedFold(
-      "await x + y + z", "await ((x + y) + z)")
+      "await x + y + z",
+      "await ((x + y) + z)"
+    )
   }
 
   func testInfixOperatorLookup() throws {

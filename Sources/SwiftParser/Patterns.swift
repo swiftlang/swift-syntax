@@ -50,7 +50,7 @@ extension Parser {
       case leftParen
       case wildcardKeyword
       case identifier
-      case dollarIdentifier // For recovery
+      case dollarIdentifier  // For recovery
       case letKeyword
       case varKeyword
 
@@ -83,52 +83,64 @@ extension Parser {
       let lparen = self.eat(handle)
       let elements = self.parsePatternTupleElements()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      return RawPatternSyntax(RawTuplePatternSyntax(
-        leftParen: lparen,
-        elements: elements,
-        unexpectedBeforeRParen,
-        rightParen: rparen,
-        arena: self.arena
-      ))
+      return RawPatternSyntax(
+        RawTuplePatternSyntax(
+          leftParen: lparen,
+          elements: elements,
+          unexpectedBeforeRParen,
+          rightParen: rparen,
+          arena: self.arena
+        )
+      )
     case (.wildcardKeyword, let handle)?:
       let wildcard = self.eat(handle)
-      return RawPatternSyntax(RawWildcardPatternSyntax(
-        wildcard: wildcard,
-        typeAnnotation: nil,
-        arena: self.arena
-      ))
+      return RawPatternSyntax(
+        RawWildcardPatternSyntax(
+          wildcard: wildcard,
+          typeAnnotation: nil,
+          arena: self.arena
+        )
+      )
     case (.identifier, let handle)?:
       let identifier = self.eat(handle)
-      return RawPatternSyntax(RawIdentifierPatternSyntax(
-        identifier: identifier,
-        arena: self.arena
-      ))
+      return RawPatternSyntax(
+        RawIdentifierPatternSyntax(
+          identifier: identifier,
+          arena: self.arena
+        )
+      )
     case (.dollarIdentifier, let handle)?:
       let dollarIdent = self.eat(handle)
       let unexpectedBeforeIdentifier = RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena)
-      return RawPatternSyntax(RawIdentifierPatternSyntax(
-        unexpectedBeforeIdentifier,
-        identifier: missingToken(.identifier),
-        arena: self.arena
-      ))
+      return RawPatternSyntax(
+        RawIdentifierPatternSyntax(
+          unexpectedBeforeIdentifier,
+          identifier: missingToken(.identifier),
+          arena: self.arena
+        )
+      )
     case (.letKeyword, let handle)?,
-         (.varKeyword, let handle)?:
+      (.varKeyword, let handle)?:
       let letOrVar = self.eat(handle)
       let value = self.parsePattern()
-      return RawPatternSyntax(RawValueBindingPatternSyntax(
-        letOrVarKeyword: letOrVar,
-        valuePattern: value,
-        arena: self.arena
-      ))
+      return RawPatternSyntax(
+        RawValueBindingPatternSyntax(
+          letOrVarKeyword: letOrVar,
+          valuePattern: value,
+          arena: self.arena
+        )
+      )
     case nil:
       if self.currentToken.tokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
         // Recover if a keyword was used instead of an identifier
         let keyword = self.consumeAnyToken()
-        return RawPatternSyntax(RawIdentifierPatternSyntax(
-          RawUnexpectedNodesSyntax([keyword], arena: self.arena),
-          identifier: missingToken(.identifier, text: nil),
-          arena: self.arena
-        ))
+        return RawPatternSyntax(
+          RawIdentifierPatternSyntax(
+            RawUnexpectedNodesSyntax([keyword], arena: self.arena),
+            identifier: missingToken(.identifier, text: nil),
+            arena: self.arena
+          )
+        )
       } else {
         return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
       }
@@ -156,8 +168,9 @@ extension Parser {
         arena: self.arena
       )
     } else if allowRecoveryFromMissingColon
-                && !self.currentToken.isAtStartOfLine
-                && lookahead.canParseType() {
+      && !self.currentToken.isAtStartOfLine
+      && lookahead.canParseType()
+    {
       // Recovery if the user forgot to add ':'
       let result = self.parseResultType()
       type = RawTypeAnnotationSyntax(
@@ -167,7 +180,6 @@ extension Parser {
       )
     }
 
-    
     return (pattern, type)
   }
 
@@ -180,34 +192,40 @@ extension Parser {
   ///     tuple-pattern-element → pattern | identifier ':' pattern
   mutating func parsePatternTupleElements() -> RawTuplePatternElementListSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
-      return RawTuplePatternElementListSyntax(elements: [
-        RawTuplePatternElementSyntax(
-          remainingTokens,
-          labelName: nil,
-          labelColon: nil,
-          pattern: RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena)),
-          trailingComma: nil,
-          arena: self.arena
-        )
-      ], arena: self.arena)
+      return RawTuplePatternElementListSyntax(
+        elements: [
+          RawTuplePatternElementSyntax(
+            remainingTokens,
+            labelName: nil,
+            labelColon: nil,
+            pattern: RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena)),
+            trailingComma: nil,
+            arena: self.arena
+          )
+        ],
+        arena: self.arena
+      )
     }
     var elements = [RawTuplePatternElementSyntax]()
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
-         // If the tuple element has a label, parse it.
+        // If the tuple element has a label, parse it.
         let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
         let (label, colon) = (labelAndColon?.0, labelAndColon?.1)
         let pattern = self.parsePattern()
         let trailingComma = self.consume(if: .comma)
         keepGoing = trailingComma != nil
-        elements.append(RawTuplePatternElementSyntax(
-          labelName: label,
-          labelColon: colon,
-          pattern: pattern,
-          trailingComma: trailingComma,
-          arena: self.arena))
+        elements.append(
+          RawTuplePatternElementSyntax(
+            labelName: label,
+            labelColon: colon,
+            pattern: pattern,
+            trailingComma: trailingComma,
+            arena: self.arena
+          )
+        )
       }
     }
     return RawTuplePatternElementListSyntax(elements: elements, arena: self.arena)
@@ -221,19 +239,26 @@ extension Parser {
     // Parse productions that can only be patterns.
     switch self.at(anyIn: MatchingPatternStart.self) {
     case (.varKeyword, let handle)?,
-         (.letKeyword, let handle)?:
+      (.letKeyword, let handle)?:
       let letOrVar = self.eat(handle)
       let value = self.parseMatchingPattern(context: .letOrVar)
-      return RawPatternSyntax(RawValueBindingPatternSyntax(
-        letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
+      return RawPatternSyntax(
+        RawValueBindingPatternSyntax(
+          letOrVarKeyword: letOrVar,
+          valuePattern: value,
+          arena: self.arena
+        )
+      )
     case (.isKeyword, let handle)?:
       let isKeyword = self.eat(handle)
       let type = self.parseType()
-      return RawPatternSyntax(RawIsTypePatternSyntax(
-        isKeyword: isKeyword,
-        type: type,
-        arena: self.arena
-      ))
+      return RawPatternSyntax(
+        RawIsTypePatternSyntax(
+          isKeyword: isKeyword,
+          type: type,
+          arena: self.arena
+        )
+      )
     case nil:
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will
@@ -294,7 +319,7 @@ extension Parser.Lookahead {
 
     switch self.at(anyIn: PatternStartTokens.self) {
     case (.identifier, let handle)?,
-        (.wildcardKeyword, let handle)?:
+      (.wildcardKeyword, let handle)?:
       self.eat(handle)
       return true
     case (.letKeyword, let handle)?,
@@ -348,10 +373,7 @@ extension Parser.Lookahead {
     // If the next token can be an argument label, we might have a name.
     if nextTok.canBeArgumentLabel(allowDollarIdentifier: true) {
       // If the first name wasn't "isolated", we're done.
-      if !self.atContextualKeyword("isolated") &&
-          !self.atContextualKeyword("some") &&
-          !self.atContextualKeyword("any") &&
-          !self.atContextualKeyword("each") {
+      if !self.atContextualKeyword("isolated") && !self.atContextualKeyword("some") && !self.atContextualKeyword("any") && !self.atContextualKeyword("each") {
         return true
       }
 
@@ -360,7 +382,7 @@ extension Parser.Lookahead {
       // indicate that this is an argument label.
       do {
         if self.at(.colon) {
-          return true // isolated :
+          return true  // isolated :
         }
         self.consumeAnyToken()
         return self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon

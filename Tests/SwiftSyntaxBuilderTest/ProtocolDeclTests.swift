@@ -20,10 +20,13 @@ final class ProtocolDeclTests: XCTestCase {
       FunctionDecl("func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]")
     }
 
-    AssertBuildResult(buildable, """
-    public protocol DeclListBuildable {
-        func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
-    }
-    """)
+    AssertBuildResult(
+      buildable,
+      """
+      public protocol DeclListBuildable {
+          func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
+      }
+      """
+    )
   }
 }

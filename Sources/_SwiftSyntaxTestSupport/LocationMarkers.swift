@@ -35,8 +35,8 @@ fileprivate func nextMarkedRange(text: String, from: String.Index) -> Marker? {
   }
   let end = text.index(after: start)
 
-  let markerRange = start ..< end
-  let name = text[start ..< end]
+  let markerRange = start..<end
+  let name = text[start..<end]
 
   return Marker(name: name, range: markerRange)
 }
@@ -57,13 +57,13 @@ public func extractMarkers(_ markedText: String) -> (markers: [String: Int], tex
   var markers = [String: Int]()
   var lastIndex = markedText.startIndex
   for marker in findMarkedRanges(text: markedText) {
-    text += markedText[lastIndex ..< marker.range.lowerBound]
+    text += markedText[lastIndex..<marker.range.lowerBound]
     lastIndex = marker.range.upperBound
 
     assert(markers[String(marker.name)] == nil, "Marker names must be unique")
     markers[String(marker.name)] = text.utf8.count
   }
-  text += markedText[lastIndex ..< markedText.endIndex]
+  text += markedText[lastIndex..<markedText.endIndex]
 
   return (markers, text)
 }

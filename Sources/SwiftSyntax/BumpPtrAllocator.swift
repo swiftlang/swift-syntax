@@ -15,7 +15,7 @@
 public class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
-  static private var GLOWTH_DELAY: Int = 128
+  static private var GROWTH_DELAY: Int = 128
   static private var SLAB_ALIGNMENT: Int = 8
 
   /// Initial slab size.
@@ -54,8 +54,8 @@ public class BumpPtrAllocator {
 
   /// Calculate the size of the slab at the index.
   private func slabSize(at index: Int) -> Int {
-    // Double the slab size every 'GLOWTH_DELAY' slabs.
-    return self.slabSize * (1 << min(30, index / Self.GLOWTH_DELAY))
+    // Double the slab size every 'GROWTH_DELAY' slabs.
+    return self.slabSize * (1 << min(30, index / Self.GROWTH_DELAY))
   }
 
   private func startNewSlab() {

@@ -76,9 +76,19 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case \CodeBlockSyntax.statements: 
       return true
+    case \FunctionCallExprSyntax.argumentList: 
+      return true
+    case \FunctionTypeSyntax.arguments: 
+      return true
     case \MemberDeclBlockSyntax.members: 
       return true
+    case \ParameterClauseSyntax.parameterList: 
+      return true
     case \SwitchCaseSyntax.statements: 
+      return true
+    case \TupleExprSyntax.elementList: 
+      return true
+    case \TupleTypeSyntax.elements: 
       return true
     default: 
       return false

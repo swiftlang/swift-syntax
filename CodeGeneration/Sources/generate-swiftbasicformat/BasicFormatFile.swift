@@ -142,6 +142,7 @@ let basicFormatFile = SourceFile {
         case (.asKeyword, .exclamationMark),
              (.asKeyword, .postfixQuestionMark),
              (.initKeyword, .postfixQuestionMark),
+             (.initKeyword, .leftParen),
              (.tryKeyword, .exclamationMark),
              (.tryKeyword, .postfixQuestionMark):
           return false

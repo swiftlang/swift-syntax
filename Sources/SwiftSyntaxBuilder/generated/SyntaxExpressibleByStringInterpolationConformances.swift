@@ -297,6 +297,9 @@ extension OptionalPatternSyntax: SyntaxExpressibleByStringInterpolation {
 extension OptionalTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension PackElementExprSyntax: SyntaxExpressibleByStringInterpolation { 
+}
+
 extension PackExpansionTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

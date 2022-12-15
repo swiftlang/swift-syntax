@@ -43,6 +43,7 @@ public enum SyntaxEnum {
   case nilLiteralExpr(NilLiteralExprSyntax)
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
   case assignmentExpr(AssignmentExprSyntax)
+  case packElementExpr(PackElementExprSyntax)
   case sequenceExpr(SequenceExprSyntax)
   case exprList(ExprListSyntax)
   case symbolicReferenceExpr(SymbolicReferenceExprSyntax)
@@ -340,6 +341,8 @@ public extension Syntax {
       return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
     case .assignmentExpr:
       return .assignmentExpr(AssignmentExprSyntax(self)!)
+    case .packElementExpr:
+      return .packElementExpr(PackElementExprSyntax(self)!)
     case .sequenceExpr:
       return .sequenceExpr(SequenceExprSyntax(self)!)
     case .exprList:

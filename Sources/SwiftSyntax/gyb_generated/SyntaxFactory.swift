@@ -692,6 +692,37 @@ public enum SyntaxFactory {
       return AssignmentExprSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on PackElementExprSyntax")
+  public static func makePackElementExpr(_ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil, eachKeyword: TokenSyntax, _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil, packRefExpr: ExprSyntax, _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil) -> PackElementExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeEachKeyword?.raw,
+      eachKeyword.raw,
+      unexpectedBetweenEachKeywordAndPackRefExpr?.raw,
+      packRefExpr.raw,
+      unexpectedAfterPackRefExpr?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.packElementExpr,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return PackElementExprSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on PackElementExprSyntax")
+  public static func makeBlankPackElementExpr(presence: SourcePresence = .present) -> PackElementExprSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packElementExpr,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return PackElementExprSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on SequenceExprSyntax")
   public static func makeSequenceExpr(_ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil, elements: ExprListSyntax, _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil) -> SequenceExprSyntax {
     let layout: [RawSyntax?] = [

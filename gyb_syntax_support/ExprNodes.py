@@ -120,6 +120,14 @@ EXPR_NODES = [
              Child('AssignToken', kind='EqualToken'),
          ]),
 
+    # A pack element expr spelled with 'each'.
+    Node('PackElementExpr', name_for_diagnostics=None, kind='Expr',
+         children=[
+             Child('EachKeyword', kind='ContextualKeywordToken',
+                   text_choices=['each']),
+             Child('PackRefExpr', kind='Expr'),
+         ]),
+
     # A flat list of expressions before sequence folding, e.g. 1 + 2 + 3.
     Node('SequenceExpr', name_for_diagnostics=None, kind='Expr',
          children=[

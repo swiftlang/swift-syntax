@@ -212,6 +212,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `PackElementExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackElementExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `SequenceExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2194,6 +2201,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAssignmentExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = AssignmentExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackElementExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackElementExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4645,6 +4662,8 @@ open class SyntaxRewriter {
       return visitImplDiscardAssignmentExprSyntax
     case .assignmentExpr:
       return visitImplAssignmentExprSyntax
+    case .packElementExpr:
+      return visitImplPackElementExprSyntax
     case .sequenceExpr:
       return visitImplSequenceExprSyntax
     case .exprList:
@@ -5182,6 +5201,8 @@ open class SyntaxRewriter {
       return visitImplDiscardAssignmentExprSyntax(data)
     case .assignmentExpr:
       return visitImplAssignmentExprSyntax(data)
+    case .packElementExpr:
+      return visitImplPackElementExprSyntax(data)
     case .sequenceExpr:
       return visitImplSequenceExprSyntax(data)
     case .exprList:

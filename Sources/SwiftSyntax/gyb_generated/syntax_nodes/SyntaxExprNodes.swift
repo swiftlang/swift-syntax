@@ -1709,6 +1709,192 @@ extension AssignmentExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - PackElementExprSyntax
+
+public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .packElementExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `PackElementExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .packElementExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init<P: ExprSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
+    eachKeyword: TokenSyntax = .contextualKeyword("each"),
+    _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil,
+    packRefExpr: P,
+    _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeEachKeyword?.raw,
+      eachKeyword.raw,
+      unexpectedBetweenEachKeywordAndPackRefExpr?.raw,
+      packRefExpr.raw,
+      unexpectedAfterPackRefExpr?.raw,
+    ]
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.packElementExpr, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeEachKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeEachKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeEachKeyword` to replace the node's
+  ///                   current `unexpectedBeforeEachKeyword`, if present.
+  public func withUnexpectedBeforeEachKeyword(_ newChild: UnexpectedNodesSyntax?) -> PackElementExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return PackElementExprSyntax(newData)
+  }
+
+  public var eachKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEachKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `eachKeyword` replaced.
+  /// - param newChild: The new `eachKeyword` to replace the node's
+  ///                   current `eachKeyword`, if present.
+  public func withEachKeyword(_ newChild: TokenSyntax?) -> PackElementExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return PackElementExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenEachKeywordAndPackRefExpr(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenEachKeywordAndPackRefExpr` replaced.
+  /// - param newChild: The new `unexpectedBetweenEachKeywordAndPackRefExpr` to replace the node's
+  ///                   current `unexpectedBetweenEachKeywordAndPackRefExpr`, if present.
+  public func withUnexpectedBetweenEachKeywordAndPackRefExpr(_ newChild: UnexpectedNodesSyntax?) -> PackElementExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return PackElementExprSyntax(newData)
+  }
+
+  public var packRefExpr: ExprSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withPackRefExpr(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `packRefExpr` replaced.
+  /// - param newChild: The new `packRefExpr` to replace the node's
+  ///                   current `packRefExpr`, if present.
+  public func withPackRefExpr(_ newChild: ExprSyntax?) -> PackElementExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return PackElementExprSyntax(newData)
+  }
+
+  public var unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterPackRefExpr(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterPackRefExpr` replaced.
+  /// - param newChild: The new `unexpectedAfterPackRefExpr` to replace the node's
+  ///                   current `unexpectedAfterPackRefExpr`, if present.
+  public func withUnexpectedAfterPackRefExpr(_ newChild: UnexpectedNodesSyntax?) -> PackElementExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return PackElementExprSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeEachKeyword,
+      \Self.eachKeyword,
+      \Self.unexpectedBetweenEachKeywordAndPackRefExpr,
+      \Self.packRefExpr,
+      \Self.unexpectedAfterPackRefExpr,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension PackElementExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeEachKeyword": unexpectedBeforeEachKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "eachKeyword": Syntax(eachKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenEachKeywordAndPackRefExpr": unexpectedBetweenEachKeywordAndPackRefExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "packRefExpr": Syntax(packRefExpr).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterPackRefExpr": unexpectedAfterPackRefExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - SequenceExprSyntax
 
 public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

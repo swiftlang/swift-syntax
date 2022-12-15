@@ -891,6 +891,15 @@ extension OperatorPrecedenceAndTypes {
   }
 }
 
+extension PackElementExpr {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia? = nil, unexpectedBeforeEachKeyword: UnexpectedNodes? = nil, eachKeyword: String, unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodes? = nil, packRefExpr: ExprSyntaxProtocol, trailingTrivia: Trivia? = nil) {
+    self.init (leadingTrivia: leadingTrivia, unexpectedBeforeEachKeyword, eachKeyword: Token.`contextualKeyword`(eachKeyword), unexpectedBetweenEachKeywordAndPackRefExpr, packRefExpr: ExprSyntax(fromProtocol: packRefExpr), trailingTrivia: trailingTrivia)
+  }
+}
+
 extension ParameterClause {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders

@@ -300,7 +300,8 @@ public let TYPE_NODES: [Node] = [
                ]),
          Child(name: "Elements",
                kind: "TupleTypeElementList",
-               collectionElementName: "Element"),
+               collectionElementName: "Element",
+               isIndented: true),
          Child(name: "RightParen",
                kind: "RightParenToken",
                tokenChoices: [
@@ -322,7 +323,8 @@ public let TYPE_NODES: [Node] = [
                ]),
          Child(name: "Arguments",
                kind: "TupleTypeElementList",
-               collectionElementName: "Argument"),
+               collectionElementName: "Argument",
+               isIndented: true),
          Child(name: "RightParen",
                kind: "RightParenToken",
                tokenChoices: [

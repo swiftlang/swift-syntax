@@ -170,7 +170,7 @@ TYPE_NODES = [
          children=[
              Child('LeftParen', kind='LeftParenToken'),
              Child('Elements', kind='TupleTypeElementList',
-                   collection_element_name='Element'),
+                   collection_element_name='Element', is_indented=True),
              Child('RightParen', kind='RightParenToken'),
          ]),
 
@@ -182,7 +182,7 @@ TYPE_NODES = [
          children=[
              Child('LeftParen', kind='LeftParenToken'),
              Child('Arguments', kind='TupleTypeElementList',
-                   collection_element_name='Argument'),
+                   collection_element_name='Argument', is_indented=True),
              Child('RightParen', kind='RightParenToken'),
              Child('AsyncKeyword', kind='ContextualKeyworkToken',
                    text_choices=['async'], is_optional=True),

@@ -43,6 +43,20 @@ final class FunctionTests: XCTestCase {
     AssertBuildResult(buildable, "test(value1, p2: value2, value3, p4: value4, value5)")
   }
   
+  func testFunctionDeclBuilder() {
+    let builder = FunctionDecl("""
+      func test(_ p1: Int, p2: Int, _ p3: Int, p4: Int, _ p5: Int) -> Int {
+          return p1 + p2 + p3 + p4 + p5
+      }
+      """)
+    
+    AssertBuildResult(builder, """
+      func test(_ p1: Int, p2: Int, _ p3: Int, p4: Int, _ p5: Int) -> Int {
+          return p1 + p2 + p3 + p4 + p5
+      }
+      """)
+  }
+  
   func testMultilineFunctionParameterList() {
     let builder = FunctionDecl("""
       func test(

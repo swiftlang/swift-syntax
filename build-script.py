@@ -517,6 +517,9 @@ def verify_code_generated_files(
     user_swiftideutils_generated_dir = os.path.join(
         IDEUTILS_DIR, "generated"
     )
+    user_swiftparser_generated_dir = os.path.join(
+        SWIFTPARSER_DIR, "generated"
+    )
     user_swiftsyntax_generated_dir = os.path.join(
         SWIFTSYNTAX_DIR, "generated"
     )
@@ -555,6 +558,10 @@ def verify_code_generated_files(
     check_generated_files_match(
         self_swiftideutils_generated_dir,
         user_swiftideutils_generated_dir
+    )
+    check_generated_files_match(
+        self_swiftparser_generated_dir,
+        user_swiftparser_generated_dir
     )
     check_generated_files_match(
         self_swiftsyntax_generated_dir,

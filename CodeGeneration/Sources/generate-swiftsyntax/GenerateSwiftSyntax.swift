@@ -32,6 +32,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         (syntaxEnumFile, "SyntaxEnum.swift"),
         (syntaxKindFile, "SyntaxKind.swift"),
         (syntaxTraitsFile, "SyntaxTraits.swift"),
+        (syntaxTransformFile, "SyntaxTransform.swift"),
       ],
       destination: URL(fileURLWithPath: generatedPath),
       verbose: verbose

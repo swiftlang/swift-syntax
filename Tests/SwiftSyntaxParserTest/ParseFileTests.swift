@@ -36,6 +36,17 @@ enum Animal {
   case dog
 }
 
+func foo(token: TokenSyntax) -> Bool {
+  switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
+  case (.initKeyword, .postfixQuestionMark),
+    (.asKeyword, .exclamationMark),
+    (.asKeyword, .postfixQuestionMark):
+    return false
+  default:
+    return true
+  }
+}
+
 public class ParseFileTests: XCTestCase {
 
   public func testParseSingleFile() {

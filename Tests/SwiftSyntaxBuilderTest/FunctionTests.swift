@@ -70,6 +70,31 @@ final class FunctionTests: XCTestCase {
       }
       """)
   }
+  
+  func testMultilineFunctionCallExpr() {
+    let builder = FunctionCallExpr("""
+      test(
+      p1: value1,
+      p2: value2,
+      p3: value3,
+      p4: value4,
+      p5: value5
+      )
+      """)
+    
+    print(builder.formatted().description)
+    
+    AssertBuildResult(builder, """
+      test(
+          p1: value1,
+          p2: value2,
+          p3: value3,
+          p4: value4,
+          p5: value5
+      )
+      """)
+  }
+  
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
     let buildable = FunctionCallExpr(callee: ExprSyntax("test"))
     AssertBuildResult(buildable, "test()")

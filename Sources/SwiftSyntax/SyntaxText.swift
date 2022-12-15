@@ -208,7 +208,7 @@ extension String {
   }
 
   /// Runs `body` with a `SyntaxText` that refers the contiguous memory of this
-  /// string. Like `String.withUTF8(_:)`, this may mutates the string if this
+  /// string. Like `String.withUTF8(_:)`, this may mutate the string if this
   /// string was not contiguous.
   @_spi(RawSyntax)
   public mutating func withSyntaxText<R>(

@@ -48,8 +48,6 @@ final class InitializerDeclTests: XCTestCase {
       }
       """)
     
-    print(builder.formatted().description)
-    
     AssertBuildResult(builder, """
       init(
           _ p1: Int,

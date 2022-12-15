@@ -17,9 +17,6 @@ import SwiftSyntaxBuilder
 final class TupleTests: XCTestCase {
   func testLabeledElementList() {
     let builder = TupleExprSyntax("(p1: value1, p2: value2, p3: value3)")
-    
-    print(builder.formatted().description)
-    
     AssertBuildResult(builder, "(p1: value1, p2: value2, p3: value3)")
   }
   
@@ -33,8 +30,6 @@ final class TupleTests: XCTestCase {
       p5: value5
       )
       """)
-    
-    print(builder.formatted().description)
     
     AssertBuildResult(builder, """
       (
@@ -57,8 +52,6 @@ final class TupleTests: XCTestCase {
       Int
       )
       """)
-    
-    print(builder.formatted().description)
     
     AssertBuildResult(builder, """
       (

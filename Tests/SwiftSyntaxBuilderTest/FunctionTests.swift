@@ -56,8 +56,6 @@ final class FunctionTests: XCTestCase {
       }
       """)
     
-    print(builder.formatted().description)
-    
     AssertBuildResult(builder, """
       func test(
           _ p1: Int,
@@ -81,8 +79,6 @@ final class FunctionTests: XCTestCase {
       p5: value5
       )
       """)
-    
-    print(builder.formatted().description)
     
     AssertBuildResult(builder, """
       test(

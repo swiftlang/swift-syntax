@@ -59,7 +59,7 @@ extension TokenConsumer {
   /// - Returns: `true` if the given `kind` matches the current token's kind.
   public func at(
     _ kind: RawTokenKind,
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Bool {
     return self.currentToken.tokenKind == kind && condition(self.currentToken)
   }
@@ -75,7 +75,6 @@ extension TokenConsumer {
   public func atContextualPunctuator(_ name: SyntaxText) -> Bool {
     return self.currentToken.isContextualPunctuator(name)
   }
-
 
   /// Returns whether the kind of the current token is any of the given
   /// kinds or a contextual keyword with text in `contextualKeywords` and
@@ -108,10 +107,13 @@ extension TokenConsumer {
   /// as well as a handle to consume that token.
   func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
     if let matchedKind = Subset(lexeme: self.currentToken) {
-      return (matchedKind, TokenConsumptionHandle(
-        tokenKind: matchedKind.rawTokenKind,
-        remappedKind: matchedKind.remappedKind
-      ))
+      return (
+        matchedKind,
+        TokenConsumptionHandle(
+          tokenKind: matchedKind.rawTokenKind,
+          remappedKind: matchedKind.remappedKind
+        )
+      )
     }
     return nil
   }
@@ -150,7 +152,7 @@ extension TokenConsumer {
   public mutating func consume(
     if kind: RawTokenKind,
     remapping: RawTokenKind? = nil,
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Token? {
     if self.at(kind, where: condition) {
       if let remapping = remapping {
@@ -277,19 +279,18 @@ extension TokenConsumer {
   }
 }
 
-
 // MARK: Convenience functions
 
 extension TokenConsumer {
   mutating func expectIdentifierWithoutRecovery() -> Token {
-    if let (_ , handle) = self.at(anyIn: IdentifierTokens.self) {
+    if let (_, handle) = self.at(anyIn: IdentifierTokens.self) {
       return self.eat(handle)
     }
     return missingToken(.identifier, text: nil)
   }
 
   mutating func expectIdentifierOrRethrowsWithoutRecovery() -> Token {
-    if let (_ , handle) = self.at(anyIn: IdentifierOrRethrowsTokens.self) {
+    if let (_, handle) = self.at(anyIn: IdentifierOrRethrowsTokens.self) {
       return self.eat(handle)
     }
     return missingToken(.identifier, text: nil)

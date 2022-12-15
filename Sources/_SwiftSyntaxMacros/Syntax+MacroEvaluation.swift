@@ -57,12 +57,17 @@ extension MacroExpansionDeclSyntax {
   /// expression is also warranted, so
   private func asMacroExpansionExpr() -> MacroExpansionExprSyntax {
     MacroExpansionExprSyntax(
-      unexpectedBeforePoundToken, poundToken: poundToken,
-      unexpectedBetweenPoundTokenAndMacro, macro: macro,
+      unexpectedBeforePoundToken,
+      poundToken: poundToken,
+      unexpectedBetweenPoundTokenAndMacro,
+      macro: macro,
       genericArguments: genericArguments,
-      unexpectedBetweenGenericArgumentsAndLeftParen, leftParen: leftParen,
-      unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentList,
-      unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen,
+      unexpectedBetweenGenericArgumentsAndLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArgumentList,
+      argumentList: argumentList,
+      unexpectedBetweenArgumentListAndRightParen,
+      rightParen: rightParen,
       unexpectedBetweenRightParenAndTrailingClosure,
       trailingClosure: trailingClosure,
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,

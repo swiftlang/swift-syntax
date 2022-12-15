@@ -20,6 +20,7 @@ func AssertBuildResult<T: SyntaxProtocol>(_ buildable: T, _ expectedResult: Stri
   AssertStringsEqualWithDiff(
     buildable.formatted().description.trimmingTrailingWhitespace(),
     expectedResult.trimmingTrailingWhitespace(),
-    file: file, line: line
+    file: file,
+    line: line
   )
 }

@@ -90,15 +90,17 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       (a < b, c > (d))
       """,
-      substructure: Syntax(GenericArgumentListSyntax([
-        GenericArgumentSyntax(
-          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
-          trailingComma: .commaToken()
-        ),
-        GenericArgumentSyntax(
-          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
-        )
-      ]))
+      substructure: Syntax(
+        GenericArgumentListSyntax([
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
+            trailingComma: .commaToken()
+          ),
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
+          ),
+        ])
+      )
     )
   }
 
@@ -108,15 +110,17 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       (a<b, c>(d))
       """,
-      substructure: Syntax(GenericArgumentListSyntax([
-        GenericArgumentSyntax(
-          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
-          trailingComma: .commaToken()
-        ),
-        GenericArgumentSyntax(
-          argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
-        )
-      ]))
+      substructure: Syntax(
+        GenericArgumentListSyntax([
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
+            trailingComma: .commaToken()
+          ),
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
+          ),
+        ])
+      )
     )
   }
 
@@ -215,7 +219,7 @@ final class GenericDisambiguationTests: XCTestCase {
        1️⃣*/
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '*/' at top level"),
+        DiagnosticSpec(message: "extraneous code '*/' at top level")
       ]
     )
   }

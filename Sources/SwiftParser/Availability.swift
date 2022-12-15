@@ -36,20 +36,26 @@ extension Parser {
         let entry: RawAvailabilityArgumentSyntax.Entry
         switch source {
         case .available where self.at(.identifier),
-            .unavailable where self.at(.identifier):
+          .unavailable where self.at(.identifier):
           entry = .availabilityVersionRestriction(self.parseAvailabilityMacro())
         default:
           entry = self.parseAvailabilitySpec()
         }
 
         keepGoing = self.consume(if: .comma)
-        elements.append(RawAvailabilityArgumentSyntax(
-          entry: entry, trailingComma: keepGoing, arena: self.arena))
+        elements.append(
+          RawAvailabilityArgumentSyntax(
+            entry: entry,
+            trailingComma: keepGoing,
+            arena: self.arena
+          )
+        )
 
         // Before continuing to parse the next specification, we check that it's
         // also in the shorthand syntax and recover from it.
         if keepGoing != nil,
-           let (_, handle) = self.at(anyIn: AvailabilityArgumentKind.self) {
+          let (_, handle) = self.at(anyIn: AvailabilityArgumentKind.self)
+        {
           var tokens = [RawTokenSyntax]()
           tokens.append(self.eat(handle))
           var recoveryProgress = LoopProgressCondition()
@@ -58,8 +64,13 @@ extension Parser {
           }
           let syntax = RawTokenListSyntax(elements: tokens, arena: self.arena)
           keepGoing = self.consume(if: .comma)
-          elements.append(RawAvailabilityArgumentSyntax(
-            entry: .tokenList(syntax), trailingComma: keepGoing, arena: self.arena))
+          elements.append(
+            RawAvailabilityArgumentSyntax(
+              entry: .tokenList(syntax),
+              trailingComma: keepGoing,
+              arena: self.arena
+            )
+          )
         }
       } while keepGoing != nil && availablityArgumentProgress.evaluate(currentToken)
     }
@@ -83,8 +94,13 @@ extension Parser {
     // Parse the platform from the first element.
     let platform = self.consumeAnyToken()
     var keepGoing: RawTokenSyntax? = self.consume(if: .comma)
-    elements.append(RawAvailabilityArgumentSyntax(
-      entry: .token(platform), trailingComma: keepGoing, arena: self.arena))
+    elements.append(
+      RawAvailabilityArgumentSyntax(
+        entry: .token(platform),
+        trailingComma: keepGoing,
+        arena: self.arena
+      )
+    )
 
     do {
       var loopProgressCondition = LoopProgressCondition()
@@ -92,46 +108,52 @@ extension Parser {
         let entry: RawAvailabilityArgumentSyntax.Entry
         switch self.at(anyIn: AvailabilityArgumentKind.self) {
         case (.message, let handle)?,
-            (.renamed, let handle)?:
+          (.renamed, let handle)?:
           let argumentLabel = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           // FIXME: Make sure this is a string literal with no interpolation.
           let stringValue = self.consumeAnyToken()
 
-          entry = .availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax(
-            label: argumentLabel,
-            unexpectedBeforeColon,
-            colon: colon,
-            value: .string(stringValue),
-            arena: self.arena
-          ))
+          entry = .availabilityLabeledArgument(
+            RawAvailabilityLabeledArgumentSyntax(
+              label: argumentLabel,
+              unexpectedBeforeColon,
+              colon: colon,
+              value: .string(stringValue),
+              arena: self.arena
+            )
+          )
         case (.introduced, let handle)?,
-            (.obsoleted, let handle)?:
+          (.obsoleted, let handle)?:
           let argumentLabel = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let version = self.parseVersionTuple()
-          entry = .availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax(
-            label: argumentLabel,
-            unexpectedBeforeColon,
-            colon: colon,
-            value: .version(version),
-            arena: self.arena
-          ))
+          entry = .availabilityLabeledArgument(
+            RawAvailabilityLabeledArgumentSyntax(
+              label: argumentLabel,
+              unexpectedBeforeColon,
+              colon: colon,
+              value: .version(version),
+              arena: self.arena
+            )
+          )
         case (.deprecated, let handle)?:
           let argumentLabel = self.eat(handle)
           if let colon = self.consume(if: .colon) {
             let version = self.parseVersionTuple()
-            entry = .availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax(
-              label: argumentLabel,
-              colon: colon,
-              value: .version(version),
-              arena: self.arena
-            ))
+            entry = .availabilityLabeledArgument(
+              RawAvailabilityLabeledArgumentSyntax(
+                label: argumentLabel,
+                colon: colon,
+                value: .version(version),
+                arena: self.arena
+              )
+            )
           } else {
             entry = .token(argumentLabel)
           }
         case (.unavailable, let handle)?,
-            (.noasync, let handle)?:
+          (.noasync, let handle)?:
           let argument = self.eat(handle)
           // FIXME: Can we model this in SwiftSyntax by making the
           // 'labeled' argument part optional?
@@ -147,8 +169,13 @@ extension Parser {
         }
 
         keepGoing = self.consume(if: .comma)
-        elements.append(RawAvailabilityArgumentSyntax(
-          entry: entry, trailingComma: keepGoing, arena: self.arena))
+        elements.append(
+          RawAvailabilityArgumentSyntax(
+            entry: entry,
+            trailingComma: keepGoing,
+            arena: self.arena
+          )
+        )
       }
     }
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
@@ -207,7 +234,10 @@ extension Parser {
     let plaform = self.consumeAnyToken(remapping: .contextualKeyword)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
-      platform: plaform, version: version, arena: self.arena)
+      platform: plaform,
+      version: version,
+      arena: self.arena
+    )
   }
 
   /// Parse an availability macro.
@@ -231,7 +261,10 @@ extension Parser {
     }
 
     return RawAvailabilityVersionRestrictionSyntax(
-      platform: platform, version: version, arena: self.arena)
+      platform: platform,
+      version: version,
+      arena: self.arena
+    )
   }
 
   /// Parse a dot-separated list of version numbers.
@@ -245,8 +278,11 @@ extension Parser {
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
     if let major = self.consume(if: .integerLiteral) {
       return RawVersionTupleSyntax(
-        majorMinor: major, patchPeriod: nil, patchVersion: nil,
-        arena: self.arena)
+        majorMinor: major,
+        patchPeriod: nil,
+        patchVersion: nil,
+        arena: self.arena
+      )
     }
 
     let majorMinor = self.consumeAnyToken()
@@ -260,7 +296,10 @@ extension Parser {
     }
 
     return RawVersionTupleSyntax(
-      majorMinor: majorMinor, patchPeriod: period, patchVersion: patch,
-      arena: self.arena)
+      majorMinor: majorMinor,
+      patchPeriod: period,
+      patchVersion: patch,
+      arena: self.arena
+    )
   }
 }

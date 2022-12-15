@@ -20,7 +20,8 @@ public struct TriviaParser {
     var pieces: [RawTriviaPiece] = []
     var cursor = Lexer.Cursor(
       input: UnsafeBufferPointer(start: source.baseAddress, count: source.count),
-      previous: 0)
+      previous: 0
+    )
 
     while true {
       let start = cursor
@@ -123,7 +124,8 @@ public struct TriviaParser {
         assert(start.pointer == preUnexpected.baseAddress! + preUnexpected.count)
         let mergedText = SyntaxText(
           baseAddress: preUnexpected.baseAddress,
-          count: preUnexpected.count + start.distance(to: cursor))
+          count: preUnexpected.count + start.distance(to: cursor)
+        )
         pieces[pieces.count - 1] = .unexpectedText(mergedText)
       } else {
         pieces.append(.unexpectedText(start.textUpTo(cursor)))
@@ -141,8 +143,9 @@ extension Lexer.Cursor {
     if self.advance(if: { $0 == "\n" }) {
       var mark = self
       while true {
-        if self.advance(if: { $0 == "\r"}),
-           self.advance(if: { $0 == "\n"}) {
+        if self.advance(if: { $0 == "\r" }),
+          self.advance(if: { $0 == "\n" })
+        {
           mark = self
           continue
         } else {
@@ -154,7 +157,7 @@ extension Lexer.Cursor {
     } else {
       var mark = self
       while true {
-        if self.advance(if: { $0 == "\r"}), !self.advance(if: { $0 == "\n"}) {
+        if self.advance(if: { $0 == "\r" }), !self.advance(if: { $0 == "\n" }) {
           mark = self
           continue
         } else {

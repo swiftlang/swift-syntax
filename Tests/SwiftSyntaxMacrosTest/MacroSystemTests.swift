@@ -21,7 +21,8 @@ import _SwiftSyntaxTestSupport
 struct CheckContextIndependenceMacro: ExpressionMacro {
   static func expansion(
     of macro: MacroExpansionExprSyntax,
-    in context: inout MacroExpansionContext) -> ExprSyntax {
+    in context: inout MacroExpansionContext
+  ) -> ExprSyntax {
 
     // Should not have a parent.
     XCTAssertNil(macro.parent)
@@ -41,10 +42,12 @@ final class MacroSystemTests: XCTestCase {
       #colorLiteral(red: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
       """
     var context = MacroExpansionContext(
-      moduleName: "MyModule", fileName: "test.swift"
+      moduleName: "MyModule",
+      fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: &context
+      node: sf,
+      in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -64,10 +67,12 @@ final class MacroSystemTests: XCTestCase {
       })
       """
     var context = MacroExpansionContext(
-      moduleName: "MyModule", fileName: "test.swift"
+      moduleName: "MyModule",
+      fileName: "test.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: &context
+      node: sf,
+      in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -86,10 +91,12 @@ final class MacroSystemTests: XCTestCase {
       let b = #fileID
       """
     var context = MacroExpansionContext(
-      moduleName: "MyModule", fileName: "taylor.swift"
+      moduleName: "MyModule",
+      fileName: "taylor.swift"
     )
     let transformedSF = MacroSystem.exampleSystem.evaluateMacros(
-      node: sf, in: &context
+      node: sf,
+      in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,
@@ -101,7 +108,8 @@ final class MacroSystemTests: XCTestCase {
 
   func testContextUniqueLocalNames() {
     var context = MacroExpansionContext(
-      moduleName: "MyModule", fileName: "taylor.swift"
+      moduleName: "MyModule",
+      fileName: "taylor.swift"
     )
 
     let t1 = context.createUniqueLocalName()
@@ -119,10 +127,12 @@ final class MacroSystemTests: XCTestCase {
       let b = #checkContext
       """
     var context = MacroExpansionContext(
-      moduleName: "MyModule", fileName: "taylor.swift"
+      moduleName: "MyModule",
+      fileName: "taylor.swift"
     )
     let transformedSF = system.evaluateMacros(
-      node: sf, in: &context
+      node: sf,
+      in: &context
     )
     AssertStringsEqualWithDiff(
       transformedSF.description,

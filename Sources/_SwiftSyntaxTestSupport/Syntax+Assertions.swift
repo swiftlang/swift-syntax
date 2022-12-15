@@ -22,7 +22,8 @@ import XCTest
 public func XCTAssertNext<Iterator: IteratorProtocol>(
   _ iterator: inout Iterator,
   satisfies predicate: (Iterator.Element) throws -> Bool,
-  file: StaticString = #filePath, line: UInt = #line
+  file: StaticString = #filePath,
+  line: UInt = #line
 ) throws {
   let next = try XCTUnwrap(iterator.next(), file: file, line: line)
   XCTAssertTrue(try predicate(next), file: file, line: line)
@@ -110,8 +111,13 @@ public struct SubtreeMatcher {
 
   /// Verifies that the the subtree found from parsing the text passed into
   /// `init(markedText:)` has the same structure as `expected`.
-  public func assertSameStructure(afterMarker: String? = nil, _ expected: Syntax, includeTrivia: Bool = false,
-                                  file: StaticString = #filePath, line: UInt = #line) throws {
+  public func assertSameStructure(
+    afterMarker: String? = nil,
+    _ expected: Syntax,
+    includeTrivia: Bool = false,
+    file: StaticString = #filePath,
+    line: UInt = #line
+  ) throws {
     if let diff = try findFirstDifference(afterMarker: afterMarker, baseline: expected, includeTrivia: includeTrivia) {
       XCTFail(diff.debugDescription, file: file, line: line)
     }

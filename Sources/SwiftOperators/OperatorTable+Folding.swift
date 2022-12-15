@@ -46,8 +46,10 @@ extension OperatorTable {
     }
 
     return try precedenceGraph.precedence(
-      relating: groupName, to: boundGroupName,
-      startSyntax: operatorSyntax, endSyntax: bound.syntax!,
+      relating: groupName,
+      to: boundGroupName,
+      startSyntax: operatorSyntax,
+      endSyntax: bound.syntax!,
       errorHandler: errorHandler
     ) != .lowerThan
   }
@@ -61,7 +63,8 @@ extension OperatorTable {
     if let binaryExpr = expr.as(BinaryOperatorExprSyntax.self) {
       let operatorName = binaryExpr.operatorToken.text
       return try lookupOperatorPrecedenceGroupName(
-        operatorName, referencedFrom: Syntax(binaryExpr.operatorToken),
+        operatorName,
+        referencedFrom: Syntax(binaryExpr.operatorToken),
         errorHandler: errorHandler
       )
     }
@@ -92,7 +95,9 @@ extension OperatorTable {
   /// Form a binary operation expression for, e.g., a + b.
   @_spi(Testing)
   public static func makeBinaryOperationExpr(
-    lhs: ExprSyntax, op: ExprSyntax, rhs: ExprSyntax
+    lhs: ExprSyntax,
+    op: ExprSyntax,
+    rhs: ExprSyntax
   ) -> ExprSyntax {
     // If the left-hand side is a "try" or "await", hoist it up to encompass
     // the right-hand side as well.
@@ -105,7 +110,10 @@ extension OperatorTable {
           questionOrExclamationMark: tryExpr.questionOrExclamationMark,
           tryExpr.unexpectedBetweenQuestionOrExclamationMarkAndExpression,
           expression: makeBinaryOperationExpr(
-            lhs: tryExpr.expression, op: op, rhs: rhs)
+            lhs: tryExpr.expression,
+            op: op,
+            rhs: rhs
+          )
         )
       )
     }
@@ -117,7 +125,10 @@ extension OperatorTable {
           awaitKeyword: awaitExpr.awaitKeyword,
           awaitExpr.unexpectedBetweenAwaitKeywordAndExpression,
           expression: makeBinaryOperationExpr(
-            lhs: awaitExpr.expression, op: op, rhs: rhs)
+            lhs: awaitExpr.expression,
+            op: op,
+            rhs: rhs
+          )
         )
       )
     }
@@ -131,7 +142,8 @@ extension OperatorTable {
         InfixOperatorExprSyntax(
           leftOperand: lhs,
           operatorOperand: ExprSyntax(binaryOperatorExpr),
-          rightOperand: rhs)
+          rightOperand: rhs
+        )
       )
     }
 
@@ -146,7 +158,8 @@ extension OperatorTable {
           firstChoice: ternaryExpr.firstChoice,
           ternaryExpr.unexpectedBetweenFirstChoiceAndColonMark,
           colonMark: ternaryExpr.colonMark,
-          secondChoice: rhs)
+          secondChoice: rhs
+        )
       )
     }
 
@@ -156,7 +169,8 @@ extension OperatorTable {
         InfixOperatorExprSyntax(
           leftOperand: lhs,
           operatorOperand: ExprSyntax(assignExpr),
-          rightOperand: rhs)
+          rightOperand: rhs
+        )
       )
     }
 
@@ -169,8 +183,9 @@ extension OperatorTable {
           expression: lhs,
           isExpr.unexpectedBeforeIsTok,
           isTok: isExpr.isTok,
-          typeName: rhs.as(TypeExprSyntax.self)!.type)
+          typeName: rhs.as(TypeExprSyntax.self)!.type
         )
+      )
     }
 
     // An "as" cast.
@@ -184,8 +199,9 @@ extension OperatorTable {
           asTok: asExpr.asTok,
           asExpr.unexpectedBetweenAsTokAndQuestionOrExclamationMark,
           questionOrExclamationMark: asExpr.questionOrExclamationMark,
-          typeName: rhs.as(TypeExprSyntax.self)!.type)
+          typeName: rhs.as(TypeExprSyntax.self)!.type
         )
+      )
     }
 
     // An arrow expression (->).
@@ -194,7 +210,8 @@ extension OperatorTable {
         InfixOperatorExprSyntax(
           leftOperand: lhs,
           operatorOperand: ExprSyntax(arrowExpr),
-          rightOperand: rhs)
+          rightOperand: rhs
+        )
       )
     }
 
@@ -218,7 +235,8 @@ extension OperatorTable {
     if firstGroup == secondGroup {
       guard let group = precedenceGraph.lookupGroup(firstGroup) else {
         try errorHandler(
-          .missingGroup(firstGroup, referencedFrom: firstOperatorSyntax))
+          .missingGroup(firstGroup, referencedFrom: firstOperatorSyntax)
+        )
         return .none
       }
 
@@ -226,8 +244,10 @@ extension OperatorTable {
     }
 
     let prec = try precedenceGraph.precedence(
-      relating: firstGroup, to: secondGroup,
-      startSyntax: firstOperatorSyntax, endSyntax: secondOperatorSyntax,
+      relating: firstGroup,
+      to: secondGroup,
+      startSyntax: firstOperatorSyntax,
+      endSyntax: secondOperatorSyntax,
       errorHandler: errorHandler
     )
 
@@ -247,7 +267,8 @@ extension OperatorTable {
   /// out and (potentially) folded somewhat, and the "rest" of the sequence is
   /// consumed along the way
   private func fold(
-    _ lhs: ExprSyntax, rest: inout Slice<ExprListSyntax>,
+    _ lhs: ExprSyntax,
+    rest: inout Slice<ExprListSyntax>,
     bound: PrecedenceBound,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> ExprSyntax {
@@ -262,9 +283,13 @@ extension OperatorTable {
 
       // If the operator's precedence is lower than the minimum, stop here.
       let opPrecedence = try lookupPrecedence(
-        of: op, errorHandler: errorHandler)
+        of: op,
+        errorHandler: errorHandler
+      )
       if try !shouldConsiderOperator(
-        fromGroup: opPrecedence, in: bound, operatorSyntax: Syntax(op)
+        fromGroup: opPrecedence,
+        in: bound,
+        operatorSyntax: Syntax(op)
       ) {
         return nil
       }
@@ -304,12 +329,16 @@ extension OperatorTable {
       // Pull out the next binary operator.
       let op2 = rest.first!
       let op2Precedence = try lookupPrecedence(
-        of: op2, errorHandler: errorHandler)
+        of: op2,
+        errorHandler: errorHandler
+      )
 
       // If the second operator's precedence is lower than the
       // precedence bound, break out of the loop.
       if try !shouldConsiderOperator(
-        fromGroup: op2Precedence, in: bound, operatorSyntax: Syntax(op1),
+        fromGroup: op2Precedence,
+        in: bound,
+        operatorSyntax: Syntax(op1),
         errorHandler: errorHandler
       ) {
         break
@@ -340,9 +369,12 @@ extension OperatorTable {
         // higher-precedence operators starting from this point, then
         // repeat.
         rhs = try fold(
-          rhs, rest: &rest,
+          rhs,
+          rest: &rest,
           bound: PrecedenceBound(
-            groupName: op1Precedence, isStrict: true, syntax: Syntax(op1)
+            groupName: op1Precedence,
+            isStrict: true,
+            syntax: Syntax(op1)
           ),
           errorHandler: errorHandler
         )
@@ -351,9 +383,12 @@ extension OperatorTable {
         // Apply right-associativity by recursively folding operators
         // starting from this point, then immediately folding the LHS and RHS.
         rhs = try fold(
-          rhs, rest: &rest,
+          rhs,
+          rest: &rest,
           bound: PrecedenceBound(
-            groupName: op1Precedence, isStrict: false, syntax: Syntax(op1)
+            groupName: op1Precedence,
+            isStrict: false,
+            syntax: Syntax(op1)
           ),
           errorHandler: errorHandler
         )
@@ -367,7 +402,10 @@ extension OperatorTable {
 
         // Otherwise, start all over with our new LHS.
         return try fold(
-          lhs, rest: &rest, bound: bound, errorHandler: errorHandler
+          lhs,
+          rest: &rest,
+          bound: bound,
+          errorHandler: errorHandler
         )
 
       case .none:
@@ -376,11 +414,14 @@ extension OperatorTable {
         //   - have unordered precedence groups, or
         //   - have the same precedence group with no associativity.
         if let op1Precedence = op1Precedence,
-            let op2Precedence = op2Precedence {
+          let op2Precedence = op2Precedence
+        {
           try errorHandler(
             .incomparableOperators(
-              leftOperator: op1, leftPrecedenceGroup: op1Precedence,
-              rightOperator: op2, rightPrecedenceGroup: op2Precedence
+              leftOperator: op1,
+              leftPrecedenceGroup: op1Precedence,
+              rightOperator: op2,
+              rightPrecedenceGroup: op2Precedence
             )
           )
         }
@@ -411,7 +452,8 @@ extension OperatorTable {
     let lhs = sequence.elements.first!
     var rest = sequence.elements.dropFirst()
     return try fold(
-      lhs, rest: &rest,
+      lhs,
+      rest: &rest,
       bound: PrecedenceBound(groupName: nil, isStrict: false, syntax: nil),
       errorHandler: errorHandler
     )
@@ -419,7 +461,7 @@ extension OperatorTable {
 
   /// Syntax rewriter that folds all of the sequence expressions it
   /// encounters.
-  private class SequenceFolder : SyntaxRewriter {
+  private class SequenceFolder: SyntaxRewriter {
     /// The first operator precedecence that caused the error handler to
     /// also throw.
     var firstFatalError: OperatorError? = nil
@@ -493,7 +535,8 @@ extension OperatorTable {
   ) rethrows -> Syntax {
     return try withoutActuallyEscaping(errorHandler) { errorHandler in
       let folder = SequenceFolder(
-        opPrecedence: self, errorHandler: errorHandler
+        opPrecedence: self,
+        errorHandler: errorHandler
       )
       let result = folder.visit(Syntax(node))
 

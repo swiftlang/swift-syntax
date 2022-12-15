@@ -35,25 +35,31 @@ public class SyntaxCreationTests: XCTestCase {
 
     let structDecl = cannedStructDecl()
 
-    XCTAssertEqual("\(structDecl)",
-                   """
-                   struct Foo {
-                   }
-                   """)
+    XCTAssertEqual(
+      "\(structDecl)",
+      """
+      struct Foo {
+      }
+      """
+    )
 
     let forType = TokenSyntax.identifier("`for`", trailingTrivia: .space)
     let newBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newlines(2))
 
     let renamed = structDecl.withIdentifier(forType)
-                            .withMembers(structDecl.members
-                                                   .withRightBrace(newBrace))
+      .withMembers(
+        structDecl.members
+          .withRightBrace(newBrace)
+      )
 
-    XCTAssertEqual("\(renamed)",
-                   """
-                   struct `for` {
+    XCTAssertEqual(
+      "\(renamed)",
+      """
+      struct `for` {
 
-                   }
-                   """)
+      }
+      """
+    )
 
     XCTAssertNotEqual(structDecl.members, renamed.members)
     XCTAssertEqual(structDecl, StructDeclSyntax(structDecl.root))
@@ -61,11 +67,13 @@ public class SyntaxCreationTests: XCTestCase {
     XCTAssertNotNil(structDecl.members.parent)
     XCTAssertEqual(structDecl.members.parent.map(StructDeclSyntax.init), structDecl)
 
-    XCTAssertEqual("\(structDecl.members.rightBrace)",
-                   """
+    XCTAssertEqual(
+      "\(structDecl.members.rightBrace)",
+      """
 
-                   }
-                   """)
+      }
+      """
+    )
   }
 
   public func testTokenSyntax() {
@@ -94,9 +102,9 @@ public class SyntaxCreationTests: XCTestCase {
     XCTAssertEqual("\(mutablePreSpacedTok)", "    struct  ")
   }
 
-//  private func makeStringLiteralExpr(_ text: String, leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> StringLiteralExprSyntax {
-//    return
-//  }
+  //  private func makeStringLiteralExpr(_ text: String, leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> StringLiteralExprSyntax {
+  //    return
+  //  }
 
   public func testFunctionCallSyntaxBuilder() {
     let string = StringLiteralExprSyntax(
@@ -127,13 +135,16 @@ public class SyntaxCreationTests: XCTestCase {
     let callWithTerminator = call.withArgumentList(
       TupleExprElementListSyntax([
         arg.withTrailingComma(
-          .commaToken(trailingTrivia: .space)),
-        terminatorArg
+          .commaToken(trailingTrivia: .space)
+        ),
+        terminatorArg,
       ])
     )
 
-    XCTAssertEqual("\(callWithTerminator)",
-                   "print(\"Hello, world!\", terminator: \" \")")
+    XCTAssertEqual(
+      "\(callWithTerminator)",
+      "print(\"Hello, world!\", terminator: \" \")"
+    )
   }
 
   public func testWithOptionalChild() {
@@ -174,12 +185,12 @@ public class SyntaxCreationTests: XCTestCase {
       closeQuote: .stringQuoteToken()
     )
     let expected = """
-// hello
-"Hello, world!"
-"""
+      // hello
+      "Hello, world!"
+      """
     XCTAssertEqual(expr.description, expected)
   }
-    
+
   public func testMakeBinaryOperator() {
     let first = IntegerLiteralExprSyntax(
       digits: .integerLiteral("1")
@@ -191,9 +202,11 @@ public class SyntaxCreationTests: XCTestCase {
     operatorNames.forEach { operatorName in
       let operatorToken = TokenSyntax.spacedBinaryOperator(operatorName, leadingTrivia: .space, trailingTrivia: .space)
       let operatorExpr = BinaryOperatorExprSyntax(operatorToken: operatorToken)
-      let exprList = ExprListSyntax([ExprSyntax(first),
-                                                 ExprSyntax(operatorExpr),
-                                                 ExprSyntax(second)])
+      let exprList = ExprListSyntax([
+        ExprSyntax(first),
+        ExprSyntax(operatorExpr),
+        ExprSyntax(second),
+      ])
 
       XCTAssertEqual("\(exprList)", "1 \(operatorName) 1")
     }

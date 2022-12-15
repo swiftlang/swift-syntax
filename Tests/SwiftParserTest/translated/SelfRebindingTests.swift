@@ -63,7 +63,7 @@ final class SelfRebindingTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'self' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'self' cannot be used as an identifier here")
       ]
     )
   }

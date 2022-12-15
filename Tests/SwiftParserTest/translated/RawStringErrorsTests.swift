@@ -24,7 +24,7 @@ final class RawStringErrorsTests: XCTestCase {
         // TODO: Old parser expected error on line 1: too many '#' characters in closing delimiter
         // TODO: Old parser expected error on line 1: expected ',' separator
         // TODO: Old parser expected error on line 1: expected expression in list of expressions
-        DiagnosticSpec(message: "unexpected code '#' in string literal"),
+        DiagnosticSpec(message: "unexpected code '#' in string literal")
       ]
     )
   }
@@ -65,7 +65,7 @@ final class RawStringErrorsTests: XCTestCase {
       """#####,
       diagnostics: [
         // TODO: Old parser expected error on line 1: unterminated string literal
-        DiagnosticSpec(message: #####"expected '"####' to end string literal"#####),
+        DiagnosticSpec(message: #####"expected '"####' to end string literal"#####)
       ]
     )
   }

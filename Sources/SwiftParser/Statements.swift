@@ -77,12 +77,14 @@ extension Parser {
       guard let label = label else {
         return RawStmtSyntax(stmt)
       }
-      return RawStmtSyntax(RawLabeledStmtSyntax(
-        labelName: label.label,
-        labelColon: label.colon,
-        statement: RawStmtSyntax(stmt),
-        arena: self.arena
-      ))
+      return RawStmtSyntax(
+        RawLabeledStmtSyntax(
+          labelName: label.label,
+          labelColon: label.colon,
+          statement: RawStmtSyntax(stmt),
+          arena: self.arena
+        )
+      )
     }
 
     let optLabel = self.parseOptionalStatementLabel()
@@ -117,7 +119,7 @@ extension Parser {
     case (.poundAssertKeyword, let handle)?:
       return label(self.parsePoundAssertStatement(poundAssertHandle: handle), with: optLabel)
     case (.yieldAsIdentifier, let handle)?,
-         (.yield, let handle)?:
+      (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
     case nil:
       let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
@@ -162,8 +164,10 @@ extension Parser {
       ifKeyword: ifKeyword,
       conditions: conditions,
       body: body,
-      elseKeyword: elseKeyword, elseBody: elseBody,
-      arena: self.arena)
+      elseKeyword: elseKeyword,
+      elseBody: elseBody,
+      arena: self.arena
+    )
   }
 }
 
@@ -187,10 +191,10 @@ extension Parser {
       unexpectedBeforeElseKeyword,
       elseKeyword: elseKeyword,
       body: body,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
-
 
 extension Parser {
   /// Parse a list of condition elements.
@@ -210,9 +214,13 @@ extension Parser {
     repeat {
       let condition = self.parseConditionElement()
       keepGoing = self.consume(if: .comma)
-      elements.append(RawConditionElementSyntax(
-        condition: condition, trailingComma: keepGoing,
-        arena: self.arena))
+      elements.append(
+        RawConditionElementSyntax(
+          condition: condition,
+          trailingComma: keepGoing,
+          arena: self.arena
+        )
+      )
     } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
     return RawConditionElementListSyntax(elements: elements, arena: self.arena)
@@ -233,7 +241,7 @@ extension Parser {
     if self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]) {
       return self.parsePoundAvailableConditionElement()
     }
-    
+
     // Parse a #_hasSymbol condition if present.
     if self.at(.poundHasSymbolKeyword) {
       return .hasSymbol(self.parsePoundHasSymbolConditionElement())
@@ -304,23 +312,30 @@ extension Parser {
 
     switch kind {
     case let .optional(letOrVar, pattern):
-      return .optionalBinding(RawOptionalBindingConditionSyntax(
-        letOrVarKeyword: letOrVar,
-        pattern: pattern,
-        typeAnnotation: annotation,
-        initializer: initializer,
-        arena: self.arena))
-    case let .pattern(caseKeyword, pattern):
-      return .matchingPattern(RawMatchingPatternConditionSyntax(
-        caseKeyword: caseKeyword,
-        pattern: pattern,
-        typeAnnotation: annotation,
-        initializer: initializer ?? RawInitializerClauseSyntax(
-          equal: RawTokenSyntax(missing: .equal, arena: self.arena),
-          value: RawExprSyntax(RawMissingExprSyntax(arena: self.arena)),
+      return .optionalBinding(
+        RawOptionalBindingConditionSyntax(
+          letOrVarKeyword: letOrVar,
+          pattern: pattern,
+          typeAnnotation: annotation,
+          initializer: initializer,
           arena: self.arena
-        ),
-        arena: self.arena))
+        )
+      )
+    case let .pattern(caseKeyword, pattern):
+      return .matchingPattern(
+        RawMatchingPatternConditionSyntax(
+          caseKeyword: caseKeyword,
+          pattern: pattern,
+          typeAnnotation: annotation,
+          initializer: initializer
+            ?? RawInitializerClauseSyntax(
+              equal: RawTokenSyntax(missing: .equal, arena: self.arena),
+              value: RawExprSyntax(RawMissingExprSyntax(arena: self.arena)),
+              arena: self.arena
+            ),
+          arena: self.arena
+        )
+      )
     }
   }
 
@@ -341,28 +356,34 @@ extension Parser {
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     switch kind {
     case .available:
-      return .availability(RawAvailabilityConditionSyntax(
-        poundAvailableKeyword: keyword,
-        unexpectedBeforeLParen,
-        leftParen: lparen,
-        availabilitySpec: spec,
-        unexpectedBeforeRParen,
-        rightParen: rparen,
-        arena: self.arena))
+      return .availability(
+        RawAvailabilityConditionSyntax(
+          poundAvailableKeyword: keyword,
+          unexpectedBeforeLParen,
+          leftParen: lparen,
+          availabilitySpec: spec,
+          unexpectedBeforeRParen,
+          rightParen: rparen,
+          arena: self.arena
+        )
+      )
     case .unavailable:
-      return .unavailability(RawUnavailabilityConditionSyntax(
-        poundUnavailableKeyword: keyword,
-        unexpectedBeforeLParen,
-        leftParen: lparen,
-        availabilitySpec: spec,
-        unexpectedBeforeRParen,
-        rightParen: rparen,
-        arena: self.arena))
+      return .unavailability(
+        RawUnavailabilityConditionSyntax(
+          poundUnavailableKeyword: keyword,
+          unexpectedBeforeLParen,
+          leftParen: lparen,
+          availabilitySpec: spec,
+          unexpectedBeforeRParen,
+          rightParen: rparen,
+          arena: self.arena
+        )
+      )
     case .macro:
       fatalError("Macros are not allowed in this position!")
     }
   }
-  
+
   /// Parse a `#_hasSymbol` condition.
   ///
   /// Grammar
@@ -403,12 +424,14 @@ extension Parser {
     let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { $0.tokenKind == .tryKeyword }) ?? false
     var expr = self.parseExpression()
     if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
-      expr = RawExprSyntax(RawTryExprSyntax(
-        tryKeyword: missingToken(.tryKeyword, text: nil),
-        questionOrExclamationMark: nil,
-        expression: expr,
-        arena: self.arena
-      ))
+      expr = RawExprSyntax(
+        RawTryExprSyntax(
+          tryKeyword: missingToken(.tryKeyword, text: nil),
+          questionOrExclamationMark: nil,
+          expression: expr,
+          arena: self.arena
+        )
+      )
     }
     return RawThrowStmtSyntax(
       unexpectedBeforeThrowKeyword,
@@ -468,7 +491,8 @@ extension Parser {
       doKeyword: doKeyword,
       body: body,
       catchClauses: elements.isEmpty ? nil : RawCatchClauseListSyntax(elements: elements, arena: self.arena),
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   /// Parse a catch statement.
@@ -492,18 +516,24 @@ extension Parser {
       repeat {
         let (pattern, whereClause) = self.parseGuardedCatchPattern()
         keepGoing = self.consume(if: .comma)
-        catchItems.append(RawCatchItemSyntax(
-          pattern: pattern, whereClause: whereClause, trailingComma: keepGoing,
-          arena: self.arena))
+        catchItems.append(
+          RawCatchItemSyntax(
+            pattern: pattern,
+            whereClause: whereClause,
+            trailingComma: keepGoing,
+            arena: self.arena
+          )
+        )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     let body = self.parseCodeBlock(introducer: catchKeyword)
     return RawCatchClauseSyntax(
       unexpectedBeforeCatchKeyword,
       catchKeyword: catchKeyword,
-      catchItems: catchItems.isEmpty ? nil : RawCatchItemListSyntax(elements: catchItems, arena:  self.arena),
+      catchItems: catchItems.isEmpty ? nil : RawCatchItemListSyntax(elements: catchItems, arena: self.arena),
       body: body,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   /// Parse a pattern-matching clause for a catch statement,
@@ -517,7 +547,7 @@ extension Parser {
     // If this is a 'catch' clause and we have "catch {" or "catch where...",
     // then we get an implicit "let error" pattern.
     let pattern: RawPatternSyntax?
-    if self.at(any: [ .leftBrace, .whereKeyword ]) {
+    if self.at(any: [.leftBrace, .whereKeyword]) {
       pattern = nil
     } else {
       pattern = self.parseMatchingPattern(context: .matching)
@@ -583,7 +613,8 @@ extension Parser {
       unexpectedBeforeWhileKeyword,
       whileKeyword: whileKeyword,
       condition: condition,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -691,7 +722,8 @@ extension Parser {
       cases: cases,
       unexpectedBeforeRBrace,
       rightBrace: rbrace,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   /// Parse a list of switch case clauses.
@@ -710,45 +742,62 @@ extension Parser {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
     while !self.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
-            && elementsProgress.evaluate(currentToken) {
+      && elementsProgress.evaluate(currentToken)
+    {
       if self.lookahead().isAtStartOfSwitchCase(allowRecovery: false) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIfKeyword) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.
-        elements.append(.ifConfigDecl(self.parsePoundIfDirective(
-          { $0.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
-          syntax: { parser, cases in
-            guard cases.count == 1, let firstCase = cases.first else {
-              assert(cases.isEmpty)
-              return .switchCases(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
-            }
-            return .switchCases(firstCase)
-          })))
+        elements.append(
+          .ifConfigDecl(
+            self.parsePoundIfDirective(
+              { $0.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
+              syntax: { parser, cases in
+                guard cases.count == 1, let firstCase = cases.first else {
+                  assert(cases.isEmpty)
+                  return .switchCases(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
+                }
+                return .switchCases(firstCase)
+              }
+            )
+          )
+        )
       } else if allowStandaloneStmtRecovery && (self.atStartOfExpression() || self.atStartOfStatement() || self.atStartOfDeclaration()) {
         // Synthesize a label for the stamenent or declaration that isn't coverd by a case right now.
         let statements = parseSwitchCaseBody()
-        elements.append(.switchCase(RawSwitchCaseSyntax(
-          unknownAttr: nil,
-          label: .case(RawSwitchCaseLabelSyntax(
-            caseKeyword: missingToken(.caseKeyword, text: nil),
-            caseItems: RawCaseItemListSyntax(elements: [
-              RawCaseItemSyntax(
-                pattern: RawPatternSyntax(RawIdentifierPatternSyntax(
-                  identifier: missingToken(.identifier, text: nil),
+        elements.append(
+          .switchCase(
+            RawSwitchCaseSyntax(
+              unknownAttr: nil,
+              label: .case(
+                RawSwitchCaseLabelSyntax(
+                  caseKeyword: missingToken(.caseKeyword, text: nil),
+                  caseItems: RawCaseItemListSyntax(
+                    elements: [
+                      RawCaseItemSyntax(
+                        pattern: RawPatternSyntax(
+                          RawIdentifierPatternSyntax(
+                            identifier: missingToken(.identifier, text: nil),
+                            arena: self.arena
+                          )
+                        ),
+                        whereClause: nil,
+                        trailingComma: nil,
+                        arena: self.arena
+                      )
+                    ],
+                    arena: self.arena
+                  ),
+                  colon: missingToken(.colon, text: nil),
                   arena: self.arena
-                )),
-                whereClause: nil,
-                trailingComma: nil,
-                arena: self.arena
-              )
-            ], arena: self.arena),
-            colon: missingToken(.colon, text: nil),
-            arena: self.arena
-          )),
-          statements: statements,
-          arena: self.arena
-        )))
+                )
+              ),
+              statements: statements,
+              arena: self.arena
+            )
+          )
+        )
       } else if self.lookahead().isAtStartOfSwitchCase(allowRecovery: true) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else {
@@ -762,9 +811,10 @@ extension Parser {
     var items = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
     while !self.at(any: [.rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
-            && !self.lookahead().isStartOfConditionalSwitchCases(),
-          let newItem = self.parseCodeBlockItem(),
-          loopProgress.evaluate(currentToken) {
+      && !self.lookahead().isStartOfConditionalSwitchCases(),
+      let newItem = self.parseCodeBlockItem(),
+      loopProgress.evaluate(currentToken)
+    {
       items.append(newItem)
     }
     return RawCodeBlockItemListSyntax(elements: items, arena: self.arena)
@@ -812,28 +862,35 @@ extension Parser {
     case (.defaultKeyword, let handle)?:
       label = .default(self.parseSwitchDefaultLabel(handle))
     case nil:
-      label = .case(RawSwitchCaseLabelSyntax(
-        caseKeyword: missingToken(.caseKeyword),
-        caseItems: RawCaseItemListSyntax(elements: [
-          RawCaseItemSyntax(
-            pattern: RawPatternSyntax(RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena)),
-            whereClause: nil,
-            trailingComma: nil,
+      label = .case(
+        RawSwitchCaseLabelSyntax(
+          caseKeyword: missingToken(.caseKeyword),
+          caseItems: RawCaseItemListSyntax(
+            elements: [
+              RawCaseItemSyntax(
+                pattern: RawPatternSyntax(RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena)),
+                whereClause: nil,
+                trailingComma: nil,
+                arena: self.arena
+              )
+            ],
             arena: self.arena
-          )
-        ], arena: self.arena),
-        colon: missingToken(.colon),
-        arena: self.arena
-      ))
+          ),
+          colon: missingToken(.colon),
+          arena: self.arena
+        )
+      )
     }
-
 
     // Parse the body.
     let statements = parseSwitchCaseBody()
 
     return RawSwitchCaseSyntax(
-      unknownAttr: unknownAttr, label: label, statements: statements,
-      arena: self.arena)
+      unknownAttr: unknownAttr,
+      label: label,
+      statements: statements,
+      arena: self.arena
+    )
   }
 
   /// Parse a switch case with a 'case' label.
@@ -855,9 +912,14 @@ extension Parser {
       repeat {
         let (pattern, whereClause) = self.parseGuardedCasePattern()
         keepGoing = self.consume(if: .comma)
-        caseItems.append(RawCaseItemSyntax(
-          pattern: pattern, whereClause: whereClause, trailingComma: keepGoing,
-          arena: self.arena))
+        caseItems.append(
+          RawCaseItemSyntax(
+            pattern: pattern,
+            whereClause: whereClause,
+            trailingComma: keepGoing,
+            arena: self.arena
+          )
+        )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -867,7 +929,8 @@ extension Parser {
       caseItems: RawCaseItemListSyntax(elements: caseItems, arena: self.arena),
       unexpectedBeforeColon,
       colon: colon,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   /// Parse a switch case with a 'default' label.
@@ -936,21 +999,23 @@ extension Parser {
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
     // followed by a '}', '', statement or decl start keyword sequence.
     let expr: RawExprSyntax?
-    if
-      !self.at(any: [
-        .rightBrace, .caseKeyword, .defaultKeyword, .semicolon, .eof,
-        .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
-        .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword
-      ])
-        && !self.atStartOfStatement() && !self.atStartOfDeclaration() {
+    if !self.at(any: [
+      .rightBrace, .caseKeyword, .defaultKeyword, .semicolon, .eof,
+      .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
+      .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword,
+    ])
+      && !self.atStartOfStatement() && !self.atStartOfDeclaration()
+    {
       let parsedExpr = self.parseExpression()
       if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {
-        expr = RawExprSyntax(RawTryExprSyntax(
-          tryKeyword: missingToken(.tryKeyword, text: nil),
-          questionOrExclamationMark: nil,
-          expression: parsedExpr,
-          arena: self.arena
-        ))
+        expr = RawExprSyntax(
+          RawTryExprSyntax(
+            tryKeyword: missingToken(.tryKeyword, text: nil),
+            questionOrExclamationMark: nil,
+            expression: parsedExpr,
+            arena: self.arena
+          )
+        )
       } else {
         expr = parsedExpr
       }
@@ -989,22 +1054,28 @@ extension Parser {
         while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
           let expr = self.parseExpression()
           let comma = self.consume(if: .comma)
-          elementList.append(RawYieldExprListElementSyntax(
-            expression: expr,
-            comma: comma,
-            arena: self.arena))
+          elementList.append(
+            RawYieldExprListElementSyntax(
+              expression: expr,
+              comma: comma,
+              arena: self.arena
+            )
+          )
 
           keepGoing = (comma != nil)
         }
         exprList = RawYieldExprListSyntax(elements: elementList, arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      yields = .yieldList(RawYieldListSyntax(
-        leftParen: lparen,
-        elementList: exprList,
-        unexpectedBeforeRParen,
-        rightParen: rparen,
-        arena: self.arena))
+      yields = .yieldList(
+        RawYieldListSyntax(
+          leftParen: lparen,
+          elementList: exprList,
+          unexpectedBeforeRParen,
+          rightParen: rparen,
+          arena: self.arena
+        )
+      )
     } else {
       yields = .simpleYield(self.parseExpression())
     }
@@ -1114,9 +1185,7 @@ extension Parser {
     }
 
     guard
-      self.at(.identifier) &&
-        !self.atStartOfStatement() &&
-        !self.atStartOfDeclaration()
+      self.at(.identifier) && !self.atStartOfStatement() && !self.atStartOfDeclaration()
     else {
       return nil
     }
@@ -1149,7 +1218,8 @@ extension Parser {
       message: message,
       unexpectedBeforeRParen,
       rightParen: rparen,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -1193,22 +1263,22 @@ extension Parser.Lookahead {
       return true
     case .yieldAsIdentifier?:
       switch self.peek().tokenKind {
-       case .prefixAmpersand:
-         // "yield &" always denotes a yield statement.
-         return true
+      case .prefixAmpersand:
+        // "yield &" always denotes a yield statement.
+        return true
       case .leftParen:
-         // "yield (", by contrast, must be disambiguated with additional
-         // context. We always consider it an apply expression of a function
-         // called `yield` for the purposes of the parse.
-         return false
+        // "yield (", by contrast, must be disambiguated with additional
+        // context. We always consider it an apply expression of a function
+        // called `yield` for the purposes of the parse.
+        return false
       case .spacedBinaryOperator, .unspacedBinaryOperator:
         // 'yield &= x' treats yield as an identifier.
         return false
-       default:
+      default:
         // "yield" followed immediately by any other token is likely a
         // yield statement of some singular expression.
         return !self.peek().isAtStartOfLine
-       }
+      }
     case nil:
       return false
     }

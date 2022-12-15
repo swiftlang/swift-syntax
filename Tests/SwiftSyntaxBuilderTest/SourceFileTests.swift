@@ -19,18 +19,25 @@ final class SourceFileTests: XCTestCase {
     let source = SourceFile {
       ImportDecl("import Foundation")
       ImportDecl("import UIKit")
-      ClassDecl(classKeyword: .class, identifier: "SomeViewController", membersBuilder: {
-        VariableDecl("let tableView: UITableView")
-      })
+      ClassDecl(
+        classKeyword: .class,
+        identifier: "SomeViewController",
+        membersBuilder: {
+          VariableDecl("let tableView: UITableView")
+        }
+      )
     }
 
-    AssertBuildResult(source, """
+    AssertBuildResult(
+      source,
+      """
 
       import Foundation
       import UIKit
       class SomeViewController {
           let tableView: UITableView
       }
-      """)
+      """
+    )
   }
 }

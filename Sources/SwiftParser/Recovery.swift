@@ -14,7 +14,6 @@
 
 // MARK: Lookahead
 
-
 /// After calling `consume(ifAnyFrom:)` we know which token we are positioned
 /// at based on that function's return type. This handle allows consuming that
 /// token.
@@ -27,7 +26,8 @@ public struct RecoveryConsumptionHandle {
   public static func constant(_ token: RawTokenKind) -> RecoveryConsumptionHandle {
     return RecoveryConsumptionHandle(
       unexpectedTokens: 0,
-      tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: token))
+      tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: token)
+    )
   }
 
   /// A `RecoveryConsumptionHandle` that will not eat any tokens but instead
@@ -36,7 +36,8 @@ public struct RecoveryConsumptionHandle {
   public static func missing(_ token: RawTokenKind) -> RecoveryConsumptionHandle {
     return RecoveryConsumptionHandle(
       unexpectedTokens: 0,
-      tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: token, missing: true))
+      tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: token, missing: true)
+    )
   }
 }
 
@@ -64,7 +65,8 @@ extension Parser.Lookahead {
 
     while !self.at(.eof) {
       if !recoveryPrecedence.shouldSkipOverNewlines,
-          self.currentToken.isAtStartOfLine {
+        self.currentToken.isAtStartOfLine
+      {
         break
       }
       if self.at(any: kinds, contextualKeywords: contextualKeywords) {
@@ -104,23 +106,28 @@ extension Parser.Lookahead {
     let initialTokensConsumed = self.tokensConsumed
 
     assert(!subset.allCases.isEmpty, "Subset must have at least one case")
-    let recoveryPrecedence = recoveryPrecedence ?? subset.allCases.map({
-      if let precedence = $0.precedence {
-        return precedence
-      } else {
-        return TokenPrecedence($0.rawTokenKind)
-      }
-    }).min()!
+    let recoveryPrecedence =
+      recoveryPrecedence ?? subset.allCases.map({
+        if let precedence = $0.precedence {
+          return precedence
+        } else {
+          return TokenPrecedence($0.rawTokenKind)
+        }
+      }).min()!
     while !self.at(.eof) {
       if !recoveryPrecedence.shouldSkipOverNewlines,
-          self.currentToken.isAtStartOfLine {
+        self.currentToken.isAtStartOfLine
+      {
         break
       }
       if let (kind, handle) = self.at(anyIn: subset) {
-        return (kind, RecoveryConsumptionHandle(
-          unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
-          tokenConsumptionHandle: handle
-        ))
+        return (
+          kind,
+          RecoveryConsumptionHandle(
+            unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
+            tokenConsumptionHandle: handle
+          )
+        )
       }
       let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
       if currentTokenPrecedence >= recoveryPrecedence {
@@ -138,4 +145,3 @@ extension Parser.Lookahead {
     return nil
   }
 }
-

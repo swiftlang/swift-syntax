@@ -11,4 +11,4 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes a macro.
-public protocol Macro { }
+public protocol Macro {}

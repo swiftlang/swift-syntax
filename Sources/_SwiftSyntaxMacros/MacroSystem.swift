@@ -37,10 +37,10 @@ public enum MacroSystemError: Error {
 
 /// A system of known macros that can be expanded syntactically
 public struct MacroSystem {
-  var macros: [String : Macro.Type] = [:]
+  var macros: [String: Macro.Type] = [:]
 
   /// Create an empty macro system.
-  public init() { }
+  public init() {}
 
   /// Add a macro to the system.
   ///
@@ -60,7 +60,7 @@ public struct MacroSystem {
 }
 
 /// Syntax rewriter that evaluates any macros encountered along the way.
-class MacroApplication : SyntaxRewriter {
+class MacroApplication: SyntaxRewriter {
   let macroSystem: MacroSystem
   var context: MacroExpansionContext
 
@@ -78,7 +78,8 @@ class MacroApplication : SyntaxRewriter {
     }
 
     return node.evaluateMacro(
-      with: macroSystem, context: &context
+      with: macroSystem,
+      context: &context
     )
   }
 
@@ -111,7 +112,8 @@ extension MacroSystem {
     in context: inout MacroExpansionContext
   ) -> Syntax {
     let applier = MacroApplication(
-      macroSystem: self, context: context
+      macroSystem: self,
+      context: context
     )
     return applier.visit(Syntax(node))
   }

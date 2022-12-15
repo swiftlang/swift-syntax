@@ -31,7 +31,8 @@ public protocol IncrementalParseReusedNodeDelegate {
 /// An implementation of `IncrementalParseReusedNodeDelegate` that just collects
 /// the range and re-used node into an array.
 public final class IncrementalParseReusedNodeCollector:
-    IncrementalParseReusedNodeDelegate {
+  IncrementalParseReusedNodeDelegate
+{
   public var rangeAndNodes: [(ByteSourceRange, Syntax)] = []
 
   public init() {}
@@ -58,9 +59,11 @@ public final class IncrementalParseTransition {
   ///   - reusedNodeDelegate: Optional delegate to accept information about the
   ///                         reused regions and nodes.
   @available(*, deprecated, message: "Use the initializer taking 'ConcurrentEdits' instead")
-  public convenience init(previousTree: SourceFileSyntax,
-                          edits: [SourceEdit],
-                          reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil) {
+  public convenience init(
+    previousTree: SourceFileSyntax,
+    edits: [SourceEdit],
+    reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil
+  ) {
     self.init(
       previousTree: previousTree,
       edits: try! ConcurrentEdits(concurrent: edits),
@@ -74,9 +77,11 @@ public final class IncrementalParseTransition {
   ///            in the new source that is about to be parsed.
   ///   - reusedNodeDelegate: Optional delegate to accept information about the
   ///                         reused regions and nodes.
-  public init(previousTree: SourceFileSyntax,
-              edits: ConcurrentEdits,
-              reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil) {
+  public init(
+    previousTree: SourceFileSyntax,
+    edits: ConcurrentEdits,
+    reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil
+  ) {
     self.previousTree = previousTree
     self.edits = edits
     self.reusedDelegate = reusedNodeDelegate
@@ -167,14 +172,12 @@ public struct ConcurrentEdits {
           editToAdd = SourceEdit(
             offset: Swift.min(existingEdit.offset, editToAdd.offset),
             length: existingEdit.length + editToAdd.length - intersectionLength,
-            replacementLength: existingEdit.replacementLength +
-              editToAdd.replacementLength - intersectionLength
+            replacementLength: existingEdit.replacementLength + editToAdd.replacementLength - intersectionLength
           )
           editIndiciesMergedWithNewEdit.append(index)
         } else if existingEdit.offset < editToAdd.endOffset {
           editToAdd = SourceEdit(
-            offset: editToAdd.offset - existingEdit.replacementLength +
-              existingEdit.length,
+            offset: editToAdd.offset - existingEdit.replacementLength + existingEdit.length,
             length: editToAdd.length,
             replacementLength: editToAdd.replacementLength
           )
@@ -184,9 +187,10 @@ public struct ConcurrentEdits {
       for indexToRemove in editIndiciesMergedWithNewEdit.reversed() {
         concurrentEdits.remove(at: indexToRemove)
       }
-      let insertPos = concurrentEdits.firstIndex(where: { edit in
-        editToAdd.endOffset <= edit.offset
-      }) ?? concurrentEdits.count
+      let insertPos =
+        concurrentEdits.firstIndex(where: { edit in
+          editToAdd.endOffset <= edit.offset
+        }) ?? concurrentEdits.count
       concurrentEdits.insert(editToAdd, at: insertPos)
       assert(ConcurrentEdits.isValidConcurrentEditArray(concurrentEdits))
     }
@@ -200,7 +204,7 @@ public struct ConcurrentEdits {
     guard !edits.isEmpty else { return true }
 
     for i in 1..<edits.count {
-      let prevEdit = edits[i-1]
+      let prevEdit = edits[i - 1]
       let curEdit = edits[i]
       if curEdit.range.offset < prevEdit.range.endOffset {
         return false
@@ -259,13 +263,15 @@ public struct IncrementalParseLookup {
     if let delegate = reusedDelegate, let node = node {
       delegate.parserReusedNode(
         range: ByteSourceRange(offset: newOffset, length: node.byteSize),
-        previousNode: node)
+        previousNode: node
+      )
     }
     return node
   }
 
   mutating fileprivate func cursorLookup(
-    prevPosition: AbsolutePosition, kind: SyntaxKind
+    prevPosition: AbsolutePosition,
+    kind: SyntaxKind
   ) -> Syntax? {
     guard !cursor.finished else { return nil }
 
@@ -278,7 +284,8 @@ public struct IncrementalParseLookup {
   }
 
   fileprivate func nodeAtCursorCanBeReused(
-    prevPosition: AbsolutePosition, kind: SyntaxKind
+    prevPosition: AbsolutePosition,
+    kind: SyntaxKind
   ) -> Bool {
     let node = cursor.node
     if node.position != prevPosition {
@@ -309,8 +316,10 @@ public struct IncrementalParseLookup {
         nextLeafNodeLength = nextToken.raw.totalLength - nextToken.trailingTriviaLength
       }
     }
-    let nodeAffectRange = ByteSourceRange(offset: node.position.utf8Offset,
-      length: (node.raw.totalLength + nextLeafNodeLength).utf8Length)
+    let nodeAffectRange = ByteSourceRange(
+      offset: node.position.utf8Offset,
+      length: (node.raw.totalLength + nextLeafNodeLength).utf8Length
+    )
 
     for edit in edits.edits {
       // Check if this node or the trivia of the next node has been edited. If

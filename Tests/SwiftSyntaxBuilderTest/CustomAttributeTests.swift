@@ -19,10 +19,12 @@ final class CustomAttributeTests: XCTestCase {
     let testCases: [UInt: (CustomAttribute, String)] = [
       #line: (CustomAttribute("Test"), "@Test"),
       #line: (CustomAttribute("WithParens") {}, "@WithParens()"),
-      #line: (CustomAttribute("WithArgs") {
-        TupleExprElement(expression: "value1")
-        TupleExprElement(label: "labelled", expression: "value2")
-      }, "@WithArgs(value1, labelled: value2)"),
+      #line: (
+        CustomAttribute("WithArgs") {
+          TupleExprElement(expression: "value1")
+          TupleExprElement(label: "labelled", expression: "value2")
+        }, "@WithArgs(value1, labelled: value2)"
+      ),
     ]
 
     for (line, testCase) in testCases {

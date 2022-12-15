@@ -27,14 +27,15 @@
       self.init(
         size: MemoryLayout<T>.size,
         stride: MemoryLayout<T>.stride,
-        alignment: MemoryLayout<T>.alignment)
+        alignment: MemoryLayout<T>.alignment
+      )
     }
   }
 
-  public static var values: [String : Value] {
-    let uniq: (Value, Value) -> Value =  { _, _ in preconditionFailure() }
+  public static var values: [String: Value] {
+    let uniq: (Value, Value) -> Value = { _, _ in preconditionFailure() }
 
-    var result: [String : Value] = [:]
+    var result: [String: Value] = [:]
     result.merge(RawSyntaxDataMemoryLayouts, uniquingKeysWith: uniq)
     result.merge(SyntaxDataMemoryLayouts, uniquingKeysWith: uniq)
     return result

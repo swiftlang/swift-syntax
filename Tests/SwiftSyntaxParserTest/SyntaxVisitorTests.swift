@@ -25,14 +25,16 @@ public class SyntaxVisitorTests: XCTestCase {
         return .visitChildren
       }
     }
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      let counter = FuncCounter(viewMode: .fixedUp)
-      let hashBefore = parsed.hashValue
-      counter.walk(parsed)
-      XCTAssertEqual(counter.funcCount, 3)
-      XCTAssertEqual(hashBefore, parsed.hashValue)
-    }())
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
+        let counter = FuncCounter(viewMode: .fixedUp)
+        let hashBefore = parsed.hashValue
+        counter.walk(parsed)
+        XCTAssertEqual(counter.funcCount, 3)
+        XCTAssertEqual(hashBefore, parsed.hashValue)
+      }()
+    )
   }
 
   public func testRewritingNodeWithEmptyChild() {
@@ -42,12 +44,14 @@ public class SyntaxVisitorTests: XCTestCase {
         return ExprSyntax(node.withSignature(node.signature))
       }
     }
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getTestInput("closure.swift"))
-      let rewriter = ClosureRewriter()
-      let rewritten = rewriter.visit(parsed)
-      XCTAssertEqual(parsed.description, rewritten.description)
-    }())
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(getTestInput("closure.swift"))
+        let rewriter = ClosureRewriter()
+        let rewritten = rewriter.visit(parsed)
+        XCTAssertEqual(parsed.description, rewritten.description)
+      }()
+    )
   }
 
   public func testSyntaxRewriterVisitAny() {
@@ -63,14 +67,16 @@ public class SyntaxVisitorTests: XCTestCase {
         return nil
       }
     }
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getTestInput("near-empty.swift"))
-      let rewriter = VisitAnyRewriter(transform: { _ in
-        return TokenSyntax.identifier("")
-      })
-      let rewritten = rewriter.visit(parsed)
-      XCTAssertEqual(rewritten.description, "")
-    }())
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(getTestInput("near-empty.swift"))
+        let rewriter = VisitAnyRewriter(transform: { _ in
+          return TokenSyntax.identifier("")
+        })
+        let rewritten = rewriter.visit(parsed)
+        XCTAssertEqual(rewritten.description, "")
+      }()
+    )
   }
 
   public func testSyntaxRewriterVisitCollection() {
@@ -83,12 +89,14 @@ public class SyntaxVisitorTests: XCTestCase {
       }
     }
 
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getTestInput("nested-blocks.swift"))
-      let visitor = VisitCollections(viewMode: .fixedUp)
-      visitor.walk(parsed)
-      XCTAssertEqual(4, visitor.numberOfCodeBlockItems)
-    }())
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(getTestInput("nested-blocks.swift"))
+        let visitor = VisitCollections(viewMode: .fixedUp)
+        visitor.walk(parsed)
+        XCTAssertEqual(4, visitor.numberOfCodeBlockItems)
+      }()
+    )
   }
 
   public func testVisitorClass() {
@@ -99,14 +107,16 @@ public class SyntaxVisitorTests: XCTestCase {
         return super.visit(node)
       }
     }
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      let counter = FuncCounter(viewMode: .fixedUp)
-      let hashBefore = parsed.hashValue
-      counter.walk(parsed)
-      XCTAssertEqual(counter.funcCount, 3)
-      XCTAssertEqual(hashBefore, parsed.hashValue)
-    }())
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
+        let counter = FuncCounter(viewMode: .fixedUp)
+        let hashBefore = parsed.hashValue
+        counter.walk(parsed)
+        XCTAssertEqual(counter.funcCount, 3)
+        XCTAssertEqual(hashBefore, parsed.hashValue)
+      }()
+    )
   }
 
   public func testRewriteTrivia() {
@@ -116,11 +126,13 @@ public class SyntaxVisitorTests: XCTestCase {
       }
     }
 
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(source: "let a = 5")
-      let visitor = TriviaRemover()
-      let rewritten = visitor.visit(parsed)
-      XCTAssertEqual(rewritten.description, "leta=5")
-    }())
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(source: "let a = 5")
+        let visitor = TriviaRemover()
+        let rewritten = visitor.visit(parsed)
+        XCTAssertEqual(rewritten.description, "leta=5")
+      }()
+    )
   }
 }

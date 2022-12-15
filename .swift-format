@@ -1,0 +1,18 @@
+{
+    "version": 1,
+    "lineLength": 1000,
+    "indentation": {
+        "spaces": 2
+    },
+    "lineBreakBeforeEachArgument": true,
+    "indentConditionalCompilationBlocks": false,
+    "rules": {
+        "AlwaysUseLowerCamelCase": false,
+        "AmbiguousTrailingClosureOverload": false,
+        "DontRepeatTypeInStaticProperties": false,
+        "NoBlockComments": false,
+        "Spacing": false,
+        "UseLetInEveryBoundCaseVariable": false,
+        "UseSynthesizedInitializer": false
+    }
+}

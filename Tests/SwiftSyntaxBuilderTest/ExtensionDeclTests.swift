@@ -26,25 +26,32 @@ final class ExtensionDeclTests: XCTestCase {
         modifiers: [DeclModifier(name: .public)],
         letOrVarKeyword: .var
       ) {
-        PatternBinding(pattern: PatternSyntax("`\(raw: keyword)`"),
-                       typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
-                       accessor: .getter(body))
+        PatternBinding(
+          pattern: PatternSyntax("`\(raw: keyword)`"),
+          typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
+          accessor: .getter(body)
+        )
 
       }
     }
     let members = MemberDeclList(keywords.map { MemberDeclListItem(decl: $0) })
-    let buildable = ExtensionDecl(extendedType: Type("TokenSyntax"),
-                                  members: MemberDeclBlock(members: members))
+    let buildable = ExtensionDecl(
+      extendedType: Type("TokenSyntax"),
+      members: MemberDeclBlock(members: members)
+    )
 
-    AssertBuildResult(buildable, """
-    extension TokenSyntax {
-        public var `associatedtype`: TokenSyntax {
-            TokenSyntax.associatedtypeKeyword()
-        }
-        public var `class`: TokenSyntax {
-            TokenSyntax.classKeyword()
-        }
-    }
-    """)
+    AssertBuildResult(
+      buildable,
+      """
+      extension TokenSyntax {
+          public var `associatedtype`: TokenSyntax {
+              TokenSyntax.associatedtypeKeyword()
+          }
+          public var `class`: TokenSyntax {
+              TokenSyntax.classKeyword()
+          }
+      }
+      """
+    )
   }
 }

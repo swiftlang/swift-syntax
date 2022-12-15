@@ -14,7 +14,7 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 
-extension OperatorError : DiagnosticMessage {
+extension OperatorError: DiagnosticMessage {
   public var severity: DiagnosticSeverity {
     .error
   }

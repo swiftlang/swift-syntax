@@ -91,7 +91,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ',' joining parts of a multi-clause condition, Fix-It replacements: 28 - 31 = ','
-        DiagnosticSpec(message: "unexpected code '&& #available(OSX 10.52, *)' in 'if' statement"),
+        DiagnosticSpec(message: "unexpected code '&& #available(OSX 10.52, *)' in 'if' statement")
       ]
     )
   }
@@ -119,9 +119,12 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#availabile' condition",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        ),
         DiagnosticSpec(message: "expected code block in 'if' statement"),
       ]
     )
@@ -149,9 +152,12 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected version number
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#availabile' condition",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }
@@ -176,9 +182,12 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ')'
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#availabile' condition",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }
@@ -297,9 +306,12 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#availabile' condition",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }
@@ -322,9 +334,12 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected platform name
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#availabile' condition",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        ),
         DiagnosticSpec(message: "expected code block in 'if' statement"),
       ]
     )
@@ -352,9 +367,12 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected version number
-        DiagnosticSpec(message: "expected ')' to end '#availabile' condition", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ]),
+        DiagnosticSpec(
+          message: "expected ')' to end '#availabile' condition",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }
@@ -385,7 +403,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '||' cannot be used in an availability condition
-        DiagnosticSpec(message: "unexpected code '|| iOS 8.0' in '#availabile' condition"),
+        DiagnosticSpec(message: "unexpected code '|| iOS 8.0' in '#availabile' condition")
       ]
     )
   }
@@ -406,7 +424,7 @@ final class AvailabilityQueryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: version comparison not needed, Fix-It replacements: 19 - 22 = ''
-        DiagnosticSpec(message: "unexpected code '>= 10.51, *' in '#availabile' condition"),
+        DiagnosticSpec(message: "unexpected code '>= 10.51, *' in '#availabile' condition")
       ]
     )
   }

@@ -43,7 +43,7 @@ extension Parser {
   /// Grammar
   /// =======
   ///
-    ///     source-file → top-level-declaration?
+  ///     source-file → top-level-declaration?
   @_spi(RawSyntax)
   public mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
@@ -76,7 +76,8 @@ extension Parser {
           lastItem.unexpectedBetweenSemicolonAndErrorTokens,
           errorTokens: lastItem.errorTokens,
           lastItem.unexpectedAfterErrorTokens,
-          arena: self.arena)
+          arena: self.arena
+        )
       }
       elements.append(newElement)
     }
@@ -126,7 +127,8 @@ extension Parser {
       statements: itemList,
       unexpectedBeforeRBrace,
       rightBrace: rbrace,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   /// Parse an individual item - either in a code block or at the top level.
@@ -211,11 +213,12 @@ extension Parser {
             lastElement.unexpectedBetweenSemicolonAndErrorTokens,
             errorTokens: lastElement.errorTokens,
             lastElement.unexpectedAfterErrorTokens,
-            arena: parser.arena)
+            arena: parser.arena
+          )
         } else {
           return nil
         }
-      } syntax: { parser, items  in
+      } syntax: { parser, items in
         return .statements(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
       }
       return .decl(RawDeclSyntax(directive))

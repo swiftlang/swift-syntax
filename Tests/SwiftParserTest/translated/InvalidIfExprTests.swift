@@ -21,8 +21,9 @@ final class InvalidIfExprTests: XCTestCase {
       (a ? b1️⃣)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
-      ], fixedSource: "(a ? b: <#expression#>)"
+        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+      ],
+      fixedSource: "(a ? b: <#expression#>)"
     )
   }
 
@@ -32,8 +33,9 @@ final class InvalidIfExprTests: XCTestCase {
       (a ? b : c ? d1️⃣)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
-     ], fixedSource: "(a ? b : c ? d: <#expression#>)"
+        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+      ],
+      fixedSource: "(a ? b : c ? d: <#expression#>)"
     )
   }
 
@@ -44,8 +46,9 @@ final class InvalidIfExprTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
-        DiagnosticSpec(message: "expected ')' to end tuple")
-      ], fixedSource: "(a ? b ? c : d: <#expression#>)"
+        DiagnosticSpec(message: "expected ')' to end tuple"),
+      ],
+      fixedSource: "(a ? b ? c : d: <#expression#>)"
     )
   }
 
@@ -57,7 +60,8 @@ final class InvalidIfExprTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
-      ], fixedSource: "(a ? b ? c: <#expression#>: <#expression#>)"
+      ],
+      fixedSource: "(a ? b ? c: <#expression#>: <#expression#>)"
     )
   }
 

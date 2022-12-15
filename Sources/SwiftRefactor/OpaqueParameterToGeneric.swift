@@ -55,18 +55,26 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
     }
 
     let genericParam = GenericParameterSyntax(
-      attributes: nil, name: paramNameSyntax, ellipsis: nil, colon: colon,
-      inheritedType: inheritedType, trailingComma: nil
+      attributes: nil,
+      name: paramNameSyntax,
+      ellipsis: nil,
+      colon: colon,
+      inheritedType: inheritedType,
+      trailingComma: nil
     )
 
     let genericParamRef = SimpleTypeIdentifierSyntax(
-      name: .identifier(paramName), genericArgumentClause: nil
+      name: .identifier(paramName),
+      genericArgumentClause: nil
     )
 
     rewrittenSomeParameters.append(
       .init(
-        original: node, genericParam: genericParam,
-        genericParamRef: genericParamRef))
+        original: node,
+        genericParam: genericParam,
+        genericParamRef: genericParamRef
+      )
+    )
 
     return TypeSyntax(genericParamRef)
   }
@@ -77,15 +85,15 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
     // If this tuple type is simple parentheses around a replaced "some"
     // parameter, drop the parentheses.
     guard let newTuple = newNode.as(TupleTypeSyntax.self),
-          newTuple.elements.count == 1,
-          let onlyElement = newTuple.elements.first,
-          onlyElement.name == nil,
-          onlyElement.ellipsis == nil,
-          let onlyIdentifierType =
-            onlyElement.type.as(SimpleTypeIdentifierSyntax.self),
-          rewrittenSomeParameters.first(
-            where: { $0.genericParamRef.name.text == onlyIdentifierType.name.text }
-          ) != nil
+      newTuple.elements.count == 1,
+      let onlyElement = newTuple.elements.first,
+      onlyElement.name == nil,
+      onlyElement.ellipsis == nil,
+      let onlyIdentifierType =
+        onlyElement.type.as(SimpleTypeIdentifierSyntax.self),
+      rewrittenSomeParameters.first(
+        where: { $0.genericParamRef.name.text == onlyIdentifierType.name.text }
+      ) != nil
     else {
       return newNode
     }
@@ -134,8 +142,8 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
 
       // Add a trailing comma to the prior generic parameter, if there is one.
       if let lastNewGenericParam = newGenericParams.last {
-        newGenericParams[newGenericParams.count-1] =
-            lastNewGenericParam.withTrailingComma(.commaToken())
+        newGenericParams[newGenericParams.count - 1] =
+          lastNewGenericParam.withTrailingComma(.commaToken())
         newGenericParams.append(newGenericParam.withLeadingTrivia(.space))
       } else {
         newGenericParams.append(newGenericParam)
@@ -164,14 +172,17 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
   }
 
   public static func refactor(
-    syntax decl: DeclSyntax, in context: Void
+    syntax decl: DeclSyntax,
+    in context: Void
   ) -> DeclSyntax? {
     // Function declaration.
     if let funcSyntax = decl.as(FunctionDeclSyntax.self) {
-      guard let (newInput, newGenericParams) = replaceSomeParameters(
-        in: funcSyntax.signature.input,
-        augmenting: funcSyntax.genericParameterClause
-      ) else {
+      guard
+        let (newInput, newGenericParams) = replaceSomeParameters(
+          in: funcSyntax.signature.input,
+          augmenting: funcSyntax.genericParameterClause
+        )
+      else {
         return nil
       }
 
@@ -184,10 +195,12 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
 
     // Initializer declaration.
     if let initSyntax = decl.as(InitializerDeclSyntax.self) {
-      guard let (newInput, newGenericParams) = replaceSomeParameters(
-        in: initSyntax.signature.input,
-        augmenting: initSyntax.genericParameterClause
-      ) else {
+      guard
+        let (newInput, newGenericParams) = replaceSomeParameters(
+          in: initSyntax.signature.input,
+          augmenting: initSyntax.genericParameterClause
+        )
+      else {
         return nil
       }
 
@@ -200,10 +213,12 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
 
     // Subscript declaration.
     if let subscriptSyntax = decl.as(SubscriptDeclSyntax.self) {
-      guard let (newIndices, newGenericParams) = replaceSomeParameters(
-        in: subscriptSyntax.indices,
-        augmenting: subscriptSyntax.genericParameterClause
-      ) else {
+      guard
+        let (newIndices, newGenericParams) = replaceSomeParameters(
+          in: subscriptSyntax.indices,
+          augmenting: subscriptSyntax.genericParameterClause
+        )
+      else {
         return nil
       }
 
@@ -217,4 +232,3 @@ public struct OpaqueParameterToGeneric: RefactoringProvider {
     return nil
   }
 }
-

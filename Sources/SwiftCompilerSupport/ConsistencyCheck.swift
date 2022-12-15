@@ -41,13 +41,17 @@ extension Syntax {
 @_cdecl("swift_parser_consistencyCheck")
 @_spi(SwiftCompiler)
 public func _parserConsistencyCheck(
-  bufferPtr: UnsafePointer<UInt8>, bufferLength: Int,
-  filename: UnsafePointer<UInt8>, flags: CUnsignedInt,
+  bufferPtr: UnsafePointer<UInt8>,
+  bufferLength: Int,
+  filename: UnsafePointer<UInt8>,
+  flags: CUnsignedInt,
   hookCtx: OpaquePointer,
   diagnosticHook: @convention(c) (Int, UnsafePointer<Int8>, OpaquePointer) -> Void
 ) -> CInt {
   let buffer = UnsafeBufferPointer<UInt8>(
-    start: bufferPtr, count: bufferLength)
+    start: bufferPtr,
+    count: bufferLength
+  )
   var parser = Parser(buffer)
   return withExtendedLifetime(parser) { () -> CInt in
     // Parse the source file
@@ -57,7 +61,8 @@ public func _parserConsistencyCheck(
     if flags & 0x01 != 0 {
       if sourceFile.syntaxTextBytes != [UInt8](buffer) {
         print(
-          "\(String(cString: filename)): error: file failed to round-trip")
+          "\(String(cString: filename)): error: file failed to round-trip"
+        )
         return 1
       }
     }
@@ -67,7 +72,8 @@ public func _parserConsistencyCheck(
       var anyDiags = false
 
       let diags = ParseDiagnosticsGenerator.diagnostics(
-        for: sourceFile)
+        for: sourceFile
+      )
       for diag in diags {
         // Skip over diagnostics within #if, because we don't know whether
         // we are in an active region or not.

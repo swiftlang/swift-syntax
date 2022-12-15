@@ -24,14 +24,17 @@ final class FunctionTests: XCTestCase {
       ReturnStmt("return fibonacci(n - 1) + self.fibonacci(n - 2)")
     }
 
-    AssertBuildResult(buildable, """
+    AssertBuildResult(
+      buildable,
+      """
       func fibonacci(_ n: Int) -> Int {
           if n <= 1 {
               return n
           }
           return fibonacci(n - 1) + self.fibonacci(n - 2)
       }
-      """)
+      """
+    )
   }
 
   func testArguments() {
@@ -42,23 +45,29 @@ final class FunctionTests: XCTestCase {
     }
     AssertBuildResult(buildable, "test(value1, p2: value2, value3, p4: value4, value5)")
   }
-  
+
   func testFunctionDeclBuilder() {
-    let builder = FunctionDecl("""
+    let builder = FunctionDecl(
+      """
       func test(_ p1: Int, p2: Int, _ p3: Int, p4: Int, _ p5: Int) -> Int {
           return p1 + p2 + p3 + p4 + p5
       }
-      """)
-    
-    AssertBuildResult(builder, """
+      """
+    )
+
+    AssertBuildResult(
+      builder,
+      """
       func test(_ p1: Int, p2: Int, _ p3: Int, p4: Int, _ p5: Int) -> Int {
           return p1 + p2 + p3 + p4 + p5
       }
-      """)
+      """
+    )
   }
-  
+
   func testMultilineFunctionParameterList() {
-    let builder = FunctionDecl("""
+    let builder = FunctionDecl(
+      """
       func test(
         _ p1: Int,
         p2: Int,
@@ -68,9 +77,12 @@ final class FunctionTests: XCTestCase {
       ) -> Int {
         return p1 + p2 + p3 + p4 + p5
       }
-      """)
-    
-    AssertBuildResult(builder, """
+      """
+    )
+
+    AssertBuildResult(
+      builder,
+      """
       func test(
           _ p1: Int,
           p2: Int,
@@ -80,11 +92,13 @@ final class FunctionTests: XCTestCase {
       ) -> Int {
           return p1 + p2 + p3 + p4 + p5
       }
-      """)
+      """
+    )
   }
-  
+
   func testMultilineFunctionCallExpr() {
-    let builder = FunctionCallExpr("""
+    let builder = FunctionCallExpr(
+      """
       test(
       p1: value1,
       p2: value2,
@@ -92,9 +106,12 @@ final class FunctionTests: XCTestCase {
       p4: value4,
       p5: value5
       )
-      """)
-    
-    AssertBuildResult(builder, """
+      """
+    )
+
+    AssertBuildResult(
+      builder,
+      """
       test(
           p1: value1,
           p2: value2,
@@ -102,9 +119,10 @@ final class FunctionTests: XCTestCase {
           p4: value4,
           p5: value5
       )
-      """)
+      """
+    )
   }
-  
+
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
     let buildable = FunctionCallExpr(callee: ExprSyntax("test"))
     AssertBuildResult(buildable, "test()")
@@ -131,6 +149,7 @@ final class FunctionTests: XCTestCase {
       test {
           f(a)
       }
-      """)
+      """
+    )
   }
 }

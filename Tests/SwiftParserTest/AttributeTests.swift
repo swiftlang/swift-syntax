@@ -33,7 +33,7 @@ final class AttributeTests: XCTestCase {
         """
     )
   }
-  
+
   func testMissingGenericTypeToAttribute() {
     AssertParse(
       """
@@ -53,7 +53,7 @@ final class AttributeTests: XCTestCase {
         """
     )
   }
-  
+
   func testMissingClosingParenToAttribute() {
     AssertParse(
       """
@@ -125,7 +125,8 @@ final class AttributeTests: XCTestCase {
     AssertParse(
       """
       @_Concurrency.MainActor(unsafe) public struct Image : SwiftUI.View {}
-      """)
+      """
+    )
   }
 
   func testDerivativeAttribute() {
@@ -138,7 +139,8 @@ final class AttributeTests: XCTestCase {
       ) -> [Result] {
         map(body)
       }
-      """)
+      """
+    )
 
     AssertParse(
       """
@@ -150,7 +152,8 @@ final class AttributeTests: XCTestCase {
       ) -> Result {
         reduce(initialResult, nextPartialResult)
       }
-      """)
+      """
+    )
 
     AssertParse(
       """
@@ -164,7 +167,8 @@ final class AttributeTests: XCTestCase {
         pullback: (Result.TangentVector)
           -> (Array.TangentVector, Result.TangentVector)
       ) {}
-      """)
+      """
+    )
   }
 
   func testTransposeAttribute() {
@@ -174,14 +178,16 @@ final class AttributeTests: XCTestCase {
       static func transposeInstanceMethodWrtSelf(_ other: S, t: S) -> S {
         other + t
       }
-      """)
+      """
+    )
     AssertParse(
       """
       @transpose(of: +)
       func addTranspose(_ v: Float) -> (Float, Float) {
         return (v, v)
       }
-      """)
+      """
+    )
 
     AssertParse(
       """
@@ -189,7 +195,8 @@ final class AttributeTests: XCTestCase {
       func subtractTranspose(_ v: Float) -> (Float, Float) {
         return (v, -v)
       }
-      """)
+      """
+    )
 
     AssertParse(
       """
@@ -197,11 +204,13 @@ final class AttributeTests: XCTestCase {
       func subtractTranspose(_ v: Float) -> (Float, Float) {
         return (v, -v)
       }
-      """)
+      """
+    )
   }
 
   func testImplementsAttribute() {
-    AssertParse("""
+    AssertParse(
+      """
       @_implements(P, f0())
       func g0() -> Int {
         return 10
@@ -221,7 +230,8 @@ final class AttributeTests: XCTestCase {
       public static func isEqual(_ lhs: S, _ rhs: S) -> Bool {
         return false
       }
-      """)
+      """
+    )
   }
 
   func testSemanticsAttribute() {
@@ -236,7 +246,8 @@ final class AttributeTests: XCTestCase {
       internal func interpretRecursion() -> Int {
         return testRecursion(10)
       }
-      """)
+      """
+    )
   }
 
   func testMissingDeclarationAfterAttributes() {
@@ -251,13 +262,15 @@ final class AttributeTests: XCTestCase {
   }
 
   func testObjcImplementationAttribute() throws {
-    AssertParse("""
+    AssertParse(
+      """
       @_objcImplementation extension MyClass {
         func fn() {}
       }
       @_objcImplementation(Category) extension MyClass {
         func fn2() {}
       }
-      """)
+      """
+    )
   }
 }

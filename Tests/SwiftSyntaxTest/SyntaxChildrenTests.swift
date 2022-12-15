@@ -19,7 +19,8 @@ public class SyntaxChildrenTests: XCTestCase {
   public func testIterateWithAllPresent() throws {
     let returnStmt = ReturnStmtSyntax(
       returnKeyword: .returnKeyword(),
-      expression: ExprSyntax(MissingExprSyntax()))
+      expression: ExprSyntax(MissingExprSyntax())
+    )
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
     try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
@@ -29,7 +30,8 @@ public class SyntaxChildrenTests: XCTestCase {
 
   public func testIterateWithSomeMissing() throws {
     let returnStmt = ReturnStmtSyntax(
-      returnKeyword: .returnKeyword())
+      returnKeyword: .returnKeyword()
+    )
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
     try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
@@ -63,7 +65,7 @@ public class SyntaxChildrenTests: XCTestCase {
 
     var sourceAccurateIt = node.children(viewMode: .sourceAccurate).makeIterator()
     try XCTAssertNext(&sourceAccurateIt) { $0.is(MissingDeclSyntax.self) }
-    
+
     var fixedUpIt = node.children(viewMode: .fixedUp).makeIterator()
     try XCTAssertNext(&fixedUpIt) { $0.is(MissingDeclSyntax.self) }
   }

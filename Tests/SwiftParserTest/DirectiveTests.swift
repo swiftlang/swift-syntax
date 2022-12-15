@@ -42,44 +42,44 @@ final class DirectiveTests: XCTestCase {
 
   func testPostfixIfConfigExpression() {
     AssertParse(
-       """
-       foo
-         .bar()
-         .baz()
-         #if CONFIG1
-         .quux
-         .garp
-         #if CONFIG2
-         .quux
-         #if CONFIG3
-           #if INNER1
-            .quux
-            .garp
-           #endif
-         #elseif CONFIG3
-         .quux
-         .garp
-         #else
-         .gorp
-         #endif
-         .garp
-         #endif
-         #endif
-       """
+      """
+      foo
+        .bar()
+        .baz()
+        #if CONFIG1
+        .quux
+        .garp
+        #if CONFIG2
+        .quux
+        #if CONFIG3
+          #if INNER1
+           .quux
+           .garp
+          #endif
+        #elseif CONFIG3
+        .quux
+        .garp
+        #else
+        .gorp
+        #endif
+        .garp
+        #endif
+        #endif
+      """
     )
   }
 
   func testSourceLocation() {
     AssertParse(
-       """
-       #sourceLocation()
-       """
+      """
+      #sourceLocation()
+      """
     )
 
     AssertParse(
-       """
-       #sourceLocation(file: "foo", line: 42)
-       """
+      """
+      #sourceLocation(file: "foo", line: 42)
+      """
     )
 
     AssertParse(
@@ -93,7 +93,8 @@ final class DirectiveTests: XCTestCase {
           g(s)
         }
       }
-      """)
+      """
+    )
   }
 
   public func testUnterminatedPoundIf() {
@@ -131,7 +132,8 @@ final class DirectiveTests: XCTestCase {
       @foo
       #endif
       public struct S2 { }
-      """)
+      """
+    )
 
     AssertParse(
       """

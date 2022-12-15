@@ -107,7 +107,8 @@ final class TrailingSemiTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected ';' separator")
-      ], fixedSource: "let x = 5;"
+      ],
+      fixedSource: "let x = 5;"
     )
   }
 
@@ -118,7 +119,8 @@ final class TrailingSemiTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';;'"])
-      ], fixedSource: "let x = 5;"
+      ],
+      fixedSource: "let x = 5;"
     )
   }
 
@@ -131,11 +133,12 @@ final class TrailingSemiTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';;'"])
-      ], fixedSource: """
-      struct X {
-        func foo() {};
-      }
-      """
+      ],
+      fixedSource: """
+        struct X {
+          func foo() {};
+        }
+        """
     )
   }
 
@@ -150,13 +153,14 @@ final class TrailingSemiTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'")
-      ], fixedSource: """
-      struct X {
-      #if FLAG1
-        func foo() {}; func bar() {}
-      #endif
-      }
-      """
+      ],
+      fixedSource: """
+        struct X {
+        #if FLAG1
+          func foo() {}; func bar() {}
+        #endif
+        }
+        """
     )
   }
 
@@ -171,13 +175,14 @@ final class TrailingSemiTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'")
-      ], fixedSource: """
-      func foo() {
-      #if FLAG1
-        let a = 1; let b = 2
-      #endif
-      }
-      """
+      ],
+      fixedSource: """
+        func foo() {
+        #if FLAG1
+          let a = 1; let b = 2
+        #endif
+        }
+        """
     )
   }
 }

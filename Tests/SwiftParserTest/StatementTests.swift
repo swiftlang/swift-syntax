@@ -16,35 +16,58 @@ import XCTest
 
 final class StatementTests: XCTestCase {
   func testIf() {
-    AssertParse("""
-                if let baz {}
-                """,
-                substructure: Syntax(IfStmtSyntax(
-                  ifKeyword: .ifKeyword(),
-                  conditions: ConditionElementListSyntax([
-                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
-                      letOrVarKeyword: .letKeyword(),
-                      pattern: IdentifierPatternSyntax(identifier: .identifier("baz"))
-                      )))
-                  ]),
-                  body: .init(leftBrace: .leftBraceToken(),
-                              statements: .init([]),
-                              rightBrace: .rightBraceToken()))))
+    AssertParse(
+      """
+      if let baz {}
+      """,
+      substructure: Syntax(
+        IfStmtSyntax(
+          ifKeyword: .ifKeyword(),
+          conditions: ConditionElementListSyntax([
+            ConditionElementSyntax(
+              condition: .init(
+                OptionalBindingConditionSyntax(
+                  letOrVarKeyword: .letKeyword(),
+                  pattern: IdentifierPatternSyntax(identifier: .identifier("baz"))
+                )
+              )
+            )
+          ]),
+          body: .init(
+            leftBrace: .leftBraceToken(),
+            statements: .init([]),
+            rightBrace: .rightBraceToken()
+          )
+        )
+      )
+    )
 
-    AssertParse("""
-                if let self = self {}
-                """,
-                substructure: Syntax(IfStmtSyntax(
-                  ifKeyword: .ifKeyword(),
-                  conditions: ConditionElementListSyntax([
-                    ConditionElementSyntax(condition: .init(OptionalBindingConditionSyntax(
-                      letOrVarKeyword: .letKeyword(),
-                      pattern: IdentifierPatternSyntax(identifier: .selfKeyword()),
-                      initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .selfKeyword())))))
-                  ]),
-                  body: .init(leftBrace: .leftBraceToken(),
-                              statements: .init([]),
-                              rightBrace: .rightBraceToken()))))
+    AssertParse(
+      """
+      if let self = self {}
+      """,
+      substructure: Syntax(
+        IfStmtSyntax(
+          ifKeyword: .ifKeyword(),
+          conditions: ConditionElementListSyntax([
+            ConditionElementSyntax(
+              condition: .init(
+                OptionalBindingConditionSyntax(
+                  letOrVarKeyword: .letKeyword(),
+                  pattern: IdentifierPatternSyntax(identifier: .selfKeyword()),
+                  initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .selfKeyword()))
+                )
+              )
+            )
+          ]),
+          body: .init(
+            leftBrace: .leftBraceToken(),
+            statements: .init([]),
+            rightBrace: .rightBraceToken()
+          )
+        )
+      )
+    )
 
     AssertParse("if let x { }")
 
@@ -63,21 +86,22 @@ final class StatementTests: XCTestCase {
     AssertParse(
       """
       if includeSavedHints { a = a.flatMap{ $0 } ?? nil }
-      """)
+      """
+    )
   }
 
   func testNestedIfs() {
     let nest = 22
     var source = "func nestThoseIfs() {\n"
     for index in (0...nest) {
-        let indent = String(repeating: "    ", count: index + 1)
-        source += indent + "if false != true {\n"
-        source += indent + "   print(\"\\(i)\")\n"
+      let indent = String(repeating: "    ", count: index + 1)
+      source += indent + "if false != true {\n"
+      source += indent + "   print(\"\\(i)\")\n"
     }
 
     for index in (0...nest).reversed() {
-        let indent = String(repeating: "    ", count: index + 1)
-        source += indent + "}\n"
+      let indent = String(repeating: "    ", count: index + 1)
+      source += indent + "}\n"
     }
     source += "}"
     AssertParse(source)
@@ -85,30 +109,31 @@ final class StatementTests: XCTestCase {
 
   func testDo() {
     AssertParse(
-       """
-       do {
+      """
+      do {
 
-       }
-       """
+      }
+      """
     )
   }
 
   func testDoCatch() {
     AssertParse(
-       """
-       do {
+      """
+      do {
 
-       } catch {
+      } catch {
 
-       }
-       """
+      }
+      """
     )
 
     AssertParse(
       """
       do {}
       catch where (error as NSError) == NSError() {}
-      """)
+      """
+    )
   }
 
   func testReturn() {
@@ -117,18 +142,21 @@ final class StatementTests: XCTestCase {
     AssertParse(
       "{ 1️⃣return 0 }",
       { ExprSyntax.parse(from: &$0) },
-      substructure: Syntax(ReturnStmtSyntax(
-        returnKeyword: .returnKeyword(),
-        expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0")))),
+      substructure: Syntax(
+        ReturnStmtSyntax(
+          returnKeyword: .returnKeyword(),
+          expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
+        )
+      ),
       substructureAfterMarker: "1️⃣"
     )
 
     AssertParse("return")
 
     AssertParse(
-       #"""
-       return "assert(\(assertChoices.joined(separator: " || ")))"
-       """#
+      #"""
+      return "assert(\(assertChoices.joined(separator: " || ")))"
+      """#
     )
 
     AssertParse("return true ? nil : nil")
@@ -209,7 +237,8 @@ final class StatementTests: XCTestCase {
       "1️⃣case:",
       diagnostics: [
         DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
-      ])
+      ]
+    )
 
     AssertParse(
       #"""
@@ -237,7 +266,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@s return' in function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '@unknown return' in function")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '@unknown return' in function"),
       ]
     )
   }
@@ -295,7 +324,7 @@ final class StatementTests: XCTestCase {
       if #_hasSymbol(foo) {}
       """
     )
-    
+
     AssertParse(
       """
       if #_hasSymbol(foo as () -> ()) {}
@@ -306,9 +335,11 @@ final class StatementTests: XCTestCase {
   func testIdentifierPattern() {
     AssertParse(
       "switch x { case let .y(z): break }",
-      substructure: Syntax(IdentifierPatternSyntax(
-        identifier: .identifier("z")
-      ))
+      substructure: Syntax(
+        IdentifierPatternSyntax(
+          identifier: .identifier("z")
+        )
+      )
     )
   }
 
@@ -317,33 +348,48 @@ final class StatementTests: XCTestCase {
       """
       graphQLMap["clientMutationId"] as? 1️⃣Swift.Optional<String?> ?? Swift.Optional<String?>.none
       """,
-    substructure: Syntax(MemberTypeIdentifierSyntax(
-      baseType: SimpleTypeIdentifierSyntax(name: .identifier("Swift")),
-      period: .periodToken(),
-      name: .identifier("Optional"),
-      genericArgumentClause: GenericArgumentClauseSyntax(
-        leftAngleBracket: .leftAngleToken(),
-        arguments: GenericArgumentListSyntax([
-          GenericArgumentSyntax(
-            argumentType: OptionalTypeSyntax(
-              wrappedType: SimpleTypeIdentifierSyntax(name: .identifier("String")),
-              questionMark: .postfixQuestionMarkToken()))
-        ]),
-        rightAngleBracket: .rightAngleToken()))),
-    substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        MemberTypeIdentifierSyntax(
+          baseType: SimpleTypeIdentifierSyntax(name: .identifier("Swift")),
+          period: .periodToken(),
+          name: .identifier("Optional"),
+          genericArgumentClause: GenericArgumentClauseSyntax(
+            leftAngleBracket: .leftAngleToken(),
+            arguments: GenericArgumentListSyntax([
+              GenericArgumentSyntax(
+                argumentType: OptionalTypeSyntax(
+                  wrappedType: SimpleTypeIdentifierSyntax(name: .identifier("String")),
+                  questionMark: .postfixQuestionMarkToken()
+                )
+              )
+            ]),
+            rightAngleBracket: .rightAngleToken()
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
 
     AssertParse(
       """
       if case 1️⃣Optional<Any>.none = object["anyCol"] { }
       """,
-      substructure: Syntax(SpecializeExprSyntax(
-        expression: IdentifierExprSyntax(identifier: .identifier("Optional")),
-        genericArgumentClause: GenericArgumentClauseSyntax(
-          leftAngleBracket: .leftAngleToken(), arguments: GenericArgumentListSyntax([
-        GenericArgumentSyntax(
-          argumentType: SimpleTypeIdentifierSyntax(name: .anyKeyword()))
-      ]), rightAngleBracket: .rightAngleToken()))),
-      substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        SpecializeExprSyntax(
+          expression: IdentifierExprSyntax(identifier: .identifier("Optional")),
+          genericArgumentClause: GenericArgumentClauseSyntax(
+            leftAngleBracket: .leftAngleToken(),
+            arguments: GenericArgumentListSyntax([
+              GenericArgumentSyntax(
+                argumentType: SimpleTypeIdentifierSyntax(name: .anyKeyword())
+              )
+            ]),
+            rightAngleBracket: .rightAngleToken()
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
   }
 
   func testHangingYieldArgument() {
@@ -353,7 +399,8 @@ final class StatementTests: XCTestCase {
       print("huh")
       """,
       substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("yield"))),
-    substructureAfterMarker: "1️⃣")
+      substructureAfterMarker: "1️⃣"
+    )
   }
 
   func testYield() {
@@ -366,12 +413,19 @@ final class StatementTests: XCTestCase {
         }
       }
       """,
-      substructure: Syntax(YieldStmtSyntax(
-        yieldKeyword: .contextualKeyword("yield"),
-        yields: .init(InOutExprSyntax(
-          ampersand: .prefixAmpersandToken(),
-          expression: IdentifierExprSyntax(identifier: .identifier("x")))))),
-      substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        YieldStmtSyntax(
+          yieldKeyword: .contextualKeyword("yield"),
+          yields: .init(
+            InOutExprSyntax(
+              ampersand: .prefixAmpersandToken(),
+              expression: IdentifierExprSyntax(identifier: .identifier("x"))
+            )
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
 
     AssertParse(
       """
@@ -393,24 +447,34 @@ final class StatementTests: XCTestCase {
         }
       }
       """,
-      substructure: Syntax(YieldStmtSyntax(
-        yieldKeyword: .contextualKeyword("yield"),
-        yields: .init(InOutExprSyntax(
-          ampersand: .prefixAmpersandToken(),
-          expression: SubscriptExprSyntax(
-            calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
-            leftBracket: .leftSquareBracketToken(),
-            argumentList: TupleExprElementListSyntax([
-              TupleExprElementSyntax(
-                expression: IdentifierExprSyntax(identifier: .identifier("key")),
-                trailingComma: .commaToken()),
-              TupleExprElementSyntax(
-                label: .identifier("isUnique"),
-                colon: .colonToken(),
-                expression: BooleanLiteralExprSyntax(booleanLiteral: .trueKeyword())),
-            ]),
-            rightBracket: .rightSquareBracketToken()))))),
-      substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        YieldStmtSyntax(
+          yieldKeyword: .contextualKeyword("yield"),
+          yields: .init(
+            InOutExprSyntax(
+              ampersand: .prefixAmpersandToken(),
+              expression: SubscriptExprSyntax(
+                calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
+                leftBracket: .leftSquareBracketToken(),
+                argumentList: TupleExprElementListSyntax([
+                  TupleExprElementSyntax(
+                    expression: IdentifierExprSyntax(identifier: .identifier("key")),
+                    trailingComma: .commaToken()
+                  ),
+                  TupleExprElementSyntax(
+                    label: .identifier("isUnique"),
+                    colon: .colonToken(),
+                    expression: BooleanLiteralExprSyntax(booleanLiteral: .trueKeyword())
+                  ),
+                ]),
+                rightBracket: .rightSquareBracketToken()
+              )
+            )
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
 
     // Make sure these are not.
     AssertParse(
@@ -421,12 +485,16 @@ final class StatementTests: XCTestCase {
         }
       }
       """,
-      substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
-        leftParen: .leftParenToken(),
-        argumentList: TupleExprElementListSyntax([]),
-        rightParen: .rightParenToken())),
-    substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([]),
+          rightParen: .rightParenToken()
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
 
     AssertParse(
       """
@@ -436,28 +504,38 @@ final class StatementTests: XCTestCase {
         }
       }
       """,
-      substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
-        leftParen: .leftParenToken(),
-        argumentList: TupleExprElementListSyntax([]),
-        rightParen: .rightParenToken())),
-    substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([]),
+          rightParen: .rightParenToken()
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
 
     AssertParse(
       """
       yield([])
       """,
-      substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
-        leftParen: .leftParenToken(),
-        argumentList: TupleExprElementListSyntax([
-          TupleExprElementSyntax(
-            expression: ArrayExprSyntax(
-              leftSquare: .leftSquareBracketToken(),
-              elements: ArrayElementListSyntax([]),
-              rightSquare: .rightSquareBracketToken())),
-        ]),
-        rightParen: .rightParenToken())))
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([
+            TupleExprElementSyntax(
+              expression: ArrayExprSyntax(
+                leftSquare: .leftSquareBracketToken(),
+                elements: ArrayElementListSyntax([]),
+                rightSquare: .rightSquareBracketToken()
+              )
+            )
+          ]),
+          rightParen: .rightParenToken()
+        )
+      )
+    )
 
     AssertParse(
       """
@@ -465,12 +543,17 @@ final class StatementTests: XCTestCase {
         1️⃣yield & 5
       }
       """,
-      substructure: Syntax(SequenceExprSyntax(elements: ExprListSyntax([
-        IdentifierExprSyntax(identifier: .identifier("yield")),
-        BinaryOperatorExprSyntax(operatorToken: .spacedBinaryOperator("&")),
-        IntegerLiteralExprSyntax(5)
-      ]))),
-      substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        SequenceExprSyntax(
+          elements: ExprListSyntax([
+            IdentifierExprSyntax(identifier: .identifier("yield")),
+            BinaryOperatorExprSyntax(operatorToken: .spacedBinaryOperator("&")),
+            IntegerLiteralExprSyntax(5),
+          ])
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
 
     AssertParse(
       """
@@ -478,36 +561,46 @@ final class StatementTests: XCTestCase {
         1️⃣yield&5
       }
       """,
-      substructure: Syntax(SequenceExprSyntax(elements: ExprListSyntax([
-        IdentifierExprSyntax(identifier: .identifier("yield")),
-        BinaryOperatorExprSyntax(operatorToken: .unspacedBinaryOperator("&")),
-        IntegerLiteralExprSyntax(5)
-      ]))),
-      substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        SequenceExprSyntax(
+          elements: ExprListSyntax([
+            IdentifierExprSyntax(identifier: .identifier("yield")),
+            BinaryOperatorExprSyntax(operatorToken: .unspacedBinaryOperator("&")),
+            IntegerLiteralExprSyntax(5),
+          ])
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
   }
 
   func testDefaultIdentIdentifierInReturnStmt() {
     AssertParse("return FileManager.default")
   }
-  
+
   func testDefaultAsIdentifierInSubscript() {
     AssertParse(
-         """
-         data[position, default: 0]
-         """,
-         substructure: Syntax(SubscriptExprSyntax(
+      """
+      data[position, default: 0]
+      """,
+      substructure: Syntax(
+        SubscriptExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("data")),
           leftBracket: .leftSquareBracketToken(),
           argumentList: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               expression: IdentifierExprSyntax(identifier: .identifier("position")),
-              trailingComma: .commaToken()),
+              trailingComma: .commaToken()
+            ),
             TupleExprElementSyntax(
               label: .identifier("default"),
               colon: .colonToken(),
-              expression: IntegerLiteralExprSyntax(0)),
+              expression: IntegerLiteralExprSyntax(0)
+            ),
           ]),
-          rightBracket: .rightSquareBracketToken()))
+          rightBracket: .rightSquareBracketToken()
+        )
+      )
     )
   }
 }

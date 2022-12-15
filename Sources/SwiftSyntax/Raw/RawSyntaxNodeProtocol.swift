@@ -39,7 +39,7 @@ public extension RawSyntaxNodeProtocol {
     raw.description
   }
 
-  func write<Target>(to target: inout Target) where Target : TextOutputStream {
+  func write<Target>(to target: inout Target) where Target: TextOutputStream {
     raw.write(to: &target)
   }
 
@@ -85,7 +85,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
-      guard Self.isKindOf(other.raw) else { return nil }
+    guard Self.isKindOf(other.raw) else { return nil }
     self.init(raw: other.raw)
   }
 
@@ -161,7 +161,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       self.init(
         kind: kind,
         wholeText: text,
-        textRange: 0 ..< text.count,
+        textRange: 0..<text.count,
         presence: presence,
         hasLexerError: false,
         arena: arena
@@ -197,9 +197,11 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       arena: arena,
       initializingLeadingTriviaWith: { buffer in
         _ = buffer.initialize(from: leadingTriviaPieces)
-      }, initializingTrailingTriviaWith: { buffer in
+      },
+      initializingTrailingTriviaWith: { buffer in
         _ = buffer.initialize(from: trailingTriviaPieces)
-      })
+      }
+    )
     self = RawTokenSyntax(raw: raw)
   }
 

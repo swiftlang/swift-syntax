@@ -34,7 +34,7 @@ final class ExpressionTests: XCTestCase {
 
   func testSequence() {
     AssertParse(
-       "A as? B + C -> D is E as! F ? G = 42 : H"
+      "A as? B + C -> D is E as! F ? G = 42 : H"
     )
   }
 
@@ -74,7 +74,8 @@ final class ExpressionTests: XCTestCase {
       """
       async let child = testNestedTaskPriority(basePri: basePri, curPri: curPri)
       await child
-      """)
+      """
+    )
   }
 
   func testNestedTypeSpecialization() {
@@ -111,26 +112,27 @@ final class ExpressionTests: XCTestCase {
           CodeBlockItemSyntax(
             item: .init(
               KeyPathExprSyntax(
-              backslash: .backslashToken(),
-              components: KeyPathComponentListSyntax([
-                KeyPathComponentSyntax(
-                  period: .periodToken(),
-                  component: .init(
-                    KeyPathOptionalComponentSyntax(
-                      questionOrExclamationMark: .postfixQuestionMarkToken()
+                backslash: .backslashToken(),
+                components: KeyPathComponentListSyntax([
+                  KeyPathComponentSyntax(
+                    period: .periodToken(),
+                    component: .init(
+                      KeyPathOptionalComponentSyntax(
+                        questionOrExclamationMark: .postfixQuestionMarkToken()
+                      )
                     )
-                  )
-                ),
-                KeyPathComponentSyntax(
-                  period: .periodToken(),
-                  component: .init(
-                    KeyPathPropertyComponentSyntax(
-                      identifier: .identifier("foo")
+                  ),
+                  KeyPathComponentSyntax(
+                    period: .periodToken(),
+                    component: .init(
+                      KeyPathPropertyComponentSyntax(
+                        identifier: .identifier("foo")
+                      )
                     )
-                  )
-                )
-              ])
-            ))
+                  ),
+                ])
+              )
+            )
           )
         ])
       )
@@ -148,14 +150,15 @@ final class ExpressionTests: XCTestCase {
       cℹ️[1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected value and ']' to end subscript"),
+        DiagnosticSpec(message: "expected value and ']' to end subscript")
       ]
     )
 
     AssertParse(
       #"""
       _ = \Lens<[Int]>.[0]
-      """#)
+      """#
+    )
 
     AssertParse(
       #"""
@@ -311,24 +314,34 @@ final class ExpressionTests: XCTestCase {
         1️⃣#line : Calendar(identifier: .buddhist),
       ]
       """,
-      substructure: Syntax(DictionaryElementSyntax.init(
-        keyExpression: MacroExpansionExprSyntax(
-            poundToken: .poundToken(), macro: .identifier("line"), argumentList: TupleExprElementListSyntax([])),
-        colon: .colonToken(),
-        valueExpression: FunctionCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .identifier("Calendar")),
-          leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
-              label: .identifier("identifier"),
-              colon: .colonToken(),
-              expression: MemberAccessExprSyntax(
-                dot: .prefixPeriodToken(),
-                name: .identifier("buddhist")))
-          ]),
-          rightParen: .rightParenToken()),
-        trailingComma: .commaToken())),
-    substructureAfterMarker: "1️⃣")
+      substructure: Syntax(
+        DictionaryElementSyntax.init(
+          keyExpression: MacroExpansionExprSyntax(
+            poundToken: .poundToken(),
+            macro: .identifier("line"),
+            argumentList: TupleExprElementListSyntax([])
+          ),
+          colon: .colonToken(),
+          valueExpression: FunctionCallExprSyntax(
+            calledExpression: IdentifierExprSyntax(identifier: .identifier("Calendar")),
+            leftParen: .leftParenToken(),
+            argumentList: TupleExprElementListSyntax([
+              TupleExprElementSyntax(
+                label: .identifier("identifier"),
+                colon: .colonToken(),
+                expression: MemberAccessExprSyntax(
+                  dot: .prefixPeriodToken(),
+                  name: .identifier("buddhist")
+                )
+              )
+            ]),
+            rightParen: .rightParenToken()
+          ),
+          trailingComma: .commaToken()
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
 
     AssertParse(
       """
@@ -412,9 +425,12 @@ final class ExpressionTests: XCTestCase {
       ℹ️"\",1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"' to end string literal"#, notes: [
-          NoteSpec(message: #"to match this opening '"'"#)
-        ])
+        DiagnosticSpec(
+          message: #"expected '"' to end string literal"#,
+          notes: [
+            NoteSpec(message: #"to match this opening '"'"#)
+          ]
+        )
       ]
     )
 
@@ -444,10 +460,10 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-        """
+      """
 
-        ""
-        """
+      ""
+      """
     )
 
     AssertParse(
@@ -477,39 +493,42 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-       ##"""
-       ℹ️""""1️⃣
-       """##,
-       diagnostics: [
-         DiagnosticSpec(message: #"expected '"""' to end string literal"#, notes: [
-          NoteSpec(message: #"to match this opening '"""'"#)
-         ])
-       ]
-     )
+      ##"""
+      ℹ️""""1️⃣
+      """##,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"expected '"""' to end string literal"#,
+          notes: [
+            NoteSpec(message: #"to match this opening '"""'"#)
+          ]
+        )
+      ]
+    )
 
     AssertParse(
-       ##"""
-       """""1️⃣
-       """##,
-       diagnostics: [
-         DiagnosticSpec(message: #"expected '"""' to end string literal"#)
-       ]
-     )
+      ##"""
+      """""1️⃣
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#)
+      ]
+    )
 
     // FIXME: We currently don't enforce that multiline string literal
     // contents must start on a new line
     AssertParse(
-       ##"""
-       """"""1️⃣
-       """##
-     )
+      ##"""
+      """"""1️⃣
+      """##
+    )
 
     AssertParse(
       ##"""
       #"1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: ##"expected '"#' to end string literal"##, notes: []),
+        DiagnosticSpec(message: ##"expected '"#' to end string literal"##, notes: [])
       ]
     )
 
@@ -518,7 +537,7 @@ final class ExpressionTests: XCTestCase {
       #"""1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##),
+        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##)
       ]
     )
 
@@ -527,7 +546,7 @@ final class ExpressionTests: XCTestCase {
       #"""a1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##),
+        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##)
       ]
     )
 
@@ -601,7 +620,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "foo ? 11️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression"),
+        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression")
       ]
     )
   }
@@ -623,18 +642,20 @@ final class ExpressionTests: XCTestCase {
       ]
     )
 
-    AssertParse("#keyPath((b:1️⃣)2️⃣",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end pound literal expression"),
-                ])
+    AssertParse(
+      "#keyPath((b:1️⃣)2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected value in tuple"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end pound literal expression"),
+      ]
+    )
   }
 
   func testMissingArrowInArrowExpr() {
     AssertParse(
       "[(Int) -> 1️⃣throws Int]()",
       diagnostics: [
-        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"]),
+        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: "[(Int) throws -> Int]()"
     )
@@ -642,7 +663,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "[(Int) -> 1️⃣async throws Int]()",
       diagnostics: [
-        DiagnosticSpec(message: "'async throws' may only occur before '->'", fixIts: ["move 'async throws' in front of '->'"]),
+        DiagnosticSpec(message: "'async throws' may only occur before '->'", fixIts: ["move 'async throws' in front of '->'"])
       ],
       fixedSource: "[(Int) async throws -> Int]()"
     )
@@ -664,7 +685,7 @@ final class ExpressionTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in 'do' statement"),
+        DiagnosticSpec(message: "expected expression in 'do' statement")
       ]
     )
   }
@@ -718,7 +739,8 @@ final class ExpressionTests: XCTestCase {
       optional(x: .some(23))
       optional(x: .none)
       var pair : (Int, Double) = makePair(a: 1, b: 2.5)
-      """)
+      """
+    )
   }
 
   // N.B. This test includes zero-width characters that may not render in most
@@ -737,7 +759,8 @@ final class ExpressionTests: XCTestCase {
       _ = #""""""#
 
       _ = ##""" foo # "# "##
-      """###)
+      """###
+    )
   }
 
   func testOperatorReference() {
@@ -762,7 +785,8 @@ final class ExpressionTests: XCTestCase {
               }),
           ]
       }()
-      """)
+      """
+    )
   }
 
   func testMacroExpansionExpression() {

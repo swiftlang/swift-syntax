@@ -86,8 +86,7 @@ extension RawUnexpectedNodesSyntax {
 
 extension SyntaxText {
   var isEditorPlaceholder: Bool {
-    return self.starts(with: SyntaxText("<#")) &&
-    self.hasSuffix(SyntaxText("#>"))
+    return self.starts(with: SyntaxText("<#")) && self.hasSuffix(SyntaxText("#>"))
   }
 }
 

@@ -43,8 +43,9 @@ final class ToplevelLibraryTests: XCTestCase {
       for i1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'in', expression, and body in 'for' statement"),
-      ], fixedSource: """
+        DiagnosticSpec(message: "expected 'in', expression, and body in 'for' statement")
+      ],
+      fixedSource: """
         for i in <#expression#> {}
         """
     )

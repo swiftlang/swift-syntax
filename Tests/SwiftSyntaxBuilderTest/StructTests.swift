@@ -19,61 +19,69 @@ final class StructTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let buildable = StructDecl(leadingTrivia: leadingTrivia, identifier: "TestStruct") {}
 
-    AssertBuildResult(buildable, """
-    ␣struct TestStruct {
-    }
-    """)
+    AssertBuildResult(
+      buildable,
+      """
+      ␣struct TestStruct {
+      }
+      """
+    )
   }
 
   func testNestedStruct() {
-    let nestedStruct = StructDecl("""
-    /// A nested struct
-    /// with multi line comment
-    struct NestedStruct<A, B: C, D> where A: X, A.P == D
-    """) {}
-    
+    let nestedStruct = StructDecl(
+      """
+      /// A nested struct
+      /// with multi line comment
+      struct NestedStruct<A, B: C, D> where A: X, A.P == D
+      """
+    ) {}
+
     let carriateReturnsStruct = StructDecl(
-        leadingTrivia: [
-          .docLineComment("/// A nested struct"),
-          .carriageReturns(1),
-          .docLineComment("/// with multi line comment where the newline is a CR"),
-          .carriageReturns(1)
-        ],
-        structKeyword: .struct,
-        identifier: "CarriateReturnsStruct"
-      )
-      let carriageReturnFormFeedsStruct = StructDecl(
-          leadingTrivia: [
-            .docLineComment("/// A nested struct"),
-            .carriageReturnLineFeeds(1),
-            .docLineComment("/// with multi line comment where the newline is a CRLF"),
-            .carriageReturnLineFeeds(1),
-          ],
-          structKeyword: .struct,
-          identifier: "CarriageReturnFormFeedsStruct"
-        )
+      leadingTrivia: [
+        .docLineComment("/// A nested struct"),
+        .carriageReturns(1),
+        .docLineComment("/// with multi line comment where the newline is a CR"),
+        .carriageReturns(1),
+      ],
+      structKeyword: .struct,
+      identifier: "CarriateReturnsStruct"
+    )
+    let carriageReturnFormFeedsStruct = StructDecl(
+      leadingTrivia: [
+        .docLineComment("/// A nested struct"),
+        .carriageReturnLineFeeds(1),
+        .docLineComment("/// with multi line comment where the newline is a CRLF"),
+        .carriageReturnLineFeeds(1),
+      ],
+      structKeyword: .struct,
+      identifier: "CarriageReturnFormFeedsStruct"
+    )
     let testStruct = StructDecl("public struct TestStruct") {
       nestedStruct
       carriateReturnsStruct
       carriageReturnFormFeedsStruct
     }
 
-    AssertBuildResult(testStruct, """
-    public struct TestStruct {
-        /// A nested struct
-        /// with multi line comment
-        struct NestedStruct < A, B: C, D > where A: X, A.P == D {
-        }
-        /// A nested struct\r\
-        /// with multi line comment where the newline is a CR\r\
-        struct CarriateReturnsStruct {
-        }
-        /// A nested struct\r\n\
-        /// with multi line comment where the newline is a CRLF\r\n\
-        struct CarriageReturnFormFeedsStruct {
-        }
-    }
-    """)
+    AssertBuildResult(
+      testStruct,
+      """
+      public struct TestStruct {
+          /// A nested struct
+          /// with multi line comment
+          struct NestedStruct < A, B: C, D > where A: X, A.P == D {
+          }
+          /// A nested struct\r\
+          /// with multi line comment where the newline is a CR\r\
+          struct CarriateReturnsStruct {
+          }
+          /// A nested struct\r\n\
+          /// with multi line comment where the newline is a CRLF\r\n\
+          struct CarriageReturnFormFeedsStruct {
+          }
+      }
+      """
+    )
   }
 
   func testControlWithLoopAndIf() {
@@ -89,12 +97,15 @@ final class StructTests: XCTestCase {
         }
       }
     }
-    AssertBuildResult(myStruct, """
-    struct MyStruct {
-        let var0: String
-        let var2: String
-        let var4: String
-    }
-    """)
+    AssertBuildResult(
+      myStruct,
+      """
+      struct MyStruct {
+          let var0: String
+          let var2: String
+          let var4: String
+      }
+      """
+    )
   }
 }

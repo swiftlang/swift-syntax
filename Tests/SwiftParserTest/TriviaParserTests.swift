@@ -19,12 +19,15 @@ final class TriviaParserTests: XCTestCase {
   func testTriviaParsing() {
 
     XCTAssertEqual(
-      TriviaParser.parseTrivia("""
+      TriviaParser.parseTrivia(
+        """
         /* */
         /**/
         /* /** */ */
         /** /* */ */
-        """, position: .leading),
+        """,
+        position: .leading
+      ),
       [
         .blockComment("/* */"),
         .newlines(1),
@@ -33,28 +36,37 @@ final class TriviaParserTests: XCTestCase {
         .blockComment("/* /** */ */"),
         .newlines(1),
         .docBlockComment("/** /* */ */"),
-      ])
+      ]
+    )
 
     XCTAssertEqual(
-      TriviaParser.parseTrivia("""
+      TriviaParser.parseTrivia(
+        """
         #!/bin/env swift
 
 
-        """, position: .leading),
+        """,
+        position: .leading
+      ),
       [
         .shebang("#!/bin/env swift"),
         .newlines(2),
-      ])
-    
+      ]
+    )
+
     XCTAssertEqual(
-      TriviaParser.parseTrivia("""
+      TriviaParser.parseTrivia(
+        """
         #!/bin/env swift
-        """, position: .trailing),
+        """,
+        position: .trailing
+      ),
       [
         .unexpectedText("#!/bin/env"),
         .spaces(1),
         .unexpectedText("swift"),
-      ])
+      ]
+    )
 
     XCTAssertEqual(
       TriviaParser.parseTrivia("\r\n\r\r\n\r\n\n", position: .leading),
@@ -62,21 +74,26 @@ final class TriviaParserTests: XCTestCase {
         .carriageReturnLineFeeds(1),
         .carriageReturns(1),
         .carriageReturnLineFeeds(2),
-        .newlines(1)
-      ])
+        .newlines(1),
+      ]
+    )
 
     let bom: Unicode.Scalar = "\u{feff}"
     var bomStr = "\(bom)/// Foo\n"
     bomStr.withSyntaxText { triviaText in
-      XCTAssertEqual(TriviaParser.parseTrivia(triviaText, position: .leading), [
-        .unexpectedText("\u{feff}"),
-        .docLineComment("/// Foo"),
-        .newlines(1)
-      ])
+      XCTAssertEqual(
+        TriviaParser.parseTrivia(triviaText, position: .leading),
+        [
+          .unexpectedText("\u{feff}"),
+          .docLineComment("/// Foo"),
+          .newlines(1),
+        ]
+      )
     }
 
     XCTAssertEqual(
-      TriviaParser.parseTrivia("""
+      TriviaParser.parseTrivia(
+        """
         // diff3-style conflict markers
 
         <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
@@ -87,11 +104,14 @@ final class TriviaParserTests: XCTestCase {
         var b : String = "B"
         >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
 
-        """, position: .leading),
+        """,
+        position: .leading
+      ),
       [
         .lineComment("// diff3-style conflict markers"),
         .newlines(2),
-        .unexpectedText("""
+        .unexpectedText(
+          """
           <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
           var a : String = "A"
           var b : String = "b"
@@ -99,12 +119,15 @@ final class TriviaParserTests: XCTestCase {
           var a : String = "a"
           var b : String = "B"
           >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
-          """),
-        .newlines(1)
-      ])
+          """
+        ),
+        .newlines(1),
+      ]
+    )
 
     XCTAssertEqual(
-      TriviaParser.parseTrivia("""
+      TriviaParser.parseTrivia(
+        """
         // Perforce-style conflict markers
 
         >>>> ORIGINAL
@@ -118,11 +141,14 @@ final class TriviaParserTests: XCTestCase {
         var b : String = "B"
         <<<<
 
-        """, position: .leading),
+        """,
+        position: .leading
+      ),
       [
         .lineComment("// Perforce-style conflict markers"),
         .newlines(2),
-        .unexpectedText("""
+        .unexpectedText(
+          """
           >>>> ORIGINAL
           var a : String = "A"
           var b : String = "B"
@@ -134,32 +160,45 @@ final class TriviaParserTests: XCTestCase {
           var b : String = "B"
           <<<<
 
-          """),
-      ])
+          """
+        ),
+      ]
+    )
   }
 
   func testRawSyntaxLazyTriviaPieces() {
-    withParser(source: """
+    withParser(
+      source: """
         /// Foo.
         func foo() {
         }
-        """) { parser in
+        """
+    ) { parser in
       let fn = parser.parseDeclaration().as(RawFunctionDeclSyntax.self)!
 
-      XCTAssertEqual(fn.funcKeyword.leadingTriviaPieces, [
-        .docLineComment("/// Foo."),
-        .newlines(1),
-      ])
-      XCTAssertEqual(fn.funcKeyword.trailingTriviaPieces, [
-        .spaces(1),
-      ])
+      XCTAssertEqual(
+        fn.funcKeyword.leadingTriviaPieces,
+        [
+          .docLineComment("/// Foo."),
+          .newlines(1),
+        ]
+      )
+      XCTAssertEqual(
+        fn.funcKeyword.trailingTriviaPieces,
+        [
+          .spaces(1)
+        ]
+      )
 
       XCTAssertEqual(fn.body!.leftBrace.leadingTriviaPieces, [])
       XCTAssertEqual(fn.body!.leftBrace.trailingTriviaPieces, [])
 
-      XCTAssertEqual(fn.body!.rightBrace.leadingTriviaPieces, [
-        .newlines(1),
-      ])
+      XCTAssertEqual(
+        fn.body!.rightBrace.leadingTriviaPieces,
+        [
+          .newlines(1)
+        ]
+      )
       XCTAssertEqual(fn.body!.rightBrace.trailingTriviaPieces, [])
     }
 
@@ -171,10 +210,13 @@ final class TriviaParserTests: XCTestCase {
 
       """
     let sourceFileSyntax = Parser.parse(source: source)
-    XCTAssertEqual(sourceFileSyntax.leadingTrivia, [
-      .blockComment("/* comment only */"),
-      .newlines(1)
-    ])
+    XCTAssertEqual(
+      sourceFileSyntax.leadingTrivia,
+      [
+        .blockComment("/* comment only */"),
+        .newlines(1),
+      ]
+    )
   }
 
   func testUnexpectedSplitting() {
@@ -183,6 +225,7 @@ final class TriviaParserTests: XCTestCase {
       [
         .unexpectedText("\u{fffe}"),
         .spaces(1),
-      ])
+      ]
+    )
   }
 }

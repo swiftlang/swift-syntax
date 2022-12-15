@@ -37,7 +37,7 @@ enum Precedence {
 /// determine the relative precedence of two precedence groups.
 struct PrecedenceGraph {
   /// The known set of precedence groups, found by name.
-  var precedenceGroups: [PrecedenceGroupName : PrecedenceGroup] = [:]
+  var precedenceGroups: [PrecedenceGroupName: PrecedenceGroup] = [:]
 
   /// Add a new precedence group
   ///
@@ -50,7 +50,10 @@ struct PrecedenceGraph {
     if let existing = precedenceGroups[group.name] {
       try errorHandler(
         OperatorError.groupAlreadyExists(
-          existing: existing, new: group))
+          existing: existing,
+          new: group
+        )
+      )
     } else {
       precedenceGroups[group.name] = group
     }
@@ -66,7 +69,8 @@ struct PrecedenceGraph {
   /// (fromGroup, fromSyntax) and following precedence groups in the
   /// specified direction.
   private func searchRelationships(
-    initialGroupName: PrecedenceGroupName, initialSyntax: Syntax,
+    initialGroupName: PrecedenceGroupName,
+    initialSyntax: Syntax,
     targetGroupName: PrecedenceGroupName,
     direction: PrecedenceRelation.Kind,
     errorHandler: OperatorErrorHandler
@@ -80,7 +84,8 @@ struct PrecedenceGraph {
     while let (currentGroupName, currentOperatorSyntax) = stack.popLast() {
       guard let currentGroup = lookupGroup(currentGroupName) else {
         try errorHandler(
-          .missingGroup(currentGroupName, referencedFrom: currentOperatorSyntax))
+          .missingGroup(currentGroupName, referencedFrom: currentOperatorSyntax)
+        )
         continue
       }
 
@@ -137,22 +142,30 @@ struct PrecedenceGraph {
     // Walk all of the relationships from the end down, then from the beginning
     // up, to determine whether there is a relation between the two groups.
     return try searchRelationships(
-      initialGroupName: endGroupName, initialSyntax: endSyntax,
-      targetGroupName: startGroupName, direction: .lowerThan,
+      initialGroupName: endGroupName,
+      initialSyntax: endSyntax,
+      targetGroupName: startGroupName,
+      direction: .lowerThan,
       errorHandler: errorHandler
     ) ?? searchRelationships(
-      initialGroupName: startGroupName, initialSyntax: startSyntax,
-      targetGroupName: endGroupName, direction: .higherThan,
+      initialGroupName: startGroupName,
+      initialSyntax: startSyntax,
+      targetGroupName: endGroupName,
+      direction: .higherThan,
       errorHandler: errorHandler
     ) ?? searchRelationships(
-      initialGroupName: startGroupName, initialSyntax: startSyntax,
-      targetGroupName: endGroupName, direction: .lowerThan,
+      initialGroupName: startGroupName,
+      initialSyntax: startSyntax,
+      targetGroupName: endGroupName,
+      direction: .lowerThan,
       errorHandler: errorHandler
     ).map {
       $0.flipped
     } ?? searchRelationships(
-      initialGroupName: endGroupName, initialSyntax: endSyntax,
-      targetGroupName: startGroupName, direction: .higherThan,
+      initialGroupName: endGroupName,
+      initialSyntax: endSyntax,
+      targetGroupName: startGroupName,
+      direction: .higherThan,
       errorHandler: errorHandler
     ).map {
       $0.flipped

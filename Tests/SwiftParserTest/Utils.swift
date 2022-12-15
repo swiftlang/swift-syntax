@@ -19,4 +19,3 @@ func withParser<T>(source: String, _ body: (inout Parser) throws -> T) rethrows 
     return try body(&parser)
   }
 }
-

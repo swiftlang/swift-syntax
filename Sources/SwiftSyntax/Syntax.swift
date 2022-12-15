@@ -71,11 +71,11 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   public init<S: SyntaxProtocol>(_ syntax: S) {
     self = syntax._syntaxNode
   }
-  
+
   public init(fromProtocol syntax: SyntaxProtocol) {
     self = syntax._syntaxNode
   }
-  
+
   public init?(fromProtocol syntax: SyntaxProtocol?) {
     guard let syntax = syntax else { return nil }
     self = syntax._syntaxNode
@@ -103,7 +103,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     return data.nodeId.hash(into: &hasher)
   }
 
-  public static func ==(lhs: Syntax, rhs: Syntax) -> Bool {
+  public static func == (lhs: Syntax, rhs: Syntax) -> Bool {
     return lhs.data.nodeId == rhs.data.nodeId
   }
 }
@@ -152,7 +152,7 @@ public extension SyntaxHashable {
     return _syntaxNode.data.nodeId.hash(into: &hasher)
   }
 
-  static func ==(lhs: Self, rhs: Self) -> Bool {
+  static func == (lhs: Self, rhs: Self) -> Bool {
     return lhs._syntaxNode.data.nodeId == rhs._syntaxNode.data.nodeId
   }
 }
@@ -161,7 +161,8 @@ public extension SyntaxHashable {
 /// protocol to provide common functionality for all syntax nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol SyntaxProtocol: CustomStringConvertible,
-    CustomDebugStringConvertible, TextOutputStreamable {
+  CustomDebugStringConvertible, TextOutputStreamable
+{
 
   /// Retrieve the generic syntax node that is represented by this node.
   /// Do not retrieve this property directly. Use `Syntax(self)` instead.
@@ -573,7 +574,7 @@ public extension SyntaxProtocol {
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
   func write<Target>(to target: inout Target)
-    where Target: TextOutputStream {
+  where Target: TextOutputStream {
     data.raw.write(to: &target)
   }
 }
@@ -601,19 +602,33 @@ public extension SyntaxProtocol {
   ///   the dump.
   ///   - indentLevel: The starting indent level, 0 by default. Each level is 2
   ///   spaces.
-  func debugDescription(includeChildren: Bool = false, includeTrivia: Bool = false,
-                        converter: SourceLocationConverter? = nil, mark: SyntaxProtocol? = nil,
-                        indentLevel: Int = 0) -> String {
+  func debugDescription(
+    includeChildren: Bool = false,
+    includeTrivia: Bool = false,
+    converter: SourceLocationConverter? = nil,
+    mark: SyntaxProtocol? = nil,
+    indentLevel: Int = 0
+  ) -> String {
     var str = ""
-    debugWrite(to: &str, includeChildren: includeChildren, includeTrivia: includeTrivia,
-               converter: converter, mark: mark, indentLevel: indentLevel)
+    debugWrite(
+      to: &str,
+      includeChildren: includeChildren,
+      includeTrivia: includeTrivia,
+      converter: converter,
+      mark: mark,
+      indentLevel: indentLevel
+    )
     return str
   }
 
-  private func debugWrite<Target: TextOutputStream>(to target: inout Target,
-                                                    includeChildren: Bool, includeTrivia: Bool,
-                                                    converter: SourceLocationConverter? = nil, mark: SyntaxProtocol? = nil,
-                                                    indentLevel: Int) {
+  private func debugWrite<Target: TextOutputStream>(
+    to target: inout Target,
+    includeChildren: Bool,
+    includeTrivia: Bool,
+    converter: SourceLocationConverter? = nil,
+    mark: SyntaxProtocol? = nil,
+    indentLevel: Int
+  ) {
     if let mark = mark, self.id == mark.id {
       target.write("*** ")
     }
@@ -658,8 +673,14 @@ public extension SyntaxProtocol {
         target.write("\n")
         target.write(String(repeating: " ", count: childIndentLevel * 2))
         target.write("\(num): ")
-        child.debugWrite(to: &target, includeChildren: includeChildren, includeTrivia: includeTrivia,
-                         converter: converter, mark: mark, indentLevel: childIndentLevel)
+        child.debugWrite(
+          to: &target,
+          includeChildren: includeChildren,
+          includeTrivia: includeTrivia,
+          converter: converter,
+          mark: mark,
+          indentLevel: childIndentLevel
+        )
       }
     }
   }
@@ -718,7 +739,7 @@ public struct TokenSequence: Sequence {
 
 extension TokenSequence: CustomReflectable {
   public var customMirror: Mirror {
-    return Mirror(self, unlabeledChildren: self.map{ $0 })
+    return Mirror(self, unlabeledChildren: self.map { $0 })
   }
 }
 
@@ -765,7 +786,7 @@ public struct ReversedTokenSequence: Sequence {
 
 extension ReversedTokenSequence: CustomReflectable {
   public var customMirror: Mirror {
-    return Mirror(self, unlabeledChildren: self.map{ $0 })
+    return Mirror(self, unlabeledChildren: self.map { $0 })
   }
 }
 

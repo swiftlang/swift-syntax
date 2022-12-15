@@ -27,8 +27,11 @@ public class BumpPtrAllocator {
   /// - end: Points to the end address of `slabs.last`. This is equivalent to
   ///        `slabs.last!.baseAddress! + slabs.last!.count`
   /// 'nil' if `slabs` is empty.
-  private var current: (pointer: UnsafeMutableRawPointer,
-                        end: UnsafeMutableRawPointer)?
+  private var current:
+    (
+      pointer: UnsafeMutableRawPointer,
+      end: UnsafeMutableRawPointer
+    )?
   private var customSizeSlabs: [Slab]
   private var _totalBytesAllocated: Int
 
@@ -61,7 +64,9 @@ public class BumpPtrAllocator {
   private func startNewSlab() {
     let newSlabSize = self.slabSize(at: slabs.count)
     let newSlab = Slab.allocate(
-      byteCount: newSlabSize, alignment: Self.SLAB_ALIGNMENT)
+      byteCount: newSlabSize,
+      alignment: Self.SLAB_ALIGNMENT
+    )
     let pointer = newSlab.baseAddress!
     current = (pointer, pointer.advanced(by: newSlabSize))
     slabs.append(newSlab)
@@ -108,7 +113,9 @@ public class BumpPtrAllocator {
     // If the size is too big, allocate a dedicated slab for it.
     if byteCount >= self.slabSize {
       let customSlab = Slab.allocate(
-        byteCount: byteCount, alignment: alignment)
+        byteCount: byteCount,
+        alignment: alignment
+      )
       customSizeSlabs.append(customSlab)
       return customSlab
     }
@@ -129,8 +136,10 @@ public class BumpPtrAllocator {
   /// class instances, existentials, etc.) is strongly discouraged because they
   /// are not automatically deinitialized.
   public func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {
-    let allocated = allocate(byteCount: MemoryLayout<T>.stride * count,
-                             alignment: MemoryLayout<T>.alignment)
+    let allocated = allocate(
+      byteCount: MemoryLayout<T>.stride * count,
+      alignment: MemoryLayout<T>.alignment
+    )
     return allocated.bindMemory(to: T.self)
   }
 

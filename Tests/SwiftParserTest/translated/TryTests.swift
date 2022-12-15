@@ -140,8 +140,9 @@ final class TryTests: XCTestCase {
       1️⃣try let singleLet = try foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["remove redundant 'try'"]),
-      ], fixedSource: "let singleLet = try foo()"
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["remove redundant 'try'"])
+      ],
+      fixedSource: "let singleLet = try foo()"
     )
   }
 
@@ -151,8 +152,9 @@ final class TryTests: XCTestCase {
       1️⃣try let singleLet = foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-      ], fixedSource: "let singleLet = try foo()"
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+      ],
+      fixedSource: "let singleLet = try foo()"
     )
   }
 
@@ -162,8 +164,9 @@ final class TryTests: XCTestCase {
       1️⃣try var singleVar = foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-      ], fixedSource: "var singleVar = try foo()"
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+      ],
+      fixedSource: "var singleVar = try foo()"
     )
   }
 
@@ -173,7 +176,7 @@ final class TryTests: XCTestCase {
       1️⃣try let uninit: Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: []),
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: [])
       ]
     )
   }
@@ -184,8 +187,9 @@ final class TryTests: XCTestCase {
       1️⃣try let (destructure1, destructure2) = (foo(), bar())
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-      ], fixedSource: "let (destructure1, destructure2) = try (foo(), bar())"
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+      ],
+      fixedSource: "let (destructure1, destructure2) = try (foo(), bar())"
     )
   }
 
@@ -195,8 +199,9 @@ final class TryTests: XCTestCase {
       1️⃣try let multi1 = foo(), multi2 = bar()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-      ], fixedSource: "let multi1 = try foo(), multi2 = try bar()"
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+      ],
+      fixedSource: "let multi1 = try foo(), multi2 = try bar()"
     )
   }
 
@@ -208,12 +213,13 @@ final class TryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-      ], fixedSource: """
-      class TryDecl {
-        let singleLet = try foo()
-      }
-      """
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+      ],
+      fixedSource: """
+        class TryDecl {
+          let singleLet = try foo()
+        }
+        """
     )
   }
 
@@ -225,12 +231,13 @@ final class TryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"]),
-      ], fixedSource: """
-      class TryDecl {
-        var singleVar = try foo()
-      }
-      """
+        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+      ],
+      fixedSource: """
+        class TryDecl {
+          var singleVar = try foo()
+        }
+        """
     )
   }
 
@@ -241,7 +248,7 @@ final class TryTests: XCTestCase {
       func method() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression after 'try'"),
+        DiagnosticSpec(message: "expected expression after 'try'")
       ]
     )
   }
@@ -252,7 +259,7 @@ final class TryTests: XCTestCase {
       1️⃣try func method() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' cannot be used with 'func'"),
+        DiagnosticSpec(message: "'try' cannot be used with 'func'")
       ]
     )
   }
@@ -279,7 +286,8 @@ final class TryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'try' must be placed on the thrown expression", fixIts: ["move 'try' after 'throw'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'", fixIts: ["insert expression"]),
-      ], fixedSource: "throw try <#expression#>"
+      ],
+      fixedSource: "throw try <#expression#>"
     )
   }
 
@@ -289,7 +297,7 @@ final class TryTests: XCTestCase {
       1️⃣try return
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' cannot be used with 'return'"),
+        DiagnosticSpec(message: "'try' cannot be used with 'return'")
       ]
     )
   }
@@ -300,8 +308,9 @@ final class TryTests: XCTestCase {
       1️⃣try throw foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the thrown expression", fixIts: ["move 'try' after 'throw'"]),
-      ], fixedSource: "throw try foo()"
+        DiagnosticSpec(message: "'try' must be placed on the thrown expression", fixIts: ["move 'try' after 'throw'"])
+      ],
+      fixedSource: "throw try foo()"
     )
   }
 
@@ -311,8 +320,9 @@ final class TryTests: XCTestCase {
       1️⃣try return foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the returned expression", fixIts: ["move 'try' after 'return'"]),
-      ], fixedSource: "return try foo()"
+        DiagnosticSpec(message: "'try' must be placed on the returned expression", fixIts: ["move 'try' after 'return'"])
+      ],
+      fixedSource: "return try foo()"
     )
   }
 

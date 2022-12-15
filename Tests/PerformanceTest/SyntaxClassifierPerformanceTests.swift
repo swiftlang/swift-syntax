@@ -25,14 +25,16 @@ public class SyntaxClassifierPerformanceTests: XCTestCase {
   }
 
   func testParsingPerformance() {
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(inputFile)
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(inputFile)
 
-      measure {
-        for _ in 0..<10 {
-          for _ in parsed.classifications {}
+        measure {
+          for _ in 0..<10 {
+            for _ in parsed.classifications {}
+          }
         }
-      }
-    }())
+      }()
+    )
   }
 }

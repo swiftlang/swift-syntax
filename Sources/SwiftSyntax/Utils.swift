@@ -20,7 +20,7 @@ public struct ByteSourceRange: Equatable {
   }
 
   public var endOffset: Int {
-    return offset+length
+    return offset + length
   }
 
   public var isEmpty: Bool {
@@ -28,13 +28,11 @@ public struct ByteSourceRange: Equatable {
   }
 
   public func intersectsOrTouches(_ other: ByteSourceRange) -> Bool {
-    return self.endOffset >= other.offset &&
-      self.offset <= other.endOffset
+    return self.endOffset >= other.offset && self.offset <= other.endOffset
   }
 
   public func intersects(_ other: ByteSourceRange) -> Bool {
-    return self.endOffset > other.offset &&
-      self.offset < other.endOffset
+    return self.endOffset > other.offset && self.offset < other.endOffset
   }
 
   /// Returns the byte range for the overlapping region between two ranges.
@@ -44,7 +42,7 @@ public struct ByteSourceRange: Equatable {
     if start > end {
       return ByteSourceRange(offset: 0, length: 0)
     } else {
-      return ByteSourceRange(offset: start, length: end-start)
+      return ByteSourceRange(offset: start, length: end - start)
     }
   }
 }
@@ -88,7 +86,11 @@ public struct SourceEdit: Equatable {
 extension RawUnexpectedNodesSyntax {
   public init(elements: [RawSyntax], isMaximumNestingLevelOverflow: Bool, arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .unexpectedNodes, uninitializedCount: elements.count, isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow, arena: arena) { layout in
+      kind: .unexpectedNodes,
+      uninitializedCount: elements.count,
+      isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow,
+      arena: arena
+    ) { layout in
       guard var ptr = layout.baseAddress else { return }
       for elem in elements {
         ptr.initialize(to: elem.raw)

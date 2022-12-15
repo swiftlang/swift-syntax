@@ -255,7 +255,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'async'
         // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'rethrows'
         // TODO: Old parser expected error on line 2: 'willSet' accessor cannot have specifier 'reasync'
-        DiagnosticSpec(message: "unexpected code in variable"),
+        DiagnosticSpec(message: "unexpected code in variable")
         // TODO: Old parser expected error on line 3: expected '{' to start 'didSet' definition
         // TODO: Old parser expected error on line 3: 'didSet' accessor cannot have specifier 'throws'
       ]
@@ -271,7 +271,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' to start getter definition
-        DiagnosticSpec(message: "unexpected code 'bogus rethrows {}' in variable"),
+        DiagnosticSpec(message: "unexpected code 'bogus rethrows {}' in variable")
       ]
     )
   }
@@ -286,7 +286,7 @@ final class EffectfulPropertiesTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected '{' to start getter definition
         // TODO: Old parser expected error on line 2: only function declarations may be marked 'rethrows'; did you mean 'throws'?
-        DiagnosticSpec(message: "unexpected code '-> Int { 0 }' in variable"),
+        DiagnosticSpec(message: "unexpected code '-> Int { 0 }' in variable")
       ]
     )
   }

@@ -15,16 +15,18 @@
 import XCTest
 
 final class TypeTests: XCTestCase {
-  
+
   func testMissingColonInType() {
     AssertParse(
       """
       var foo 1️⃣Bar = 1
-      """, diagnostics: [
+      """,
+      diagnostics: [
         DiagnosticSpec(message: "expected ':' in type annotation")
-      ])
+      ]
+    )
   }
-    
+
   func testClosureParsing() {
     AssertParse(
       "(a, b) -> c",
@@ -52,11 +54,14 @@ final class TypeTests: XCTestCase {
   }
 
   func testFunctionTypes() {
-    AssertParse("t as(1️⃣..)->2️⃣", diagnostics: [
-      DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type"),
-      DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '..' in function type"),
-      DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
-    ])
+    AssertParse(
+      "t as(1️⃣..)->2️⃣",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '..' in function type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type"),
+      ]
+    )
   }
 
   func testClosureSignatures() {
@@ -66,45 +71,58 @@ final class TypeTests: XCTestCase {
       simple { [] str in
         print("closure with empty capture list")
       }
-      """)
+      """
+    )
 
-    AssertParse("""
-                { ()
-                throws -> Void in }
-                """,
-                { ExprSyntax.parse(from: &$0) })
+    AssertParse(
+      """
+      { ()
+      throws -> Void in }
+      """,
+      { ExprSyntax.parse(from: &$0) }
+    )
 
-    AssertParse("""
-                { [weak a, unowned(safe) self, b = 3] (a: Int, b: Int, _: Int) -> Int in }
-                """,
-                { ExprSyntax.parse(from: &$0) })
+    AssertParse(
+      """
+      { [weak a, unowned(safe) self, b = 3] (a: Int, b: Int, _: Int) -> Int in }
+      """,
+      { ExprSyntax.parse(from: &$0) }
+    )
 
-    AssertParse("{[1️⃣class]in2️⃣",
-                { ExprSyntax.parse(from: &$0) },
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item"),
-                  DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'class' keyword in closure capture signature"),
-                  DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end closure"),
-                ])
+    AssertParse(
+      "{[1️⃣class]in2️⃣",
+      { ExprSyntax.parse(from: &$0) },
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in closure capture item"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'class' keyword in closure capture signature"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end closure"),
+      ]
+    )
 
-    AssertParse("{[n1️⃣`]in}",
-                { ExprSyntax.parse(from: &$0) },
-                diagnostics: [
-                  DiagnosticSpec(message: "unexpected code '`' in closure capture signature")
-                ])
+    AssertParse(
+      "{[n1️⃣`]in}",
+      { ExprSyntax.parse(from: &$0) },
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '`' in closure capture signature")
+      ]
+    )
 
-    AssertParse("{[weak1️⃣^]in}",
-                { ExprSyntax.parse(from: &$0) },
-                diagnostics: [
-                  DiagnosticSpec(message: "expected identifier in closure capture item"),
-                  DiagnosticSpec(message: "unexpected code '^' in closure capture signature"),
-                ])
+    AssertParse(
+      "{[weak1️⃣^]in}",
+      { ExprSyntax.parse(from: &$0) },
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in closure capture item"),
+        DiagnosticSpec(message: "unexpected code '^' in closure capture signature"),
+      ]
+    )
   }
 
   func testOpaqueReturnTypes() {
-    AssertParse("""
-                public typealias Body = @_opaqueReturnTypeOf("$s6CatKit10pspspspspsV5cmereV6lilguyQrvp", 0) __
-                """)
+    AssertParse(
+      """
+      public typealias Body = @_opaqueReturnTypeOf("$s6CatKit10pspspspspsV5cmereV6lilguyQrvp", 0) __
+      """
+    )
   }
 
   func testVariadics() {
@@ -129,15 +147,17 @@ final class TypeTests: XCTestCase {
                                 @convention(method) () -> (),
                                 @convention(objc_method) () -> (),
                                 @convention(witness_method: Bendable) (Fork) -> ()) -> ()
-      """#)
+      """#
+    )
   }
 
   func testMetatypes() {
     AssertParse(
       """
       arg.covariantAssocMetatype1 { (_: Any.Type.Type.Type) in }
-      """)
-    
+      """
+    )
+
     AssertParse(
       """
       protocol CovariantMetatypes {
@@ -161,7 +181,8 @@ final class TypeTests: XCTestCase {
         subscript(covariantAssocMetatypeSubscript1 _: (Q.Type.Type.Type) -> Void) -> Q.Type { get }
         subscript(covariantAssocMetatypeSubscript2 _: Void) -> (Q.Type, Q.Type.Type) { get }
       }
-      """)
+      """
+    )
   }
 
   func testNamedOpaqueReturnTypes() {
@@ -179,7 +200,8 @@ final class TypeTests: XCTestCase {
         var prop1: Int = 5
         var prop2: <U, V> (U, V) = ("hello", 5)
       }
-      """)
+      """
+    )
   }
 }
 
@@ -188,19 +210,22 @@ final class TypeParameterPackTests: XCTestCase {
     AssertParse(
       """
       func f1<T...>() -> T... {}
-      """)
+      """
+    )
   }
   func testParameterPacks2() {
     AssertParse(
       """
       func f2<T...>() -> (T...) {}
-      """)
+      """
+    )
   }
   func testParameterPacks3() {
     AssertParse(
       """
       func f3<T...>() -> G<T... > {}
-      """)
+      """
+    )
   }
   func testParameterPacks4() {
     AssertParse(
@@ -210,105 +235,124 @@ final class TypeParameterPackTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "associated types cannot be variadic",
-                       fixIts: ["remove '...'"])
-      ])
+        DiagnosticSpec(
+          message: "associated types cannot be variadic",
+          fixIts: ["remove '...'"]
+        )
+      ]
+    )
   }
   func testParameterPacks5() {
     AssertParse(
-    """
-    typealias Alias<T...> = (T...)
-    """)
+      """
+      typealias Alias<T...> = (T...)
+      """
+    )
   }
   func testParameterPacks6() {
     AssertParse(
       """
       struct S<T...> {}
-      """)
+      """
+    )
   }
   func testParameterPacks7() {
     AssertParse(
       """
       struct S<T, U...> {}
-      """)
+      """
+    )
   }
   func testParameterPacks8() {
     AssertParse(
       """
       struct S<T..., U> {}
-      """)
+      """
+    )
   }
   func testParameterPacks9() {
     AssertParse(
       """
       struct S<T...:P, U> {}
-      """)
+      """
+    )
   }
   func testParameterPacks10() {
     AssertParse(
       """
       struct S<T... :P, U> {}
-      """)
+      """
+    )
   }
   func testParameterPacks11() {
     AssertParse(
       """
       struct S<T...: P> {}
-      """)
+      """
+    )
   }
   func testParameterPacks12() {
     AssertParse(
       """
       struct S<T... : P> {}
-      """)
+      """
+    )
   }
   func testParameterPacks13() {
     AssertParse(
       """
       func foo<T...>(_ x: T...) {}
-      """)
+      """
+    )
   }
   func testParameterPacks14() {
     AssertParse(
       """
       func foo<T...:P>(_ x: T...) {}
-      """)
+      """
+    )
   }
   func testParameterPacks15() {
     AssertParse(
       """
       func foo<T... :P>(_ x: T...) {}
-      """)
+      """
+    )
   }
   func testParameterPacks16() {
     AssertParse(
       """
       func foo<T... : P>(_ x: T...) {}
-      """)
+      """
+    )
   }
   func testParameterPacks17() {
     AssertParse(
       """
       func foo<T...: P>(_ x: T...) {}
-      """)
+      """
+    )
   }
   func testParameterPacks18() {
     AssertParse(
       """
       func foo<T, U, V...>(x: T, y: U, z: V...) { }
-      """)
+      """
+    )
   }
   func testParameterPacks19() {
     AssertParse(
       """
       func foo<T, U..., V>(x: T, y: U..., z: V) { }
-      """)
+      """
+    )
   }
   func testParameterPacks20() {
     AssertParse(
       """
       func foo<T..., U..., V...>(x: T..., y: U..., z: V...) { }
-      """)
+      """
+    )
   }
   func testParameterPacks21() {
     AssertParse(
@@ -316,7 +360,8 @@ final class TypeParameterPackTests: XCTestCase {
       enum E<T...> {
         case f1(_: T...)
       }
-      """)
+      """
+    )
   }
   func testParameterPacks22() {
     AssertParse(
@@ -324,7 +369,8 @@ final class TypeParameterPackTests: XCTestCase {
       enum E<T...> {
         case f2(_: G<T... >)
       }
-      """)
+      """
+    )
   }
   func testParameterPacks23() {
     AssertParse(
@@ -332,7 +378,8 @@ final class TypeParameterPackTests: XCTestCase {
       enum E<T...> {
         var x: T... { fatalError() }
       }
-      """)
+      """
+    )
   }
   func testParameterPacks24() {
     AssertParse(
@@ -340,7 +387,8 @@ final class TypeParameterPackTests: XCTestCase {
       enum E<T...> {
         var x: (T...) { fatalError() }
       }
-      """)
+      """
+    )
   }
   func testParameterPacks25() {
     AssertParse(
@@ -348,7 +396,8 @@ final class TypeParameterPackTests: XCTestCase {
       enum E<T...> {
         subscript(_: T...) -> Int { fatalError() }
       }
-      """)
+      """
+    )
   }
   func testParameterPacks26() {
     AssertParse(
@@ -356,7 +405,8 @@ final class TypeParameterPackTests: XCTestCase {
       enum E<T...> {
         subscript() -> T... { fatalError() }
       }
-      """)
+      """
+    )
   }
   func testParameterPacks27() {
     AssertParse(
@@ -364,104 +414,116 @@ final class TypeParameterPackTests: XCTestCase {
       enum E<T...> {
         subscript() -> (T...) { fatalError() }
       }
-      """)
+      """
+    )
   }
   func testParameterPacks28() {
     // We allow whitespace between the generic parameter and the '...', this is
     // consistent with regular variadic parameters.
     AssertParse(
-    """
-    func f1<T ...>(_ x: T ...) -> (T ...) {}
-    """)
+      """
+      func f1<T ...>(_ x: T ...) -> (T ...) {}
+      """
+    )
   }
   func testVariadicTypes() {
     AssertParse(
-    """
-    let _: G< > = G()
-    let _: G<T... > = G()
-    let _: G<Int, T... > = G()
-    let _ = G< >.self
-    let _ = G<T... >.self
-    let _ = G<Int, T... >.self
-    """)
+      """
+      let _: G< > = G()
+      let _: G<T... > = G()
+      let _: G<Int, T... > = G()
+      let _ = G< >.self
+      let _ = G<T... >.self
+      let _ = G<Int, T... >.self
+      """
+    )
 
   }
-  
+
   func testMissingCommaInType() throws {
     AssertParse(
       """
       var foo: (Int)
-      """)
-    
+      """
+    )
+
     AssertParse(
       """
       var foo: (Int, Int)
-      """)
-    
+      """
+    )
+
     AssertParse(
       """
       var foo: (bar: Int 1️⃣bar2: Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type")
-      ])
-    
+      ]
+    )
+
     AssertParse(
       """
       var foo: (bar: Int 1️⃣Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type")
-      ])
-    
+      ]
+    )
+
     AssertParse(
       """
       var foo: (a 1️⃣Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in tuple type")
-      ])
-    
+      ]
+    )
+
     AssertParse(
       """
       var foo: (A 1️⃣Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type")
-      ])
-    
+      ]
+    )
+
     AssertParse(
       """
       var foo: (_ 1️⃣a 2️⃣Int)
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in tuple type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type")
-      ])
-    
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type"),
+      ]
+    )
+
     AssertParse(
       """
       var foo: (Array<Foo> 1️⃣Array<Bar>)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type"),
-      ])
-    
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ]
+    )
+
     AssertParse(
       """
       var foo: (a 1️⃣Array<Bar>)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in tuple type"),
-      ])
-    
+        DiagnosticSpec(message: "expected ':' in tuple type")
+      ]
+    )
+
     AssertParse(
       """
       var foo: (Array<Foo> 1️⃣a)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' in tuple type"),
-      ])
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ]
+    )
   }
 }
-

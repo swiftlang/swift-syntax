@@ -21,26 +21,33 @@ final class DoStmtTests: XCTestCase {
         TryExpr(expression: FunctionCallExpr(callee: ExprSyntax("a.b")))
       }),
       catchClauses: [
-        CatchClause(CatchItemList {
-          CatchItem(pattern: PatternSyntax("Error1"))
-          CatchItem(pattern: PatternSyntax("Error2"))
-        }) {
+        CatchClause(
+          CatchItemList {
+            CatchItem(pattern: PatternSyntax("Error1"))
+            CatchItem(pattern: PatternSyntax("Error2"))
+          }
+        ) {
           FunctionCallExpr(callee: ExprSyntax("print")) {
             TupleExprElement(expression: StringLiteralExpr(content: "Known error"))
           }
         },
-        CatchClause(CatchItemList {
-          CatchItem(
-            pattern: PatternSyntax("Error3"), whereClause: WhereClause(guardResult: MemberAccessExpr(base: "error", name: "isError4")))
-        }) {
+        CatchClause(
+          CatchItemList {
+            CatchItem(
+              pattern: PatternSyntax("Error3"),
+              whereClause: WhereClause(guardResult: MemberAccessExpr(base: "error", name: "isError4"))
+            )
+          }
+        ) {
           ThrowStmt(expression: MemberAccessExpr(base: "Error4", name: "error3"))
         },
         CatchClause {
           FunctionCallExpr(callee: ExprSyntax("print")) {
             TupleExprElement(expression: "error")
           }
-        }
-      ])
+        },
+      ]
+    )
 
     AssertBuildResult(
       buildable,
@@ -54,6 +61,7 @@ final class DoStmtTests: XCTestCase {
       } catch {
           print(error)
       }
-      """)
+      """
+    )
   }
 }

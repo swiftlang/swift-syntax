@@ -26,10 +26,15 @@ extension PrecedenceGroup {
         let isLowerThan = relation.higherThanOrLowerThan.text == "lowerThan"
         for otherGroup in relation.otherNames {
           let otherGroupName = otherGroup.name.text
-          let relationKind: PrecedenceRelation.Kind = isLowerThan ? .lowerThan
-                                                                  : .higherThan
+          let relationKind: PrecedenceRelation.Kind =
+            isLowerThan
+            ? .lowerThan
+            : .higherThan
           let relation = PrecedenceRelation(
-            kind: relationKind, groupName: otherGroupName, syntax: otherGroup)
+            kind: relationKind,
+            groupName: otherGroupName,
+            syntax: otherGroup
+          )
           self.relations.append(relation)
         }
 
@@ -64,9 +69,10 @@ extension Operator {
   init(from syntax: OperatorDeclSyntax) {
     self.syntax = syntax
 
-    kind = syntax.modifiers?.compactMap {
-      OperatorKind(rawValue: $0.name.text)
-    }.first ?? .infix
+    kind =
+      syntax.modifiers?.compactMap {
+        OperatorKind(rawValue: $0.name.text)
+      }.first ?? .infix
 
     name = syntax.identifier.text
 
@@ -81,7 +87,7 @@ extension OperatorTable {
     _ sourceFile: SourceFileSyntax,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
-    class OperatorAndGroupVisitor : SyntaxAnyVisitor {
+    class OperatorAndGroupVisitor: SyntaxAnyVisitor {
       var opPrecedence: OperatorTable
       var errors: [OperatorError] = []
 
@@ -98,7 +104,9 @@ extension OperatorTable {
         _ node: OperatorDeclSyntax
       ) -> SyntaxVisitorContinueKind {
         opPrecedence.record(
-          Operator(from: node), errorHandler: errorHandler)
+          Operator(from: node),
+          errorHandler: errorHandler
+        )
         return .skipChildren
       }
 
@@ -106,7 +114,9 @@ extension OperatorTable {
         _ node: PrecedenceGroupDeclSyntax
       ) -> SyntaxVisitorContinueKind {
         opPrecedence.record(
-          PrecedenceGroup(from: node), errorHandler: errorHandler)
+          PrecedenceGroup(from: node),
+          errorHandler: errorHandler
+        )
         return .skipChildren
       }
 
@@ -130,7 +140,7 @@ extension OperatorTable {
       }
 
       // Everything else stops the visitation.
-      override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind{
+      override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
         return .skipChildren
       }
     }

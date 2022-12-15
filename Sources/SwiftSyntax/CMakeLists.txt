@@ -39,7 +39,7 @@ add_swift_host_library(SwiftSyntax
   gyb_generated/SyntaxFactory.swift
   generated/SyntaxKind.swift
   gyb_generated/SyntaxRewriter.swift
-  gyb_generated/SyntaxTraits.swift
+  generated/SyntaxTraits.swift
   gyb_generated/SyntaxTransform.swift
   gyb_generated/SyntaxVisitor.swift
   gyb_generated/TokenKind.swift

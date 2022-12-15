@@ -34,4 +34,32 @@ final class InitializerDeclTests: XCTestCase {
       }
       """)
   }
+  
+  func testMultilineParameterList() {
+    let builder = InitializerDecl("""
+      init(
+        _ p1: Int,
+        p2: Int,
+        _ p3: Int,
+        p4: Int,
+        _ p5: Int
+      ) {
+        self.init(p1 + p2 + p3 + p4 + p5)
+      }
+      """)
+    
+    print(builder.formatted().description)
+    
+    AssertBuildResult(builder, """
+      init(
+          _ p1: Int,
+          p2: Int,
+          _ p3: Int,
+          p4: Int,
+          _ p5: Int
+      ) {
+          self.init(p1 + p2 + p3 + p4 + p5)
+      }
+      """)
+  }
 }

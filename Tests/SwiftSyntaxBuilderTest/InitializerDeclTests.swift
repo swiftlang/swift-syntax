@@ -22,8 +22,6 @@ final class InitializerDeclTests: XCTestCase {
       }
       """)
     
-    print(builder.formatted().description)
-    
     AssertBuildResult(builder, """
       public init(errorCode: Int) {
           self.code = errorCode
@@ -38,8 +36,6 @@ final class InitializerDeclTests: XCTestCase {
         self.code = errorCode
       }
       """)
-    
-    print(builder.formatted().description)
     
     AssertBuildResult(builder, """
       public init?(errorCode: Int) {

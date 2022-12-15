@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if canImport(Darwin)
+#if canImport(Darwin) && !os(iOS) && !os(tvOS) && !os(watchOS)
 import Darwin
 import XCTest
 

@@ -198,7 +198,7 @@ EXPR_NODES = [
          children=[
              Child('LeftParen', kind='LeftParenToken'),
              Child('ElementList', kind='TupleExprElementList',
-                   collection_element_name='Element'),
+                   collection_element_name='Element', is_indented=True),
              Child('RightParen', kind='RightParenToken'),
          ]),
 
@@ -472,7 +472,7 @@ EXPR_NODES = [
              Child('LeftParen', kind='LeftParenToken',
                    is_optional=True),
              Child('ArgumentList', kind='TupleExprElementList', name_for_diagnostics='arguments',
-                   collection_element_name='Argument'),
+                   collection_element_name='Argument', is_indented=True),
              Child('RightParen', kind='RightParenToken',
                    is_optional=True),
              Child('TrailingClosure', kind='ClosureExpr', name_for_diagnostics='trailing closure',

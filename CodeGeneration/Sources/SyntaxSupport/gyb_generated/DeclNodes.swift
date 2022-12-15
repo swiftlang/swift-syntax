@@ -116,7 +116,8 @@ public let DECL_NODES: [Node] = [
                ]),
          Child(name: "ParameterList",
                kind: "FunctionParameterList",
-               collectionElementName: "Parameter"),
+               collectionElementName: "Parameter",
+               isIndented: true),
          Child(name: "RightParen",
                kind: "RightParenToken",
                tokenChoices: [

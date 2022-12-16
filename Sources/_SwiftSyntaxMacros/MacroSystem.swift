@@ -14,7 +14,7 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 /// Describes the kinds of errors that can occur within a macro system.
-public enum MacroSystemError: Error {
+enum MacroSystemError: Error {
   /// Indicates that a macro with the given name has already been defined.
   case alreadyDefined(new: Macro.Type, existing: Macro.Type)
 
@@ -36,16 +36,16 @@ public enum MacroSystemError: Error {
 }
 
 /// A system of known macros that can be expanded syntactically
-public struct MacroSystem {
+struct MacroSystem {
   var macros: [String: Macro.Type] = [:]
 
   /// Create an empty macro system.
-  public init() {}
+  init() {}
 
   /// Add a macro to the system.
   ///
   /// Throws an error if there is already a macro with this name.
-  public mutating func add(_ macro: Macro.Type, name: String) throws {
+  mutating func add(_ macro: Macro.Type, name: String) throws {
     if let knownMacro = macros[name] {
       throw MacroSystemError.alreadyDefined(new: macro, existing: knownMacro)
     }
@@ -54,7 +54,7 @@ public struct MacroSystem {
   }
 
   /// Look for a macro with the given name.
-  public func lookup(_ macroName: String) -> Macro.Type? {
+  func lookup(_ macroName: String) -> Macro.Type? {
     return macros[macroName]
   }
 }
@@ -101,20 +101,24 @@ class MacroApplication: SyntaxRewriter {
   }
 }
 
-extension MacroSystem {
-  /// Expand all macros encountered within the given syntax tree.
-  ///
-  /// - Parameter node: The syntax node in which macros will be evaluated.
-  /// - Parameter context: The context in which macros are evaluated.
-  /// - Returns: the syntax tree with all macros evaluated.
-  public func evaluateMacros<Node: SyntaxProtocol>(
-    node: Node,
+
+extension SyntaxProtocol {
+  /// Expand all uses of the given set of macros within this syntax
+  /// node.
+  public func expand(
+    macros: [String : Macro.Type],
     in context: inout MacroExpansionContext
   ) -> Syntax {
+      // Build the macro system.
+    var system = MacroSystem()
+    for (macroName, macroType) in macros {
+      try! system.add(macroType, name: macroName)
+    }
+
     let applier = MacroApplication(
-      macroSystem: self,
+      macroSystem: system,
       context: context
     )
-    return applier.visit(Syntax(node))
+    return applier.visit(Syntax(self))
   }
 }

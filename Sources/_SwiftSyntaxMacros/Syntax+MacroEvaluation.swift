@@ -95,7 +95,7 @@ extension Syntax {
   /// Determine the name of the macro that is evaluated by this syntax node,
   /// if indeed it is a macro evaluation. For example, "#stringify(x)" has the
   /// name "stringify".
-  public var evaluatedMacroName: String? {
+  var evaluatedMacroName: String? {
     switch self.as(SyntaxEnum.self) {
     case .macroExpansionDecl(let expansion):
       return expansion.macro.text
@@ -114,7 +114,7 @@ extension Syntax {
   /// This operation only makes sense when `evaluatedMacroName` produces a
   /// non-nil value, indicating that this syntax node is a macro evaluation of
   /// some kind.
-  public func evaluateMacro(
+  func evaluateMacro(
     with macroSystem: MacroSystem,
     context: inout MacroExpansionContext
   ) -> Syntax {

@@ -29,6 +29,8 @@ struct GenerateSwiftSyntax: ParsableCommand {
         (miscFile, "Misc.swift"),
         (syntaxAnyVisitorFile, "SyntaxAnyVisitor.swift"),
         (syntaxBaseNodesFile, "SyntaxBaseNodes.swift"),
+        (syntaxEnumFile, "SyntaxEnum.swift"),
+        (syntaxKindFile, "SyntaxKind.swift")
       ],
       destination: URL(fileURLWithPath: generatedPath),
       verbose: verbose

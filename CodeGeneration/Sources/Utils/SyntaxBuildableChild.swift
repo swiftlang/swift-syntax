@@ -80,7 +80,7 @@ public extension Child {
       }))
     }
     let disjunction = ExprList(assertChoices.flatMap { [$0, Expr(BinaryOperatorExpr(text: "||"))] }.dropLast())
-    return FunctionCallExpr(callee: "assert") {
+    return FunctionCallExpr(callee: Expr("assert")) {
       TupleExprElement(expression: SequenceExpr(elements: disjunction))
     }
   }

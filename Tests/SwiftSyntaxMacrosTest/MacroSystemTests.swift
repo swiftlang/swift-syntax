@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -132,6 +133,58 @@ struct CheckContextIndependenceMacro: ExpressionMacro {
   }
 }
 
+enum CustomError: Error, CustomStringConvertible {
+  case message(String)
+
+  var description: String {
+    switch self {
+    case .message(let text):
+      return text
+    }
+  }
+}
+
+struct SimpleDiagnosticMessage: DiagnosticMessage {
+  let message: String
+  let diagnosticID: MessageID
+  let severity: DiagnosticSeverity
+}
+
+extension SimpleDiagnosticMessage: FixItMessage {
+  var fixItID: MessageID { diagnosticID }
+}
+
+public struct ErrorMacro: ExpressionMacro {
+  public static func expansion(
+    of macro: MacroExpansionExprSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> ExprSyntax {
+    guard let firstElement = macro.argumentList.first,
+      let stringLiteral = firstElement.expression
+        .as(StringLiteralExprSyntax.self),
+      stringLiteral.segments.count == 1,
+      case let .stringSegment(messageString) = stringLiteral.segments[0]
+    else {
+      throw CustomError.message("#error macro requires a string literal")
+    }
+
+    context.diagnose(
+      Diagnostic(
+        node: Syntax(macro),
+        message: SimpleDiagnosticMessage(
+          message: messageString.content.description,
+          diagnosticID: MessageID(domain: "test", id: "error"),
+          severity: .error
+        )
+      )
+    )
+
+    return "()"
+  }
+}
+
+// MARK: Assertion helper functions
+
 /// Assert that expanding the given macros in the original source produces
 /// the given expanded source code.
 ///
@@ -146,11 +199,12 @@ struct CheckContextIndependenceMacro: ExpressionMacro {
 ///   - expandedSource: The source code that we expect to see after performing
 ///     macro expansion on the original source.
 public func AssertMacroExpansion(
-  macros: [String : Macro.Type],
+  macros: [String: Macro.Type],
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   _ originalSource: String,
   _ expandedSource: String,
+  diagnosticStrings: [String] = [],
   file: StaticString = #file,
   line: UInt = #line
 ) {
@@ -170,15 +224,25 @@ public func AssertMacroExpansion(
     file: file,
     line: line
   )
+
+  let diags = context.diagnostics
+  XCTAssertEqual(diags.count, diagnosticStrings.count)
+  for (actualDiag, expectedDiag) in zip(diags, diagnosticStrings) {
+    let actualMessage = actualDiag.message
+    XCTAssertEqual(actualMessage, expectedDiag)
+  }
 }
 
+// MARK: Tests
+
 /// The set of test macros we use here.
-public let testMacros: [String : Macro.Type] = [
-  "checkContext" : CheckContextIndependenceMacro.self,
-  "colorLiteral" : ColorLiteralMacro.self,
-  "fileID" : FileIDMacro.self,
-  "imageLiteral" : ImageLiteralMacro.self,
-  "stringify" : StringifyMacro.self,
+public let testMacros: [String: Macro.Type] = [
+  "checkContext": CheckContextIndependenceMacro.self,
+  "colorLiteral": ColorLiteralMacro.self,
+  "fileID": FileIDMacro.self,
+  "imageLiteral": ImageLiteralMacro.self,
+  "stringify": StringifyMacro.self,
+  "myError": ErrorMacro.self,
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -198,7 +262,7 @@ final class MacroSystemTests: XCTestCase {
 
   func testStringifyExpression() {
     AssertMacroExpansion(
-      macros: ["stringify" : StringifyMacro.self],
+      macros: ["stringify": StringifyMacro.self],
       """
       _ = #stringify({ () -> Bool in
         print("hello")
@@ -242,7 +306,7 @@ final class MacroSystemTests: XCTestCase {
 
   func testContextIndependence() {
     AssertMacroExpansion(
-      macros: ["checkContext" : CheckContextIndependenceMacro.self],
+      macros: ["checkContext": CheckContextIndependenceMacro.self],
       """
       let b = #checkContext
       """,
@@ -251,4 +315,23 @@ final class MacroSystemTests: XCTestCase {
       """
     )
   }
+
+  func testErrorExpansion() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      _ = #myError("please don't do that")
+      _ = #myError(bad)
+      """,
+      """
+      _ = ()
+      _ = #myError(bad)
+      """,
+      diagnosticStrings: [
+        "please don't do that",
+        "#error macro requires a string literal",
+      ]
+    )
+  }
+
 }

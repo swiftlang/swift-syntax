@@ -101,15 +101,14 @@ class MacroApplication: SyntaxRewriter {
   }
 }
 
-
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax
   /// node.
   public func expand(
-    macros: [String : Macro.Type],
+    macros: [String: Macro.Type],
     in context: inout MacroExpansionContext
   ) -> Syntax {
-      // Build the macro system.
+    // Build the macro system.
     var system = MacroSystem()
     for (macroName, macroType) in macros {
       try! system.add(macroType, name: macroName)
@@ -119,6 +118,11 @@ extension SyntaxProtocol {
       macroSystem: system,
       context: context
     )
+
+    defer {
+      context = applier.context
+    }
+
     return applier.visit(Syntax(self))
   }
 }

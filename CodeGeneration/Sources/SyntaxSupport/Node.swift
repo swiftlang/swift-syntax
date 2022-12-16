@@ -73,6 +73,10 @@ public class Node {
     return syntaxKind.contains("Token") || collectionElement.contains("Token")
   }
 
+  public var isVisitable: Bool {
+    return !isBase
+  }
+  
   init(name: String,
        nameForDiagnostics: String?,
        description: String? = nil,

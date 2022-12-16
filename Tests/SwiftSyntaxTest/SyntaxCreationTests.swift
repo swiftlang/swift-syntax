@@ -211,4 +211,27 @@ public class SyntaxCreationTests: XCTestCase {
       XCTAssertEqual("\(exprList)", "1 \(operatorName) 1")
     }
   }
+
+  func testTriviaInInitializxerDoesNotOverrideFirstNode() {
+    let node = ExpressionPatternSyntax(
+      leadingTrivia: .lineComment("// Outer leading") + .newline,
+      expression: IntegerLiteralExprSyntax(
+        leadingTrivia: .lineComment("// Inner leading") + .newline,
+        digits: .integerLiteral("42"),
+        trailingTrivia: .newline + .lineComment("// Inner trailing")
+      ),
+      trailingTrivia: .newline + .lineComment("// Outer trailing")
+    )
+
+    XCTAssertEqual(
+      node.description,
+      """
+      // Outer leading
+      // Inner leading
+      42
+      // Inner trailing
+      // Outer trailing
+      """
+    )
+  }
 }

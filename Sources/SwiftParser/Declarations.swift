@@ -21,7 +21,7 @@ extension DeclarationModifier {
       .nonmutating, .optional, .override, .postfix, .prefix, .reasync,
       .required, .rethrows, .staticKeyword, .weak:
       return false
-    case .fileprivateKeyword, .internalKeyword, .open, .privateKeyword,
+    case .fileprivateKeyword, .internalKeyword, .package, .open, .privateKeyword,
       .publicKeyword, .unowned:
       return true
     }

@@ -201,6 +201,7 @@ enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {
   case mutating = "mutating"
   case nonisolated = "nonisolated"
   case nonmutating = "nonmutating"
+  case package = "package"
   case open = "open"
   case optional = "optional"
   case override = "override"

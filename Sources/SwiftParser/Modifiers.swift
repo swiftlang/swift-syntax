@@ -24,6 +24,8 @@ extension Parser {
         (.internalKeyword, _)?,
         (.publicKeyword, _)?:
         elements.append(parseAccessLevelModifier())
+      case (.package, _)?:
+        elements.append(parsePackageAccessLevelModifier())
       case (.open, _)?:
         elements.append(parseOpenAccessLevelModifier())
       case (.staticKeyword, let handle)?:
@@ -125,6 +127,17 @@ extension Parser {
       unexpectedBeforeKeyword,
       name: keyword,
       detail: detail,
+      arena: self.arena
+    )
+  }
+
+  mutating func parsePackageAccessLevelModifier() -> RawDeclModifierSyntax {
+    let (unexpectedBeforeName, name) = self.expectContextualKeyword("package")
+    let details = self.parseAccessModifierDetails()
+    return RawDeclModifierSyntax(
+      unexpectedBeforeName,
+      name: name,
+      detail: details,
       arena: self.arena
     )
   }

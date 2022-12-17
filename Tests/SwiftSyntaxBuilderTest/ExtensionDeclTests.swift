@@ -19,34 +19,39 @@ final class ExtensionDeclTests: XCTestCase {
     let keywords = ["associatedtype", "class"].map { keyword -> VariableDecl in
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(callee: "TokenSyntax.\(raw: keyword)Keyword")
+        FunctionCallExpr(callee: MemberAccessExpr(base: "TokenSyntax", name: "\(keyword)Keyword"))
       }
 
       return VariableDecl(
         modifiers: [DeclModifier(name: .public)],
         letOrVarKeyword: .var
       ) {
-        PatternBinding(pattern: PatternSyntax("`\(raw: keyword)`"),
-                       typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
-                       initializer: nil,
-                       accessor: .getter(body))
+        PatternBinding(
+          pattern: PatternSyntax("`\(raw: keyword)`"),
+          typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
+          accessor: .getter(body)
+        )
 
       }
     }
     let members = MemberDeclList(keywords.map { MemberDeclListItem(decl: $0) })
-    let buildable = ExtensionDecl(modifiers: nil,
-                                  extendedType: Type("TokenSyntax"),
-                                  members: MemberDeclBlock(members: members))
+    let buildable = ExtensionDecl(
+      extendedType: Type("TokenSyntax"),
+      members: MemberDeclBlock(members: members)
+    )
 
-    AssertBuildResult(buildable, """
-    extension TokenSyntax {
-        public var `associatedtype`: TokenSyntax {
-            TokenSyntax.associatedtypeKeyword()
-        }
-        public var `class`: TokenSyntax {
-            TokenSyntax.classKeyword()
-        }
-    }
-    """)
+    AssertBuildResult(
+      buildable,
+      """
+      extension TokenSyntax {
+          public var `associatedtype`: TokenSyntax {
+              TokenSyntax.associatedtypeKeyword()
+          }
+          public var `class`: TokenSyntax {
+              TokenSyntax.classKeyword()
+          }
+      }
+      """
+    )
   }
 }

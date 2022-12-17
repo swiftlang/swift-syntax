@@ -168,7 +168,8 @@ extension Parser {
           rightBrace: RawTokenSyntax(missing: .rightBrace, arena: self.arena),
           arena: self.arena
         ),
-        arena: self.arena)
+        arena: self.arena
+      )
     }
 
     let primaryOrGenerics: T.PrimaryOrGenerics?
@@ -205,7 +206,8 @@ extension Parser {
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
       members: members,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   /// Parse an inheritance clause.
@@ -219,17 +221,24 @@ extension Parser {
       repeat {
         let type: RawTypeSyntax
         if let classKeyword = self.consume(if: .classKeyword) {
-          type = RawTypeSyntax(RawClassRestrictionTypeSyntax(
-            classKeyword: classKeyword,
-            arena: self.arena
-          ))
+          type = RawTypeSyntax(
+            RawClassRestrictionTypeSyntax(
+              classKeyword: classKeyword,
+              arena: self.arena
+            )
+          )
         } else {
           type = self.parseType()
         }
 
         keepGoing = self.consume(if: .comma)
-        elements.append(RawInheritedTypeSyntax(
-          typeName: type, trailingComma: keepGoing, arena: self.arena))
+        elements.append(
+          RawInheritedTypeSyntax(
+            typeName: type,
+            trailingComma: keepGoing,
+            arena: self.arena
+          )
+        )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     return RawTypeInheritanceClauseSyntax(
@@ -251,11 +260,14 @@ extension Parser {
         // Parse the name of the parameter.
         let (unexpectedBeforeName, name) = self.expectIdentifier()
         keepGoing = self.consume(if: .comma)
-        associatedTypes.append(RawPrimaryAssociatedTypeSyntax(
-          unexpectedBeforeName,
-          name: name,
-          trailingComma: keepGoing,
-          arena: self.arena))
+        associatedTypes.append(
+          RawPrimaryAssociatedTypeSyntax(
+            unexpectedBeforeName,
+            name: name,
+            trailingComma: keepGoing,
+            arena: self.arena
+          )
+        )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     let unexpectedBeforeRangle: RawUnexpectedNodesSyntax?
@@ -271,6 +283,7 @@ extension Parser {
       primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
       unexpectedBeforeRangle,
       rightAngleBracket: rangle,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }

@@ -114,11 +114,12 @@ func nodesDescriptionAndCommonParent<SyntaxType: SyntaxProtocol>(_ nodes: [Synta
 
   // If all tokens in the parent are missing, return the parent type name.
   if let commonAncestor = findCommonAncestor(missingSyntaxNodes),
-     commonAncestor.isMissingAllTokens,
-     let firstToken = commonAncestor.firstToken(viewMode: .all),
-     let lastToken = commonAncestor.lastToken(viewMode: .all),
-     missingSyntaxNodes.contains(Syntax(firstToken)),
-     missingSyntaxNodes.contains(Syntax(lastToken)) {
+    commonAncestor.isMissingAllTokens,
+    let firstToken = commonAncestor.firstToken(viewMode: .all),
+    let lastToken = commonAncestor.lastToken(viewMode: .all),
+    missingSyntaxNodes.contains(Syntax(firstToken)),
+    missingSyntaxNodes.contains(Syntax(lastToken))
+  {
     if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
       return (commonAncestor, nodeTypeName)
     } else if let nodeTypeName = commonAncestor.childNameInParent {
@@ -228,13 +229,15 @@ public struct MissingNodesError: ParserError {
   /// If applicable, returns a string that describes the node in which the missing nodes are expected.
   private func parentContextClause(anchor: Syntax?) -> String? {
     // anchorParent is the first parent that has a type name for diagnostics.
-    guard let (anchorParent, anchorTypeName) = anchor?.ancestorOrSelf(mapping: { (node: Syntax) -> (Syntax, String)? in
-      if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
-        return (node, name)
-      } else {
-        return nil
-      }
-    }) else {
+    guard
+      let (anchorParent, anchorTypeName) = anchor?.ancestorOrSelf(mapping: { (node: Syntax) -> (Syntax, String)? in
+        if let name = node.nodeTypeNameForDiagnostics(allowBlockNames: false) {
+          return (node, name)
+        } else {
+          return nil
+        }
+      })
+    else {
       return nil
     }
     if anchorParent.is(SourceFileSyntax.self) {
@@ -344,9 +347,10 @@ extension ParseDiagnosticsGenerator {
 
     var notes: [Note] = []
     if missingNodes.count == 1,
-       let token = missingNodes.last?.as(TokenSyntax.self),
-       let matchingStartMarkerKind = token.tokenKind.matchingStartMarkerKind,
-       let startToken = token.parent?.children(viewMode: .sourceAccurate).lazy.compactMap({ $0.as(TokenSyntax.self) }).first(where: { $0.tokenKind == matchingStartMarkerKind }) {
+      let token = missingNodes.last?.as(TokenSyntax.self),
+      let matchingStartMarkerKind = token.tokenKind.matchingStartMarkerKind,
+      let startToken = token.parent?.children(viewMode: .sourceAccurate).lazy.compactMap({ $0.as(TokenSyntax.self) }).first(where: { $0.tokenKind == matchingStartMarkerKind })
+    {
       notes.append(Note(node: Syntax(startToken), message: MatchingOpeningTokenNote(openingToken: startToken)))
     }
 

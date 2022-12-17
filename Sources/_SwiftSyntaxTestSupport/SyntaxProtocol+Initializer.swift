@@ -58,40 +58,44 @@ private class InitializerExprFormat: BasicFormat {
 }
 
 private extension TriviaPiece {
-  var initializerExpr: ExprSyntaxProtocol {
+  var initializerExpr: ExprSyntax {
     let (label, value) = Mirror(reflecting: self).children.first!
+    let arg: Expr
     switch value {
     case let value as String:
-      return FunctionCallExpr(callee: ".\(raw: label!)") {
-        TupleExprElement(expression: StringLiteralExpr(content: value))
-      }
+      arg = Expr(literal: value)
     case let value as Int:
-      return FunctionCallExpr(callee: ".\(raw: label!)") {
-        TupleExprElement(expression: IntegerLiteralExpr(value))
-      }
+      arg = Expr(literal: value)
     default:
       fatalError("Unknown associated value type")
     }
+    return ExprSyntax(
+      FunctionCallExpr(callee: MemberAccessExpr(name: label!)) {
+        TupleExprElement(expression: arg)
+      }
+    )
   }
 }
 
 private extension Trivia {
-  var initializerExpr: ExprSyntaxProtocol {
+  var initializerExpr: ExprSyntax {
     if pieces.count == 1 {
       switch pieces.first {
       case .spaces(1):
-        return MemberAccessExpr(name: "space")
+        return ExprSyntax(MemberAccessExpr(name: "space"))
       case .newlines(1):
-        return MemberAccessExpr(name: "newline")
+        return ExprSyntax(MemberAccessExpr(name: "newline"))
       default:
         break
       }
     }
-    return ArrayExpr() {
-      for piece in pieces {
-        ArrayElement(expression: piece.initializerExpr)
+    return ExprSyntax(
+      ArrayExpr {
+        for piece in pieces {
+          ArrayElement(expression: piece.initializerExpr)
+        }
       }
-    }
+    )
   }
 }
 
@@ -103,19 +107,22 @@ extension SyntaxProtocol {
     return self.debugInitCallExpr.formatted(using: InitializerExprFormat()).description
   }
 
-  private var debugInitCallExpr: ExprSyntaxProtocol {
+  private var debugInitCallExpr: ExprSyntax {
     let mirror = Mirror(reflecting: self)
     if self.isCollection {
-      return FunctionCallExpr(callee: "\(type(of: self))") {
-        TupleExprElement(
-          expression: ArrayExpr() {
-            for child in mirror.children {
-              let value = child.value as! SyntaxProtocol?
-              ArrayElement(expression: value?.debugInitCallExpr ?? NilLiteralExpr())
+      let typeName = String(describing: type(of: self))
+      return ExprSyntax(
+        FunctionCallExpr(callee: IdentifierExpr(identifier: .identifier(typeName))) {
+          TupleExprElement(
+            expression: ArrayExpr {
+              for child in mirror.children {
+                let value = child.value as! SyntaxProtocol?
+                ArrayElement(expression: value?.debugInitCallExpr ?? ExprSyntax(NilLiteralExpr()))
+              }
             }
-          }
-        )
-      }
+          )
+        }
+      )
     } else if let token = Syntax(self).as(TokenSyntax.self) {
       let tokenKind = token.tokenKind
       let tokenInitializerName: String
@@ -131,49 +138,54 @@ extension SyntaxProtocol {
         tokenInitializerName = String(tokenKindStr[..<tokenKindStr.firstIndex(of: "(")!])
         requiresExplicitText = true
       }
-      return FunctionCallExpr(callee: ".\(raw: tokenInitializerName)") {
-        if requiresExplicitText {
-          TupleExprElement(
-            expression: StringLiteralExpr(content: token.text)
-          )
-        }
-        if !token.leadingTrivia.isEmpty {
-          TupleExprElement(
-            label: .identifier("leadingTrivia"),
-            colon: .colon,
-            expression: token.leadingTrivia.initializerExpr
-          )
-        }
-        if !token.trailingTrivia.isEmpty {
-          TupleExprElement(
-            label: .identifier("trailingTrivia"),
-            colon: .colon,
-            expression: token.trailingTrivia.initializerExpr
-          )
-        }
-        if token.presence != .present {
-          TupleExprElement(
-            label: .identifier("presence"),
-            colon: .colon,
-            expression: MemberAccessExpr(name: "missing")
-          )
-        }
-      }
-    } else {
-      return FunctionCallExpr(callee: "\(type(of: self))") {
-        for child in mirror.children {
-          let label = child.label!
-          let value = child.value as! SyntaxProtocol?
-          let isUnexpected = label.hasPrefix("unexpected")
-          if !isUnexpected || value != nil {
+      return ExprSyntax(
+        FunctionCallExpr(callee: MemberAccessExpr(name: tokenInitializerName)) {
+          if requiresExplicitText {
             TupleExprElement(
-              label: isUnexpected ? nil : .identifier(label),
-              colon: isUnexpected ? nil : .colon,
-              expression: value?.debugInitCallExpr ?? NilLiteralExpr()
+              expression: StringLiteralExpr(content: token.text)
+            )
+          }
+          if !token.leadingTrivia.isEmpty {
+            TupleExprElement(
+              label: .identifier("leadingTrivia"),
+              colon: .colon,
+              expression: token.leadingTrivia.initializerExpr
+            )
+          }
+          if !token.trailingTrivia.isEmpty {
+            TupleExprElement(
+              label: .identifier("trailingTrivia"),
+              colon: .colon,
+              expression: token.trailingTrivia.initializerExpr
+            )
+          }
+          if token.presence != .present {
+            TupleExprElement(
+              label: .identifier("presence"),
+              colon: .colon,
+              expression: MemberAccessExpr(name: "missing")
             )
           }
         }
-      }
+      )
+    } else {
+      let typeName = String(describing: type(of: self))
+      return ExprSyntax(
+        FunctionCallExpr(callee: IdentifierExpr(identifier: .identifier(typeName))) {
+          for child in mirror.children {
+            let label = child.label!
+            let value = child.value as! SyntaxProtocol?
+            let isUnexpected = label.hasPrefix("unexpected")
+            if !isUnexpected || value != nil {
+              TupleExprElement(
+                label: isUnexpected ? nil : .identifier(label),
+                colon: isUnexpected ? nil : .colon,
+                expression: value?.debugInitCallExpr ?? ExprSyntax(NilLiteralExpr())
+              )
+            }
+          }
+        }
+      )
     }
   }
 }

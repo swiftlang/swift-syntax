@@ -32,7 +32,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '(', attribute argument, and ')' in attribute"),
+        DiagnosticSpec(message: "expected '(', attribute argument, and ')' in attribute")
       ]
     )
   }
@@ -59,9 +59,12 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end attribute", notes: [
-          NoteSpec(message: "to match this opening '('")
-        ])
+        DiagnosticSpec(
+          message: "expected ')' to end attribute",
+          notes: [
+            NoteSpec(message: "to match this opening '('")
+          ]
+        )
       ]
     )
   }

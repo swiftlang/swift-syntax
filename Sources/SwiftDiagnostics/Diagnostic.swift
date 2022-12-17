@@ -71,4 +71,3 @@ public struct Diagnostic: CustomDebugStringConvertible {
     return "\(location): \(message)"
   }
 }
-

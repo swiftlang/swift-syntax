@@ -20,19 +20,21 @@ extension Parser {
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
       switch self.at(anyIn: DeclarationModifier.self) {
       case (.privateKeyword, _)?,
-          (.fileprivateKeyword, _)?,
-          (.internalKeyword, _)?,
-          (.publicKeyword, _)?:
+        (.fileprivateKeyword, _)?,
+        (.internalKeyword, _)?,
+        (.publicKeyword, _)?:
         elements.append(parseAccessLevelModifier())
       case (.open, _)?:
         elements.append(parseOpenAccessLevelModifier())
       case (.staticKeyword, let handle)?:
         let staticKeyword = self.eat(handle)
-        elements.append(RawDeclModifierSyntax(
-          name: staticKeyword,
-          detail: nil,
-          arena: self.arena
-        ))
+        elements.append(
+          RawDeclModifierSyntax(
+            name: staticKeyword,
+            detail: nil,
+            arena: self.arena
+          )
+        )
       case (.classKeyword, let handle)?:
         var lookahead = self.lookahead()
         lookahead.eat(.classKeyword)
@@ -42,11 +44,13 @@ extension Parser {
         // or witness something static.
         if lookahead.atStartOfDeclaration() || lookahead.atContextualKeyword("override") {
           let classKeyword = self.eat(handle)
-          elements.append(RawDeclModifierSyntax(
-            name: classKeyword,
-            detail: nil,
-            arena: self.arena
-          ))
+          elements.append(
+            RawDeclModifierSyntax(
+              name: classKeyword,
+              detail: nil,
+              arena: self.arena
+            )
+          )
           continue
         } else {
           break MODIFIER_LOOP
@@ -132,7 +136,8 @@ extension Parser {
       unexpectedBeforeName,
       name: name,
       detail: details,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
@@ -145,7 +150,8 @@ extension Parser {
       unexpectedBeforeName,
       name: name,
       detail: details,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   mutating func parseAccessModifierDetails() -> RawDeclModifierDetailSyntax? {
@@ -173,6 +179,7 @@ extension Parser {
       detail: detail,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }

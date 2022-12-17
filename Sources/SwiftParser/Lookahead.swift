@@ -125,9 +125,10 @@ extension Parser.Lookahead {
     assert(tokenText.hasPrefix(prefix))
 
     // See also: Parser.consumePrefix(_:as:)
-    let offset = (self.currentToken.trailingTriviaByteLength
-                  + tokenText.count
-                  - prefix.count)
+    let offset =
+      (self.currentToken.trailingTriviaByteLength
+        + tokenText.count
+        - prefix.count)
     self.currentToken = self.lexemes.resetForSplit(of: offset)
   }
 }
@@ -228,7 +229,7 @@ extension Parser.Lookahead {
         break
       }
 
-      guard self.at(any: [ .poundElseifKeyword, .poundElseKeyword ]) else {
+      guard self.at(any: [.poundElseifKeyword, .poundElseKeyword]) else {
         break
       }
     }
@@ -367,8 +368,8 @@ extension Parser.Lookahead {
           self.eat(handle)
           stack += [.skipSinglePost(start: .leftSquareBracket), .skipUntil(.rightSquareBracket, .rightSquareBracket)]
         case (.poundIfKeyword, let handle)?,
-            (.poundElseKeyword, let handle)?,
-            (.poundElseifKeyword, let handle)?:
+          (.poundElseKeyword, let handle)?,
+          (.poundElseifKeyword, let handle)?:
           self.eat(handle)
           // skipUntil also implicitly stops at tok::pound_endif.
           stack += [.skipSinglePost(start: t!.0), .skipUntil(.poundElseKeyword, .poundElseifKeyword)]

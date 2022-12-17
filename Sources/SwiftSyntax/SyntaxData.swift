@@ -67,16 +67,14 @@ public struct SyntaxIndexInTree: Comparable, Hashable {
   /// Assuming that this index points to the start of `Raw`, so that it points
   /// to the next sibling of `Raw`.
   func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree +
-                         UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
     return .init(indexInTree: newIndexInTree)
   }
 
   /// Assuming that this index points to the next sibling of `Raw`, reverse it
   /// so that it points to the start of `Raw`.
   func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree -
-                         UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
     return .init(indexInTree: newIndexInTree)
   }
 
@@ -118,8 +116,10 @@ public struct SyntaxIdentifier: Hashable {
   }
 
   static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
-    return .init(rootId: UInt(bitPattern: raw.pointer),
-                 indexInTree: .zero)
+    return .init(
+      rootId: UInt(bitPattern: raw.pointer),
+      indexInTree: .zero
+    )
   }
 }
 
@@ -143,7 +143,7 @@ struct AbsoluteRawSyntax {
   /// Returns next `present` sibling.
   func nextSibling(parent: AbsoluteRawSyntax, viewMode: SyntaxTreeViewMode) -> AbsoluteRawSyntax? {
     var curInfo = info.advancedBySibling(raw)
-    for siblingOpt in parent.raw.layoutView!.children.dropFirst(Int(info.indexInParent+1)) {
+    for siblingOpt in parent.raw.layoutView!.children.dropFirst(Int(info.indexInParent + 1)) {
       if let sibling = siblingOpt, viewMode.shouldTraverse(node: sibling) {
         return AbsoluteRawSyntax(raw: sibling, info: curInfo)
       }
@@ -340,7 +340,7 @@ struct SyntaxData {
 
 #if DEBUG
 /// See `SyntaxMemoryLayout`.
-var SyntaxDataMemoryLayouts: [String : SyntaxMemoryLayout.Value] = [
+var SyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "SyntaxData": .init(SyntaxData.self),
   "SyntaxData.Info": .init(SyntaxData.Info.self),
   "SyntaxData.Info.Root": .init(SyntaxData.Info.Root.self),

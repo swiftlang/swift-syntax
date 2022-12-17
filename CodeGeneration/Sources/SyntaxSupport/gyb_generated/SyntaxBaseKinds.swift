@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public let SYNTAX_BASE_KINDS: Set<String> = [
+public let SYNTAX_BASE_KINDS: [String] = [
   "Decl",
   "Expr",
   "Pattern",

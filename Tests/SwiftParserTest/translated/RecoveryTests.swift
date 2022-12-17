@@ -37,7 +37,7 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the keyword below...' before 'return' statement"),
+        DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the keyword below...' before 'return' statement")
       ]
     )
   }
@@ -52,7 +52,7 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the declaration...' before function"),
+        DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the declaration...' before function")
       ]
     )
   }
@@ -167,7 +167,7 @@ final class RecoveryTests: XCTestCase {
         if1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and body in 'if' statement"),
+        DiagnosticSpec(message: "expected expression and body in 'if' statement")
       ]
     )
   }
@@ -180,7 +180,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected code block in 'if' statement")
       ]
     )
   }
@@ -194,7 +194,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected code block in 'if' statement")
       ]
     )
   }
@@ -208,7 +208,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: missing condition in 'if' statement
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected code block in 'if' statement")
       ]
     )
   }
@@ -253,7 +253,7 @@ final class RecoveryTests: XCTestCase {
         // TODO: Old parser expected error on line 2: missing condition in 'if' statement
         // TODO: Old parser expected error on line 2: closure expression is unused
         // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 8 - 8 = 'do '
-        DiagnosticSpec(message: "expected code block in 'if' statement"),
+        DiagnosticSpec(message: "expected code block in 'if' statement")
       ]
     )
   }
@@ -264,7 +264,7 @@ final class RecoveryTests: XCTestCase {
       while1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and code block in 'while' statement"),
+        DiagnosticSpec(message: "expected expression and code block in 'while' statement")
       ]
     )
   }
@@ -277,7 +277,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: missing condition in 'while' statement
-        DiagnosticSpec(message: "expected code block in 'while' statement"),
+        DiagnosticSpec(message: "expected code block in 'while' statement")
       ]
     )
   }
@@ -291,7 +291,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: missing condition in 'while' statement
-        DiagnosticSpec(message: "expected code block in 'while' statement"),
+        DiagnosticSpec(message: "expected code block in 'while' statement")
       ]
     )
   }
@@ -336,7 +336,7 @@ final class RecoveryTests: XCTestCase {
         // TODO: Old parser expected error on line 2: missing condition in 'while' statement
         // TODO: Old parser expected error on line 2: closure expression is unused
         // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 11 - 11 = 'do '
-        DiagnosticSpec(message: "expected code block in 'while' statement"),
+        DiagnosticSpec(message: "expected code block in 'while' statement")
       ]
     )
   }
@@ -348,7 +348,7 @@ final class RecoveryTests: XCTestCase {
       } while1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected condition in 'repeat' statement"),
+        DiagnosticSpec(message: "expected condition in 'repeat' statement")
       ]
     )
   }
@@ -389,7 +389,7 @@ final class RecoveryTests: XCTestCase {
       }1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'while' and condition in 'repeat' statement"),
+        DiagnosticSpec(message: "expected 'while' and condition in 'repeat' statement")
       ]
     )
   }
@@ -454,7 +454,7 @@ final class RecoveryTests: XCTestCase {
       for1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern, 'in', expression, and body in 'for' statement"),
+        DiagnosticSpec(message: "expected pattern, 'in', expression, and body in 'for' statement")
       ]
     )
   }
@@ -540,7 +540,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern and 'in' in 'for' statement"),
+        DiagnosticSpec(message: "expected pattern and 'in' in 'for' statement")
       ]
     )
   }
@@ -567,7 +567,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected Sequence expression for for-each loop
-        DiagnosticSpec(message: "expected code block in 'for' statement"),
+        DiagnosticSpec(message: "expected code block in 'for' statement")
       ]
     )
   }
@@ -592,7 +592,7 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'whe' in 'for' statement"),
+        DiagnosticSpec(message: "unexpected code 'whe' in 'for' statement")
       ]
     )
   }
@@ -632,7 +632,7 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
         // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        DiagnosticSpec(message: "expected '{}' in 'switch' statement"),
+        DiagnosticSpec(message: "expected '{}' in 'switch' statement")
       ]
     )
   }
@@ -647,7 +647,7 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected expression in 'switch' statement
         // TODO: Old parser expected error on line 1: 'switch' statement body must have at least one 'case' or 'default' block
-        DiagnosticSpec(message: "expected '{}' in 'switch' statement"),
+        DiagnosticSpec(message: "expected '{}' in 'switch' statement")
       ]
     )
   }
@@ -712,7 +712,7 @@ final class RecoveryTests: XCTestCase {
       struct NoBracesStruct11️⃣()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected member block in struct"),
+        DiagnosticSpec(message: "expected member block in struct")
       ]
     )
   }
@@ -770,7 +770,7 @@ final class RecoveryTests: XCTestCase {
       protocol Multi 1️⃣ident {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in protocol"),
+        DiagnosticSpec(message: "found an unexpected second identifier in protocol")
       ]
     )
   }
@@ -781,10 +781,11 @@ final class RecoveryTests: XCTestCase {
       class CCC 1️⃣CCC<T> {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in class"),
-      ], fixedSource: """
-      class CCCCCC<T> {}
-      """
+        DiagnosticSpec(message: "found an unexpected second identifier in class")
+      ],
+      fixedSource: """
+        class CCCCCC<T> {}
+        """
     )
   }
 
@@ -838,7 +839,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: found an unexpected second identifier in constant declaration; is there an accidental break?
-        DiagnosticSpec(message: "unexpected code 'hij, foobar' in tuple pattern"),
+        DiagnosticSpec(message: "unexpected code 'hij, foobar' in tuple pattern")
       ]
     )
   }
@@ -861,7 +862,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in type annotation"),
+        DiagnosticSpec(message: "expected type in type annotation")
       ]
     )
   }
@@ -891,7 +892,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause"),
+        DiagnosticSpec(message: "expected '>' to end generic argument clause")
       ]
     )
   }
@@ -905,7 +906,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause"),
+        DiagnosticSpec(message: "expected '>' to end generic argument clause")
       ]
     )
   }
@@ -919,7 +920,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause"),
+        DiagnosticSpec(message: "expected '>' to end generic argument clause")
       ]
     )
   }
@@ -934,7 +935,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic argument clause", notes: [NoteSpec(message: "to match this opening '<'")]),
+        DiagnosticSpec(message: "expected '>' to end generic argument clause", notes: [NoteSpec(message: "to match this opening '<'")])
       ]
     )
   }
@@ -963,7 +964,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in type composition"),
+        DiagnosticSpec(message: "expected type in type composition")
       ]
     )
   }
@@ -977,7 +978,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in type composition"),
+        DiagnosticSpec(message: "expected type in type composition")
       ]
     )
   }
@@ -991,7 +992,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in type composition"),
+        DiagnosticSpec(message: "expected type in type composition")
       ]
     )
   }
@@ -1002,7 +1003,7 @@ final class RecoveryTests: XCTestCase {
       func ErrorTypeInPattern4(_: FooProtocol & 1️⃣) { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in type composition"),
+        DiagnosticSpec(message: "expected type in type composition")
       ]
     )
   }
@@ -1053,7 +1054,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
+        DiagnosticSpec(message: "expected '>' to end generic parameter clause")
       ]
     )
   }
@@ -1067,7 +1068,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '>' to end generic parameter clause"),
+        DiagnosticSpec(message: "expected '>' to end generic parameter clause")
       ]
     )
   }
@@ -1096,7 +1097,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected type in function type"),
+        DiagnosticSpec(message: "expected type in function type")
       ]
     )
   }
@@ -1107,7 +1108,7 @@ final class RecoveryTests: XCTestCase {
       let a1: Swift.Int1️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code ']' at top level"),
+        DiagnosticSpec(message: "extraneous code ']' at top level")
       ]
     )
   }
@@ -1133,7 +1134,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 4: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level"),
+        DiagnosticSpec(message: "extraneous code ']' at top level")
       ]
     )
   }
@@ -1147,7 +1148,7 @@ final class RecoveryTests: XCTestCase {
         // TODO: Old parser expected error on line 5: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
         // TODO: Old parser expected error on line 5: expected declaration
         // TODO: Old parser expected error on line 5: consecutive declarations on a line must be separated by ';'
-        DiagnosticSpec(message: "extraneous code ']?' at top level"),
+        DiagnosticSpec(message: "extraneous code ']?' at top level")
       ]
     )
   }
@@ -1159,7 +1160,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 6: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level"),
+        DiagnosticSpec(message: "extraneous code ']' at top level")
       ]
     )
   }
@@ -1171,7 +1172,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 7: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level"),
+        DiagnosticSpec(message: "extraneous code ']' at top level")
       ]
     )
   }
@@ -1183,7 +1184,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 8: unexpected ']' in type; did you mean to write an array type?, Fix-It replacements: 11 - 11 = '['
-        DiagnosticSpec(message: "extraneous code ']' at top level"),
+        DiagnosticSpec(message: "extraneous code ']' at top level")
       ]
     )
   }
@@ -1267,7 +1268,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: array types are now written with the brackets around the element type, Fix-It replacements: 17 - 17 = '[', 20 - 21 = ''
-        DiagnosticSpec(message: "unexpected code in struct"),
+        DiagnosticSpec(message: "unexpected code in struct")
       ]
     )
   }
@@ -1283,7 +1284,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: array types are now written with the brackets around the element type, Fix-It replacements: 17 - 17 = '[', 20 - 21 = ''
-        DiagnosticSpec(message: "unexpected code in struct"),
+        DiagnosticSpec(message: "unexpected code in struct")
       ]
     )
   }
@@ -1299,7 +1300,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: array types are now written with the brackets around the element type, Fix-It replacements: 17 - 17 = '[', 20 - 21 = ''
-        DiagnosticSpec(message: "unexpected code in struct"),
+        DiagnosticSpec(message: "unexpected code in struct")
       ]
     )
   }
@@ -1342,7 +1343,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression in variable"),
+        DiagnosticSpec(message: "expected expression in variable")
       ]
     )
   }
@@ -1364,7 +1365,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected member name following '.'
-        DiagnosticSpec(message: "unexpected code '.' in function"),
+        DiagnosticSpec(message: "unexpected code '.' in function")
       ]
     )
   }
@@ -1378,7 +1379,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: '.42' is not a valid floating point literal; it must be written '0.42', Fix-It replacements: 7 - 7 = '0'
-        DiagnosticSpec(message: "expected name in member access"),
+        DiagnosticSpec(message: "expected name in member access")
       ]
     )
   }
@@ -1422,7 +1423,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected member name following '.'
-        DiagnosticSpec(message: "unexpected code '.' in initializer"),
+        DiagnosticSpec(message: "unexpected code '.' in initializer")
       ]
     )
   }
@@ -1446,7 +1447,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code before typealias declaration"),
+        DiagnosticSpec(message: "unexpected code before typealias declaration")
       ]
     )
   }
@@ -1514,7 +1515,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration
-        DiagnosticSpec(message: "unexpected code 'notAKeyword() {}' before function"),
+        DiagnosticSpec(message: "unexpected code 'notAKeyword() {}' before function")
       ]
     )
   }
@@ -1554,7 +1555,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 30 - 31 = ': ', 34 - 35 = ''
-        DiagnosticSpec(message: "unexpected code '(Int)' in class"),
+        DiagnosticSpec(message: "unexpected code '(Int)' in class")
       ]
     )
   }
@@ -1566,7 +1567,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 30 - 31 = ': ', 41 - 42 = ''
-        DiagnosticSpec(message: "unexpected code '(Base2<Int>)' in class"),
+        DiagnosticSpec(message: "unexpected code '(Base2<Int>)' in class")
       ]
     )
   }
@@ -1578,7 +1579,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 33 - 34 = ': ', 49 - 50 = ''
-        DiagnosticSpec(message: "unexpected code '(SubModule.Base1) where T:AnyObject' in class"),
+        DiagnosticSpec(message: "unexpected code '(SubModule.Base1) where T:AnyObject' in class")
       ]
     )
   }
@@ -1590,7 +1591,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 30 - 31 = ': ', 51 - 52 = ''
-        DiagnosticSpec(message: "unexpected code '(SubModule.Base2<Int>)' in class"),
+        DiagnosticSpec(message: "unexpected code '(SubModule.Base2<Int>)' in class")
       ]
     )
   }
@@ -1602,7 +1603,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: expected ':' to begin inheritance clause, Fix-It replacements: 33 - 34 = ': ', 54 - 55 = ''
-        DiagnosticSpec(message: "unexpected code '(SubModule.Base2<Int>) where T:AnyObject' in class"),
+        DiagnosticSpec(message: "unexpected code '(SubModule.Base2<Int>) where T:AnyObject' in class")
       ]
     )
   }
@@ -1660,7 +1661,7 @@ final class RecoveryTests: XCTestCase {
         // TODO: Old parser expected error on line 3: expected '{' in body of function declaration
         // TODO: Old parser expected error on line 3: expected parameter name followed by ':'
         // TODO: Old parser expected error on line 4: expected parameter name followed by ':'
-        DiagnosticSpec(message: #"unexpected code '!= 0, "Can't form a Character from an empty String"' in parameter clause"#),
+        DiagnosticSpec(message: #"unexpected code '!= 0, "Can't form a Character from an empty String"' in parameter clause"#)
       ]
     )
   }
@@ -1677,7 +1678,7 @@ final class RecoveryTests: XCTestCase {
         // TODO: Old parser expected error on line 2: expected '{' in body of function declaration
         // TODO: Old parser expected error on line 2: expected parameter name followed by ':'
         // TODO: Old parser expected error on line 3: expected parameter name followed by ':'
-        DiagnosticSpec(message: #"unexpected code '?= 0, "Can't form a Character from an empty String"' in parameter clause"#),
+        DiagnosticSpec(message: #"unexpected code '?= 0, "Can't form a Character from an empty String"' in parameter clause"#)
       ]
     )
   }
@@ -1753,7 +1754,6 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-
   func testRecovery143() {
     AssertParse(
       """
@@ -1779,7 +1779,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(message: "unexpected code 'a' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'a' before parameter clause")
       ]
     )
   }
@@ -1791,7 +1791,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
-        DiagnosticSpec(message: "unexpected code 'c' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'c' before parameter clause")
       ]
     )
   }
@@ -1803,7 +1803,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 8 - 9 = ''
-        DiagnosticSpec(message: "unexpected code 'e<T>' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'e<T>' before parameter clause")
       ]
     )
   }
@@ -1815,7 +1815,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: initializers cannot have a name, Fix-It replacements: 9 - 10 = ''
-        DiagnosticSpec(message: "unexpected code 'g<T>' before parameter clause"),
+        DiagnosticSpec(message: "unexpected code 'g<T>' before parameter clause")
       ]
     )
   }
@@ -1839,7 +1839,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code at top level"),
+        DiagnosticSpec(message: "extraneous code at top level")
       ]
     )
   }
@@ -1857,7 +1857,7 @@ final class RecoveryTests: XCTestCase {
         // TODO: Old parser expected error on line 4: expected ',' joining parts of a multi-clause condition, Fix-It replacements: 15 - 21 = ','
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'if' statement"),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'where y == 0,' before variable"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'if' statement")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end 'if' statement"),
       ]
     )
   }
@@ -1904,7 +1904,7 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '? = e' in function"),
+        DiagnosticSpec(message: "unexpected code '? = e' in function")
       ]
     )
   }
@@ -2108,7 +2108,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: '@' is not allowed in operator names
-        DiagnosticSpec(message: "'@-class' is not allowed in operator names"),
+        DiagnosticSpec(message: "'@-class' is not allowed in operator names")
       ]
     )
   }
@@ -2120,7 +2120,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'фф' is considered an identifier and must not appear within an operator name
-        DiagnosticSpec(message: "'фф--class' is not allowed in operator names"),
+        DiagnosticSpec(message: "'фф--class' is not allowed in operator names")
       ]
     )
   }
@@ -2137,7 +2137,7 @@ final class RecoveryTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected ']' to end subscript"),
+        DiagnosticSpec(message: "expected ']' to end subscript")
       ]
     )
   }
@@ -2155,7 +2155,7 @@ final class RecoveryTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 4: extraneous whitespace after '.' is not permitted, Fix-It replacements: 9 - 12 = ''
-        DiagnosticSpec(message: "unexpected code in function"),
+        DiagnosticSpec(message: "unexpected code in function")
         // TODO: Old parser expected error on line 5: expected member name following '.'
         // TODO: Old parser expected error on line 6: expected member name following '.'
       ]
@@ -2172,7 +2172,7 @@ final class RecoveryTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected member name following '.'
-        DiagnosticSpec(message: "unexpected code '.' in function"),
+        DiagnosticSpec(message: "unexpected code '.' in function")
       ]
     )
   }
@@ -2186,7 +2186,7 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected '=' instead of '==' to assign default value for parameter, Fix-It replacements: 21 - 23 = '='
-        DiagnosticSpec(message: "unexpected code '== 0' in parameter clause"),
+        DiagnosticSpec(message: "unexpected code '== 0' in parameter clause")
       ]
     )
   }
@@ -2198,7 +2198,7 @@ final class RecoveryTests: XCTestCase {
       extension Collection where Element == Int 1️⃣&& Index == Int {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '&& Index == Int' in extension"),
+        DiagnosticSpec(message: "unexpected code '&& Index == Int' in extension")
         // TODO: Old parser expected error on line 1: expected ',' to separate the requirements of this 'where' clause, Fix-It replacements: 43 - 45 = ','
       ]
     )

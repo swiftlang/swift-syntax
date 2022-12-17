@@ -22,8 +22,9 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let a1️⃣:[X]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
-      ], fixedSource: "let a=[X]()"
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
+      ],
+      fixedSource: "let a=[X]()"
     )
   }
 
@@ -33,8 +34,9 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let b1️⃣: [X]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
-      ], fixedSource: "let b= [X]()"
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
+      ],
+      fixedSource: "let b= [X]()"
     )
   }
 
@@ -44,8 +46,9 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let c 1️⃣:[X]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
-      ], fixedSource: "let c =[X]()"
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
+      ],
+      fixedSource: "let c =[X]()"
     )
   }
 
@@ -55,11 +58,11 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let d 1️⃣: [X]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
-      ], fixedSource: "let d = [X]()"
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
+      ],
+      fixedSource: "let d = [X]()"
     )
   }
-
 
   func testDiagnoseInitializerAsTypedPattern4() {
     AssertParse(
@@ -67,8 +70,9 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let e1️⃣: X(), ee: Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?"),
-      ], fixedSource: "let e= X(), ee: Int"
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?")
+      ],
+      fixedSource: "let e= X(), ee: Int"
     )
   }
 
@@ -78,8 +82,9 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let f1️⃣:/*comment*/[X]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
-      ], fixedSource: "let f=/*comment*/[X]()"
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
+      ],
+      fixedSource: "let f=/*comment*/[X]()"
     )
   }
 
@@ -89,11 +94,11 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let f/*comment*/1️⃣:[X]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
-      ], fixedSource: "let f/*comment*/=[X]()"
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
+      ],
+      fixedSource: "let f/*comment*/=[X]()"
     )
   }
-
 
   func testDiagnoseInitializerAsTypedPattern6() {
     AssertParse(
@@ -121,7 +126,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let g1️⃣: X(x)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -132,7 +137,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let h1️⃣: X(x, y)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -143,7 +148,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let i1️⃣: X() { foo() }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -154,7 +159,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let j1️⃣: X(x) { foo() }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -165,7 +170,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       let k1️⃣: X(x, y) { foo() }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -178,7 +183,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -191,7 +196,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -204,7 +209,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }
@@ -217,7 +222,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"]),
+        DiagnosticSpec(message: "unexpected initializer in pattern; did you mean to use '='?", fixIts: ["replace ':' by '='"])
       ]
     )
   }

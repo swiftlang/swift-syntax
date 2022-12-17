@@ -85,12 +85,12 @@ public struct AccessPathBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension AccessPath {
-  init (@AccessPathBuilder itemsBuilder: () -> AccessPath) {
+  init(@AccessPathBuilder itemsBuilder: () -> AccessPath) {
     self = itemsBuilder()
   }
 }
@@ -165,12 +165,12 @@ public struct AccessorListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension AccessorList {
-  init (@AccessorListBuilder itemsBuilder: () -> AccessorList) {
+  init(@AccessorListBuilder itemsBuilder: () -> AccessorList) {
     self = itemsBuilder()
   }
 }
@@ -246,14 +246,14 @@ public struct ArrayElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension ArrayElementList {
-  init (@ArrayElementListBuilder itemsBuilder: () -> ArrayElementList) {
+  init(@ArrayElementListBuilder itemsBuilder: () -> ArrayElementList) {
     self = itemsBuilder()
   }
 }
@@ -289,19 +289,19 @@ public struct AttributeListBuilder {
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: Attribute) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: CustomAttribute) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: IfConfigDecl) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
@@ -346,12 +346,12 @@ public struct AttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension AttributeList {
-  init (@AttributeListBuilder itemsBuilder: () -> AttributeList) {
+  init(@AttributeListBuilder itemsBuilder: () -> AttributeList) {
     self = itemsBuilder()
   }
 }
@@ -426,12 +426,12 @@ public struct AvailabilitySpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension AvailabilitySpecList {
-  init (@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecList) {
+  init(@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecList) {
     self = itemsBuilder()
   }
 }
@@ -506,12 +506,12 @@ public struct BackDeployVersionListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension BackDeployVersionList {
-  init (@BackDeployVersionListBuilder itemsBuilder: () -> BackDeployVersionList) {
+  init(@BackDeployVersionListBuilder itemsBuilder: () -> BackDeployVersionList) {
     self = itemsBuilder()
   }
 }
@@ -587,14 +587,14 @@ public struct CaseItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension CaseItemList {
-  init (@CaseItemListBuilder itemsBuilder: () -> CaseItemList) {
+  init(@CaseItemListBuilder itemsBuilder: () -> CaseItemList) {
     self = itemsBuilder()
   }
 }
@@ -669,12 +669,12 @@ public struct CatchClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension CatchClauseList {
-  init (@CatchClauseListBuilder itemsBuilder: () -> CatchClauseList) {
+  init(@CatchClauseListBuilder itemsBuilder: () -> CatchClauseList) {
     self = itemsBuilder()
   }
 }
@@ -750,14 +750,14 @@ public struct CatchItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension CatchItemList {
-  init (@CatchItemListBuilder itemsBuilder: () -> CatchItemList) {
+  init(@CatchItemListBuilder itemsBuilder: () -> CatchItemList) {
     self = itemsBuilder()
   }
 }
@@ -833,14 +833,14 @@ public struct ClosureCaptureItemListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension ClosureCaptureItemList {
-  init (@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList) {
+  init(@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList) {
     self = itemsBuilder()
   }
 }
@@ -916,14 +916,14 @@ public struct ClosureParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension ClosureParamList {
-  init (@ClosureParamListBuilder itemsBuilder: () -> ClosureParamList) {
+  init(@ClosureParamListBuilder itemsBuilder: () -> ClosureParamList) {
     self = itemsBuilder()
   }
 }
@@ -998,12 +998,12 @@ public struct CodeBlockItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension CodeBlockItemList {
-  init (@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemList) {
+  init(@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemList) {
     self = itemsBuilder()
   }
 }
@@ -1078,12 +1078,12 @@ public struct CompositionTypeElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension CompositionTypeElementList {
-  init (@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementList) {
+  init(@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementList) {
     self = itemsBuilder()
   }
 }
@@ -1159,14 +1159,14 @@ public struct ConditionElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension ConditionElementList {
-  init (@ConditionElementListBuilder itemsBuilder: () -> ConditionElementList) {
+  init(@ConditionElementListBuilder itemsBuilder: () -> ConditionElementList) {
     self = itemsBuilder()
   }
 }
@@ -1241,12 +1241,12 @@ public struct DeclNameArgumentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension DeclNameArgumentList {
-  init (@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentList) {
+  init(@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentList) {
     self = itemsBuilder()
   }
 }
@@ -1321,12 +1321,12 @@ public struct DesignatedTypeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension DesignatedTypeList {
-  init (@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeList) {
+  init(@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeList) {
     self = itemsBuilder()
   }
 }
@@ -1402,14 +1402,14 @@ public struct DictionaryElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension DictionaryElementList {
-  init (@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementList) {
+  init(@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementList) {
     self = itemsBuilder()
   }
 }
@@ -1485,14 +1485,14 @@ public struct DifferentiabilityParamListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension DifferentiabilityParamList {
-  init (@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamList) {
+  init(@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamList) {
     self = itemsBuilder()
   }
 }
@@ -1568,14 +1568,14 @@ public struct EnumCaseElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension EnumCaseElementList {
-  init (@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementList) {
+  init(@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementList) {
     self = itemsBuilder()
   }
 }
@@ -1650,12 +1650,12 @@ public struct ExprListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension ExprList {
-  init (@ExprListBuilder itemsBuilder: () -> ExprList) {
+  init(@ExprListBuilder itemsBuilder: () -> ExprList) {
     self = itemsBuilder()
   }
 }
@@ -1731,14 +1731,14 @@ public struct FunctionParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension FunctionParameterList {
-  init (@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterList) {
+  init(@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterList) {
     self = itemsBuilder()
   }
 }
@@ -1814,14 +1814,14 @@ public struct GenericArgumentListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension GenericArgumentList {
-  init (@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentList) {
+  init(@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentList) {
     self = itemsBuilder()
   }
 }
@@ -1897,14 +1897,14 @@ public struct GenericParameterListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension GenericParameterList {
-  init (@GenericParameterListBuilder itemsBuilder: () -> GenericParameterList) {
+  init(@GenericParameterListBuilder itemsBuilder: () -> GenericParameterList) {
     self = itemsBuilder()
   }
 }
@@ -1980,14 +1980,14 @@ public struct GenericRequirementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension GenericRequirementList {
-  init (@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementList) {
+  init(@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementList) {
     self = itemsBuilder()
   }
 }
@@ -2062,12 +2062,12 @@ public struct IfConfigClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension IfConfigClauseList {
-  init (@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseList) {
+  init(@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseList) {
     self = itemsBuilder()
   }
 }
@@ -2143,14 +2143,14 @@ public struct InheritedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension InheritedTypeList {
-  init (@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeList) {
+  init(@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeList) {
     self = itemsBuilder()
   }
 }
@@ -2225,12 +2225,12 @@ public struct KeyPathComponentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension KeyPathComponentList {
-  init (@KeyPathComponentListBuilder itemsBuilder: () -> KeyPathComponentList) {
+  init(@KeyPathComponentListBuilder itemsBuilder: () -> KeyPathComponentList) {
     self = itemsBuilder()
   }
 }
@@ -2305,12 +2305,12 @@ public struct MemberDeclListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension MemberDeclList {
-  init (@MemberDeclListBuilder itemsBuilder: () -> MemberDeclList) {
+  init(@MemberDeclListBuilder itemsBuilder: () -> MemberDeclList) {
     self = itemsBuilder()
   }
 }
@@ -2385,12 +2385,12 @@ public struct ModifierListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension ModifierList {
-  init (@ModifierListBuilder itemsBuilder: () -> ModifierList) {
+  init(@ModifierListBuilder itemsBuilder: () -> ModifierList) {
     self = itemsBuilder()
   }
 }
@@ -2465,12 +2465,12 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension MultipleTrailingClosureElementList {
-  init (@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementList) {
+  init(@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementList) {
     self = itemsBuilder()
   }
 }
@@ -2545,12 +2545,12 @@ public struct NonEmptyTokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension NonEmptyTokenList {
-  init (@NonEmptyTokenListBuilder itemsBuilder: () -> NonEmptyTokenList) {
+  init(@NonEmptyTokenListBuilder itemsBuilder: () -> NonEmptyTokenList) {
     self = itemsBuilder()
   }
 }
@@ -2625,12 +2625,12 @@ public struct ObjCSelectorBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension ObjCSelector {
-  init (@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelector) {
+  init(@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelector) {
     self = itemsBuilder()
   }
 }
@@ -2706,14 +2706,14 @@ public struct PatternBindingListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension PatternBindingList {
-  init (@PatternBindingListBuilder itemsBuilder: () -> PatternBindingList) {
+  init(@PatternBindingListBuilder itemsBuilder: () -> PatternBindingList) {
     self = itemsBuilder()
   }
 }
@@ -2749,19 +2749,19 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: PrecedenceGroupRelation) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: PrecedenceGroupAssignment) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: PrecedenceGroupAssociativity) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
@@ -2806,12 +2806,12 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension PrecedenceGroupAttributeList {
-  init (@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeList) {
+  init(@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeList) {
     self = itemsBuilder()
   }
 }
@@ -2886,12 +2886,12 @@ public struct PrecedenceGroupNameListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension PrecedenceGroupNameList {
-  init (@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameList) {
+  init(@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameList) {
     self = itemsBuilder()
   }
 }
@@ -2967,14 +2967,14 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension PrimaryAssociatedTypeList {
-  init (@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeList) {
+  init(@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeList) {
     self = itemsBuilder()
   }
 }
@@ -3010,25 +3010,25 @@ public struct SpecializeAttributeSpecListBuilder {
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: LabeledSpecializeEntry) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: AvailabilityEntry) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: TargetFunctionEntry) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: GenericWhereClause) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
@@ -3073,12 +3073,12 @@ public struct SpecializeAttributeSpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension SpecializeAttributeSpecList {
-  init (@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecList) {
+  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecList) {
     self = itemsBuilder()
   }
 }
@@ -3114,13 +3114,13 @@ public struct StringLiteralSegmentsBuilder {
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: StringSegment) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: ExpressionSegment) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
@@ -3165,12 +3165,12 @@ public struct StringLiteralSegmentsBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension StringLiteralSegments {
-  init (@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegments) {
+  init(@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegments) {
     self = itemsBuilder()
   }
 }
@@ -3206,13 +3206,13 @@ public struct SwitchCaseListBuilder {
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: SwitchCase) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: IfConfigDecl) -> Self.Component {
-    return buildExpression(.init (expression))
+    return buildExpression(.init(expression))
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
@@ -3257,12 +3257,12 @@ public struct SwitchCaseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension SwitchCaseList {
-  init (@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseList) {
+  init(@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseList) {
     self = itemsBuilder()
   }
 }
@@ -3337,12 +3337,12 @@ public struct TokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension TokenList {
-  init (@TokenListBuilder itemsBuilder: () -> TokenList) {
+  init(@TokenListBuilder itemsBuilder: () -> TokenList) {
     self = itemsBuilder()
   }
 }
@@ -3418,14 +3418,14 @@ public struct TupleExprElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension TupleExprElementList {
-  init (@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementList) {
+  init(@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementList) {
     self = itemsBuilder()
   }
 }
@@ -3501,14 +3501,14 @@ public struct TuplePatternElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension TuplePatternElementList {
-  init (@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementList) {
+  init(@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementList) {
     self = itemsBuilder()
   }
 }
@@ -3584,14 +3584,14 @@ public struct TupleTypeElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     let lastIndex = component.count - 1
-    return .init (component.enumerated().map { index, source in 
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-    })
+    return .init(component.enumerated().map { index, source in 
+        return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
 public extension TupleTypeElementList {
-  init (@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementList) {
+  init(@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementList) {
     self = itemsBuilder()
   }
 }
@@ -3666,12 +3666,12 @@ public struct UnexpectedNodesBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension UnexpectedNodes {
-  init (@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodes) {
+  init(@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodes) {
     self = itemsBuilder()
   }
 }
@@ -3746,12 +3746,12 @@ public struct YieldExprListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init (component)
+    return .init(component)
   }
 }
 
 public extension YieldExprList {
-  init (@YieldExprListBuilder itemsBuilder: () -> YieldExprList) {
+  init(@YieldExprListBuilder itemsBuilder: () -> YieldExprList) {
     self = itemsBuilder()
   }
 }

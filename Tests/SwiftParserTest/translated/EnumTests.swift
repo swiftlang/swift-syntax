@@ -116,7 +116,7 @@ final class EnumTests: XCTestCase {
       1️⃣case FloatingCase
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
       ]
     )
   }
@@ -181,7 +181,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum"),
+        DiagnosticSpec(message: "unexpected code ':' in enum")
       ]
     )
   }
@@ -194,7 +194,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum"),
+        DiagnosticSpec(message: "unexpected code ':' in enum")
       ]
     )
   }
@@ -207,7 +207,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum"),
+        DiagnosticSpec(message: "unexpected code ':' in enum")
       ]
     )
   }
@@ -220,7 +220,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'where true:' in enum"),
+        DiagnosticSpec(message: "unexpected code 'where true:' in enum")
       ]
     )
   }
@@ -233,7 +233,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum"),
+        DiagnosticSpec(message: "unexpected code ':' in enum")
       ]
     )
   }
@@ -246,7 +246,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'where true:' in enum"),
+        DiagnosticSpec(message: "unexpected code 'where true:' in enum")
       ]
     )
   }
@@ -292,11 +292,12 @@ final class EnumTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in parameter"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ':' in enum"),
-      ], fixedSource: """
-      enum SwitchEnvy {
-        case <#identifier#>(_, var x: <#type#>, <#type#>0):
-      }
-      """
+      ],
+      fixedSource: """
+        enum SwitchEnvy {
+          case <#identifier#>(_, var x: <#type#>, <#type#>0):
+        }
+        """
     )
   }
 
@@ -343,7 +344,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case")
       ]
     )
   }
@@ -370,7 +371,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum"),
+        DiagnosticSpec(message: "unexpected code ':' in enum")
       ]
     )
   }
@@ -383,7 +384,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum"),
+        DiagnosticSpec(message: "unexpected code ':' in enum")
       ]
     )
   }
@@ -1207,7 +1208,7 @@ final class EnumTests: XCTestCase {
       enum 1️⃣switch {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here")
       ]
     )
   }
@@ -1240,7 +1241,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'operator' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'operator' cannot be used as an identifier here")
       ]
     )
   }
@@ -1255,7 +1256,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'var' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'var' cannot be used as an identifier here")
       ]
     )
   }
@@ -1270,7 +1271,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'_' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "'_' cannot be used as an identifier here")
       ]
     )
   }
@@ -1283,7 +1284,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'func' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'func' cannot be used as an identifier here")
       ]
     )
   }
@@ -1299,7 +1300,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case")
       ]
     )
   }
@@ -1313,7 +1314,7 @@ final class EnumTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in enum case"),
+        DiagnosticSpec(message: "expected identifier in enum case")
       ]
     )
   }

@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 /// An identifier that identifies a diagnostic message's type.
 /// Fundamentally different diagnostics should have a different `diagnosticID`
 /// so that clients may filter/prioritise/highlight/... certain diagnostics.

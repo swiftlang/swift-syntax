@@ -12,7 +12,6 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
-@_spi(Testing) import _SwiftSyntaxMacros
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftOperators
@@ -82,7 +81,6 @@ class SwiftParserCli: ParsableCommand {
     subcommands: [
       PrintDiags.self,
       PrintTree.self,
-      ExpandMacros.self,
       Reduce.self,
       VerifyRoundTrip.self,
     ]
@@ -123,13 +121,15 @@ class VerifyRoundTrip: ParsableCommand {
 
     try source.withUnsafeBufferPointer { sourceBuffer in
       try Self.run(
-        source: sourceBuffer, foldSequences: foldSequences
+        source: sourceBuffer,
+        foldSequences: foldSequences
       )
     }
   }
 
   static func run(
-    source: UnsafeBufferPointer<UInt8>, foldSequences: Bool
+    source: UnsafeBufferPointer<UInt8>,
+    foldSequences: Bool
   ) throws {
     let tree = Parser.parse(source: source)
 
@@ -167,10 +167,10 @@ class PrintDiags: ParsableCommand {
 
     source.withUnsafeBufferPointer { sourceBuffer in
       let tree = Parser.parse(source: sourceBuffer)
-      
+
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
       print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))
-      
+
       if foldSequences {
         diags += foldAllSequences(tree).1
       }
@@ -217,49 +217,6 @@ class PrintTree: ParsableCommand {
   }
 }
 
-class ExpandMacros: ParsableCommand {
-  static var configuration = CommandConfiguration(
-    commandName: "expand-macros",
-    abstract: "Expand example macros and print the result source code"
-  )
-
-  required init() {}
-
-  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
-  var sourceFile: String
-
-  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
-  var foldSequences: Bool = false
-
-  func run() throws {
-    let source = try getContentsOfSourceFile(at: sourceFile)
-
-    source.withUnsafeBufferPointer { sourceBuffer in
-      let tree = Parser.parse(source: sourceBuffer)
-
-      let resultTree: Syntax
-      if foldSequences {
-        resultTree = foldAllSequences(tree).0
-      } else {
-        resultTree = Syntax(tree)
-      }
-
-      var context = MacroExpansionContext(
-        moduleName: "MyModule", fileName: self.sourceFile.withoutPath()
-      )
-      var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-      let transformedTree = MacroSystem.exampleSystem.evaluateMacros(
-        node: resultTree, in: &context
-      )
-
-      diags.append(contentsOf: context.diagnostics)
-
-      print(transformedTree)
-      print(DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags))
-    }
-  }
-}
-
 class Reduce: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "reduce",
@@ -302,6 +259,13 @@ class Reduce: ParsableCommand {
   /// Invoke `swift-parser-cli verify-round-trip` with the same arguments as this `reduce` subcommand.
   /// Returns the exit code of the invocation.
   private func runVerifyRoundTripInSeparateProcess(source: [UInt8]) throws -> ProcessExit {
+    #if os(iOS) || os(tvOS) || os(watchOS)
+    // We cannot launch a new process on iOS-like platforms.
+    // Default to running verification in-process.
+    // Honestly, this isn't very important because you can't launch swift-parser-cli
+    // on iOS anyway but this fixes a compilation error of the pacakge on iOS.
+    return try runVerifyRoundTripInCurrentProcess(source: source) ? ProcessExit.success : ProcessExit.potentialCrash
+    #else
     return try withTemporaryFile(contents: source) { tempFileURL in
       let process = Process()
       process.executableURL = URL(fileURLWithPath: ProcessInfo.processInfo.arguments[0])
@@ -309,7 +273,7 @@ class Reduce: ParsableCommand {
         "verify-round-trip", tempFileURL.path,
       ]
       if foldSequences {
-        process.arguments! += [ "--fold-sequences" ]
+        process.arguments! += ["--fold-sequences"]
       }
 
       let sema = DispatchSemaphore(value: 0)
@@ -321,11 +285,11 @@ class Reduce: ParsableCommand {
 
       try process.run()
       if sema.wait(timeout: DispatchTime.now() + .seconds(2)) == .timedOut {
-#if os(Windows)
+        #if os(Windows)
         _ = TerminateProcess(process.processHandle, 0)
-#else
+        #else
         kill(pid_t(process.processIdentifier), SIGKILL)
-#endif
+        #endif
         return .timeout
       }
       switch process.terminationStatus {
@@ -337,6 +301,7 @@ class Reduce: ParsableCommand {
         return .potentialCrash
       }
     }
+    #endif
   }
 
   /// Runs the `verify-round-trip` subcommand in process.
@@ -345,7 +310,9 @@ class Reduce: ParsableCommand {
     do {
       try source.withUnsafeBufferPointer { sourceBuffer in
         try VerifyRoundTrip.run(
-          source: sourceBuffer, foldSequences: foldSequences)
+          source: sourceBuffer,
+          foldSequences: foldSequences
+        )
       }
     } catch {
       return false

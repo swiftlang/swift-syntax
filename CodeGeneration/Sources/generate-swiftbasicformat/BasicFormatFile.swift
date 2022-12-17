@@ -52,10 +52,10 @@ let basicFormatFile = SourceFile {
       open override func visit(_ node: TokenSyntax) -> TokenSyntax {
         var leadingTrivia = node.leadingTrivia
         var trailingTrivia = node.trailingTrivia
-        if requiresLeadingSpace(node.tokenKind) && leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+        if requiresLeadingSpace(node) && leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
           leadingTrivia += .space
         }
-        if requiresTrailingSpace(node.tokenKind) && trailingTrivia.isEmpty {
+        if requiresTrailingSpace(node) && trailingTrivia.isEmpty {
           trailingTrivia += .space
         }
         if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false) {
@@ -121,8 +121,8 @@ let basicFormatFile = SourceFile {
       }
     }
 
-    FunctionDecl("open func requiresLeadingSpace(_ tokenKind: TokenKind) -> Bool") {
-      SwitchStmt(expression: Expr("tokenKind")) {
+    FunctionDecl("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
+      SwitchStmt(expression: Expr("token.tokenKind")) {
         for token in SYNTAX_TOKENS {
           if token.requiresLeadingSpace {
             SwitchCase("case .\(raw: token.swiftKind):") {
@@ -136,8 +136,22 @@ let basicFormatFile = SourceFile {
       }
     }
 
-    FunctionDecl("open func requiresTrailingSpace(_ tokenKind: TokenKind) -> Bool") {
-      SwitchStmt(expression: Expr("tokenKind")) {
+    FunctionDecl("open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool") {
+      SwitchStmt("""
+        switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
+        case (.asKeyword, .exclamationMark),
+             (.asKeyword, .postfixQuestionMark),
+             (.initKeyword, .leftParen),
+             (.initKeyword, .postfixQuestionMark),
+             (.tryKeyword, .exclamationMark),
+             (.tryKeyword, .postfixQuestionMark):
+          return false
+        default:
+          break
+        }
+        """)
+      
+      SwitchStmt(expression: Expr("token.tokenKind")) {
         for token in SYNTAX_TOKENS {
           if token.requiresTrailingSpace {
             SwitchCase("case .\(raw: token.swiftKind):") {

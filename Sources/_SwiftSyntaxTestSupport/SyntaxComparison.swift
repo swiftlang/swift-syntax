@@ -33,8 +33,7 @@ public struct TreeDifference {
   public let reason: DifferenceReason
 
   public init<Difference, Baseline>(node: Difference, baseline: Baseline, reason: DifferenceReason)
-    where Difference: SyntaxProtocol, Baseline: SyntaxProtocol
-  {
+  where Difference: SyntaxProtocol, Baseline: SyntaxProtocol {
     self.node = Syntax(node)
     self.baseline = Syntax(baseline)
     self.reason = reason
@@ -55,36 +54,36 @@ extension TreeDifference: CustomDebugStringConvertible {
     switch reason {
     case .nodeType, .presence, .trivia, .token:
       message = """
-                Trees do not match due to \(reason) in:
-                \(actualDesc)
-                when expecting:
-                \(expectedDesc)
-                """
+        Trees do not match due to \(reason) in:
+        \(actualDesc)
+        when expecting:
+        \(expectedDesc)
+        """
     case .missingNode:
       message = """
-                Trees do not match due to a missing node:
-                \(expectedDesc)
-                in parent:
-                \(actualDesc)
-                """
+        Trees do not match due to a missing node:
+        \(expectedDesc)
+        in parent:
+        \(actualDesc)
+        """
     case .additionalNode:
       message = """
-                Trees do not match due to an additional node:
-                \(actualDesc)
-                in parent:
-                \(expectedDesc)
-                """
+        Trees do not match due to an additional node:
+        \(actualDesc)
+        in parent:
+        \(expectedDesc)
+        """
     }
 
     return """
-           \(message)
+      \(message)
 
-           Full Expected Tree:
-           \(baseline.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: expectedConverter, mark: baseline))
+      Full Expected Tree:
+      \(baseline.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: expectedConverter, mark: baseline))
 
-           Full Actual Tree:
-           \(node.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: actualConverter, mark: node))
-           """
+      Full Actual Tree:
+      \(node.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: actualConverter, mark: node))
+      """
   }
 }
 
@@ -127,8 +126,7 @@ public extension SyntaxProtocol {
         if token.tokenKind != baselineToken.tokenKind {
           return .token
         }
-        if includeTrivia && (token.leadingTrivia != baselineToken.leadingTrivia ||
-                             token.trailingTrivia != baselineToken.trailingTrivia) {
+        if includeTrivia && (token.leadingTrivia != baselineToken.leadingTrivia || token.trailingTrivia != baselineToken.trailingTrivia) {
           return .trivia
         }
       }

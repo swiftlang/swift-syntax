@@ -18,8 +18,11 @@ fileprivate extension SyntaxProtocol {
     var curData = Syntax(self)
     repeat {
       guard let parent = curData.parent else { break }
-      contextualClassif = SyntaxClassification.classify(parentKind: parent.raw.kind,
-        indexInParent: curData.indexInParent, childKind: raw.kind)
+      contextualClassif = SyntaxClassification.classify(
+        parentKind: parent.raw.kind,
+        indexInParent: curData.indexInParent,
+        childKind: raw.kind
+      )
       curData = parent
     } while contextualClassif == nil
     return contextualClassif
@@ -33,7 +36,9 @@ extension TokenSyntax {
     let relativeOffset = leadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
     return TokenKindAndText(kind: rawTokenKind, text: tokenView.rawText).classify(
-      offset: absoluteOffset, contextualClassification: contextualClassification)
+      offset: absoluteOffset,
+      contextualClassification: contextualClassification
+    )
   }
 }
 
@@ -41,11 +46,11 @@ extension RawTriviaPiece {
   func classify(offset: Int) -> SyntaxClassifiedRange {
     let range = ByteSourceRange(offset: offset, length: byteLength)
     switch self {
-      case .lineComment: return .init(kind: .lineComment, range: range)
-      case .blockComment: return .init(kind: .blockComment, range: range)
-      case .docLineComment: return .init(kind: .docLineComment, range: range)
-      case .docBlockComment: return .init(kind: .docBlockComment, range: range)
-      default: return .init(kind: .none, range: range)
+    case .lineComment: return .init(kind: .lineComment, range: range)
+    case .blockComment: return .init(kind: .blockComment, range: range)
+    case .docLineComment: return .init(kind: .docLineComment, range: range)
+    case .docBlockComment: return .init(kind: .docBlockComment, range: range)
+    default: return .init(kind: .none, range: range)
     }
   }
 }
@@ -55,7 +60,8 @@ fileprivate struct TokenKindAndText {
   let text: SyntaxText
 
   func classify(
-    offset: Int, contextualClassification: (SyntaxClassification, Bool)?
+    offset: Int,
+    contextualClassification: (SyntaxClassification, Bool)?
   ) -> SyntaxClassifiedRange {
     let range = ByteSourceRange(offset: offset, length: text.count)
 
@@ -73,8 +79,9 @@ fileprivate struct TokenKindAndText {
       return .stringLiteral
     }
     if kind == .identifier,
-       text.hasPrefix("<#"),
-       text.hasSuffix("#>") {
+      text.hasPrefix("<#"),
+      text.hasSuffix("#>")
+    {
       return .editorPlaceholder
     }
     return kind.classification
@@ -114,17 +121,21 @@ private struct ClassificationVisitor {
   init(node: Syntax, relativeClassificationRange: ByteSourceRange) {
     let range = ByteSourceRange(
       offset: node.position.utf8Offset + relativeClassificationRange.offset,
-      length: relativeClassificationRange.length)
+      length: relativeClassificationRange.length
+    )
     self.targetRange = range
     self.classifications = []
 
     // `withExtendedLifetime` to make sure `SyntaxArena` for the node alive
     // during the visit.
     withExtendedLifetime(node) {
-      _ = self.visit(Descriptor(
-        node: node.raw,
-        byteOffset: node.position.utf8Offset,
-        contextualClassification: node.contextualClassification))
+      _ = self.visit(
+        Descriptor(
+          node: node.raw,
+          byteOffset: node.position.utf8Offset,
+          contextualClassification: node.contextualClassification
+        )
+      )
     }
   }
 
@@ -135,15 +146,19 @@ private struct ClassificationVisitor {
 
     // Merge consecutive classified ranges of the same kind.
     if let last = classifications.last,
-       last.kind == range.kind,
-       last.endOffset == range.offset {
+      last.kind == range.kind,
+      last.endOffset == range.offset
+    {
       classifications[classifications.count - 1].range = ByteSourceRange(
-        offset: last.offset, length: last.length + range.length)
+        offset: last.offset,
+        length: last.length + range.length
+      )
       return
     }
 
     guard range.offset <= targetRange.endOffset,
-          range.endOffset >= targetRange.offset else {
+      range.endOffset >= targetRange.offset
+    else {
       return
     }
     classifications.append(range)
@@ -186,11 +201,17 @@ private struct ClassificationVisitor {
     for case (let index, let child?) in children.enumerated() {
 
       let classficiation = SyntaxClassification.classify(
-        parentKind: descriptor.node.kind, indexInParent: index, childKind: child.kind)
-      let result = visit(.init(
-        node: child,
-        byteOffset: byteOffset,
-        contextualClassification: classficiation ?? descriptor.contextualClassification))
+        parentKind: descriptor.node.kind,
+        indexInParent: index,
+        childKind: child.kind
+      )
+      let result = visit(
+        .init(
+          node: child,
+          byteOffset: byteOffset,
+          contextualClassification: classficiation ?? descriptor.contextualClassification
+        )
+      )
       if result == .break {
         return .break
       }

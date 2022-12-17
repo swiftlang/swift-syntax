@@ -52,13 +52,13 @@ extension Parser {
 
     /// If passed, 'deinit' and 'subscript' should be parsed as special names,
     /// not ordinary identifiers.
-    static let keywordsUsingSpecialNames: Self = [ .keywords, Self(rawValue: 1 << 2) ]
+    static let keywordsUsingSpecialNames: Self = [.keywords, Self(rawValue: 1 << 2)]
     /// If passed, compound names with argument lists are allowed, unless they
     /// have empty argument lists.
     static let compoundNames = Self(rawValue: 1 << 4)
 
     /// If passed, compound names with empty argument lists are allowed.
-    static let zeroArgCompoundNames: Self = [ .compoundNames, Self(rawValue: 1 << 5) ]
+    static let zeroArgCompoundNames: Self = [.compoundNames, Self(rawValue: 1 << 5)]
   }
 
   mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
@@ -118,12 +118,14 @@ extension Parser {
         assert(self.currentToken.canBeArgumentLabel() && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        elements.append(RawDeclNameArgumentSyntax(
-          name: name,
-          unexpectedBeforeColon,
-          colon: colon,
-          arena: arena
-        ))
+        elements.append(
+          RawDeclNameArgumentSyntax(
+            name: name,
+            unexpectedBeforeColon,
+            colon: colon,
+            arena: arena
+          )
+        )
       }
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
@@ -133,7 +135,8 @@ extension Parser {
       arguments: RawDeclNameArgumentListSyntax(elements: elements, arena: self.arena),
       unexpectedBeforeRParen,
       rightParen: rparen,
-      arena: arena)
+      arena: arena
+    )
   }
 }
 
@@ -159,7 +162,8 @@ extension Parser {
       dot: dot,
       name: name,
       arguments: args,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   @_spi(RawSyntax)
@@ -180,15 +184,23 @@ extension Parser {
         generics = nil
       }
       if let keepGoing = keepGoing {
-        result = RawTypeSyntax(RawMemberTypeIdentifierSyntax(
-          baseType: result!,
-          period: keepGoing,
-          name: name,
-          genericArgumentClause: generics,
-          arena: self.arena))
+        result = RawTypeSyntax(
+          RawMemberTypeIdentifierSyntax(
+            baseType: result!,
+            period: keepGoing,
+            name: name,
+            genericArgumentClause: generics,
+            arena: self.arena
+          )
+        )
       } else {
-        result = RawTypeSyntax(RawSimpleTypeIdentifierSyntax(
-          name: name, genericArgumentClause: generics, arena: self.arena))
+        result = RawTypeSyntax(
+          RawSimpleTypeIdentifierSyntax(
+            name: name,
+            genericArgumentClause: generics,
+            arena: self.arena
+          )
+        )
       }
 
       // If qualified name base type cannot be parsed from the current
@@ -296,4 +308,3 @@ extension Lexer.Lexeme {
     return self.tokenText.hasPrefix(symbol)
   }
 }
-

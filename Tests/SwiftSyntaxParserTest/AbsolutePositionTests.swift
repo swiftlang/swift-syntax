@@ -19,7 +19,8 @@ fileprivate class FuncRenamer: SyntaxRewriter {
   override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
     let rewritten = super.visit(node).as(FunctionDeclSyntax.self)!
     let modifiedFunctionDecl = rewritten.withIdentifier(
-      .identifier("anotherName"))
+      .identifier("anotherName")
+    )
     return DeclSyntax(modifiedFunctionDecl)
   }
 }
@@ -27,72 +28,88 @@ fileprivate class FuncRenamer: SyntaxRewriter {
 public class AbsolutePositionTests: XCTestCase {
 
   public func testVisitor() {
-    XCTAssertNoThrow(try {
-      let source = try String(contentsOf: getTestInput("visitor.swift"))
-      let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      XCTAssertEqual(0, parsed.position.utf8Offset)
-      XCTAssertEqual(source.count,
-        parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
-      XCTAssertEqual(0, parsed.position.utf8Offset)
-      XCTAssertEqual(source.count, parsed.byteSize)  
-    }())
+    XCTAssertNoThrow(
+      try {
+        let source = try String(contentsOf: getTestInput("visitor.swift"))
+        let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
+        XCTAssertEqual(0, parsed.position.utf8Offset)
+        XCTAssertEqual(
+          source.count,
+          parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset
+        )
+        XCTAssertEqual(0, parsed.position.utf8Offset)
+        XCTAssertEqual(source.count, parsed.byteSize)
+      }()
+    )
   }
 
   public func testClosure() {
-    XCTAssertNoThrow(try {
-      let source = try String(contentsOf: getTestInput("closure.swift"))
-      let parsed = try SyntaxParser.parse(getTestInput("closure.swift"))
-      XCTAssertEqual(source.count, 
-        parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
-      XCTAssertEqual(0, parsed.position.utf8Offset)
-      XCTAssertEqual(source.count, parsed.byteSize)
-    }())
+    XCTAssertNoThrow(
+      try {
+        let source = try String(contentsOf: getTestInput("closure.swift"))
+        let parsed = try SyntaxParser.parse(getTestInput("closure.swift"))
+        XCTAssertEqual(
+          source.count,
+          parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset
+        )
+        XCTAssertEqual(0, parsed.position.utf8Offset)
+        XCTAssertEqual(source.count, parsed.byteSize)
+      }()
+    )
   }
 
   public func testRename() {
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      let renamed = FuncRenamer().visit(parsed)
-      let renamedSource = renamed.description
-      XCTAssertEqual(renamedSource.count, 
-        renamed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
-      XCTAssertEqual(renamedSource.count, renamed.byteSize)
-    }())
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
+        let renamed = FuncRenamer().visit(parsed)
+        let renamedSource = renamed.description
+        XCTAssertEqual(
+          renamedSource.count,
+          renamed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset
+        )
+        XCTAssertEqual(renamedSource.count, renamed.byteSize)
+      }()
+    )
   }
 
   public func testCurrentFile() {
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(URL(fileURLWithPath: #file))
-      class Visitor: SyntaxVisitor {
-        override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
-          XCTAssertEqual(node.positionAfterSkippingLeadingTrivia.utf8Offset,
-            node.position.utf8Offset + node.leadingTrivia.byteSize)
-          return .skipChildren
+    XCTAssertNoThrow(
+      try {
+        let parsed = try SyntaxParser.parse(URL(fileURLWithPath: #file))
+        class Visitor: SyntaxVisitor {
+          override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
+            XCTAssertEqual(
+              node.positionAfterSkippingLeadingTrivia.utf8Offset,
+              node.position.utf8Offset + node.leadingTrivia.byteSize
+            )
+            return .skipChildren
+          }
         }
-      }
-      let visitor = Visitor(viewMode: .sourceAccurate)
-      visitor.walk(parsed)
-    }())
+        let visitor = Visitor(viewMode: .sourceAccurate)
+        visitor.walk(parsed)
+      }()
+    )
   }
 
   public func testRecursion() {
     var l = [CodeBlockItemSyntax]()
     let idx = 2000
     for _ in 0...idx {
-      l.append(CodeBlockItemSyntax(
-        item: .init(
-          ReturnStmtSyntax(
-            returnKeyword: .returnKeyword(trailingTrivia: .newline),
-            expression: nil
+      l.append(
+        CodeBlockItemSyntax(
+          item: .init(
+            ReturnStmtSyntax(
+              returnKeyword: .returnKeyword(trailingTrivia: .newline)
+            )
           )
-        ),
-        semicolon: nil, 
-        errorTokens: nil)
+        )
       )
     }
     let root = SourceFileSyntax(
       statements: CodeBlockItemListSyntax(l),
-      eofToken: .eof())
+      eofToken: .eof()
+    )
     _ = root.statements[idx].position
     _ = root.statements[idx].byteSize
     _ = root.statements[idx].positionAfterSkippingLeadingTrivia
@@ -110,21 +127,24 @@ public class AbsolutePositionTests: XCTestCase {
   ])
 
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
-    let items : [CodeBlockItemSyntax] =
-    [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax(
-      item: .init(ReturnStmtSyntax(
-        returnKeyword: .returnKeyword(
-          leadingTrivia: AbsolutePositionTests.leadingTrivia,
-          trailingTrivia: AbsolutePositionTests.trailingTrivia
+    let items: [CodeBlockItemSyntax] =
+      [CodeBlockItemSyntax](
+        repeating: CodeBlockItemSyntax(
+          item: .init(
+            ReturnStmtSyntax(
+              returnKeyword: .returnKeyword(
+                leadingTrivia: AbsolutePositionTests.leadingTrivia,
+                trailingTrivia: AbsolutePositionTests.trailingTrivia
+              )
+            )
+          )
         ),
-        expression: nil
-      )),
-      semicolon: nil,
-      errorTokens: nil
-    ), count: count)
+        count: count
+      )
     return SourceFileSyntax(
       statements: CodeBlockItemListSyntax(items),
-      eofToken: .eof())
+      eofToken: .eof()
+    )
   }
 
   public func testTrivias() {
@@ -135,9 +155,11 @@ public class AbsolutePositionTests: XCTestCase {
     let state = root.statements[idx]
     XCTAssertEqual(3, state.leadingTrivia!.count)
     XCTAssertEqual(2, state.trailingTrivia!.count)
-    XCTAssertEqual(state.byteSize,
+    XCTAssertEqual(
+      state.byteSize,
       state.leadingTrivia!.byteSize + state.trailingTrivia!.byteSize
-        + state.byteSizeAfterTrimmingTrivia)
+        + state.byteSizeAfterTrimmingTrivia
+    )
     XCTAssertFalse(root.statements.isImplicit)
 
     // Test Node trivia setters and getters
@@ -184,13 +206,12 @@ public class AbsolutePositionTests: XCTestCase {
     let item = CodeBlockItemSyntax(
       item: .init(
         ReturnStmtSyntax(
-          returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline),
-          expression: nil)
-      ),
-      semicolon: nil,
-      errorTokens: nil)
-     XCTAssertEqual(0, item.position.utf8Offset)
-     XCTAssertEqual(1, item.positionAfterSkippingLeadingTrivia.utf8Offset)
+          returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline)
+        )
+      )
+    )
+    XCTAssertEqual(0, item.position.utf8Offset)
+    XCTAssertEqual(1, item.positionAfterSkippingLeadingTrivia.utf8Offset)
   }
 
   public func testSourceLocation() {
@@ -201,31 +222,39 @@ public class AbsolutePositionTests: XCTestCase {
     let startLoc = secondReturnStmt.startLocation(converter: converter)
     XCTAssertEqual(startLoc.line, 8)
     XCTAssertEqual(startLoc.column, 1)
-    XCTAssertEqual(converter.position(ofLine: startLoc.line!, column: startLoc.column!),
-      secondReturnStmt.positionAfterSkippingLeadingTrivia)
+    XCTAssertEqual(
+      converter.position(ofLine: startLoc.line!, column: startLoc.column!),
+      secondReturnStmt.positionAfterSkippingLeadingTrivia
+    )
 
     let startLocBeforeTrivia =
-      secondReturnStmt.startLocation(converter: converter,
-        afterLeadingTrivia: false)
+      secondReturnStmt.startLocation(
+        converter: converter,
+        afterLeadingTrivia: false
+      )
     XCTAssertEqual(startLocBeforeTrivia.line, 6)
     XCTAssertEqual(startLocBeforeTrivia.column, 1)
-    XCTAssertEqual(converter.position(ofLine: startLocBeforeTrivia.line!, column: startLocBeforeTrivia.column!),
-      secondReturnStmt.position)
+    XCTAssertEqual(
+      converter.position(ofLine: startLocBeforeTrivia.line!, column: startLocBeforeTrivia.column!),
+      secondReturnStmt.position
+    )
 
     let endLoc = secondReturnStmt.endLocation(converter: converter)
     XCTAssertEqual(endLoc.line, 8)
     XCTAssertEqual(endLoc.column, 7)
 
     let endLocAfterTrivia =
-      secondReturnStmt.endLocation(converter: converter,
-        afterTrailingTrivia: true)
+      secondReturnStmt.endLocation(
+        converter: converter,
+        afterTrailingTrivia: true
+      )
     XCTAssertEqual(endLocAfterTrivia.line, 11)
     XCTAssertEqual(endLocAfterTrivia.column, 1)
 
     XCTAssertTrue(converter.isValid(line: startLoc.line!, column: startLoc.column!))
-    XCTAssertFalse(converter.isValid(line: startLoc.line!, column: startLoc.column!+50))
+    XCTAssertFalse(converter.isValid(line: startLoc.line!, column: startLoc.column! + 50))
     XCTAssertFalse(converter.isValid(line: 0, column: startLoc.column!))
     XCTAssertTrue(converter.isValid(position: secondReturnStmt.position))
-    XCTAssertFalse(converter.isValid(position: secondReturnStmt.position+SourceLength(utf8Length: 100)))
+    XCTAssertFalse(converter.isValid(position: secondReturnStmt.position + SourceLength(utf8Length: 100)))
   }
 }

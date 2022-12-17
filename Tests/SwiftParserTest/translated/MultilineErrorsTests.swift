@@ -407,7 +407,7 @@ final class MultilineErrorsTests: XCTestCase {
         foo\1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#)
       ]
     )
   }
@@ -418,7 +418,7 @@ final class MultilineErrorsTests: XCTestCase {
       """ // OK because LF + CR is two new lines.1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#)
       ]
     )
   }

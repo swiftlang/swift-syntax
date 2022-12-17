@@ -90,22 +90,17 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       (a < b, c > (d))
       """,
-      substructure: Syntax(GenericArgumentListSyntax([
-        GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("b"),
-            genericArgumentClause: nil
-          )),
-          trailingComma: .commaToken()
-        ),
-        GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("c"),
-            genericArgumentClause: nil
-          )),
-          trailingComma: nil
-        )
-      ]))
+      substructure: Syntax(
+        GenericArgumentListSyntax([
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
+            trailingComma: .commaToken()
+          ),
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
+          ),
+        ])
+      )
     )
   }
 
@@ -115,22 +110,17 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       (a<b, c>(d))
       """,
-      substructure: Syntax(GenericArgumentListSyntax([
-        GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("b"),
-            genericArgumentClause: nil
-          )),
-          trailingComma: .commaToken()
-        ),
-        GenericArgumentSyntax(
-          argumentType: TypeSyntax(SimpleTypeIdentifierSyntax(
-            name: .identifier("c"),
-            genericArgumentClause: nil
-          )),
-          trailingComma: nil
-        )
-      ]))
+      substructure: Syntax(
+        GenericArgumentListSyntax([
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("b")),
+            trailingComma: .commaToken()
+          ),
+          GenericArgumentSyntax(
+            argumentType: SimpleTypeIdentifierSyntax(name: .identifier("c"))
+          ),
+        ])
+      )
     )
   }
 
@@ -229,7 +219,7 @@ final class GenericDisambiguationTests: XCTestCase {
        1️⃣*/
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '*/' at top level"),
+        DiagnosticSpec(message: "extraneous code '*/' at top level")
       ]
     )
   }

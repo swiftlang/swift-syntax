@@ -15,30 +15,43 @@ import XCTest
 
 fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
   let structKW = RawTokenSyntax(
-    kind: .structKeyword, text: arena.intern("struct"),
-    leadingTriviaPieces: [], trailingTriviaPieces: [.spaces(1)],
+    kind: .structKeyword,
+    text: arena.intern("struct"),
+    leadingTriviaPieces: [],
+    trailingTriviaPieces: [.spaces(1)],
     presence: .present,
-    arena: arena)
+    arena: arena
+  )
   let fooID = RawTokenSyntax(
-    kind: .identifier, text: arena.intern("Foo"),
-    leadingTriviaPieces: [], trailingTriviaPieces: [.spaces(1)],
+    kind: .identifier,
+    text: arena.intern("Foo"),
+    leadingTriviaPieces: [],
+    trailingTriviaPieces: [.spaces(1)],
     presence: .present,
-    arena: arena)
+    arena: arena
+  )
   let lBrace = RawTokenSyntax(
-    kind: .leftBrace, text: arena.intern("{"),
-    leadingTriviaPieces: [], trailingTriviaPieces: [],
+    kind: .leftBrace,
+    text: arena.intern("{"),
+    leadingTriviaPieces: [],
+    trailingTriviaPieces: [],
     presence: .present,
-    arena: arena)
+    arena: arena
+  )
   let rBrace = RawTokenSyntax(
-    kind: .leftBrace, text: arena.intern("}"),
-    leadingTriviaPieces: [.newlines(1)], trailingTriviaPieces: [],
+    kind: .leftBrace,
+    text: arena.intern("}"),
+    leadingTriviaPieces: [.newlines(1)],
+    trailingTriviaPieces: [],
     presence: .present,
-    arena: arena)
+    arena: arena
+  )
   let members = RawMemberDeclBlockSyntax(
     leftBrace: lBrace,
     members: RawMemberDeclListSyntax(elements: [], arena: arena),
     rightBrace: rBrace,
-    arena: arena)
+    arena: arena
+  )
   return RawStructDeclSyntax(
     attributes: nil,
     modifiers: nil,
@@ -47,7 +60,9 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
     genericParameterClause: nil,
     inheritanceClause: nil,
     genericWhereClause: nil,
-    members: members, arena: arena)
+    members: members,
+    arena: arena
+  )
 }
 
 final class RawSyntaxTests: XCTestCase {
@@ -55,11 +70,13 @@ final class RawSyntaxTests: XCTestCase {
   func testFactory() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
-      XCTAssertEqual("\(structDecl.raw)",
-                       """
-                       struct Foo {
-                       }
-                       """)
+      XCTAssertEqual(
+        "\(structDecl.raw)",
+        """
+        struct Foo {
+        }
+        """
+      )
     }
   }
 
@@ -81,10 +98,13 @@ final class RawSyntaxTests: XCTestCase {
   func testMaterializedToken() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let ident = RawTokenSyntax(
-        kind: .identifier, text: arena.intern("foo"),
-        leadingTriviaPieces: [], trailingTriviaPieces: [],
+        kind: .identifier,
+        text: arena.intern("foo"),
+        leadingTriviaPieces: [],
+        trailingTriviaPieces: [],
         presence: .present,
-        arena: arena)
+        arena: arena
+      )
       XCTAssertEqual(ident.tokenKind, .identifier)
       XCTAssertEqual(ident.tokenText, "foo")
       XCTAssertEqual(ident.presence, .present)
@@ -106,10 +126,13 @@ final class RawSyntaxTests: XCTestCase {
 
     withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let ident = RawTokenSyntax(
-        kind: .identifier, wholeText: arena.intern("\nfoo "), textRange: 1..<4,
+        kind: .identifier,
+        wholeText: arena.intern("\nfoo "),
+        textRange: 1..<4,
         presence: .present,
         hasLexerError: false,
-        arena: arena)
+        arena: arena
+      )
 
       XCTAssertEqual(ident.tokenKind, .identifier)
       XCTAssertEqual(ident.tokenText, "foo")

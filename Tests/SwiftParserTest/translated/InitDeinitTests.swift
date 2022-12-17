@@ -25,7 +25,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature"),
+        DiagnosticSpec(message: "expected parameter clause in function signature")
       ]
     )
   }
@@ -48,7 +48,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature"),
+        DiagnosticSpec(message: "expected parameter clause in function signature")
       ]
     )
   }
@@ -61,7 +61,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature"),
+        DiagnosticSpec(message: "expected parameter clause in function signature")
       ]
     )
   }
@@ -74,7 +74,7 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature"),
+        DiagnosticSpec(message: "expected parameter clause in function signature")
       ]
     )
   }
@@ -110,12 +110,13 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
-      ], fixedSource: """
-      struct FooStructDeinitializerA {
-        deinit
-      }
-      """
+        DiagnosticSpec(message: "deinitializers cannot have a name", fixIts: ["remove 'x'"])
+      ],
+      fixedSource: """
+        struct FooStructDeinitializerA {
+          deinit
+        }
+        """
     )
   }
 
@@ -129,11 +130,12 @@ final class InitDeinitTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove function signature"]),
-      ], fixedSource: """
-      struct FooStructDeinitializerA {
-        deinit
-      }
-      """
+      ],
+      fixedSource: """
+        struct FooStructDeinitializerA {
+          deinit
+        }
+        """
     )
   }
 
@@ -165,12 +167,13 @@ final class InitDeinitTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "deinitializers cannot have parameters", fixIts: ["remove function signature"]),
-      ], fixedSource: """
-      class FooClassDeinitializerA {
-        deinit {}
-      }
-      """
+        DiagnosticSpec(message: "deinitializers cannot have parameters", fixIts: ["remove function signature"])
+      ],
+      fixedSource: """
+        class FooClassDeinitializerA {
+          deinit {}
+        }
+        """
     )
   }
 
@@ -193,12 +196,13 @@ final class InitDeinitTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters")
-      ], fixedSource: """
-      class FooClassDeinitializerC {
-        deinit {}
-      }
-      """
+        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters"),
+      ],
+      fixedSource: """
+        class FooClassDeinitializerC {
+          deinit {}
+        }
+        """
     )
   }
 
@@ -210,7 +214,7 @@ final class InitDeinitTests: XCTestCase {
       init() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter clause in function signature"),
+        DiagnosticSpec(message: "expected parameter clause in function signature")
       ]
     )
   }
@@ -395,12 +399,7 @@ final class InitDeinitTests: XCTestCase {
         final func foo()
       }
       """,
-      substructure: Syntax(DeinitializerDeclSyntax(
-        attributes: nil,
-        modifiers: nil,
-        deinitKeyword: .deinitKeyword(),
-        body: nil
-      ))
+      substructure: Syntax(DeinitializerDeclSyntax())
     )
   }
 }

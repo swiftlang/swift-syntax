@@ -74,12 +74,14 @@ public enum SyntaxParser {
     var utf8Source = source
     utf8Source.makeContiguousUTF8()
 
-    return try parseImpl(source: utf8Source,
-                         parseTransition: parseTransition,
-                         filenameForDiagnostics: filenameForDiagnostics,
-                         languageVersion: languageVersion,
-                         enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
-                         diagnosticHandler: diagnosticHandler)
+    return try parseImpl(
+      source: utf8Source,
+      parseTransition: parseTransition,
+      filenameForDiagnostics: filenameForDiagnostics,
+      languageVersion: languageVersion,
+      enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
+      diagnosticHandler: diagnosticHandler
+    )
   }
 
   /// Parses the file `URL` into a full-fidelity Syntax tree.
@@ -108,10 +110,13 @@ public enum SyntaxParser {
     let source = fileData.withUnsafeBytes { buf in
       return String(decoding: buf.bindMemory(to: UInt8.self), as: UTF8.self)
     }
-    return try parse(source: source, filenameForDiagnostics: url.path,
-                     languageVersion: languageVersion,
-                     enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
-                     diagnosticHandler: diagnosticHandler)
+    return try parse(
+      source: source,
+      filenameForDiagnostics: url.path,
+      languageVersion: languageVersion,
+      enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
+      diagnosticHandler: diagnosticHandler
+    )
   }
 
   private static func parseImpl(
@@ -128,15 +133,23 @@ public enum SyntaxParser {
 
 extension Note {
   init(_ diag: Diagnostic) {
-    self.init(message: diag.message, location: diag.location,
-              highlights: diag.highlights, fixIts: diag.fixIts)
+    self.init(
+      message: diag.message,
+      location: diag.location,
+      highlights: diag.highlights,
+      fixIts: diag.fixIts
+    )
   }
 }
 
 extension Diagnostic {
   init(_ diag: Diagnostic, _ notes: [Note]) {
-    self.init(message: diag.message, location: diag.location, notes: notes,
-              highlights: diag.highlights, fixIts: diag.fixIts)
+    self.init(
+      message: diag.message,
+      location: diag.location,
+      notes: notes,
+      highlights: diag.highlights,
+      fixIts: diag.fixIts
+    )
   }
 }
-

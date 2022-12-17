@@ -25,6 +25,24 @@ final class VariableTests: XCTestCase {
     AssertBuildResult(buildable, "␣let a: [Int]")
   }
 
+  func testVariableDeclWithTry() {
+    let testCases: [UInt: (VariableDecl, String)] = [
+      #line: (
+        VariableDecl("let content = try? String(contentsOf: url)"),
+        "let content = try? String(contentsOf: url)"
+      ),
+      #line: (
+        VariableDecl("let content = try! String(contentsOf: url)"),
+        "let content = try! String(contentsOf: url)"
+      ),
+    ]
+
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
+    }
+  }
+
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
@@ -32,46 +50,68 @@ final class VariableTests: XCTestCase {
       PatternBinding(
         pattern: PatternSyntax("d"),
         typeAnnotation: TypeAnnotation(type: DictionaryType(keyType: Type("String"), valueType: Type("Int"))),
-        initializer: InitializerClause(value: DictionaryExpr()))
+        initializer: InitializerClause(value: DictionaryExpr())
+      )
     }
 
     AssertBuildResult(buildable, "␣var d: [String: Int] = [: ]")
   }
 
   func testVariableDeclWithExplicitTrailingCommas() {
-    let buildable = VariableDecl(letOrVarKeyword: .let, bindings: [
-      PatternBinding(pattern: PatternSyntax("a"), initializer: InitializerClause(value: ArrayExpr(
-        leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)) {
-          for i in 1...3 {
-            ArrayElement(
-              expression: IntegerLiteralExpr(i),
-              trailingComma: .comma.withTrailingTrivia(.newline)
-            )
-          }
-        }
-      ))
-    ])
-    AssertBuildResult(buildable, """
-    let a = [
-    1,
-    2,
-    3,
-    ]
-    """)
+    let buildable = VariableDecl(
+      letOrVarKeyword: .let,
+      bindings: [
+        PatternBinding(
+          pattern: PatternSyntax("a"),
+          initializer: InitializerClause(
+            value: ArrayExpr(
+              leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)
+            ) {
+              for i in 1...3 {
+                ArrayElement(
+                  expression: IntegerLiteralExpr(i),
+                  trailingComma: .comma.withTrailingTrivia(.newline)
+                )
+              }
+            }
+          )
+        )
+      ]
+    )
+    AssertBuildResult(
+      buildable,
+      """
+      let a = [
+      1,
+      2,
+      3,
+      ]
+      """
+    )
   }
 
   func testMultiPatternVariableDecl() {
     let buildable = VariableDecl(letOrVarKeyword: .let) {
-      PatternBinding(pattern: PatternSyntax("a"), initializer: InitializerClause(value: ArrayExpr {
-        for i in 1...3 {
-          ArrayElement(expression: IntegerLiteralExpr(i))
-        }
-      }))
-      PatternBinding(pattern: PatternSyntax("d"), initializer: InitializerClause(value: DictionaryExpr {
-        for i in 1...3 {
-          DictionaryElement(keyExpression: StringLiteralExpr(content: "key\(i)"), valueExpression: IntegerLiteralExpr(i))
-        }
-      }))
+      PatternBinding(
+        pattern: PatternSyntax("a"),
+        initializer: InitializerClause(
+          value: ArrayExpr {
+            for i in 1...3 {
+              ArrayElement(expression: IntegerLiteralExpr(i))
+            }
+          }
+        )
+      )
+      PatternBinding(
+        pattern: PatternSyntax("d"),
+        initializer: InitializerClause(
+          value: DictionaryExpr {
+            for i in 1...3 {
+              DictionaryElement(keyExpression: StringLiteralExpr(content: "key\(i)"), valueExpression: IntegerLiteralExpr(i))
+            }
+          }
+        )
+      )
       PatternBinding(pattern: PatternSyntax("i"), typeAnnotation: TypeAnnotation(type: Type("Int")))
       PatternBinding(pattern: PatternSyntax("s"), typeAnnotation: TypeAnnotation(type: Type("String")))
     }
@@ -95,11 +135,14 @@ final class VariableTests: XCTestCase {
       }
     }
 
-    AssertBuildResult(buildable, """
+    AssertBuildResult(
+      buildable,
+      """
       var test: Int {
           4 + 5
       }
-      """)
+      """
+    )
   }
 
   func testAttributedVariables() {
@@ -117,7 +160,7 @@ final class VariableTests: XCTestCase {
       ),
       #line: (
         VariableDecl(
-          attributes: AttributeList { CustomAttribute("Test")} ,
+          attributes: AttributeList { CustomAttribute("Test") },
           name: "y",
           type: TypeAnnotation(type: Type("String"))
         ) {
@@ -131,10 +174,12 @@ final class VariableTests: XCTestCase {
       ),
       #line: (
         VariableDecl(
-          attributes: AttributeList { CustomAttribute("WithArgs") {
-            TupleExprElement(expression: "value1")
-            TupleExprElement(label: "label", expression: "value2")
-          } },
+          attributes: AttributeList {
+            CustomAttribute("WithArgs") {
+              TupleExprElement(expression: "value1")
+              TupleExprElement(label: "label", expression: "value2")
+            }
+          },
           name: "z",
           type: TypeAnnotation(type: Type("Float"))
         ) {
@@ -148,9 +193,11 @@ final class VariableTests: XCTestCase {
       ),
       #line: (
         VariableDecl(
-          attributes: AttributeList { CustomAttribute("WithArgs")  {
-            TupleExprElement(expression: "value")
-          } },
+          attributes: AttributeList {
+            CustomAttribute("WithArgs") {
+              TupleExprElement(expression: "value")
+            }
+          },
           modifiers: [DeclModifier(name: .public)],
           .let,
           name: "z",

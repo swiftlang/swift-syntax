@@ -35,7 +35,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier"),
+        DiagnosticSpec(message: "'$' is not a valid identifier")
       ]
     )
   }
@@ -49,7 +49,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier"),
+        DiagnosticSpec(message: "'$' is not a valid identifier")
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 9 - 10 = '`$`'
       ]
     )
@@ -63,12 +63,13 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
-      ], fixedSource: """
-      func dollarClass() {
-        class `$` {}
-      }
-      """
+        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+      ],
+      fixedSource: """
+        func dollarClass() {
+          class `$` {}
+        }
+        """
     )
   }
 
@@ -80,7 +81,7 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier"),
+        DiagnosticSpec(message: "'$' is not a valid identifier")
       ]
     )
   }
@@ -93,11 +94,10 @@ final class DollarIdentifierTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier"),
+        DiagnosticSpec(message: "'$' is not a valid identifier")
       ]
     )
   }
-
 
   func testDollarIdentifier3a() {
     AssertParse(
@@ -107,7 +107,8 @@ final class DollarIdentifierTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'$' is not a valid identifier"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'$' is not a valid identifier"),
-      ], fixedSource: "func `$`(`$` dollarParam: Int) {}"
+      ],
+      fixedSource: "func `$`(`$` dollarParam: Int) {}"
     )
   }
 
@@ -118,7 +119,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: '$' is not an identifier; use backticks to escape it, Fix-It replacements: 3 - 4 = '`$`'
-        DiagnosticSpec(message: "'$' is not a valid identifier"),
+        DiagnosticSpec(message: "'$' is not a valid identifier")
       ]
     )
   }
@@ -171,7 +172,7 @@ final class DollarIdentifierTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 3: expected expression
-        DiagnosticSpec(message: "unexpected code in function"),
+        DiagnosticSpec(message: "unexpected code in function")
       ]
     )
   }

@@ -19,10 +19,10 @@ import SwiftParser
 import SwiftParserDiagnostics
 
 extension SyntaxParseable {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      return Self.parse(from: &parser)
-    })
+        return Self.parse(from: &parser)
+      })
   }
 }
 
@@ -68,7 +68,12 @@ extension BooleanLiteralExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension BreakStmtSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation { 
+extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+        return Self.parse(from: &parser)
+      })
+  }
 }
 
 extension ClassDeclSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -90,22 +95,22 @@ extension ContinueStmtSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension DeclSyntaxProtocol {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      let node = DeclSyntax.parse(from: &parser)
-      guard let result = node.as(Self.self) else {
-        throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
-      }
-      return result
-    })
+        let node = DeclSyntax.parse(from: &parser)
+        guard let result = node.as(Self.self) else {
+          throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
+        }
+        return result
+      })
   }
 }
 
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      return Self.parse(from: &parser)
-    })
+        return Self.parse(from: &parser)
+      })
   }
 }
 
@@ -143,22 +148,22 @@ extension EnumDeclSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension ExprSyntaxProtocol {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      let node = ExprSyntax.parse(from: &parser)
-      guard let result = node.as(Self.self) else {
-        throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
-      }
-      return result
-    })
+        let node = ExprSyntax.parse(from: &parser)
+        guard let result = node.as(Self.self) else {
+          throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
+        }
+        return result
+      })
   }
 }
 
 extension ExprSyntax: SyntaxExpressibleByStringInterpolation {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      return Self.parse(from: &parser)
-    })
+        return Self.parse(from: &parser)
+      })
   }
 }
 
@@ -192,7 +197,12 @@ extension FunctionDeclSyntax: SyntaxExpressibleByStringInterpolation {
 extension FunctionTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation { 
+extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+        return Self.parse(from: &parser)
+      })
+  }
 }
 
 extension GuardStmtSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -252,28 +262,18 @@ extension MacroExpansionExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension MemberAccessExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension MemberDeclBlockSyntax: SyntaxExpressibleByStringInterpolation { 
+extension MemberDeclBlockSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+        return Self.parse(from: &parser)
+      })
+  }
 }
 
 extension MemberTypeIdentifierSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension MetatypeTypeSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingDeclSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingExprSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingPatternSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingStmtSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension MissingTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension MoveExprSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -297,6 +297,9 @@ extension OptionalPatternSyntax: SyntaxExpressibleByStringInterpolation {
 extension OptionalTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension PackElementExprSyntax: SyntaxExpressibleByStringInterpolation { 
+}
+
 extension PackExpansionTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
@@ -304,22 +307,22 @@ extension PackReferenceTypeSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension PatternSyntaxProtocol {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      let node = PatternSyntax.parse(from: &parser)
-      guard let result = node.as(Self.self) else {
-        throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
-      }
-      return result
-    })
+        let node = PatternSyntax.parse(from: &parser)
+        guard let result = node.as(Self.self) else {
+          throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
+        }
+        return result
+      })
   }
 }
 
 extension PatternSyntax: SyntaxExpressibleByStringInterpolation {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      return Self.parse(from: &parser)
-    })
+        return Self.parse(from: &parser)
+      })
   }
 }
 
@@ -368,29 +371,34 @@ extension SequenceExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension SimpleTypeIdentifierSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation { 
+extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+        return Self.parse(from: &parser)
+      })
+  }
 }
 
 extension SpecializeExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension StmtSyntaxProtocol {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      let node = StmtSyntax.parse(from: &parser)
-      guard let result = node.as(Self.self) else {
-        throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
-      }
-      return result
-    })
+        let node = StmtSyntax.parse(from: &parser)
+        guard let result = node.as(Self.self) else {
+          throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
+        }
+        return result
+      })
   }
 }
 
 extension StmtSyntax: SyntaxExpressibleByStringInterpolation {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      return Self.parse(from: &parser)
-    })
+        return Self.parse(from: &parser)
+      })
   }
 }
 
@@ -409,7 +417,12 @@ extension SubscriptExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension SuperRefExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation { 
+extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+        return Self.parse(from: &parser)
+      })
+  }
 }
 
 extension SwitchStmtSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -440,22 +453,22 @@ extension TypeExprSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension TypeSyntaxProtocol {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      let node = TypeSyntax.parse(from: &parser)
-      guard let result = node.as(Self.self) else {
-        throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
-      }
-      return result
-    })
+        let node = TypeSyntax.parse(from: &parser)
+        guard let result = node.as(Self.self) else {
+          throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualType: node.kind.syntaxNodeType)
+        }
+        return result
+      })
   }
 }
 
 extension TypeSyntax: SyntaxExpressibleByStringInterpolation {
-  public init (stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
     self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
-      return Self.parse(from: &parser)
-    })
+        return Self.parse(from: &parser)
+      })
   }
 }
 

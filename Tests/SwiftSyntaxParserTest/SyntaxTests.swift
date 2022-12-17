@@ -72,7 +72,7 @@ public class SyntaxTests: XCTestCase {
     XCTAssertEqual(toks[4], rtoks[1])
     XCTAssertEqual(toks[5], rtoks[0])
 
-    let tokset = Set(toks+rtoks)
+    let tokset = Set(toks + rtoks)
     XCTAssertEqual(tokset.count, 6)
 
     XCTAssertEqual(toks[0].id, rtoks[5].id)
@@ -99,10 +99,12 @@ public class SyntaxTests: XCTestCase {
       testFuncKw(funcKW)
     }
     do {
-      let leading = Trivia(pieces: [ .spaces(2) ])
-      let trailing = Trivia(pieces: [ .spaces(1) ])
+      let leading = Trivia(pieces: [.spaces(2)])
+      let trailing = Trivia(pieces: [.spaces(1)])
       let funcKW = TokenSyntax.funcKeyword(
-        leadingTrivia: leading, trailingTrivia: trailing)
+        leadingTrivia: leading,
+        trailingTrivia: trailing
+      )
       testFuncKw(funcKW)
     }
   }

@@ -104,39 +104,37 @@ public enum TokenPrecedence: Comparable {
     switch tokenKind {
     case .unknown:
       self = .unknownToken
-      // MARK: Identifier like
-    case
-      // Literals
-        .capitalSelfKeyword, .falseKeyword, .floatingLiteral, .integerLiteral, .nilKeyword, .regexLiteral, .selfKeyword, .stringLiteral, .superKeyword, .trueKeyword,
+    // MARK: Identifier like
+    case  // Literals
+    .capitalSelfKeyword, .falseKeyword, .floatingLiteral, .integerLiteral, .nilKeyword, .regexLiteral, .selfKeyword, .stringLiteral, .superKeyword, .trueKeyword,
       // Pound literals
-        .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
+      .poundAvailableKeyword, .poundColorLiteralKeyword, .poundColumnKeyword, .poundDsohandleKeyword, .poundFileIDKeyword, .poundFileKeyword, .poundFileLiteralKeyword, .poundFilePathKeyword, .poundFunctionKeyword, .poundImageLiteralKeyword, .poundKeyPathKeyword, .poundLineKeyword, .poundSelectorKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword, .poundHasSymbolKeyword,
       // Identifiers
-        .dollarIdentifier, .identifier,
+      .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
-        .wildcardKeyword,
+      .wildcardKeyword,
       // String segment, string interpolation anchor and pound don't really fit anywhere else
-        .pound, .stringInterpolationAnchor, .stringSegment:
+      .pound, .stringInterpolationAnchor, .stringSegment:
       self = .identifierLike
 
-      // MARK: Expr keyword
-    case
-      // Keywords
-        .asKeyword, .isKeyword, .tryKeyword,
+    // MARK: Expr keyword
+    case  // Keywords
+    .asKeyword, .isKeyword, .tryKeyword,
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
-        .contextualKeyword,
+      .contextualKeyword,
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
-        .rethrowsKeyword, .throwsKeyword,
+      .rethrowsKeyword, .throwsKeyword,
       // Operators can occur inside expressions
-        .postfixOperator, .prefixOperator, .spacedBinaryOperator, .unspacedBinaryOperator,
+      .postfixOperator, .prefixOperator, .spacedBinaryOperator, .unspacedBinaryOperator,
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
-        .anyKeyword, .inoutKeyword,
+      .anyKeyword, .inoutKeyword,
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
-        .whereKeyword,
+      .whereKeyword,
       // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
-        .inKeyword:
+      .inKeyword:
       self = .exprKeyword
 
-      // MARK: Weak bracketet
+    // MARK: Weak bracketet
     case .leftParen:
       self = .weakBracketed(closingDelimiter: .rightParen)
     case .leftSquareBracket:
@@ -145,69 +143,64 @@ public enum TokenPrecedence: Comparable {
       self = .weakBracketed(closingDelimiter: .rightAngle)
     case .multilineStringQuote, .rawStringDelimiter, .singleQuote, .stringQuote:
       self = .weakBracketed(closingDelimiter: tokenKind)
-    case
-      // Chaining punctuators
-        .infixQuestionMark, .period, .postfixQuestionMark, .prefixPeriod,.exclamationMark,
+    case  // Chaining punctuators
+    .infixQuestionMark, .period, .postfixQuestionMark, .prefixPeriod, .exclamationMark,
       // Misc
-        .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand:
+      .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand:
       self = .weakPunctuator
 
-      // MARK: Weak bracket close
-    case
-      // Weak brackets
-        .rightAngle, .rightParen, .rightSquareBracket:
+    // MARK: Weak bracket close
+    case  // Weak brackets
+    .rightAngle, .rightParen, .rightSquareBracket:
       self = .weakBracketClose
 
-      // MARK: Statement keyword punctuator
-    case
-      // Control-flow constructs
-        .deferKeyword, .doKeyword, .forKeyword, .guardKeyword, .ifKeyword, .repeatKeyword, .switchKeyword, .whileKeyword,
+    // MARK: Statement keyword punctuator
+    case  // Control-flow constructs
+    .deferKeyword, .doKeyword, .forKeyword, .guardKeyword, .ifKeyword, .repeatKeyword, .switchKeyword, .whileKeyword,
       // Secondary parts of control-flow constructs
-        .caseKeyword, .catchKeyword, .defaultKeyword, .elseKeyword,
+      .caseKeyword, .catchKeyword, .defaultKeyword, .elseKeyword,
       // Return-like statements
-        .breakKeyword, .continueKeyword, .fallthroughKeyword, .returnKeyword, .throwKeyword, .yield,
+      .breakKeyword, .continueKeyword, .fallthroughKeyword, .returnKeyword, .throwKeyword, .yield,
       // #error, #warning and #assert are statement-like
-        .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
+      .poundErrorKeyword, .poundWarningKeyword, .poundAssertKeyword:
       self = .stmtKeyword
 
-      // MARK: Strong bracketet
+    // MARK: Strong bracketet
     case .leftBrace:
       self = .openingBrace(closingDelimiter: .rightBrace)
     case .poundElseifKeyword, .poundElseKeyword, .poundIfKeyword:
       self = .openingPoundIf
 
-      // MARK: Strong punctuator
-    case
-      // Semicolon separates two statements
-        .semicolon,
+    // MARK: Strong punctuator
+    case  // Semicolon separates two statements
+    .semicolon,
       // Arrow is a strong indicator in a function type that we are now in the return type
-        .arrow,
+      .arrow,
       // '@' typically occurs at the start of declarations
-        .atSign,
+      .atSign,
       // EOF is here because it is a very stong marker and doesn't belong anywhere else
-        .eof:
+      .eof:
       self = .strongPunctuator
 
-      // MARK: Strong bracket close
+    // MARK: Strong bracket close
     case .rightBrace:
       self = .closingBrace
-    case  .poundEndifKeyword:
+    case .poundEndifKeyword:
       self = .closingPoundIf
 
-      // MARK: Decl keywords
-    case
-      // Types
-        .associatedtypeKeyword, .classKeyword, .enumKeyword, .extensionKeyword, .protocolKeyword, .structKeyword, .typealiasKeyword,
+    // MARK: Decl keywords
+    case  // Types
+    .associatedtypeKeyword, .classKeyword, .enumKeyword, .extensionKeyword, .protocolKeyword, .structKeyword, .typealiasKeyword,
       // Access modifiers
-        .fileprivateKeyword, .internalKeyword, .privateKeyword, .publicKeyword, .staticKeyword,
+      .fileprivateKeyword, .internalKeyword, .privateKeyword, .publicKeyword, .staticKeyword,
       // Functions
-        .deinitKeyword, .funcKeyword, .initKeyword, .subscriptKeyword,
+      .deinitKeyword, .funcKeyword, .initKeyword, .subscriptKeyword,
       // Variables
-        .letKeyword, .varKeyword,
+      .letKeyword, .varKeyword,
       // Operator stuff
-        .operatorKeyword, .precedencegroupKeyword,
+      .operatorKeyword, .precedencegroupKeyword,
       // Misc
-        .importKeyword:
+      .importKeyword:
       self = .declKeyword
     }
   }

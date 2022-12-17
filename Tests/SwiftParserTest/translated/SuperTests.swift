@@ -115,7 +115,7 @@ final class SuperTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected name in member access"),
+        DiagnosticSpec(message: "expected name in member access")
       ]
     )
   }
@@ -129,21 +129,18 @@ final class SuperTests: XCTestCase {
         }
       }
       """#,
-      substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: ExprSyntax(SuperRefExprSyntax(superKeyword: .superKeyword())),
-        leftParen: .leftParenToken(),
-        argumentList: TupleExprElementListSyntax([
-          TupleExprElementSyntax(
-            label: nil,
-            colon: nil,
-            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))),
-            trailingComma: nil
-          )
-        ]),
-        rightParen: .rightParenToken(),
-        trailingClosure: nil,
-        additionalTrailingClosures: nil
-      ))
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: SuperRefExprSyntax(superKeyword: .superKeyword()),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([
+            TupleExprElementSyntax(
+              expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
+            )
+          ]),
+          rightParen: .rightParenToken()
+        )
+      )
     )
   }
 
@@ -157,16 +154,17 @@ final class SuperTests: XCTestCase {
         }
       }
       """#,
-      substructure: Syntax(ArrayExprSyntax(
-        leftSquare: .leftSquareBracketToken(),
-        elements: ArrayElementListSyntax([
-          ArrayElementSyntax(
-            expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
-            trailingComma: nil
-          )
-        ]),
-        rightSquare: .rightSquareBracketToken()
-      ))
+      substructure: Syntax(
+        ArrayExprSyntax(
+          leftSquare: .leftSquareBracketToken(),
+          elements: ArrayElementListSyntax([
+            ArrayElementSyntax(
+              expression: IntegerLiteralExprSyntax(digits: .integerLiteral("1"))
+            )
+          ]),
+          rightSquare: .rightSquareBracketToken()
+        )
+      )
     )
   }
 

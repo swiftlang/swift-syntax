@@ -17,24 +17,38 @@ extension OperatorTable {
   /// example as it is used in `#if` processing.
   public static var logicalOperators: OperatorTable {
     let precedenceGroups: [PrecedenceGroup] = [
-      PrecedenceGroup(name: "LogicalConjunctionPrecedence",
-                      associativity: .left, assignment: false,
-                      relations: [.higherThan("LogicalDisjunctionPrecedence")]),
-      PrecedenceGroup(name: "LogicalDisjunctionPrecedence",
-                      associativity: .left, assignment: false,
-                      relations: [])
+      PrecedenceGroup(
+        name: "LogicalConjunctionPrecedence",
+        associativity: .left,
+        assignment: false,
+        relations: [.higherThan("LogicalDisjunctionPrecedence")]
+      ),
+      PrecedenceGroup(
+        name: "LogicalDisjunctionPrecedence",
+        associativity: .left,
+        assignment: false,
+        relations: []
+      ),
     ]
 
     let operators: [Operator] = [
       Operator(kind: .prefix, name: "!"),
-      Operator(kind: .infix, name: "&&",
-               precedenceGroup: "LogicalConjunctionPrecedence"),
-      Operator(kind: .infix, name: "||",
-               precedenceGroup: "LogicalDisjunctionPrecedence")
+      Operator(
+        kind: .infix,
+        name: "&&",
+        precedenceGroup: "LogicalConjunctionPrecedence"
+      ),
+      Operator(
+        kind: .infix,
+        name: "||",
+        precedenceGroup: "LogicalDisjunctionPrecedence"
+      ),
     ]
 
     return try! OperatorTable(
-      precedenceGroups: precedenceGroups, operators: operators)
+      precedenceGroups: precedenceGroups,
+      operators: operators
+    )
   }
 
   /// Operator precedence graph for the Swift standard library.
@@ -118,7 +132,7 @@ extension OperatorTable {
       PrecedenceGroup(
         name: "BitwiseShiftPrecedence",
         relations: [.higherThan("MultiplicationPrecedence")]
-      )
+      ),
     ]
 
     let operators: [Operator] = [
@@ -318,7 +332,6 @@ extension OperatorTable {
         precedenceGroup: "LogicalDisjunctionPrecedence"
       ),
 
-
       Operator(
         kind: .infix,
         name: "*=",
@@ -411,12 +424,13 @@ extension OperatorTable {
 
       Operator(
         kind: .infix,
-        name: "~>",
-        precedenceGroup: nil
-      )
+        name: "~>"
+      ),
     ]
 
     return try! OperatorTable(
-      precedenceGroups: precedenceGroups, operators: operators)
+      precedenceGroups: precedenceGroups,
+      operators: operators
+    )
   }
 }

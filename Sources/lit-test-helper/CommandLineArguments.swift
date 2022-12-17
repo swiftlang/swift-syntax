@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 struct CommandLineArguments {
   struct MissingArgumentError: Error, CustomStringConvertible {
     let argName: String
@@ -38,36 +37,36 @@ struct CommandLineArguments {
   private let args: [String: [String]]
 
   static func parse<T: Sequence>(_ args: T) throws -> CommandLineArguments
-    where T.Element == String {
-      var parsedArgs: [String: [String]] = [:]
-      let addArg = { (key: String, val: String) in
-        parsedArgs[key, default: []].append(val)
-      }
-      var currentKey: String? = nil
-      for arg in args {
-        if arg.hasPrefix("-") {
-          // Parse a new key
-          if let currentKey = currentKey {
-            // The last key didn't have a value. Just add it with an empty string as
-            // the value to the parsed args
-            addArg(currentKey, "")
-          }
-          currentKey = arg
-        } else {
-          if let currentKey = currentKey {
-            addArg(currentKey, arg)
-          } else {
-            throw UnkeyedArgumentError(argName: arg)
-          }
-          currentKey = nil
+  where T.Element == String {
+    var parsedArgs: [String: [String]] = [:]
+    let addArg = { (key: String, val: String) in
+      parsedArgs[key, default: []].append(val)
+    }
+    var currentKey: String? = nil
+    for arg in args {
+      if arg.hasPrefix("-") {
+        // Parse a new key
+        if let currentKey = currentKey {
+          // The last key didn't have a value. Just add it with an empty string as
+          // the value to the parsed args
+          addArg(currentKey, "")
         }
+        currentKey = arg
+      } else {
+        if let currentKey = currentKey {
+          addArg(currentKey, arg)
+        } else {
+          throw UnkeyedArgumentError(argName: arg)
+        }
+        currentKey = nil
       }
-      if let currentKey = currentKey {
-        // The last key didn't have a value. Just add it with an empty string as
-        // the value to the parsed args
-        addArg(currentKey, "")
-      }
-      return CommandLineArguments(args: parsedArgs)
+    }
+    if let currentKey = currentKey {
+      // The last key didn't have a value. Just add it with an empty string as
+      // the value to the parsed args
+      addArg(currentKey, "")
+    }
+    return CommandLineArguments(args: parsedArgs)
   }
 
   subscript(key: String) -> String? {

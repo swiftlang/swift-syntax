@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if canImport(Darwin)
+#if canImport(Darwin) && !os(iOS) && !os(tvOS) && !os(watchOS)
 import Darwin
 import XCTest
 
@@ -26,39 +26,51 @@ final class LinkageTest: XCTestCase {
       return
     }
 
-    try assertLinkage(of: "SwiftSyntax", in: baseURL, assertions: [
-      .library("-lobjc"),
-      .library("-lswiftCompatibility51", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-      .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-      .library("-lswiftCompatibilityConcurrency"),
-      .library("-lswiftCore"),
-      .library("-lswiftDarwin", condition: .mayBeAbsent("Not present when building inside the compiler")),
-      .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
-      .library("-lswift_Concurrency"),
-      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-    ])
+    try assertLinkage(
+      of: "SwiftSyntax",
+      in: baseURL,
+      assertions: [
+        .library("-lobjc"),
+        .library("-lswiftCompatibility51", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+        .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+        .library("-lswiftCompatibilityConcurrency"),
+        .library("-lswiftCore"),
+        .library("-lswiftDarwin", condition: .mayBeAbsent("Not present when building inside the compiler")),
+        .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
+        .library("-lswift_Concurrency"),
+        .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+      ]
+    )
 
-    try assertLinkage(of: "SwiftParser", in: baseURL, assertions: [
-      .library("-lobjc"),
-      .library("-lswiftCompatibility51", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-      .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-      .library("-lswiftCompatibilityConcurrency"),
-      .library("-lswiftCore"),
-      .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
-      .library("-lswift_Concurrency"),
-      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-    ])
+    try assertLinkage(
+      of: "SwiftParser",
+      in: baseURL,
+      assertions: [
+        .library("-lobjc"),
+        .library("-lswiftCompatibility51", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+        .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+        .library("-lswiftCompatibilityConcurrency"),
+        .library("-lswiftCore"),
+        .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
+        .library("-lswift_Concurrency"),
+        .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+      ]
+    )
 
-    try assertLinkage(of: "SwiftSyntaxBuilder", in: baseURL, assertions: [
-      .library("-lobjc"),
-      .library("-lswiftCompatibility51", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-      .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-      .library("-lswiftCompatibilityConcurrency"),
-      .library("-lswiftCore"),
-      .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
-      .library("-lswift_Concurrency"),
-      .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
-    ])
+    try assertLinkage(
+      of: "SwiftSyntaxBuilder",
+      in: baseURL,
+      assertions: [
+        .library("-lobjc"),
+        .library("-lswiftCompatibility51", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+        .library("-lswiftCompatibility56", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+        .library("-lswiftCompatibilityConcurrency"),
+        .library("-lswiftCore"),
+        .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
+        .library("-lswift_Concurrency"),
+        .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+      ]
+    )
 
   }
 }
@@ -130,8 +142,11 @@ extension LinkageTest {
           continue
         }
 
-        XCTFail("Expected linkage was not present: \(assert.linkage)",
-                file: assert.file, line: assert.line)
+        XCTFail(
+          "Expected linkage was not present: \(assert.linkage)",
+          file: assert.file,
+          line: assert.line
+        )
         continue
       }
 
@@ -148,8 +163,11 @@ extension LinkageTest {
         continue
       }
 
-      XCTFail("Expected linkage to \(assert.linkage), but recieved linkage to \(linkage.linkage); Perhaps linkage assertions are out of order?",
-              file: assert.file, line: assert.line)
+      XCTFail(
+        "Expected linkage to \(assert.linkage), but recieved linkage to \(linkage.linkage); Perhaps linkage assertions are out of order?",
+        file: assert.file,
+        line: assert.line
+      )
       expectedLinkagesIdx += 1
     }
 
@@ -168,8 +186,10 @@ extension LinkageTest {
         return [baseURL.appendingPathComponent(library + ".o")]
       case .unified(let baseURL):
         return try FileManager.default
-          .contentsOfDirectory(at: baseURL.appendingPathComponent(library + ".build"),
-                               includingPropertiesForKeys: nil)
+          .contentsOfDirectory(
+            at: baseURL.appendingPathComponent(library + ".build"),
+            includingPropertiesForKeys: nil
+          )
           .filter({ $0.pathExtension == "o" })
       }
     }
@@ -207,7 +227,7 @@ extension LinkageTest {
 
   private func extractAutolinkingHints(in object: URL) throws -> [Linkage] {
     let data = try Data(contentsOf: object, options: .mappedIfSafe)
-    assert(data.starts(with: [0xcf,0xfa,0xed,0xfe]), "Not a mach object file?")
+    assert(data.starts(with: [0xcf, 0xfa, 0xed, 0xfe]), "Not a mach object file?")
     return data.withUnsafeBytes { (buf: UnsafeRawBufferPointer) -> [Linkage] in
       var result = [Linkage]()
       guard let base = buf.baseAddress else {
@@ -320,22 +340,22 @@ extension Linkage.Assertion {
     fileprivate func evaluate() -> Bool {
       switch self {
       case let .swiftVersionAtLeast(versionBound: bound):
-#if swift(>=5.7)
+        #if swift(>=5.7)
         let version: SwiftVersion = .v5_7
-#elseif swift(>=5.6)
+        #elseif swift(>=5.6)
         let version: SwiftVersion = .v5_6
-#elseif swift(>=5.5)
+        #elseif swift(>=5.5)
         let version: SwiftVersion = .v5_5
-#else
+        #else
         #error("Swift version is too old!")
-#endif
+        #endif
         return version >= bound
       case let .configuration(expectation):
-#if DEBUG
+        #if DEBUG
         let config: ProductConfiguration = .debug
-#else
+        #else
         let config: ProductConfiguration = .release
-#endif
+        #endif
         return config == expectation
       case .flaky:
         return true

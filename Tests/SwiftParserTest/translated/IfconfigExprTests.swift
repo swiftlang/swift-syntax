@@ -130,7 +130,7 @@ final class IfconfigExprTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '+ 12' in conditional compilation block"),
+        DiagnosticSpec(message: "unexpected code '+ 12' in conditional compilation block")
       ]
     )
   }
@@ -154,7 +154,7 @@ final class IfconfigExprTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected 'return' keyword in conditional compilation block"),
+        DiagnosticSpec(message: "unexpected 'return' keyword in conditional compilation block")
       ]
     )
   }
@@ -410,7 +410,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'A' is not a valid digit in integer literal"),
+        DiagnosticSpec(message: "'A' is not a valid digit in integer literal")
       ]
     )
   }
@@ -454,27 +454,21 @@ final class IfconfigExprTests: XCTestCase {
       #if compiler(<10.0) || hasGreeble(blah)
       #endif
       """,
-      substructure: Syntax(FunctionCallExprSyntax(
-        calledExpression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("compiler"),
-          declNameArguments: nil
-        )),
-        leftParen: .leftParenToken(),
-        argumentList: TupleExprElementListSyntax([
-          TupleExprElementSyntax(
-            label: nil,
-            colon: nil,
-            expression: ExprSyntax(PrefixOperatorExprSyntax(
-              operatorToken: .prefixOperator("<"),
-              postfixExpression: ExprSyntax(FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("10.0")))
-            )),
-            trailingComma: nil
-          )
-        ]),
-        rightParen: .rightParenToken(trailingTrivia: .space),
-        trailingClosure: nil,
-        additionalTrailingClosures: nil
-      ))
+      substructure: Syntax(
+        FunctionCallExprSyntax(
+          calledExpression: IdentifierExprSyntax(identifier: .identifier("compiler")),
+          leftParen: .leftParenToken(),
+          argumentList: TupleExprElementListSyntax([
+            TupleExprElementSyntax(
+              expression: PrefixOperatorExprSyntax(
+                operatorToken: .prefixOperator("<"),
+                postfixExpression: FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("10.0"))
+              )
+            )
+          ]),
+          rightParen: .rightParenToken(trailingTrivia: .space)
+        )
+      )
     )
   }
 
@@ -514,25 +508,22 @@ final class IfconfigExprTests: XCTestCase {
       #if hasFeature(17)
       #endif
       """,
-      substructure: Syntax(IfConfigClauseSyntax(
-        poundKeyword: .poundIfKeyword(),
-        condition: ExprSyntax(FunctionCallExprSyntax(
-          calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("hasFeature"), declNameArguments: nil)),
-          leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
-              label: nil,
-              colon: nil,
-              expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("17"))),
-              trailingComma: nil
-            )
-          ]),
-          rightParen: .rightParenToken(),
-          trailingClosure: nil,
-          additionalTrailingClosures: nil
-        )),
-        elements: .init(CodeBlockItemListSyntax([]))
-      ))
+      substructure: Syntax(
+        IfConfigClauseSyntax(
+          poundKeyword: .poundIfKeyword(),
+          condition: FunctionCallExprSyntax(
+            calledExpression: IdentifierExprSyntax(identifier: .identifier("hasFeature")),
+            leftParen: .leftParenToken(),
+            argumentList: TupleExprElementListSyntax([
+              TupleExprElementSyntax(
+                expression: IntegerLiteralExprSyntax(digits: .integerLiteral("17"))
+              )
+            ]),
+            rightParen: .rightParenToken()
+          ),
+          elements: .init(CodeBlockItemListSyntax([]))
+        )
+      )
     )
   }
 }

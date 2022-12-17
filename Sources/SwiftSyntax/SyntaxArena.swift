@@ -19,11 +19,11 @@ public class SyntaxArena {
   /// are retained in `addChild()` and are released in `deinit`.
   private var childRefs: Set<SyntaxArenaRef>
 
-#if DEBUG
+  #if DEBUG
   /// Whether or not this arena has been added to other arenas as a child.
   /// Used to make sure we don’t introduce retain cycles between arenas.
   private var hasParent: Bool
-#endif
+  #endif
 
   public convenience init() {
     self.init(slabSize: 128)
@@ -32,9 +32,9 @@ public class SyntaxArena {
   fileprivate init(slabSize: Int) {
     self.allocator = BumpPtrAllocator(slabSize: slabSize)
     self.childRefs = []
-#if DEBUG
+    #if DEBUG
     self.hasParent = false
-#endif
+    #endif
   }
 
   deinit {
@@ -107,19 +107,20 @@ public class SyntaxArena {
   func addChild(_ otherRef: SyntaxArenaRef) {
     if SyntaxArenaRef(self) == otherRef { return }
 
-#if DEBUG
+    #if DEBUG
     precondition(
       !self.hasParent,
-      "an arena can't have a new child once it's owned by other arenas")
-#endif
+      "an arena can't have a new child once it's owned by other arenas"
+    )
+    #endif
 
     if childRefs.insert(otherRef).inserted {
       otherRef.retain()
-#if DEBUG
+      #if DEBUG
       // FIXME: This may trigger a data race warning in Thread Sanitizer.
       // Can we use atomic bool here?
       otherRef.value.hasParent = true
-#endif
+      #endif
     }
   }
 
@@ -136,8 +137,7 @@ public class SyntaxArena {
   /// allocated by the underlying arena.
   @_spi(RawSyntax)
   public func contains(text: SyntaxText) -> Bool {
-    return (text.isEmpty ||
-            allocator.contains(address: text.baseAddress!))
+    return (text.isEmpty || allocator.contains(address: text.baseAddress!))
   }
 }
 
@@ -167,7 +167,9 @@ public class ParsingSyntaxArena: SyntaxArena {
   /// range this function returned.
   public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
     let allocated = allocator.allocate(
-      UInt8.self, count: buffer.count + /* for NULL */1)
+      UInt8.self,
+      count: buffer.count + /* for NULL */ 1
+    )
     precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
     _ = allocated.initialize(from: buffer)
 
@@ -230,7 +232,7 @@ struct SyntaxArenaRef: Hashable {
     hasher.combine(_value.toOpaque())
   }
 
-  static func ==(lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
+  static func == (lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
     return lhs._value.toOpaque() == rhs._value.toOpaque()
   }
 }

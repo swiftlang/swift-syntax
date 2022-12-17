@@ -22,7 +22,7 @@ final class BooleanLiteralTests: XCTestCase {
       #line: (BooleanLiteralExpr(true), "true"),
       #line: (BooleanLiteralExpr(false), "false"),
       #line: (true, "true"),
-      #line: (false, "false")
+      #line: (false, "false"),
     ]
 
     for (line, testCase) in testCases {

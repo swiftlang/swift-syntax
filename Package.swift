@@ -65,12 +65,8 @@ let package = Package(
         "CMakeLists.txt",
         "Raw/RawSyntaxNodes.swift.gyb",
         "Raw/RawSyntaxValidation.swift.gyb",
-        "SyntaxAnyVisitor.swift.gyb",
-        "SyntaxBaseNodes.swift.gyb",
         "SyntaxCollections.swift.gyb",
-        "SyntaxEnum.swift.gyb",
         "SyntaxFactory.swift.gyb",
-        "SyntaxKind.swift.gyb",
         "SyntaxNodes.swift.gyb.template",
         "SyntaxRewriter.swift.gyb",
         "SyntaxTransform.swift.gyb",
@@ -154,7 +150,7 @@ let package = Package(
     ),
     .executableTarget(
       name: "swift-parser-cli",
-      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics", "SwiftOperators", "_SwiftSyntaxMacros",
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics", "SwiftOperators",
                      .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .testTarget(name: "IDEUtilsTest", dependencies: ["_SwiftSyntaxTestSupport", "SwiftParser", "SwiftSyntax", "IDEUtils"]),

@@ -30,7 +30,8 @@ public class SyntaxTests: XCTestCase {
     let s = StructDeclSyntax(
       structKeyword: .structKeyword(),
       identifier: .identifier("someStruct"),
-      members: MemberDeclBlockSyntax(leftBrace: .leftBrace, members: [], rightBrace: .rightBrace))
+      members: MemberDeclBlockSyntax(leftBrace: .leftBrace, members: [], rightBrace: .rightBrace)
+    )
 
     XCTAssertEqual(Syntax(s), s.members.parent)
     XCTAssertNil(s.members.detach().parent)

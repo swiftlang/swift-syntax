@@ -154,13 +154,12 @@ public struct RawSyntaxTokenView {
         leadingTrivia: formLeadingTrivia(),
         trailingTrivia: formTrailingTrivia(),
         presence: presence,
-        arena: arena)
+        arena: arena
+      )
     case .materializedToken(var payload):
       let decomposed = newValue.decomposeToRaw()
       let rawKind = decomposed.rawKind
-      let text: SyntaxText = (decomposed.string.map({arena.intern($0)}) ??
-                              decomposed.rawKind.defaultText ??
-                              "")
+      let text: SyntaxText = (decomposed.string.map({ arena.intern($0) }) ?? decomposed.rawKind.defaultText ?? "")
       payload.tokenKind = rawKind
       payload.tokenText = text
       return RawSyntax(arena: arena, payload: .materializedToken(payload))

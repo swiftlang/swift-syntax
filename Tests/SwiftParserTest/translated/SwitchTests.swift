@@ -47,7 +47,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{}' in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{}' in 'switch' statement")
       ]
     )
   }
@@ -62,7 +62,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and ':' in switch case"),
+        DiagnosticSpec(message: "expected expression and ':' in switch case")
       ]
     )
   }
@@ -93,7 +93,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in switch case"),
+        DiagnosticSpec(message: "expected ':' in switch case")
       ]
     )
   }
@@ -108,7 +108,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in switch case"),
+        DiagnosticSpec(message: "expected ':' in switch case")
       ]
     )
   }
@@ -223,15 +223,16 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "standalone ';' statements are not allowed", fixIts: ["remove ';'"]),
-      ], fixedSource: """
-      switch x {
-      case 0:
-      
-      case 1:
-        x = 0
-      }
-      """
+        DiagnosticSpec(message: "standalone ';' statements are not allowed", fixIts: ["remove ';'"])
+      ],
+      fixedSource: """
+        switch x {
+        case 0:
+
+        case 1:
+          x = 0
+        }
+        """
     )
   }
 
@@ -249,7 +250,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
       ]
     )
   }
@@ -264,15 +265,16 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
-      ], fixedSource: """
-      switch x {
-      case <#identifier#>:
-        let x = 1
-      case 1:
-        x = 0
-      }
-      """
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          let x = 1
+        case 1:
+          x = 0
+        }
+        """
     )
   }
 
@@ -297,7 +299,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
       ]
     )
   }
@@ -311,7 +313,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
       ]
     )
   }
@@ -349,7 +351,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression"),
+        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression")
       ]
     )
   }
@@ -765,7 +767,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression"),
+        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression")
       ]
     )
   }
@@ -904,7 +906,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression"),
+        DiagnosticSpec(message: "'default' cannot be used with a 'where' guard expression")
       ]
     )
   }
@@ -1201,7 +1203,7 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected label in switch case"),
+        DiagnosticSpec(message: "expected label in switch case")
       ]
     )
   }
@@ -1219,9 +1221,12 @@ final class SwitchTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ']' to end array", notes: [
-          NoteSpec(message: "to match this opening '['")
-        ]),
+        DiagnosticSpec(
+          message: "expected ']' to end array",
+          notes: [
+            NoteSpec(message: "to match this opening '['")
+          ]
+        )
       ]
     )
   }

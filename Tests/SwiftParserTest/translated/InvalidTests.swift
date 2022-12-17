@@ -23,8 +23,9 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 2: 'var' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`var`'
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"]),
-      ], fixedSource: "func test1(var x : inout Int) {}"
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+      ],
+      fixedSource: "func test1(var x : inout Int) {}"
     )
   }
 
@@ -35,7 +36,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 18 - 21 = '`let`'
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
       ]
     )
   }
@@ -46,8 +47,9 @@ final class InvalidTests: XCTestCase {
       func test3(f : (1️⃣inout _ x : Int) -> Void) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"]),
-      ], fixedSource: "func test3(f : (_ x : inout Int) -> Void) {}"
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+      ],
+      fixedSource: "func test3(f : (_ x : inout Int) -> Void) {}"
     )
   }
 
@@ -58,7 +60,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`var`'
-        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed")
       ]
     )
   }
@@ -70,7 +72,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'let' in this position is interpreted as an argument label, Fix-It replacements: 22 - 25 = '`let`'
-        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed")
       ]
     )
   }
@@ -82,7 +84,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 1: 'var' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`var`'
-        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed")
       ]
     )
   }
@@ -94,7 +96,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 2: 'let' in this position is interpreted as an argument label, Fix-It replacements: 21 - 24 = '`let`'
-        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed")
       ]
     )
   }
@@ -107,7 +109,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value and ')' to end function call"),
+        DiagnosticSpec(message: "expected value and ')' to end function call")
       ]
     )
   }
@@ -130,7 +132,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ')' to end function call"),
+        DiagnosticSpec(message: "expected ')' to end function call")
       ]
     )
   }
@@ -153,7 +155,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
       ]
     )
   }
@@ -178,7 +180,7 @@ final class InvalidTests: XCTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label"),
+        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label")
       ]
     )
   }
@@ -239,7 +241,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and type in parameter"),
+        DiagnosticSpec(message: "expected ':' and type in parameter")
       ]
     )
   }
@@ -254,7 +256,7 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected value in function call"),
+        DiagnosticSpec(message: "expected value in function call")
       ]
     )
   }
@@ -279,15 +281,15 @@ final class InvalidTests: XCTestCase {
     )
   }
 
-
   func testInvalid16b() {
     AssertParse(
       """
       func f2_43591(1️⃣inout inout b: Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout inout' before a parameter name is not allowed", fixIts: ["move 'inout inout' in front of type"]),
-      ], fixedSource: "func f2_43591(b: inout Int) {}"
+        DiagnosticSpec(message: "'inout inout' before a parameter name is not allowed", fixIts: ["move 'inout inout' in front of type"])
+      ],
+      fixedSource: "func f2_43591(b: inout Int) {}"
     )
   }
 
@@ -298,7 +300,7 @@ final class InvalidTests: XCTestCase {
       """,
       diagnostics: [
         // TODO: Old parser expected warning on line 3: 'let' in this position is interpreted as an argument label, Fix-It replacements: 15 - 18 = '`let`'
-        DiagnosticSpec(message: "unexpected code 'a' in parameter"),
+        DiagnosticSpec(message: "unexpected code 'a' in parameter")
       ]
     )
   }
@@ -309,7 +311,7 @@ final class InvalidTests: XCTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
       ]
     )
   }
@@ -320,7 +322,7 @@ final class InvalidTests: XCTestCase {
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
       ]
     )
   }
@@ -331,7 +333,7 @@ final class InvalidTests: XCTestCase {
       func 1️⃣repeat() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here")
       ]
     )
   }
@@ -342,7 +344,7 @@ final class InvalidTests: XCTestCase {
       let 1️⃣for = 2
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here")
       ]
     )
   }
@@ -353,7 +355,7 @@ final class InvalidTests: XCTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed"),
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed")
       ]
     )
   }
@@ -364,8 +366,9 @@ final class InvalidTests: XCTestCase {
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"]),
-      ], fixedSource: "func f5_43591(i: inout Int) {}"
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
+      ],
+      fixedSource: "func f5_43591(i: inout Int) {}"
     )
   }
 
@@ -375,7 +378,7 @@ final class InvalidTests: XCTestCase {
       func 1️⃣repeat() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here")
       ]
     )
   }
@@ -386,7 +389,7 @@ final class InvalidTests: XCTestCase {
       let 1️⃣for = 2
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here"),
+        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here")
       ]
     )
   }
@@ -397,10 +400,13 @@ final class InvalidTests: XCTestCase {
       func dog 1️⃣cow() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
-          "join the identifiers together",
-          "join the identifiers together with camel-case"
-        ]),
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in function",
+          fixIts: [
+            "join the identifiers together",
+            "join the identifiers together with camel-case",
+          ]
+        )
       ],
       applyFixIts: ["join the identifiers together"],
       fixedSource: "func dogcow() {}"
@@ -413,10 +419,13 @@ final class InvalidTests: XCTestCase {
       func dog 1️⃣cow() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
-          "join the identifiers together",
-          "join the identifiers together with camel-case"
-        ]),
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in function",
+          fixIts: [
+            "join the identifiers together",
+            "join the identifiers together with camel-case",
+          ]
+        )
       ],
       applyFixIts: ["join the identifiers together with camel-case"],
       fixedSource: "func dogCow() {}"
@@ -429,10 +438,13 @@ final class InvalidTests: XCTestCase {
       func dog 1️⃣cow sheep() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
-          "join the identifiers together",
-          "join the identifiers together with camel-case"
-        ]),
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in function",
+          fixIts: [
+            "join the identifiers together",
+            "join the identifiers together with camel-case",
+          ]
+        )
       ],
       applyFixIts: ["join the identifiers together with camel-case"],
       fixedSource: "func dogCowSheep() {}"
@@ -445,8 +457,9 @@ final class InvalidTests: XCTestCase {
       func cat 1️⃣Mouse() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: ["join the identifiers together"]),
-      ], fixedSource: "func catMouse() {}"
+        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: ["join the identifiers together"])
+      ],
+      fixedSource: "func catMouse() {}"
     )
   }
 
@@ -456,10 +469,13 @@ final class InvalidTests: XCTestCase {
       func friend 1️⃣ship<T>(x: T) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "found an unexpected second identifier in function", fixIts: [
-          "join the identifiers together",
-          "join the identifiers together with camel-case"
-        ]),
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in function",
+          fixIts: [
+            "join the identifiers together",
+            "join the identifiers together with camel-case",
+          ]
+        )
       ],
       applyFixIts: ["join the identifiers together with camel-case"],
       fixedSource: "func friendShip<T>(x: T) {}"
@@ -509,12 +525,13 @@ final class InvalidTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'class' constraint can only appear on protocol declarations", fixIts: ["replace 'class' by 'AnyObject'"]),
-      ], fixedSource: """
-      struct Weak<T: AnyObject> {
-        weak let value: T
-      }
-      """
+        DiagnosticSpec(message: "'class' constraint can only appear on protocol declarations", fixIts: ["replace 'class' by 'AnyObject'"])
+      ],
+      fixedSource: """
+        struct Weak<T: AnyObject> {
+          weak let value: T
+        }
+        """
     )
   }
 

@@ -33,11 +33,15 @@ final class RecoveryLibraryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected braces before function", highlight: """
-        // Check that we handle multiple consecutive right braces.
-        }
-        }
-        """),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected braces before function",
+          highlight: """
+            // Check that we handle multiple consecutive right braces.
+            }
+            }
+            """
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected braces before function"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous braces at top level"),
       ]

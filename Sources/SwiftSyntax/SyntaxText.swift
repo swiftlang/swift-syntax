@@ -38,8 +38,10 @@ public struct SyntaxText {
   var buffer: UnsafeBufferPointer<UInt8>
 
   public init(baseAddress: UnsafePointer<UInt8>?, count: Int) {
-    assert(count == 0 || baseAddress != nil,
-           "If count is not zero, base address must be exist")
+    assert(
+      count == 0 || baseAddress != nil,
+      "If count is not zero, base address must be exist"
+    )
     buffer = .init(start: baseAddress, count: count)
   }
 
@@ -57,7 +59,8 @@ public struct SyntaxText {
   public init(rebasing slice: SubSequence) {
     self.init(
       baseAddress: slice.base.baseAddress?.advanced(by: slice.startIndex),
-      count: slice.count)
+      count: slice.count
+    )
   }
 
   /// Base address of the memory range this string refers to.
@@ -88,8 +91,7 @@ public struct SyntaxText {
     guard !self.isEmpty && !other.isEmpty else {
       return self.isEmpty && other.isEmpty
     }
-    return (other.baseAddress! <= self.baseAddress! &&
-            self.baseAddress! + count <= other.baseAddress! + other.count)
+    return (other.baseAddress! <= self.baseAddress! && self.baseAddress! + count <= other.baseAddress! + other.count)
   }
 
   /// Returns `true` if `other` is a substring of this `SyntaxText`.
@@ -109,7 +111,7 @@ public struct SyntaxText {
       // Force unwrappings are safe because we know 'self' and 'other' are both
       // not empty.
       if compareMemory(self.baseAddress! + start, other.baseAddress!, other.count) {
-        return start ..< (start + other.count)
+        return start..<(start + other.count)
       } else {
         start += 1
       }
@@ -121,7 +123,7 @@ public struct SyntaxText {
   public func hasPrefix(_ other: SyntaxText) -> Bool {
     guard self.count >= other.count else { return false }
     guard !other.isEmpty else { return true }
-    let prefixSlice = self[0 ..< other.count]
+    let prefixSlice = self[0..<other.count]
     return Self(rebasing: prefixSlice) == other
   }
 
@@ -129,7 +131,7 @@ public struct SyntaxText {
   public func hasSuffix(_ other: SyntaxText) -> Bool {
     guard self.count >= other.count else { return false }
     guard !other.isEmpty else { return true }
-    let suffixSlice = self[(self.count - other.count) ..< self.count]
+    let suffixSlice = self[(self.count - other.count)..<self.count]
     return Self(rebasing: suffixSlice) == other
   }
 }
@@ -149,7 +151,7 @@ extension SyntaxText: RandomAccessCollection {
 }
 
 extension SyntaxText: Hashable {
-  public static func ==(lhs: SyntaxText, rhs: SyntaxText) -> Bool {
+  public static func == (lhs: SyntaxText, rhs: SyntaxText) -> Bool {
     if lhs.buffer.count != rhs.buffer.count {
       return false
     }
@@ -208,7 +210,7 @@ extension String {
   }
 
   /// Runs `body` with a `SyntaxText` that refers the contiguous memory of this
-  /// string. Like `String.withUTF8(_:)`, this may mutates the string if this
+  /// string. Like `String.withUTF8(_:)`, this may mutate the string if this
   /// string was not contiguous.
   @_spi(RawSyntax)
   public mutating func withSyntaxText<R>(
@@ -221,18 +223,20 @@ extension String {
 }
 
 private func compareMemory(
-  _ s1: UnsafePointer<UInt8>, _ s2: UnsafePointer<UInt8>, _ count: Int
+  _ s1: UnsafePointer<UInt8>,
+  _ s2: UnsafePointer<UInt8>,
+  _ count: Int
 ) -> Bool {
   assert(count >= 0)
-#if SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
+  #if SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
   return UnsafeBufferPointer(start: s1, count: count)
     .elementsEqual(UnsafeBufferPointer(start: s2, count: count))
-#elseif canImport(Darwin)
+  #elseif canImport(Darwin)
   return Darwin.memcmp(s1, s2, count) == 0
-#elseif canImport(Glibc)
+  #elseif canImport(Glibc)
   return Glibc.memcmp(s1, s2, count) == 0
-#else
+  #else
   return UnsafeBufferPointer(start: s1, count: count)
     .elementsEqual(UnsafeBufferPointer(start: s2, count: count))
-#endif
+  #endif
 }

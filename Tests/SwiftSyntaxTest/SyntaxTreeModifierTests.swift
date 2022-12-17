@@ -15,17 +15,16 @@ import SwiftSyntax
 
 fileprivate func cannedVarDecl() -> VariableDeclSyntax {
   let identifierPattern = IdentifierPatternSyntax(
-    identifier: TokenSyntax.identifier("a")
+    identifier: .identifier("a")
   )
   let pattern = PatternBindingSyntax(
-    pattern: PatternSyntax(identifierPattern),
+    pattern: identifierPattern,
     typeAnnotation: TypeAnnotationSyntax(
-      colon: TokenSyntax.colonToken(trailingTrivia: .space),
-      type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"), genericArgumentClause: nil))),
-    initializer: nil, accessor: nil, trailingComma: nil)
+      colon: .colonToken(trailingTrivia: .space),
+      type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+    )
+  )
   return VariableDeclSyntax(
-    attributes: nil,
-    modifiers: nil,
     letOrVarKeyword: .letKeyword(trailingTrivia: .space),
     bindings: PatternBindingListSyntax([pattern])
   )

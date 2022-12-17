@@ -40,12 +40,13 @@ public struct MigrateToNewIfLetSyntax: RefactoringProvider {
       var conditionCopy = condition
       // Check if the condition is an optional binding ...
       if var binding = condition.condition.as(OptionalBindingConditionSyntax.self),
-         // ... that binds an identifier (and not a tuple) ...
-         let bindingIdentifier = binding.pattern.as(IdentifierPatternSyntax.self),
-         // ... and has an initializer that is also an identifier ...
-         let initializerIdentifier = binding.initializer?.value.as(IdentifierExprSyntax.self),
-         // ... and both sides of the assignment are the same identifiers.
-         bindingIdentifier.identifier.text == initializerIdentifier.identifier.text {
+        // ... that binds an identifier (and not a tuple) ...
+        let bindingIdentifier = binding.pattern.as(IdentifierPatternSyntax.self),
+        // ... and has an initializer that is also an identifier ...
+        let initializerIdentifier = binding.initializer?.value.as(IdentifierExprSyntax.self),
+        // ... and both sides of the assignment are the same identifiers.
+        bindingIdentifier.identifier.text == initializerIdentifier.identifier.text
+      {
         // Remove the initializer ...
         binding.initializer = nil
         // ... and remove whitespace before the comma (in `if` statements with multiple conditions).

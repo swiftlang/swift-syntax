@@ -25,35 +25,36 @@ let buildableNodesFile = SourceFile {
     let type = node.type
     let hasTrailingComma = node.traits.contains("WithTrailingComma")
 
-    let docComment: SwiftSyntax.Trivia = node.documentation.isEmpty ? [] : .docLineComment("/// \(node.documentation)") + .newline
-    ExtensionDecl(
-      leadingTrivia: docComment,
-      extendedType: SimpleTypeIdentifier(name: .identifier(type.shorthandName)),
-      inheritanceClause: hasTrailingComma ? TypeInheritanceClause { InheritedType(typeName: Type("HasTrailingComma")) } : nil
-    ) {
-      // Generate initializers
-      createDefaultInitializer(node: node)
-      if let convenienceInit = createConvenienceInitializer(node: node) {
-        convenienceInit
-      }
+    let convenienceInit = createConvenienceInitializer(node: node)
+    if convenienceInit != nil || hasTrailingComma {
+      let docComment: SwiftSyntax.Trivia = node.documentation.isEmpty ? [] : .docLineComment("/// \(node.documentation)") + .newline
+      ExtensionDecl(
+        leadingTrivia: docComment,
+        extendedType: SimpleTypeIdentifier(name: .identifier(type.shorthandName)),
+        inheritanceClause: hasTrailingComma ? TypeInheritanceClause { InheritedType(typeName: Type("HasTrailingComma")) } : nil
+      ) {
+        if let convenienceInit = convenienceInit {
+          convenienceInit
+        }
 
-      if hasTrailingComma {
-        VariableDecl(
+        if hasTrailingComma {
+          VariableDecl(
           """
           var hasTrailingComma: Bool {
             return trailingComma != nil
           }
           """
-        )
+          )
 
-        FunctionDecl(
+          FunctionDecl(
           """
           /// Conformance to `HasTrailingComma`.
           public func withTrailingComma(_ withComma: Bool) -> Self {
             return withTrailingComma(withComma ? .commaToken() : nil)
           }
           """
-        )
+          )
+        }
       }
     }
   }
@@ -64,57 +65,6 @@ private func convertFromSyntaxProtocolToSyntaxType(child: Child) -> Expr {
     return Expr(FunctionCallExpr("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: child.swiftName))"))
   } else {
     return Expr(IdentifierExpr(identifier: .identifier(child.swiftName)))
-  }
-}
-
-/// Create the default initializer for the given node.
-private func createDefaultInitializer(node: Node) -> InitializerDecl {
-  let type = node.type
-  return InitializerDecl(
-    leadingTrivia: ([
-      "/// Creates a `\(type.shorthandName)` using the provided parameters.",
-      "/// - Parameters:",
-    ] + node.children.map { child in
-      "///   - \(child.swiftName): \(child.documentation)"
-    }).map { .docLineComment($0) + .newline }.reduce([], +),
-    // FIXME: If all parameters are specified, the SwiftSyntaxBuilder initializer is ambigious
-    // with the memberwise initializer in SwiftSyntax.
-    // Hot-fix this by preferring the overload in SwiftSyntax. In the long term, consider sinking
-    // this initializer to SwiftSyntax.
-    attributes: AttributeList { CustomAttribute("_disfavoredOverload").withTrailingTrivia(.space) },
-    modifiers: [DeclModifier(name: .public)],
-    signature: FunctionSignature(
-      input: ParameterClause {
-        for trivia in ["leadingTrivia", "trailingTrivia"] {
-          FunctionParameter("\(trivia): Trivia = []", for: .functionParameters)
-        }
-        for child in node.children {
-          FunctionParameter(
-            firstName: .identifier(child.swiftName),
-            colon: .colon,
-            type: child.parameterType,
-            defaultArgument: child.type.defaultInitialization.map { InitializerClause(value: $0) }
-          )
-        }
-      }
-    )
-  ) {
-    for child in node.children {
-      if let assertStmt = child.generateAssertStmtTextChoices(varName: child.swiftName) {
-        assertStmt
-      }
-    }
-    let nodeConstructorCall = FunctionCallExpr(callee: Expr(IdentifierExpr(identifier: .identifier(type.syntaxBaseName)))) {
-      for child in node.children {
-        TupleExprElement(
-          label: child.isUnexpectedNodes ? nil : child.swiftName,
-          expression: convertFromSyntaxProtocolToSyntaxType(child: child)
-        )
-      }
-    }
-    SequenceExpr("self = \(nodeConstructorCall)")
-    SequenceExpr("self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])")
-    SequenceExpr("self.trailingTrivia = trailingTrivia + (self.trailingTrivia ?? [])")
   }
 }
 
@@ -192,28 +142,24 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       "///  - Initializing syntax collections using result builders",
       "///  - Initializing tokens without default text using strings",
     ].map { .docLineComment($0) + .newline }.reduce([], +),
-    // FIXME: If all parameters are specified, the SwiftSyntaxBuilder initializer is ambigious
-    // with the memberwise initializer in SwiftSyntax.
-    // Hot-fix this by preferring the overload in SwiftSyntax. In the long term, consider sinking
-    // this initializer to SwiftSyntax.
-    attributes: AttributeList { CustomAttribute("_disfavoredOverload").withTrailingTrivia(.space) },
     modifiers: [DeclModifier(name: .public)],
     signature: FunctionSignature(
       input: ParameterClause {
-        FunctionParameter("leadingTrivia: Trivia = []", for: .functionParameters)
+        FunctionParameter("leadingTrivia: Trivia? = nil", for: .functionParameters)
         for param in normalParameters + builderParameters {
           param
         }
+        FunctionParameter("trailingTrivia: Trivia? = nil", for: .functionParameters)
       }
     )
   ) {
-    FunctionCallExpr(callee: "self.init") {
+    FunctionCallExpr(callee: Expr("self.init")) {
+      TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
       for arg in delegatedInitArgs {
         arg
       }
+      TupleExprElement(label: "trailingTrivia", expression: "trailingTrivia")
     }
-
-    SequenceExpr("self.leadingTrivia = leadingTrivia + (self.leadingTrivia ?? [])")
   }
 }
 

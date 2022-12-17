@@ -18,7 +18,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public let SYNTAX_BASE_KINDS: Set<String> = [
+public let SYNTAX_BASE_KINDS: [String] = [
 % for name in SYNTAX_BASE_KINDS:
   "${name}",
 % end

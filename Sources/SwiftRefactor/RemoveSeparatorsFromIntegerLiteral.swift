@@ -32,7 +32,8 @@ public struct RemoveSeparatorsFromIntegerLiteral: RefactoringProvider {
       return lit
     }
     let formattedText = lit.digits.text.filter({ $0 != "_" })
-    return lit
+    return
+      lit
       .withDigits(lit.digits.withKind(.integerLiteral(formattedText)))
   }
 }

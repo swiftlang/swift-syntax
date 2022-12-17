@@ -35,9 +35,13 @@ public func AssertStringsEqualWithDiff(
     return
   }
   FailStringsEqualWithDiff(
-    actual, expected, message,
+    actual,
+    expected,
+    message,
     additionalInfo: additionalInfo(),
-    file: file, line: line)
+    file: file,
+    line: line
+  )
 }
 
 /// Asserts that the two data are equal, providing Unix `diff`-style output if they are not.
@@ -70,7 +74,9 @@ public func AssertDataEqualWithDiff(
     String(decoding: expected, as: UTF8.self),
     message,
     additionalInfo: additionalInfo(),
-    file: file, line: line)
+    file: file,
+    line: line
+  )
 }
 
 /// `XCTFail` with `diff`-style output.
@@ -125,9 +131,9 @@ public func FailStringsEqualWithDiff(
     var fullMessage = message.isEmpty ? failureMessage : "\(message) - \(failureMessage)"
     if let additionalInfo = additionalInfo() {
       fullMessage = """
-      \(fullMessage)
-      \(additionalInfo)
-      """
+        \(fullMessage)
+        \(additionalInfo)
+        """
     }
     XCTFail(fullMessage, file: file, line: line)
   } else {

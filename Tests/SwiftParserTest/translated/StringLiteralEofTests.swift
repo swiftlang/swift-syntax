@@ -45,7 +45,6 @@ final class StringLiteralEofTests: XCTestCase {
     )
   }
 
-
   func testStringLiteralEof3() {
     AssertParse(
       ##"""
@@ -53,7 +52,7 @@ final class StringLiteralEofTests: XCTestCase {
       """##,
       diagnostics: [
         // TODO: Old parser expected error on line 1: invalid escape sequence in literal
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#)
       ]
     )
   }
@@ -67,11 +66,10 @@ final class StringLiteralEofTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 2: unterminated string literal
         // TODO: Old parser expected error on line 2: invalid escape sequence in literal
-        DiagnosticSpec(message: #"expected '"' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"' to end string literal"#)
       ]
     )
   }
-
 
   func testStringLiteralEof5() {
     AssertParse(
@@ -82,11 +80,10 @@ final class StringLiteralEofTests: XCTestCase {
       """#,
       diagnostics: [
         // TODO: Old parser expected error on line 2: unterminated string literal
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
+        DiagnosticSpec(message: #"expected '"""' to end string literal"#)
       ]
     )
   }
-
 
   func testStringLiteralEof6() {
     AssertParse(
@@ -105,7 +102,6 @@ final class StringLiteralEofTests: XCTestCase {
     )
   }
 
-
   func testStringLiteralEof7() {
     AssertParse(
       ##"""
@@ -122,7 +118,6 @@ final class StringLiteralEofTests: XCTestCase {
       ]
     )
   }
-
 
   func testStringLiteralEof8() {
     AssertParse(

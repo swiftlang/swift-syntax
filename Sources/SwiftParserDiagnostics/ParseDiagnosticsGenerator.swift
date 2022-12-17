@@ -95,7 +95,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     removeRedundantFixIt: (_ misplacedTokens: [TokenSyntax]) -> FixItMessage? = { _ in nil }
   ) {
     guard let incorrectContainer = unexpected,
-          let misplacedTokens = incorrectContainer.onlyTokens(satisfying: unexpectedTokenCondition) else {
+      let misplacedTokens = incorrectContainer.onlyTokens(satisfying: unexpectedTokenCondition)
+    else {
       // If there are no unexpected nodes or the unexpected contain multiple tokens, don't emit a diagnostic.
       return
     }
@@ -106,14 +107,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     let correctAndMissingTokens = correctTokens.filter({ $0.presence == .missing })
     var changes: [FixIt.Changes] = []
     if let misplacedToken = misplacedTokens.only, let correctToken = correctTokens.only,
-       misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken {
+      misplacedToken.nextToken(viewMode: .all) == correctToken || misplacedToken.previousToken(viewMode: .all) == correctToken
+    {
       // We are exchanging two adjacent tokens, transfer the trivia from the incorrect token to the corrected token.
       changes += misplacedTokens.map { FixIt.Changes.makeMissing($0, transferTrivia: false) }
-      changes.append(FixIt.Changes.makePresent(
-        correctToken,
-        leadingTrivia: misplacedToken.leadingTrivia,
-        trailingTrivia: misplacedToken.trailingTrivia
-      ))
+      changes.append(
+        FixIt.Changes.makePresent(
+          correctToken,
+          leadingTrivia: misplacedToken.leadingTrivia,
+          trailingTrivia: misplacedToken.trailingTrivia
+        )
+      )
     } else {
       changes += misplacedTokens.map { FixIt.Changes.makeMissing($0) }
       changes += correctAndMissingTokens.map { FixIt.Changes.makePresent($0) }
@@ -137,7 +141,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     message: (TokenSyntax) -> Message
   ) {
     guard let unexpected = unexpected,
-          let misplacedToken = unexpected.onlyToken(where: predicate)
+      let misplacedToken = unexpected.onlyToken(where: predicate)
     else {
       // If there is no unexpected node or the unexpected doesn't have the
       // expected token, don't emit a diagnostic.
@@ -148,7 +152,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       changes: .makeMissing(unexpected)
     )
     addDiagnostic(
-      unexpected, message(misplacedToken), fixIts: [fixit],
+      unexpected,
+      message(misplacedToken),
+      fixIts: [fixit],
       handledNodes: [unexpected.id]
     )
   }
@@ -175,34 +181,49 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let tryKeyword = node.onlyToken(where: { $0.tokenKind == .tryKeyword }),
-       let nextToken = tryKeyword.nextToken(viewMode: .sourceAccurate),
-       nextToken.tokenKind.isKeyword {
+      let nextToken = tryKeyword.nextToken(viewMode: .sourceAccurate),
+      nextToken.tokenKind.isKeyword
+    {
       addDiagnostic(node, TryCannotBeUsed(nextToken: nextToken))
     } else if let semicolons = node.onlyTokens(satisfying: { $0.tokenKind == .semicolon }) {
-      addDiagnostic(node, .unexpectedSemicolon, fixIts: [
-        FixIt(message: RemoveNodesFixIt(semicolons), changes: semicolons.map { FixIt.Changes.makeMissing($0) })
-      ])
+      addDiagnostic(
+        node,
+        .unexpectedSemicolon,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(semicolons), changes: semicolons.map { FixIt.Changes.makeMissing($0) })
+        ]
+      )
     } else if node.first?.as(TokenSyntax.self)?.tokenKind.isIdentifier == true,
-              let previousToken = node.previousToken(viewMode: .sourceAccurate),
-              previousToken.tokenKind.isIdentifier,
-              previousToken.parent?.is(DeclSyntax.self) == true {
+      let previousToken = node.previousToken(viewMode: .sourceAccurate),
+      previousToken.tokenKind.isIdentifier,
+      previousToken.parent?.is(DeclSyntax.self) == true
+    {
       // If multiple identifiers are used for a declaration name, offer to join them together.
-      let tokens = node
+      let tokens =
+        node
         .prefix(while: { $0.as(TokenSyntax.self)?.tokenKind.isIdentifier == true })
         .map({ $0.as(TokenSyntax.self)! })
       let joined = previousToken.text + tokens.map(\.text).joined()
       var fixIts: [FixIt] = [
-        FixIt(message: .joinIdentifiers, changes: [
-          [.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joined), presence: .present)))],
-          .makeMissing(tokens)
-        ])
+        FixIt(
+          message: .joinIdentifiers,
+          changes: [
+            [.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joined), presence: .present)))],
+            .makeMissing(tokens),
+          ]
+        )
       ]
       if tokens.contains(where: { $0.text.first?.isUppercase == false }) {
         let joinedUsingCamelCase = previousToken.text + tokens.map({ $0.text.withFirstLetterUppercased() }).joined()
-        fixIts.append(FixIt(message: .joinIdentifiersWithCamelCase, changes: [
-          [.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joinedUsingCamelCase), presence: .present)))],
-          .makeMissing(tokens)
-        ]))
+        fixIts.append(
+          FixIt(
+            message: .joinIdentifiersWithCamelCase,
+            changes: [
+              [.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joinedUsingCamelCase), presence: .present)))],
+              .makeMissing(tokens),
+            ]
+          )
+        )
       }
       addDiagnostic(node, SpaceSeparatedIdentifiersError(firstToken: previousToken, additionalTokens: tokens), fixIts: fixIts)
     } else {
@@ -219,16 +240,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       // If there is an unexpected token in front of the identifier, we assume
       // that this unexpected token was intended to be the identifier we are missing.
       if node.tokenKind.isIdentifier,
-         let invalidIdentifier = node.previousToken(viewMode: .all),
-         let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self) {
+        let invalidIdentifier = node.previousToken(viewMode: .all),
+        let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self)
+      {
         let fixIts: [FixIt]
         if invalidIdentifier.tokenKind.isKeyword || invalidIdentifier.tokenKind.isDollarIdentifier {
-          fixIts = [FixIt(message: .wrapInBackticks, changes: [
-            .replace(
-              oldNode: Syntax(invalidIdentifier),
-              newNode: Syntax(TokenSyntax.identifier("`\(invalidIdentifier.text)`", leadingTrivia: invalidIdentifier.leadingTrivia, trailingTrivia: invalidIdentifier.trailingTrivia))
+          fixIts = [
+            FixIt(
+              message: .wrapInBackticks,
+              changes: [
+                .replace(
+                  oldNode: Syntax(invalidIdentifier),
+                  newNode: Syntax(TokenSyntax.identifier("`\(invalidIdentifier.text)`", leadingTrivia: invalidIdentifier.leadingTrivia, trailingTrivia: invalidIdentifier.trailingTrivia))
+                )
+              ]
             )
-          ])]
+          ]
         } else {
           fixIts = []
         }
@@ -288,9 +315,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let argument = node.argument, argument.isMissingAllTokens {
-      addDiagnostic(argument, MissingAttributeArgument(attributeName: node.attributeName), fixIts: [
-        FixIt(message: .insertAttributeArguments, changes: .makePresent(argument))
-      ], handledNodes: [argument.id])
+      addDiagnostic(
+        argument,
+        MissingAttributeArgument(attributeName: node.attributeName),
+        fixIts: [
+          FixIt(message: .insertAttributeArguments, changes: .makePresent(argument))
+        ],
+        handledNodes: [argument.id]
+      )
       return .visitChildren
     }
     return .visitChildren
@@ -317,17 +349,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         // Only diagnose the missing semicolon if the item doesn't contain any errors.
         // If the item contains errors, the root cause is most likely something different and not the missing semicolon.
         let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
-        addDiagnostic(semicolon, position: position, .consecutiveStatementsOnSameLine, fixIts: [
-          FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
-        ], handledNodes: [semicolon.id])
+        addDiagnostic(
+          semicolon,
+          position: position,
+          .consecutiveStatementsOnSameLine,
+          fixIts: [
+            FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
+          ],
+          handledNodes: [semicolon.id]
+        )
       } else {
         handledNodes.append(semicolon.id)
       }
     }
     if let semicolon = node.semicolon, semicolon.presence == .present, node.item.isMissingAllTokens {
-      addDiagnostic(node, .standaloneSemicolonStatement, fixIts: [
-        FixIt(message: RemoveNodesFixIt(semicolon), changes: .makeMissing(semicolon))
-      ], handledNodes: [node.item.id])
+      addDiagnostic(
+        node,
+        .standaloneSemicolonStatement,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(semicolon), changes: .makeMissing(semicolon))
+        ],
+        handledNodes: [node.item.id]
+      )
     }
     if let switchCase = node.unexpectedBeforeItem?.only?.as(SwitchCaseSyntax.self) {
       if switchCase.label.is(SwitchDefaultLabelSyntax.self) {
@@ -345,16 +388,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let unexpected = node.unexpectedBetweenDeinitKeywordAndBody,
-       let name = unexpected.filter({ $0.as(TokenSyntax.self)?.tokenKind.isIdentifier == true }).only?.as(TokenSyntax.self) {
-      addDiagnostic(name, .deinitCannotHaveName, fixIts: [
-        FixIt(message: RemoveNodesFixIt(name), changes: .makeMissing(name))
-      ], handledNodes: [name.id])
+      let name = unexpected.filter({ $0.as(TokenSyntax.self)?.tokenKind.isIdentifier == true }).only?.as(TokenSyntax.self)
+    {
+      addDiagnostic(
+        name,
+        .deinitCannotHaveName,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(name), changes: .makeMissing(name))
+        ],
+        handledNodes: [name.id]
+      )
     }
     if let unexpected = node.unexpectedBetweenDeinitKeywordAndBody,
-       let signature = unexpected.compactMap({ $0.as(FunctionSignatureSyntax.self) }).only {
-      addDiagnostic(signature, .deinitCannotHaveParameters, fixIts: [
-        FixIt(message: RemoveNodesFixIt(signature), changes: .makeMissing(signature))
-      ], handledNodes: [signature.id])
+      let signature = unexpected.compactMap({ $0.as(FunctionSignatureSyntax.self) }).only
+    {
+      addDiagnostic(
+        signature,
+        .deinitCannotHaveParameters,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(signature), changes: .makeMissing(signature))
+        ],
+        handledNodes: [signature.id]
+      )
     }
 
     return .visitChildren
@@ -367,7 +422,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
     // This is mostly a proof-of-concept implementation to produce more complex diagnostics.
     if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
-       unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
+      unexpectedCondition.tokens(withKind: .semicolon).count == 2
+    {
       // FIXME: This is aweful. We should have a way to either get all children between two cursors in a syntax node or highlight a range from one node to another.
       addDiagnostic(
         node,
@@ -383,7 +439,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           Syntax(node.unexpectedBetweenSequenceExprAndWhereClause),
           Syntax(node.whereClause),
           Syntax(node.unexpectedBetweenWhereClauseAndBody),
-          Syntax(unexpectedCondition)
+          Syntax(unexpectedCondition),
         ] as [Syntax?]).compactMap({ $0 }),
         handledNodes: [node.inKeyword.id, node.sequenceExpr.id, unexpectedCondition.id]
       )
@@ -441,8 +497,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.identifier.presence == .missing,
-       let unexpected = node.unexpectedBeforeIdentifier,
-       unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound {
+      let unexpected = node.unexpectedBeforeIdentifier,
+      unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound
+    {
       addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.identifier.id])
     }
     return .visitChildren
@@ -473,9 +530,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         // Only diagnose the missing semicolon if the decl doesn't contain any errors.
         // If the decl contains errors, the root cause is most likely something different and not the missing semicolon.
         let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
-        addDiagnostic(semicolon, position: position, .consecutiveDeclarationsOnSameLine, fixIts: [
-          FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
-        ], handledNodes: [semicolon.id])
+        addDiagnostic(
+          semicolon,
+          position: position,
+          .consecutiveDeclarationsOnSameLine,
+          fixIts: [
+            FixIt(message: .insertSemicolon, changes: .makePresentBeforeTrivia(semicolon))
+          ],
+          handledNodes: [semicolon.id]
+        )
       } else {
         handledNodes.append(semicolon.id)
       }
@@ -512,10 +575,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let unexpected = node.unexpectedAfterOperatorPrecedenceAndTypes,
-       unexpected.contains(where: { $0.is(PrecedenceGroupAttributeListSyntax.self) }) == true {
-      addDiagnostic(unexpected, .operatorShouldBeDeclaredWithoutBody, fixIts: [
-        FixIt(message: .removeOperatorBody, changes: .makeMissing(unexpected))
-      ], handledNodes: [unexpected.id])
+      unexpected.contains(where: { $0.is(PrecedenceGroupAttributeListSyntax.self) }) == true
+    {
+      addDiagnostic(
+        unexpected,
+        .operatorShouldBeDeclaredWithoutBody,
+        fixIts: [
+          FixIt(message: .removeOperatorBody, changes: .makeMissing(unexpected))
+        ],
+        handledNodes: [unexpected.id]
+      )
     }
 
     func diagnoseIdentifierInOperatorName(unexpected: UnexpectedNodesSyntax?, name: TokenSyntax) {
@@ -588,16 +657,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let unexpected = node.unexpectedBetweenSubscriptKeywordAndGenericParameterClause,
-       let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
-      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
-        FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
-      ], handledNodes: [unexpected.id])
+      let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword })
+    {
+      addDiagnostic(
+        unexpected,
+        .subscriptsCannotHaveNames,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
+        ],
+        handledNodes: [unexpected.id]
+      )
     }
     if let unexpected = node.indices.unexpectedBeforeLeftParen,
-       let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword }) {
-      addDiagnostic(unexpected, .subscriptsCannotHaveNames, fixIts: [
-        FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
-      ], handledNodes: [unexpected.id])
+      let nameTokens = unexpected.onlyTokens(satisfying: { !$0.tokenKind.isKeyword })
+    {
+      addDiagnostic(
+        unexpected,
+        .subscriptsCannotHaveNames,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(nameTokens), changes: .makeMissing(nameTokens))
+        ],
+        handledNodes: [unexpected.id]
+      )
     }
     return .visitChildren
   }
@@ -607,9 +688,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.unknownAttr?.isMissingAllTokens != false && node.label.isMissingAllTokens {
-      addDiagnostic(node.statements, .allStatmentsInSwitchMustBeCoveredByCase, fixIts: [
-        FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.label)]), changes: .makePresent(node.label, leadingTrivia: .newline))
-      ], handledNodes: [node.label.id])
+      addDiagnostic(
+        node.statements,
+        .allStatmentsInSwitchMustBeCoveredByCase,
+        fixIts: [
+          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.label)]), changes: .makePresent(node.label, leadingTrivia: .newline))
+        ],
+        handledNodes: [node.label.id]
+      )
     }
     return .visitChildren
   }
@@ -643,9 +729,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.expression.is(MissingExprSyntax.self) {
-      addDiagnostic(node.expression, .expectedExpressionAfterTry, fixIts: [
-        FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.expression)]), changes: .makePresent(node.expression))
-      ], handledNodes: [node.expression.id])
+      addDiagnostic(
+        node.expression,
+        .expectedExpressionAfterTry,
+        fixIts: [
+          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.expression)]), changes: .makePresent(node.expression))
+        ],
+        handledNodes: [node.expression.id]
+      )
     }
     return .visitChildren
   }
@@ -687,18 +778,32 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if node.colonMark.presence == .missing {
       if let siblings = node.parent?.children(viewMode: .all),
-         let nextSibling = siblings[siblings.index(after: node.index)...].first,
-         nextSibling.is(MissingExprSyntax.self) {
-        addDiagnostic(node.colonMark, .missingColonAndExprInTernaryExpr, fixIts: [
-          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark), Syntax(nextSibling)]), changes: [
-            .makePresent(node.colonMark),
-            .makePresent(nextSibling),
-          ])
-        ], handledNodes: [node.colonMark.id, nextSibling.id])
+        let nextSibling = siblings[siblings.index(after: node.index)...].first,
+        nextSibling.is(MissingExprSyntax.self)
+      {
+        addDiagnostic(
+          node.colonMark,
+          .missingColonAndExprInTernaryExpr,
+          fixIts: [
+            FixIt(
+              message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark), Syntax(nextSibling)]),
+              changes: [
+                .makePresent(node.colonMark),
+                .makePresent(nextSibling),
+              ]
+            )
+          ],
+          handledNodes: [node.colonMark.id, nextSibling.id]
+        )
       } else {
-        addDiagnostic(node.colonMark, .missingColonInTernaryExpr, fixIts: [
-          FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark)]), changes: .makePresent(node.colonMark))
-        ], handledNodes: [node.colonMark.id])
+        addDiagnostic(
+          node.colonMark,
+          .missingColonInTernaryExpr,
+          fixIts: [
+            FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark)]), changes: .makePresent(node.colonMark))
+          ],
+          handledNodes: [node.colonMark.id]
+        )
       }
     }
     return .visitChildren
@@ -727,4 +832,3 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // insert it in alphabetical order above                                    //
   //==========================================================================//
 }
-

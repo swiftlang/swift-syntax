@@ -10,8 +10,6 @@ add_swift_host_library(_SwiftSyntaxMacros
   ExpressionMacro.swift
   Macro.swift
   MacroExpansionContext.swift
-  MacroSystem+Builtin.swift
-  MacroSystem+Examples.swift
   MacroSystem.swift
   Syntax+MacroEvaluation.swift
 )

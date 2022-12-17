@@ -531,11 +531,11 @@ final class TypeExprTests: XCTestCase {
       let _ = [(Int) -> 1️⃣throws Int]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' may only occur before '->'"),
+        DiagnosticSpec(message: "'throws' may only occur before '->'")
       ],
       fixedSource: """
-      let _ = [(Int) throws -> Int]()
-      """
+        let _ = [(Int) throws -> Int]()
+        """
     )
   }
 

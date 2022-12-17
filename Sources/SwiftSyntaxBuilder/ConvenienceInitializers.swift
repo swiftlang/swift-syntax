@@ -44,7 +44,7 @@ extension CatchClause {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      catchKeyword: .catch.withTrailingTrivia(catchItems.isEmpty ? [] : .space),
+      catchKeyword: .catchKeyword(trailingTrivia: catchItems.isEmpty ? [] : .space),
       catchItems: catchItems,
       body: CodeBlockSyntax(statements: bodyBuilder())
     )
@@ -84,7 +84,7 @@ extension DictionaryExpr {
     let elementList = contentBuilder()
     self.init(
       leftSquare: leftSquare,
-      content: elementList.isEmpty ? .colon(Token.colon.withTrailingTrivia([])) : .elements(elementList),
+      content: elementList.isEmpty ? .colon(.colonToken()) : .elements(elementList),
       rightSquare: rightSquare
     )
   }
@@ -122,7 +122,7 @@ extension Expr {
   /// literal anywhere in its syntax tree. Use a convenience initializer on a
   /// specific type if you need that exact type in the syntax tree.
   public init<Literal: ExpressibleByLiteralSyntax>(literal: Literal) {
-    self.init(fromProtocol: literal.makeLiteralSyntax())
+    self.init(literal.makeLiteralSyntax())
   }
 }
 
@@ -141,12 +141,11 @@ extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
 // MARK: - FunctionCallExpr
 
 extension FunctionCallExpr {
-  // Need an overload that's explicitly `ExprSyntax` for code literals to work.
   /// A convenience initializer that allows passing in arguments using a result builder
   /// instead of having to wrap them in a `TupleExprElementList`.
   /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
-  public init(
-    callee: ExprSyntax,
+  public init<C: ExprSyntaxProtocol>(
+    callee: C,
     trailingClosure: ClosureExprSyntax? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
     @TupleExprElementListBuilder argumentList: () -> TupleExprElementList = { [] }
@@ -160,23 +159,6 @@ extension FunctionCallExpr {
       rightParen: shouldOmitParens ? nil : .rightParen,
       trailingClosure: trailingClosure,
       additionalTrailingClosures: additionalTrailingClosures
-    )
-  }
-
-  /// A convenience initializer that allows passing in arguments using a result builder
-  /// instead of having to wrap them in a `TupleExprElementList`.
-  /// The presence of the parenthesis will be inferred based on the presence of arguments and the trailing closure.
-  public init(
-    callee: ExprSyntaxProtocol,
-    trailingClosure: ClosureExprSyntax? = nil,
-    additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
-    @TupleExprElementListBuilder argumentList: () -> TupleExprElementList = { [] }
-  ) {
-    self.init(
-      callee: ExprSyntax(fromProtocol: callee),
-      trailingClosure: trailingClosure,
-      additionalTrailingClosures: additionalTrailingClosures,
-      argumentList: argumentList
     )
   }
 }
@@ -194,10 +176,13 @@ extension FunctionParameter {
     _ source: String,
     for subject: Parser.ParameterSubject
   ) {
-    self = try! performParse(source: Array(source.utf8), parse: {
-      let raw = RawSyntax($0.parseFunctionParameter(for: subject))
-      return Syntax(raw: raw).cast(FunctionParameter.self)
-    })
+    self = try! performParse(
+      source: Array(source.utf8),
+      parse: {
+        let raw = RawSyntax($0.parseFunctionParameter(for: subject))
+        return Syntax(raw: raw).cast(FunctionParameter.self)
+      }
+    )
   }
 }
 
@@ -218,12 +203,11 @@ extension IfStmt {
       leadingTrivia: leadingTrivia,
       conditions: conditions,
       body: CodeBlockSyntax(statements: body()),
-      elseKeyword: generatedElseBody == nil ? nil : Token.else.withLeadingTrivia(.space).withTrailingTrivia([]),
+      elseKeyword: generatedElseBody == nil ? nil : .elseKeyword(leadingTrivia: .space),
       elseBody: generatedElseBody.map { .codeBlock(CodeBlock(statements: $0)) }
     )
   }
 }
-
 
 // MARK: - IntegerLiteralExpr
 
@@ -247,7 +231,7 @@ extension MemberAccessExpr {
     name: String,
     declNameArguments: DeclNameArgumentsSyntax? = nil
   ) {
-    self.init(base: base, dot: dot, name: TokenSyntax.identifier(name), declNameArguments: declNameArguments)
+    self.init(base: base, dot: dot, name: .identifier(name), declNameArguments: declNameArguments)
   }
 }
 
@@ -262,7 +246,7 @@ extension String {
     // them in string literals.
     func needsEscaping(_ scalar: UnicodeScalar) -> Bool {
       return (scalar.isASCII && scalar != "\t" && !scalar.isPrintableASCII)
-              || Character(scalar).isNewline
+        || Character(scalar).isNewline
     }
 
     // Work at the Unicode scalar level so that "\r\n" isn't combined.
@@ -372,16 +356,16 @@ extension SwitchCase {
 // MARK: - TernaryExpr
 
 extension TernaryExpr {
-  public init(
-    if condition: ExprSyntaxProtocol,
-    then firstChoice: ExprSyntaxProtocol,
-    else secondChoice: ExprSyntaxProtocol
+  public init<C: ExprSyntaxProtocol, F: ExprSyntaxProtocol, S: ExprSyntaxProtocol>(
+    if condition: C,
+    then firstChoice: F,
+    else secondChoice: S
   ) {
     self.init(
       conditionExpression: condition,
-      questionMark: .infixQuestionMark.withLeadingTrivia(.space).withTrailingTrivia(.space),
+      questionMark: .infixQuestionMarkToken(leadingTrivia: .space, trailingTrivia: .space),
       firstChoice: firstChoice,
-      colonMark: .colon.withLeadingTrivia(.space),
+      colonMark: .colonToken(leadingTrivia: .space),
       secondChoice: secondChoice
     )
   }
@@ -394,7 +378,10 @@ extension TupleExprElement {
   /// The presence of the colon will be inferred based on the presence of the label.
   public init(label: String? = nil, expression: ExprSyntax) {
     self.init(
-      label: label.map { Token.identifier($0) }, colon: label == nil ? nil : Token.colon, expression: expression, trailingComma: nil)
+      label: label.map { .identifier($0) },
+      colon: label == nil ? nil : .colonToken(),
+      expression: expression
+    )
   }
 }
 

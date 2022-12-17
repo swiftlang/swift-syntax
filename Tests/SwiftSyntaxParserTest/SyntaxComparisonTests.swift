@@ -92,11 +92,16 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentPresence() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f"), body: CodeBlockSyntax(
-      leftBrace: .leftBraceToken(presence: .missing),
-      statements: CodeBlockItemListSyntax([]),
-      rightBrace: .leftBraceToken(presence: .missing)
-    )))
+    let expected = Syntax(
+      makeFunc(
+        identifier: .identifier("f"),
+        body: CodeBlockSyntax(
+          leftBrace: .leftBraceToken(presence: .missing),
+          statements: CodeBlockItemListSyntax([]),
+          rightBrace: .leftBraceToken(presence: .missing)
+        )
+      )
+    )
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .presence)
@@ -135,13 +140,16 @@ public class SyntaxComparisonTests: XCTestCase {
     let actual = Syntax(makeFunc(identifier: .identifier("f"), body: makeBody(statementCount: 1)))
     try expectations(actual.findFirstDifference(baseline: expected))
 
-    let matcher = try SubtreeMatcher("""
+    let matcher = try SubtreeMatcher(
+      """
       struct A {
         func f() {
           0
         }
       }
-      """, parse: parse)
+      """,
+      parse: parse
+    )
     try expectations(matcher.findFirstDifference(baseline: expected))
   }
 
@@ -149,7 +157,8 @@ public class SyntaxComparisonTests: XCTestCase {
     let expectedFunc = Syntax(makeFunc(identifier: .identifier("f")))
     let expectedBody = Syntax(makeBody())
 
-    let matcher = try SubtreeMatcher("""
+    let matcher = try SubtreeMatcher(
+      """
       struct A {
         1️⃣
         let member = 1
@@ -158,7 +167,9 @@ public class SyntaxComparisonTests: XCTestCase {
           0
         }
       }
-      """, parse: parse)
+      """,
+      parse: parse
+    )
     let funcDiff = try XCTUnwrap(matcher.findFirstDifference(afterMarker: "1️⃣", baseline: expectedFunc))
     XCTAssertEqual(funcDiff.reason, .additionalNode)
 
@@ -169,8 +180,12 @@ public class SyntaxComparisonTests: XCTestCase {
   /// Generates a `FunctionDeclSyntax` with the given `identifier`, `keyword`,
   /// and `body` with some optional leading indentation (which applied only to
   /// the start, not the entire body).
-  private func makeFunc(identifier: TokenSyntax, keyword: TokenSyntax = .funcKeyword(),
-                        body: CodeBlockSyntax? = nil, indent: Int = 0) -> FunctionDeclSyntax {
+  private func makeFunc(
+    identifier: TokenSyntax,
+    keyword: TokenSyntax = .funcKeyword(),
+    body: CodeBlockSyntax? = nil,
+    indent: Int = 0
+  ) -> FunctionDeclSyntax {
     let funcBody: CodeBlockSyntax
     if let body = body {
       funcBody = body
@@ -181,16 +196,13 @@ public class SyntaxComparisonTests: XCTestCase {
       input: ParameterClauseSyntax(
         leftParen: .leftParenToken(),
         parameterList: FunctionParameterListSyntax([]),
-        rightParen: .rightParenToken()),
-      asyncOrReasyncKeyword: nil, throwsOrRethrowsKeyword: nil, output: nil)
+        rightParen: .rightParenToken()
+      )
+    )
     let fd = FunctionDeclSyntax(
-      attributes: nil,
-      modifiers: nil,
       funcKeyword: keyword,
       identifier: identifier,
-      genericParameterClause: nil,
       signature: emptySignature,
-      genericWhereClause: nil,
       body: funcBody
     )
     if indent > 0 {
@@ -212,7 +224,7 @@ public class SyntaxComparisonTests: XCTestCase {
     var items = [CodeBlockItemSyntax]()
     for i in 0..<statementCount {
       let literal = IntegerLiteralExprSyntax(digits: .integerLiteral(String(i)))
-      items.append(CodeBlockItemSyntax(item: .init(literal), semicolon: nil, errorTokens: nil))
+      items.append(CodeBlockItemSyntax(item: .init(literal)))
     }
     let block = CodeBlockItemListSyntax(items)
     return CodeBlockSyntax(

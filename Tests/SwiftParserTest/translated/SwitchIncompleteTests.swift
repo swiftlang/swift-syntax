@@ -24,9 +24,12 @@ final class SwitchIncompleteTests: XCTestCase {
       case 1:1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end 'switch' statement", notes: [
-          NoteSpec(message: "to match this opening '{'")
-        ]),
+        DiagnosticSpec(
+          message: "expected '}' to end 'switch' statement",
+          notes: [
+            NoteSpec(message: "to match this opening '{'")
+          ]
+        )
       ]
     )
   }

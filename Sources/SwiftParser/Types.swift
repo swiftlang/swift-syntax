@@ -42,7 +42,9 @@ extension Parser {
         RawPackExpansionTypeSyntax(
           patternType: type,
           ellipsis: ellipsis,
-          arena: self.arena))
+          arena: self.arena
+        )
+      )
     }
     return type
   }
@@ -73,36 +75,54 @@ extension Parser {
         unexpectedBeforeLeftParen = nil
         leftParen = RawTokenSyntax(missing: .leftParen, arena: self.arena)
         unexpectedBetweenLeftParenAndElements = nil
-        arguments = RawTupleTypeElementListSyntax(elements: [
-          RawTupleTypeElementSyntax(
-            inOut: nil, name: nil, secondName: nil, colon: nil, type: base,
-            ellipsis: nil, initializer: nil, trailingComma: nil, arena: self.arena)
-        ], arena: self.arena)
+        arguments = RawTupleTypeElementListSyntax(
+          elements: [
+            RawTupleTypeElementSyntax(
+              inOut: nil,
+              name: nil,
+              secondName: nil,
+              colon: nil,
+              type: base,
+              ellipsis: nil,
+              initializer: nil,
+              trailingComma: nil,
+              arena: self.arena
+            )
+          ],
+          arena: self.arena
+        )
         unexpectedBetweenElementsAndRightParen = nil
         rightParen = RawTokenSyntax(missing: .rightParen, arena: self.arena)
       }
 
-      base = RawTypeSyntax(RawFunctionTypeSyntax(
-        unexpectedBeforeLeftParen,
-        leftParen: leftParen,
-        unexpectedBetweenLeftParenAndElements,
-        arguments: arguments,
-        unexpectedBetweenElementsAndRightParen,
-        rightParen: rightParen,
-        asyncKeyword: firstEffect,
-        throwsOrRethrowsKeyword: secondEffect,
-        unexpectedBeforeArrow,
-        arrow: arrow,
-        returnType: returnTy,
-        arena: self.arena))
+      base = RawTypeSyntax(
+        RawFunctionTypeSyntax(
+          unexpectedBeforeLeftParen,
+          leftParen: leftParen,
+          unexpectedBetweenLeftParenAndElements,
+          arguments: arguments,
+          unexpectedBetweenElementsAndRightParen,
+          rightParen: rightParen,
+          asyncKeyword: firstEffect,
+          throwsOrRethrowsKeyword: secondEffect,
+          unexpectedBeforeArrow,
+          arrow: arrow,
+          returnType: returnTy,
+          arena: self.arena
+        )
+      )
     }
 
     if unexpectedBeforeAttrList != nil || specifier != nil || attrList != nil {
-      return RawTypeSyntax(RawAttributedTypeSyntax(
-        specifier: specifier,
-        unexpectedBeforeAttrList,
-        attributes: attrList,
-        baseType: base, arena: self.arena))
+      return RawTypeSyntax(
+        RawAttributedTypeSyntax(
+          specifier: specifier,
+          unexpectedBeforeAttrList,
+          attributes: attrList,
+          baseType: base,
+          arena: self.arena
+        )
+      )
     } else {
       return RawTypeSyntax(base)
     }
@@ -123,8 +143,13 @@ extension Parser {
     // 'each' is a contextual keyword for a pack reference.
     if let each = consume(ifAny: [], contextualKeywords: ["each"]) {
       let packType = parseSimpleType()
-      return RawTypeSyntax(RawPackReferenceTypeSyntax(
-        eachKeyword: each, packType: packType, arena: self.arena))
+      return RawTypeSyntax(
+        RawPackReferenceTypeSyntax(
+          eachKeyword: each,
+          packType: packType,
+          arena: self.arena
+        )
+      )
     }
 
     let someOrAny = self.consume(ifAny: [], contextualKeywords: ["some", "any"])
@@ -132,8 +157,13 @@ extension Parser {
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
       if let someOrAny = someOrAny {
-        return RawTypeSyntax(RawConstrainedSugarTypeSyntax(
-          someOrAnySpecifier: someOrAny, baseType: base, arena: self.arena))
+        return RawTypeSyntax(
+          RawConstrainedSugarTypeSyntax(
+            someOrAnySpecifier: someOrAny,
+            baseType: base,
+            arena: self.arena
+          )
+        )
       } else {
         return base
       }
@@ -141,29 +171,44 @@ extension Parser {
 
     var elements = [RawCompositionTypeElementSyntax]()
     if let firstAmpersand = self.consumeIfContextualPunctuator("&") {
-      elements.append(RawCompositionTypeElementSyntax(
-        type: base, ampersand: firstAmpersand, arena: self.arena))
+      elements.append(
+        RawCompositionTypeElementSyntax(
+          type: base,
+          ampersand: firstAmpersand,
+          arena: self.arena
+        )
+      )
 
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
         let elementType = self.parseSimpleType()
         keepGoing = self.consumeIfContextualPunctuator("&")
-        elements.append(RawCompositionTypeElementSyntax(
-          type: elementType,
-          ampersand: keepGoing,
-          arena: self.arena
-        ))
+        elements.append(
+          RawCompositionTypeElementSyntax(
+            type: elementType,
+            ampersand: keepGoing,
+            arena: self.arena
+          )
+        )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
-      base = RawTypeSyntax(RawCompositionTypeSyntax(
-        elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
-        arena: self.arena))
+      base = RawTypeSyntax(
+        RawCompositionTypeSyntax(
+          elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
+          arena: self.arena
+        )
+      )
     }
 
     if let someOrAny = someOrAny {
-      return RawTypeSyntax(RawConstrainedSugarTypeSyntax(
-        someOrAnySpecifier: someOrAny, baseType: base, arena: self.arena))
+      return RawTypeSyntax(
+        RawConstrainedSugarTypeSyntax(
+          someOrAnySpecifier: someOrAny,
+          baseType: base,
+          arena: self.arena
+        )
+      )
     } else {
       return base
     }
@@ -188,8 +233,8 @@ extension Parser {
     var base: RawTypeSyntax
     switch self.currentToken.tokenKind {
     case .capitalSelfKeyword,
-        .anyKeyword,
-        .identifier:
+      .anyKeyword,
+      .identifier:
       base = self.parseTypeIdentifier(stopAtFirstPeriod: stopAtFirstPeriod)
     case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
@@ -204,12 +249,20 @@ extension Parser {
     // '.Type', '.Protocol', '?', '!', and '[]' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if !stopAtFirstPeriod, let (period, type) = self.consume(
-        if: { [.period, .prefixPeriod].contains($0.tokenKind) },
-        followedBy: { $0.isContextualKeyword(["Type", "Protocol"])}
-      ) {
-        base = RawTypeSyntax(RawMetatypeTypeSyntax(
-          baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
+      if !stopAtFirstPeriod,
+        let (period, type) = self.consume(
+          if: { [.period, .prefixPeriod].contains($0.tokenKind) },
+          followedBy: { $0.isContextualKeyword(["Type", "Protocol"]) }
+        )
+      {
+        base = RawTypeSyntax(
+          RawMetatypeTypeSyntax(
+            baseType: base,
+            period: period,
+            typeOrProtocol: type,
+            arena: self.arena
+          )
+        )
         continue
       }
 
@@ -282,15 +335,23 @@ extension Parser {
         generics = nil
       }
       if let keepGoing = keepGoing {
-        result = RawTypeSyntax(RawMemberTypeIdentifierSyntax(
-          baseType: result!,
-          period: keepGoing,
-          name: name,
-          genericArgumentClause: generics,
-          arena: self.arena))
+        result = RawTypeSyntax(
+          RawMemberTypeIdentifierSyntax(
+            baseType: result!,
+            period: keepGoing,
+            name: name,
+            genericArgumentClause: generics,
+            arena: self.arena
+          )
+        )
       } else {
-        result = RawTypeSyntax(RawSimpleTypeIdentifierSyntax(
-          name: name, genericArgumentClause: generics, arena: self.arena))
+        result = RawTypeSyntax(
+          RawSimpleTypeIdentifierSyntax(
+            name: name,
+            genericArgumentClause: generics,
+            arena: self.arena
+          )
+        )
       }
 
       if stopAtFirstPeriod {
@@ -362,8 +423,13 @@ extension Parser {
           break
         }
         keepGoing = self.consume(if: .comma)
-        arguments.append(RawGenericArgumentSyntax(
-          argumentType: type, trailingComma: keepGoing, arena: self.arena))
+        arguments.append(
+          RawGenericArgumentSyntax(
+            argumentType: type,
+            trailingComma: keepGoing,
+            arena: self.arena
+          )
+        )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
@@ -384,7 +450,8 @@ extension Parser {
       leftAngleBracket: langle,
       arguments: args,
       rightAngleBracket: rangle,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -450,25 +517,28 @@ extension Parser {
           unexpectedBeforeColon = nil
           colon = nil
         }
-        
+
         // In the case that the input is "(foo bar)" we have to decide whether we parse it as "(foo: bar)" or "(foo, bar)".
         // As most people write identifiers lowercase and types capitalized, we decide on the first character of the first token
         if let first = first,
-            second == nil,
-            colon?.isMissing == true,
-            first.tokenText.description.first?.isUppercase == true {
-          elements.append(RawTupleTypeElementSyntax(
-            inOut: nil,
-            name: nil,
-            secondName: nil,
-            unexpectedBeforeColon,
-            colon: nil,
-            type: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
-            ellipsis: nil,
-            initializer: nil,
-            trailingComma: self.missingToken(.comma),
-            arena: self.arena
-          ))
+          second == nil,
+          colon?.isMissing == true,
+          first.tokenText.description.first?.isUppercase == true
+        {
+          elements.append(
+            RawTupleTypeElementSyntax(
+              inOut: nil,
+              name: nil,
+              secondName: nil,
+              unexpectedBeforeColon,
+              colon: nil,
+              type: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
+              ellipsis: nil,
+              initializer: nil,
+              trailingComma: self.missingToken(.comma),
+              arena: self.arena
+            )
+          )
           keepGoing = true
           continue
         }
@@ -481,7 +551,8 @@ extension Parser {
           trailingComma = self.missingToken(.comma)
         }
         keepGoing = trailingComma != nil
-        elements.append(RawTupleTypeElementSyntax(
+        elements.append(
+          RawTupleTypeElementSyntax(
             inOut: nil,
             RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeFirst, arena: self.arena),
             name: first,
@@ -494,7 +565,8 @@ extension Parser {
             initializer: nil,
             trailingComma: trailingComma,
             arena: self.arena
-          ))
+          )
+        )
       }
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
@@ -504,7 +576,8 @@ extension Parser {
       elements: RawTupleTypeElementListSyntax(elements: elements, arena: self.arena),
       unexpectedBeforeRParen,
       rightParen: rparen,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 
@@ -520,13 +593,15 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseCollectionType() -> RawTypeSyntax {
     if let remaingingTokens = remainingTokensIfMaximumNestingLevelReached() {
-      return RawTypeSyntax(RawArrayTypeSyntax(
-        remaingingTokens,
-        leftSquareBracket: missingToken(.leftSquareBracket),
-        elementType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-        rightSquareBracket: missingToken(.rightSquareBracket),
-        arena: self.arena
-      ))
+      return RawTypeSyntax(
+        RawArrayTypeSyntax(
+          remaingingTokens,
+          leftSquareBracket: missingToken(.leftSquareBracket),
+          elementType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+          rightSquareBracket: missingToken(.rightSquareBracket),
+          arena: self.arena
+        )
+      )
     }
 
     let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquareBracket)
@@ -534,26 +609,30 @@ extension Parser {
     if let colon = self.consume(if: .colon) {
       let secondType = self.parseType()
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
-      return RawTypeSyntax(RawDictionaryTypeSyntax(
-        unexpectedBeforeLSquare,
-        leftSquareBracket: lsquare,
-        keyType: firstType,
-        colon: colon,
-        valueType: secondType,
-        unexpectedBeforeRSquareBracket,
-        rightSquareBracket: rSquareBracket,
-        arena: self.arena
-      ))
+      return RawTypeSyntax(
+        RawDictionaryTypeSyntax(
+          unexpectedBeforeLSquare,
+          leftSquareBracket: lsquare,
+          keyType: firstType,
+          colon: colon,
+          valueType: secondType,
+          unexpectedBeforeRSquareBracket,
+          rightSquareBracket: rSquareBracket,
+          arena: self.arena
+        )
+      )
     } else {
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
-      return RawTypeSyntax(RawArrayTypeSyntax(
-        unexpectedBeforeLSquare,
-        leftSquareBracket: lsquare,
-        elementType: firstType,
-        unexpectedBeforeRSquareBracket,
-        rightSquareBracket: rSquareBracket,
-        arena: self.arena
-      ))
+      return RawTypeSyntax(
+        RawArrayTypeSyntax(
+          unexpectedBeforeLSquare,
+          leftSquareBracket: lsquare,
+          elementType: firstType,
+          unexpectedBeforeRSquareBracket,
+          rightSquareBracket: rSquareBracket,
+          arena: self.arena
+        )
+      )
     }
   }
 }
@@ -573,8 +652,8 @@ extension Parser.Lookahead {
       guard self.canParseTypeIdentifier() else {
         return false
       }
-    case .protocolKeyword, // Deprecated composition syntax
-        .identifier:
+    case .protocolKeyword,  // Deprecated composition syntax
+      .identifier:
       guard self.canParseIdentifierTypeOrCompositionType() else {
         return false
       }
@@ -611,7 +690,8 @@ extension Parser.Lookahead {
     while loopCondition.evaluate(currentToken) {
       if let (_, _) = self.consume(
         if: { [.period, .prefixPeriod].contains($0.tokenKind) },
-        followedBy: { $0.isContextualKeyword(["Type", "Protocol"])}) {
+        followedBy: { $0.isContextualKeyword(["Type", "Protocol"]) }
+      ) {
         continue
       }
       if self.currentToken.isOptionalToken {
@@ -649,9 +729,7 @@ extension Parser.Lookahead {
 
   mutating func canParseTupleBodyType() -> Bool {
     guard
-      !self.at(any: [.rightParen, .rightBrace]) &&
-        !self.atContextualPunctuator("...") &&
-        !self.atStartOfDeclaration()
+      !self.at(any: [.rightParen, .rightBrace]) && !self.atContextualPunctuator("...") && !self.atStartOfDeclaration()
     else {
       return self.consume(if: .rightParen) != nil
     }
@@ -683,9 +761,10 @@ extension Parser.Lookahead {
         if self.consume(if: .equal) != nil {
           var skipProgress = LoopProgressCondition()
           while !self.at(any: [.eof, .rightParen, .rightBrace, .comma])
-                  && !self.atContextualPunctuator("...")
-                  && !self.atStartOfDeclaration()
-                  && skipProgress.evaluate(currentToken) {
+            && !self.atContextualPunctuator("...")
+            && !self.atStartOfDeclaration()
+            && skipProgress.evaluate(currentToken)
+          {
             self.skipSingle()
           }
         }
@@ -702,7 +781,7 @@ extension Parser.Lookahead {
     } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
     return self.consume(if: .rightParen) != nil
   }
-  
+
   mutating func canParseTypeIdentifier() -> Bool {
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
@@ -712,8 +791,7 @@ extension Parser.Lookahead {
 
       // Treat 'Foo.<anything>' as an attempt to write a dotted type
       // unless <anything> is 'Type' or 'Protocol'.
-      if self.at(any: [.period, .prefixPeriod]) &&
-          !self.peek().isContextualKeyword(["Type", "Protocol"]) {
+      if self.at(any: [.period, .prefixPeriod]) && !self.peek().isContextualKeyword(["Type", "Protocol"]) {
         self.consumeAnyToken()
       } else {
         return true
@@ -970,7 +1048,9 @@ extension Parser {
         RawNamedOpaqueReturnTypeSyntax(
           genericParameters: generics,
           baseType: baseType,
-          arena: self.arena))
+          arena: self.arena
+        )
+      )
     } else {
       return self.parseType()
     }
@@ -980,13 +1060,13 @@ extension Parser {
 extension Lexer.Lexeme {
   var isBinaryOperator: Bool {
     return self.tokenKind == .spacedBinaryOperator
-        || self.tokenKind == .unspacedBinaryOperator
+      || self.tokenKind == .unspacedBinaryOperator
   }
 
   var isAnyOperator: Bool {
     return self.isBinaryOperator
-        || self.tokenKind == .postfixOperator
-        || self.tokenKind == .prefixOperator
+      || self.tokenKind == .postfixOperator
+      || self.tokenKind == .prefixOperator
   }
 
   var isEllipsis: Bool {
@@ -1024,22 +1104,22 @@ extension Lexer.Lexeme {
   var isGenericTypeDisambiguatingToken: Bool {
     switch self.tokenKind {
     case .rightParen,
-         .rightSquareBracket,
-         .leftBrace,
-         .rightBrace,
-         .period,
-         .prefixPeriod,
-         .comma,
-         .semicolon,
-         .eof,
-         .exclamationMark,
-         .postfixQuestionMark,
-         .colon:
+      .rightSquareBracket,
+      .leftBrace,
+      .rightBrace,
+      .period,
+      .prefixPeriod,
+      .comma,
+      .semicolon,
+      .eof,
+      .exclamationMark,
+      .postfixQuestionMark,
+      .colon:
       return true
     case .spacedBinaryOperator:
       return self.tokenText == "&"
     case .unspacedBinaryOperator,
-         .postfixOperator:
+      .postfixOperator:
       return self.isOptionalToken || self.isImplicitlyUnwrappedOptionalToken
     case .leftParen, .leftSquareBracket:
       // These only apply to the generic type if they don't start a new line.

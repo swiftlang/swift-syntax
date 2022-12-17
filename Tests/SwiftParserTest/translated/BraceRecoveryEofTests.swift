@@ -23,9 +23,12 @@ final class BraceRecoveryEofTests: XCTestCase {
         _ = foo1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '}' to end 'for' statement", notes: [
-          NoteSpec(message: "to match this opening '{'")
-        ]),
+        DiagnosticSpec(
+          message: "expected '}' to end 'for' statement",
+          notes: [
+            NoteSpec(message: "to match this opening '{'")
+          ]
+        )
       ]
     )
   }

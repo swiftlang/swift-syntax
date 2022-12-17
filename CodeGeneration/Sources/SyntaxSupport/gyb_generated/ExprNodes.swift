@@ -213,6 +213,22 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "PackElementExpr",
+       nameForDiagnostics: nil,
+       kind: "Expr",
+       children: [
+         Child(name: "EachKeyword",
+               kind: "ContextualKeywordToken",
+               tokenChoices: [
+                 "ContextualKeyword"
+               ],
+               textChoices: [
+                 "each"
+               ]),
+         Child(name: "PackRefExpr",
+               kind: "Expr")
+       ]),
+
   Node(name: "SequenceExpr",
        nameForDiagnostics: nil,
        kind: "Expr",
@@ -328,7 +344,8 @@ public let EXPR_NODES: [Node] = [
                ]),
          Child(name: "ElementList",
                kind: "TupleExprElementList",
-               collectionElementName: "Element"),
+               collectionElementName: "Element",
+               isIndented: true),
          Child(name: "RightParen",
                kind: "RightParenToken",
                tokenChoices: [
@@ -813,7 +830,8 @@ public let EXPR_NODES: [Node] = [
                ]),
          Child(name: "ArgumentList",
                kind: "TupleExprElementList",
-               collectionElementName: "Argument"),
+               collectionElementName: "Argument",
+               isIndented: true),
          Child(name: "RightParen",
                kind: "RightParenToken",
                isOptional: true,

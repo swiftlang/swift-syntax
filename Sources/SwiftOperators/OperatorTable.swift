@@ -21,11 +21,11 @@ import SwiftSyntax
 /// syntax tree.
 public struct OperatorTable {
   var precedenceGraph: PrecedenceGraph = .init()
-  var infixOperators: [OperatorName : Operator] = [:]
-  var prefixOperators: [OperatorName : Operator] = [:]
-  var postfixOperators: [OperatorName : Operator] = [:]
+  var infixOperators: [OperatorName: Operator] = [:]
+  var prefixOperators: [OperatorName: Operator] = [:]
+  var postfixOperators: [OperatorName: Operator] = [:]
 
-  public init() { }
+  public init() {}
 
   /// Initialize the operator precedence instance with a given set of
   /// operators and precedence groups.
@@ -46,7 +46,7 @@ public struct OperatorTable {
   /// Record the operator in the given operator array.
   private func record(
     _ op: Operator,
-    in table: inout [OperatorName : Operator],
+    in table: inout [OperatorName: Operator],
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
     if let existing = table[op.name] {
@@ -109,7 +109,8 @@ extension OperatorTable {
   ) rethrows -> PrecedenceGroupName? {
     guard let op = infixOperator(named: operatorName) else {
       try errorHandler(
-        .missingOperator(operatorName, referencedFrom: syntax))
+        .missingOperator(operatorName, referencedFrom: syntax)
+      )
       return nil
     }
 
@@ -124,15 +125,17 @@ extension OperatorTable: CustomStringConvertible {
 
     // Turn all of the dictionary values into their string representations.
     func add<Key: Comparable, Value: CustomStringConvertible>(
-      _ dict: [Key : Value]
+      _ dict: [Key: Value]
     ) {
       if dict.isEmpty {
         return
       }
 
-      result.append(contentsOf: dict.sorted { $0.key < $1.key }
-        .map { $0.value.description }
-        .joined(separator: "\n"))
+      result.append(
+        contentsOf: dict.sorted { $0.key < $1.key }
+          .map { $0.value.description }
+          .joined(separator: "\n")
+      )
 
       result += "\n"
     }

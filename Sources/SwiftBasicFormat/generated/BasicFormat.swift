@@ -48,10 +48,10 @@ open class BasicFormat: SyntaxRewriter {
   open override func visit(_ node: TokenSyntax) -> TokenSyntax {
     var leadingTrivia = node.leadingTrivia
     var trailingTrivia = node.trailingTrivia
-    if requiresLeadingSpace(node.tokenKind) && leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
+    if requiresLeadingSpace(node) && leadingTrivia.isEmpty && lastRewrittenToken?.trailingTrivia.isEmpty != false {
       leadingTrivia += .space
     }
-    if requiresTrailingSpace(node.tokenKind) && trailingTrivia.isEmpty {
+    if requiresTrailingSpace(node) && trailingTrivia.isEmpty {
       trailingTrivia += .space
     }
     if let keyPath = getKeyPath(Syntax(node)), requiresLeadingNewline(keyPath), !(leadingTrivia.first?.isNewline ?? false) {
@@ -60,10 +60,10 @@ open class BasicFormat: SyntaxRewriter {
     leadingTrivia = leadingTrivia.indented(indentation: indentation)
     trailingTrivia = trailingTrivia.indented(indentation: indentation)
     let rewritten = TokenSyntax(
-    node.tokenKind, 
-    leadingTrivia: leadingTrivia, 
-    trailingTrivia: trailingTrivia, 
-    presence: node.presence
+      node.tokenKind, 
+      leadingTrivia: leadingTrivia, 
+      trailingTrivia: trailingTrivia, 
+      presence: node.presence
     )
     lastRewrittenToken = rewritten
     putNextTokenOnNewLine = false
@@ -76,9 +76,19 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case \CodeBlockSyntax.statements: 
       return true
+    case \FunctionCallExprSyntax.argumentList: 
+      return true
+    case \FunctionTypeSyntax.arguments: 
+      return true
     case \MemberDeclBlockSyntax.members: 
       return true
+    case \ParameterClauseSyntax.parameterList: 
+      return true
     case \SwitchCaseSyntax.statements: 
+      return true
+    case \TupleExprSyntax.elementList: 
+      return true
+    case \TupleTypeSyntax.elements: 
       return true
     default: 
       return false
@@ -113,8 +123,8 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
   
-  open func requiresLeadingSpace(_ tokenKind: TokenKind) -> Bool {
-    switch tokenKind {
+  open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
+    switch token.tokenKind {
     case .whereKeyword: 
       return true
     case .catchKeyword: 
@@ -136,8 +146,19 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
   
-  open func requiresTrailingSpace(_ tokenKind: TokenKind) -> Bool {
-    switch tokenKind {
+  open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
+    switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
+    case (.asKeyword, .exclamationMark), 
+     (.asKeyword, .postfixQuestionMark), 
+     (.initKeyword, .leftParen), 
+     (.initKeyword, .postfixQuestionMark), 
+     (.tryKeyword, .exclamationMark), 
+     (.tryKeyword, .postfixQuestionMark): 
+      return false
+    default: 
+      break 
+    }
+    switch token.tokenKind {
     case .associatedtypeKeyword: 
       return true
     case .classKeyword: 

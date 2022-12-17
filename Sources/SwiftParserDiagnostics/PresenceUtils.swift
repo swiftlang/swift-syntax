@@ -70,58 +70,45 @@ class PresentMaker: SyntaxRewriter {
     } else {
       leadingTriviaBeforePlaceholder = .newline
     }
-    return DeclSyntax(StructDeclSyntax(
-      node.unexpectedBeforeAttributes,
-      attributes: node.attributes,
-      node.unexpectedBetweenAttributesAndModifiers,
-      modifiers: node.modifiers,
-      structKeyword: .structKeyword(presence: .missing),
-      identifier: .identifier("<#declaration#>", leadingTrivia: leadingTriviaBeforePlaceholder),
-      genericParameterClause: nil,
-      inheritanceClause: nil,
-      genericWhereClause: nil,
-      members: MemberDeclBlockSyntax(
-        leftBrace: .leftBraceToken(presence: .missing),
-        members: MemberDeclListSyntax([]),
-        rightBrace: .rightBraceToken(presence: .missing)
+    return DeclSyntax(
+      StructDeclSyntax(
+        node.unexpectedBeforeAttributes,
+        attributes: node.attributes,
+        node.unexpectedBetweenAttributesAndModifiers,
+        modifiers: node.modifiers,
+        structKeyword: .structKeyword(presence: .missing),
+        identifier: .identifier("<#declaration#>", leadingTrivia: leadingTriviaBeforePlaceholder),
+        members: MemberDeclBlockSyntax(
+          leftBrace: .leftBraceToken(presence: .missing),
+          members: MemberDeclListSyntax([]),
+          rightBrace: .rightBraceToken(presence: .missing)
+        )
       )
-    ))
+    )
   }
 
   override func visit(_ node: MissingExprSyntax) -> ExprSyntax {
-    return ExprSyntax(IdentifierExprSyntax(
-      identifier: .identifier("<#expression#>"),
-      declNameArguments: nil
-    ))
+    return ExprSyntax(IdentifierExprSyntax(identifier: .identifier("<#expression#>")))
   }
 
   override func visit(_ node: MissingPatternSyntax) -> PatternSyntax {
-    return PatternSyntax(IdentifierPatternSyntax(
-      identifier: .identifier("<#pattern#>")
-    ))
+    return PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("<#pattern#>")))
   }
 
   override func visit(_ node: MissingStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(ExpressionStmtSyntax(
-      expression: ExprSyntax(IdentifierExprSyntax(
-        identifier: .identifier("<#statement#>"),
-        declNameArguments: nil
-      ))
-    ))
+    return StmtSyntax(
+      ExpressionStmtSyntax(
+        expression: IdentifierExprSyntax(identifier: .identifier("<#statement#>"))
+      )
+    )
   }
 
   override func visit(_ node: MissingTypeSyntax) -> TypeSyntax {
-    return TypeSyntax(SimpleTypeIdentifierSyntax(
-      name: .identifier("<#type#>"),
-      genericArgumentClause: nil
-    ))
+    return TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("<#type#>")))
   }
 
   override func visit(_ node: MissingSyntax) -> Syntax {
-    return Syntax(IdentifierExprSyntax(
-      identifier: .identifier("<#syntax#>"),
-      declNameArguments: nil
-    ))
+    return Syntax(IdentifierExprSyntax(identifier: .identifier("<#syntax#>")))
   }
 }
 

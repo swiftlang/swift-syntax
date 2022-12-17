@@ -49,7 +49,8 @@ public struct AddSeparatorsToIntegerLiteral: RefactoringProvider {
     let (prefix, value) = lit.split()
     formattedText += prefix
     formattedText += value.byAddingGroupSeparators(at: lit.idealGroupSize)
-    return lit
+    return
+      lit
       .withDigits(lit.digits.withKind(.integerLiteral(formattedText)))
   }
 }

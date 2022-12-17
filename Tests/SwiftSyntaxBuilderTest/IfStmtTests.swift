@@ -20,31 +20,37 @@ final class IfStmtTests: XCTestCase {
     // disambiguated by the absence of a labelName parameter and the use of a
     // trailing closure.
     let buildable = IfStmt(conditions: ConditionElementList { BooleanLiteralExpr(false) }) {}
-    AssertBuildResult(buildable, """
+    AssertBuildResult(
+      buildable,
+      """
       if false {
       }
-      """)
+      """
+    )
   }
 
   func testIfElseStmt() {
     // Use the convenience initializer from IfStmtConvenienceInitializers
     // with an else branch expressed by a second trailing closure.
     let buildable = IfStmt(conditions: ConditionElementList { BooleanLiteralExpr(true) }) {
-      FunctionCallExpr(callee: "print") {
+      FunctionCallExpr(callee: ExprSyntax("print")) {
         TupleExprElement(expression: StringLiteralExpr(content: "Hello from the if-branch!"))
       }
     } elseBody: {
-      FunctionCallExpr(callee: "print") {
+      FunctionCallExpr(callee: ExprSyntax("print")) {
         TupleExprElement(expression: StringLiteralExpr(content: "Hello from the else-branch!"))
       }
     }
-    AssertBuildResult(buildable, """
+    AssertBuildResult(
+      buildable,
+      """
       if true {
           print("Hello from the if-branch!")
       } else {
           print("Hello from the else-branch!")
       }
-      """)
+      """
+    )
   }
 
   func testIfLetStmt() {
@@ -57,10 +63,13 @@ final class IfStmtTests: XCTestCase {
         )
       }
     ) {}
-    AssertBuildResult(buildable, """
+    AssertBuildResult(
+      buildable,
+      """
       if let x = y {
       }
-      """)
+      """
+    )
   }
 
   func testIfCaseStmt() {
@@ -72,9 +81,12 @@ final class IfStmtTests: XCTestCase {
         )
       }
     ) {}
-    AssertBuildResult(buildable, """
+    AssertBuildResult(
+      buildable,
+      """
       if case .x = y {
       }
-      """)
+      """
+    )
   }
 }

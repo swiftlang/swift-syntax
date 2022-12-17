@@ -19,6 +19,14 @@ Alternatively you can also build it from the command line using `build-script.py
     swift-syntax/build-script.py build --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr
     ```
 
+## Formatting
+
+SwiftSyntax is being formatted using [swift-format](http://github.com/apple/swift-format) to ensure a consistent style.
+
+To format your changes run `format.py` at the root of this repository. If you have a `swift-format` executable ready, you can pass it to `format.py`. If you do not, `format.py` will build its own copy of `swift-format` in /tmp/swift-format.
+
+CI will ensure that all hand-written source code is correctly formatted. Generated source code is not formatted to make it easier to spot changes when re-running code generation.
+
 ## Testing
 
 Because of SwiftSyntax’s integration with the Swift compiler project, testing certain parts of the project is a little bit more involved than others. 

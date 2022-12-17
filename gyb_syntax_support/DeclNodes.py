@@ -61,7 +61,7 @@ DECL_NODES = [
          children=[
              Child('LeftParen', kind='LeftParenToken'),
              Child('ParameterList', kind='FunctionParameterList', name_for_diagnostics='parameters',
-                   collection_element_name='Parameter'),
+                   collection_element_name='Parameter', is_indented=True),
              Child('RightParen', kind='RightParenToken'),
          ]),
 

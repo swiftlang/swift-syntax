@@ -26,7 +26,7 @@ public extension SyntaxCollection {
     for _ in 0..<index { _ = iter.next() }
     return iter.next()!
   }
-  
+
   subscript(_ index: Int) -> Element {
     return child(at: index)!
   }

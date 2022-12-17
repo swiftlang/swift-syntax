@@ -83,7 +83,7 @@ final class AsyncTests: XCTestCase {
       diagnostics: [
         // TODO: Old parser expected error on line 1: 'throws' may only occur before '->', Fix-It replacements: 28 - 35 = '', 21 - 21 = 'throws '
         // TODO: Old parser expected error on line 1: 'async' may only occur before '->', Fix-It replacements: 35 - 41 = '', 21 - 21 = 'async '
-        DiagnosticSpec(message: "extraneous code 'throws async { }' at top level"),
+        DiagnosticSpec(message: "extraneous code 'throws async { }' at top level")
       ]
     )
   }
@@ -114,8 +114,8 @@ final class AsyncTests: XCTestCase {
       ],
       // TODO: This should not insert another 'async'
       fixedSource: """
-      func asyncGlobal8() async throws; async async -> Int async {}
-      """
+        func asyncGlobal8() async throws; async async -> Int async {}
+        """
     )
   }
 

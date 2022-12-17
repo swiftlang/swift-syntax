@@ -23,7 +23,6 @@ public protocol FixItMessage {
   var fixItID: MessageID { get }
 }
 
-
 /// A Fix-It that can be applied to resolve a diagnostic.
 public struct FixIt {
   public struct Changes: ExpressibleByArrayLiteral {
@@ -63,4 +62,3 @@ public struct FixIt {
     self.changes = changes
   }
 }
-

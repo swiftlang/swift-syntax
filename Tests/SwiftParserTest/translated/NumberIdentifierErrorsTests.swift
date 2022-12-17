@@ -31,7 +31,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       func 1️⃣1() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -42,7 +42,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       func 1️⃣2.0() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -53,11 +53,10 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       func 1️⃣3func() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
-
 
   func testNumberIdentifierErrors3a() {
     AssertParse(
@@ -101,14 +100,13 @@ final class NumberIdentifierErrorsTests: XCTestCase {
     )
   }
 
-
   func testNumberIdentifierErrors4a() {
     AssertParse(
       """
       typealias 1️⃣10 = Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -119,7 +117,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       typealias 1️⃣11.0 = Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -130,7 +128,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       typealias 1️⃣12typealias = Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -141,7 +139,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       struct 1️⃣13 {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -152,7 +150,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       struct 1️⃣14.0 {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -163,7 +161,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       struct 1️⃣15struct {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -174,7 +172,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       enum 1️⃣16 {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -185,7 +183,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       enum 1️⃣17.0 {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -196,7 +194,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       enum 1️⃣18enum {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(message: "identifier can only start with a letter or underscore, not a number")
       ]
     )
   }
@@ -228,7 +226,6 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       ]
     )
   }
-
 
   func testNumberIdentifierErrors8() {
     AssertParse(

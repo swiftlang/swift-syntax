@@ -141,7 +141,7 @@ public final class SourceLocationConverter {
     (self.lines, endOfFile) = computeLines(source)
     assert(source.utf8.count == endOfFile.utf8Offset)
   }
-  
+
   /// Execute the body with an array that contains each source line.
   func withSourceLines<T>(_ body: ([SyntaxText]) throws -> T) rethrows -> T {
     return try source.withUnsafeBufferPointer { (sourcePointer: UnsafeBufferPointer<UInt8>) in
@@ -149,10 +149,12 @@ public final class SourceLocationConverter {
       var previousLoc = AbsolutePosition.startOfFile
       assert(lines.first == AbsolutePosition.startOfFile)
       for lineStartLoc in lines.dropFirst() + [endOfFile] {
-        result.append(SyntaxText(
-          baseAddress: sourcePointer.baseAddress?.advanced(by: previousLoc.utf8Offset),
-          count: lineStartLoc.utf8Offset - previousLoc.utf8Offset
-        ))
+        result.append(
+          SyntaxText(
+            baseAddress: sourcePointer.baseAddress?.advanced(by: previousLoc.utf8Offset),
+            count: lineStartLoc.utf8Offset - previousLoc.utf8Offset
+          )
+        )
         previousLoc = lineStartLoc
       }
       return try body(result)
@@ -197,15 +199,19 @@ public final class SourceLocationConverter {
     }
 
     assert(first > 0)
-    let lineIdx = first-1
+    let lineIdx = first - 1
     let lineStartOffset = lines[lineIdx].utf8Offset
     let colOffset = pos.utf8Offset - lineStartOffset
 
-    let line = lineIdx+1
-    let column = colOffset+1
+    let line = lineIdx + 1
+    let column = colOffset + 1
 
-    return SourceLocation(line: line, column: column,
-      offset: pos.utf8Offset, file: self.file)
+    return SourceLocation(
+      line: line,
+      column: column,
+      offset: pos.utf8Offset,
+      file: self.file
+    )
   }
 
   /// Convert a line/column to a `SourceLocation`. If the line/column exceeds
@@ -216,7 +222,7 @@ public final class SourceLocationConverter {
   ///   - line: A 1-based line number.
   ///   - column: A 1-based, UTF8 offset from the start of line.
   public func position(ofLine line: Int, column: Int) -> AbsolutePosition {
-    let lineIdx = line-1
+    let lineIdx = line - 1
     guard lineIdx >= lines.startIndex else {
       return .startOfFile
     }
@@ -224,12 +230,12 @@ public final class SourceLocationConverter {
       return self.endOfFile
     }
     let lineStart = lines[lineIdx]
-    let lineEnd = lineIdx+1 < lines.endIndex ? lines[lineIdx+1] : self.endOfFile
-    let colOffset = column-1
+    let lineEnd = lineIdx + 1 < lines.endIndex ? lines[lineIdx + 1] : self.endOfFile
+    let colOffset = column - 1
     guard colOffset >= 0 else {
       return lineStart
     }
-    return min(lineStart+SourceLength(utf8Length: colOffset), lineEnd)
+    return min(lineStart + SourceLength(utf8Length: colOffset), lineEnd)
   }
 
   /// Returns false if the `position` is out-of-bounds for the file.
@@ -240,7 +246,7 @@ public final class SourceLocationConverter {
   /// Returns false if the `line`/`column` pair is out-of-bounds for the file or
   /// that specific line.
   public func isValid(line: Int, column: Int) -> Bool {
-    let lineIdx = line-1
+    let lineIdx = line - 1
     guard lineIdx >= lines.startIndex else {
       return false
     }
@@ -248,12 +254,12 @@ public final class SourceLocationConverter {
       return false
     }
     let lineStart = lines[lineIdx]
-    let lineEnd = lineIdx+1 < lines.endIndex ? lines[lineIdx+1] : self.endOfFile
-    let colOffset = column-1
+    let lineEnd = lineIdx + 1 < lines.endIndex ? lines[lineIdx + 1] : self.endOfFile
+    let colOffset = column - 1
     guard colOffset >= 0 else {
       return false
     }
-    return lineStart+SourceLength(utf8Length: colOffset) <= lineEnd
+    return lineStart + SourceLength(utf8Length: colOffset) <= lineEnd
   }
 }
 
@@ -268,9 +274,7 @@ public extension Syntax {
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    let pos = afterLeadingTrivia ?
-      data.positionAfterSkippingLeadingTrivia :
-      data.position
+    let pos = afterLeadingTrivia ? data.positionAfterSkippingLeadingTrivia : data.position
     return converter.location(for: pos)
   }
 
@@ -306,10 +310,14 @@ public extension Syntax {
     afterLeadingTrivia: Bool = true,
     afterTrailingTrivia: Bool = false
   ) -> SourceRange {
-    let start = startLocation(converter: converter, 
-                              afterLeadingTrivia: afterLeadingTrivia)
-    let end = endLocation(converter: converter, 
-                          afterTrailingTrivia: afterTrailingTrivia)
+    let start = startLocation(
+      converter: converter,
+      afterLeadingTrivia: afterLeadingTrivia
+    )
+    let end = endLocation(
+      converter: converter,
+      afterTrailingTrivia: afterTrailingTrivia
+    )
     return SourceRange(start: start, end: end)
   }
 }
@@ -325,8 +333,10 @@ public extension SyntaxProtocol {
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    return _syntaxNode.startLocation(converter: converter, 
-                                    afterLeadingTrivia: afterLeadingTrivia)
+    return _syntaxNode.startLocation(
+      converter: converter,
+      afterLeadingTrivia: afterLeadingTrivia
+    )
   }
 
   /// The ending location, in the provided file, of this Syntax node.
@@ -339,8 +349,10 @@ public extension SyntaxProtocol {
     converter: SourceLocationConverter,
     afterTrailingTrivia: Bool = false
   ) -> SourceLocation {
-    return _syntaxNode.endLocation(converter: converter, 
-                                  afterTrailingTrivia: afterTrailingTrivia)
+    return _syntaxNode.endLocation(
+      converter: converter,
+      afterTrailingTrivia: afterTrailingTrivia
+    )
   }
 
   /// The source range, in the provided file, of this Syntax node.
@@ -356,9 +368,11 @@ public extension SyntaxProtocol {
     afterLeadingTrivia: Bool = true,
     afterTrailingTrivia: Bool = false
   ) -> SourceRange {
-    return _syntaxNode.sourceRange(converter: converter, 
-                                  afterLeadingTrivia: afterLeadingTrivia,
-                                  afterTrailingTrivia: afterTrailingTrivia)
+    return _syntaxNode.sourceRange(
+      converter: converter,
+      afterLeadingTrivia: afterLeadingTrivia,
+      afterTrailingTrivia: afterTrailingTrivia
+    )
   }
 }
 
@@ -383,8 +397,7 @@ fileprivate func computeLines(
   return (lines, position)
 }
 
-fileprivate func computeLines(_ source: String) ->
-    ([AbsolutePosition], AbsolutePosition) {
+fileprivate func computeLines(_ source: String) -> ([AbsolutePosition], AbsolutePosition) {
   var lines: [AbsolutePosition] = []
   // First line starts from the beginning.
   lines.append(.startOfFile)
@@ -404,14 +417,15 @@ fileprivate extension String {
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
   func forEachLineLength(
-    prefix: SourceLength = .zero, body: (SourceLength) -> ()
+    prefix: SourceLength = .zero,
+    body: (SourceLength) -> ()
   ) -> SourceLength {
     let utf8 = self.utf8
     let startIndex = utf8.startIndex
     let endIndex = utf8.endIndex
     var curIdx = startIndex
     var lineLength = prefix
-    let advanceLengthByOne = { ()->() in
+    let advanceLengthByOne = { () -> () in
       lineLength += SourceLength(utf8Length: 1)
       curIdx = utf8.index(after: curIdx)
     }
@@ -451,17 +465,18 @@ fileprivate extension TriviaPiece {
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
   func forEachLineLength(
-    prefix: SourceLength = .zero, body: (SourceLength) -> ()
+    prefix: SourceLength = .zero,
+    body: (SourceLength) -> ()
   ) -> SourceLength {
     var lineLength = prefix
     switch self {
     case let .spaces(count),
-         let .tabs(count),
-         let .verticalTabs(count),
-         let .formfeeds(count):
+      let .tabs(count),
+      let .verticalTabs(count),
+      let .formfeeds(count):
       lineLength += SourceLength(utf8Length: count)
     case let .newlines(count),
-         let .carriageReturns(count):
+      let .carriageReturns(count):
       let newLineLength = SourceLength(utf8Length: 1)
       body(lineLength + newLineLength)
       for _ in 1..<count {
@@ -476,14 +491,14 @@ fileprivate extension TriviaPiece {
       }
       lineLength = .zero
     case let .shebang(text),
-         let .lineComment(text),
-         let .docLineComment(text):
+      let .lineComment(text),
+      let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
       assert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
       lineLength += SourceLength(utf8Length: text.utf8.count)
     case let .blockComment(text),
-         let .docBlockComment(text),
-         let .unexpectedText(text):
+      let .docBlockComment(text),
+      let .unexpectedText(text):
       lineLength = text.forEachLineLength(prefix: lineLength, body: body)
     }
     return lineLength
@@ -495,7 +510,8 @@ fileprivate extension Trivia {
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
   func forEachLineLength(
-    prefix: SourceLength = .zero, body: (SourceLength) -> ()
+    prefix: SourceLength = .zero,
+    body: (SourceLength) -> ()
   ) -> SourceLength {
     var curPrefix = prefix
     for piece in self {
@@ -510,7 +526,8 @@ fileprivate extension TokenSyntax {
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
   func forEachLineLength(
-    prefix: SourceLength = .zero, body: (SourceLength) -> ()
+    prefix: SourceLength = .zero,
+    body: (SourceLength) -> ()
   ) -> SourceLength {
     var curPrefix = prefix
     curPrefix = self.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)

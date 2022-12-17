@@ -15,10 +15,7 @@ import SwiftSyntax
 
 public class VisitorTests: XCTestCase {
   public func testVisitMissingNodes() {
-    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax(
-      attributes: nil,
-      modifiers: nil
-    )))
+    let node = DeclarationStmtSyntax(declaration: MissingDeclSyntax())
 
     class MissingDeclChecker: SyntaxVisitor {
       var didSeeMissingDeclSyntax = false
@@ -41,8 +38,7 @@ public class VisitorTests: XCTestCase {
 
   public func testVisitMissingToken() {
     let node = ReturnStmtSyntax(
-      returnKeyword: .returnKeyword(presence: .missing),
-      expression: nil
+      returnKeyword: .returnKeyword(presence: .missing)
     )
 
     class MissingTokenChecker: SyntaxVisitor {
@@ -76,10 +72,12 @@ public class VisitorTests: XCTestCase {
     // This is more real-world where the user wrote null instead of nil.
     let misspelledNil = ReturnStmtSyntax(
       returnKeyword: .returnKeyword(trailingTrivia: [.spaces(1)]),
-      expression: ExprSyntax(NilLiteralExprSyntax(
-        UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("null"))]),
-        nilKeyword: .nilKeyword(presence: .missing)
-      ))
+      expression: ExprSyntax(
+        NilLiteralExprSyntax(
+          UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("null"))]),
+          nilKeyword: .nilKeyword(presence: .missing)
+        )
+      )
     )
 
     // Test SyntaxVisitor
@@ -119,7 +117,6 @@ public class VisitorTests: XCTestCase {
         return .visitChildren
       }
 
-
       static func print<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> String {
         let printer = TreePrinter(viewMode: viewMode)
         printer.walk(tree)
@@ -143,7 +140,6 @@ public class VisitorTests: XCTestCase {
         out += node.trailingTrivia.description
         return node
       }
-
 
       static func print<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> String {
         let printer = TreePrinter(viewMode: viewMode)

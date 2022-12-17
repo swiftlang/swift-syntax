@@ -173,11 +173,14 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 
 extension TokenSyntax: CustomReflectable {
   public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "text": text,
-      "leadingTrivia": leadingTrivia,
-      "trailingTrivia": trailingTrivia,
-      "tokenKind": tokenKind,
-    ])
+    return Mirror(
+      self,
+      children: [
+        "text": text,
+        "leadingTrivia": leadingTrivia,
+        "trailingTrivia": trailingTrivia,
+        "tokenKind": tokenKind,
+      ]
+    )
   }
 }

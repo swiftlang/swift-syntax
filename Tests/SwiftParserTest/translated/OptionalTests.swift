@@ -33,7 +33,7 @@ final class OptionalTests: XCTestCase {
       var b : A 1️⃣?
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '?' at top level"),
+        DiagnosticSpec(message: "extraneous code '?' at top level")
       ]
     )
   }
@@ -43,13 +43,12 @@ final class OptionalTests: XCTestCase {
       """
       var c = a?  
       """,
-      substructure: Syntax(OptionalChainingExprSyntax(
-        expression: ExprSyntax(IdentifierExprSyntax(
-          identifier: .identifier("a"),
-          declNameArguments: nil
-        )),
-        questionMark: .postfixQuestionMarkToken()
-      ))
+      substructure: Syntax(
+        OptionalChainingExprSyntax(
+          expression: IdentifierExprSyntax(identifier: .identifier("a")),
+          questionMark: .postfixQuestionMarkToken()
+        )
+      )
     )
   }
 

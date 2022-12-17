@@ -40,20 +40,24 @@ public class ParseFileTests: XCTestCase {
 
   public func testParseSingleFile() {
     let currentFile = URL(fileURLWithPath: #file)
-    XCTAssertNoThrow(try {
-      let fileContents = try String(contentsOf: currentFile)
-      let parsed = try SyntaxParser.parse(currentFile)
-      XCTAssertEqual("\(parsed)", fileContents)
-    }())
+    XCTAssertNoThrow(
+      try {
+        let fileContents = try String(contentsOf: currentFile)
+        let parsed = try SyntaxParser.parse(currentFile)
+        XCTAssertEqual("\(parsed)", fileContents)
+      }()
+    )
   }
 
   public func testEnumCaseStructure() {
     class Visitor: SyntaxVisitor {
       var cases: [EnumCaseDeclSyntax] = []
       override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-        cases.append(contentsOf: node.members.members.compactMap {
-          $0.decl.as(EnumCaseDeclSyntax.self)
-        })
+        cases.append(
+          contentsOf: node.members.members.compactMap {
+            $0.decl.as(EnumCaseDeclSyntax.self)
+          }
+        )
         return .skipChildren
       }
     }

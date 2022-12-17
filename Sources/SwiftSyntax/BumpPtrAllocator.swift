@@ -15,7 +15,7 @@
 public class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
-  static private var GLOWTH_DELAY: Int = 128
+  static private var GROWTH_DELAY: Int = 128
   static private var SLAB_ALIGNMENT: Int = 8
 
   /// Initial slab size.
@@ -27,8 +27,11 @@ public class BumpPtrAllocator {
   /// - end: Points to the end address of `slabs.last`. This is equivalent to
   ///        `slabs.last!.baseAddress! + slabs.last!.count`
   /// 'nil' if `slabs` is empty.
-  private var current: (pointer: UnsafeMutableRawPointer,
-                        end: UnsafeMutableRawPointer)?
+  private var current:
+    (
+      pointer: UnsafeMutableRawPointer,
+      end: UnsafeMutableRawPointer
+    )?
   private var customSizeSlabs: [Slab]
   private var _totalBytesAllocated: Int
 
@@ -54,14 +57,16 @@ public class BumpPtrAllocator {
 
   /// Calculate the size of the slab at the index.
   private func slabSize(at index: Int) -> Int {
-    // Double the slab size every 'GLOWTH_DELAY' slabs.
-    return self.slabSize * (1 << min(30, index / Self.GLOWTH_DELAY))
+    // Double the slab size every 'GROWTH_DELAY' slabs.
+    return self.slabSize * (1 << min(30, index / Self.GROWTH_DELAY))
   }
 
   private func startNewSlab() {
     let newSlabSize = self.slabSize(at: slabs.count)
     let newSlab = Slab.allocate(
-      byteCount: newSlabSize, alignment: Self.SLAB_ALIGNMENT)
+      byteCount: newSlabSize,
+      alignment: Self.SLAB_ALIGNMENT
+    )
     let pointer = newSlab.baseAddress!
     current = (pointer, pointer.advanced(by: newSlabSize))
     slabs.append(newSlab)
@@ -108,7 +113,9 @@ public class BumpPtrAllocator {
     // If the size is too big, allocate a dedicated slab for it.
     if byteCount >= self.slabSize {
       let customSlab = Slab.allocate(
-        byteCount: byteCount, alignment: alignment)
+        byteCount: byteCount,
+        alignment: alignment
+      )
       customSizeSlabs.append(customSlab)
       return customSlab
     }
@@ -129,8 +136,10 @@ public class BumpPtrAllocator {
   /// class instances, existentials, etc.) is strongly discouraged because they
   /// are not automatically deinitialized.
   public func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {
-    let allocated = allocate(byteCount: MemoryLayout<T>.stride * count,
-                             alignment: MemoryLayout<T>.alignment)
+    let allocated = allocate(
+      byteCount: MemoryLayout<T>.stride * count,
+      alignment: MemoryLayout<T>.alignment
+    )
     return allocated.bindMemory(to: T.self)
   }
 

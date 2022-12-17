@@ -26,8 +26,11 @@ public class ParserTests: XCTestCase {
       // Debug builds overflow with any stack size bigger than 25-ish.
       Parser.parse(source: buffer.bindMemory(to: UInt8.self), maximumNestingLevel: 25)
     })
-    AssertDataEqualWithDiff(Data(parsed.syntaxTextBytes), fileContents,
-                            additionalInfo: "Failed in file \(fileURL)")
+    AssertDataEqualWithDiff(
+      Data(parsed.syntaxTextBytes),
+      fileContents,
+      additionalInfo: "Failed in file \(fileURL)"
+    )
 
     if !checkDiagnostics {
       return
@@ -42,16 +45,20 @@ public class ParserTests: XCTestCase {
         let message = diag.message
         locationAndDiagnostics.append("\(location): \(message)")
       }
-      XCTFail("""
-      Received the following diagnostics while parsing \(fileURL)
-      \(locationAndDiagnostics.joined(separator: "\n"))
-      """)
+      XCTFail(
+        """
+        Received the following diagnostics while parsing \(fileURL)
+        \(locationAndDiagnostics.joined(separator: "\n"))
+        """
+      )
     }
   }
 
   /// Run parsr tests on all of the Swift files in the given path, recursively.
   func runParserTests(
-    name: String, path: URL, checkDiagnostics: Bool,
+    name: String,
+    path: URL,
+    checkDiagnostics: Bool,
     shouldExclude: (URL) -> Bool = { _ in false }
   ) {
     let fileURLs = FileManager.default
@@ -59,8 +66,8 @@ public class ParserTests: XCTestCase {
       .compactMap({ $0 as? URL })
       .filter {
         $0.pathExtension == "swift"
-        || $0.pathExtension == "sil"
-        || $0.pathExtension == "swiftinterface"
+          || $0.pathExtension == "sil"
+          || $0.pathExtension == "swiftinterface"
       }
 
     print("\(name) - processing \(fileURLs.count) source files")
@@ -87,10 +94,13 @@ public class ParserTests: XCTestCase {
     // Allow skipping the self parse test in local development environments
     // because it takes very long compared to all the other tests.
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
-    let currentDir = packageDir
+    let currentDir =
+      packageDir
       .appendingPathComponent("Sources")
     runParserTests(
-      name: "Self-parse tests", path: currentDir, checkDiagnostics: true
+      name: "Self-parse tests",
+      path: currentDir,
+      checkDiagnostics: true
     )
   }
 
@@ -99,12 +109,15 @@ public class ParserTests: XCTestCase {
   /// directory alongside swift-syntax.
   func testSwiftTestsuite() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
-    let testDir = packageDir
+    let testDir =
+      packageDir
       .deletingLastPathComponent()
       .appendingPathComponent("swift")
       .appendingPathComponent("test")
     runParserTests(
-      name: "Swift tests", path: testDir, checkDiagnostics: false
+      name: "Swift tests",
+      path: testDir,
+      checkDiagnostics: false
     )
   }
 
@@ -113,12 +126,15 @@ public class ParserTests: XCTestCase {
   /// out into the "swift" directory alongside swift-syntax.
   func testSwiftValidationTestsuite() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
-    let testDir = packageDir
+    let testDir =
+      packageDir
       .deletingLastPathComponent()
       .appendingPathComponent("swift")
       .appendingPathComponent("validation-test")
     runParserTests(
-      name: "Swift validation tests", path: testDir, checkDiagnostics: false
+      name: "Swift validation tests",
+      path: testDir,
+      checkDiagnostics: false
     )
   }
 
@@ -133,7 +149,7 @@ public class ParserTests: XCTestCase {
       .map { try Data(contentsOf: $0) }
 
     measure {
-      for _ in 0 ..< 10 {
+      for _ in 0..<10 {
         for file in files {
           file.withUnsafeBytes { buf in
             _ = Parser.parse(source: buf.bindMemory(to: UInt8.self))

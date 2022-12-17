@@ -173,7 +173,7 @@ extension RawSyntax {
   var totalNodes: Int {
     switch rawData.payload {
     case .parsedToken(_),
-         .materializedToken(_):
+      .materializedToken(_):
       return 1
     case .layout(let dat):
       return dat.descendantCount + 1
@@ -220,7 +220,8 @@ extension RawSyntax {
         leadingTrivia: leadingTrivia,
         trailingTrivia: tokenView.formTrailingTrivia(),
         presence: tokenView.presence,
-        arena: arena)
+        arena: arena
+      )
     case .layout(let layoutView):
       for (index, child) in layoutView.children.enumerated() {
         if let replaced = child?.withLeadingTrivia(leadingTrivia, arena: arena) {
@@ -244,7 +245,8 @@ extension RawSyntax {
         leadingTrivia: tokenView.formLeadingTrivia(),
         trailingTrivia: trailingTrivia,
         presence: tokenView.presence,
-        arena: arena)
+        arena: arena
+      )
     case .layout(let layoutView):
       for (index, child) in layoutView.children.enumerated().reversed() {
         if let replaced = child?.withTrailingTrivia(trailingTrivia, arena: arena) {
@@ -449,10 +451,14 @@ extension RawSyntax {
     arena: SyntaxArena,
     hasLexerError: Bool
   ) -> RawSyntax {
-    assert(arena.contains(text: wholeText),
-           "token text must be managed by the arena")
-    assert(arena is ParsingSyntaxArena || textRange == wholeText.indices,
-           "arena must be able to parse trivia")
+    assert(
+      arena.contains(text: wholeText),
+      "token text must be managed by the arena"
+    )
+    assert(
+      arena is ParsingSyntaxArena || textRange == wholeText.indices,
+      "arena must be able to parse trivia"
+    )
     let payload = RawSyntaxData.ParsedToken(
       tokenKind: kind,
       wholeText: wholeText,
@@ -516,18 +522,22 @@ extension RawSyntax {
     presence: SourcePresence,
     arena: SyntaxArena,
     initializingLeadingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void,
-    initializingTrailingTriviaWith : (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
+    initializingTrailingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
   ) -> RawSyntax {
     let totalTriviaCount = leadingTriviaPieceCount + trailingTriviaPieceCount
     let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: totalTriviaCount)
     initializingLeadingTriviaWith(
-      UnsafeMutableBufferPointer(rebasing: triviaBuffer[..<leadingTriviaPieceCount]))
+      UnsafeMutableBufferPointer(rebasing: triviaBuffer[..<leadingTriviaPieceCount])
+    )
     initializingTrailingTriviaWith(
-      UnsafeMutableBufferPointer(rebasing: triviaBuffer[leadingTriviaPieceCount...]))
+      UnsafeMutableBufferPointer(rebasing: triviaBuffer[leadingTriviaPieceCount...])
+    )
 
     let byteLength = text.count + triviaBuffer.reduce(0, { $0 + $1.byteLength })
     return .materializedToken(
-      kind: kind, text: text, triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
+      kind: kind,
+      text: text,
+      triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
       numLeadingTrivia: numericCast(leadingTriviaPieceCount),
       byteLength: numericCast(byteLength),
       presence: presence,
@@ -552,12 +562,11 @@ extension RawSyntax {
   ) -> RawSyntax {
     let decomposed = kind.decomposeToRaw()
     let rawKind = decomposed.rawKind
-    let text = (decomposed.string.map({arena.intern($0)}) ??
-                decomposed.rawKind.defaultText ??
-                "")
+    let text = (decomposed.string.map({ arena.intern($0) }) ?? decomposed.rawKind.defaultText ?? "")
 
     return .makeMaterializedToken(
-      kind: rawKind, text: text,
+      kind: rawKind,
+      text: text,
       leadingTriviaPieceCount: leadingTrivia.count,
       trailingTriviaPieceCount: trailingTrivia.count,
       presence: presence,
@@ -575,7 +584,8 @@ extension RawSyntax {
           ptr.initialize(to: .make(piece, arena: arena))
           ptr += 1
         }
-      })
+      }
+    )
   }
 
   static func makeMissingToken(
@@ -584,11 +594,14 @@ extension RawSyntax {
   ) -> RawSyntax {
     let (rawKind, _) = kind.decomposeToRaw()
     return .materializedToken(
-      kind: rawKind, text: rawKind.defaultText ?? "",
+      kind: rawKind,
+      text: rawKind.defaultText ?? "",
       triviaPieces: .init(start: nil, count: 0),
-      numLeadingTrivia: 0, byteLength: 0,
+      numLeadingTrivia: 0,
+      byteLength: 0,
       presence: .missing,
-      arena: arena)
+      arena: arena
+    )
   }
 }
 
@@ -692,9 +705,26 @@ extension RawSyntax {
   static func makeLayout<C: Collection>(
     kind: SyntaxKind,
     from collection: C,
-    arena: SyntaxArena
+    arena: SyntaxArena,
+    leadingTrivia: Trivia? = nil,
+    trailingTrivia: Trivia? = nil
   ) -> RawSyntax where C.Element == RawSyntax? {
-    .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
+    if leadingTrivia != nil || trailingTrivia != nil {
+      var layout = Array(collection)
+      if let leadingTrivia = leadingTrivia,
+        let idx = layout.firstIndex(where: { $0 != nil })
+      {
+        layout[idx] = layout[idx]!.withLeadingTrivia(leadingTrivia, arena: arena)
+      }
+      if let trailingTrivia = trailingTrivia,
+        let idx = layout.lastIndex(where: { $0 != nil })
+      {
+        layout[idx] = layout[idx]!.withTrailingTrivia(trailingTrivia, arena: arena)
+      }
+      return .makeLayout(kind: kind, from: layout, arena: arena)
+    }
+
+    return .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
       _ = $0.initialize(from: collection)
     }
   }
@@ -782,7 +812,7 @@ extension RawSyntax {
 
 #if DEBUG
 /// See `SyntaxMemoryLayout`.
-var RawSyntaxDataMemoryLayouts: [String : SyntaxMemoryLayout.Value] = [
+var RawSyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "RawSyntaxData": .init(RawSyntaxData.self),
   "RawSyntaxData.Layout": .init(RawSyntaxData.Layout.self),
   "RawSyntaxData.ParsedToken": .init(RawSyntaxData.ParsedToken.self),

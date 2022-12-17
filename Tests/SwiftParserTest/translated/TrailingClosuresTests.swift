@@ -178,24 +178,23 @@ final class TrailingClosuresTests: XCTestCase {
       """
       fn {} g: 1️⃣<#T##() -> Void#>
       """,
-      substructure: Syntax(MultipleTrailingClosureElementSyntax(
-        label: .identifier("g"),
-        colon: .colonToken(trailingTrivia: .space),
-        closure: ClosureExprSyntax(
-          leftBrace: .leftBraceToken(presence: .missing),
-          signature: nil,
-          statements: CodeBlockItemListSyntax([
-            CodeBlockItemSyntax(
-              item: .init(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>"))),
-              semicolon: nil,
-              errorTokens: nil
-            )
-          ]),
-          rightBrace: .rightBraceToken(presence: .missing)
+      substructure: Syntax(
+        MultipleTrailingClosureElementSyntax(
+          label: .identifier("g"),
+          colon: .colonToken(trailingTrivia: .space),
+          closure: ClosureExprSyntax(
+            leftBrace: .leftBraceToken(presence: .missing),
+            statements: CodeBlockItemListSyntax([
+              CodeBlockItemSyntax(
+                item: .init(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>")))
+              )
+            ]),
+            rightBrace: .rightBraceToken(presence: .missing)
+          )
         )
-      )),
+      ),
       diagnostics: [
-        DiagnosticSpec(message: "editor placeholder in source file"),
+        DiagnosticSpec(message: "editor placeholder in source file")
       ]
     )
   }

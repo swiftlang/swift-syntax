@@ -12,7 +12,7 @@
 
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(Testing) @_spi(RawSyntax)  import SwiftParser
+@_spi(Testing)@_spi(RawSyntax) import SwiftParser
 import SwiftParserDiagnostics
 import SwiftDiagnostics
 import _SwiftSyntaxTestSupport
@@ -44,7 +44,8 @@ func AssertEqualTokens(_ actual: [Lexer.Lexeme], _ expected: [Lexer.Lexeme], fil
         String(syntaxText: l.leadingTriviaText),
         String(syntaxText: r.leadingTriviaText),
         "Token at index \(idx) does not have matching leading trivia",
-        file: file, line: line
+        file: file,
+        line: line
       )
     }
 
@@ -53,7 +54,8 @@ func AssertEqualTokens(_ actual: [Lexer.Lexeme], _ expected: [Lexer.Lexeme], fil
         l.tokenText.debugDescription,
         r.tokenText.debugDescription,
         "Text at index \(idx) does not have matching text",
-        file: file, line: line
+        file: file,
+        line: line
       )
     }
 
@@ -62,7 +64,8 @@ func AssertEqualTokens(_ actual: [Lexer.Lexeme], _ expected: [Lexer.Lexeme], fil
         String(syntaxText: l.trailingTriviaText),
         String(syntaxText: r.trailingTriviaText),
         "Token at index \(idx) does not have matching trailing trivia",
-        file: file, line: line
+        file: file,
+        line: line
       )
     }
   }
@@ -139,7 +142,8 @@ class FixItApplier: SyntaxRewriter {
   var changes: [FixIt.Change]
 
   init(diagnostics: [Diagnostic], withMessages messages: [String]?) {
-    self.changes = diagnostics
+    self.changes =
+      diagnostics
       .flatMap { $0.fixIts }
       .filter {
         if let messages = messages {
@@ -200,9 +204,10 @@ func AssertLocation<T: SyntaxProtocol>(
     let actualLocation = location
     let expectedLocation = locationConverter.location(for: AbsolutePosition(utf8Offset: markerLoc))
     if let actualLine = actualLocation.line,
-       let actualColumn = actualLocation.column,
-       let expectedLine = expectedLocation.line,
-       let expectedColumn = expectedLocation.column {
+      let actualColumn = actualLocation.column,
+      let expectedLine = expectedLocation.line,
+      let expectedColumn = expectedLocation.column
+    {
       if actualLine != expectedLine || actualColumn != expectedColumn {
         XCTFail("Expected location \(expectedLine):\(expectedColumn) but got \(actualLine):\(actualColumn)", file: file, line: line)
       }
@@ -262,24 +267,31 @@ func AssertDiagnostic<T: SyntaxProtocol>(
     AssertStringsEqualWithDiff(diag.message, message, file: file, line: line)
   }
   if diag.message.contains("\n") {
-    XCTFail("""
+    XCTFail(
+      """
       Diagnostic message should only span a single line. Message was:
       \(diag.message)
-      """)
+      """
+    )
   }
   if let highlight = spec.highlight {
     AssertStringsEqualWithDiff(
       diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
       highlight.trimmingTrailingWhitespace(),
-      file: file, line: line
+      file: file,
+      line: line
     )
   }
   if let notes = spec.notes {
     if diag.notes.count != notes.count {
-      XCTFail("""
-      Expected \(notes.count) notes but received \(diag.notes.count):
-      \(diag.notes.map(\.debugDescription).joined(separator: "\n"))
-      """, file: file, line: line)
+      XCTFail(
+        """
+        Expected \(notes.count) notes but received \(diag.notes.count):
+        \(diag.notes.map(\.debugDescription).joined(separator: "\n"))
+        """,
+        file: file,
+        line: line
+      )
     } else {
       for (note, expectedNote) in zip(diag.notes, notes) {
         AssertNote(note, in: tree, markerLocations: markerLocations, expected: expectedNote, file: expectedNote.file, line: expectedNote.line)
@@ -291,7 +303,8 @@ func AssertDiagnostic<T: SyntaxProtocol>(
       FailStringsEqualWithDiff(
         diag.fixIts.map(\.message.message).joined(separator: "\n"),
         fixIts.joined(separator: "\n"),
-        file: file, line: line
+        file: file,
+        line: line
       )
     }
   }
@@ -318,7 +331,8 @@ func AssertParse(
     applyFixIts: applyFixIts,
     fixedSource: expectedFixedSource,
     file: file,
-    line: line)
+    line: line
+  )
 }
 
 /// Same as `AssertParse` overload with a `(String) -> S` `parse`,
@@ -347,7 +361,8 @@ func AssertParse<S: SyntaxProtocol>(
     applyFixIts: applyFixIts,
     fixedSource: expectedFixedSource,
     file: file,
-    line: line)
+    line: line
+  )
 }
 
 /// Removes any test markers from `markedSource` (1) and parses the result
@@ -386,12 +401,18 @@ func AssertParse<S: SyntaxProtocol>(
   let tree: S = parse(source)
 
   // Round-trip
-  AssertStringsEqualWithDiff("\(tree)", source, additionalInfo: """
-  Source failed to round-trip.
+  AssertStringsEqualWithDiff(
+    "\(tree)",
+    source,
+    additionalInfo: """
+      Source failed to round-trip.
 
-  Actual syntax tree:
-  \(tree.recursiveDescription)
-  """, file: file, line: line)
+      Actual syntax tree:
+      \(tree.recursiveDescription)
+      """,
+    file: file,
+    line: line
+  )
 
   // Substructure
   if let expectedSubstructure = expectedSubstructure {
@@ -406,10 +427,14 @@ func AssertParse<S: SyntaxProtocol>(
   // Diagnostics
   let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
   if diags.count != expectedDiagnostics.count {
-    XCTFail("""
-    Expected \(expectedDiagnostics.count) diagnostics but received \(diags.count):
-    \(diags.map(\.debugDescription).joined(separator: "\n"))
-    """, file: file, line: line)
+    XCTFail(
+      """
+      Expected \(expectedDiagnostics.count) diagnostics but received \(diags.count):
+      \(diags.map(\.debugDescription).joined(separator: "\n"))
+      """,
+      file: file,
+      line: line
+    )
   } else {
     for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
       AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: expectedDiag.file, line: expectedDiag.line)
@@ -422,7 +447,8 @@ func AssertParse<S: SyntaxProtocol>(
     AssertStringsEqualWithDiff(
       fixedTree.description.trimmingTrailingWhitespace(),
       expectedFixedSource.trimmingTrailingWhitespace(),
-      file: file, line: line
+      file: file,
+      line: line
     )
   }
 }

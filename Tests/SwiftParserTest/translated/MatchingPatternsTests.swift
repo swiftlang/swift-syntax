@@ -518,7 +518,7 @@ final class MatchingPatternsTests: XCTestCase {
       let (responseObject: Int1️⃣?) = op1
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '?' in tuple pattern"),
+        DiagnosticSpec(message: "unexpected code '?' in tuple pattern")
       ]
     )
   }

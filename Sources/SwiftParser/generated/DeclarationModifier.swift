@@ -81,7 +81,7 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
   
   case _local = "_local"
   
-  init ?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme) {
     switch lexeme.tokenKind {
     case .staticKeyword: 
       self = .staticKeyword
@@ -96,7 +96,7 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
     case .publicKeyword: 
       self = .publicKeyword
     case .identifier: 
-      self.init (rawValue: lexeme.tokenText)
+      self.init(rawValue: lexeme.tokenText)
     default: 
       return nil
     }

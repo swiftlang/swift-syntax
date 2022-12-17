@@ -47,12 +47,12 @@ struct Main {
     let source = SourceFile {
       StructDecl(identifier: "Person") {
         for (propertyName, propertyType) in properties {
-          VariableDecl("var \(propertyName): \(propertyType)")
+          VariableDecl("var \(raw: propertyName): \(raw: propertyType)")
 
           FunctionDecl("""
-            func with\(propertyName.withFirstLetterUppercased())(_ \(propertyName): \(propertyType)) -> Person {
+            func with\(raw: propertyName.withFirstLetterUppercased())(_ \(raw: propertyName): \(raw: propertyType)) -> Person {
               var result = self
-              result.\(propertyName) = \(propertyName)
+              result.\(raw: propertyName) = \(raw: propertyName)
               return result
             }
             """

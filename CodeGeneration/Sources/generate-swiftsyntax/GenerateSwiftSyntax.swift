@@ -33,6 +33,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         (syntaxKindFile, "SyntaxKind.swift"),
         (syntaxTraitsFile, "SyntaxTraits.swift"),
         (syntaxTransformFile, "SyntaxTransform.swift"),
+        (syntaxVisitorFile, "SyntaxVisitor.swift"),
         (tokenKindFile, "TokenKind.swift"),
         (tokensFile, "Tokens.swift")
       ],

@@ -29,6 +29,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         (miscFile, "Misc.swift"),
         (syntaxAnyVisitorFile, "SyntaxAnyVisitor.swift"),
         (syntaxBaseNodesFile, "SyntaxBaseNodes.swift"),
+        (syntaxCollectionsFile, "SyntaxCollections.swift"),
         (syntaxEnumFile, "SyntaxEnum.swift"),
         (syntaxKindFile, "SyntaxKind.swift"),
         (syntaxTraitsFile, "SyntaxTraits.swift"),

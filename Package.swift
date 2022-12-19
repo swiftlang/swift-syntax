@@ -123,15 +123,6 @@ let package = Package(
       ]
     ),
     .target(
-      name: "SwiftCompilerSupport",
-      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftParserDiagnostics",
-                     "SwiftDiagnostics", "SwiftOperators"],
-      exclude: [
-        "CMakeLists.txt",
-        "SwiftCompilerSupport.h"
-      ]
-    ),
-    .target(
       name: "_SwiftSyntaxMacros",
       dependencies: [
         "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftParser", "SwiftDiagnostics"

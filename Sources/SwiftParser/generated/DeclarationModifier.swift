@@ -55,6 +55,8 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
   
   case publicKeyword = "public"
   
+  case package = "package"
+  
   case open = "open"
   
   case __setter_access = "__setter_access"
@@ -142,6 +144,8 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
       return .internalKeyword
     case .publicKeyword: 
       return .publicKeyword
+    case .package: 
+      return .identifier
     case .open: 
       return .identifier
     case .__setter_access: 
@@ -199,6 +203,8 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
       return "convenience"
     case .override: 
       return "override"
+    case .package: 
+      return "package"
     case .open: 
       return "open"
     case .__setter_access: 

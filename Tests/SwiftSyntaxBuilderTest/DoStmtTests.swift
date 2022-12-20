@@ -43,7 +43,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClause {
           FunctionCallExpr(callee: ExprSyntax("print")) {
-            TupleExprElement(expression: "error")
+            TupleExprElement(expression: Expr("error"))
           }
         },
       ]

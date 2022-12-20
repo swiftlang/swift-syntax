@@ -176,8 +176,8 @@ final class VariableTests: XCTestCase {
         VariableDecl(
           attributes: AttributeList {
             CustomAttribute("WithArgs") {
-              TupleExprElement(expression: "value1")
-              TupleExprElement(label: "label", expression: "value2")
+              TupleExprElement(expression: Expr("value1"))
+              TupleExprElement(label: "label", expression: Expr("value2"))
             }
           },
           name: "z",
@@ -195,7 +195,7 @@ final class VariableTests: XCTestCase {
         VariableDecl(
           attributes: AttributeList {
             CustomAttribute("WithArgs") {
-              TupleExprElement(expression: "value")
+              TupleExprElement(expression: Expr("value"))
             }
           },
           modifiers: [DeclModifier(name: .public)],

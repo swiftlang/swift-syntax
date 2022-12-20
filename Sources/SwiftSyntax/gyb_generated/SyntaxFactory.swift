@@ -8997,7 +8997,7 @@ public enum SyntaxFactory {
   }
   @available(*, deprecated, message: "Use TokenSyntax.inKeywordKeyword instead")
   public static func makeInKeyword(
-    leadingTrivia: Trivia = [],
+    leadingTrivia: Trivia = .space,
     trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.inKeyword, presence: .present,

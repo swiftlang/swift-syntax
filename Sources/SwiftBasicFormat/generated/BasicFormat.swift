@@ -125,6 +125,8 @@ open class BasicFormat: SyntaxRewriter {
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
     switch token.tokenKind {
+    case .inKeyword: 
+      return true
     case .whereKeyword: 
       return true
     case .catchKeyword: 

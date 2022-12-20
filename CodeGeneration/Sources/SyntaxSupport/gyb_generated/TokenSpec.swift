@@ -230,7 +230,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   StmtKeywordSpec(name: "Repeat", text: "repeat", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Else", text: "else", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "For", text: "for", requiresTrailingSpace: true),
-  StmtKeywordSpec(name: "In", text: "in", requiresTrailingSpace: true),
+  StmtKeywordSpec(name: "In", text: "in", requiresLeadingSpace: true, requiresTrailingSpace: true),
   StmtKeywordSpec(name: "While", text: "while", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Return", text: "return", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Break", text: "break", requiresTrailingSpace: true),

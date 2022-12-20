@@ -281,6 +281,7 @@ final class DeclarationTests: XCTestCase {
       """
       open1️⃣ open(set)2️⃣ var openProp = 0
       public public(set) var publicProp = 0
+      package package(set) var packageProp = 0
       internal internal(set) var internalProp = 0
       fileprivate fileprivate(set) var fileprivateProp = 0
       private private(set) var privateProp = 0

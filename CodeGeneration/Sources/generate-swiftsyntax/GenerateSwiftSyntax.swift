@@ -31,6 +31,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         (syntaxBaseNodesFile, "SyntaxBaseNodes.swift"),
         (syntaxCollectionsFile, "SyntaxCollections.swift"),
         (syntaxEnumFile, "SyntaxEnum.swift"),
+        (syntaxFactoryFile, "SyntaxFactory.swift"),
         (syntaxKindFile, "SyntaxKind.swift"),
         (syntaxTraitsFile, "SyntaxTraits.swift"),
         (syntaxTransformFile, "SyntaxTransform.swift"),

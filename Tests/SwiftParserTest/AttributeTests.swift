@@ -234,6 +234,55 @@ final class AttributeTests: XCTestCase {
     )
   }
 
+  func testImplementsAttributeBaseType() {
+    let cases: [UInt: String] = [
+      // Identifiers and member types
+      #line: "X<T>",
+      #line: "X.Y",
+      #line: "X.Y<T>",
+
+      // Metatypes
+      #line: "X.Type",
+      #line: "X.Protocol",
+
+      // Sugared optionals
+      #line: "X?",
+      #line: "X!",
+
+      // Sugared collections
+      #line: "[X]",
+      #line: "[X : Y]",
+
+      // Tuples and paren type
+      #line: "()",
+      #line: "(X)",
+      #line: "(X, X)",
+
+      // Keywords
+      #line: "Any",
+      #line: "Self",
+
+      // Protocol compositions
+      #line: "X & Y",
+      #line: "any X & Y",
+
+      // Functions
+      #line: "(X) -> Y",
+    ]
+
+    for (line, baseType) in cases {
+      var parser = Parser(baseType)
+
+      AssertParse(
+        "@_implements(1️⃣\(baseType), f())",
+        AttributeSyntax.parse,
+        substructure: Syntax(TypeSyntax.parse(from: &parser)),
+        substructureAfterMarker: "1️⃣",
+        line: line
+      )
+    }
+  }
+
   func testSemanticsAttribute() {
     AssertParse(
       """

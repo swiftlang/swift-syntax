@@ -77,6 +77,12 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(letPattern.is(ValueBindingPatternSyntax.self))
   }
 
+  func testAttributeInterpolation() {
+    let attrSyntax: AttributeSyntax = "@discardableResult"
+    XCTAssertTrue(attrSyntax.is(AttributeSyntax.self))
+    XCTAssertEqual(attrSyntax.description, "@discardableResult")
+  }
+
   func testStructGenerator() {
     let name = "Type"
     let id = 17

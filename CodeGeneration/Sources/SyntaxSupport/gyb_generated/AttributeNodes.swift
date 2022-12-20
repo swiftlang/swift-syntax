@@ -61,6 +61,7 @@ public let ATTRIBUTE_NODES: [Node] = [
        nameForDiagnostics: "attribute",
        description: "An `@` attribute.",
        kind: "Syntax",
+       parserFunction: "parseAttribute",
        children: [
          Child(name: "AtSignToken",
                kind: "AtSignToken",

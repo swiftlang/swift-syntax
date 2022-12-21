@@ -38,7 +38,7 @@ add_swift_host_library(SwiftSyntax
   generated/SyntaxEnum.swift
   generated/SyntaxFactory.swift
   generated/SyntaxKind.swift
-  gyb_generated/SyntaxRewriter.swift
+  generated/SyntaxRewriter.swift
   generated/SyntaxTraits.swift
   generated/SyntaxTransform.swift
   generated/SyntaxVisitor.swift

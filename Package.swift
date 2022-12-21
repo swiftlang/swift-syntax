@@ -66,7 +66,6 @@ let package = Package(
         "Raw/RawSyntaxNodes.swift.gyb",
         "Raw/RawSyntaxValidation.swift.gyb",
         "SyntaxNodes.swift.gyb.template",
-        "SyntaxRewriter.swift.gyb",
         "Trivia.swift.gyb",
       ],
       swiftSettings: swiftSyntaxSwiftSettings

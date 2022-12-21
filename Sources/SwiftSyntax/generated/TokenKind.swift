@@ -131,8 +131,6 @@ public enum TokenKind: Hashable {
   
   case period
   
-  case prefixPeriod
-  
   case comma
   
   case ellipsis
@@ -538,8 +536,6 @@ public enum TokenKind: Hashable {
       return #">"#
     case .period: 
       return #"."#
-    case .prefixPeriod: 
-      return #"."#
     case .comma: 
       return #","#
     case .ellipsis: 
@@ -792,8 +788,6 @@ public enum TokenKind: Hashable {
       return false
     case .period: 
       return false
-    case .prefixPeriod: 
-      return false
     case .comma: 
       return false
     case .ellipsis: 
@@ -1044,8 +1038,6 @@ public enum TokenKind: Hashable {
       return true
     case .period: 
       return true
-    case .prefixPeriod: 
-      return true
     case .comma: 
       return true
     case .ellipsis: 
@@ -1291,8 +1283,6 @@ public enum TokenKind: Hashable {
       return "r_angle"
     case .period: 
       return "period"
-    case .prefixPeriod: 
-      return "period_prefix"
     case .comma: 
       return "comma"
     case .ellipsis: 
@@ -1537,8 +1527,6 @@ public enum TokenKind: Hashable {
     case .rightAngle: 
       return SourceLength(utf8Length: 1)
     case .period: 
-      return SourceLength(utf8Length: 1)
-    case .prefixPeriod: 
       return SourceLength(utf8Length: 1)
     case .comma: 
       return SourceLength(utf8Length: 1)
@@ -1786,8 +1774,6 @@ extension TokenKind: Equatable {
     case (.rightAngle, .rightAngle): 
       return true
     case (.period, .period): 
-      return true
-    case (.prefixPeriod, .prefixPeriod): 
       return true
     case (.comma, .comma): 
       return true
@@ -2038,8 +2024,6 @@ public enum RawTokenKind: Equatable, Hashable {
   
   case period
   
-  case prefixPeriod
-  
   case comma
   
   case ellipsis
@@ -2283,8 +2267,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return #">"#
     case .period: 
       return #"."#
-    case .prefixPeriod: 
-      return #"."#
     case .comma: 
       return #","#
     case .ellipsis: 
@@ -2503,8 +2485,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .rightAngle: 
       return #">"#
     case .period: 
-      return #"."#
-    case .prefixPeriod: 
       return #"."#
     case .comma: 
       return #","#
@@ -2756,8 +2736,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .period: 
       return false
-    case .prefixPeriod: 
-      return false
     case .comma: 
       return false
     case .ellipsis: 
@@ -3007,8 +2985,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .rightAngle: 
       return true
     case .period: 
-      return true
-    case .prefixPeriod: 
       return true
     case .comma: 
       return true
@@ -3559,9 +3535,6 @@ extension TokenKind {
     case .period: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .period
-    case .prefixPeriod: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .prefixPeriod
     case .comma: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .comma
@@ -3852,8 +3825,6 @@ extension TokenKind {
       return (.rightAngle, nil)
     case .period: 
       return (.period, nil)
-    case .prefixPeriod: 
-      return (.prefixPeriod, nil)
     case .comma: 
       return (.comma, nil)
     case .ellipsis: 

@@ -7108,16 +7108,6 @@ public enum SyntaxFactory {
                    trailingTrivia: trailingTrivia)
   }
   
-  @available( * , deprecated, message: "Use TokenSyntax.prefixPeriodToken instead")
-  public static func makePrefixPeriodToken(
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = []
-  ) -> TokenSyntax {
-    return makeToken(.prefixPeriod, presence: .present, 
-                   leadingTrivia: leadingTrivia, 
-                   trailingTrivia: trailingTrivia)
-  }
-  
   @available( * , deprecated, message: "Use TokenSyntax.commaToken instead")
   public static func makeCommaToken(
     leadingTrivia: Trivia = [], 

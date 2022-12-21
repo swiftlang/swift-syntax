@@ -82,6 +82,8 @@ public enum SyntaxEnum {
   
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
   
+  case borrowExpr(BorrowExprSyntax)
+  
   case breakStmt(BreakStmtSyntax)
   
   case caseItemList(CaseItemListSyntax)
@@ -615,6 +617,8 @@ public extension Syntax {
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .booleanLiteralExpr: 
       return .booleanLiteralExpr(BooleanLiteralExprSyntax(self)!)
+    case .borrowExpr: 
+      return .borrowExpr(BorrowExprSyntax(self)!)
     case .breakStmt: 
       return .breakStmt(BreakStmtSyntax(self)!)
     case .caseItemList: 

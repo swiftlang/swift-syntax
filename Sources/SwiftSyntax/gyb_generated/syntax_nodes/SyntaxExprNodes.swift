@@ -990,6 +990,192 @@ extension MoveExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - BorrowExprSyntax
+
+public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .borrowExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `BorrowExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .borrowExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init<E: ExprSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeBorrowKeyword: UnexpectedNodesSyntax? = nil,
+    borrowKeyword: TokenSyntax = .contextualKeyword("_borrow"),
+    _ unexpectedBetweenBorrowKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+    expression: E,
+    _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeBorrowKeyword?.raw,
+      borrowKeyword.raw,
+      unexpectedBetweenBorrowKeywordAndExpression?.raw,
+      expression.raw,
+      unexpectedAfterExpression?.raw,
+    ]
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.borrowExpr, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeBorrowKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeBorrowKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeBorrowKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeBorrowKeyword` to replace the node's
+  ///                   current `unexpectedBeforeBorrowKeyword`, if present.
+  public func withUnexpectedBeforeBorrowKeyword(_ newChild: UnexpectedNodesSyntax?) -> BorrowExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return BorrowExprSyntax(newData)
+  }
+
+  public var borrowKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withBorrowKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `borrowKeyword` replaced.
+  /// - param newChild: The new `borrowKeyword` to replace the node's
+  ///                   current `borrowKeyword`, if present.
+  public func withBorrowKeyword(_ newChild: TokenSyntax?) -> BorrowExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return BorrowExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenBorrowKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenBorrowKeywordAndExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenBorrowKeywordAndExpression` replaced.
+  /// - param newChild: The new `unexpectedBetweenBorrowKeywordAndExpression` to replace the node's
+  ///                   current `unexpectedBetweenBorrowKeywordAndExpression`, if present.
+  public func withUnexpectedBetweenBorrowKeywordAndExpression(_ newChild: UnexpectedNodesSyntax?) -> BorrowExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return BorrowExprSyntax(newData)
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(_ newChild: ExprSyntax?) -> BorrowExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return BorrowExprSyntax(newData)
+  }
+
+  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterExpression` replaced.
+  /// - param newChild: The new `unexpectedAfterExpression` to replace the node's
+  ///                   current `unexpectedAfterExpression`, if present.
+  public func withUnexpectedAfterExpression(_ newChild: UnexpectedNodesSyntax?) -> BorrowExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return BorrowExprSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeBorrowKeyword,
+      \Self.borrowKeyword,
+      \Self.unexpectedBetweenBorrowKeywordAndExpression,
+      \Self.expression,
+      \Self.unexpectedAfterExpression,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension BorrowExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeBorrowKeyword": unexpectedBeforeBorrowKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "borrowKeyword": Syntax(borrowKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenBorrowKeywordAndExpression": unexpectedBetweenBorrowKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterExpression": unexpectedAfterExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - IdentifierExprSyntax
 
 public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

@@ -156,6 +156,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `BorrowExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: BorrowExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `DeclNameArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2121,6 +2128,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMoveExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = MoveExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplBorrowExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = BorrowExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4646,6 +4663,8 @@ open class SyntaxRewriter {
       return visitImplAwaitExprSyntax
     case .moveExpr:
       return visitImplMoveExprSyntax
+    case .borrowExpr:
+      return visitImplBorrowExprSyntax
     case .declNameArgument:
       return visitImplDeclNameArgumentSyntax
     case .declNameArgumentList:
@@ -5185,6 +5204,8 @@ open class SyntaxRewriter {
       return visitImplAwaitExprSyntax(data)
     case .moveExpr:
       return visitImplMoveExprSyntax(data)
+    case .borrowExpr:
+      return visitImplBorrowExprSyntax(data)
     case .declNameArgument:
       return visitImplDeclNameArgumentSyntax(data)
     case .declNameArgumentList:

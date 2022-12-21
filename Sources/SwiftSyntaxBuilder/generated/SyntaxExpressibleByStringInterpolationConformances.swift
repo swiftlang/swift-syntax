@@ -65,6 +65,9 @@ extension BinaryOperatorExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension BooleanLiteralExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension BorrowExprSyntax: SyntaxExpressibleByStringInterpolation { 
+}
+
 extension BreakStmtSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

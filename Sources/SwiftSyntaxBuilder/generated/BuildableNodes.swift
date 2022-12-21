@@ -159,6 +159,15 @@ extension BackDeployAttributeSpecList {
   }
 }
 
+extension BorrowExpr {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBorrowKeyword: UnexpectedNodes? = nil, borrowKeyword: String, unexpectedBetweenBorrowKeywordAndExpression: UnexpectedNodes? = nil, expression: ExprSyntaxProtocol, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBorrowKeyword, borrowKeyword: Token.`contextualKeyword`(borrowKeyword), unexpectedBetweenBorrowKeywordAndExpression, expression: ExprSyntax(fromProtocol: expression), trailingTrivia: trailingTrivia)
+  }
+}
+
 extension BreakStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders

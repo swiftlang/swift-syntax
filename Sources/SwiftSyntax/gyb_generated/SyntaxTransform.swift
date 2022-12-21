@@ -95,6 +95,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MoveExprSyntax) -> ResultType
+  /// Visiting `BorrowExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: BorrowExprSyntax) -> ResultType
   /// Visiting `DeclNameArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1190,6 +1194,12 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MoveExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `BorrowExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: BorrowExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `DeclNameArgumentSyntax` specifically.
@@ -2698,6 +2708,8 @@ extension SyntaxTransformVisitor {
     case .awaitExpr(let derived):
       return visit(derived)
     case .moveExpr(let derived):
+      return visit(derived)
+    case .borrowExpr(let derived):
       return visit(derived)
     case .declNameArgument(let derived):
       return visit(derived)

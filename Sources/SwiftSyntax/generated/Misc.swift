@@ -51,6 +51,7 @@ extension Syntax {
       .node(BackDeployVersionListSyntax.self), 
       .node(BinaryOperatorExprSyntax.self), 
       .node(BooleanLiteralExprSyntax.self), 
+      .node(BorrowExprSyntax.self), 
       .node(BreakStmtSyntax.self), 
       .node(CaseItemListSyntax.self), 
       .node(CaseItemSyntax.self), 
@@ -354,6 +355,8 @@ extension SyntaxKind {
       return BinaryOperatorExprSyntax.self
     case .booleanLiteralExpr: 
       return BooleanLiteralExprSyntax.self
+    case .borrowExpr: 
+      return BorrowExprSyntax.self
     case .breakStmt: 
       return BreakStmtSyntax.self
     case .caseItemList: 
@@ -887,6 +890,8 @@ extension SyntaxKind {
       return nil
     case .booleanLiteralExpr: 
       return "bool literal"
+    case .borrowExpr: 
+      return "'_borrow' expression"
     case .breakStmt: 
       return "'break' statement"
     case .caseItemList: 

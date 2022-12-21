@@ -79,7 +79,6 @@ public enum TokenKind: Hashable {
   case leftAngle
   case rightAngle
   case period
-  case prefixPeriod
   case comma
   case ellipsis
   case colon
@@ -368,7 +367,6 @@ public enum TokenKind: Hashable {
     case .leftAngle: return "<"
     case .rightAngle: return ">"
     case .period: return "."
-    case .prefixPeriod: return "."
     case .comma: return ","
     case .ellipsis: return "..."
     case .colon: return ":"
@@ -499,7 +497,6 @@ public enum TokenKind: Hashable {
     case .leftAngle: return false
     case .rightAngle: return false
     case .period: return false
-    case .prefixPeriod: return false
     case .comma: return false
     case .ellipsis: return false
     case .colon: return false
@@ -630,7 +627,6 @@ public enum TokenKind: Hashable {
     case .leftAngle: return true
     case .rightAngle: return true
     case .period: return true
-    case .prefixPeriod: return true
     case .comma: return true
     case .ellipsis: return true
     case .colon: return true
@@ -756,7 +752,6 @@ public enum TokenKind: Hashable {
     case .leftAngle: return "l_angle"
     case .rightAngle: return "r_angle"
     case .period: return "period"
-    case .prefixPeriod: return "period_prefix"
     case .comma: return "comma"
     case .ellipsis: return "ellipsis"
     case .colon: return "colon"
@@ -882,7 +877,6 @@ public enum TokenKind: Hashable {
     case .leftAngle: return SourceLength(utf8Length: 1)
     case .rightAngle: return SourceLength(utf8Length: 1)
     case .period: return SourceLength(utf8Length: 1)
-    case .prefixPeriod: return SourceLength(utf8Length: 1)
     case .comma: return SourceLength(utf8Length: 1)
     case .ellipsis: return SourceLength(utf8Length: 3)
     case .colon: return SourceLength(utf8Length: 1)
@@ -1010,7 +1004,6 @@ extension TokenKind: Equatable {
     case (.leftAngle, .leftAngle): return true
     case (.rightAngle, .rightAngle): return true
     case (.period, .period): return true
-    case (.prefixPeriod, .prefixPeriod): return true
     case (.comma, .comma): return true
     case (.ellipsis, .ellipsis): return true
     case (.colon, .colon): return true
@@ -1153,7 +1146,6 @@ public enum RawTokenKind: Equatable, Hashable {
   case leftAngle
   case rightAngle
   case period
-  case prefixPeriod
   case comma
   case ellipsis
   case colon
@@ -1278,7 +1270,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .leftAngle: return "<"
     case .rightAngle: return ">"
     case .period: return "."
-    case .prefixPeriod: return "."
     case .comma: return ","
     case .ellipsis: return "..."
     case .colon: return ":"
@@ -1391,7 +1382,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .leftAngle: return "<"
     case .rightAngle: return ">"
     case .period: return "."
-    case .prefixPeriod: return "."
     case .comma: return ","
     case .ellipsis: return "..."
     case .colon: return ":"
@@ -1522,7 +1512,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .leftAngle: return false
     case .rightAngle: return false
     case .period: return false
-    case .prefixPeriod: return false
     case .comma: return false
     case .ellipsis: return false
     case .colon: return false
@@ -1653,7 +1642,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .leftAngle: return true
     case .rightAngle: return true
     case .period: return true
-    case .prefixPeriod: return true
     case .comma: return true
     case .ellipsis: return true
     case .colon: return true
@@ -2053,9 +2041,6 @@ extension TokenKind {
     case .period:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .period
-    case .prefixPeriod:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .prefixPeriod
     case .comma:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .comma
@@ -2282,7 +2267,6 @@ extension TokenKind {
     case .leftAngle: return (.leftAngle, nil)
     case .rightAngle: return (.rightAngle, nil)
     case .period: return (.period, nil)
-    case .prefixPeriod: return (.prefixPeriod, nil)
     case .comma: return (.comma, nil)
     case .ellipsis: return (.ellipsis, nil)
     case .colon: return (.colon, nil)

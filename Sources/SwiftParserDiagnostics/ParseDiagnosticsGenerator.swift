@@ -236,40 +236,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.presence == .missing {
-      // If there is an unexpected token in front of the identifier, we assume
-      // that this unexpected token was intended to be the identifier we are missing.
-      if node.tokenKind.isIdentifier,
-        let invalidIdentifier = node.previousToken(viewMode: .all),
-        let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self)
-      {
-        let fixIts: [FixIt]
-        if invalidIdentifier.tokenKind.isKeyword || invalidIdentifier.tokenKind.isDollarIdentifier {
-          fixIts = [
-            FixIt(
-              message: .wrapInBackticks,
-              changes: [
-                .replace(
-                  oldNode: Syntax(invalidIdentifier),
-                  newNode: Syntax(TokenSyntax.identifier("`\(invalidIdentifier.text)`", leadingTrivia: invalidIdentifier.leadingTrivia, trailingTrivia: invalidIdentifier.trailingTrivia))
-                )
-              ]
-            )
-          ]
-        } else {
-          fixIts = []
-        }
 
-        addDiagnostic(
-          invalidIdentifier,
-          InvalidIdentifierError(invalidIdentifier: invalidIdentifier, missingIdentifier: node),
-          fixIts: fixIts,
-          handledNodes: [previousParent.id]
-        )
-      } else {
-        return handleMissingSyntax(node)
-      }
-    } else if node.hasError {
+    if node.presence == .missing {
+      handleMissingToken(node)
+    } else {
       node.syntaxTextBytes.withUnsafeBufferPointer { buf in
         var cursor = Lexer.Cursor(input: buf, previous: 0)
         _ = cursor.nextToken(cursor) { [self] offset, diagnostic in
@@ -277,6 +247,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         }
       }
     }
+
     return .skipChildren
   }
 

@@ -586,3 +586,36 @@ extension SyntaxText {
     try body(UnsafeBufferPointer<UInt8>(start: self.baseAddress, count: self.count))
   }
 }
+
+extension Parser {
+  /// Consume a period as part of a member expression/type while handling
+  /// extraneous whitespace. Consider the following cases -
+  ///   - `<no whitespace>.<no whitespace>`: return the consumed period
+  ///   - `<whitespace>.<any>`: return the consumed period
+  ///   - `<no whitespace>.<whitespace>`: if no newlines, return both an
+  ///     unexpected period (with the extraneous whitespace) and a missing
+  ///     period. If there is a newline also set `skipMember` to inform
+  ///     callers to not parse any futher member names.
+  mutating func consumeMemberPeriod<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (unexpected: RawUnexpectedNodesSyntax?, period: RawTokenSyntax, skipMemberName: Bool) {
+    assert(self.at(.period))
+
+    let beforePeriodWhitespace = previousNode?.raw.trailingTriviaByteLength ?? 0 > 0 || self.currentToken.leadingTriviaByteLength > 0
+    let afterPeriodWhitespace = self.currentToken.trailingTriviaByteLength > 0 || self.peek().leadingTriviaByteLength > 0
+    let afterContainsAnyNewline = self.peek().flags.contains(.isAtStartOfLine)
+
+    let period = self.consumeAnyToken()
+
+    if beforePeriodWhitespace || !afterPeriodWhitespace {
+      // Valid, parse as-is
+      return (nil, period, false)
+    }
+
+    // Invalid, extraneous whitespace. Have callers synthesize a missing
+    // member if there's a newline after the period.
+    return (
+      RawUnexpectedNodesSyntax(elements: [period.raw], arena: arena),
+      RawTokenSyntax(missing: .period, arena: arena),
+      afterContainsAnyNewline
+    )
+  }
+}

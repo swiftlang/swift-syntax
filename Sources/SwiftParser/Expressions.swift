@@ -556,13 +556,19 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseDottedExpressionSuffix() -> (
-    period: RawTokenSyntax, name: RawTokenSyntax,
+  public mutating func parseDottedExpressionSuffix<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (
+    unexpectedPeriod: RawUnexpectedNodesSyntax?,
+    period: RawTokenSyntax,
+    name: RawTokenSyntax,
     declNameArgs: RawDeclNameArgumentsSyntax?,
     generics: RawGenericArgumentClauseSyntax?
   ) {
-    assert(self.at(any: [.period, .prefixPeriod]))
-    let period = self.consumeAnyToken(remapping: .period)
+    assert(self.at(.period))
+    let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: previousNode)
+    if skipMemberName {
+      let missingIdentifier = missingToken(.identifier)
+      return (unexpectedPeriod, period, missingIdentifier, nil, nil)
+    }
 
     // Parse the name portion.
     let name: RawTokenSyntax
@@ -588,15 +594,16 @@ extension Parser {
       generics = nil
     }
 
-    return (period, name, declNameArgs, generics)
+    return (unexpectedPeriod, period, name, declNameArgs, generics)
   }
 
   @_spi(RawSyntax)
   public mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
-    let (period, name, declNameArgs, generics) = parseDottedExpressionSuffix()
+    let (unexpectedPeriod, period, name, declNameArgs, generics) = parseDottedExpressionSuffix(previousNode: start)
 
     let memberAccess = RawMemberAccessExprSyntax(
       base: start,
+      unexpectedPeriod,
       dot: period,
       name: name,
       declNameArguments: declNameArgs,
@@ -626,7 +633,7 @@ extension Parser {
 
     let config = self.parsePoundIfDirective { parser -> RawExprSyntax? in
       let head: RawExprSyntax
-      if parser.at(any: [.period, .prefixPeriod]) {
+      if parser.at(.period) {
         head = parser.parseDottedExpressionSuffix(nil)
       } else if parser.at(.poundIfKeyword) {
         head = parser.parseIfConfigExpressionSuffix(nil, flavor, forDirective: forDirective)
@@ -689,7 +696,7 @@ extension Parser {
       }
 
       // Check for a .foo suffix.
-      if self.at(any: [.period, .prefixPeriod]) {
+      if self.at(.period) {
         leadingExpr = self.parseDottedExpressionSuffix(leadingExpr)
         continue
       }
@@ -967,11 +974,13 @@ extension Parser {
     while loopCondition.evaluate(currentToken) {
       // Check for a [] or .[] suffix. The latter is only permitted when there
       // are no components.
-      if self.at(.leftSquareBracket, where: { !$0.isAtStartOfLine }) || (components.isEmpty && self.at(any: [.period, .prefixPeriod]) && self.peek().tokenKind == .leftSquareBracket) {
+      if self.at(.leftSquareBracket, where: { !$0.isAtStartOfLine })
+        || (components.isEmpty && self.at(.period) && self.peek().tokenKind == .leftSquareBracket)
+      {
         // Consume the '.', if it's allowed here.
         let period: RawTokenSyntax?
         if !self.at(.leftSquareBracket) {
-          period = self.consumeAnyToken(remapping: .period)
+          period = self.consumeAnyToken()
         } else {
           period = nil
         }
@@ -1027,10 +1036,11 @@ extension Parser {
       }
 
       // Check for a .name or .1 suffix.
-      if self.at(any: [.period, .prefixPeriod]) {
-        let (period, name, declNameArgs, generics) = parseDottedExpressionSuffix()
+      if self.at(.period) {
+        let (unexpectedPeriod, period, name, declNameArgs, generics) = parseDottedExpressionSuffix(previousNode: components.last?.raw ?? rootType?.raw ?? backslash.raw)
         components.append(
           RawKeyPathComponentSyntax(
+            unexpectedPeriod,
             period: period,
             component: .property(
               RawKeyPathPropertyComponentSyntax(
@@ -1184,8 +1194,7 @@ extension Parser {
 
     case (.leftBrace, _)?:  // expr-closure
       return RawExprSyntax(self.parseClosureExpression())
-    case (.period, let handle)?,  //=.foo
-      (.prefixPeriod, let handle)?:  // .foo
+    case (.period, let handle)?:  // .foo
       let dot = self.eat(handle)
       let (name, args) = self.parseDeclNameRef([.keywords, .compoundNames])
       return RawExprSyntax(
@@ -2506,7 +2515,6 @@ extension Parser.Lookahead {
     case .leftSquareBracket,
       .leftParen,
       .period,
-      .prefixPeriod,
       .isKeyword,
       .asKeyword,
       .postfixQuestionMark,
@@ -2618,7 +2626,7 @@ extension Parser.Lookahead {
   // Helper function to see if we can parse member reference like suffixes
   // inside '#if'.
   fileprivate func isAtStartOfPostfixExprSuffix() -> Bool {
-    guard self.at(any: [.period, .prefixPeriod]) else {
+    guard self.at(.period) else {
       return false
     }
 
@@ -2639,7 +2647,6 @@ extension Parser.Lookahead {
   fileprivate func isNextTokenCallPattern() -> Bool {
     switch self.peek().tokenKind {
     case .period,
-      .prefixPeriod,
       .leftParen:
       return true
     default:

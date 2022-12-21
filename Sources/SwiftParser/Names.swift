@@ -212,7 +212,7 @@ extension Parser {
         break
       }
 
-      keepGoing = self.consume(if: .period) ?? self.consume(if: .prefixPeriod)
+      keepGoing = self.consume(if: .period)
     } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
     return result!
@@ -222,7 +222,7 @@ extension Parser {
 extension Parser.Lookahead {
   func canParseBaseTypeForQualifiedDeclName() -> Bool {
     var lookahead = self.lookahead()
-    guard lookahead.canParseSimpleTypeIdentifier() else {
+    guard lookahead.canParseTypeIdentifier() else {
       return false
     }
     return lookahead.currentToken.starts(with: ".")

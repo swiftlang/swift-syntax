@@ -778,18 +778,6 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  public static func prefixPeriodToken(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .prefixPeriod,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-    )
-  }
   public static func commaToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],

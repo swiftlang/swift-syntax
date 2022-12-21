@@ -315,10 +315,7 @@ EXPR_NODES = [
              # The base needs to be optional to parse expressions in key paths
              # like \.a
              Child("Base", kind='Expr',  name_for_diagnostics='base', is_optional=True),
-             Child("Dot", kind='Token',
-                   token_choices=[
-                       'PeriodToken', 'PrefixPeriodToken'
-                   ]),
+             Child("Dot", kind='PeriodToken'),
              # Name could be 'self'
              Child("Name", kind='Token', name_for_diagnostics='name'),
              Child('DeclNameArguments', kind='DeclNameArguments',
@@ -603,11 +600,8 @@ EXPR_NODES = [
     Node('KeyPathComponent', name_for_diagnostics='key path component',
          kind='Syntax',
          children=[
-             Child('Period', kind='Token',
-                   is_optional=True,
-                   token_choices=[
-                       'PeriodToken', 'PrefixPeriodToken',
-                   ]),
+             Child('Period', kind='PeriodToken',
+                   is_optional=True),
 
              Child('Component', kind='Syntax', node_choices=[
                Child('Property', kind='KeyPathPropertyComponent'),

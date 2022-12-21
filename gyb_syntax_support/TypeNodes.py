@@ -19,12 +19,8 @@ TYPE_NODES = [
     Node('MemberTypeIdentifier', name_for_diagnostics='member type', kind='Type',
          children=[
              Child('BaseType', kind='Type', name_for_diagnostics='base type'),
-             Child('Period', kind='Token',
-                   token_choices=[
-                       'PeriodToken',
-                       'PrefixPeriodToken',
-                   ]),
-             Child('Name', kind='Token',  name_for_diagnostics='member type', classification='TypeIdentifier',
+             Child('Period', kind='PeriodToken'),
+             Child('Name', kind='Token',  name_for_diagnostics='name', classification='TypeIdentifier',
                    token_choices=[
                        'IdentifierToken',
                        'CapitalSelfToken',

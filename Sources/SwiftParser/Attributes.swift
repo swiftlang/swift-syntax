@@ -839,7 +839,7 @@ extension Parser {
   }
 
   mutating func parseImplementsAttributeArguments() -> RawImplementsAttributeArgumentsSyntax {
-    let type = self.parseTypeIdentifier()
+    let type = self.parseType()
     let (unexpectedBeforeComma, comma) = self.expect(.comma)
     let (name, args) = self.parseDeclNameRef([
       .zeroArgCompoundNames,

@@ -37,10 +37,9 @@ public let TYPE_NODES: [Node] = [
          Child(name: "BaseType",
                kind: "Type"),
          Child(name: "Period",
-               kind: "Token",
+               kind: "PeriodToken",
                tokenChoices: [
-                 "Period",
-                 "PrefixPeriod"
+                 "Period"
                ]),
          Child(name: "Name",
                kind: "Token",

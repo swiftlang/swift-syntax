@@ -390,10 +390,7 @@ ATTRIBUTE_NODES = [
              Child('BaseType', kind='Type', name_for_diagnostics='base type', description='''
                    The base type of the qualified name, optionally specified.
                    ''', is_optional=True),
-             Child('Dot', kind='Token',
-                   token_choices=[
-                       'PeriodToken', 'PrefixPeriodToken'
-                   ], is_optional=True),
+             Child('Dot', kind='PeriodToken', is_optional=True),
              Child('Name', kind='Token', name_for_diagnostics='base name', description='''
                    The base name of the referenced function.
                    ''',

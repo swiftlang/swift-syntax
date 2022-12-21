@@ -401,11 +401,13 @@ extension RawSyntax {
 }
 
 extension RawSyntax {
-  var leadingTriviaByteLength: Int {
+  @_spi(RawSyntax)
+  public var leadingTriviaByteLength: Int {
     firstToken(viewMode: .sourceAccurate)?.leadingTriviaByteLength ?? 0
   }
 
-  var trailingTriviaByteLength: Int {
+  @_spi(RawSyntax)
+  public var trailingTriviaByteLength: Int {
     lastToken(viewMode: .sourceAccurate)?.trailingTriviaByteLength ?? 0
   }
 

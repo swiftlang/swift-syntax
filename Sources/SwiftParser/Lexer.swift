@@ -1715,45 +1715,7 @@ extension Lexer.Cursor {
         }
         return (.prefixAmpersand, [])
       case UInt8(ascii: "."):
-        if leftBound == rightBound {
-          return (.period, [])
-        }
-
-        if rightBound {
-          return (.prefixPeriod, [])
-        }
-
-        // If left bound but not right bound, handle some likely situations.
-
-        // If there is just some horizontal whitespace before the next token, its
-        // addition is probably incorrect.
-        var AfterHorzWhitespace = self
-        while !AfterHorzWhitespace.isAtEndOfFile, AfterHorzWhitespace.peek() == UInt8(ascii: " ") || AfterHorzWhitespace.peek() == UInt8(ascii: "\t") {
-          _ = AfterHorzWhitespace.advance()
-        }
-
-        //        // First, when we are code completing "x. <ESC>", then make sure to return
-        //        // a tok::period, since that is what the user is wanting to know about.
-        //        if (AfterHorzWhitespace.peek() == 0 &&
-        //            AfterHorzWhitespace == CodeCompletionPtr) {
-        //          diagnose(TokStart, diag::expected_member_name)
-        //          return formToken(tok::period, TokStart)
-        //        }
-
-        //        if AfterHorzWhitespace.isRightBound(leftBound) &&
-        //            // Don't consider comments to be this.  A leading slash is probably
-        //            // either // or /* and most likely occurs just in our testsuite for
-        //            // expected-error lines.
-        //            AfterHorzWhitespace.peek() != UInt8(ascii: "/") {
-        //          diagnose(TokStart, diag::extra_whitespace_period)
-        //            .fixItRemoveChars(getSourceLoc(CurPtr),
-        //                              getSourceLoc(AfterHorzWhitespace))
-        //          return formToken(tok::period, TokStart)
-        //        }
-
-        // Otherwise, it is probably a missing member.
-        //        diagnose(TokStart, diag::expected_member_name)
-        return (.unknown, [])
+        return (.period, [])
       case UInt8(ascii: "?"):
         if (leftBound) {
           return (.postfixQuestionMark, [])

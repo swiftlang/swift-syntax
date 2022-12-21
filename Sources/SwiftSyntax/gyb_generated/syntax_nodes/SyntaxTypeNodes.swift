@@ -269,7 +269,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
     baseType: B,
     _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
-    period: TokenSyntax,
+    period: TokenSyntax = .periodToken(),
     _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
     _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
@@ -510,7 +510,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case 4:
       return nil
     case 5:
-      return "member type"
+      return "name"
     case 6:
       return nil
     case 7:

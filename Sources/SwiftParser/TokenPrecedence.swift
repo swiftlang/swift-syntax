@@ -144,7 +144,7 @@ public enum TokenPrecedence: Comparable {
     case .multilineStringQuote, .rawStringDelimiter, .singleQuote, .stringQuote:
       self = .weakBracketed(closingDelimiter: tokenKind)
     case  // Chaining punctuators
-    .infixQuestionMark, .period, .postfixQuestionMark, .prefixPeriod, .exclamationMark,
+    .infixQuestionMark, .period, .postfixQuestionMark, .exclamationMark,
       // Misc
       .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand:
       self = .weakPunctuator

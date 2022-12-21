@@ -235,7 +235,7 @@ extension Parser {
     case .capitalSelfKeyword,
       .anyKeyword,
       .identifier:
-      base = self.parseTypeIdentifier(stopAtFirstPeriod: stopAtFirstPeriod)
+      base = self.parseTypeIdentifier()
     case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
     case .leftSquareBracket:
@@ -246,38 +246,64 @@ extension Parser {
       return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
     }
 
-    // '.Type', '.Protocol', '?', '!', and '[]' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if !stopAtFirstPeriod,
-        let (period, type) = self.consume(
-          if: { [.period, .prefixPeriod].contains($0.tokenKind) },
-          followedBy: { $0.isContextualKeyword(["Type", "Protocol"]) }
-        )
-      {
-        base = RawTypeSyntax(
-          RawMetatypeTypeSyntax(
-            baseType: base,
-            period: period,
-            typeOrProtocol: type,
-            arena: self.arena
+      if !stopAtFirstPeriod, self.at(.period) {
+        let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: base)
+        if skipMemberName {
+          let missingIdentifier = missingToken(.identifier)
+          base = RawTypeSyntax(
+            RawMemberTypeIdentifierSyntax(
+              baseType: base,
+              unexpectedPeriod,
+              period: period,
+              name: missingIdentifier,
+              genericArgumentClause: nil,
+              arena: self.arena
+            )
           )
-        )
+          break
+        } else if self.atContextualKeyword("Type") || self.atContextualKeyword("Protocol") {
+          let typeOrProtocol = self.consumeAnyToken(remapping: .contextualKeyword)
+          base = RawTypeSyntax(
+            RawMetatypeTypeSyntax(
+              baseType: base,
+              unexpectedPeriod,
+              period: period,
+              typeOrProtocol: typeOrProtocol,
+              arena: self.arena
+            )
+          )
+        } else {
+          let (name, generics) = self.parseTypeNameWithGenerics(include: .keywords)
+          base = RawTypeSyntax(
+            RawMemberTypeIdentifierSyntax(
+              baseType: base,
+              unexpectedPeriod,
+              period: period,
+              name: name,
+              genericArgumentClause: generics,
+              arena: self.arena
+            )
+          )
+        }
         continue
       }
 
       if !self.currentToken.isAtStartOfLine {
-        if self.currentToken.isOptionalToken {
+        if self.at(.postfixQuestionMark) {
           base = RawTypeSyntax(self.parseOptionalType(base))
           continue
         }
-        if self.currentToken.isImplicitlyUnwrappedOptionalToken {
+        if self.at(.exclamationMark) {
           base = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(base))
           continue
         }
       }
+
       break
     }
+
     return base
   }
 
@@ -315,53 +341,27 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseTypeIdentifier(
-    stopAtFirstPeriod: Bool = false
-  ) -> RawTypeSyntax {
-    if self.at(.anyKeyword) && !stopAtFirstPeriod {
+  mutating func parseTypeNameWithGenerics(include flags: DeclNameOptions = []) -> (RawTokenSyntax, RawGenericArgumentClauseSyntax?) {
+    let (name, _) = self.parseDeclNameRef(flags)
+    if self.atContextualPunctuator("<") {
+      return (name, self.parseGenericArguments())
+    }
+    return (name, nil)
+  }
+
+  mutating func parseTypeIdentifier() -> RawTypeSyntax {
+    if self.at(.anyKeyword) {
       return RawTypeSyntax(self.parseAnyType())
     }
 
-    var result: RawTypeSyntax?
-    var keepGoing: RawTokenSyntax? = nil
-    var loopProgress = LoopProgressCondition()
-    repeat {
-      let (name, _) = self.parseDeclNameRef()
-      let generics: RawGenericArgumentClauseSyntax?
-      if self.atContextualPunctuator("<") {
-        generics = self.parseGenericArguments()
-      } else {
-        generics = nil
-      }
-      if let keepGoing = keepGoing {
-        result = RawTypeSyntax(
-          RawMemberTypeIdentifierSyntax(
-            baseType: result!,
-            period: keepGoing,
-            name: name,
-            genericArgumentClause: generics,
-            arena: self.arena
-          )
-        )
-      } else {
-        result = RawTypeSyntax(
-          RawSimpleTypeIdentifierSyntax(
-            name: name,
-            genericArgumentClause: generics,
-            arena: self.arena
-          )
-        )
-      }
-
-      if stopAtFirstPeriod {
-        keepGoing = nil
-      } else {
-        keepGoing = self.consume(if: .period) ?? self.consume(if: .prefixPeriod)
-      }
-    } while keepGoing != nil && loopProgress.evaluate(currentToken)
-
-    return result!
+    let (name, generics) = parseTypeNameWithGenerics()
+    return RawTypeSyntax(
+      RawSimpleTypeIdentifierSyntax(
+        name: name,
+        genericArgumentClause: generics,
+        arena: self.arena
+      )
+    )
   }
 
   /// Parse the existential `Any` type.
@@ -639,22 +639,15 @@ extension Parser {
 
 extension Parser.Lookahead {
   mutating func canParseType() -> Bool {
-    // Accept 'inout' at for better recovery.
-    _ = self.consume(if: .inoutKeyword)
+    self.skipTypeAttributeList()
 
-    if self.consumeIfContextualKeyword("some") != nil {
-    } else {
-      self.consumeIfContextualKeyword("any")
+    if self.atContextualKeyword("some") || self.atContextualKeyword("any") {
+      self.consumeAnyToken()
     }
 
     switch self.currentToken.tokenKind {
-    case .capitalSelfKeyword, .anyKeyword:
+    case .capitalSelfKeyword, .anyKeyword, .identifier:
       guard self.canParseTypeIdentifier() else {
-        return false
-      }
-    case .protocolKeyword,  // Deprecated composition syntax
-      .identifier:
-      guard self.canParseIdentifierTypeOrCompositionType() else {
         return false
       }
     case .leftParen:
@@ -662,10 +655,6 @@ extension Parser.Lookahead {
       guard self.canParseTupleBodyType() else {
         return false
       }
-    case .atSign:
-      self.consumeAnyToken()
-      self.skipTypeAttribute()
-      return self.canParseType()
     case .leftSquareBracket:
       self.consumeAnyToken()
       guard self.canParseType() else {
@@ -685,23 +674,29 @@ extension Parser.Lookahead {
       return false
     }
 
-    // '.Type', '.Protocol', '?', and '!' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if let (_, _) = self.consume(
-        if: { [.period, .prefixPeriod].contains($0.tokenKind) },
-        followedBy: { $0.isContextualKeyword(["Type", "Protocol"]) }
-      ) {
-        continue
+      if self.at(.period) {
+        self.consumeAnyToken()
+        if self.atContextualKeyword("Type") || self.atContextualKeyword("Protocol") {
+          self.consumeAnyToken()
+          continue
+        }
+
+        if self.canParseTypeIdentifier(allowKeyword: true) {
+          continue
+        }
+
+        return false
       }
-      if self.currentToken.isOptionalToken {
-        self.consumePrefix("?", as: .postfixQuestionMark)
-        continue
+
+      if !self.currentToken.isAtStartOfLine {
+        if self.at(.postfixQuestionMark) || self.at(.exclamationMark) {
+          self.consumeAnyToken()
+          continue
+        }
       }
-      if self.currentToken.isImplicitlyUnwrappedOptionalToken {
-        self.consumePrefix("!", as: .exclamationMark)
-        continue
-      }
+
       break
     }
 
@@ -725,6 +720,22 @@ extension Parser.Lookahead {
     }
 
     return true
+  }
+
+  mutating func skipTypeAttributeList() {
+    var specifierProgress = LoopProgressCondition()
+    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
+    while self.at(anyIn: TypeSpecifier.self) != nil || self.atContextualKeyword("isolated") || self.atContextualKeyword("_const"),
+      specifierProgress.evaluate(currentToken)
+    {
+      self.consumeAnyToken()
+    }
+
+    var attributeProgress = LoopProgressCondition()
+    while self.at(.atSign), attributeProgress.evaluate(currentToken) {
+      self.consumeAnyToken()
+      self.skipTypeAttribute()
+    }
   }
 
   mutating func canParseTupleBodyType() -> Bool {
@@ -782,17 +793,23 @@ extension Parser.Lookahead {
     return self.consume(if: .rightParen) != nil
   }
 
-  mutating func canParseTypeIdentifier() -> Bool {
+  mutating func canParseSimpleType() -> Bool {
+    var allowKeyword = false
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      guard self.canParseSimpleTypeIdentifier() else {
-        return false
+      if !self.canParseTypeIdentifier() {
+        // Allow Foo.<keyword> but not <keyword> as the initial identifier
+        if allowKeyword && self.currentToken.isKeyword {
+          self.consumeAnyToken()
+        } else {
+          return false
+        }
       }
 
       // Treat 'Foo.<anything>' as an attempt to write a dotted type
-      // unless <anything> is 'Type' or 'Protocol'.
-      if self.at(any: [.period, .prefixPeriod]) && !self.peek().isContextualKeyword(["Type", "Protocol"]) {
+      if self.at(.period) {
         self.consumeAnyToken()
+        allowKeyword = true
       } else {
         return true
       }
@@ -823,14 +840,10 @@ extension Parser.Lookahead {
     return false
   }
 
-  mutating func canParseIdentifierTypeOrCompositionType() -> Bool {
-    if self.at(.protocolKeyword) {
-      return self.canParseOldStyleProtocolComposition()
-    }
-
+  mutating func canParseSimpleOrCompositionType() -> Bool {
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      guard self.canParseTypeIdentifier() else {
+      guard self.canParseSimpleType() else {
         return false
       }
 
@@ -844,42 +857,9 @@ extension Parser.Lookahead {
     preconditionFailure("Should return from inside the loop")
   }
 
-  mutating func canParseOldStyleProtocolComposition() -> Bool {
-    self.eat(.protocolKeyword)
-
-    // Check for the starting '<'.
-    guard self.currentToken.starts(with: "<") else {
-      return false
-    }
-
-    self.consumePrefix("<", as: .leftAngle)
-
-    // Check for empty protocol composition.
-    if self.currentToken.starts(with: ">") {
-      self.consumePrefix(">", as: .rightAngle)
-      return true
-    }
-
-    // Parse the type-composition-list.
-    var loopProgress = LoopProgressCondition()
-    repeat {
-      guard self.canParseTypeIdentifier() else {
-        return false;
-      }
-    } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
-
-    // Check for the terminating '>'.
-    guard self.currentToken.starts(with: ">") else {
-      return false
-    }
-    self.consumePrefix(">", as: .rightAngle)
-
-    return true
-  }
-
-  mutating func canParseSimpleTypeIdentifier() -> Bool {
+  mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
     // Parse an identifier.
-    guard self.at(.identifier) || self.at(any: [.capitalSelfKeyword, .anyKeyword]) else {
+    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || self.at(.anyKeyword) || (allowKeyword && self.currentToken.isKeyword) else {
       return false
     }
     self.consumeAnyToken()
@@ -951,7 +931,7 @@ extension Parser {
     }
     let unexpectedBeforeAttributeList = RawUnexpectedNodesSyntax(extraneousSpecifiers, arena: self.arena)
 
-    if self.at(any: [.atSign, .inoutKeyword]) {
+    if self.at(.atSign) {
       return (specifier, unexpectedBeforeAttributeList, self.parseTypeAttributeListPresent())
     }
 
@@ -1073,34 +1053,6 @@ extension Lexer.Lexeme {
     return self.isAnyOperator && self.tokenText == "..."
   }
 
-  var isOptionalToken: Bool {
-    // A postfix '?' by itself is obviously optional.
-    if self.tokenKind == .postfixQuestionMark {
-      return true
-    }
-    // A postfix or bound infix operator token that begins with '?' can be
-    // optional too.
-    if self.tokenKind == .postfixOperator || self.tokenKind == .unspacedBinaryOperator {
-      return self.tokenText.first == UInt8(ascii: "?")
-    }
-
-    return false
-  }
-
-  var isImplicitlyUnwrappedOptionalToken: Bool {
-    // A postfix !?' by itself is obviously optional.
-    if self.tokenKind == .exclamationMark {
-      return true
-    }
-    // A postfix or bound infix operator token that begins with '?' can be
-    // optional too.
-    if self.tokenKind == .postfixOperator || self.tokenKind == .unspacedBinaryOperator {
-      return self.tokenText.first == UInt8(ascii: "!")
-    }
-
-    return false
-  }
-
   var isGenericTypeDisambiguatingToken: Bool {
     switch self.tokenKind {
     case .rightParen,
@@ -1108,7 +1060,6 @@ extension Lexer.Lexeme {
       .leftBrace,
       .rightBrace,
       .period,
-      .prefixPeriod,
       .comma,
       .semicolon,
       .eof,
@@ -1120,7 +1071,7 @@ extension Lexer.Lexeme {
       return self.tokenText == "&"
     case .unspacedBinaryOperator,
       .postfixOperator:
-      return self.isOptionalToken || self.isImplicitlyUnwrappedOptionalToken
+      return false
     case .leftParen, .leftSquareBracket:
       // These only apply to the generic type if they don't start a new line.
       return !self.isAtStartOfLine

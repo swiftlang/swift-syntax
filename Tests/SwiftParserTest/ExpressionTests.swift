@@ -330,7 +330,7 @@ final class ExpressionTests: XCTestCase {
                 label: .identifier("identifier"),
                 colon: .colonToken(),
                 expression: MemberAccessExprSyntax(
-                  dot: .prefixPeriodToken(),
+                  dot: .periodToken(),
                   name: .identifier("buddhist")
                 )
               )

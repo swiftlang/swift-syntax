@@ -264,7 +264,6 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "LeftAngle", kind: "l_angle", text: "<", requiresLeadingSpace: true, requiresTrailingSpace: true),
   PunctuatorSpec(name: "RightAngle", kind: "r_angle", text: ">", requiresLeadingSpace: true, requiresTrailingSpace: true),
   PunctuatorSpec(name: "Period", kind: "period", text: "."),
-  PunctuatorSpec(name: "PrefixPeriod", kind: "period_prefix", text: "."),
   PunctuatorSpec(name: "Comma", kind: "comma", text: ",", requiresTrailingSpace: true),
   PunctuatorSpec(name: "Ellipsis", kind: "ellipsis", text: "..."),
   PunctuatorSpec(name: "Colon", kind: "colon", text: ":", requiresTrailingSpace: true),

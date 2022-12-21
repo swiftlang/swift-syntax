@@ -25,7 +25,7 @@ final class VariableTests: XCTestCase {
     AssertBuildResult(buildable, "␣let a: [Int]")
   }
 
-  func testVariableDeclWithTry() {
+  func testVariableDeclWithStringParsing() {
     let testCases: [UInt: (VariableDecl, String)] = [
       #line: (
         VariableDecl("let content = try? String(contentsOf: url)"),
@@ -34,6 +34,10 @@ final class VariableTests: XCTestCase {
       #line: (
         VariableDecl("let content = try! String(contentsOf: url)"),
         "let content = try! String(contentsOf: url)"
+      ),
+      #line: (
+        VariableDecl("var newLayout: ContiguousArray<RawSyntax?>?"),
+        "var newLayout: ContiguousArray<RawSyntax?>?"
       ),
     ]
 

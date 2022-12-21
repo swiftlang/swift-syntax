@@ -122,6 +122,17 @@ let basicFormatFile = SourceFile {
     }
 
     FunctionDecl("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
+      SwitchStmt("""
+        switch (token.tokenKind, token.previousToken(viewMode: .sourceAccurate)?.tokenKind) {
+        case (.leftAngle, .identifier(_)),
+             (.rightAngle, .identifier(_)),
+             (.rightAngle, .postfixQuestionMark):
+          return false
+        default:
+          break
+        }
+        """)
+      
       SwitchStmt(expression: Expr("token.tokenKind")) {
         for token in SYNTAX_TOKENS {
           if token.requiresLeadingSpace {
@@ -150,6 +161,8 @@ let basicFormatFile = SourceFile {
              (.asKeyword, .postfixQuestionMark),
              (.initKeyword, .leftParen),
              (.initKeyword, .postfixQuestionMark),
+             (.leftAngle, .identifier(_)),
+             (.rightAngle, .postfixQuestionMark),
              (.tryKeyword, .exclamationMark),
              (.tryKeyword, .postfixQuestionMark):
           return false

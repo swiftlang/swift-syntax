@@ -130,6 +130,14 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
+    switch (token.tokenKind, token.previousToken(viewMode: .sourceAccurate)?.tokenKind) {
+    case (.leftAngle, .identifier(_ )), 
+     (.rightAngle, .identifier(_ )), 
+     (.rightAngle, .postfixQuestionMark): 
+      return false
+    default: 
+      break 
+    }
     switch token.tokenKind {
     case .inKeyword: 
       return true
@@ -164,6 +172,8 @@ open class BasicFormat: SyntaxRewriter {
      (.asKeyword, .postfixQuestionMark), 
      (.initKeyword, .leftParen), 
      (.initKeyword, .postfixQuestionMark), 
+     (.leftAngle, .identifier(_ )), 
+     (.rightAngle, .postfixQuestionMark), 
      (.tryKeyword, .exclamationMark), 
      (.tryKeyword, .postfixQuestionMark): 
       return false

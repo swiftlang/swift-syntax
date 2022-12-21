@@ -723,6 +723,37 @@ public enum SyntaxFactory {
       return AssignmentExprSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on PackExpansionExprSyntax")
+  public static func makePackExpansionExpr(_ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil, patternExpr: ExprSyntax, _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil) -> PackExpansionExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeRepeatKeyword?.raw,
+      repeatKeyword.raw,
+      unexpectedBetweenRepeatKeywordAndPatternExpr?.raw,
+      patternExpr.raw,
+      unexpectedAfterPatternExpr?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.packExpansionExpr,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return PackExpansionExprSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on PackExpansionExprSyntax")
+  public static func makeBlankPackExpansionExpr(presence: SourcePresence = .present) -> PackExpansionExprSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packExpansionExpr,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.repeatKeyword, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return PackExpansionExprSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on PackElementExprSyntax")
   public static func makePackElementExpr(_ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil, eachKeyword: TokenSyntax, _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil, packRefExpr: ExprSyntax, _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil) -> PackElementExprSyntax {
     let layout: [RawSyntax?] = [

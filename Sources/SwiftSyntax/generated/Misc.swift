@@ -199,6 +199,7 @@ extension Syntax {
       .node(OptionalPatternSyntax.self), 
       .node(OptionalTypeSyntax.self), 
       .node(PackElementExprSyntax.self), 
+      .node(PackExpansionExprSyntax.self), 
       .node(PackExpansionTypeSyntax.self), 
       .node(PackReferenceTypeSyntax.self), 
       .node(ParameterClauseSyntax.self), 
@@ -651,6 +652,8 @@ extension SyntaxKind {
       return OptionalTypeSyntax.self
     case .packElementExpr: 
       return PackElementExprSyntax.self
+    case .packExpansionExpr: 
+      return PackExpansionExprSyntax.self
     case .packExpansionType: 
       return PackExpansionTypeSyntax.self
     case .packReferenceType: 
@@ -1185,6 +1188,8 @@ extension SyntaxKind {
     case .optionalType: 
       return "optional type"
     case .packElementExpr: 
+      return nil
+    case .packExpansionExpr: 
       return nil
     case .packExpansionType: 
       return "variadic expansion"

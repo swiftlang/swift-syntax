@@ -1919,6 +1919,192 @@ extension AssignmentExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - PackExpansionExprSyntax
+
+public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .packExpansionExpr else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `PackExpansionExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .packExpansionExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init<P: ExprSyntaxProtocol>(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
+    repeatKeyword: TokenSyntax = .repeatKeyword(),
+    _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil,
+    patternExpr: P,
+    _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeRepeatKeyword?.raw,
+      repeatKeyword.raw,
+      unexpectedBetweenRepeatKeywordAndPatternExpr?.raw,
+      patternExpr.raw,
+      unexpectedAfterPatternExpr?.raw,
+    ]
+    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.packExpansionExpr, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeRepeatKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeRepeatKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeRepeatKeyword` to replace the node's
+  ///                   current `unexpectedBeforeRepeatKeyword`, if present.
+  public func withUnexpectedBeforeRepeatKeyword(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return PackExpansionExprSyntax(newData)
+  }
+
+  public var repeatKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRepeatKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `repeatKeyword` replaced.
+  /// - param newChild: The new `repeatKeyword` to replace the node's
+  ///                   current `repeatKeyword`, if present.
+  public func withRepeatKeyword(_ newChild: TokenSyntax?) -> PackExpansionExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.repeatKeyword, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return PackExpansionExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenRepeatKeywordAndPatternExpr(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenRepeatKeywordAndPatternExpr` replaced.
+  /// - param newChild: The new `unexpectedBetweenRepeatKeywordAndPatternExpr` to replace the node's
+  ///                   current `unexpectedBetweenRepeatKeywordAndPatternExpr`, if present.
+  public func withUnexpectedBetweenRepeatKeywordAndPatternExpr(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return PackExpansionExprSyntax(newData)
+  }
+
+  public var patternExpr: ExprSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withPatternExpr(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `patternExpr` replaced.
+  /// - param newChild: The new `patternExpr` to replace the node's
+  ///                   current `patternExpr`, if present.
+  public func withPatternExpr(_ newChild: ExprSyntax?) -> PackExpansionExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena)
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return PackExpansionExprSyntax(newData)
+  }
+
+  public var unexpectedAfterPatternExpr: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterPatternExpr(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterPatternExpr` replaced.
+  /// - param newChild: The new `unexpectedAfterPatternExpr` to replace the node's
+  ///                   current `unexpectedAfterPatternExpr`, if present.
+  public func withUnexpectedAfterPatternExpr(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionExprSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return PackExpansionExprSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeRepeatKeyword,
+      \Self.repeatKeyword,
+      \Self.unexpectedBetweenRepeatKeywordAndPatternExpr,
+      \Self.patternExpr,
+      \Self.unexpectedAfterPatternExpr,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension PackExpansionExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeRepeatKeyword": unexpectedBeforeRepeatKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "repeatKeyword": Syntax(repeatKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenRepeatKeywordAndPatternExpr": unexpectedBetweenRepeatKeywordAndPatternExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "patternExpr": Syntax(patternExpr).asProtocol(SyntaxProtocol.self),
+      "unexpectedAfterPatternExpr": unexpectedAfterPatternExpr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - PackElementExprSyntax
 
 public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

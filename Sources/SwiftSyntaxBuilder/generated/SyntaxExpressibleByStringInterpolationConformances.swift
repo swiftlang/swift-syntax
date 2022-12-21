@@ -311,6 +311,9 @@ extension OptionalTypeSyntax: SyntaxExpressibleByStringInterpolation {
 extension PackElementExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension PackExpansionExprSyntax: SyntaxExpressibleByStringInterpolation { 
+}
+
 extension PackExpansionTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

@@ -465,6 +465,20 @@ extension Parser {
           arena: self.arena
         )
       )
+    case (._borrowContextualKeyword, let handle)?:
+      let borrowTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(
+        flavor,
+        forDirective: forDirective,
+        pattern: pattern
+      )
+      return RawExprSyntax(
+        RawBorrowExprSyntax(
+          borrowKeyword: borrowTok,
+          expression: sub,
+          arena: self.arena
+        )
+      )
     case nil:
       return self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
     }

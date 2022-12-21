@@ -583,6 +583,7 @@ public enum TypeSpecifier: RawTokenKindSubset {
 enum AwaitTryMove: RawTokenKindSubset {
   case awaitContextualKeyword
   case _moveContextualKeyword
+  case _borrowContextualKeyword
   case tryKeyword
 
   init?(lexeme: Lexer.Lexeme) {
@@ -590,6 +591,7 @@ enum AwaitTryMove: RawTokenKindSubset {
     case (.tryKeyword, _): self = .tryKeyword
     case (.identifier, "await"): self = .awaitContextualKeyword
     case (.identifier, "_move"): self = ._moveContextualKeyword
+    case (.identifier, "_borrow"): self = ._borrowContextualKeyword
     default: return nil
     }
   }
@@ -598,6 +600,7 @@ enum AwaitTryMove: RawTokenKindSubset {
     switch self {
     case .awaitContextualKeyword: return .identifier
     case ._moveContextualKeyword: return .identifier
+    case ._borrowContextualKeyword: return .identifier
     case .tryKeyword: return .tryKeyword
     }
   }
@@ -606,6 +609,7 @@ enum AwaitTryMove: RawTokenKindSubset {
     switch self {
     case .awaitContextualKeyword: return "await"
     case ._moveContextualKeyword: return "_move"
+    case ._borrowContextualKeyword: return "_borrow"
     default: return nil
     }
   }

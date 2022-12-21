@@ -22,7 +22,12 @@ public extension Node {
 
   /// The node's syntax kind as `SyntaxBuildableType`.
   var baseType: SyntaxBuildableType {
-    SyntaxBuildableType(syntaxKind: baseKind)
+    if baseKind == "SyntaxCollection" {
+      return SyntaxBuildableType(syntaxKind: "Syntax")
+    } else {
+      return SyntaxBuildableType(syntaxKind: baseKind)
+    }
+    
   }
 
   /// If documentation exists for this node, return it as a single-line string.

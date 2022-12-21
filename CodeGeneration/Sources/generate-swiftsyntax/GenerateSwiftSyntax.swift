@@ -60,6 +60,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
       TemplateSpec(sourceFile: syntaxCollectionsFile, module: swiftSyntaxDir, filename: "SyntaxCollections.swift"),
       TemplateSpec(sourceFile: syntaxEnumFile, module: swiftSyntaxDir, filename: "SyntaxEnum.swift"),
       TemplateSpec(sourceFile: syntaxKindFile, module: swiftSyntaxDir, filename: "SyntaxKind.swift"),
+      TemplateSpec(sourceFile: syntaxRewriterFile, module: swiftSyntaxDir, filename: "SyntaxRewriter.swift"),
       TemplateSpec(sourceFile: syntaxTraitsFile, module: swiftSyntaxDir, filename: "SyntaxTraits.swift"),
       TemplateSpec(sourceFile: syntaxTransformFile, module: swiftSyntaxDir, filename: "SyntaxTransform.swift"),
       TemplateSpec(sourceFile: syntaxVisitorFile, module: swiftSyntaxDir, filename: "SyntaxVisitor.swift"),

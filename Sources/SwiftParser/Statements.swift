@@ -1252,7 +1252,6 @@ extension Parser.Lookahead {
       .guardKeyword?,
       .whileKeyword?,
       .doKeyword?,
-      .repeatKeyword?,
       .forKeyword?,
       .breakKeyword?,
       .continueKeyword?,
@@ -1261,6 +1260,12 @@ extension Parser.Lookahead {
       .yield?,
       .poundAssertKeyword?:
       return true
+    case .repeatKeyword?:
+      // 'repeat' followed by anything other than a brace stmt
+      // is a pack expansion expression.
+      // FIXME: 'repeat' followed by '{' could be a pack expansion
+      // with a closure pattern.
+      return self.peek().tokenKind == .leftBrace
     case .yieldAsIdentifier?:
       switch self.peek().tokenKind {
       case .prefixAmpersand:

@@ -14,12 +14,25 @@ import SwiftSyntax
 import XCTest
 
 final class VariadicGenericsTests: XCTestCase {
-  func testSimple() {
+  func testSimpleForwarding() {
     AssertParse(
       """
       func tuplify<T...>(_ t: (each T)...) -> ((each T)...) {
+        return (1️⃣repeat each t)
       }
-      """
+      """,
+      substructure: Syntax(
+        PackExpansionExprSyntax(
+          repeatKeyword: .repeatKeyword(),
+          patternExpr: PackElementExprSyntax(
+            eachKeyword: .contextualKeyword("each"),
+            packRefExpr: IdentifierExprSyntax(
+              identifier: .identifier("t")
+            )
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
     )
   }
 
@@ -65,7 +78,7 @@ final class VariadicGenericsTests: XCTestCase {
     AssertParse(
       """
       func tuplify<T...>(_ t: (each T)...) -> ((each T)...) {
-        return ((each t)...)
+        return (repeat each t)
       }
       """
     )
@@ -73,7 +86,7 @@ final class VariadicGenericsTests: XCTestCase {
     AssertParse(
       """
       func zip<T..., U...>(_ first: T..., with second: U...) -> ((T, U)...) {
-        return ((each first, each second)...)
+        return (repeat (each first, each second))
       }
       """
     )
@@ -81,7 +94,7 @@ final class VariadicGenericsTests: XCTestCase {
     AssertParse(
       """
       func variadicMap<T..., Result...>(_ t: T..., transform: ((T) -> Result)...) -> (Result...) {
-        return ((each transform)(each t)...)
+        return (repeat (each transform)(each t))
       }
       """
     )
@@ -135,6 +148,112 @@ final class VariadicGenericsTests: XCTestCase {
           eachKeyword: .contextualKeyword("each"),
           packRefExpr: IdentifierExprSyntax(
             identifier: .identifier("x")
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+  }
+
+  func testPackExpansionExpr() {
+    AssertParse(
+      """
+      func expand<T...>(_ t: (each T)...) {
+        1️⃣repeat (each t).member()
+      }
+      """,
+      substructure: Syntax(
+        PackExpansionExprSyntax(
+          repeatKeyword: .repeatKeyword(),
+          patternExpr: FunctionCallExprSyntax(
+            callee: MemberAccessExprSyntax(
+              base: ExprSyntax(
+                TupleExprSyntax(
+                  elementList: .init([
+                    TupleExprElementSyntax(
+                      expression: PackElementExprSyntax(
+                        eachKeyword: .contextualKeyword("each"),
+                        packRefExpr: IdentifierExprSyntax(
+                          identifier: .identifier("t")
+                        )
+                      )
+                    )
+                  ])
+                )
+              ),
+              name: "member"
+            )
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    AssertParse(
+      """
+      func expand<T...>(_ t: (each T)...) {
+        1️⃣repeat each t.member
+      }
+      """,
+      substructure: Syntax(
+        PackExpansionExprSyntax(
+          repeatKeyword: .repeatKeyword(),
+          patternExpr: PackElementExprSyntax(
+            eachKeyword: .contextualKeyword("each"),
+            packRefExpr: MemberAccessExprSyntax(
+              base: ExprSyntax(
+                IdentifierExprSyntax(
+                  identifier: .identifier("t")
+                )
+              ),
+              name: "member"
+            )
+          )
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    AssertParse(
+      """
+      func expand<T...>(_ t: (each T)...) {
+        1️⃣repeat x + each t + 10
+      }
+      """,
+      substructure: Syntax(
+        PackExpansionExprSyntax(
+          repeatKeyword: .repeatKeyword(),
+          patternExpr: SequenceExprSyntax(
+            elements: .init([
+              ExprSyntax(
+                IdentifierExprSyntax(
+                  identifier: .identifier("x")
+                )
+              ),
+              ExprSyntax(
+                BinaryOperatorExprSyntax(
+                  operatorToken: .spacedBinaryOperator("+")
+                )
+              ),
+              ExprSyntax(
+                PackElementExprSyntax(
+                  eachKeyword: .contextualKeyword("each"),
+                  packRefExpr: IdentifierExprSyntax(
+                    identifier: .identifier("t")
+                  )
+                )
+              ),
+              ExprSyntax(
+                BinaryOperatorExprSyntax(
+                  operatorToken: .spacedBinaryOperator("+")
+                )
+              ),
+              ExprSyntax(
+                IntegerLiteralExprSyntax(
+                  integerLiteral: 10
+                )
+              ),
+            ])
           )
         )
       ),

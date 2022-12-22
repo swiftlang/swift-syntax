@@ -676,6 +676,9 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseTypeScalar() -> Bool {
+    // 'repeat' starts a pack expansion type
+    self.consume(if: .repeatKeyword)
+
     self.skipTypeAttributeList()
 
     guard self.canParseSimpleOrCompositionType() else {
@@ -701,11 +704,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleOrCompositionType() -> Bool {
-    if self.atContextualKeyword("each") {
-      return self.canParseSimpleType();
-    }
-
-    if self.atContextualKeyword("some") || self.atContextualKeyword("any") {
+    if self.atContextualKeyword("some") || self.atContextualKeyword("any") || self.atContextualKeyword("each") {
       self.consumeAnyToken()
     }
 

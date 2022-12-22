@@ -260,4 +260,12 @@ final class VariadicGenericsTests: XCTestCase {
       substructureAfterMarker: "1️⃣"
     )
   }
+
+  func testMetatype() {
+    AssertParse(
+      """
+      G<Int, repeat Array<each T>>.self
+      """
+    )
+  }
 }

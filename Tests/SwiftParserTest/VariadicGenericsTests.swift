@@ -17,7 +17,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testSimpleForwarding() {
     AssertParse(
       """
-      func tuplify<T...>(_ t: (each T)...) -> ((each T)...) {
+      func tuplify<T...>(_ t: repeat each T) -> (repeat each T) {
         return (1️⃣repeat each t)
       }
       """,
@@ -77,7 +77,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testPackElementExprSimple() {
     AssertParse(
       """
-      func tuplify<T...>(_ t: (each T)...) -> ((each T)...) {
+      func tuplify<T...>(_ t: repeat each T) -> (repeat each T) {
         return (repeat each t)
       }
       """
@@ -85,7 +85,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func zip<T..., U...>(_ first: T..., with second: U...) -> ((T, U)...) {
+      func zip<T..., U...>(_ first: repeat each T, with second: repeat each U) -> (repeat (each T, each U)) {
         return (repeat (each first, each second))
       }
       """
@@ -93,7 +93,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func variadicMap<T..., Result...>(_ t: T..., transform: ((T) -> Result)...) -> (Result...) {
+      func variadicMap<T..., Result...>(_ t: repeat each T, transform: repeat (each T) -> each Result) -> (repeat each Result) {
         return (repeat (each transform)(each t))
       }
       """
@@ -158,7 +158,7 @@ final class VariadicGenericsTests: XCTestCase {
   func testPackExpansionExpr() {
     AssertParse(
       """
-      func expand<T...>(_ t: (each T)...) {
+      func expand<T...>(_ t: repeat each T) {
         1️⃣repeat (each t).member()
       }
       """,
@@ -191,7 +191,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func expand<T...>(_ t: (each T)...) {
+      func expand<T...>(_ t: repeat each T) {
         1️⃣repeat each t.member
       }
       """,
@@ -216,7 +216,7 @@ final class VariadicGenericsTests: XCTestCase {
 
     AssertParse(
       """
-      func expand<T...>(_ t: (each T)...) {
+      func expand<T...>(_ t: repeat each T) {
         1️⃣repeat x + each t + 10
       }
       """,

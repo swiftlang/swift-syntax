@@ -206,13 +206,13 @@ public let TYPE_NODES: [Node] = [
        nameForDiagnostics: "variadic expansion",
        kind: "Type",
        children: [
-         Child(name: "PatternType",
-               kind: "Type"),
-         Child(name: "Ellipsis",
-               kind: "EllipsisToken",
+         Child(name: "RepeatKeyword",
+               kind: "RepeatToken",
                tokenChoices: [
-                 "Ellipsis"
-               ])
+                 "Repeat"
+               ]),
+         Child(name: "PatternType",
+               kind: "Type")
        ]),
   
   Node(name: "PackReferenceType",

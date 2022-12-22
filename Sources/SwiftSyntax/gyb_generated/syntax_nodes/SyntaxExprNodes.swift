@@ -1946,14 +1946,16 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
-    let layout: [RawSyntax?] = [
-      unexpectedBeforeRepeatKeyword?.raw,
-      repeatKeyword.raw,
-      unexpectedBetweenRepeatKeywordAndPatternExpr?.raw,
-      patternExpr.raw,
-      unexpectedAfterPatternExpr?.raw,
-    ]
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeRepeatKeyword, repeatKeyword, unexpectedBetweenRepeatKeywordAndPatternExpr, patternExpr, unexpectedAfterPatternExpr))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeRepeatKeyword?.raw,
+        repeatKeyword.raw,
+        unexpectedBetweenRepeatKeywordAndPatternExpr?.raw,
+        patternExpr.raw,
+        unexpectedAfterPatternExpr?.raw,
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.packExpansionExpr, from: layout, arena: arena,
         leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)

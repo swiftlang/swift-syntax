@@ -2247,22 +2247,22 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init<P: TypeSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforePatternType: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
+    repeatKeyword: TokenSyntax = .repeatKeyword(),
+    _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil,
     patternType: P,
-    _ unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
-    ellipsis: TokenSyntax = .ellipsisToken(),
-    _ unexpectedAfterEllipsis: UnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePatternType, patternType, unexpectedBetweenPatternTypeAndEllipsis, ellipsis, unexpectedAfterEllipsis))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeRepeatKeyword, repeatKeyword, unexpectedBetweenRepeatKeywordAndPatternType, patternType, unexpectedAfterPatternType))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforePatternType?.raw,
+        unexpectedBeforeRepeatKeyword?.raw,
+        repeatKeyword.raw,
+        unexpectedBetweenRepeatKeywordAndPatternType?.raw,
         patternType.raw,
-        unexpectedBetweenPatternTypeAndEllipsis?.raw,
-        ellipsis.raw,
-        unexpectedAfterEllipsis?.raw,
+        unexpectedAfterPatternType?.raw,
       ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.packExpansionType, from: layout, arena: arena,
@@ -2272,30 +2272,71 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var unexpectedBeforePatternType: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforePatternType(value)
+      self = withUnexpectedBeforeRepeatKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBeforePatternType` replaced.
-  /// - param newChild: The new `unexpectedBeforePatternType` to replace the node's
-  ///                   current `unexpectedBeforePatternType`, if present.
-  public func withUnexpectedBeforePatternType(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeRepeatKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeRepeatKeyword` to replace the node's
+  ///                   current `unexpectedBeforeRepeatKeyword`, if present.
+  public func withUnexpectedBeforeRepeatKeyword(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 0, with: raw, arena: arena)
     return PackExpansionTypeSyntax(newData)
   }
 
-  public var patternType: TypeSyntax {
+  public var repeatKeyword: TokenSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRepeatKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `repeatKeyword` replaced.
+  /// - param newChild: The new `repeatKeyword` to replace the node's
+  ///                   current `repeatKeyword`, if present.
+  public func withRepeatKeyword(_ newChild: TokenSyntax?) -> PackExpansionTypeSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.repeatKeyword, arena: arena)
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return PackExpansionTypeSyntax(newData)
+  }
+
+  public var unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenRepeatKeywordAndPatternType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenRepeatKeywordAndPatternType` replaced.
+  /// - param newChild: The new `unexpectedBetweenRepeatKeywordAndPatternType` to replace the node's
+  ///                   current `unexpectedBetweenRepeatKeywordAndPatternType`, if present.
+  public func withUnexpectedBetweenRepeatKeywordAndPatternType(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return PackExpansionTypeSyntax(newData)
+  }
+
+  public var patternType: TypeSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TypeSyntax(childData!)
     }
     set(value) {
@@ -2309,66 +2350,25 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func withPatternType(_ newChild: TypeSyntax?) -> PackExpansionTypeSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena)
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return PackExpansionTypeSyntax(newData)
-  }
-
-  public var unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenPatternTypeAndEllipsis(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenPatternTypeAndEllipsis` replaced.
-  /// - param newChild: The new `unexpectedBetweenPatternTypeAndEllipsis` to replace the node's
-  ///                   current `unexpectedBetweenPatternTypeAndEllipsis`, if present.
-  public func withUnexpectedBetweenPatternTypeAndEllipsis(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return PackExpansionTypeSyntax(newData)
-  }
-
-  public var ellipsis: TokenSyntax {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withEllipsis(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `ellipsis` replaced.
-  /// - param newChild: The new `ellipsis` to replace the node's
-  ///                   current `ellipsis`, if present.
-  public func withEllipsis(_ newChild: TokenSyntax?) -> PackExpansionTypeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.ellipsis, arena: arena)
     let newData = data.replacingChild(at: 3, with: raw, arena: arena)
     return PackExpansionTypeSyntax(newData)
   }
 
-  public var unexpectedAfterEllipsis: UnexpectedNodesSyntax? {
+  public var unexpectedAfterPatternType: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedAfterEllipsis(value)
+      self = withUnexpectedAfterPatternType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedAfterEllipsis` replaced.
-  /// - param newChild: The new `unexpectedAfterEllipsis` to replace the node's
-  ///                   current `unexpectedAfterEllipsis`, if present.
-  public func withUnexpectedAfterEllipsis(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedAfterPatternType` replaced.
+  /// - param newChild: The new `unexpectedAfterPatternType` to replace the node's
+  ///                   current `unexpectedAfterPatternType`, if present.
+  public func withUnexpectedAfterPatternType(_ newChild: UnexpectedNodesSyntax?) -> PackExpansionTypeSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 4, with: raw, arena: arena)
@@ -2377,11 +2377,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public static var structure: SyntaxNodeStructure {
     return .layout([
-      \Self.unexpectedBeforePatternType,
+      \Self.unexpectedBeforeRepeatKeyword,
+      \Self.repeatKeyword,
+      \Self.unexpectedBetweenRepeatKeywordAndPatternType,
       \Self.patternType,
-      \Self.unexpectedBetweenPatternTypeAndEllipsis,
-      \Self.ellipsis,
-      \Self.unexpectedAfterEllipsis,
+      \Self.unexpectedAfterPatternType,
     ])
   }
 
@@ -2406,11 +2406,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 extension PackExpansionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforePatternType": unexpectedBeforePatternType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeRepeatKeyword": unexpectedBeforeRepeatKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "repeatKeyword": Syntax(repeatKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenRepeatKeywordAndPatternType": unexpectedBetweenRepeatKeywordAndPatternType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "patternType": Syntax(patternType).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenPatternTypeAndEllipsis": unexpectedBetweenPatternTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "ellipsis": Syntax(ellipsis).asProtocol(SyntaxProtocol.self),
-      "unexpectedAfterEllipsis": unexpectedAfterEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterPatternType": unexpectedAfterPatternType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

@@ -32,9 +32,11 @@
 /// Token consumption is generally either unconditional via ``TokenConsumer/consumeAnyToken()``
 /// or conditional via a combination of ``TokenConsumer/at(_:where:)``
 /// and `TokenConsumer.eat(_:)`. When parsing conditionally, `at` returns a
-/// handle that is passed to `eat`. This ensures that any structure that is checked for
-/// is actually parsed by the parser at that position. If the parser detects any unexpected
-/// structure, an assertion is raised.
+/// handle that is passed to `eat`. This ensures that any structure that is
+/// checked for is actually parsed by the parser at that position. If the parser
+/// detects any unexpected structure, an assertion is raised. To perform
+/// conditional consumption and validation in one step, use `consume(if:)` for
+/// one kind of token, or `consume(ifAny:)` to consume many kinds of tokens.
 ///
 /// It can also be useful to expect the presence of certain structural elements.
 /// For example, a function that parses the content of code items might expect

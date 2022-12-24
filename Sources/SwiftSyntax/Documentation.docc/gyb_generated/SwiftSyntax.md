@@ -439,12 +439,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/SourceRange>
 - <doc:SwiftSyntax/SourceLength>
 
-### Classifying Syntax
-
-- <doc:SwiftSyntax/SyntaxClassification>
-- <doc:SwiftSyntax/SyntaxClassifications>
-- <doc:SwiftSyntax/SyntaxClassifiedRange>
-
 ### Incremental Parsing
 
 - <doc:SwiftSyntax/IncrementalParseLookup>
@@ -463,4 +457,3 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/SyntaxHashable>
 - <doc:SwiftSyntax/SyntaxIdentifier>
 - <doc:SwiftSyntax/RawTokenKind>
-- <doc:SwiftSyntax/SyntaxNode>

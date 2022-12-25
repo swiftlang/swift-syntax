@@ -37,6 +37,25 @@ final class FunctionTests: XCTestCase {
     )
   }
 
+  func testFunctionDeclEnsurePropperSpacing() {
+    let buildable = FunctionDecl(
+      """
+      @available(*, deprecated, message: "Use function on Baz")
+      private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+      }
+      """
+    )
+
+    AssertBuildResult(
+      buildable,
+      """
+      @available(*, deprecated, message: "Use function on Baz")
+      private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+      }
+      """
+    )
+  }
+
   func testArguments() {
     let buildable = FunctionCallExpr(callee: ExprSyntax("test")) {
       for param in (1...5) {

@@ -128,6 +128,8 @@ let basicFormatFile = SourceFile {
              (.rightAngle, .identifier(_)),
              (.rightAngle, .postfixQuestionMark):
           return false
+        case (.spacedBinaryOperator(let `operator`), .leftParen):
+          return `operator` != "*"
         default:
           break
         }
@@ -162,10 +164,13 @@ let basicFormatFile = SourceFile {
              (.initKeyword, .leftParen),
              (.initKeyword, .postfixQuestionMark),
              (.leftAngle, .identifier(_)),
+             (.rightAngle, .leftParen),
              (.rightAngle, .postfixQuestionMark),
              (.tryKeyword, .exclamationMark),
              (.tryKeyword, .postfixQuestionMark):
           return false
+        case (.spacedBinaryOperator(let `operator`), .comma):
+          return `operator` != "*"
         default:
           break
         }

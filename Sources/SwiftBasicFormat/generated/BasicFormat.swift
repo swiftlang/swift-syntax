@@ -135,6 +135,8 @@ open class BasicFormat: SyntaxRewriter {
      (.rightAngle, .identifier(_ )), 
      (.rightAngle, .postfixQuestionMark): 
       return false
+    case (.spacedBinaryOperator(let `operator`), .leftParen): 
+      return `operator` != "*"
     default: 
       break 
     }
@@ -173,10 +175,13 @@ open class BasicFormat: SyntaxRewriter {
      (.initKeyword, .leftParen), 
      (.initKeyword, .postfixQuestionMark), 
      (.leftAngle, .identifier(_ )), 
+     (.rightAngle, .leftParen), 
      (.rightAngle, .postfixQuestionMark), 
      (.tryKeyword, .exclamationMark), 
      (.tryKeyword, .postfixQuestionMark): 
       return false
+    case (.spacedBinaryOperator(let `operator`), .comma): 
+      return `operator` != "*"
     default: 
       break 
     }

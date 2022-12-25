@@ -29,6 +29,62 @@ final class IfStmtTests: XCTestCase {
     )
   }
 
+  func testIfStmtyntax() {
+    let testCases: [UInt: (IfStmt, String)] = [
+      #line: (
+        IfStmt(
+          """
+          if foo == x {
+            return foo
+          }
+          """
+        ),
+        """
+        if foo == x {
+            return foo
+        }
+        """
+      ),
+      #line: (
+        IfStmt("if foo == x") { ReturnStmt("return foo") },
+        """
+        if foo == x {
+            return foo
+        }
+        """
+      ),
+      #line: (
+        IfStmt("if foo == x") {
+          ReturnStmt("return foo")
+        } else: {
+          ReturnStmt("return bar")
+        },
+        """
+        if foo == x {
+            return foo
+        }else {
+            return bar
+        }
+        """
+      ),
+      #line: (
+        IfStmt("if foo == x", bodyBuilder: { ReturnStmt("return foo") }, elseIf: IfStmtSyntax("if foo == z") { ReturnStmt("return baz") }),
+        """
+        if foo == x {
+            return foo
+        }else if foo == z {
+            return baz
+        }
+        """
+      ),
+    ]
+
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
+    }
+  }
+
   func testIfElseStmt() {
     // Use the convenience initializer from IfStmtConvenienceInitializers
     // with an else branch expressed by a second trailing closure.

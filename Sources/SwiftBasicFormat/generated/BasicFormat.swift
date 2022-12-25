@@ -177,6 +177,8 @@ open class BasicFormat: SyntaxRewriter {
      (.leftAngle, .identifier(_ )), 
      (.rightAngle, .leftParen), 
      (.rightAngle, .postfixQuestionMark), 
+     (.postfixQuestionMark, .leftParen), 
+     (.postfixQuestionMark, .rightParen), 
      (.tryKeyword, .exclamationMark), 
      (.tryKeyword, .postfixQuestionMark): 
       return false
@@ -287,6 +289,10 @@ open class BasicFormat: SyntaxRewriter {
     case .equal: 
       return true
     case .arrow: 
+      return true
+    case .exclamationMark: 
+      return true
+    case .postfixQuestionMark: 
       return true
     case .poundKeyPathKeyword: 
       return true

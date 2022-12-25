@@ -277,9 +277,11 @@ SYNTAX_TOKENS = [
 
     Punctuator('Backslash', 'backslash', text='\\\\'),
 
-    Punctuator('ExclamationMark', 'exclaim_postfix', text='!'),
+    Punctuator('ExclamationMark', 'exclaim_postfix', text='!',
+               requires_trailing_space=True),
 
-    Punctuator('PostfixQuestionMark', 'question_postfix', text='?'),
+    Punctuator('PostfixQuestionMark', 'question_postfix', text='?',
+               requires_trailing_space=True),
     Punctuator('InfixQuestionMark', 'question_infix', text='?'),
 
     Punctuator('StringQuote', 'string_quote', text='\\\"',

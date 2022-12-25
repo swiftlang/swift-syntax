@@ -166,6 +166,8 @@ let basicFormatFile = SourceFile {
              (.leftAngle, .identifier(_)),
              (.rightAngle, .leftParen),
              (.rightAngle, .postfixQuestionMark),
+             (.postfixQuestionMark, .leftParen),
+             (.postfixQuestionMark, .rightParen),
              (.tryKeyword, .exclamationMark),
              (.tryKeyword, .postfixQuestionMark):
           return false

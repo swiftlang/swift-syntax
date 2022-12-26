@@ -234,6 +234,54 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
+  func testKeypathExpressionWithSugaredRoot() {
+    let cases: [UInt: String] = [
+      // Identifiers
+      #line: "X",
+      #line: "X<T>",
+
+      // Sugared optionals
+      #line: "X?",
+      #line: "X!",
+
+      // Sugared collections
+      #line: "[X]",
+      #line: "[X : Y]",
+
+      // Tuples and paren type
+      #line: "()",
+      #line: "(X)",
+      #line: "(X, X)",
+
+      // Keywords
+      #line: "Any",
+      #line: "Self",
+    ]
+
+    for (line, rootType) in cases {
+      var parser = Parser(rootType)
+
+      AssertParse(
+        "\\\(rootType).y",
+        ExprSyntax.parse,
+        substructure: Syntax(
+          KeyPathExprSyntax(
+            root: TypeSyntax.parse(from: &parser),
+            components: KeyPathComponentListSyntax([
+              KeyPathComponentSyntax(
+                period: .periodToken(),
+                component: .init(
+                  KeyPathPropertyComponentSyntax(identifier: .identifier("y"))
+                )
+              )
+            ])
+          )
+        ),
+        line: line
+      )
+    }
+  }
+
   func testBasicLiterals() {
     AssertParse(
       """

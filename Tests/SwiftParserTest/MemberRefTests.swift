@@ -18,13 +18,12 @@ final class MemberTypeTests: XCTestCase {
   func testKeyword() {
     AssertParse(
       "MyType.class",
-      { TypeSyntax.parse(from: &$0) },
+      TypeSyntax.parse,
       substructure: Syntax(
         MemberTypeIdentifierSyntax(
           baseType: SimpleTypeIdentifierSyntax(
             name: .identifier("MyType")
           ),
-          period: .period,
           name: .identifier("class")
         )
       )
@@ -34,13 +33,12 @@ final class MemberTypeTests: XCTestCase {
   func testMissing() {
     AssertParse(
       "MyType.1️⃣",
-      { TypeSyntax.parse(from: &$0) },
+      TypeSyntax.parse,
       substructure: Syntax(
         MemberTypeIdentifierSyntax(
           baseType: SimpleTypeIdentifierSyntax(
             name: .identifier("MyType")
           ),
-          period: .periodToken(),
           name: .identifier("", presence: .missing)
         )
       ),
@@ -54,7 +52,6 @@ final class MemberTypeTests: XCTestCase {
         baseType: SimpleTypeIdentifierSyntax(
           name: .identifier("MyType")
         ),
-        period: .periodToken(),
         name: .identifier("Nested")
       )
     )
@@ -71,7 +68,7 @@ final class MemberTypeTests: XCTestCase {
     for (line, source) in cases {
       AssertParse(
         source,
-        { TypeSyntax.parse(from: &$0) },
+        TypeSyntax.parse,
         substructure: expected,
         line: line
       )
@@ -88,9 +85,73 @@ final class MemberTypeTests: XCTestCase {
     for (line, source) in cases {
       AssertParse(
         source,
-        { TypeSyntax.parse(from: &$0) },
+        TypeSyntax.parse,
         diagnostics: [DiagnosticSpec(message: "extraneous whitespace after '.' is not permitted")],
         fixedSource: expected,
+        line: line
+      )
+    }
+  }
+
+  func testBaseType() {
+    let cases: [UInt: String] = [
+      // Identifiers and member types
+      #line: "X",
+      #line: "X<T>",
+      #line: "X.Y",
+      #line: "X.Y<T>",
+      #line: "X<T>.Y",
+      #line: "X<T>.Y<T>",
+
+      // Metatypes
+      #line: "X.Type",
+      #line: "X.Protocol",
+
+      // Sugared optionals
+      #line: "X?",
+      #line: "X!",
+
+      // Sugared collections
+      #line: "[X]",
+      #line: "[X : Y]",
+
+      // Tuples and paren type
+      #line: "()",
+      #line: "(X)",
+      #line: "(X, X)",
+
+      // Keywords
+      #line: "Any",
+      #line: "Self",
+    ]
+
+    for (line, baseType) in cases {
+      var parser = Parser(baseType)
+
+      let expectedSyntax = MemberTypeIdentifierSyntax(
+        baseType: TypeSyntax.parse(from: &parser),
+        name: .identifier("Z")
+      )
+
+      AssertParse(
+        "\(baseType).Z",
+        TypeSyntax.parse,
+        substructure: Syntax(expectedSyntax),
+        line: line
+      )
+
+      AssertParse(
+        "\(baseType).Z<W>",
+        TypeSyntax.parse,
+        substructure: Syntax(
+          expectedSyntax.withGenericArgumentClause(
+            GenericArgumentClauseSyntax(
+              arguments: .init([
+                GenericArgumentSyntax(argumentType: SimpleTypeIdentifierSyntax(name: .identifier("W")))
+              ])
+            )
+          )
+        ),
         line: line
       )
     }

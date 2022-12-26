@@ -851,3 +851,23 @@ final class ExpressionTests: XCTestCase {
     )
   }
 }
+
+final class MemberExprTests: XCTestCase {
+  func testMissing() {
+    let cases: [UInt: String] = [
+      #line: "",
+      #line: "\nmember",
+      #line: "  \nmember",
+      #line: "/*foo*/\nmember",
+      #line: "\n  member",
+    ]
+    for (line, trailing) in cases {
+      AssertParse(
+        "someVar.1️⃣\(trailing)",
+        diagnostics: [DiagnosticSpec(message: "expected name in member access")],
+        fixedSource: "someVar.<#identifier#>\(trailing)",
+        line: line
+      )
+    }
+  }
+}

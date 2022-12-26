@@ -14,7 +14,7 @@ import SwiftSyntax
 import SwiftParser
 import XCTest
 
-final class MemberTypeTests: XCTestCase {
+final class TypeMemberTests: XCTestCase {
   func testKeyword() {
     AssertParse(
       "MyType.class",

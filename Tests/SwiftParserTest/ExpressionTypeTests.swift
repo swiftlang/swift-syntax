@@ -57,18 +57,18 @@ final class ExpressionTypeTests: XCTestCase {
       #line: "(1️⃣X, X)",
 
       // Protocol compositions
-      // FIXME: 'canParseType' cannot handle these.
-      //#line: "1️⃣X & Y",
-      //#line: "Any & 1️⃣X",
-      //#line: "Self & 1️⃣X",
-      //#line: "any 1️⃣X & Y",
-      //#line: "any 1️⃣X?.Y & (Y, Z)",
+      #line: "1️⃣X & Y",
+      #line: "Any & 1️⃣X",
+      #line: "Self & 1️⃣X",
+      #line: "any 1️⃣X & Y",
+      #line: "any 1️⃣X?.Y & (Y, Z)",
 
       // Functions
       // FIXME: 'canParseType' cannot handle these.
       //#line: "@convention(witness_method: Y) (1️⃣X) -> ()",
       //#line: #"@convention(c, cType: "intptr_t (*)(size_t)") (1️⃣X) -> Y"#,
       #line: "(1️⃣X) -> Y",
+      #line: "(1️⃣X, Y) -> P & Q",
     ]
 
     for (line, type) in cases {

@@ -649,14 +649,87 @@ extension Parser {
 
 extension Parser.Lookahead {
   mutating func canParseType() -> Bool {
+    guard self.canParseTypeScalar() else {
+      return false
+    }
+
+    if self.currentToken.isEllipsis {
+      self.consumeAnyToken()
+    }
+
+    return true
+  }
+
+  mutating func skipTypeAttributeList() {
+    var specifierProgress = LoopProgressCondition()
+    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
+    while self.at(anyIn: TypeSpecifier.self) != nil || self.atContextualKeyword("isolated") || self.atContextualKeyword("_const"),
+      specifierProgress.evaluate(currentToken)
+    {
+      self.consumeAnyToken()
+    }
+
+    var attributeProgress = LoopProgressCondition()
+    while self.at(.atSign), attributeProgress.evaluate(currentToken) {
+      self.consumeAnyToken()
+      self.skipTypeAttribute()
+    }
+  }
+
+  mutating func canParseTypeScalar() -> Bool {
     self.skipTypeAttributeList()
+
+    guard self.canParseSimpleOrCompositionType() else {
+      return false
+    }
+
+    if self.isAtFunctionTypeArrow() {
+      // Handle type-function if we have an '->' with optional
+      // 'async' and/or 'throws'.
+      var loopProgress = LoopProgressCondition()
+      while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
+        self.eat(handle)
+      }
+
+      guard self.consume(if: .arrow) != nil else {
+        return false
+      }
+
+      return self.canParseType()
+    }
+
+    return true
+  }
+
+  mutating func canParseSimpleOrCompositionType() -> Bool {
+    if self.atContextualKeyword("each") {
+      return self.canParseSimpleType();
+    }
 
     if self.atContextualKeyword("some") || self.atContextualKeyword("any") {
       self.consumeAnyToken()
     }
 
+    guard self.canParseSimpleType() else {
+      return false
+    }
+
+    var loopCondition = LoopProgressCondition()
+    while self.atContextualPunctuator("&") && loopCondition.evaluate(self.currentToken) {
+      self.consumeAnyToken()
+      guard self.canParseSimpleType() else {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  mutating func canParseSimpleType() -> Bool {
     switch self.currentToken.tokenKind {
-    case .capitalSelfKeyword, .anyKeyword, .identifier:
+    case .anyKeyword:
+      self.consumeAnyToken()
+    case .capitalSelfKeyword, .identifier:
       guard self.canParseTypeIdentifier() else {
         return false
       }
@@ -710,42 +783,7 @@ extension Parser.Lookahead {
       break
     }
 
-    if self.isAtFunctionTypeArrow() {
-      // Handle type-function if we have an '->' with optional
-      // 'async' and/or 'throws'.
-      var loopProgress = LoopProgressCondition()
-      while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
-        self.eat(handle)
-      }
-
-      guard self.consume(if: .arrow) != nil else {
-        return false
-      }
-
-      return self.canParseType()
-    }
-
-    if self.currentToken.isEllipsis {
-      self.consumeAnyToken()
-    }
-
     return true
-  }
-
-  mutating func skipTypeAttributeList() {
-    var specifierProgress = LoopProgressCondition()
-    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
-    while self.at(anyIn: TypeSpecifier.self) != nil || self.atContextualKeyword("isolated") || self.atContextualKeyword("_const"),
-      specifierProgress.evaluate(currentToken)
-    {
-      self.consumeAnyToken()
-    }
-
-    var attributeProgress = LoopProgressCondition()
-    while self.at(.atSign), attributeProgress.evaluate(currentToken) {
-      self.consumeAnyToken()
-      self.skipTypeAttribute()
-    }
   }
 
   mutating func canParseTupleBodyType() -> Bool {
@@ -803,30 +841,6 @@ extension Parser.Lookahead {
     return self.consume(if: .rightParen) != nil
   }
 
-  mutating func canParseSimpleType() -> Bool {
-    var allowKeyword = false
-    var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
-      if !self.canParseTypeIdentifier() {
-        // Allow Foo.<keyword> but not <keyword> as the initial identifier
-        if allowKeyword && self.currentToken.isKeyword {
-          self.consumeAnyToken()
-        } else {
-          return false
-        }
-      }
-
-      // Treat 'Foo.<anything>' as an attempt to write a dotted type
-      if self.at(.period) {
-        self.consumeAnyToken()
-        allowKeyword = true
-      } else {
-        return true
-      }
-    }
-    preconditionFailure("Should return from inside the loop")
-  }
-
   func isAtFunctionTypeArrow() -> Bool {
     if self.at(.arrow) {
       return true
@@ -850,26 +864,14 @@ extension Parser.Lookahead {
     return false
   }
 
-  mutating func canParseSimpleOrCompositionType() -> Bool {
-    var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
-      guard self.canParseSimpleType() else {
-        return false
-      }
-
-      if self.atContextualPunctuator("&") {
-        self.consumeAnyToken()
-        continue
-      } else {
-        return true
-      }
-    }
-    preconditionFailure("Should return from inside the loop")
-  }
-
   mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
+    if self.at(.anyKeyword) {
+      self.consumeAnyToken()
+      return true
+    }
+
     // Parse an identifier.
-    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || self.at(.anyKeyword) || (allowKeyword && self.currentToken.isKeyword) else {
+    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || (allowKeyword && self.currentToken.isKeyword) else {
       return false
     }
     self.consumeAnyToken()

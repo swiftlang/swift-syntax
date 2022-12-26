@@ -764,10 +764,6 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
-  func testTypeExpression() {
-    AssertParse("_ = (any Sequence<Int>).self")
-  }
-
   func testMoveExpression() {
     AssertParse("_move msg")
     AssertParse("use(_move msg)")

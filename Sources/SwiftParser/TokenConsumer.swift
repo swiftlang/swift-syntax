@@ -61,7 +61,7 @@ extension TokenConsumer {
     _ kind: RawTokenKind,
     where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Bool {
-    return self.currentToken.tokenKind == kind && condition(self.currentToken)
+    return self.currentToken.rawTokenKind == kind && condition(self.currentToken)
   }
 
   /// Returns whether the current token is a contextual keyword with the given `name`.
@@ -91,10 +91,10 @@ extension TokenConsumer {
     contextualKeywords: [SyntaxText] = [],
     where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Bool {
-    if kinds.contains(self.currentToken.tokenKind) && condition(self.currentToken) {
+    if kinds.contains(self.currentToken.rawTokenKind) && condition(self.currentToken) {
       return true
     }
-    switch self.currentToken.tokenKind {
+    switch self.currentToken.rawTokenKind {
     case .identifier, .contextualKeyword:
       return contextualKeywords.contains(self.currentToken.tokenText) && condition(self.currentToken)
     default:
@@ -207,7 +207,7 @@ extension TokenConsumer {
   /// tokens and return them. Otherwise, return `nil`.
   @_spi(RawSyntax)
   public mutating func consume(if kind1: RawTokenKind, followedBy kind2: RawTokenKind) -> (Token, Token)? {
-    if self.at(kind1) && self.peek().tokenKind == kind2 {
+    if self.at(kind1) && self.peek().rawTokenKind == kind2 {
       return (consumeAnyToken(), consumeAnyToken())
     } else {
       return nil

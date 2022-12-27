@@ -47,7 +47,7 @@ extension TokenConsumer {
       _ = subparser.consumeAttributeList()
     }
 
-    if subparser.currentToken.isKeyword || subparser.currentToken.tokenKind == .identifier {
+    if subparser.currentToken.isKeyword || subparser.currentToken.rawTokenKind == .identifier {
       var modifierProgress = LoopProgressCondition()
       while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
         modifierKind != .classKeyword,
@@ -85,7 +85,7 @@ extension TokenConsumer {
     switch declStartKeyword {
     case .actorContextualKeyword:
       // actor Foo {}
-      if subparser.peek().tokenKind == .identifier {
+      if subparser.peek().rawTokenKind == .identifier {
         return true
       }
       // actor may be somewhere in the modifier list. Eat the tokens until we get
@@ -104,7 +104,7 @@ extension TokenConsumer {
       return allowInitDecl
     case .macroContextualKeyword:
       // macro Foo ...
-      return subparser.peek().tokenKind == .identifier
+      return subparser.peek().rawTokenKind == .identifier
     case .some(_):
       // All other decl start keywords unconditonally start a decl.
       return true
@@ -250,8 +250,8 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case nil:
       if inMemberDeclList {
-        let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().tokenKind.is(any: [.colon, .equal, .comma])
-        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().tokenKind.is(any: [.identifier, .wildcardKeyword])
+        let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().rawTokenKind.is(any: [.colon, .equal, .comma])
+        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(any: [.identifier, .wildcardKeyword])
 
         if isProbablyVarDecl || isProbablyTupleDecl {
           return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.varKeyword)))
@@ -553,7 +553,7 @@ extension Parser {
           case prefixOperator
 
           init?(lexeme: Lexer.Lexeme) {
-            switch (lexeme.tokenKind, lexeme.tokenText) {
+            switch (lexeme.rawTokenKind, lexeme.tokenText) {
             case (.colon, _): self = .colon
             case (.spacedBinaryOperator, "=="): self = .spacedBinaryOperator
             case (.unspacedBinaryOperator, "=="): self = .unspacedBinaryOperator
@@ -1242,7 +1242,7 @@ extension Parser {
     let identifier: RawTokenSyntax
     if self.at(anyIn: Operator.self) != nil || self.at(any: [.exclamationMark, .prefixAmpersand]) || self.atRegexLiteralThatCouldBeAnOperator() {
       var name = self.currentToken.tokenText
-      if name.count > 1 && name.hasSuffix("<") && self.peek().tokenKind == .identifier {
+      if name.count > 1 && name.hasSuffix("<") && self.peek().rawTokenKind == .identifier {
         name = SyntaxText(rebasing: name.dropLast())
       }
       unexpectedBeforeIdentifier = nil
@@ -1338,7 +1338,7 @@ extension Parser {
     let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.eat(handle)
 
     let unexpectedName: RawTokenSyntax?
-    if self.at(.identifier) && self.peek().starts(with: "<") || self.peek().tokenKind == .leftParen {
+    if self.at(.identifier) && self.peek().starts(with: "<") || self.peek().rawTokenKind == .leftParen {
       unexpectedName = self.consumeAnyToken()
     } else {
       unexpectedName = nil
@@ -2057,7 +2057,7 @@ extension Parser {
       case poundWarningKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.tokenKind {
+        switch lexeme.rawTokenKind {
         case .poundErrorKeyword: self = .poundErrorKeyword
         case .poundWarningKeyword: self = .poundWarningKeyword
         default: return nil

@@ -266,7 +266,7 @@ extension Parser.Lookahead {
     }
 
     // If we don't have attributes, then it cannot be an accessor block.
-    if nextToken.tokenKind != .atSign {
+    if nextToken.rawTokenKind != .atSign {
       return false
     }
 
@@ -316,7 +316,7 @@ extension Parser.Lookahead {
     case poundElseifKeyword
 
     init?(lexeme: Lexer.Lexeme) {
-      switch lexeme.tokenKind {
+      switch lexeme.rawTokenKind {
       case .leftParen: self = .leftParen
       case .leftBrace: self = .leftBrace
       case .leftSquareBracket: self = .leftSquareBracket

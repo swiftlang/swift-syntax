@@ -57,7 +57,7 @@ protocol ContextualKeywords: RawRepresentable, RawTokenKindSubset {}
 
 extension ContextualKeywords where RawValue == SyntaxText {
   init?(lexeme: Lexer.Lexeme) {
-    guard lexeme.tokenKind == .identifier else { return nil }
+    guard lexeme.rawTokenKind == .identifier else { return nil }
     self.init(rawValue: lexeme.tokenText)
   }
 
@@ -92,7 +92,7 @@ enum BinaryOperator: RawTokenKindSubset {
   case unspacedBinaryOperator
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .spacedBinaryOperator: self = .spacedBinaryOperator
     case .unspacedBinaryOperator: self = .unspacedBinaryOperator
     default: return nil
@@ -126,7 +126,7 @@ enum CanBeStatementStart: RawTokenKindSubset {
   case yieldAsIdentifier
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .breakKeyword: self = .breakKeyword
     case .continueKeyword: self = .continueKeyword
     case .deferKeyword: self = .deferKeyword
@@ -234,7 +234,7 @@ enum DeclarationStart: RawTokenKindSubset {
   case varKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .identifier where lexeme.tokenText == "actor": self = .actorContextualKeyword
     case .identifier where lexeme.tokenText == "macro": self = .macroContextualKeyword
     case .associatedtypeKeyword: self = .associatedtypeKeyword
@@ -312,7 +312,7 @@ enum EffectsSpecifier: RawTokenKindSubset {
   init?(lexeme: Lexer.Lexeme) {
     // We'll take 'await', 'throw' and 'try' too for recovery but they have to
     // be on the same line as the declaration they're modifying.
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .identifier where lexeme.tokenText == "async": self = .asyncContextualKeyword
     case .identifier where lexeme.tokenText == "await" && !lexeme.isAtStartOfLine: self = .awaitContextualKeyword
     case .identifier where lexeme.tokenText == "reasync": self = .reasyncContextualKeyword
@@ -354,7 +354,7 @@ enum IdentifierTokens: RawTokenKindSubset {
   case selfKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .anyKeyword: self = .anyKeyword
     case .capitalSelfKeyword: self = .capitalSelfKeyword
     case .identifier: self = .identifier
@@ -383,7 +383,7 @@ enum IdentifierOrRethrowsTokens: RawTokenKindSubset {
   case rethrowsKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .anyKeyword: self = .anyKeyword
     case .capitalSelfKeyword: self = .capitalSelfKeyword
     case .identifier: self = .identifier
@@ -419,7 +419,7 @@ enum Operator: RawTokenKindSubset {
   case prefixOperator
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .spacedBinaryOperator: self = .spacedBinaryOperator
     case .unspacedBinaryOperator: self = .unspacedBinaryOperator
     case .postfixOperator: self = .postfixOperator
@@ -453,7 +453,7 @@ enum OperatorLike: RawTokenKindSubset {
       self = .operator(op)
       return
     }
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .exclamationMark: self = .exclamationMark
     case .infixQuestionMark: self = .infixQuestionMark
     case .postfixQuestionMark: self = .postfixQuestionMark
@@ -501,7 +501,7 @@ enum PoundDeclarationStart: RawTokenKindSubset {
   case poundErrorKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .poundIfKeyword: self = .poundIfKeyword
     case .poundWarningKeyword: self = .poundWarningKeyword
     case .poundErrorKeyword: self = .poundErrorKeyword
@@ -523,7 +523,7 @@ enum SwitchCaseStart: RawTokenKindSubset {
   case defaultKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .caseKeyword: self = .caseKeyword
     case .defaultKeyword: self = .defaultKeyword
     default: return nil
@@ -544,7 +544,7 @@ public enum TypeSpecifier: RawTokenKindSubset {
   case shared
 
   init?(lexeme: Lexer.Lexeme) {
-    switch (lexeme.tokenKind, lexeme.tokenText) {
+    switch (lexeme.rawTokenKind, lexeme.tokenText) {
     case (.inoutKeyword, _): self = .inoutKeyword
     case (.identifier, "__owned"): self = .owned
     case (.identifier, "__shared"): self = .shared
@@ -587,7 +587,7 @@ enum AwaitTryMove: RawTokenKindSubset {
   case tryKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch (lexeme.tokenKind, lexeme.tokenText) {
+    switch (lexeme.rawTokenKind, lexeme.tokenText) {
     case (.tryKeyword, _): self = .tryKeyword
     case (.identifier, "await"): self = .awaitContextualKeyword
     case (.identifier, "_move"): self = ._moveContextualKeyword
@@ -621,7 +621,7 @@ enum ExpressionPrefixOperator: RawTokenKindSubset {
   case prefixOperator
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .backslash: self = .backslash
     case .prefixAmpersand: self = .prefixAmpersand
     case .prefixOperator: self = .prefixOperator
@@ -644,7 +644,7 @@ enum MatchingPatternStart: RawTokenKindSubset {
   case varKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .isKeyword: self = .isKeyword
     case .letKeyword: self = .letKeyword
     case .varKeyword: self = .varKeyword
@@ -666,7 +666,7 @@ enum ParameterModifier: RawTokenKindSubset {
   case isolated
 
   init?(lexeme: Lexer.Lexeme) {
-    switch (lexeme.tokenKind, lexeme.tokenText) {
+    switch (lexeme.rawTokenKind, lexeme.tokenText) {
     case (.identifier, "_const"): self = ._const
     case (.identifier, "isolated"): self = .isolated
     default: return nil
@@ -708,7 +708,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case wildcardKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.tokenKind {
+    switch lexeme.rawTokenKind {
     case .anyKeyword: self = .anyKeyword
     case .capitalSelfKeyword: self = .capitalSelfKeyword
     case .dollarIdentifier: self = .dollarIdentifier

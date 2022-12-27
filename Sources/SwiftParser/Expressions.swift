@@ -46,7 +46,7 @@ extension TokenConsumer {
       // whether the '{' is the start of a closure expression or a
       // brace statement for 'repeat { ... } while'
       let backtrack = self.lookahead()
-      return backtrack.peek().tokenKind != .leftBrace
+      return backtrack.peek().rawTokenKind != .leftBrace
     }
 
     return false
@@ -238,7 +238,7 @@ extension Parser {
       case throwsKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.tokenKind {
+        switch lexeme.rawTokenKind {
         case .spacedBinaryOperator: self = .spacedBinaryOperator
         case .unspacedBinaryOperator: self = .unspacedBinaryOperator
         case .infixQuestionMark: self = .infixQuestionMark
@@ -349,7 +349,7 @@ extension Parser {
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
     case (.async, _)?:
-      if self.peek().tokenKind == .arrow || self.peek().tokenKind == .throwsKeyword {
+      if self.peek().rawTokenKind == .arrow || self.peek().rawTokenKind == .throwsKeyword {
         fallthrough
       } else {
         return nil
@@ -1008,7 +1008,7 @@ extension Parser {
       // Check for a [] or .[] suffix. The latter is only permitted when there
       // are no components.
       if self.at(.leftSquareBracket, where: { !$0.isAtStartOfLine })
-        || (components.isEmpty && self.at(.period) && self.peek().tokenKind == .leftSquareBracket)
+        || (components.isEmpty && self.at(.period) && self.peek().rawTokenKind == .leftSquareBracket)
       {
         // Consume the '.', if it's allowed here.
         let period: RawTokenSyntax?
@@ -1185,7 +1185,7 @@ extension Parser {
       // We might have a contextual keyword followed by an identifier.
       // 'each <identifier>' is a pack element expr, and 'any <identifier>'
       // is an existential type expr.
-      if self.peek().tokenKind == .identifier, !self.peek().isAtStartOfLine {
+      if self.peek().rawTokenKind == .identifier, !self.peek().isAtStartOfLine {
         if self.atContextualKeyword("any") {
           let ty = self.parseType()
           return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))
@@ -1782,7 +1782,7 @@ extension Parser {
             runexpected = nil
           }
           let rparen = subparser.expectWithoutRecovery(.rightParen)
-          assert(subparser.currentToken.tokenKind == .eof)
+          assert(subparser.currentToken.rawTokenKind == .eof)
           let trailing: RawUnexpectedNodesSyntax?
           if subparser.currentToken.byteLength == 0 {
             trailing = nil
@@ -2216,7 +2216,7 @@ extension Parser {
           let unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax?
           let assignToken: RawTokenSyntax?
           let expression: RawExprSyntax
-          if self.peek().tokenKind == .equal {
+          if self.peek().rawTokenKind == .equal {
             // The name is a new declaration.
             (unexpectedBeforeName, name) = self.expectIdentifier()
             (unexpectedBeforeAssignToken, assignToken) = self.expect(.equal)
@@ -2357,8 +2357,8 @@ extension Parser {
         let next = self.peek()
         // "x = 42", "x," and "x]" are all strong captures of x.
         guard
-          next.tokenKind == .equal || next.tokenKind == .comma
-            || next.tokenKind == .rightSquareBracket || next.tokenKind == .period
+          next.rawTokenKind == .equal || next.rawTokenKind == .comma
+            || next.rawTokenKind == .rightSquareBracket || next.rawTokenKind == .period
         else {
           return nil
         }
@@ -2407,7 +2407,7 @@ extension Parser {
       let unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
       let label: RawTokenSyntax?
       let colon: RawTokenSyntax?
-      if currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon {
+      if currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
         (unexpectedBeforeLabel, label) = parseArgumentLabel()
         colon = consumeAnyToken()
       } else {
@@ -2421,7 +2421,7 @@ extension Parser {
       // follows a proper subexpression.
       let expr: RawExprSyntax
       if self.at(anyIn: BinaryOperator.self) != nil
-        && (self.peek().tokenKind == .comma || self.peek().tokenKind == .rightParen || self.peek().tokenKind == .rightSquareBracket)
+        && (self.peek().rawTokenKind == .comma || self.peek().rawTokenKind == .rightParen || self.peek().rawTokenKind == .rightSquareBracket)
       {
         let (ident, args) = self.parseDeclNameRef(.operators)
         expr = RawExprSyntax(
@@ -2495,7 +2495,7 @@ extension Parser.Lookahead {
     // (unless escaped) even outside of switches.
     if !self.currentToken.canBeArgumentLabel()
       || self.at(.defaultKeyword)
-      || self.peek().tokenKind != .colon
+      || self.peek().rawTokenKind != .colon
     {
       return false
     }
@@ -2504,7 +2504,7 @@ extension Parser.Lookahead {
     // `label: switch x { ... }`.
     var backtrack = self.lookahead()
     backtrack.consumeAnyToken()
-    if backtrack.peek().tokenKind == .leftBrace {
+    if backtrack.peek().rawTokenKind == .leftBrace {
       return true
     }
     if backtrack.peek().isEditorPlaceholder {
@@ -2565,7 +2565,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    switch backtrack.currentToken.tokenKind {
+    switch backtrack.currentToken.rawTokenKind {
     case .leftBrace,
       .whereKeyword,
       .comma:
@@ -2692,10 +2692,10 @@ extension Parser.Lookahead {
       return true
     }
 
-    if self.peek().tokenKind != .identifier,
-      self.peek().tokenKind != .capitalSelfKeyword,
-      self.peek().tokenKind != .selfKeyword,
-      !self.peek().tokenKind.isKeyword
+    if self.peek().rawTokenKind != .identifier,
+      self.peek().rawTokenKind != .capitalSelfKeyword,
+      self.peek().rawTokenKind != .selfKeyword,
+      !self.peek().rawTokenKind.isKeyword
     {
       return false
     }
@@ -2703,7 +2703,7 @@ extension Parser.Lookahead {
   }
 
   fileprivate func isNextTokenCallPattern() -> Bool {
-    switch self.peek().tokenKind {
+    switch self.peek().rawTokenKind {
     case .period,
       .leftParen:
       return true

@@ -20,7 +20,7 @@ import _SwiftSyntaxTestSupport
 // MARK: Lexing Assertions
 
 struct LexemeSpec {
-  let tokenKind: RawTokenKind
+  let rawTokenKind: RawTokenKind
   let leadingTrivia: SyntaxText
   let tokenText: SyntaxText
   let trailingTrivia: SyntaxText
@@ -33,7 +33,7 @@ struct LexemeSpec {
   let line: UInt
 
   init(
-    _ tokenKind: RawTokenKind,
+    _ rawTokenKind: RawTokenKind,
     leading: SyntaxText = "",
     text: SyntaxText,
     trailing: SyntaxText = "",
@@ -43,7 +43,7 @@ struct LexemeSpec {
     file: StaticString = #file,
     line: UInt = #line
   ) {
-    self.tokenKind = tokenKind
+    self.rawTokenKind = rawTokenKind
     self.leadingTrivia = leading
     self.tokenText = text
     self.trailingTrivia = trailing
@@ -86,9 +86,9 @@ private func AssertTokens(
     defer {
       lexemeStartOffset = actualLexeme.byteLength
     }
-    if actualLexeme.tokenKind != expectedLexeme.tokenKind {
+    if actualLexeme.rawTokenKind != expectedLexeme.rawTokenKind {
       XCTFail(
-        "Expected token kind \(expectedLexeme.tokenKind) but got \(actualLexeme.tokenKind)",
+        "Expected token kind \(expectedLexeme.rawTokenKind) but got \(actualLexeme.rawTokenKind)",
         file: expectedLexeme.file,
         line: expectedLexeme.line
       )
@@ -180,7 +180,7 @@ func AssertLexemes(
 ) {
   var (markerLocations, source) = extractMarkers(markedSource)
   var expectedLexemes = expectedLexemes
-  if expectedLexemes.last?.tokenKind != .eof {
+  if expectedLexemes.last?.rawTokenKind != .eof {
     expectedLexemes.append(LexemeSpec(.eof, text: ""))
   }
   source.withUTF8 { buf in
@@ -188,7 +188,7 @@ func AssertLexemes(
     for token in Lexer.tokenize(buf, from: 0) {
       lexemes.append(token)
 
-      if token.tokenKind == .eof {
+      if token.rawTokenKind == .eof {
         break
       }
     }

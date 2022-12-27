@@ -232,7 +232,7 @@ extension Parser {
     stopAtFirstPeriod: Bool = false
   ) -> RawTypeSyntax {
     var base: RawTypeSyntax
-    switch self.currentToken.tokenKind {
+    switch self.currentToken.rawTokenKind {
     case .capitalSelfKeyword,
       .anyKeyword,
       .identifier:
@@ -509,7 +509,7 @@ extension Parser {
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().tokenKind == .colon {
+          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
             (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {
@@ -724,7 +724,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleType() -> Bool {
-    switch self.currentToken.tokenKind {
+    switch self.currentToken.rawTokenKind {
     case .anyKeyword:
       self.consumeAnyToken()
     case .capitalSelfKeyword, .identifier:
@@ -847,7 +847,7 @@ extension Parser.Lookahead {
     }
 
     if self.at(anyIn: EffectsSpecifier.self) != nil {
-      if self.peek().tokenKind == .arrow {
+      if self.peek().rawTokenKind == .arrow {
         return true
       }
 
@@ -1051,14 +1051,14 @@ extension Parser {
 
 extension Lexer.Lexeme {
   var isBinaryOperator: Bool {
-    return self.tokenKind == .spacedBinaryOperator
-      || self.tokenKind == .unspacedBinaryOperator
+    return self.rawTokenKind == .spacedBinaryOperator
+      || self.rawTokenKind == .unspacedBinaryOperator
   }
 
   var isAnyOperator: Bool {
     return self.isBinaryOperator
-      || self.tokenKind == .postfixOperator
-      || self.tokenKind == .prefixOperator
+      || self.rawTokenKind == .postfixOperator
+      || self.rawTokenKind == .prefixOperator
   }
 
   var isEllipsis: Bool {
@@ -1066,7 +1066,7 @@ extension Lexer.Lexeme {
   }
 
   var isGenericTypeDisambiguatingToken: Bool {
-    switch self.tokenKind {
+    switch self.rawTokenKind {
     case .rightParen,
       .rightSquareBracket,
       .leftBrace,

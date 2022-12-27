@@ -73,12 +73,12 @@ extension Parser.Lookahead {
         return RecoveryConsumptionHandle(
           unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
           tokenConsumptionHandle: TokenConsumptionHandle(
-            tokenKind: self.currentToken.tokenKind,
+            tokenKind: self.currentToken.rawTokenKind,
             remappedKind: self.at(any: [], contextualKeywords: contextualKeywords) ? .contextualKeyword : nil
           )
         )
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
+      let currentTokenPrecedence = TokenPrecedence(self.currentToken.rawTokenKind)
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }
@@ -129,7 +129,7 @@ extension Parser.Lookahead {
           )
         )
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
+      let currentTokenPrecedence = TokenPrecedence(self.currentToken.rawTokenKind)
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }

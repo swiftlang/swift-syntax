@@ -46,7 +46,7 @@ public struct Lexer {
     }
 
     @_spi(RawSyntax)
-    public var tokenKind: RawTokenKind
+    public var rawTokenKind: RawTokenKind
     public var flags: Lexeme.Flags
     public var error: LexerError?
     var start: UnsafePointer<UInt8>
@@ -59,12 +59,12 @@ public struct Lexer {
     }
 
     var isMultilineStringLiteral: Bool {
-      assert(self.tokenKind == .stringLiteral)
+      assert(self.rawTokenKind == .stringLiteral)
       return self.flags.contains(.isMultilineStringLiteral)
     }
 
     var isEditorPlaceholder: Bool {
-      return self.tokenKind == .identifier && self.tokenText.isEditorPlaceholder
+      return self.rawTokenKind == .identifier && self.tokenText.isEditorPlaceholder
     }
 
     @_spi(RawSyntax)
@@ -77,7 +77,7 @@ public struct Lexer {
       textLength: Int,
       trailingTriviaLength: Int
     ) {
-      self.tokenKind = tokenKind
+      self.rawTokenKind = tokenKind
       self.flags = flags
       self.error = error
       self.start = start

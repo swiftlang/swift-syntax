@@ -174,7 +174,7 @@ public struct Parser {
   /// - Returns: The token that was consumed.
   @_spi(RawSyntax)
   public mutating func consumeAnyToken() -> RawTokenSyntax {
-    adjustNestingLevel(for: self.currentToken.tokenKind)
+    adjustNestingLevel(for: self.currentToken.rawTokenKind)
     return self.consumeAnyTokenWithoutAdjustingNestingLevel()
   }
 
@@ -183,7 +183,7 @@ public struct Parser {
     let tok = self.currentToken
     self.currentToken = self.lexemes.advance()
     return RawTokenSyntax(
-      kind: tok.tokenKind,
+      kind: tok.rawTokenKind,
       wholeText: tok.wholeText,
       textRange: tok.textRange,
       presence: .present,
@@ -228,7 +228,7 @@ extension Parser {
   ///            given `TokenKind`.
   @_spi(RawSyntax)
   public mutating func consumeAnyToken(remapping kind: RawTokenKind) -> RawTokenSyntax {
-    self.currentToken.tokenKind = kind
+    self.currentToken.rawTokenKind = kind
     return self.consumeAnyToken()
   }
 
@@ -263,7 +263,7 @@ extension Parser {
       return RecoveryConsumptionHandle(
         unexpectedTokens: 0,
         tokenConsumptionHandle: TokenConsumptionHandle(
-          tokenKind: self.currentToken.tokenKind,
+          tokenKind: self.currentToken.rawTokenKind,
           remappedKind: .contextualKeyword
         )
       )
@@ -285,7 +285,7 @@ extension Parser {
     if self.at(any: kinds) {
       return RecoveryConsumptionHandle(
         unexpectedTokens: 0,
-        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: self.currentToken.tokenKind)
+        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: self.currentToken.rawTokenKind)
       )
     }
     var lookahead = self.lookahead()
@@ -434,7 +434,7 @@ extension Parser {
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
         self.missingToken(.identifier, text: nil)
       )
-    } else if keywordRecovery, self.currentToken.tokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
+    } else if keywordRecovery, self.currentToken.rawTokenKind.isKeyword, !self.currentToken.isAtStartOfLine {
       let keyword = self.consumeAnyToken()
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(keyword)], arena: self.arena),

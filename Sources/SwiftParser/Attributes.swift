@@ -149,9 +149,9 @@ extension Parser {
 
     let argument: RawAttributeSyntax.Argument
     do {
-      if self.peek().tokenKind == .integerLiteral {
+      if self.peek().rawTokenKind == .integerLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
-      } else if self.peek().tokenKind == .floatingLiteral {
+      } else if self.peek().rawTokenKind == .floatingLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
       } else {
         argument = .availability(self.parseExtendedAvailabilitySpecList())
@@ -181,9 +181,9 @@ extension Parser {
 
     let argument: RawAttributeSyntax.Argument
     do {
-      if self.peek().tokenKind == .integerLiteral {
+      if self.peek().rawTokenKind == .integerLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
-      } else if self.peek().tokenKind == .floatingLiteral {
+      } else if self.peek().rawTokenKind == .floatingLiteral {
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
       } else {
         argument = .availability(self.parseExtendedAvailabilitySpecList())
@@ -331,7 +331,7 @@ extension Parser {
       case selfKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.tokenKind {
+        switch lexeme.rawTokenKind {
         case .identifier: self = .identifier
         case .integerLiteral: self = .integerLiteral
         case .selfKeyword: self = .selfKeyword
@@ -962,7 +962,7 @@ extension Parser.Lookahead {
     // Alternatively, we might have a token that illustrates we're not going to
     // get anything following the attribute, which means the parentheses describe
     // what follows the attribute.
-    switch lookahead.currentToken.tokenKind {
+    switch lookahead.currentToken.rawTokenKind {
     case .arrow,
       .throwKeyword,
       .throwsKeyword,

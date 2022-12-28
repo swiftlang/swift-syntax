@@ -151,40 +151,6 @@ final class TypeTests: XCTestCase {
     )
   }
 
-  func testMetatypes() {
-    AssertParse(
-      """
-      arg.covariantAssocMetatype1 { (_: Any.Type.Type.Type) in }
-      """
-    )
-
-    AssertParse(
-      """
-      protocol CovariantMetatypes {
-        associatedtype Q
-
-        func covariantSelfMetatype1(_: (Self.Type.Type.Type) -> Void)
-        func covariantSelfMetatype2() -> (Self.Type, Self.Type.Type)
-
-        func covariantAssocMetatype1(_: (Q.Type.Type.Type) -> Void)
-        func covariantAssocMetatype2() -> (Q.Type, Q.Type.Type)
-
-        var covariantSelfMetatypeProp1: Self.Type.Type.Type { get }
-        var covariantSelfMetatypeProp2: (Self.Type, Self.Type.Type) { get }
-
-        var covariantAssocMetatypeProp1: Q.Type.Type.Type { get }
-        var covariantAssocMetatypeProp2: (Q.Type, Q.Type.Type) { get }
-
-        subscript(covariantSelfMetatypeSubscript1 _: (Self.Type.Type.Type) -> Void) -> Self.Type { get }
-        subscript(covariantSelfMetatypeSubscript2 _: Void) -> (Self.Type, Self.Type.Type) { get }
-
-        subscript(covariantAssocMetatypeSubscript1 _: (Q.Type.Type.Type) -> Void) -> Q.Type { get }
-        subscript(covariantAssocMetatypeSubscript2 _: Void) -> (Q.Type, Q.Type.Type) { get }
-      }
-      """
-    )
-  }
-
   func testNamedOpaqueReturnTypes() {
     AssertParse(
       """

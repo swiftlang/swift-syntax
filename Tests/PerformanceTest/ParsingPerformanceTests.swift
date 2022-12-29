@@ -24,7 +24,8 @@ public class ParsingPerformanceTests: XCTestCase {
       .appendingPathComponent("MinimalCollections.swift.input")
   }
 
-  func testParsingPerformance() {
+  func testParsingPerformance() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     measure {
       do {
         _ = try SyntaxParser.parse(inputFile)
@@ -34,7 +35,8 @@ public class ParsingPerformanceTests: XCTestCase {
     }
   }
 
-  func testNativeParsingPerformance() {
+  func testNativeParsingPerformance() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     measure {
       do {
         let source = try String(contentsOf: inputFile)

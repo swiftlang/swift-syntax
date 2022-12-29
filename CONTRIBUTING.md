@@ -64,7 +64,7 @@ If you are seeing issues regarding a mismatched parser library, try the followin
 Tip: Running SwiftSyntax’s self-parse tests takes the majority of testing time. If you want to iterate quickly, you can skip these tests using the following steps:
 1. Product -> Scheme -> Edit Scheme…
 2. Select the Arguments tab in the Run section
-3. Add a `SKIP_SELF_PARSE` environment variable with value `1`
+3. Add a `SKIP_LONG_TESTS` environment variable with value `1`
 
 ### `lit`-based tests
 

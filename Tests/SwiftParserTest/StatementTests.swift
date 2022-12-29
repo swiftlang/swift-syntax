@@ -415,7 +415,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         YieldStmtSyntax(
-          yieldKeyword: .contextualKeyword("yield"),
+          yieldKeyword: .contextualKeyword(.yield),
           yields: .init(
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),
@@ -449,7 +449,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         YieldStmtSyntax(
-          yieldKeyword: .contextualKeyword("yield"),
+          yieldKeyword: .contextualKeyword(.yield),
           yields: .init(
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),

@@ -17,217 +17,655 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum DeclarationAttribute: SyntaxText, ContextualKeywords {
-    case _silgen_name = "_silgen_name"
+  enum DeclarationAttribute: RawTokenKindSubset {
+    case _silgen_name
     
-    case available = "available"
+    case available
     
-    case objc = "objc"
+    case objc
     
-    case dynamicCallable = "dynamicCallable"
+    case dynamicCallable
     
-    case main = "main"
+    case main
     
-    case _exported = "_exported"
+    case _exported
     
-    case dynamicMemberLookup = "dynamicMemberLookup"
+    case dynamicMemberLookup
     
-    case NSCopying = "NSCopying"
+    case NSCopying
     
-    case IBAction = "IBAction"
+    case IBAction
     
-    case IBDesignable = "IBDesignable"
+    case IBDesignable
     
-    case IBInspectable = "IBInspectable"
+    case IBInspectable
     
-    case IBOutlet = "IBOutlet"
+    case IBOutlet
     
-    case NSManaged = "NSManaged"
+    case NSManaged
     
-    case LLDBDebuggerFunction = "LLDBDebuggerFunction"
+    case LLDBDebuggerFunction
     
-    case UIApplicationMain = "UIApplicationMain"
+    case UIApplicationMain
     
-    case unsafe_no_objc_tagged_pointer = "unsafe_no_objc_tagged_pointer"
+    case unsafe_no_objc_tagged_pointer
     
-    case inline = "inline"
+    case inline
     
-    case _semantics = "_semantics"
+    case _semantics
     
-    case _transparent = "_transparent"
+    case _transparent
     
-    case requires_stored_property_inits = "requires_stored_property_inits"
+    case requires_stored_property_inits
     
-    case nonobjc = "nonobjc"
+    case nonobjc
     
-    case _fixed_layout = "_fixed_layout"
+    case _fixed_layout
     
-    case inlinable = "inlinable"
+    case inlinable
     
-    case _specialize = "_specialize"
+    case _specialize
     
-    case objcMembers = "objcMembers"
+    case objcMembers
     
-    case _compilerInitialized = "_compilerInitialized"
+    case _compilerInitialized
     
-    case _hasStorage = "_hasStorage"
+    case _hasStorage
     
-    case __raw_doc_comment = "__raw_doc_comment"
+    case __raw_doc_comment
     
-    case _effects = "_effects"
+    case _effects
     
-    case __objc_bridged = "__objc_bridged"
+    case __objc_bridged
     
-    case NSApplicationMain = "NSApplicationMain"
+    case NSApplicationMain
     
-    case _objc_non_lazy_realization = "_objc_non_lazy_realization"
+    case _objc_non_lazy_realization
     
-    case __synthesized_protocol = "__synthesized_protocol"
+    case __synthesized_protocol
     
-    case testable = "testable"
+    case testable
     
-    case _alignment = "_alignment"
+    case _alignment
     
-    case atRethrows = "rethrows"
+    case atRethrows
     
-    case _swift_native_objc_runtime_base = "_swift_native_objc_runtime_base"
+    case _swift_native_objc_runtime_base
     
-    case warn_unqualified_access = "warn_unqualified_access"
+    case warn_unqualified_access
     
-    case _show_in_interface = "_show_in_interface"
+    case _show_in_interface
     
-    case _cdecl = "_cdecl"
+    case _cdecl
     
-    case usableFromInline = "usableFromInline"
+    case usableFromInline
     
-    case discardableResult = "discardableResult"
+    case discardableResult
     
-    case GKInspectable = "GKInspectable"
+    case GKInspectable
     
-    case _implements = "_implements"
+    case _implements
     
-    case _objcRuntimeName = "_objcRuntimeName"
+    case _objcRuntimeName
     
-    case _staticInitializeObjCMetadata = "_staticInitializeObjCMetadata"
+    case _staticInitializeObjCMetadata
     
-    case _restatedObjCConformance = "_restatedObjCConformance"
+    case _restatedObjCConformance
     
-    case _objcImplementation = "_objcImplementation"
+    case _objcImplementation
     
-    case _optimize = "_optimize"
+    case _optimize
     
-    case _clangImporterSynthesizedType = "_clangImporterSynthesizedType"
+    case _clangImporterSynthesizedType
     
-    case _weakLinked = "_weakLinked"
+    case _weakLinked
     
-    case frozen = "frozen"
+    case frozen
     
-    case _frozen = "_frozen"
+    case _frozen
     
-    case _forbidSerializingReference = "_forbidSerializingReference"
+    case _forbidSerializingReference
     
-    case _hasInitialValue = "_hasInitialValue"
+    case _hasInitialValue
     
-    case _nonoverride = "_nonoverride"
+    case _nonoverride
     
-    case _dynamicReplacement = "_dynamicReplacement"
+    case _dynamicReplacement
     
-    case _borrowed = "_borrowed"
+    case _borrowed
     
-    case _private = "_private"
+    case _private
     
-    case _alwaysEmitIntoClient = "_alwaysEmitIntoClient"
+    case _alwaysEmitIntoClient
     
-    case _implementationOnly = "_implementationOnly"
+    case _implementationOnly
     
-    case _custom = "_custom"
+    case _custom
     
-    case propertyWrapper = "propertyWrapper"
+    case propertyWrapper
     
-    case _disfavoredOverload = "_disfavoredOverload"
+    case _disfavoredOverload
     
-    case resultBuilder = "resultBuilder"
+    case resultBuilder
     
-    case _projectedValueProperty = "_projectedValueProperty"
+    case _projectedValueProperty
     
-    case _nonEphemeral = "_nonEphemeral"
+    case _nonEphemeral
     
-    case differentiable = "differentiable"
+    case differentiable
     
-    case _hasMissingDesignatedInitializers = "_hasMissingDesignatedInitializers"
+    case _hasMissingDesignatedInitializers
     
-    case _inheritsConvenienceInitializers = "_inheritsConvenienceInitializers"
+    case _inheritsConvenienceInitializers
     
-    case _typeEraser = "_typeEraser"
+    case _typeEraser
     
-    case IBSegueAction = "IBSegueAction"
+    case IBSegueAction
     
-    case _originallyDefinedIn = "_originallyDefinedIn"
+    case _originallyDefinedIn
     
-    case derivative = "derivative"
+    case derivative
     
-    case _spi = "_spi"
+    case _spi
     
-    case transpose = "transpose"
+    case transpose
     
-    case noDerivative = "noDerivative"
+    case noDerivative
     
-    case globalActor = "globalActor"
+    case globalActor
     
-    case _specializeExtension = "_specializeExtension"
+    case _specializeExtension
     
-    case Sendable = "Sendable"
+    case Sendable
     
-    case _marker = "_marker"
+    case _marker
     
-    case atReasync = "reasync"
+    case atReasync
     
-    case _unsafeInheritExecutor = "_unsafeInheritExecutor"
+    case _unsafeInheritExecutor
     
-    case _implicitSelfCapture = "_implicitSelfCapture"
+    case _implicitSelfCapture
     
-    case _inheritActorContext = "_inheritActorContext"
+    case _inheritActorContext
     
-    case _eagerMove = "_eagerMove"
+    case _eagerMove
     
-    case _noEagerMove = "_noEagerMove"
+    case _noEagerMove
     
-    case _assemblyVision = "_assemblyVision"
+    case _assemblyVision
     
-    case _nonSendable = "_nonSendable"
+    case _nonSendable
     
-    case _noImplicitCopy = "_noImplicitCopy"
+    case _noImplicitCopy
     
-    case _noLocks = "_noLocks"
+    case _noLocks
     
-    case _noAllocation = "_noAllocation"
+    case _noAllocation
     
-    case preconcurrency = "preconcurrency"
+    case preconcurrency
     
-    case _unavailableFromAsync = "_unavailableFromAsync"
+    case _unavailableFromAsync
     
-    case exclusivity = "exclusivity"
+    case exclusivity
     
-    case _backDeploy = "_backDeploy"
+    case _backDeploy
     
-    case _moveOnly = "_moveOnly"
+    case _moveOnly
     
-    case _alwaysEmitConformanceMetadata = "_alwaysEmitConformanceMetadata"
+    case _alwaysEmitConformanceMetadata
     
-    case _expose = "_expose"
+    case _expose
     
-    case typeWrapper = "typeWrapper"
+    case typeWrapper
     
-    case _spiOnly = "_spiOnly"
+    case _spiOnly
     
-    case _documentation = "_documentation"
+    case _documentation
     
-    case typeWrapperIgnored = "typeWrapperIgnored"
+    case typeWrapperIgnored
     
-    case _noMetadata = "_noMetadata"
+    case _noMetadata
     
-    case runtimeMetadata = "runtimeMetadata"
+    case runtimeMetadata
     
-    case _spi_available = "_spi_available"
+    case _spi_available
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(._silgen_name): 
+        self = ._silgen_name
+      case RawTokenKindMatch(.available): 
+        self = .available
+      case RawTokenKindMatch(.objc): 
+        self = .objc
+      case RawTokenKindMatch(.dynamicCallable): 
+        self = .dynamicCallable
+      case RawTokenKindMatch(.main): 
+        self = .main
+      case RawTokenKindMatch(._exported): 
+        self = ._exported
+      case RawTokenKindMatch(.dynamicMemberLookup): 
+        self = .dynamicMemberLookup
+      case RawTokenKindMatch(.NSCopying): 
+        self = .NSCopying
+      case RawTokenKindMatch(.IBAction): 
+        self = .IBAction
+      case RawTokenKindMatch(.IBDesignable): 
+        self = .IBDesignable
+      case RawTokenKindMatch(.IBInspectable): 
+        self = .IBInspectable
+      case RawTokenKindMatch(.IBOutlet): 
+        self = .IBOutlet
+      case RawTokenKindMatch(.NSManaged): 
+        self = .NSManaged
+      case RawTokenKindMatch(.LLDBDebuggerFunction): 
+        self = .LLDBDebuggerFunction
+      case RawTokenKindMatch(.UIApplicationMain): 
+        self = .UIApplicationMain
+      case RawTokenKindMatch(.unsafe_no_objc_tagged_pointer): 
+        self = .unsafe_no_objc_tagged_pointer
+      case RawTokenKindMatch(.inline): 
+        self = .inline
+      case RawTokenKindMatch(._semantics): 
+        self = ._semantics
+      case RawTokenKindMatch(._transparent): 
+        self = ._transparent
+      case RawTokenKindMatch(.requires_stored_property_inits): 
+        self = .requires_stored_property_inits
+      case RawTokenKindMatch(.nonobjc): 
+        self = .nonobjc
+      case RawTokenKindMatch(._fixed_layout): 
+        self = ._fixed_layout
+      case RawTokenKindMatch(.inlinable): 
+        self = .inlinable
+      case RawTokenKindMatch(._specialize): 
+        self = ._specialize
+      case RawTokenKindMatch(.objcMembers): 
+        self = .objcMembers
+      case RawTokenKindMatch(._compilerInitialized): 
+        self = ._compilerInitialized
+      case RawTokenKindMatch(._hasStorage): 
+        self = ._hasStorage
+      case RawTokenKindMatch(.__raw_doc_comment): 
+        self = .__raw_doc_comment
+      case RawTokenKindMatch(._effects): 
+        self = ._effects
+      case RawTokenKindMatch(.__objc_bridged): 
+        self = .__objc_bridged
+      case RawTokenKindMatch(.NSApplicationMain): 
+        self = .NSApplicationMain
+      case RawTokenKindMatch(._objc_non_lazy_realization): 
+        self = ._objc_non_lazy_realization
+      case RawTokenKindMatch(.__synthesized_protocol): 
+        self = .__synthesized_protocol
+      case RawTokenKindMatch(.testable): 
+        self = .testable
+      case RawTokenKindMatch(._alignment): 
+        self = ._alignment
+      case RawTokenKindMatch(.rethrows): 
+        self = .atRethrows
+      case RawTokenKindMatch(._swift_native_objc_runtime_base): 
+        self = ._swift_native_objc_runtime_base
+      case RawTokenKindMatch(.warn_unqualified_access): 
+        self = .warn_unqualified_access
+      case RawTokenKindMatch(._show_in_interface): 
+        self = ._show_in_interface
+      case RawTokenKindMatch(._cdecl): 
+        self = ._cdecl
+      case RawTokenKindMatch(.usableFromInline): 
+        self = .usableFromInline
+      case RawTokenKindMatch(.discardableResult): 
+        self = .discardableResult
+      case RawTokenKindMatch(.GKInspectable): 
+        self = .GKInspectable
+      case RawTokenKindMatch(._implements): 
+        self = ._implements
+      case RawTokenKindMatch(._objcRuntimeName): 
+        self = ._objcRuntimeName
+      case RawTokenKindMatch(._staticInitializeObjCMetadata): 
+        self = ._staticInitializeObjCMetadata
+      case RawTokenKindMatch(._restatedObjCConformance): 
+        self = ._restatedObjCConformance
+      case RawTokenKindMatch(._objcImplementation): 
+        self = ._objcImplementation
+      case RawTokenKindMatch(._optimize): 
+        self = ._optimize
+      case RawTokenKindMatch(._clangImporterSynthesizedType): 
+        self = ._clangImporterSynthesizedType
+      case RawTokenKindMatch(._weakLinked): 
+        self = ._weakLinked
+      case RawTokenKindMatch(.frozen): 
+        self = .frozen
+      case RawTokenKindMatch(._frozen): 
+        self = ._frozen
+      case RawTokenKindMatch(._forbidSerializingReference): 
+        self = ._forbidSerializingReference
+      case RawTokenKindMatch(._hasInitialValue): 
+        self = ._hasInitialValue
+      case RawTokenKindMatch(._nonoverride): 
+        self = ._nonoverride
+      case RawTokenKindMatch(._dynamicReplacement): 
+        self = ._dynamicReplacement
+      case RawTokenKindMatch(._borrowed): 
+        self = ._borrowed
+      case RawTokenKindMatch(._private): 
+        self = ._private
+      case RawTokenKindMatch(._alwaysEmitIntoClient): 
+        self = ._alwaysEmitIntoClient
+      case RawTokenKindMatch(._implementationOnly): 
+        self = ._implementationOnly
+      case RawTokenKindMatch(._custom): 
+        self = ._custom
+      case RawTokenKindMatch(.propertyWrapper): 
+        self = .propertyWrapper
+      case RawTokenKindMatch(._disfavoredOverload): 
+        self = ._disfavoredOverload
+      case RawTokenKindMatch(.resultBuilder): 
+        self = .resultBuilder
+      case RawTokenKindMatch(._projectedValueProperty): 
+        self = ._projectedValueProperty
+      case RawTokenKindMatch(._nonEphemeral): 
+        self = ._nonEphemeral
+      case RawTokenKindMatch(.differentiable): 
+        self = .differentiable
+      case RawTokenKindMatch(._hasMissingDesignatedInitializers): 
+        self = ._hasMissingDesignatedInitializers
+      case RawTokenKindMatch(._inheritsConvenienceInitializers): 
+        self = ._inheritsConvenienceInitializers
+      case RawTokenKindMatch(._typeEraser): 
+        self = ._typeEraser
+      case RawTokenKindMatch(.IBSegueAction): 
+        self = .IBSegueAction
+      case RawTokenKindMatch(._originallyDefinedIn): 
+        self = ._originallyDefinedIn
+      case RawTokenKindMatch(.derivative): 
+        self = .derivative
+      case RawTokenKindMatch(._spi): 
+        self = ._spi
+      case RawTokenKindMatch(.transpose): 
+        self = .transpose
+      case RawTokenKindMatch(.noDerivative): 
+        self = .noDerivative
+      case RawTokenKindMatch(.globalActor): 
+        self = .globalActor
+      case RawTokenKindMatch(._specializeExtension): 
+        self = ._specializeExtension
+      case RawTokenKindMatch(.Sendable): 
+        self = .Sendable
+      case RawTokenKindMatch(._marker): 
+        self = ._marker
+      case RawTokenKindMatch(.reasync): 
+        self = .atReasync
+      case RawTokenKindMatch(._unsafeInheritExecutor): 
+        self = ._unsafeInheritExecutor
+      case RawTokenKindMatch(._implicitSelfCapture): 
+        self = ._implicitSelfCapture
+      case RawTokenKindMatch(._inheritActorContext): 
+        self = ._inheritActorContext
+      case RawTokenKindMatch(._eagerMove): 
+        self = ._eagerMove
+      case RawTokenKindMatch(._noEagerMove): 
+        self = ._noEagerMove
+      case RawTokenKindMatch(._assemblyVision): 
+        self = ._assemblyVision
+      case RawTokenKindMatch(._nonSendable): 
+        self = ._nonSendable
+      case RawTokenKindMatch(._noImplicitCopy): 
+        self = ._noImplicitCopy
+      case RawTokenKindMatch(._noLocks): 
+        self = ._noLocks
+      case RawTokenKindMatch(._noAllocation): 
+        self = ._noAllocation
+      case RawTokenKindMatch(.preconcurrency): 
+        self = .preconcurrency
+      case RawTokenKindMatch(._unavailableFromAsync): 
+        self = ._unavailableFromAsync
+      case RawTokenKindMatch(.exclusivity): 
+        self = .exclusivity
+      case RawTokenKindMatch(._backDeploy): 
+        self = ._backDeploy
+      case RawTokenKindMatch(._moveOnly): 
+        self = ._moveOnly
+      case RawTokenKindMatch(._alwaysEmitConformanceMetadata): 
+        self = ._alwaysEmitConformanceMetadata
+      case RawTokenKindMatch(._expose): 
+        self = ._expose
+      case RawTokenKindMatch(.typeWrapper): 
+        self = .typeWrapper
+      case RawTokenKindMatch(._spiOnly): 
+        self = ._spiOnly
+      case RawTokenKindMatch(._documentation): 
+        self = ._documentation
+      case RawTokenKindMatch(.typeWrapperIgnored): 
+        self = .typeWrapperIgnored
+      case RawTokenKindMatch(._noMetadata): 
+        self = ._noMetadata
+      case RawTokenKindMatch(.runtimeMetadata): 
+        self = .runtimeMetadata
+      case RawTokenKindMatch(.rethrowsKeyword): 
+        self = .atRethrows
+      case RawTokenKindMatch(._spi_available): 
+        self = ._spi_available
+      default: 
+        return nil
+      }
+    }
+    
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case ._silgen_name: 
+        return .contextualKeyword(._silgen_name)
+      case .available: 
+        return .contextualKeyword(.available)
+      case .objc: 
+        return .contextualKeyword(.objc)
+      case .dynamicCallable: 
+        return .contextualKeyword(.dynamicCallable)
+      case .main: 
+        return .contextualKeyword(.main)
+      case ._exported: 
+        return .contextualKeyword(._exported)
+      case .dynamicMemberLookup: 
+        return .contextualKeyword(.dynamicMemberLookup)
+      case .NSCopying: 
+        return .contextualKeyword(.NSCopying)
+      case .IBAction: 
+        return .contextualKeyword(.IBAction)
+      case .IBDesignable: 
+        return .contextualKeyword(.IBDesignable)
+      case .IBInspectable: 
+        return .contextualKeyword(.IBInspectable)
+      case .IBOutlet: 
+        return .contextualKeyword(.IBOutlet)
+      case .NSManaged: 
+        return .contextualKeyword(.NSManaged)
+      case .LLDBDebuggerFunction: 
+        return .contextualKeyword(.LLDBDebuggerFunction)
+      case .UIApplicationMain: 
+        return .contextualKeyword(.UIApplicationMain)
+      case .unsafe_no_objc_tagged_pointer: 
+        return .contextualKeyword(.unsafe_no_objc_tagged_pointer)
+      case .inline: 
+        return .contextualKeyword(.inline)
+      case ._semantics: 
+        return .contextualKeyword(._semantics)
+      case ._transparent: 
+        return .contextualKeyword(._transparent)
+      case .requires_stored_property_inits: 
+        return .contextualKeyword(.requires_stored_property_inits)
+      case .nonobjc: 
+        return .contextualKeyword(.nonobjc)
+      case ._fixed_layout: 
+        return .contextualKeyword(._fixed_layout)
+      case .inlinable: 
+        return .contextualKeyword(.inlinable)
+      case ._specialize: 
+        return .contextualKeyword(._specialize)
+      case .objcMembers: 
+        return .contextualKeyword(.objcMembers)
+      case ._compilerInitialized: 
+        return .contextualKeyword(._compilerInitialized)
+      case ._hasStorage: 
+        return .contextualKeyword(._hasStorage)
+      case .__raw_doc_comment: 
+        return .contextualKeyword(.__raw_doc_comment)
+      case ._effects: 
+        return .contextualKeyword(._effects)
+      case .__objc_bridged: 
+        return .contextualKeyword(.__objc_bridged)
+      case .NSApplicationMain: 
+        return .contextualKeyword(.NSApplicationMain)
+      case ._objc_non_lazy_realization: 
+        return .contextualKeyword(._objc_non_lazy_realization)
+      case .__synthesized_protocol: 
+        return .contextualKeyword(.__synthesized_protocol)
+      case .testable: 
+        return .contextualKeyword(.testable)
+      case ._alignment: 
+        return .contextualKeyword(._alignment)
+      case .atRethrows: 
+        return .contextualKeyword(.rethrows)
+      case ._swift_native_objc_runtime_base: 
+        return .contextualKeyword(._swift_native_objc_runtime_base)
+      case .warn_unqualified_access: 
+        return .contextualKeyword(.warn_unqualified_access)
+      case ._show_in_interface: 
+        return .contextualKeyword(._show_in_interface)
+      case ._cdecl: 
+        return .contextualKeyword(._cdecl)
+      case .usableFromInline: 
+        return .contextualKeyword(.usableFromInline)
+      case .discardableResult: 
+        return .contextualKeyword(.discardableResult)
+      case .GKInspectable: 
+        return .contextualKeyword(.GKInspectable)
+      case ._implements: 
+        return .contextualKeyword(._implements)
+      case ._objcRuntimeName: 
+        return .contextualKeyword(._objcRuntimeName)
+      case ._staticInitializeObjCMetadata: 
+        return .contextualKeyword(._staticInitializeObjCMetadata)
+      case ._restatedObjCConformance: 
+        return .contextualKeyword(._restatedObjCConformance)
+      case ._objcImplementation: 
+        return .contextualKeyword(._objcImplementation)
+      case ._optimize: 
+        return .contextualKeyword(._optimize)
+      case ._clangImporterSynthesizedType: 
+        return .contextualKeyword(._clangImporterSynthesizedType)
+      case ._weakLinked: 
+        return .contextualKeyword(._weakLinked)
+      case .frozen: 
+        return .contextualKeyword(.frozen)
+      case ._frozen: 
+        return .contextualKeyword(._frozen)
+      case ._forbidSerializingReference: 
+        return .contextualKeyword(._forbidSerializingReference)
+      case ._hasInitialValue: 
+        return .contextualKeyword(._hasInitialValue)
+      case ._nonoverride: 
+        return .contextualKeyword(._nonoverride)
+      case ._dynamicReplacement: 
+        return .contextualKeyword(._dynamicReplacement)
+      case ._borrowed: 
+        return .contextualKeyword(._borrowed)
+      case ._private: 
+        return .contextualKeyword(._private)
+      case ._alwaysEmitIntoClient: 
+        return .contextualKeyword(._alwaysEmitIntoClient)
+      case ._implementationOnly: 
+        return .contextualKeyword(._implementationOnly)
+      case ._custom: 
+        return .contextualKeyword(._custom)
+      case .propertyWrapper: 
+        return .contextualKeyword(.propertyWrapper)
+      case ._disfavoredOverload: 
+        return .contextualKeyword(._disfavoredOverload)
+      case .resultBuilder: 
+        return .contextualKeyword(.resultBuilder)
+      case ._projectedValueProperty: 
+        return .contextualKeyword(._projectedValueProperty)
+      case ._nonEphemeral: 
+        return .contextualKeyword(._nonEphemeral)
+      case .differentiable: 
+        return .contextualKeyword(.differentiable)
+      case ._hasMissingDesignatedInitializers: 
+        return .contextualKeyword(._hasMissingDesignatedInitializers)
+      case ._inheritsConvenienceInitializers: 
+        return .contextualKeyword(._inheritsConvenienceInitializers)
+      case ._typeEraser: 
+        return .contextualKeyword(._typeEraser)
+      case .IBSegueAction: 
+        return .contextualKeyword(.IBSegueAction)
+      case ._originallyDefinedIn: 
+        return .contextualKeyword(._originallyDefinedIn)
+      case .derivative: 
+        return .contextualKeyword(.derivative)
+      case ._spi: 
+        return .contextualKeyword(._spi)
+      case .transpose: 
+        return .contextualKeyword(.transpose)
+      case .noDerivative: 
+        return .contextualKeyword(.noDerivative)
+      case .globalActor: 
+        return .contextualKeyword(.globalActor)
+      case ._specializeExtension: 
+        return .contextualKeyword(._specializeExtension)
+      case .Sendable: 
+        return .contextualKeyword(.Sendable)
+      case ._marker: 
+        return .contextualKeyword(._marker)
+      case .atReasync: 
+        return .contextualKeyword(.reasync)
+      case ._unsafeInheritExecutor: 
+        return .contextualKeyword(._unsafeInheritExecutor)
+      case ._implicitSelfCapture: 
+        return .contextualKeyword(._implicitSelfCapture)
+      case ._inheritActorContext: 
+        return .contextualKeyword(._inheritActorContext)
+      case ._eagerMove: 
+        return .contextualKeyword(._eagerMove)
+      case ._noEagerMove: 
+        return .contextualKeyword(._noEagerMove)
+      case ._assemblyVision: 
+        return .contextualKeyword(._assemblyVision)
+      case ._nonSendable: 
+        return .contextualKeyword(._nonSendable)
+      case ._noImplicitCopy: 
+        return .contextualKeyword(._noImplicitCopy)
+      case ._noLocks: 
+        return .contextualKeyword(._noLocks)
+      case ._noAllocation: 
+        return .contextualKeyword(._noAllocation)
+      case .preconcurrency: 
+        return .contextualKeyword(.preconcurrency)
+      case ._unavailableFromAsync: 
+        return .contextualKeyword(._unavailableFromAsync)
+      case .exclusivity: 
+        return .contextualKeyword(.exclusivity)
+      case ._backDeploy: 
+        return .contextualKeyword(._backDeploy)
+      case ._moveOnly: 
+        return .contextualKeyword(._moveOnly)
+      case ._alwaysEmitConformanceMetadata: 
+        return .contextualKeyword(._alwaysEmitConformanceMetadata)
+      case ._expose: 
+        return .contextualKeyword(._expose)
+      case .typeWrapper: 
+        return .contextualKeyword(.typeWrapper)
+      case ._spiOnly: 
+        return .contextualKeyword(._spiOnly)
+      case ._documentation: 
+        return .contextualKeyword(._documentation)
+      case .typeWrapperIgnored: 
+        return .contextualKeyword(.typeWrapperIgnored)
+      case ._noMetadata: 
+        return .contextualKeyword(._noMetadata)
+      case .runtimeMetadata: 
+        return .contextualKeyword(.runtimeMetadata)
+      case ._spi_available: 
+        return .contextualKeyword(._spi_available)
+      }
+    }
   }
 }

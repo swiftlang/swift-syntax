@@ -8,6 +8,7 @@
     "RawSyntaxValidation.swift",
   ],
   "Syntax": [
+    "Keyword.swift",
     "SyntaxChildren.swift",
     "SyntaxData.swift",
     "SyntaxEnum.swift",

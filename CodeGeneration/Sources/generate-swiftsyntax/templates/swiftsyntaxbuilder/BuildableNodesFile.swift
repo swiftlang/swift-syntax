@@ -112,7 +112,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
     } else if let token = child.type.token, token.text == nil {
       // Allow initializing identifiers and other tokens without default text with a String
       shouldCreateInitializer = true
-      let paramType = child.type.optionalWrapped(type: Type("String"))
+      let paramType = child.type.optionalWrapped(type: "\(raw: token.associatedValueClass ?? "String")" as TypeSyntax)
       let tokenExpr = MemberAccessExpr("Token.\(raw: token.swiftKind.withFirstCharacterLowercased.backticked)")
       if child.type.isOptional {
         produceExpr = Expr(FunctionCallExpr("\(raw: child.swiftName).map { \(tokenExpr)($0) }"))

@@ -12,6 +12,7 @@ add_swift_host_library(SwiftSyntax
   CommonAncestor.swift
   IncrementalParseTransition.swift
   LexerError.swift
+  Keyword.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift

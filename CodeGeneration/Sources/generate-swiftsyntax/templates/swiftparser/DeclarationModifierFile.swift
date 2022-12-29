@@ -24,19 +24,16 @@ let declarationModifierFile = SourceFile {
     """
   )
   
-  EnumDecl("enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset") {
+  EnumDecl("enum DeclarationModifier: RawTokenKindSubset") {
     for attribute in DECL_MODIFIER_KINDS {
-      EnumCaseDecl("case \(raw: attribute.swiftName) = \"\(raw: attribute.name)\"")
+      EnumCaseDecl("case \(raw: attribute.swiftName)")
     }
     InitializerDecl("init?(lexeme: Lexer.Lexeme)") {
-      SwitchStmt(switchKeyword: .switch, expression: Expr("lexeme.tokenKind")) {
-        for attribute in DECL_MODIFIER_KINDS where attribute.swiftName.hasSuffix("Keyword") {
-          SwitchCase("case .\(raw: attribute.swiftName):") {
+      SwitchStmt(expression: Expr("lexeme")) {
+        for attribute in DECL_MODIFIER_KINDS {
+          SwitchCase("case RawTokenKindMatch(.\(raw: attribute.swiftName)):") {
             SequenceExpr("self = .\(raw: attribute.swiftName)")
           }
-        }
-        SwitchCase("case .identifier:") {
-          FunctionCallExpr("self.init(rawValue: lexeme.tokenText)")
         }
         SwitchCase("default:") {
           ReturnStmt("return nil")
@@ -51,36 +48,15 @@ let declarationModifierFile = SourceFile {
         type: SimpleTypeIdentifier("RawTokenKind")
       )
     ) {
-      SwitchStmt(switchKeyword: .switch, expression: Expr("self")) {
+      SwitchStmt(expression: Expr("self")) {
         for attribute in DECL_MODIFIER_KINDS {
           SwitchCase("case .\(raw: attribute.swiftName):") {
             if attribute.swiftName.hasSuffix("Keyword") {
               ReturnStmt("return .\(raw: attribute.swiftName)")
             } else {
-              ReturnStmt("return .identifier")
+              ReturnStmt("return .contextualKeyword(.\(raw: attribute.swiftName))")
             }
           }
-        }
-      }
-    }
-    
-    
-    VariableDecl(
-      name: IdentifierPattern("contextualKeyword"),
-      type: TypeAnnotation(
-        colon: .colon,
-        type: OptionalType("SyntaxText?")
-      )
-    ) {
-      SwitchStmt(switchKeyword: .switch, expression: Expr("self")) {
-        for attribute in DECL_MODIFIER_KINDS where !attribute.swiftName.hasSuffix("Keyword") {
-          SwitchCase("case .\(raw: attribute.swiftName):") {
-            ReturnStmt("return \"\(raw: attribute.name)\"")
-          }
-        }
-        
-        SwitchCase("default:") {
-          ReturnStmt("return nil")
         }
       }
     }

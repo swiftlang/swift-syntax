@@ -527,6 +527,7 @@ extension RawSyntax {
     initializingLeadingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void,
     initializingTrailingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
   ) -> RawSyntax {
+    assert(kind.defaultText == nil || text.isEmpty || kind.defaultText == text)
     let totalTriviaCount = leadingTriviaPieceCount + trailingTriviaPieceCount
     let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: totalTriviaCount)
     initializingLeadingTriviaWith(

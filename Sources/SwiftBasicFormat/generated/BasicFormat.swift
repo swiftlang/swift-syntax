@@ -336,7 +336,7 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .spacedBinaryOperator: 
       return true
-    case .contextualKeyword("async"): 
+    case .contextualKeyword(.async): 
       return true
     default: 
       return false

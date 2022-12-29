@@ -11,7 +11,7 @@ class Token(object):
     def __init__(self, name, kind, name_for_diagnostics,
                  unprefixed_kind=None, text=None, classification='None',
                  is_keyword=False, requires_leading_space=False,
-                 requires_trailing_space=False):
+                 requires_trailing_space=False, associated_value_class=None):
         self.name = name
         self.kind = kind
         if unprefixed_kind is None:
@@ -24,6 +24,7 @@ class Token(object):
         self.is_keyword = is_keyword
         self.requires_leading_space = requires_leading_space
         self.requires_trailing_space = requires_trailing_space
+        self.associated_value_class = associated_value_class
 
     def swift_kind(self):
         name = lowercase_first_word(self.name)
@@ -358,7 +359,7 @@ SYNTAX_TOKENS = [
          classification='DollarIdentifier'),
 
     Misc('ContextualKeyword', 'contextual_keyword', name_for_diagnostics='keyword',
-         classification='Keyword'),
+         classification='Keyword', associated_value_class='Keyword'),
     Misc('RawStringDelimiter', 'raw_string_delimiter',
          name_for_diagnostics='raw string delimiter'),
     Misc('StringSegment', 'string_segment', name_for_diagnostics='string segment',

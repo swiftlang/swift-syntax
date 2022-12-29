@@ -52,7 +52,7 @@ let tokenFile = SourceFile {
     VariableDecl("""
       /// The `open` contextual token
       static var open: TokenSyntax {
-        return .contextualKeyword("open").withTrailingTrivia(.space)
+        return .contextualKeyword(.open).withTrailingTrivia(.space)
       }
       """
     )

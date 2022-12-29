@@ -142,6 +142,17 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
+%   elif token.associated_value_class:
+  @available(*, deprecated, message: "Use TokenSyntax.${token.swift_kind()} instead")
+  public static func make${token.name}(
+    _ value: ${token.associated_value_class},
+    leadingTrivia: Trivia = ${leading_trivia},
+    trailingTrivia: Trivia = ${trailing_trivia}
+  ) -> TokenSyntax {
+    return makeToken(.${token.swift_kind()}(value), presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
 %   else:
   @available(*, deprecated, message: "Use TokenSyntax.${token.swift_kind()} instead")
   public static func make${token.name}(

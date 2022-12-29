@@ -491,14 +491,39 @@ extension Parser {
     )
   }
 
-  enum LayoutConstraint: SyntaxText, ContextualKeywords {
-    case trivialLayout = "_Trivial"
-    case trivialAtMostLayout = "_TrivialAtMost"
-    case unknownLayout = "_UnknownLayout"
-    case refCountedObjectLayout = "_RefCountedObject"
-    case nativeRefCountedObjectLayout = "_NativeRefCountedObject"
-    case classLayout = "_Class"
-    case nativeClassLayout = "_NativeClass"
+  enum LayoutConstraint: RawTokenKindSubset {
+    case trivialLayout
+    case trivialAtMostLayout
+    case unknownLayout
+    case refCountedObjectLayout
+    case nativeRefCountedObjectLayout
+    case classLayout
+    case nativeClassLayout
+
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(._Trivial): self = .trivialLayout
+      case RawTokenKindMatch(._TrivialAtMost): self = .trivialAtMostLayout
+      case RawTokenKindMatch(._UnknownLayout): self = .unknownLayout
+      case RawTokenKindMatch(._RefCountedObject): self = .refCountedObjectLayout
+      case RawTokenKindMatch(._NativeRefCountedObject): self = .nativeRefCountedObjectLayout
+      case RawTokenKindMatch(._Class): self = .classLayout
+      case RawTokenKindMatch(._NativeClass): self = .nativeClassLayout
+      default: return nil
+      }
+    }
+
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case .trivialLayout: return .contextualKeyword(._Trivial)
+      case .trivialAtMostLayout: return .contextualKeyword(._TrivialAtMost)
+      case .unknownLayout: return .contextualKeyword(._UnknownLayout)
+      case .refCountedObjectLayout: return .contextualKeyword(._RefCountedObject)
+      case .nativeRefCountedObjectLayout: return .contextualKeyword(._NativeRefCountedObject)
+      case .classLayout: return .contextualKeyword(._Class)
+      case .nativeClassLayout: return .contextualKeyword(._NativeClass)
+      }
+    }
 
     var hasArguments: Bool {
       switch self {
@@ -1288,9 +1313,9 @@ extension Parser {
     let input = self.parseParameterClause(for: .functionParameters)
 
     let async: RawTokenSyntax?
-    if let asyncTok = self.consumeIfContextualKeyword("async") {
+    if let asyncTok = self.consume(if: .contextualKeyword(.async)) {
       async = asyncTok
-    } else if let reasync = self.consumeIfContextualKeyword("reasync") {
+    } else if let reasync = self.consume(if: .contextualKeyword(.reasync)) {
       async = reasync
     } else {
       async = nil
@@ -1526,7 +1551,7 @@ extension Parser {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
-    let hasModifier = look.consume(ifAny: [], contextualKeywords: ["mutating", "nonmutating", "__consuming"]) != nil
+    let hasModifier = look.consume(ifAny: [.contextualKeyword(.mutating), .contextualKeyword(.nonmutating), .contextualKeyword(.__consuming)]) != nil
     guard let (kind, handle) = look.at(anyIn: AccessorKind.self) else {
       return nil
     }
@@ -1558,12 +1583,12 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
     // 'async'
-    if let async = self.consumeIfContextualKeyword("async") {
+    if let async = self.consume(if: .contextualKeyword(.async)) {
       return async
     }
 
     // 'reasync'
-    if let reasync = self.consumeIfContextualKeyword("reasync") {
+    if let reasync = self.consume(if: .contextualKeyword(.reasync)) {
       return reasync
     }
 
@@ -1951,11 +1976,30 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parsePrecedenceGroupAttributeListSyntax() -> RawPrecedenceGroupAttributeListSyntax {
-    enum LabelText: SyntaxText, ContextualKeywords {
-      case associativity = "associativity"
-      case assignment = "assignment"
-      case higherThan = "higherThan"
-      case lowerThan = "lowerThan"
+    enum LabelText: RawTokenKindSubset {
+      case associativity
+      case assignment
+      case higherThan
+      case lowerThan
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme {
+        case RawTokenKindMatch(.associativity): self = .associativity
+        case RawTokenKindMatch(.assignment): self = .assignment
+        case RawTokenKindMatch(.higherThan): self = .higherThan
+        case RawTokenKindMatch(.lowerThan): self = .lowerThan
+        default: return nil
+        }
+      }
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .associativity: return .contextualKeyword(.associativity)
+        case .assignment: return .contextualKeyword(.assignment)
+        case .higherThan: return .contextualKeyword(.higherThan)
+        case .lowerThan: return .contextualKeyword(.lowerThan)
+        }
+      }
     }
 
     var elements = [RawPrecedenceGroupAttributeListSyntax.Element]()

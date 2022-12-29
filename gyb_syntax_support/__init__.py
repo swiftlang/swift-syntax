@@ -120,7 +120,10 @@ def make_missing_swift_child(child):
     if child.is_token():
         token = child.main_token()
         tok_kind = token.swift_kind() if token else "unknown"
-        if not token or not token.text:
+        if token and token.associated_value_class:
+            assert len(child.text_choices) == 1, "Can only create missing child if text is known"
+            tok_kind += f'(.{child.text_choices[0]})'
+        elif not token or not token.text:
             tok_kind += '("")'
         return f'RawSyntax.makeMissingToken(kind: TokenKind.{tok_kind}, ' + \
             'arena: arena)'

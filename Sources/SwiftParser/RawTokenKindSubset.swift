@@ -20,10 +20,6 @@ protocol RawTokenKindSubset: CaseIterable {
   /// Creates an instance if `lexeme` satisfy the condition of this subset.
   init?(lexeme: Lexer.Lexeme)
 
-  /// If this returns a non-nil value, only tokens with this token text are matched.
-  /// Must only return a non-nil value if `rawTokenKind` is `identifier` or `contextualKeyword`.
-  var contextualKeyword: SyntaxText? { get }
-
   /// If not `nil`, the token's will be remapped to this kind when the handle is eaten.
   var remappedKind: RawTokenKind? { get }
 
@@ -34,13 +30,9 @@ protocol RawTokenKindSubset: CaseIterable {
 }
 
 extension RawTokenKindSubset {
-  var contextualKeyword: SyntaxText? {
-    return nil
-  }
-
   var remappedKind: RawTokenKind? {
-    if self.contextualKeyword != nil {
-      return .contextualKeyword
+    if case .contextualKeyword = self.rawTokenKind {
+      return self.rawTokenKind
     } else {
       return nil
     }
@@ -51,40 +43,56 @@ extension RawTokenKindSubset {
   }
 }
 
-/// A set of contextual keywords.
-/// This should be an enum that has `SyntaxText` as its underlying value.
-protocol ContextualKeywords: RawRepresentable, RawTokenKindSubset {}
+// MARK: - Subsets
 
-extension ContextualKeywords where RawValue == SyntaxText {
+enum AccessorKind: RawTokenKindSubset {
+  case `get`
+  case `set`
+  case `didSet`
+  case `willSet`
+  case unsafeAddress
+  case addressWithOwner
+  case addressWithNativeOwner
+  case unsafeMutableAddress
+  case mutableAddressWithOwner
+  case mutableAddressWithNativeOwner
+  case _read
+  case _modify
+
   init?(lexeme: Lexer.Lexeme) {
-    guard lexeme.rawTokenKind == .identifier else { return nil }
-    self.init(rawValue: lexeme.tokenText)
+    switch lexeme {
+    case RawTokenKindMatch(.get): self = .get
+    case RawTokenKindMatch(.set): self = .set
+    case RawTokenKindMatch(.didSet): self = .didSet
+    case RawTokenKindMatch(.willSet): self = .willSet
+    case RawTokenKindMatch(.unsafeAddress): self = .unsafeAddress
+    case RawTokenKindMatch(.addressWithOwner): self = .addressWithOwner
+    case RawTokenKindMatch(.addressWithNativeOwner): self = .addressWithNativeOwner
+    case RawTokenKindMatch(.unsafeMutableAddress): self = .unsafeMutableAddress
+    case RawTokenKindMatch(.mutableAddressWithOwner): self = .mutableAddressWithOwner
+    case RawTokenKindMatch(.mutableAddressWithNativeOwner): self = .mutableAddressWithNativeOwner
+    case RawTokenKindMatch(._read): self = ._read
+    case RawTokenKindMatch(._modify): self = ._modify
+    default: return nil
+    }
   }
 
   var rawTokenKind: RawTokenKind {
-    return .identifier
+    switch self {
+    case .get: return .contextualKeyword(.get)
+    case .set: return .contextualKeyword(.set)
+    case .didSet: return .contextualKeyword(.didSet)
+    case .willSet: return .contextualKeyword(.willSet)
+    case .unsafeAddress: return .contextualKeyword(.unsafeAddress)
+    case .addressWithOwner: return .contextualKeyword(.addressWithOwner)
+    case .addressWithNativeOwner: return .contextualKeyword(.addressWithNativeOwner)
+    case .unsafeMutableAddress: return .contextualKeyword(.unsafeMutableAddress)
+    case .mutableAddressWithOwner: return .contextualKeyword(.mutableAddressWithOwner)
+    case .mutableAddressWithNativeOwner: return .contextualKeyword(.mutableAddressWithNativeOwner)
+    case ._read: return .contextualKeyword(._read)
+    case ._modify: return .contextualKeyword(._modify)
+    }
   }
-
-  var contextualKeyword: SyntaxText? {
-    return self.rawValue
-  }
-}
-
-// MARK: - Subsets
-
-enum AccessorKind: SyntaxText, ContextualKeywords, Equatable {
-  case `get` = "get"
-  case `set` = "set"
-  case `didSet` = "didSet"
-  case `willSet` = "willSet"
-  case unsafeAddress = "unsafeAddress"
-  case addressWithOwner = "addressWithOwner"
-  case addressWithNativeOwner = "addressWithNativeOwner"
-  case unsafeMutableAddress = "unsafeMutableAddress"
-  case mutableAddressWithOwner = "mutableAddressWithOwner"
-  case mutableAddressWithNativeOwner = "mutableAddressWithNativeOwner"
-  case _read = "_read"
-  case _modify = "_modify"
 }
 
 enum BinaryOperator: RawTokenKindSubset {
@@ -126,23 +134,23 @@ enum CanBeStatementStart: RawTokenKindSubset {
   case yieldAsIdentifier
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.rawTokenKind {
-    case .breakKeyword: self = .breakKeyword
-    case .continueKeyword: self = .continueKeyword
-    case .deferKeyword: self = .deferKeyword
-    case .doKeyword: self = .doKeyword
-    case .fallthroughKeyword: self = .fallthroughKeyword
-    case .forKeyword: self = .forKeyword
-    case .guardKeyword: self = .guardKeyword
-    case .ifKeyword: self = .ifKeyword
-    case .poundAssertKeyword: self = .poundAssertKeyword
-    case .repeatKeyword: self = .repeatKeyword
-    case .returnKeyword: self = .returnKeyword
-    case .switchKeyword: self = .switchKeyword
-    case .throwKeyword: self = .throwKeyword
-    case .whileKeyword: self = .whileKeyword
-    case .yield: self = .yield
-    case .identifier where lexeme.tokenText == "yield": self = .yieldAsIdentifier
+    switch lexeme {
+    case RawTokenKindMatch(.breakKeyword): self = .breakKeyword
+    case RawTokenKindMatch(.continueKeyword): self = .continueKeyword
+    case RawTokenKindMatch(.deferKeyword): self = .deferKeyword
+    case RawTokenKindMatch(.doKeyword): self = .doKeyword
+    case RawTokenKindMatch(.fallthroughKeyword): self = .fallthroughKeyword
+    case RawTokenKindMatch(.forKeyword): self = .forKeyword
+    case RawTokenKindMatch(.guardKeyword): self = .guardKeyword
+    case RawTokenKindMatch(.ifKeyword): self = .ifKeyword
+    case RawTokenKindMatch(.poundAssertKeyword): self = .poundAssertKeyword
+    case RawTokenKindMatch(.repeatKeyword): self = .repeatKeyword
+    case RawTokenKindMatch(.returnKeyword): self = .returnKeyword
+    case RawTokenKindMatch(.switchKeyword): self = .switchKeyword
+    case RawTokenKindMatch(.throwKeyword): self = .throwKeyword
+    case RawTokenKindMatch(.whileKeyword): self = .whileKeyword
+    case RawTokenKindMatch(RawTokenKind.yield): self = .yield
+    case RawTokenKindMatch(Keyword.yield): self = .yieldAsIdentifier
     default: return nil
     }
   }
@@ -164,14 +172,7 @@ enum CanBeStatementStart: RawTokenKindSubset {
     case .throwKeyword: return .throwKeyword
     case .whileKeyword: return .whileKeyword
     case .yield: return .yield
-    case .yieldAsIdentifier: return .identifier
-    }
-  }
-
-  var contextualKeyword: SyntaxText? {
-    switch self {
-    case .yieldAsIdentifier: return "yield"
-    default: return nil
+    case .yieldAsIdentifier: return .contextualKeyword(.yield)
     }
   }
 
@@ -183,33 +184,96 @@ enum CanBeStatementStart: RawTokenKindSubset {
   }
 }
 
-enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {
-  case __consuming = "__consuming"
-  case _compilerInitialized = "_compilerInitialized"
-  case _const = "_const"
-  case _local = "_local"
-  case actor = "actor"
-  case async = "async"
-  case convenience = "convenience"
-  case distributed = "distributed"
-  case dynamic = "dynamic"
-  case final = "final"
-  case indirect = "indirect"
-  case infix = "infix"
-  case isolated = "isolated"
-  case lazy = "lazy"
-  case mutating = "mutating"
-  case nonisolated = "nonisolated"
-  case nonmutating = "nonmutating"
-  case package = "package"
-  case open = "open"
-  case optional = "optional"
-  case override = "override"
-  case postfix = "postfix"
-  case prefix = "prefix"
-  case required = "required"
-  case unowned = "unowned"
-  case weak = "weak"
+enum ContextualDeclKeyword: RawTokenKindSubset {
+  case __consuming
+  case _compilerInitialized
+  case _const
+  case _local
+  case actor
+  case async
+  case convenience
+  case distributed
+  case dynamic
+  case final
+  case indirect
+  case infix
+  case isolated
+  case lazy
+  case mutating
+  case nonisolated
+  case nonmutating
+  case package
+  case open
+  case optional
+  case override
+  case postfix
+  case prefix
+  case required
+  case unowned
+  case weak
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch lexeme {
+    case RawTokenKindMatch(.__consuming): self = .__consuming
+    case RawTokenKindMatch(._compilerInitialized): self = ._compilerInitialized
+    case RawTokenKindMatch(._const): self = ._const
+    case RawTokenKindMatch(._local): self = ._local
+    case RawTokenKindMatch(.actor): self = .actor
+    case RawTokenKindMatch(.async): self = .async
+    case RawTokenKindMatch(.convenience): self = .convenience
+    case RawTokenKindMatch(.distributed): self = .distributed
+    case RawTokenKindMatch(.dynamic): self = .dynamic
+    case RawTokenKindMatch(.final): self = .final
+    case RawTokenKindMatch(.indirect): self = .indirect
+    case RawTokenKindMatch(.infix): self = .infix
+    case RawTokenKindMatch(.isolated): self = .isolated
+    case RawTokenKindMatch(.lazy): self = .lazy
+    case RawTokenKindMatch(.mutating): self = .mutating
+    case RawTokenKindMatch(.nonisolated): self = .nonisolated
+    case RawTokenKindMatch(.nonmutating): self = .nonmutating
+    case RawTokenKindMatch(.package): self = .package
+    case RawTokenKindMatch(.open): self = .open
+    case RawTokenKindMatch(.optional): self = .optional
+    case RawTokenKindMatch(.override): self = .override
+    case RawTokenKindMatch(.postfix): self = .postfix
+    case RawTokenKindMatch(.prefix): self = .prefix
+    case RawTokenKindMatch(.required): self = .required
+    case RawTokenKindMatch(.unowned): self = .unowned
+    case RawTokenKindMatch(.weak): self = .weak
+    default: return nil
+    }
+  }
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .__consuming: return .contextualKeyword(.__consuming)
+    case ._compilerInitialized: return .contextualKeyword(._compilerInitialized)
+    case ._const: return .contextualKeyword(._const)
+    case ._local: return .contextualKeyword(._local)
+    case .actor: return .contextualKeyword(.actor)
+    case .async: return .contextualKeyword(.async)
+    case .convenience: return .contextualKeyword(.convenience)
+    case .distributed: return .contextualKeyword(.distributed)
+    case .dynamic: return .contextualKeyword(.dynamic)
+    case .final: return .contextualKeyword(.final)
+    case .indirect: return .contextualKeyword(.indirect)
+    case .infix: return .contextualKeyword(.infix)
+    case .isolated: return .contextualKeyword(.isolated)
+    case .lazy: return .contextualKeyword(.lazy)
+    case .mutating: return .contextualKeyword(.mutating)
+    case .nonisolated: return .contextualKeyword(.nonisolated)
+    case .nonmutating: return .contextualKeyword(.nonmutating)
+    case .package: return .contextualKeyword(.package)
+    case .open: return .contextualKeyword(.open)
+    case .optional: return .contextualKeyword(.optional)
+    case .override: return .contextualKeyword(.override)
+    case .postfix: return .contextualKeyword(.postfix)
+    case .prefix: return .contextualKeyword(.prefix)
+    case .required: return .contextualKeyword(.required)
+    case .unowned: return .contextualKeyword(.unowned)
+    case .weak: return .contextualKeyword(.weak)
+    }
+  }
 }
 
 enum DeclarationStart: RawTokenKindSubset {
@@ -234,33 +298,33 @@ enum DeclarationStart: RawTokenKindSubset {
   case varKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.rawTokenKind {
-    case .identifier where lexeme.tokenText == "actor": self = .actorContextualKeyword
-    case .identifier where lexeme.tokenText == "macro": self = .macroContextualKeyword
-    case .associatedtypeKeyword: self = .associatedtypeKeyword
-    case .caseKeyword: self = .caseKeyword
-    case .classKeyword: self = .classKeyword
-    case .deinitKeyword: self = .deinitKeyword
-    case .enumKeyword: self = .enumKeyword
-    case .extensionKeyword: self = .extensionKeyword
-    case .funcKeyword: self = .funcKeyword
-    case .importKeyword: self = .importKeyword
-    case .initKeyword: self = .initKeyword
-    case .letKeyword: self = .letKeyword
-    case .operatorKeyword: self = .operatorKeyword
-    case .precedencegroupKeyword: self = .precedencegroupKeyword
-    case .protocolKeyword: self = .protocolKeyword
-    case .structKeyword: self = .structKeyword
-    case .subscriptKeyword: self = .subscriptKeyword
-    case .typealiasKeyword: self = .typealiasKeyword
-    case .varKeyword: self = .varKeyword
+    switch lexeme {
+    case RawTokenKindMatch(.actor): self = .actorContextualKeyword
+    case RawTokenKindMatch(.macro): self = .macroContextualKeyword
+    case RawTokenKindMatch(.associatedtypeKeyword): self = .associatedtypeKeyword
+    case RawTokenKindMatch(.caseKeyword): self = .caseKeyword
+    case RawTokenKindMatch(.classKeyword): self = .classKeyword
+    case RawTokenKindMatch(.deinitKeyword): self = .deinitKeyword
+    case RawTokenKindMatch(.enumKeyword): self = .enumKeyword
+    case RawTokenKindMatch(.extensionKeyword): self = .extensionKeyword
+    case RawTokenKindMatch(.funcKeyword): self = .funcKeyword
+    case RawTokenKindMatch(.importKeyword): self = .importKeyword
+    case RawTokenKindMatch(.initKeyword): self = .initKeyword
+    case RawTokenKindMatch(.letKeyword): self = .letKeyword
+    case RawTokenKindMatch(.operatorKeyword): self = .operatorKeyword
+    case RawTokenKindMatch(.precedencegroupKeyword): self = .precedencegroupKeyword
+    case RawTokenKindMatch(.protocolKeyword): self = .protocolKeyword
+    case RawTokenKindMatch(.structKeyword): self = .structKeyword
+    case RawTokenKindMatch(.subscriptKeyword): self = .subscriptKeyword
+    case RawTokenKindMatch(.typealiasKeyword): self = .typealiasKeyword
+    case RawTokenKindMatch(.varKeyword): self = .varKeyword
     default: return nil
     }
   }
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .actorContextualKeyword: return .identifier
+    case .actorContextualKeyword: return .contextualKeyword(.actor)
     case .associatedtypeKeyword: return .associatedtypeKeyword
     case .caseKeyword: return .caseKeyword
     case .classKeyword: return .classKeyword
@@ -271,7 +335,7 @@ enum DeclarationStart: RawTokenKindSubset {
     case .importKeyword: return .importKeyword
     case .initKeyword: return .initKeyword
     case .letKeyword: return .letKeyword
-    case .macroContextualKeyword: return .identifier
+    case .macroContextualKeyword: return .contextualKeyword(.macro)
     case .operatorKeyword: return .operatorKeyword
     case .precedencegroupKeyword: return .precedencegroupKeyword
     case .protocolKeyword: return .protocolKeyword
@@ -279,14 +343,6 @@ enum DeclarationStart: RawTokenKindSubset {
     case .subscriptKeyword: return .subscriptKeyword
     case .typealiasKeyword: return .typealiasKeyword
     case .varKeyword: return .varKeyword
-    }
-  }
-
-  var contextualKeyword: SyntaxText? {
-    switch self {
-    case .actorContextualKeyword: return "actor"
-    case .macroContextualKeyword: return "macro"
-    default: return nil
     }
   }
 
@@ -312,36 +368,27 @@ enum EffectsSpecifier: RawTokenKindSubset {
   init?(lexeme: Lexer.Lexeme) {
     // We'll take 'await', 'throw' and 'try' too for recovery but they have to
     // be on the same line as the declaration they're modifying.
-    switch lexeme.rawTokenKind {
-    case .identifier where lexeme.tokenText == "async": self = .asyncContextualKeyword
-    case .identifier where lexeme.tokenText == "await" && !lexeme.isAtStartOfLine: self = .awaitContextualKeyword
-    case .identifier where lexeme.tokenText == "reasync": self = .reasyncContextualKeyword
-    case .rethrowsKeyword: self = .rethrowsKeyword
-    case .throwKeyword where !lexeme.isAtStartOfLine: self = .throwKeyword
-    case .throwsKeyword: self = .throwsKeyword
-    case .tryKeyword where !lexeme.isAtStartOfLine: self = .tryKeyword
+    switch lexeme {
+    case RawTokenKindMatch(.async): self = .asyncContextualKeyword
+    case RawTokenKindMatch(.await) where !lexeme.isAtStartOfLine: self = .awaitContextualKeyword
+    case RawTokenKindMatch(.reasync): self = .reasyncContextualKeyword
+    case RawTokenKindMatch(.rethrowsKeyword): self = .rethrowsKeyword
+    case RawTokenKindMatch(.throwKeyword) where !lexeme.isAtStartOfLine: self = .throwKeyword
+    case RawTokenKindMatch(.throwsKeyword): self = .throwsKeyword
+    case RawTokenKindMatch(.tryKeyword) where !lexeme.isAtStartOfLine: self = .tryKeyword
     default: return nil
     }
   }
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .asyncContextualKeyword: return .identifier
-    case .awaitContextualKeyword: return .identifier
-    case .reasyncContextualKeyword: return .identifier
+    case .asyncContextualKeyword: return .contextualKeyword(.async)
+    case .awaitContextualKeyword: return .contextualKeyword(.await)
+    case .reasyncContextualKeyword: return .contextualKeyword(.reasync)
     case .rethrowsKeyword: return .rethrowsKeyword
     case .throwKeyword: return .throwKeyword
     case .throwsKeyword: return .throwsKeyword
     case .tryKeyword: return .tryKeyword
-    }
-  }
-
-  var contextualKeyword: SyntaxText? {
-    switch self {
-    case .asyncContextualKeyword: return "async"
-    case .reasyncContextualKeyword: return "reasync"
-    case .awaitContextualKeyword: return "await"
-    default: return nil
     }
   }
 }
@@ -544,19 +591,19 @@ public enum TypeSpecifier: RawTokenKindSubset {
   case shared
 
   init?(lexeme: Lexer.Lexeme) {
-    switch (lexeme.rawTokenKind, lexeme.tokenText) {
-    case (.inoutKeyword, _): self = .inoutKeyword
-    case (.identifier, "__owned"): self = .owned
-    case (.identifier, "__shared"): self = .shared
+    switch lexeme {
+    case RawTokenKindMatch(.inoutKeyword): self = .inoutKeyword
+    case RawTokenKindMatch(.__owned): self = .owned
+    case RawTokenKindMatch(.__shared): self = .shared
     default: return nil
     }
   }
 
   public init?(token: TokenSyntax) {
-    switch (token.tokenKind, token.text) {
-    case (.inoutKeyword, _): self = .inoutKeyword
-    case (.contextualKeyword, "__owned"): self = .owned
-    case (.contextualKeyword, "__shared"): self = .shared
+    switch token {
+    case RawTokenKindMatch(.inoutKeyword): self = .inoutKeyword
+    case RawTokenKindMatch(.__owned): self = .owned
+    case RawTokenKindMatch(.__shared): self = .shared
     default: return nil
     }
   }
@@ -564,16 +611,8 @@ public enum TypeSpecifier: RawTokenKindSubset {
   var rawTokenKind: RawTokenKind {
     switch self {
     case .inoutKeyword: return .inoutKeyword
-    case .owned: return .identifier
-    case .shared: return .identifier
-    }
-  }
-
-  var contextualKeyword: SyntaxText? {
-    switch self {
-    case .inoutKeyword: return nil
-    case .owned: return "__owned"
-    case .shared: return "__shared"
+    case .owned: return .contextualKeyword(.__owned)
+    case .shared: return .contextualKeyword(.__shared)
     }
   }
 }
@@ -587,30 +626,21 @@ enum AwaitTryMove: RawTokenKindSubset {
   case tryKeyword
 
   init?(lexeme: Lexer.Lexeme) {
-    switch (lexeme.rawTokenKind, lexeme.tokenText) {
-    case (.tryKeyword, _): self = .tryKeyword
-    case (.identifier, "await"): self = .awaitContextualKeyword
-    case (.identifier, "_move"): self = ._moveContextualKeyword
-    case (.identifier, "_borrow"): self = ._borrowContextualKeyword
+    switch lexeme {
+    case RawTokenKindMatch(.tryKeyword): self = .tryKeyword
+    case RawTokenKindMatch(.await): self = .awaitContextualKeyword
+    case RawTokenKindMatch(._move): self = ._moveContextualKeyword
+    case RawTokenKindMatch(._borrow): self = ._borrowContextualKeyword
     default: return nil
     }
   }
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .awaitContextualKeyword: return .identifier
-    case ._moveContextualKeyword: return .identifier
-    case ._borrowContextualKeyword: return .identifier
+    case .awaitContextualKeyword: return .contextualKeyword(.await)
+    case ._moveContextualKeyword: return .contextualKeyword(._move)
+    case ._borrowContextualKeyword: return .contextualKeyword(._borrow)
     case .tryKeyword: return .tryKeyword
-    }
-  }
-
-  var contextualKeyword: SyntaxText? {
-    switch self {
-    case .awaitContextualKeyword: return "await"
-    case ._moveContextualKeyword: return "_move"
-    case ._borrowContextualKeyword: return "_borrow"
-    default: return nil
     }
   }
 }
@@ -666,21 +696,17 @@ enum ParameterModifier: RawTokenKindSubset {
   case isolated
 
   init?(lexeme: Lexer.Lexeme) {
-    switch (lexeme.rawTokenKind, lexeme.tokenText) {
-    case (.identifier, "_const"): self = ._const
-    case (.identifier, "isolated"): self = .isolated
+    switch lexeme {
+    case RawTokenKindMatch(._const): self = ._const
+    case RawTokenKindMatch(.isolated): self = .isolated
     default: return nil
     }
   }
 
   var rawTokenKind: RawTokenKind {
-    return .identifier
-  }
-
-  var contextualKeyword: SyntaxText? {
     switch self {
-    case ._const: return "_const"
-    case .isolated: return "isolated"
+    case ._const: return .contextualKeyword(._const)
+    case .isolated: return .contextualKeyword(.isolated)
     }
   }
 }
@@ -797,15 +823,6 @@ enum ExpressionStart: RawTokenKindSubset {
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.rawTokenKind
     case .matchingPatternStart(let underlyingKind): return underlyingKind.rawTokenKind
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.rawTokenKind
-    }
-  }
-
-  var contextualKeyword: SyntaxText? {
-    switch self {
-    case .awaitTryMove(let underlyingKind): return underlyingKind.contextualKeyword
-    case .expressionPrefixOperator(let underlyingKind): return underlyingKind.contextualKeyword
-    case .matchingPatternStart(let underlyingKind): return underlyingKind.contextualKeyword
-    case .primaryExpressionStart(let underlyingKind): return underlyingKind.contextualKeyword
     }
   }
 }

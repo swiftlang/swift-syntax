@@ -49,6 +49,22 @@ let tokensFile = SourceFile(
             )
           }
           """)
+        } else if let associatedValueClass = token.associatedValueClass {
+          FunctionDecl("""
+          public static func \(raw: token.swiftKind)(
+            _ value: \(raw: associatedValueClass),
+            leadingTrivia: Trivia = [],
+            trailingTrivia: Trivia = [],
+            presence: SourcePresence = .present
+          ) -> TokenSyntax {
+            return TokenSyntax(
+              .\(raw: token.swiftKind)(value),
+              leadingTrivia: leadingTrivia,
+              trailingTrivia: trailingTrivia,
+              presence: presence
+            )
+          }
+          """)
         } else {
           FunctionDecl("""
           public static func \(raw: token.swiftKind)(

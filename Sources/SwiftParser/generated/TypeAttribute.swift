@@ -17,29 +17,89 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum TypeAttribute: SyntaxText, ContextualKeywords {
-    case autoclosure = "autoclosure"
+  enum TypeAttribute: RawTokenKindSubset {
+    case autoclosure
     
-    case convention = "convention"
+    case convention
     
-    case noescape = "noescape"
+    case noescape
     
-    case escaping = "escaping"
+    case escaping
     
-    case differentiable = "differentiable"
+    case differentiable
     
-    case noDerivative = "noDerivative"
+    case noDerivative
     
-    case async = "async"
+    case async
     
-    case Sendable = "Sendable"
+    case Sendable
     
-    case unchecked = "unchecked"
+    case unchecked
     
-    case _local = "_local"
+    case _local
     
-    case _noMetadata = "_noMetadata"
+    case _noMetadata
     
-    case _opaqueReturnTypeOf = "_opaqueReturnTypeOf"
+    case _opaqueReturnTypeOf
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch lexeme {
+      case RawTokenKindMatch(.autoclosure): 
+        self = .autoclosure
+      case RawTokenKindMatch(.convention): 
+        self = .convention
+      case RawTokenKindMatch(.noescape): 
+        self = .noescape
+      case RawTokenKindMatch(.escaping): 
+        self = .escaping
+      case RawTokenKindMatch(.differentiable): 
+        self = .differentiable
+      case RawTokenKindMatch(.noDerivative): 
+        self = .noDerivative
+      case RawTokenKindMatch(.async): 
+        self = .async
+      case RawTokenKindMatch(.Sendable): 
+        self = .Sendable
+      case RawTokenKindMatch(.unchecked): 
+        self = .unchecked
+      case RawTokenKindMatch(._local): 
+        self = ._local
+      case RawTokenKindMatch(._noMetadata): 
+        self = ._noMetadata
+      case RawTokenKindMatch(._opaqueReturnTypeOf): 
+        self = ._opaqueReturnTypeOf
+      default: 
+        return nil
+      }
+    }
+    
+    var rawTokenKind: RawTokenKind {
+      switch self {
+      case .autoclosure: 
+        return .contextualKeyword(.autoclosure)
+      case .convention: 
+        return .contextualKeyword(.convention)
+      case .noescape: 
+        return .contextualKeyword(.noescape)
+      case .escaping: 
+        return .contextualKeyword(.escaping)
+      case .differentiable: 
+        return .contextualKeyword(.differentiable)
+      case .noDerivative: 
+        return .contextualKeyword(.noDerivative)
+      case .async: 
+        return .contextualKeyword(.async)
+      case .Sendable: 
+        return .contextualKeyword(.Sendable)
+      case .unchecked: 
+        return .contextualKeyword(.unchecked)
+      case ._local: 
+        return .contextualKeyword(._local)
+      case ._noMetadata: 
+        return .contextualKeyword(._noMetadata)
+      case ._opaqueReturnTypeOf: 
+        return .contextualKeyword(._opaqueReturnTypeOf)
+      }
+    }
   }
 }

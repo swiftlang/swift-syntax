@@ -25,7 +25,7 @@ let syntaxTraitsFile = SourceFileSyntax {
       
       for child in trait.children {
         VariableDeclSyntax("var \(raw: child.swiftName): \(raw: child.typeName)\(raw: child.isOptional ? "?" : "") { get }")
-        FunctionDeclSyntax("func with\(raw: child.name)(_ newChild: \(raw: child.typeName)?) -> Self")
+        FunctionDeclSyntax("func with\(raw: child.name)(_ newChild: \(raw: child.typeName)\(raw: child.isOptional ? "?" : "")) -> Self")
       }
     }
     

@@ -25,9 +25,38 @@ let typeAttributeFile = SourceFile {
   )
   
   ExtensionDecl("extension Parser") {
-    EnumDecl("enum TypeAttribute: SyntaxText, ContextualKeywords") {
+    EnumDecl("enum TypeAttribute: RawTokenKindSubset") {
       for attribute in TYPE_ATTR_KINDS {
-        EnumCaseDecl("case \(raw: attribute.name) = \"\(raw: attribute.name)\"")
+        EnumCaseDecl("case \(raw: attribute.name)")
+      }
+
+      InitializerDecl("init?(lexeme: Lexer.Lexeme)") {
+        SwitchStmt(switchKeyword: .switch, expression: Expr("lexeme")) {
+          for attribute in TYPE_ATTR_KINDS {
+            SwitchCase("case RawTokenKindMatch(.\(raw: attribute.name)):") {
+              SequenceExpr("self = .\(raw: attribute.swiftName)")
+            }
+          }
+          SwitchCase("default:") {
+            ReturnStmt("return nil")
+          }
+        }
+      }
+
+      VariableDecl(
+        name: IdentifierPattern("rawTokenKind"),
+        type: TypeAnnotation(
+          colon: .colon,
+          type: SimpleTypeIdentifier("RawTokenKind")
+        )
+      ) {
+        SwitchStmt(switchKeyword: .switch, expression: Expr("self")) {
+          for attribute in TYPE_ATTR_KINDS {
+            SwitchCase("case .\(raw: attribute.swiftName):") {
+              ReturnStmt("return .contextualKeyword(.\(raw: attribute.name))")
+            }
+          }
+        }
       }
     }
   }

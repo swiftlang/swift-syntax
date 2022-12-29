@@ -632,7 +632,7 @@ extension Parser {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
     let tryKeyword = self.consume(if: .tryKeyword)
 
-    let awaitKeyword = self.consumeIfContextualKeyword("await")
+    let awaitKeyword = self.consume(if: .contextualKeyword(.await))
 
     // Parse the pattern.  This is either 'case <refutable pattern>' or just a
     // normal pattern.

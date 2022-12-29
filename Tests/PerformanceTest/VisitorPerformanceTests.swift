@@ -23,7 +23,8 @@ public class VisitorPerformanceTests: XCTestCase {
       .appendingPathComponent("MinimalCollections.swift.input")
   }
 
-  func testEmptyVisitorPerformance() {
+  func testEmptyVisitorPerformance() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     class EmptyVisitor: SyntaxVisitor {}
 
     XCTAssertNoThrow(
@@ -39,7 +40,8 @@ public class VisitorPerformanceTests: XCTestCase {
     )
   }
 
-  func testEmptyRewriterPerformance() {
+  func testEmptyRewriterPerformance() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     class EmptyRewriter: SyntaxRewriter {}
 
     XCTAssertNoThrow(
@@ -55,7 +57,8 @@ public class VisitorPerformanceTests: XCTestCase {
     )
   }
 
-  func testEmptyAnyVistorPerformance() {
+  func testEmptyAnyVistorPerformance() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     class EmptyAnyVisitor: SyntaxAnyVisitor {}
 
     XCTAssertNoThrow(

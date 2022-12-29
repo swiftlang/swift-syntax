@@ -238,16 +238,16 @@ extension Parser {
       case throwsKeyword
 
       init?(lexeme: Lexer.Lexeme) {
-        switch lexeme.rawTokenKind {
-        case .spacedBinaryOperator: self = .spacedBinaryOperator
-        case .unspacedBinaryOperator: self = .unspacedBinaryOperator
-        case .infixQuestionMark: self = .infixQuestionMark
-        case .equal: self = .equal
-        case .isKeyword: self = .isKeyword
-        case .asKeyword: self = .asKeyword
-        case .identifier where lexeme.tokenText == "async": self = .async
-        case .arrow: self = .arrow
-        case .throwsKeyword: self = .throwsKeyword
+        switch lexeme {
+        case RawTokenKindMatch(.spacedBinaryOperator): self = .spacedBinaryOperator
+        case RawTokenKindMatch(.unspacedBinaryOperator): self = .unspacedBinaryOperator
+        case RawTokenKindMatch(.infixQuestionMark): self = .infixQuestionMark
+        case RawTokenKindMatch(.equal): self = .equal
+        case RawTokenKindMatch(.isKeyword): self = .isKeyword
+        case RawTokenKindMatch(.asKeyword): self = .asKeyword
+        case RawTokenKindMatch(.async): self = .async
+        case RawTokenKindMatch(.arrow): self = .arrow
+        case RawTokenKindMatch(.throwsKeyword): self = .throwsKeyword
         default: return nil
         }
       }
@@ -260,16 +260,9 @@ extension Parser {
         case .equal: return .equal
         case .isKeyword: return .isKeyword
         case .asKeyword: return .asKeyword
-        case .async: return .identifier
+        case .async: return .contextualKeyword(.async)
         case .arrow: return .arrow
         case .throwsKeyword: return .throwsKeyword
-        }
-      }
-
-      var contextualKeyword: SyntaxText? {
-        switch self {
-        case .async: return "async"
-        default: return nil
         }
       }
     }
@@ -355,7 +348,7 @@ extension Parser {
         return nil
       }
     case (.arrow, _)?, (.throwsKeyword, _)?:
-      var asyncKeyword = self.consumeIfContextualKeyword("async")
+      var asyncKeyword = self.consume(if: .contextualKeyword(.async))
 
       var throwsKeyword = self.consume(if: .throwsKeyword)
 
@@ -366,10 +359,10 @@ extension Parser {
       // missing into the ArrowExprSyntax. This reflect the semantics the user
       // originally intended.
       var effectModifiersAfterArrow: [RawTokenSyntax] = []
-      if let asyncAfterArrow = self.consumeIfContextualKeyword("async") {
+      if let asyncAfterArrow = self.consume(if: .contextualKeyword(.async)) {
         effectModifiersAfterArrow.append(asyncAfterArrow)
         if asyncKeyword == nil {
-          asyncKeyword = missingToken(.contextualKeyword, text: "async")
+          asyncKeyword = missingToken(.contextualKeyword(.async), text: "async")
         }
       }
       if let throwsAfterArrow = self.consume(if: .throwsKeyword) {
@@ -1186,12 +1179,12 @@ extension Parser {
       // 'each <identifier>' is a pack element expr, and 'any <identifier>'
       // is an existential type expr.
       if self.peek().rawTokenKind == .identifier, !self.peek().isAtStartOfLine {
-        if self.atContextualKeyword("any") {
+        if self.at(.contextualKeyword(.any)) {
           let ty = self.parseType()
           return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))
         }
 
-        if let each = self.consumeIfContextualKeyword("each") {
+        if let each = self.consume(if: .contextualKeyword(.each)) {
           let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
           return RawExprSyntax(
             RawPackElementExprSyntax(
@@ -2340,16 +2333,16 @@ extension Parser {
     do {
       // Check for the strength specifier: "weak", "unowned", or
       // "unowned(safe/unsafe)".
-      if let weakContextualKeyword = self.consumeIfContextualKeyword("weak") {
+      if let weakContextualKeyword = self.consume(if: .contextualKeyword(.weak)) {
         specifiers.append(weakContextualKeyword)
-      } else if let unownedContextualKeyword = self.consumeIfContextualKeyword("unowned") {
+      } else if let unownedContextualKeyword = self.consume(if: .contextualKeyword(.unowned)) {
         specifiers.append(unownedContextualKeyword)
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
           if self.currentToken.tokenText == "safe" {
-            specifiers.append(self.expectContextualKeywordWithoutRecovery("safe"))
+            specifiers.append(self.expectWithoutRecovery(.contextualKeyword(.safe)))
           } else {
-            specifiers.append(self.expectContextualKeywordWithoutRecovery("unsafe"))
+            specifiers.append(self.expectWithoutRecovery(.contextualKeyword(.unsafe)))
           }
           specifiers.append(self.expectWithoutRecovery(.rightParen))
         }

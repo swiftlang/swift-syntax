@@ -49,7 +49,7 @@ extension PrecedenceRelation {
   ) -> PrecedenceGroupRelationSyntax {
     PrecedenceGroupRelationSyntax(
       higherThanOrLowerThan: .contextualKeyword(
-        "\(kind)",
+        kind.keyword,
         leadingTrivia: [.newlines(1), .spaces(indentation)]
       ),
       colon: .colonToken(),

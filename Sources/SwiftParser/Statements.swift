@@ -823,13 +823,6 @@ extension Parser {
     if let at = self.consume(if: .atSign) {
       let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
 
-      var tokenList = [RawTokenSyntax]()
-      var loopProgress = LoopProgressCondition()
-      while let atSign = self.consume(if: .atSign), loopProgress.evaluate(currentToken) {
-        tokenList.append(atSign)
-        tokenList.append(self.expectIdentifierWithoutRecovery())
-      }
-
       unknownAttr = RawAttributeSyntax(
         atSignToken: at,
         unexpectedBeforeIdent,
@@ -837,7 +830,6 @@ extension Parser {
         leftParen: nil,
         argument: nil,
         rightParen: nil,
-        tokenList: tokenList.isEmpty ? nil : RawTokenListSyntax(elements: tokenList, arena: self.arena),
         arena: self.arena
       )
     } else {

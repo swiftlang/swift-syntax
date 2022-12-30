@@ -102,7 +102,6 @@ extension Parser {
         argument: arg,
         unexpectedBeforeRightParen,
         rightParen: rightParen,
-        tokenList: nil,
         arena: self.arena
       )
     )
@@ -167,7 +166,6 @@ extension Parser {
       argument: argument,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -197,7 +195,6 @@ extension Parser {
       argument: argument,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -222,7 +219,6 @@ extension Parser {
       argument: .differentiableArguments(argument),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -411,7 +407,6 @@ extension Parser {
       argument: .derivativeRegistrationArguments(argument),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -434,7 +429,6 @@ extension Parser {
       argument: .derivativeRegistrationArguments(argument),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -499,7 +493,6 @@ extension Parser {
       argument: argument.map({ .objCName($0) }),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -567,7 +560,6 @@ extension Parser {
       argument: .specializeArguments(argument),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -781,7 +773,6 @@ extension Parser {
       ),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -825,7 +816,6 @@ extension Parser {
       ),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: arena
     )
   }
@@ -848,7 +838,6 @@ extension Parser {
       argument: .token(label),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -871,7 +860,6 @@ extension Parser {
       argument: .implementsArguments(label),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }
@@ -928,7 +916,6 @@ extension Parser {
       argument: .stringExpr(label),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      tokenList: nil,
       arena: self.arena
     )
   }

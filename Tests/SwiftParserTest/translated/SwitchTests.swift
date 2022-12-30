@@ -945,10 +945,13 @@ final class SwitchTests: XCTestCase {
       switch x {
       case 0:
         break
-      @garbage @moreGarbage default: 
+      @garbage 1️⃣@moreGarbage default:
         break
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected label in switch case")
+      ]
     )
   }
 
@@ -983,20 +986,22 @@ final class SwitchTests: XCTestCase {
       switch Whatever.Thing {
       case .Thing:
         break
-      @unknown 
-      @unknown 
+      @unknown2️⃣
+      @unknown
       case _:
         break
       }
       switch Whatever.Thing { 
-      @unknown @garbage2️⃣(foobar) 
+      @unknown 3️⃣@garbage4️⃣(foobar)
       case _:
         break
       }
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '(garbage)' in switch case"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(foobar)' in switch case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected label in switch case"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected label in switch case"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '(foobar)' in switch case"),
       ]
     )
   }

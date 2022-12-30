@@ -120,11 +120,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                isOptional: true,
                tokenChoices: [
                  "RightParen"
-               ]),
-         Child(name: "TokenList",
-               kind: "TokenList",
-               isOptional: true,
-               collectionElementName: "Token")
+               ])
        ]),
 
   Node(name: "AttributeList",

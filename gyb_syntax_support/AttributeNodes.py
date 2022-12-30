@@ -86,11 +86,7 @@ ATTRIBUTE_NODES = [
              Child('RightParen', kind='RightParenToken', is_optional=True,
                    description='''
                    If the attribute takes arguments, the closing parenthesis.
-                   '''),
-             # TokenList to gather remaining tokens of invalid attributes
-             # FIXME: Remove this recovery option entirely
-             Child('TokenList', kind='TokenList',
-                   collection_element_name='Token', is_optional=True),
+                   ''')
          ]),
 
     # attribute-list -> attribute attribute-list?

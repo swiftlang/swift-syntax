@@ -4912,7 +4912,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on AttributeSyntax")
-  public static func makeAttribute(_ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, atSignToken: TokenSyntax, _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, attributeName: TokenSyntax, _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil, argument: Syntax?, _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedBetweenRightParenAndTokenList: UnexpectedNodesSyntax? = nil, tokenList: TokenListSyntax?, _ unexpectedAfterTokenList: UnexpectedNodesSyntax? = nil) -> AttributeSyntax {
+  public static func makeAttribute(_ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, atSignToken: TokenSyntax, _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, attributeName: TokenSyntax, _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil, argument: Syntax?, _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> AttributeSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAtSignToken?.raw,
       atSignToken.raw,
@@ -4924,9 +4924,7 @@ public enum SyntaxFactory {
       argument?.raw,
       unexpectedBetweenArgumentAndRightParen?.raw,
       rightParen?.raw,
-      unexpectedBetweenRightParenAndTokenList?.raw,
-      tokenList?.raw,
-      unexpectedAfterTokenList?.raw,
+      unexpectedAfterRightParen?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.attribute,
@@ -4945,8 +4943,6 @@ public enum SyntaxFactory {
         RawSyntax.makeMissingToken(kind: TokenKind.atSign, arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
-        nil,
-        nil,
         nil,
         nil,
         nil,

@@ -987,7 +987,6 @@ extension Parser {
           argument: arguments,
           unexpectedBeforeRightParen,
           rightParen: rightParen,
-          tokenList: nil,
           arena: self.arena
         )
       )
@@ -1007,7 +1006,6 @@ extension Parser {
           argument: .opaqueReturnTypeOfAttributeArguments(argument),
           unexpectedBeforeRightParen,
           rightParen: rightParen,
-          tokenList: nil,
           arena: self.arena
         )
       )
@@ -1023,7 +1021,6 @@ extension Parser {
           leftParen: nil,
           argument: nil,
           rightParen: nil,
-          tokenList: nil,
           arena: self.arena
         )
       )

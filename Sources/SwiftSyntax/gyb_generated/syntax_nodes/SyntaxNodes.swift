@@ -12469,14 +12469,12 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     argument: Argument? = nil,
     _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax? = nil,
-    _ unexpectedBetweenRightParenAndTokenList: UnexpectedNodesSyntax? = nil,
-    tokenList: TokenListSyntax? = nil,
-    _ unexpectedAfterTokenList: UnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeAtSignToken, atSignToken, unexpectedBetweenAtSignTokenAndAttributeName, attributeName, unexpectedBetweenAttributeNameAndLeftParen, leftParen, unexpectedBetweenLeftParenAndArgument, argument, unexpectedBetweenArgumentAndRightParen, rightParen, unexpectedBetweenRightParenAndTokenList, tokenList, unexpectedAfterTokenList))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeAtSignToken, atSignToken, unexpectedBetweenAtSignTokenAndAttributeName, attributeName, unexpectedBetweenAttributeNameAndLeftParen, leftParen, unexpectedBetweenLeftParenAndArgument, argument, unexpectedBetweenArgumentAndRightParen, rightParen, unexpectedAfterRightParen))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeAtSignToken?.raw,
         atSignToken.raw,
@@ -12488,9 +12486,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         argument?.raw,
         unexpectedBetweenArgumentAndRightParen?.raw,
         rightParen?.raw,
-        unexpectedBetweenRightParenAndTokenList?.raw,
-        tokenList?.raw,
-        unexpectedAfterTokenList?.raw,
+        unexpectedAfterRightParen?.raw,
       ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.attribute, from: layout, arena: arena,
@@ -12721,85 +12717,24 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return AttributeSyntax(newData)
   }
 
-  public var unexpectedBetweenRightParenAndTokenList: UnexpectedNodesSyntax? {
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenRightParenAndTokenList(value)
+      self = withUnexpectedAfterRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenRightParenAndTokenList` replaced.
-  /// - param newChild: The new `unexpectedBetweenRightParenAndTokenList` to replace the node's
-  ///                   current `unexpectedBetweenRightParenAndTokenList`, if present.
-  public func withUnexpectedBetweenRightParenAndTokenList(_ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
+  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
+  ///                   current `unexpectedAfterRightParen`, if present.
+  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 10, with: raw, arena: arena)
-    return AttributeSyntax(newData)
-  }
-
-  public var tokenList: TokenListSyntax? {
-    get {
-      let childData = data.child(at: 11, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenListSyntax(childData!)
-    }
-    set(value) {
-      self = withTokenList(value)
-    }
-  }
-
-  /// Adds the provided `Token` to the node's `tokenList`
-  /// collection.
-  /// - param element: The new `Token` to add to the node's
-  ///                  `tokenList` collection.
-  /// - returns: A copy of the receiver with the provided `Token`
-  ///            appended to its `tokenList` collection.
-  public func addToken(_ element: TokenSyntax) -> AttributeSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[11] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
-        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 11, with: collection, arena: arena)
-    return AttributeSyntax(newData)
-  }
-
-  /// Returns a copy of the receiver with its `tokenList` replaced.
-  /// - param newChild: The new `tokenList` to replace the node's
-  ///                   current `tokenList`, if present.
-  public func withTokenList(_ newChild: TokenListSyntax?) -> AttributeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 11, with: raw, arena: arena)
-    return AttributeSyntax(newData)
-  }
-
-  public var unexpectedAfterTokenList: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 12, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterTokenList(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterTokenList` replaced.
-  /// - param newChild: The new `unexpectedAfterTokenList` to replace the node's
-  ///                   current `unexpectedAfterTokenList`, if present.
-  public func withUnexpectedAfterTokenList(_ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 12, with: raw, arena: arena)
     return AttributeSyntax(newData)
   }
 
@@ -12815,9 +12750,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       \Self.argument,
       \Self.unexpectedBetweenArgumentAndRightParen,
       \Self.rightParen,
-      \Self.unexpectedBetweenRightParenAndTokenList,
-      \Self.tokenList,
-      \Self.unexpectedAfterTokenList,
+      \Self.unexpectedAfterRightParen,
     ])
   }
 
@@ -12845,10 +12778,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       return nil
     case 10:
       return nil
-    case 11:
-      return nil
-    case 12:
-      return nil
     default:
       fatalError("Invalid index")
     }
@@ -12868,9 +12797,7 @@ extension AttributeSyntax: CustomReflectable {
       "argument": argument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenArgumentAndRightParen": unexpectedBetweenArgumentAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenRightParenAndTokenList": unexpectedBetweenRightParenAndTokenList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "tokenList": tokenList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterTokenList": unexpectedAfterTokenList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

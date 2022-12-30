@@ -820,7 +820,7 @@ extension Parser {
         let (unexpectedBeforeName, name) = self.expectIdentifier(allowIdentifierLikeKeywords: false, keywordRecovery: true)
 
         let associatedValue: RawParameterClauseSyntax?
-        if self.at(.leftParen, where: { !$0.isAtStartOfLine }) {
+        if self.at(.leftParen, allowTokenAtStartOfLine: false) {
           associatedValue = self.parseParameterClause(for: .enumCase)
         } else {
           associatedValue = nil
@@ -1016,7 +1016,7 @@ extension Parser {
   ) -> RawDeinitializerDeclSyntax {
     let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(handle)
     var unexpectedNameAndSignature: [RawSyntax?] = []
-    unexpectedNameAndSignature.append(self.consume(if: .identifier, where: { !$0.isAtStartOfLine }).map(RawSyntax.init))
+    unexpectedNameAndSignature.append(self.consume(if: .identifier, allowTokenAtStartOfLine: false).map(RawSyntax.init))
     if self.at(.leftParen) && !self.currentToken.isAtStartOfLine {
       unexpectedNameAndSignature.append(RawSyntax(parseFunctionSignature()))
     }
@@ -1596,7 +1596,7 @@ extension Parser {
     }
 
     // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: [.keyword(.throw), .keyword(.try)], where: { !$0.isAtStartOfLine }) {
+    if let throwTry = self.consume(ifAny: [.keyword(.throw), .keyword(.try)], allowTokenAtStartOfLine: false) {
       return throwTry
     }
 
@@ -1853,7 +1853,7 @@ extension Parser {
     case (_, let handle)?:
       (unexpectedBeforeName, name) = self.eat(handle)
     default:
-      if let identifier = self.consume(ifAny: [.identifier, .dollarIdentifier], where: { !$0.isAtStartOfLine }) {
+      if let identifier = self.consume(ifAny: [.identifier, .dollarIdentifier], allowTokenAtStartOfLine: false) {
         // Recover if the developer tried to use an identifier as the operator name
         unexpectedBeforeName = RawUnexpectedNodesSyntax([identifier], arena: self.arena)
       } else {
@@ -2041,7 +2041,7 @@ extension Parser {
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let (unexpectedBeforeFlag, flag) = self.expectAny([.keyword(.true), .keyword(.false)], default: .keyword(.true))
           let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
-          if flag.isMissing, let unexpectedIdentifier = self.consume(if: .identifier, where: { !$0.isAtStartOfLine }) {
+          if flag.isMissing, let unexpectedIdentifier = self.consume(if: .identifier, allowTokenAtStartOfLine: false) {
             unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)
           } else {
             unexpectedAfterFlag = nil
@@ -2267,7 +2267,7 @@ extension Parser {
     }
 
     // Parse the optional parenthesized argument list.
-    let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine })
+    let leftParen = self.consume(if: .leftParen, allowTokenAtStartOfLine: false)
     let args: [RawTupleExprElementSyntax]
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?

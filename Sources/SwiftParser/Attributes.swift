@@ -170,7 +170,7 @@ extension Parser {
     case .required:
       shouldParseArgument = true
     case .customAttribute:
-      shouldParseArgument = self.lookahead().isCustomAttributeArgument() && self.at(.leftParen, where: { !$0.isAtStartOfLine })
+      shouldParseArgument = self.lookahead().isCustomAttributeArgument() && self.at(.leftParen, allowTokenAtStartOfLine: false)
     case .optional:
       shouldParseArgument = self.at(.leftParen)
     }
@@ -1157,7 +1157,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.at(.leftParen, where: { !$0.isAtStartOfLine }) && self.lookahead().isCustomAttributeArgument() {
+    if self.at(.leftParen, allowTokenAtStartOfLine: false) && self.lookahead().isCustomAttributeArgument() {
       self.skipSingle()
     }
 

@@ -26,28 +26,6 @@ public let PATTERN_NODES: [Node] = [
                kind: "Type")
        ]),
 
-  Node(name: "EnumCasePattern",
-       nameForDiagnostics: "enum case pattern",
-       kind: "Pattern",
-       children: [
-         Child(name: "Type",
-               kind: "Type",
-               isOptional: true),
-         Child(name: "Period",
-               kind: "PeriodToken",
-               tokenChoices: [
-                 "Period"
-               ]),
-         Child(name: "CaseName",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
-         Child(name: "AssociatedTuple",
-               kind: "TuplePattern",
-               isOptional: true)
-       ]),
-
   Node(name: "IsTypePattern",
        nameForDiagnostics: "'is' pattern",
        kind: "Pattern",
@@ -61,19 +39,6 @@ public let PATTERN_NODES: [Node] = [
                kind: "Type")
        ]),
 
-  Node(name: "OptionalPattern",
-       nameForDiagnostics: "optional pattern",
-       kind: "Pattern",
-       children: [
-         Child(name: "SubPattern",
-               kind: "Pattern"),
-         Child(name: "QuestionMark",
-               kind: "PostfixQuestionMarkToken",
-               tokenChoices: [
-                 "PostfixQuestionMark"
-               ])
-       ]),
-
   Node(name: "IdentifierPattern",
        nameForDiagnostics: "pattern",
        kind: "Pattern",
@@ -84,21 +49,6 @@ public let PATTERN_NODES: [Node] = [
                  "Self",
                  "Identifier"
                ])
-       ]),
-
-  Node(name: "AsTypePattern",
-       nameForDiagnostics: "'as' pattern",
-       kind: "Pattern",
-       children: [
-         Child(name: "Pattern",
-               kind: "Pattern"),
-         Child(name: "AsKeyword",
-               kind: "AsToken",
-               tokenChoices: [
-                 "As"
-               ]),
-         Child(name: "Type",
-               kind: "Type")
        ]),
 
   Node(name: "TuplePattern",

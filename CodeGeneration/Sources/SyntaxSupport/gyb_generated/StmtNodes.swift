@@ -83,14 +83,6 @@ public let STMT_NODES: [Node] = [
                kind: "CodeBlock")
        ]),
 
-  Node(name: "ExpressionStmt",
-       nameForDiagnostics: "expression",
-       kind: "Stmt",
-       children: [
-         Child(name: "Expression",
-               kind: "Expr")
-       ]),
-
   Node(name: "SwitchCaseList",
        nameForDiagnostics: nil,
        kind: "SyntaxCollection",
@@ -498,14 +490,6 @@ public let STMT_NODES: [Node] = [
        nameForDiagnostics: nil,
        kind: "SyntaxCollection",
        element: "ConditionElement"),
-
-  Node(name: "DeclarationStmt",
-       nameForDiagnostics: "declaration",
-       kind: "Stmt",
-       children: [
-         Child(name: "Declaration",
-               kind: "Decl")
-       ]),
 
   Node(name: "ThrowStmt",
        nameForDiagnostics: "'throw' statement",

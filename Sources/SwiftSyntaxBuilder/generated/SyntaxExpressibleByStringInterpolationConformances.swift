@@ -44,9 +44,6 @@ extension ArrowExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension AsExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension AsTypePatternSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension AssignmentExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
@@ -125,9 +122,6 @@ extension DeclSyntax: SyntaxExpressibleByStringInterpolation {
   }
 }
 
-extension DeclarationStmtSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension DeferStmtSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
@@ -150,9 +144,6 @@ extension EditorPlaceholderExprSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension EnumCaseDeclSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension EnumCasePatternSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension EnumDeclSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -179,9 +170,6 @@ extension ExprSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension ExpressionPatternSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension ExpressionStmtSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension ExtensionDeclSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -302,9 +290,6 @@ extension OperatorDeclSyntax: SyntaxExpressibleByStringInterpolation {
 extension OptionalChainingExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
-extension OptionalPatternSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
 extension OptionalTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
@@ -347,9 +332,6 @@ extension PostfixUnaryExprSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension PoundAssertStmtSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension PoundColumnExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension PoundErrorDeclSyntax: SyntaxExpressibleByStringInterpolation { 
@@ -440,9 +422,6 @@ extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {
 }
 
 extension SwitchStmtSyntax: SyntaxExpressibleByStringInterpolation { 
-}
-
-extension SymbolicReferenceExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
 extension TernaryExprSyntax: SyntaxExpressibleByStringInterpolation { 

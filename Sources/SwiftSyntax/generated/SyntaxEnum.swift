@@ -18,8 +18,6 @@
 public enum SyntaxEnum {
   case token(TokenSyntax)
   
-  case accessLevelModifier(AccessLevelModifierSyntax)
-  
   case accessPathComponent(AccessPathComponentSyntax)
   
   case accessPath(AccessPathSyntax)
@@ -45,8 +43,6 @@ public enum SyntaxEnum {
   case arrowExpr(ArrowExprSyntax)
   
   case asExpr(AsExprSyntax)
-  
-  case asTypePattern(AsTypePatternSyntax)
   
   case assignmentExpr(AssignmentExprSyntax)
   
@@ -156,8 +152,6 @@ public enum SyntaxEnum {
   
   case declName(DeclNameSyntax)
   
-  case declarationStmt(DeclarationStmtSyntax)
-  
   case deferStmt(DeferStmtSyntax)
   
   case deinitializerDecl(DeinitializerDeclSyntax)
@@ -198,8 +192,6 @@ public enum SyntaxEnum {
   
   case enumCaseElement(EnumCaseElementSyntax)
   
-  case enumCasePattern(EnumCasePatternSyntax)
-  
   case enumDecl(EnumDeclSyntax)
   
   case exprList(ExprListSyntax)
@@ -207,8 +199,6 @@ public enum SyntaxEnum {
   case expressionPattern(ExpressionPatternSyntax)
   
   case expressionSegment(ExpressionSegmentSyntax)
-  
-  case expressionStmt(ExpressionStmtSyntax)
   
   case extensionDecl(ExtensionDeclSyntax)
   
@@ -221,8 +211,6 @@ public enum SyntaxEnum {
   case forcedValueExpr(ForcedValueExprSyntax)
   
   case functionCallExpr(FunctionCallExprSyntax)
-  
-  case functionDeclName(FunctionDeclNameSyntax)
   
   case functionDecl(FunctionDeclSyntax)
   
@@ -356,8 +344,6 @@ public enum SyntaxEnum {
   
   case nilLiteralExpr(NilLiteralExprSyntax)
   
-  case nonEmptyTokenList(NonEmptyTokenListSyntax)
-  
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
   
   case objCSelector(ObjCSelectorSyntax)
@@ -371,8 +357,6 @@ public enum SyntaxEnum {
   case optionalBindingCondition(OptionalBindingConditionSyntax)
   
   case optionalChainingExpr(OptionalChainingExprSyntax)
-  
-  case optionalPattern(OptionalPatternSyntax)
   
   case optionalType(OptionalTypeSyntax)
   
@@ -395,8 +379,6 @@ public enum SyntaxEnum {
   case postfixUnaryExpr(PostfixUnaryExprSyntax)
   
   case poundAssertStmt(PoundAssertStmtSyntax)
-  
-  case poundColumnExpr(PoundColumnExprSyntax)
   
   case poundErrorDecl(PoundErrorDeclSyntax)
   
@@ -476,8 +458,6 @@ public enum SyntaxEnum {
   
   case switchStmt(SwitchStmtSyntax)
   
-  case symbolicReferenceExpr(SymbolicReferenceExprSyntax)
-  
   case targetFunctionEntry(TargetFunctionEntrySyntax)
   
   case ternaryExpr(TernaryExprSyntax)
@@ -555,8 +535,6 @@ public extension Syntax {
     switch raw.kind {
     case .token: 
       return .token(TokenSyntax(self)!)
-    case .accessLevelModifier: 
-      return .accessLevelModifier(AccessLevelModifierSyntax(self)!)
     case .accessPathComponent: 
       return .accessPathComponent(AccessPathComponentSyntax(self)!)
     case .accessPath: 
@@ -583,8 +561,6 @@ public extension Syntax {
       return .arrowExpr(ArrowExprSyntax(self)!)
     case .asExpr: 
       return .asExpr(AsExprSyntax(self)!)
-    case .asTypePattern: 
-      return .asTypePattern(AsTypePatternSyntax(self)!)
     case .assignmentExpr: 
       return .assignmentExpr(AssignmentExprSyntax(self)!)
     case .associatedtypeDecl: 
@@ -693,8 +669,6 @@ public extension Syntax {
       return .declNameArguments(DeclNameArgumentsSyntax(self)!)
     case .declName: 
       return .declName(DeclNameSyntax(self)!)
-    case .declarationStmt: 
-      return .declarationStmt(DeclarationStmtSyntax(self)!)
     case .deferStmt: 
       return .deferStmt(DeferStmtSyntax(self)!)
     case .deinitializerDecl: 
@@ -735,8 +709,6 @@ public extension Syntax {
       return .enumCaseElementList(EnumCaseElementListSyntax(self)!)
     case .enumCaseElement: 
       return .enumCaseElement(EnumCaseElementSyntax(self)!)
-    case .enumCasePattern: 
-      return .enumCasePattern(EnumCasePatternSyntax(self)!)
     case .enumDecl: 
       return .enumDecl(EnumDeclSyntax(self)!)
     case .exprList: 
@@ -745,8 +717,6 @@ public extension Syntax {
       return .expressionPattern(ExpressionPatternSyntax(self)!)
     case .expressionSegment: 
       return .expressionSegment(ExpressionSegmentSyntax(self)!)
-    case .expressionStmt: 
-      return .expressionStmt(ExpressionStmtSyntax(self)!)
     case .extensionDecl: 
       return .extensionDecl(ExtensionDeclSyntax(self)!)
     case .fallthroughStmt: 
@@ -759,8 +729,6 @@ public extension Syntax {
       return .forcedValueExpr(ForcedValueExprSyntax(self)!)
     case .functionCallExpr: 
       return .functionCallExpr(FunctionCallExprSyntax(self)!)
-    case .functionDeclName: 
-      return .functionDeclName(FunctionDeclNameSyntax(self)!)
     case .functionDecl: 
       return .functionDecl(FunctionDeclSyntax(self)!)
     case .functionParameterList: 
@@ -893,8 +861,6 @@ public extension Syntax {
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .nilLiteralExpr: 
       return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
-    case .nonEmptyTokenList: 
-      return .nonEmptyTokenList(NonEmptyTokenListSyntax(self)!)
     case .objCSelectorPiece: 
       return .objCSelectorPiece(ObjCSelectorPieceSyntax(self)!)
     case .objCSelector: 
@@ -909,8 +875,6 @@ public extension Syntax {
       return .optionalBindingCondition(OptionalBindingConditionSyntax(self)!)
     case .optionalChainingExpr: 
       return .optionalChainingExpr(OptionalChainingExprSyntax(self)!)
-    case .optionalPattern: 
-      return .optionalPattern(OptionalPatternSyntax(self)!)
     case .optionalType: 
       return .optionalType(OptionalTypeSyntax(self)!)
     case .packElementExpr: 
@@ -933,8 +897,6 @@ public extension Syntax {
       return .postfixUnaryExpr(PostfixUnaryExprSyntax(self)!)
     case .poundAssertStmt: 
       return .poundAssertStmt(PoundAssertStmtSyntax(self)!)
-    case .poundColumnExpr: 
-      return .poundColumnExpr(PoundColumnExprSyntax(self)!)
     case .poundErrorDecl: 
       return .poundErrorDecl(PoundErrorDeclSyntax(self)!)
     case .poundSourceLocationArgs: 
@@ -1013,8 +975,6 @@ public extension Syntax {
       return .switchDefaultLabel(SwitchDefaultLabelSyntax(self)!)
     case .switchStmt: 
       return .switchStmt(SwitchStmtSyntax(self)!)
-    case .symbolicReferenceExpr: 
-      return .symbolicReferenceExpr(SymbolicReferenceExprSyntax(self)!)
     case .targetFunctionEntry: 
       return .targetFunctionEntry(TargetFunctionEntrySyntax(self)!)
     case .ternaryExpr: 

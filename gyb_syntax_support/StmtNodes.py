@@ -36,12 +36,6 @@ STMT_NODES = [
              Child('Body', kind='CodeBlock'),
          ]),
 
-    # expr-stmt -> expression ';'?
-    Node('ExpressionStmt', name_for_diagnostics='expression', kind='Stmt',
-         children=[
-             Child('Expression', kind='Expr'),
-         ]),
-
     # switch-case-list -> switch-case switch-case-list?
     Node('SwitchCaseList', name_for_diagnostics=None, kind='SyntaxCollection',
          element='Syntax', element_name='SwitchCase',
@@ -256,13 +250,6 @@ STMT_NODES = [
     #                 | condition ','? condition-list
     Node('ConditionElementList', name_for_diagnostics=None, kind='SyntaxCollection',
          element='ConditionElement'),
-
-    # A declaration in statement position.
-    # struct Foo {};
-    Node('DeclarationStmt', name_for_diagnostics="declaration", kind='Stmt',
-         children=[
-             Child('Declaration', kind='Decl'),
-         ]),
 
     # throw-stmt -> 'throw' expr ';'?
     Node('ThrowStmt', name_for_diagnostics="'throw' statement", kind='Stmt',

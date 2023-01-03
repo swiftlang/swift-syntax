@@ -73,14 +73,12 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     case `stmt`(StmtSyntax)
     case `expr`(ExprSyntax)
     case `tokenList`(TokenListSyntax)
-    case `nonEmptyTokenList`(NonEmptyTokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .decl(let node): return node._syntaxNode
       case .stmt(let node): return node._syntaxNode
       case .expr(let node): return node._syntaxNode
       case .tokenList(let node): return node._syntaxNode
-      case .nonEmptyTokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -95,9 +93,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init(_ node: TokenListSyntax) {
       self = .tokenList(node)
-    }
-    public init(_ node: NonEmptyTokenListSyntax) {
-      self = .nonEmptyTokenList(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(DeclSyntax.self) {
@@ -116,10 +111,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
         self = .tokenList(node)
         return
       }
-      if let node = node.as(NonEmptyTokenListSyntax.self) {
-        self = .nonEmptyTokenList(node)
-        return
-      }
       return nil
     }
 
@@ -129,7 +120,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
         .node(StmtSyntax.self),
         .node(ExprSyntax.self),
         .node(TokenListSyntax.self),
-        .node(NonEmptyTokenListSyntax.self),
       ])
     }
   }
@@ -9109,195 +9099,6 @@ extension FunctionParameterSyntax: CustomReflectable {
   }
 }
 
-// MARK: - AccessLevelModifierSyntax
-
-public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .accessLevelModifier else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `AccessLevelModifierSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .accessLevelModifier)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
-    name: TokenSyntax,
-    _ unexpectedBetweenNameAndModifier: UnexpectedNodesSyntax? = nil,
-    modifier: DeclModifierDetailSyntax? = nil,
-    _ unexpectedAfterModifier: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeName, name, unexpectedBetweenNameAndModifier, modifier, unexpectedAfterModifier))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeName?.raw,
-        name.raw,
-        unexpectedBetweenNameAndModifier?.raw,
-        modifier?.raw,
-        unexpectedAfterModifier?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.accessLevelModifier, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBeforeName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
-  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
-  ///                   current `unexpectedBeforeName`, if present.
-  public func withUnexpectedBeforeName(_ newChild: UnexpectedNodesSyntax?) -> AccessLevelModifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return AccessLevelModifierSyntax(newData)
-  }
-
-  public var name: TokenSyntax {
-    get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `name` replaced.
-  /// - param newChild: The new `name` to replace the node's
-  ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> AccessLevelModifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return AccessLevelModifierSyntax(newData)
-  }
-
-  public var unexpectedBetweenNameAndModifier: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenNameAndModifier(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndModifier` replaced.
-  /// - param newChild: The new `unexpectedBetweenNameAndModifier` to replace the node's
-  ///                   current `unexpectedBetweenNameAndModifier`, if present.
-  public func withUnexpectedBetweenNameAndModifier(_ newChild: UnexpectedNodesSyntax?) -> AccessLevelModifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return AccessLevelModifierSyntax(newData)
-  }
-
-  public var modifier: DeclModifierDetailSyntax? {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return DeclModifierDetailSyntax(childData!)
-    }
-    set(value) {
-      self = withModifier(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `modifier` replaced.
-  /// - param newChild: The new `modifier` to replace the node's
-  ///                   current `modifier`, if present.
-  public func withModifier(_ newChild: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return AccessLevelModifierSyntax(newData)
-  }
-
-  public var unexpectedAfterModifier: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterModifier(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterModifier` replaced.
-  /// - param newChild: The new `unexpectedAfterModifier` to replace the node's
-  ///                   current `unexpectedAfterModifier`, if present.
-  public func withUnexpectedAfterModifier(_ newChild: UnexpectedNodesSyntax?) -> AccessLevelModifierSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return AccessLevelModifierSyntax(newData)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeName,
-      \Self.name,
-      \Self.unexpectedBetweenNameAndModifier,
-      \Self.modifier,
-      \Self.unexpectedAfterModifier,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "name"
-    case 2:
-      return nil
-    case 3:
-      return nil
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension AccessLevelModifierSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenNameAndModifier": unexpectedBetweenNameAndModifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "modifier": modifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterModifier": unexpectedAfterModifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
 // MARK: - AccessPathComponentSyntax
 
 public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
@@ -16906,203 +16707,6 @@ extension QualifiedDeclNameSyntax: CustomReflectable {
       "unexpectedBetweenBaseTypeAndDot": unexpectedBetweenBaseTypeAndDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "dot": dot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unexpectedBetweenDotAndName": unexpectedBetweenDotAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenNameAndArguments": unexpectedBetweenNameAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "arguments": arguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterArguments": unexpectedAfterArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-    ])
-  }
-}
-
-// MARK: - FunctionDeclNameSyntax
-
-/// A function declaration name (e.g. `foo(_:_:)`).
-public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-
-  public init?<S: SyntaxProtocol>(_ node: S) {
-    guard node.raw.kind == .functionDeclName else { return nil }
-    self._syntaxNode = node._syntaxNode
-  }
-
-  /// Creates a `FunctionDeclNameSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionDeclName)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
-    name: TokenSyntax,
-    _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
-    arguments: DeclNameArgumentsSyntax? = nil,
-    _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed 
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeName, name, unexpectedBetweenNameAndArguments, arguments, unexpectedAfterArguments))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-        unexpectedBeforeName?.raw,
-        name.raw,
-        unexpectedBetweenNameAndArguments?.raw,
-        arguments?.raw,
-        unexpectedAfterArguments?.raw,
-      ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.functionDeclName, from: layout, arena: arena,
-        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
-  }
-
-  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 0, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBeforeName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
-  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
-  ///                   current `unexpectedBeforeName`, if present.
-  public func withUnexpectedBeforeName(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclNameSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
-    return FunctionDeclNameSyntax(newData)
-  }
-
-  /// 
-  /// The base name of the referenced function.
-  /// 
-  public var name: TokenSyntax {
-    get {
-      let childData = data.child(at: 1, parent: Syntax(self))
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `name` replaced.
-  /// - param newChild: The new `name` to replace the node's
-  ///                   current `name`, if present.
-  public func withName(_ newChild: TokenSyntax?) -> FunctionDeclNameSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena)
-    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
-    return FunctionDeclNameSyntax(newData)
-  }
-
-  public var unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 2, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenNameAndArguments(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndArguments` replaced.
-  /// - param newChild: The new `unexpectedBetweenNameAndArguments` to replace the node's
-  ///                   current `unexpectedBetweenNameAndArguments`, if present.
-  public func withUnexpectedBetweenNameAndArguments(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclNameSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
-    return FunctionDeclNameSyntax(newData)
-  }
-
-  /// 
-  /// The argument labels of the referenced function, optionally
-  /// specified.
-  /// 
-  public var arguments: DeclNameArgumentsSyntax? {
-    get {
-      let childData = data.child(at: 3, parent: Syntax(self))
-      if childData == nil { return nil }
-      return DeclNameArgumentsSyntax(childData!)
-    }
-    set(value) {
-      self = withArguments(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `arguments` replaced.
-  /// - param newChild: The new `arguments` to replace the node's
-  ///                   current `arguments`, if present.
-  public func withArguments(_ newChild: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
-    return FunctionDeclNameSyntax(newData)
-  }
-
-  public var unexpectedAfterArguments: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 4, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterArguments(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterArguments` replaced.
-  /// - param newChild: The new `unexpectedAfterArguments` to replace the node's
-  ///                   current `unexpectedAfterArguments`, if present.
-  public func withUnexpectedAfterArguments(_ newChild: UnexpectedNodesSyntax?) -> FunctionDeclNameSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return FunctionDeclNameSyntax(newData)
-  }
-
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-      \Self.unexpectedBeforeName,
-      \Self.name,
-      \Self.unexpectedBetweenNameAndArguments,
-      \Self.arguments,
-      \Self.unexpectedAfterArguments,
-    ])
-  }
-
-  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
-    switch index.data?.indexInParent {
-    case 0:
-      return nil
-    case 1:
-      return "base name"
-    case 2:
-      return nil
-    case 3:
-      return "arguments"
-    case 4:
-      return nil
-    default:
-      fatalError("Invalid index")
-    }
-  }
-}
-
-extension FunctionDeclNameSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenNameAndArguments": unexpectedBetweenNameAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arguments": arguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

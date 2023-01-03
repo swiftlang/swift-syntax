@@ -18,8 +18,6 @@
 public enum SyntaxKind {
   case token
   
-  case accessLevelModifier
-  
   case accessPathComponent
   
   case accessPath
@@ -45,8 +43,6 @@ public enum SyntaxKind {
   case arrowExpr
   
   case asExpr
-  
-  case asTypePattern
   
   case assignmentExpr
   
@@ -156,8 +152,6 @@ public enum SyntaxKind {
   
   case declName
   
-  case declarationStmt
-  
   case deferStmt
   
   case deinitializerDecl
@@ -198,8 +192,6 @@ public enum SyntaxKind {
   
   case enumCaseElement
   
-  case enumCasePattern
-  
   case enumDecl
   
   case exprList
@@ -207,8 +199,6 @@ public enum SyntaxKind {
   case expressionPattern
   
   case expressionSegment
-  
-  case expressionStmt
   
   case extensionDecl
   
@@ -221,8 +211,6 @@ public enum SyntaxKind {
   case forcedValueExpr
   
   case functionCallExpr
-  
-  case functionDeclName
   
   case functionDecl
   
@@ -356,8 +344,6 @@ public enum SyntaxKind {
   
   case nilLiteralExpr
   
-  case nonEmptyTokenList
-  
   case objCSelectorPiece
   
   case objCSelector
@@ -371,8 +357,6 @@ public enum SyntaxKind {
   case optionalBindingCondition
   
   case optionalChainingExpr
-  
-  case optionalPattern
   
   case optionalType
   
@@ -395,8 +379,6 @@ public enum SyntaxKind {
   case postfixUnaryExpr
   
   case poundAssertStmt
-  
-  case poundColumnExpr
   
   case poundErrorDecl
   
@@ -475,8 +457,6 @@ public enum SyntaxKind {
   case switchDefaultLabel
   
   case switchStmt
-  
-  case symbolicReferenceExpr
   
   case targetFunctionEntry
   
@@ -609,8 +589,6 @@ public enum SyntaxKind {
     case .modifierList: 
       return true
     case .multipleTrailingClosureElementList: 
-      return true
-    case .nonEmptyTokenList: 
       return true
     case .objCSelector: 
       return true

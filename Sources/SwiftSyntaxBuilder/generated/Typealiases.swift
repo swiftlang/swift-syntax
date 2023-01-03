@@ -17,8 +17,6 @@ import SwiftSyntax
 
 public typealias Token = TokenSyntax
 
-public typealias AccessLevelModifier = AccessLevelModifierSyntax
-
 public typealias AccessPathComponent = AccessPathComponentSyntax
 
 public typealias AccessPath = AccessPathSyntax
@@ -44,8 +42,6 @@ public typealias ArrayType = ArrayTypeSyntax
 public typealias ArrowExpr = ArrowExprSyntax
 
 public typealias AsExpr = AsExprSyntax
-
-public typealias AsTypePattern = AsTypePatternSyntax
 
 public typealias AssignmentExpr = AssignmentExprSyntax
 
@@ -157,8 +153,6 @@ public typealias DeclName = DeclNameSyntax
 
 public typealias Decl = DeclSyntax
 
-public typealias DeclarationStmt = DeclarationStmtSyntax
-
 public typealias DeferStmt = DeferStmtSyntax
 
 public typealias DeinitializerDecl = DeinitializerDeclSyntax
@@ -199,8 +193,6 @@ public typealias EnumCaseElementList = EnumCaseElementListSyntax
 
 public typealias EnumCaseElement = EnumCaseElementSyntax
 
-public typealias EnumCasePattern = EnumCasePatternSyntax
-
 public typealias EnumDecl = EnumDeclSyntax
 
 public typealias ExprList = ExprListSyntax
@@ -210,8 +202,6 @@ public typealias Expr = ExprSyntax
 public typealias ExpressionPattern = ExpressionPatternSyntax
 
 public typealias ExpressionSegment = ExpressionSegmentSyntax
-
-public typealias ExpressionStmt = ExpressionStmtSyntax
 
 public typealias ExtensionDecl = ExtensionDeclSyntax
 
@@ -224,8 +214,6 @@ public typealias ForInStmt = ForInStmtSyntax
 public typealias ForcedValueExpr = ForcedValueExprSyntax
 
 public typealias FunctionCallExpr = FunctionCallExprSyntax
-
-public typealias FunctionDeclName = FunctionDeclNameSyntax
 
 public typealias FunctionDecl = FunctionDeclSyntax
 
@@ -347,8 +335,6 @@ public typealias NamedOpaqueReturnType = NamedOpaqueReturnTypeSyntax
 
 public typealias NilLiteralExpr = NilLiteralExprSyntax
 
-public typealias NonEmptyTokenList = NonEmptyTokenListSyntax
-
 public typealias ObjCSelectorPiece = ObjCSelectorPieceSyntax
 
 public typealias ObjCSelector = ObjCSelectorSyntax
@@ -362,8 +348,6 @@ public typealias OperatorPrecedenceAndTypes = OperatorPrecedenceAndTypesSyntax
 public typealias OptionalBindingCondition = OptionalBindingConditionSyntax
 
 public typealias OptionalChainingExpr = OptionalChainingExprSyntax
-
-public typealias OptionalPattern = OptionalPatternSyntax
 
 public typealias OptionalType = OptionalTypeSyntax
 
@@ -388,8 +372,6 @@ public typealias PostfixIfConfigExpr = PostfixIfConfigExprSyntax
 public typealias PostfixUnaryExpr = PostfixUnaryExprSyntax
 
 public typealias PoundAssertStmt = PoundAssertStmtSyntax
-
-public typealias PoundColumnExpr = PoundColumnExprSyntax
 
 public typealias PoundErrorDecl = PoundErrorDeclSyntax
 
@@ -470,8 +452,6 @@ public typealias SwitchCase = SwitchCaseSyntax
 public typealias SwitchDefaultLabel = SwitchDefaultLabelSyntax
 
 public typealias SwitchStmt = SwitchStmtSyntax
-
-public typealias SymbolicReferenceExpr = SymbolicReferenceExprSyntax
 
 public typealias TargetFunctionEntry = TargetFunctionEntrySyntax
 

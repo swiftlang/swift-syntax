@@ -18,12 +18,6 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "SyntaxCollection",
        element: "Token"),
 
-  Node(name: "NonEmptyTokenList",
-       nameForDiagnostics: "token list",
-       kind: "SyntaxCollection",
-       element: "Token",
-       omitWhenEmpty: true),
-
   Node(name: "CustomAttribute",
        nameForDiagnostics: "attribute",
        description: "A custom `@` attribute.",
@@ -524,25 +518,6 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "SpacedBinaryOperator",
                  "PrefixOperator",
                  "PostfixOperator"
-               ]),
-         Child(name: "Arguments",
-               kind: "DeclNameArguments",
-               description: "The argument labels of the referenced function, optionallyspecified.",
-               isOptional: true)
-       ]),
-
-  Node(name: "FunctionDeclName",
-       nameForDiagnostics: "function declaration name",
-       description: "A function declaration name (e.g. `foo(_:_:)`).",
-       kind: "Syntax",
-       children: [
-         Child(name: "Name",
-               kind: "Token",
-               description: "The base name of the referenced function.",
-               tokenChoices: [
-                 "Identifier",
-                 "PrefixOperator",
-                 "SpacedBinaryOperator"
                ]),
          Child(name: "Arguments",
                kind: "DeclNameArguments",

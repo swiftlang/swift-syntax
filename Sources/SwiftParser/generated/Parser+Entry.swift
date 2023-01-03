@@ -43,6 +43,14 @@ public protocol SyntaxParseable: SyntaxProtocol {
   static func parse(from parser: inout Parser) -> Self
 }
 
+extension AttributeSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    let node = parser.parseAttribute()
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw).cast(Self.self)
+  }
+}
+
 extension CatchClauseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     let node = parser.parseCatchClause()

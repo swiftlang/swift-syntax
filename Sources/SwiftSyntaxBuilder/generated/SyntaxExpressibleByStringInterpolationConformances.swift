@@ -53,6 +53,14 @@ extension AssignmentExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension AssociatedtypeDeclSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+        return Self.parse(from: &parser)
+      })
+  }
+}
+
 extension AttributedTypeSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

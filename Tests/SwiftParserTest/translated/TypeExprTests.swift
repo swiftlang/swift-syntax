@@ -13,6 +13,7 @@
 // This test file has been translated from swift/test/Parse/type_expr.swift
 
 import XCTest
+import SwiftSyntax
 
 // Types in expression contexts must be followed by a member access or
 // constructor call.
@@ -111,10 +112,14 @@ final class TypeExprTests: XCTestCase {
         let _ : () = Foo.Bar.meth()
         _ = Foo.Bar.instMeth
         _ = Foo.Bar 
-        _ = Foo.Bar.dynamicType 
+        _ = Foo.Bar.dynamicType
       }
       """
     )
+
+    AssertParse("(X).Y.self", ExprSyntax.parse)
+    AssertParse("(X.Y).Z.self", ExprSyntax.parse)
+    AssertParse("((X).Y).Z.self", ExprSyntax.parse)
   }
 
   func testTypeExpr9() {
@@ -141,10 +146,18 @@ final class TypeExprTests: XCTestCase {
         _ = Gen<Foo>.meth
         let _ : () = Gen<Foo>.meth()
         _ = Gen<Foo>.instMeth
-        _ = Gen<Foo> 
+        _ = Gen<Foo>
+
+        _ = X?.self
+        _ = [X].self
+        _ = [X : Y].self
       }
       """
     )
+
+    AssertParse("X?.self", ExprSyntax.parse)
+    AssertParse("[X].self", ExprSyntax.parse)
+    AssertParse("[X : Y].self", ExprSyntax.parse)
   }
 
   func testTypeExpr11() {
@@ -158,10 +171,24 @@ final class TypeExprTests: XCTestCase {
         let _ : () = Gen<Foo>.Bar.meth()
         _ = Gen<Foo>.Bar.instMeth
         _ = Gen<Foo>.Bar 
-        _ = Gen<Foo>.Bar.dynamicType 
+        _ = Gen<Foo>.Bar.dynamicType
+
+        _ = (G<X>).Y.self
+        _ = X?.Y.self
+        _ = (X)?.Y.self
+        _ = (X?).Y.self
+        _ = [X].Y.self
+        _ = [X : Y].Z.self
       }
       """
     )
+
+    AssertParse("(G<X>).Y.self", ExprSyntax.parse)
+    AssertParse("X?.Y.self", ExprSyntax.parse)
+    AssertParse("(X)?.Y.self", ExprSyntax.parse)
+    AssertParse("(X?).Y.self", ExprSyntax.parse)
+    AssertParse("[X].Y.self", ExprSyntax.parse)
+    AssertParse("[X : Y].Z.self", ExprSyntax.parse)
   }
 
   func testTypeExpr12() {
@@ -550,28 +577,108 @@ final class TypeExprTests: XCTestCase {
     )
   }
 
-  func testTypeExpr26() {
+  func testCompositionTypeExpr() {
+    AssertParse("P & Q", ExprSyntax.parse)
+    AssertParse("P & Q.self", ExprSyntax.parse)
+    AssertParse("any P & Q", ExprSyntax.parse)
+
+    AssertParse("(P & Q).self", ExprSyntax.parse)
+    AssertParse("((P) & (Q)).self", ExprSyntax.parse)
+
+    AssertParse("(A.B & C.D).self", ExprSyntax.parse)
+    AssertParse("((A).B & (C).D).self", ExprSyntax.parse)
+
+    AssertParse("(G<X> & G<Y>).self", ExprSyntax.parse)
+    AssertParse("(X? & Y?).self", ExprSyntax.parse)
+    AssertParse("([X] & [Y]).self", ExprSyntax.parse)
+    AssertParse("([A : B] & [C : D]).self", ExprSyntax.parse)
+
+    AssertParse("(G<A>.B & G<C>.D).self", ExprSyntax.parse)
+    AssertParse("(A?.B & C?.D).self", ExprSyntax.parse)
+    AssertParse("([A].B & [A].B).self", ExprSyntax.parse)
+    AssertParse("([A : B].C & [D : E].F).self", ExprSyntax.parse)
+
+    AssertParse("(X.Type & Y.Type).self", ExprSyntax.parse)
+    AssertParse("(X.Protocol & Y.Protocol).self", ExprSyntax.parse)
+
+    AssertParse("((A, B) & (C, D)).self", ExprSyntax.parse)
+  }
+
+  func testTupleTypeExpr() {
+    AssertParse("(X).self", ExprSyntax.parse)
+
+    AssertParse("(X, Y)", ExprSyntax.parse)
+
+    AssertParse("(X, Y).self", ExprSyntax.parse)
+    AssertParse("((X), (Y)).self", ExprSyntax.parse)
+
+    AssertParse("(A.B, C.D).self", ExprSyntax.parse)
+    AssertParse("((A).B, (C).D).self", ExprSyntax.parse)
+
+    AssertParse("(G<X>, G<Y>).self", ExprSyntax.parse)
+    AssertParse("(X?, Y?).self", ExprSyntax.parse)
+    AssertParse("([X], [Y]).self", ExprSyntax.parse)
+    AssertParse("([A : B], [C : D]).self", ExprSyntax.parse)
+
+    AssertParse("(G<A>.B, G<C>.D).self", ExprSyntax.parse)
+    AssertParse("(A?.B, C?.D).self", ExprSyntax.parse)
+    AssertParse("([A].B, [C].D).self", ExprSyntax.parse)
+    AssertParse("([A : B].C, [D : E].F).self", ExprSyntax.parse)
+
+    AssertParse("(X.Type, Y.Type).self", ExprSyntax.parse)
+    AssertParse("(X.Protocol, Y.Protocol).self", ExprSyntax.parse)
+
+    AssertParse("(P & Q, P & Q).self", ExprSyntax.parse)
+
     AssertParse(
       """
-      protocol P1 {}
-      protocol P2 {}
-      protocol P3 {}
-      func compositionType() {
-        _ = P1 & P2 
-        _ = P1 & P2.self 
-        _ = (P1 & P2).self // Ok.
-        _ = (P1 & (P2)).self // FIXME: OK? while `typealias P = P1 & (P2)` is rejected.
-        _ = (P1 & (P2, P3)).self 
-        _ = (P1 & Int).self 
-        _ = (P1? & P2).self 
-        _ = (P1 & P2.Type).self 
-        _ = P1 & P2 -> P3
-        _ = P1 & P2 -> P3 & P1 -> Int
-        _ = (() -> P1 & P2).self // Ok
-        _ = (P1 & P2 -> P3 & P2).self 
-        _ = ((P1 & P2) -> (P3 & P2) -> P1 & Any).self // Ok
-      }
+      (
+        (G<X>.Y) -> (P) & X?.Y, (X.Y, [X : Y?].Type), [(G<X>).Y], [A.B.C].D
+      ).self
+      """,
+      ExprSyntax.parse
+    )
+  }
+
+  func testFunctionTypeExpr() {
+    AssertParse("X -> Y", ExprSyntax.parse)
+    AssertParse("(X) -> Y", ExprSyntax.parse)
+    AssertParse("(X) -> Y -> Z", ExprSyntax.parse)
+    AssertParse("P & Q -> X", ExprSyntax.parse)
+    AssertParse("A & B -> C & D -> X", ExprSyntax.parse)
+    AssertParse("(X -> Y).self", ExprSyntax.parse)
+    AssertParse("(A & B -> C & D).self", ExprSyntax.parse)
+
+    AssertParse("((X) -> Y).self", ExprSyntax.parse)
+    AssertParse("(((X)) -> (Y)).self", ExprSyntax.parse)
+
+    AssertParse("((A.B) -> C.D).self", ExprSyntax.parse)
+    AssertParse("(((A).B) -> (C).D).self", ExprSyntax.parse)
+
+    AssertParse("((G<X>) -> G<Y>).self", ExprSyntax.parse)
+    AssertParse("((X?) -> Y?).self", ExprSyntax.parse)
+    AssertParse("(([X]) -> [Y]).self", ExprSyntax.parse)
+    AssertParse("(([A : B]) -> [C : D]).self", ExprSyntax.parse)
+
+    AssertParse("((Gen<Foo>.Bar) -> Gen<Foo>.Bar).self", ExprSyntax.parse)
+    AssertParse("((Foo?.Bar) -> Foo?.Bar).self", ExprSyntax.parse)
+    AssertParse("(([Foo].Element) -> [Foo].Element).self", ExprSyntax.parse)
+    AssertParse("(([Int : Foo].Element) -> [Int : Foo].Element).self", ExprSyntax.parse)
+
+    AssertParse("((X.Type) -> Y.Type).self", ExprSyntax.parse)
+    AssertParse("((X.Protocol) -> Y.Protocol).self", ExprSyntax.parse)
+
+    AssertParse("(() -> X & Y).self", ExprSyntax.parse)
+    AssertParse("((A & B) -> C & D).self", ExprSyntax.parse)
+    AssertParse("((A & B) -> (C & D) -> E & Any).self", ExprSyntax.parse)
+
+    AssertParse(
       """
+      (
+        ((P) & X?.Y, G<X>.Y, (X, [A : B?].Type)) -> ([(X).Y]) -> [X].Y
+      ).self
+      """,
+      ExprSyntax.parse
     )
   }
 

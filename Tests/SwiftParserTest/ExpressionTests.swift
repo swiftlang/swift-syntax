@@ -234,6 +234,54 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
+  func testKeypathExpressionWithSugaredRoot() {
+    let cases: [UInt: String] = [
+      // Identifiers
+      #line: "X",
+      #line: "X<T>",
+
+      // Sugared optionals
+      #line: "X?",
+      #line: "X!",
+
+      // Sugared collections
+      #line: "[X]",
+      #line: "[X : Y]",
+
+      // Tuples and paren type
+      #line: "()",
+      #line: "(X)",
+      #line: "(X, X)",
+
+      // Keywords
+      #line: "Any",
+      #line: "Self",
+    ]
+
+    for (line, rootType) in cases {
+      var parser = Parser(rootType)
+
+      AssertParse(
+        "\\\(rootType).y",
+        ExprSyntax.parse,
+        substructure: Syntax(
+          KeyPathExprSyntax(
+            root: TypeSyntax.parse(from: &parser),
+            components: KeyPathComponentListSyntax([
+              KeyPathComponentSyntax(
+                period: .periodToken(),
+                component: .init(
+                  KeyPathPropertyComponentSyntax(identifier: .identifier("y"))
+                )
+              )
+            ])
+          )
+        ),
+        line: line
+      )
+    }
+  }
+
   func testBasicLiterals() {
     AssertParse(
       """
@@ -716,10 +764,6 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
-  func testTypeExpression() {
-    AssertParse("_ = (any Sequence<Int>).self")
-  }
-
   func testMoveExpression() {
     AssertParse("_move msg")
     AssertParse("use(_move msg)")
@@ -801,5 +845,25 @@ final class ExpressionTests: XCTestCase {
       }
       """
     )
+  }
+}
+
+final class MemberExprTests: XCTestCase {
+  func testMissing() {
+    let cases: [UInt: String] = [
+      #line: "",
+      #line: "\nmember",
+      #line: "  \nmember",
+      #line: "/*foo*/\nmember",
+      #line: "\n  member",
+    ]
+    for (line, trailing) in cases {
+      AssertParse(
+        "someVar.1️⃣\(trailing)",
+        diagnostics: [DiagnosticSpec(message: "expected name in member access")],
+        fixedSource: "someVar.<#identifier#>\(trailing)",
+        line: line
+      )
+    }
   }
 }

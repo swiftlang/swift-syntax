@@ -18,19 +18,11 @@ extension Parser {
   /// Grammar
   /// =======
   ///
+  ///     type → simple-type
   ///     type → function-type
-  ///     type → array-type
-  ///     type → dictionary-type
-  ///     type → type-identifier
-  ///     type → tuple-type
-  ///     type → optional-type
-  ///     type → implicitly-unwrapped-optional-type
   ///     type → protocol-composition-type
+  ///     type → constrained-sugar-type
   ///     type → opaque-type
-  ///     type → metatype-type
-  ///     type → any-type
-  ///     type → self-type
-  ///     type → '(' type ')'
   @_spi(RawSyntax)
   public mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
@@ -133,11 +125,13 @@ extension Parser {
   /// Grammar
   /// =======
   ///
-  ///     type-identifier → type-name generic-argument-clause? | type-name generic-argument-clause? '.' type-identifier
-  ///     type-name → identifier
+  ///     protocol-composition-type → simple-type '&' protocol-composition-continuation
+  ///     protocol-composition-continuation → simple-type | protocol-composition-type
   ///
-  ///     protocol-composition-type → type-identifier '&' protocol-composition-continuation
-  ///     protocol-composition-continuation → type-identifier | protocol-composition-type
+  ///     constrained-sugar-type → constrained-sugar-type-specifier constrained-sugar-type-constraint
+  ///     constrained-sugar-type-specifier → 'any' | 'some'
+  ///     constrained-sugar-type-constraint → protocol-composition-type
+  ///     constrained-sugar-type-constraint → type-simple
   @_spi(RawSyntax)
   public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
@@ -219,13 +213,21 @@ extension Parser {
   /// Grammar
   /// =======
   ///
-  ///     type → type-identifier
-  ///     type → tuple-type
-  ///     type → array-type
-  ///     type → dictionary-type
-  ///     type → metatype-type
+  ///     simple-type → type-identifier
+  ///     simple-type → any-type
+  ///     simple-type → paren-type
+  ///     simple-type → tuple-type
+  ///     simple-type → array-type
+  ///     simple-type → dictionary-type
+  ///     simple-type → optional-type
+  ///     simple-type → implicitly-unwrapped-optional-type
+  ///     simple-type → metatype-type
+  ///     simple-type → member-type-identifier
   ///
-  ///     metatype-type → type '.' 'Type' | type '.' 'Protocol'
+  ///     metatype-type → simple-type '.' 'Type' | simple-type '.' 'Protocol'
+  ///
+  ///     member-type-identifier → member-type-identifier-base '.' type-identifier
+  ///     member-type-identifier-base → simple-type | member-type-identifier
   @_spi(RawSyntax)
   public mutating func parseSimpleType(
     stopAtFirstPeriod: Bool = false
@@ -349,6 +351,12 @@ extension Parser {
     return (name, nil)
   }
 
+  /// Parse a type identifier.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     type-identifier → identifier generic-argument-clause?
   mutating func parseTypeIdentifier() -> RawTypeSyntax {
     if self.at(.anyKeyword) {
       return RawTypeSyntax(self.parseAnyType())
@@ -369,7 +377,7 @@ extension Parser {
   /// Grammar
   /// =======
   ///
-  ///     any-type → Any
+  ///     any-type → 'Any'
   @_spi(RawSyntax)
   public mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
     let (unexpectedBeforeName, name) = self.expect(.anyKeyword)
@@ -460,6 +468,8 @@ extension Parser {
   ///
   /// Grammar
   /// =======
+  ///
+  ///     paren-type → '(' type ')'
   ///
   ///     tuple-type → '(' ')' | '(' tuple-type-element ',' tuple-type-element-list ')'
   ///     tuple-type-element-list → tuple-type-element | tuple-type-element ',' tuple-type-element-list
@@ -639,14 +649,87 @@ extension Parser {
 
 extension Parser.Lookahead {
   mutating func canParseType() -> Bool {
+    guard self.canParseTypeScalar() else {
+      return false
+    }
+
+    if self.currentToken.isEllipsis {
+      self.consumeAnyToken()
+    }
+
+    return true
+  }
+
+  mutating func skipTypeAttributeList() {
+    var specifierProgress = LoopProgressCondition()
+    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
+    while self.at(anyIn: TypeSpecifier.self) != nil || self.atContextualKeyword("isolated") || self.atContextualKeyword("_const"),
+      specifierProgress.evaluate(currentToken)
+    {
+      self.consumeAnyToken()
+    }
+
+    var attributeProgress = LoopProgressCondition()
+    while self.at(.atSign), attributeProgress.evaluate(currentToken) {
+      self.consumeAnyToken()
+      self.skipTypeAttribute()
+    }
+  }
+
+  mutating func canParseTypeScalar() -> Bool {
     self.skipTypeAttributeList()
+
+    guard self.canParseSimpleOrCompositionType() else {
+      return false
+    }
+
+    if self.isAtFunctionTypeArrow() {
+      // Handle type-function if we have an '->' with optional
+      // 'async' and/or 'throws'.
+      var loopProgress = LoopProgressCondition()
+      while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
+        self.eat(handle)
+      }
+
+      guard self.consume(if: .arrow) != nil else {
+        return false
+      }
+
+      return self.canParseType()
+    }
+
+    return true
+  }
+
+  mutating func canParseSimpleOrCompositionType() -> Bool {
+    if self.atContextualKeyword("each") {
+      return self.canParseSimpleType();
+    }
 
     if self.atContextualKeyword("some") || self.atContextualKeyword("any") {
       self.consumeAnyToken()
     }
 
+    guard self.canParseSimpleType() else {
+      return false
+    }
+
+    var loopCondition = LoopProgressCondition()
+    while self.atContextualPunctuator("&") && loopCondition.evaluate(self.currentToken) {
+      self.consumeAnyToken()
+      guard self.canParseSimpleType() else {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  mutating func canParseSimpleType() -> Bool {
     switch self.currentToken.tokenKind {
-    case .capitalSelfKeyword, .anyKeyword, .identifier:
+    case .anyKeyword:
+      self.consumeAnyToken()
+    case .capitalSelfKeyword, .identifier:
       guard self.canParseTypeIdentifier() else {
         return false
       }
@@ -700,42 +783,7 @@ extension Parser.Lookahead {
       break
     }
 
-    if self.isAtFunctionTypeArrow() {
-      // Handle type-function if we have an '->' with optional
-      // 'async' and/or 'throws'.
-      var loopProgress = LoopProgressCondition()
-      while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
-        self.eat(handle)
-      }
-
-      guard self.consume(if: .arrow) != nil else {
-        return false
-      }
-
-      return self.canParseType()
-    }
-
-    if self.currentToken.isEllipsis {
-      self.consumeAnyToken()
-    }
-
     return true
-  }
-
-  mutating func skipTypeAttributeList() {
-    var specifierProgress = LoopProgressCondition()
-    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
-    while self.at(anyIn: TypeSpecifier.self) != nil || self.atContextualKeyword("isolated") || self.atContextualKeyword("_const"),
-      specifierProgress.evaluate(currentToken)
-    {
-      self.consumeAnyToken()
-    }
-
-    var attributeProgress = LoopProgressCondition()
-    while self.at(.atSign), attributeProgress.evaluate(currentToken) {
-      self.consumeAnyToken()
-      self.skipTypeAttribute()
-    }
   }
 
   mutating func canParseTupleBodyType() -> Bool {
@@ -793,30 +841,6 @@ extension Parser.Lookahead {
     return self.consume(if: .rightParen) != nil
   }
 
-  mutating func canParseSimpleType() -> Bool {
-    var allowKeyword = false
-    var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
-      if !self.canParseTypeIdentifier() {
-        // Allow Foo.<keyword> but not <keyword> as the initial identifier
-        if allowKeyword && self.currentToken.isKeyword {
-          self.consumeAnyToken()
-        } else {
-          return false
-        }
-      }
-
-      // Treat 'Foo.<anything>' as an attempt to write a dotted type
-      if self.at(.period) {
-        self.consumeAnyToken()
-        allowKeyword = true
-      } else {
-        return true
-      }
-    }
-    preconditionFailure("Should return from inside the loop")
-  }
-
   func isAtFunctionTypeArrow() -> Bool {
     if self.at(.arrow) {
       return true
@@ -840,26 +864,14 @@ extension Parser.Lookahead {
     return false
   }
 
-  mutating func canParseSimpleOrCompositionType() -> Bool {
-    var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
-      guard self.canParseSimpleType() else {
-        return false
-      }
-
-      if self.atContextualPunctuator("&") {
-        self.consumeAnyToken()
-        continue
-      } else {
-        return true
-      }
-    }
-    preconditionFailure("Should return from inside the loop")
-  }
-
   mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
+    if self.at(.anyKeyword) {
+      self.consumeAnyToken()
+      return true
+    }
+
     // Parse an identifier.
-    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || self.at(.anyKeyword) || (allowKeyword && self.currentToken.isKeyword) else {
+    guard self.at(.identifier) || self.at(.capitalSelfKeyword) || (allowKeyword && self.currentToken.isKeyword) else {
       return false
     }
     self.consumeAnyToken()

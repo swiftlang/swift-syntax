@@ -42,6 +42,7 @@ ATTRIBUTE_NODES = [
          description='''
          An `@` attribute.
          ''',
+         parser_function='parseAttribute',
          children=[
              Child('AtSignToken', kind='AtSignToken',
                    description='The `@` sign.'),

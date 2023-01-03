@@ -85,6 +85,35 @@ final class IfStmtTests: XCTestCase {
     }
   }
 
+  func testIfStmtSpacing() {
+    let testCases: [UInt: (IfStmt, String)] = [
+      #line: (
+        IfStmt(conditions: ConditionElementList { Expr("!(true)") }) {},
+        """
+        if !(true) {
+        }
+        """
+      ),
+      #line: (
+        IfStmt(
+          """
+          if !(false) {
+          }
+          """
+        ),
+        """
+        if !(false) {
+        }
+        """
+      ),
+    ]
+
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
+    }
+  }
+
   func testIfElseStmt() {
     // Use the convenience initializer from IfStmtConvenienceInitializers
     // with an else branch expressed by a second trailing closure.

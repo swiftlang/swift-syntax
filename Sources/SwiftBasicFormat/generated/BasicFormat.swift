@@ -130,13 +130,16 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
-    switch (token.tokenKind, token.previousToken(viewMode: .sourceAccurate)?.tokenKind) {
-    case (.leftAngle, .identifier(_ )), 
-     (.rightAngle, .identifier(_ )), 
-     (.rightAngle, .postfixQuestionMark): 
+    switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
+    case (.identifier, .leftAngle), 
+     (.identifier, .rightAngle), 
+     (.rightAngle, .exclamationMark), 
+     (.rightAngle, .rightBrace), 
+     (.rightSquareBracket, .rightAngle), 
+     (.postfixQuestionMark, .rightAngle): 
       return false
-    case (.spacedBinaryOperator(let `operator`), .leftParen): 
-      return `operator` != "*"
+    case (.leftParen, .spacedBinaryOperator("*")): 
+      return false
     default: 
       break 
     }
@@ -172,18 +175,24 @@ open class BasicFormat: SyntaxRewriter {
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
     case (.asKeyword, .exclamationMark), 
      (.asKeyword, .postfixQuestionMark), 
+     (.exclamationMark, .leftParen), 
+     (.exclamationMark, .period), 
      (.initKeyword, .leftParen), 
      (.initKeyword, .postfixQuestionMark), 
-     (.leftAngle, .identifier(_ )), 
+     (.rightAngle, .exclamationMark), 
+     (.leftAngle, .identifier), 
+     (.leftAngle, .leftSquareBracket), 
+     (.leftAngle, .leftBrace), 
      (.rightAngle, .leftParen), 
      (.rightAngle, .postfixQuestionMark), 
      (.postfixQuestionMark, .leftParen), 
+     (.postfixQuestionMark, .rightAngle), 
      (.postfixQuestionMark, .rightParen), 
      (.tryKeyword, .exclamationMark), 
      (.tryKeyword, .postfixQuestionMark): 
       return false
-    case (.spacedBinaryOperator(let `operator`), .comma): 
-      return `operator` != "*"
+    case (.spacedBinaryOperator("*"), .comma): 
+      return false
     default: 
       break 
     }

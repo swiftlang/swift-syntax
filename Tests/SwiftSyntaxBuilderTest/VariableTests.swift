@@ -39,6 +39,14 @@ final class VariableTests: XCTestCase {
         VariableDecl("var newLayout: ContiguousArray<RawSyntax?>?"),
         "var newLayout: ContiguousArray<RawSyntax?>?"
       ),
+      #line: (
+        VariableDecl("var foo: String { myOptional!.someProperty }"),
+        """
+        var foo: String {
+            myOptional!.someProperty
+        }
+        """
+      ),
     ]
 
     for (line, testCase) in testCases {

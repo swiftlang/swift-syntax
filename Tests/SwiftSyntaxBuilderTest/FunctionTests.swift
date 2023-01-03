@@ -38,22 +38,193 @@ final class FunctionTests: XCTestCase {
   }
 
   func testFunctionDeclEnsurePropperSpacing() {
-    let buildable = FunctionDecl(
-      """
-      @available(*, deprecated, message: "Use function on Baz")
-      private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
-      }
-      """
-    )
+    let testCases: [UInt: (FunctionDecl, String)] = [
+      #line: (
+        FunctionDecl(
+          """
+          @available(*, deprecated, message: "Use function on Baz")
+          private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+          }
+          """
+        ),
+        """
+        @available(*, deprecated, message: "Use function on Baz")
+        private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+        }
+        """
+      ),
+      #line: (
+        FunctionDecl(
+          """
+          public static func == (lhs: String, rhs: String) -> Bool {
+            return lhs < rhs
+          }
+          """
+        ),
+        """
+        public static func == (lhs: String, rhs: String) -> Bool {
+            return lhs < rhs
+        }
+        """
+      ),
+      #line: (
+        FunctionDecl(
+          """
+          public static func == (lhs: String, rhs: String) -> Bool {
+            return lhs > rhs
+          }
+          """
+        ),
+        """
+        public static func == (lhs: String, rhs: String) -> Bool {
+            return lhs > rhs
+        }
+        """
+      ),
+      #line: (
+        FunctionDecl(
+          """
+          public static func == (lhs1: String, lhs2: String, rhs1: String, rhs2: String) -> Bool {
+            return (lhs1, lhs2) > (rhs1, rhs2)
+          }
+          """
+        ),
+        """
+        public static func == (lhs1: String, lhs2: String, rhs1: String, rhs2: String) -> Bool {
+            return (lhs1, lhs2) > (rhs1, rhs2)
+        }
+        """
+      ),
+      #line: (
+        FunctionDecl(
+          """
+          public func foo<Generic>(input: Bas) -> Foo<Generic> {
+            return input as Foo<Generic>!
+          }
+          """
+        ),
+        """
+        public func foo<Generic>(input: Bas) -> Foo<Generic> {
+            return input as Foo<Generic>!
+        }
+        """
+      ),
+      #line: (
+        FunctionDecl(
+          """
+          public func foo<Generic>(input: Bas) -> Foo<Generic?> {
+            return input as Foo<Generic?>!
+          }
+          """
+        ),
+        """
+        public func foo<Generic>(input: Bas) -> Foo<Generic?> {
+            return input as Foo<Generic?>!
+        }
+        """
+      ),
+      #line: (
+        FunctionDecl(
+          """
+          public func foo<Generic>(input: [Bar]) -> Foo<[Bar]> {
+            return input
+          }
+          """
+        ),
+        """
+        public func foo<Generic>(input: [Bar]) -> Foo<[Bar]> {
+            return input
+        }
+        """
+      ),
+      #line: (
+        FunctionDecl(
+          """
+          public func foo(myOptionalClosure: MyClosure?)  {
+            myOptionalClosure!()
+          }
+          """
+        ),
+        """
+        public func foo(myOptionalClosure: MyClosure?)  {
+            myOptionalClosure!()
+        }
+        """
+      ),
+      #line: (
+        FunctionDeclSyntax(
+          modifiers: [DeclModifier(name: .public), DeclModifier(name: .static)],
+          identifier: Token.identifier("=="),
+          signature: FunctionSignatureSyntax(
+            input: ParameterClauseSyntax(
+              parameterList: FunctionParameterListSyntax {
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colon, type: SimpleTypeIdentifier("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colon, type: SimpleTypeIdentifier("String"))
+              }
+            ),
+            output: ReturnClauseSyntax(
+              returnType: SimpleTypeIdentifier(name: TokenSyntax.identifier("Bool"))
+            )
+          ),
+          bodyBuilder: {
+            ReturnStmt(
+              expression: SequenceExpr(
+                elements: ExprListSyntax {
+                  IdentifierExprSyntax(identifier: .identifier("lhs"))
+                  BinaryOperatorExprSyntax(operatorToken: .spacedBinaryOperator("<"))
+                  IdentifierExprSyntax(identifier: .identifier("rhs"))
+                }
+              )
+            )
+          }
+        ),
+        """
+        public static func ==(lhs: String, rhs: String) -> Bool {
+            return lhs < rhs
+        }
+        """
+      ),
+      #line: (
+        FunctionDeclSyntax(
+          modifiers: [DeclModifierSyntax(name: .public), DeclModifierSyntax(name: .static)],
+          identifier: Token.identifier("=="),
+          signature: FunctionSignatureSyntax(
+            input: ParameterClauseSyntax(
+              parameterList: FunctionParameterListSyntax {
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs1"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
+                FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs2"), colon: .colon, type: SimpleTypeIdentifierSyntax("String"))
+              }
+            ),
+            output: ReturnClauseSyntax(
+              returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
+            )
+          ),
+          bodyBuilder: {
+            ReturnStmt(
+              expression: SequenceExprSyntax(
+                elements: ExprListSyntax {
+                  ExprSyntax("(lhs1, lhs2)")
+                  BinaryOperatorExprSyntax(operatorToken: .spacedBinaryOperator("<"))
+                  ExprSyntax("(rhs1, rhs2)")
+                }
+              )
+            )
+          }
+        ),
+        """
+        public static func ==(lhs1: String, lhs2: String, rhs1: String, rhs2: String) -> Bool {
+            return (lhs1, lhs2) < (rhs1, rhs2)
+        }
+        """
+      ),
+    ]
 
-    AssertBuildResult(
-      buildable,
-      """
-      @available(*, deprecated, message: "Use function on Baz")
-      private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
-      }
-      """
-    )
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      AssertBuildResult(builder, expected, line: line)
+    }
   }
 
   func testArguments() {

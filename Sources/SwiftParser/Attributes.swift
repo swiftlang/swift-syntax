@@ -29,6 +29,59 @@ extension Parser {
 }
 
 extension Parser {
+  mutating func parseAttribute(hasRequiredArguments: Bool, parseArguments: (inout Parser) -> RawAttributeSyntax.Argument) -> RawAttributeListSyntax.Element {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforeAttributeName, attributeName) = self.expect(.identifier)
+    if hasRequiredArguments {
+      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      let argument = parseArguments(&self)
+      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+      return .attribute(
+        RawAttributeSyntax(
+          unexpectedBeforeAtSign,
+          atSignToken: atSign,
+          unexpectedBeforeAttributeName,
+          attributeName: attributeName,
+          unexpectedBeforeLeftParen,
+          leftParen: leftParen,
+          argument: argument,
+          unexpectedBeforeRightParen,
+          rightParen: rightParen,
+          arena: self.arena
+        )
+      )
+    } else if let leftParen = self.consume(if: .leftParen) {
+      let argument = parseArguments(&self)
+      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+      return .attribute(
+        RawAttributeSyntax(
+          unexpectedBeforeAtSign,
+          atSignToken: atSign,
+          unexpectedBeforeAttributeName,
+          attributeName: attributeName,
+          leftParen: leftParen,
+          argument: argument,
+          unexpectedBeforeRightParen,
+          rightParen: rightParen,
+          arena: self.arena
+        )
+      )
+    } else {
+      return .attribute(
+        RawAttributeSyntax(
+          unexpectedBeforeAtSign,
+          atSignToken: atSign,
+          unexpectedBeforeAttributeName,
+          attributeName: attributeName,
+          leftParen: nil,
+          argument: nil,
+          rightParen: nil,
+          arena: self.arena
+        )
+      )
+    }
+  }
+
   mutating func parseAttribute() -> RawAttributeListSyntax.Element {
     if self.at(.poundIfKeyword) {
       return .ifConfigDecl(
@@ -45,32 +98,121 @@ extension Parser {
     }
 
     switch declAttr {
-    case .available:
-      return .attribute(self.parseAvailabilityAttribute())
-    case ._spi_available:
-      return .attribute(self.parseSPIAvailableAttribute())
+    case .available, ._spi_available:
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        if parser.peek().rawTokenKind == .integerLiteral || parser.peek().rawTokenKind == .floatingLiteral {
+          return .availability(parser.parseAvailabilitySpecList())
+        } else {
+          return .availability(parser.parseExtendedAvailabilitySpecList())
+        }
+      }
     case .differentiable:
-      return .attribute(self.parseDifferentiableAttribute())
-    case .derivative:
-      return .attribute(self.parseDerivativeAttribute())
-    case .transpose:
-      return .attribute(self.parseTransposeAttribute())
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .differentiableArguments(parser.parseDifferentiableAttributeArguments())
+      }
+    case .derivative, .transpose:
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .derivativeRegistrationArguments(parser.parseDerivativeAttributeArguments())
+      }
     case .objc:
-      return .attribute(self.parseObjectiveCAttribute())
+      return parseAttribute(hasRequiredArguments: false) { parser in
+        return .objCName(parser.parseObjectiveCSelector())
+      }
     case ._specialize:
-      return .attribute(self.parseSpecializeAttribute())
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .specializeArguments(parser.parseSpecializeAttributeSpecList())
+      }
     case ._private:
-      return .attribute(self.parsePrivateImportAttribute())
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        let (unexpectedBeforeLabel, label) = parser.expectIdentifier(keywordRecovery: true)
+        let (unexpectedBeforeColon, colon) = parser.expect(.colon)
+        let filename = parser.consumeAnyToken()
+        return .namedAttributeString(
+          RawNamedAttributeStringArgumentSyntax(
+            unexpectedBeforeLabel,
+            nameTok: label,
+            unexpectedBeforeColon,
+            colon: colon,
+            stringOrDeclname: .string(filename),
+            arena: parser.arena
+          )
+        )
+      }
     case ._dynamicReplacement:
-      return .attribute(self.parseDynamicReplacementAttribute())
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        let (unexpectedBeforeLabel, label) = parser.expect(.keyword(.for), remapping: .identifier)
+        let (unexpectedBeforeColon, colon) = parser.expect(.colon)
+        let base: RawTokenSyntax
+        let args: RawDeclNameArgumentsSyntax?
+        if label.isMissing && colon.isMissing && parser.currentToken.isAtStartOfLine {
+          base = RawTokenSyntax(missing: .identifier, arena: parser.arena)
+          args = nil
+        } else {
+          (base, args) = parser.parseDeclNameRef([
+            .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
+          ])
+        }
+        let method = RawDeclNameSyntax(declBaseName: base, declNameArguments: args, arena: parser.arena)
+        return .namedAttributeString(
+          RawNamedAttributeStringArgumentSyntax(
+            unexpectedBeforeLabel,
+            nameTok: label,
+            unexpectedBeforeColon,
+            colon: colon,
+            stringOrDeclname: .declname(method),
+            arena: parser.arena
+          )
+        )
+      }
     case ._spi:
-      return .attribute(self.parseSPIAttribute())
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .token(parser.consumeAnyToken())
+      }
     case ._implements:
-      return .attribute(self.parseImplementsAttribute())
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .implementsArguments(parser.parseImplementsAttributeArguments())
+      }
     case ._semantics:
-      return .attribute(self.parseSemanticsAttribute())
-    default:
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .stringExpr(parser.parseStringLiteral())
+      }
+    case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .atRethrows, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
+      .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access:
+      // No arguments
       break
+    case .__synthesized_protocol, ._clangImporterSynthesizedType, ._forbidSerializingReference, ._restatedObjCConformance:
+      // Virtual attributes that should not be parsed
+      break
+    // MARK: - Literals
+    case ._alignment: break  // Integer literal
+    case ._cdecl: break  // String literal
+    case ._silgen_name: break  // string literal
+    // MARK: - Identifiers
+    case ._effects: break  // identifier
+    case ._objcRuntimeName: break  // Identifier (mangled name)
+    case ._objcImplementation: break  // no arguments or identifier (category name)
+    case ._projectedValueProperty: break  // identifier or dollar identifier
+    case ._swift_native_objc_runtime_base: break  // Identifier
+    case ._typeEraser: break  // Identifier
+    // MARK: - Limited list
+    case ._documentation: break  // visibility: Access modifier
+    case ._optimize: break  // @_optimize([none|size|speed])
+    case ._nonSendable: break  // no arguments or @_nonSendable(__assumed)
+    case .exclusivity: break  // checked|unchecked
+    case .inline: break  // __always|never
+    // MARK: - Other
+    case ._backDeploy: break  // Back deploy syntax
+    case ._expose:
+      // @_expose(<language>)
+      // @_expose(Cxx, "cxxName")
+      break
+    case ._originallyDefinedIn:
+      // @_originallyDefinedIn(module: "HighLevel", OSX 10.9, iOS 13.0)
+      break
+    case ._unavailableFromAsync:
+      // @_unavailableFromAsync(message: "Use Task.runInline from a sync context to begin an async context.")
+      break
+
     }
 
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
@@ -133,66 +275,6 @@ extension Parser {
       attributeName: attrName,
       leftParen: leftParen,
       argumentList: RawTupleExprElementListSyntax(elements: arguments, arena: self.arena),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  mutating func parseAvailabilityAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeAvailable, available) = self.expect(.keyword(.available))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-
-    let argument: RawAttributeSyntax.Argument
-    do {
-      if self.peek().rawTokenKind == .integerLiteral || self.peek().rawTokenKind == .floatingLiteral {
-        argument = .availability(self.parseAvailabilitySpecList())
-      } else {
-        argument = .availability(self.parseExtendedAvailabilitySpecList())
-      }
-    }
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeAvailable,
-      attributeName: available,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: argument,
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
-  mutating func parseSPIAvailableAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeAvailable, available) = self.expect(.keyword(._spi_available))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-
-    let argument: RawAttributeSyntax.Argument
-    do {
-      if self.peek().rawTokenKind == .integerLiteral || self.peek().rawTokenKind == .floatingLiteral {
-        argument = .availability(self.parseAvailabilitySpecList())
-      } else {
-        argument = .availability(self.parseExtendedAvailabilitySpecList())
-      }
-    }
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeAvailable,
-      attributeName: available,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: argument,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -467,36 +549,6 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseObjectiveCAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeObjc, objc) = self.expect(.keyword(.objc))
-
-    let leftParen = self.consume(if: .leftParen)
-    let argument: RawObjCSelectorSyntax?
-    let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
-    let rightParen: RawTokenSyntax?
-    if leftParen != nil {
-      argument = self.parseObjectiveCSelector()
-      (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    } else {
-      argument = nil
-      unexpectedBeforeRightParen = nil
-      rightParen = nil
-    }
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeObjc,
-      attributeName: objc,
-      leftParen: leftParen,
-      argument: argument.map({ .objCName($0) }),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
@@ -544,27 +596,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseSpecializeAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSpecialize, specializeToken) = self.expect(.keyword(._specialize))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let argument = self.parseSpecializeAttributeSpecList()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeSpecialize,
-      attributeName: specializeToken,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: .specializeArguments(argument),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
-  enum SpecializeParameter: RawTokenKindSubset {
+    enum SpecializeParameter: RawTokenKindSubset {
     case target
     case availability
     case exported
@@ -746,124 +778,6 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parsePrivateImportAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforePrivateToken, privateToken) = self.expect(.keyword(._private))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeLabel, label) = self.expectIdentifier(keywordRecovery: true)
-    let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let filename = self.consumeAnyToken()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforePrivateToken,
-      attributeName: privateToken,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: .namedAttributeString(
-        RawNamedAttributeStringArgumentSyntax(
-          unexpectedBeforeLabel,
-          nameTok: label,
-          unexpectedBeforeColon,
-          colon: colon,
-          stringOrDeclname: .string(filename),
-          arena: self.arena
-        )
-      ),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  mutating func parseDynamicReplacementAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDynamicReplacementToken, dynamicReplacementToken) = self.expect(.keyword(._dynamicReplacement))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for), remapping: .identifier)
-    let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let base: RawTokenSyntax
-    let args: RawDeclNameArgumentsSyntax?
-    if label.isMissing && colon.isMissing && self.currentToken.isAtStartOfLine {
-      base = RawTokenSyntax(missing: .identifier, arena: self.arena)
-      args = nil
-    } else {
-      (base, args) = self.parseDeclNameRef([
-        .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
-      ])
-    }
-    let method = RawDeclNameSyntax(declBaseName: base, declNameArguments: args, arena: self.arena)
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeDynamicReplacementToken,
-      attributeName: dynamicReplacementToken,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: .namedAttributeString(
-        RawNamedAttributeStringArgumentSyntax(
-          unexpectedBeforeLabel,
-          nameTok: label,
-          unexpectedBeforeColon,
-          colon: colon,
-          stringOrDeclname: .declname(method),
-          arena: self.arena
-        )
-      ),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: arena
-    )
-  }
-}
-
-extension Parser {
-  mutating func parseSPIAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSpiToken, spiToken) = self.expect(.keyword(._spi))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let label = self.consumeAnyToken()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeSpiToken,
-      attributeName: spiToken,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: .token(label),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  mutating func parseImplementsAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSpiToken, spiToken) = self.expect(.keyword(._implements))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let label = self.parseImplementsAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeSpiToken,
-      attributeName: spiToken,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: .implementsArguments(label),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
   mutating func parseImplementsAttributeArguments() -> RawImplementsAttributeArgumentsSyntax {
     let type = self.parseType()
     let (unexpectedBeforeComma, comma) = self.expect(.comma)
@@ -894,28 +808,6 @@ extension Parser {
       comma: comma,
       unexpectedBeforeOrdinal,
       ordinal: ordinal,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  mutating func parseSemanticsAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeSemanticsToken, semanticsToken) = self.expect(.keyword(._semantics))
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let label = self.parseStringLiteral()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSignToken: atSign,
-      unexpectedBeforeSemanticsToken,
-      attributeName: semanticsToken,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      argument: .stringExpr(label),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
       arena: self.arena
     )
   }

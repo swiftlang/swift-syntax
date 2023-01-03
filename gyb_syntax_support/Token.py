@@ -216,7 +216,7 @@ SYNTAX_TOKENS = [
     StmtKeyword('Repeat', 'repeat'),
     StmtKeyword('Else', 'else'),
     StmtKeyword('For', 'for'),
-    StmtKeyword('In', 'in'),
+    StmtKeyword('In', 'in', requires_leading_space=True),
     StmtKeyword('While', 'while'),
     StmtKeyword('Return', 'return'),
     StmtKeyword('Break', 'break'),

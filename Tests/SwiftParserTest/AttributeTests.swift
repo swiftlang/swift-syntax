@@ -341,4 +341,28 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testBackDeploy() {
+    AssertParse(
+      """
+      @_backDeploy(before: macOS 12.0)
+      struct Foo {}
+      """
+    )
+
+    AssertParse(
+      """
+      @_backDeploy(before: macos 12.0, iOS 15.0)
+      struct Foo {}
+      """
+    )
+
+    AssertParse(
+      """
+      @available(macOS 11.0, *)
+      @_backDeploy(before: _macOS12_1)
+      public func backDeployTopLevelFunc2() -> Int { return 48 }
+      """
+    )
+  }
 }

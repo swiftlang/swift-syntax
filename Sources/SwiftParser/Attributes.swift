@@ -199,6 +199,10 @@ extension Parser {
       return parseAttribute(hasRequiredArguments: true) { parser in
         return .stringExpr(parser.parseStringLiteral())
       }
+    case ._backDeploy:
+      return parseAttribute(hasRequiredArguments: true) { parser in
+        return .backDeployArguments(parser.parseBackDeployArguments())
+      }
     case .__objc_bridged, .__raw_doc_comment, ._alwaysEmitConformanceMetadata, ._alwaysEmitIntoClient, ._assemblyVision, ._borrowed, ._compilerInitialized, ._custom, ._disfavoredOverload, ._eagerMove, ._exported, ._fixed_layout, ._frozen, ._hasInitialValue, ._hasMissingDesignatedInitializers, ._hasStorage, ._implementationOnly, ._implicitSelfCapture, ._inheritActorContext, ._inheritsConvenienceInitializers, ._marker, ._moveOnly, ._noAllocation, ._noEagerMove, ._noImplicitCopy, ._noLocks, ._noMetadata, ._nonEphemeral, ._nonoverride, ._objc_non_lazy_realization, ._show_in_interface, ._specializeExtension, ._spiOnly, ._staticInitializeObjCMetadata, ._transparent, ._unsafeInheritExecutor, ._weakLinked, .atReasync, .atRethrows, .discardableResult, .dynamicCallable, .dynamicMemberLookup, .frozen, .GKInspectable, .globalActor, .IBAction, .IBDesignable, .IBInspectable, .IBOutlet, .IBSegueAction, .inlinable, .LLDBDebuggerFunction, .main, .noDerivative, .nonobjc, .NSApplicationMain, .NSCopying,
       .NSManaged, .objcMembers, .preconcurrency, .propertyWrapper, .requires_stored_property_inits, .resultBuilder, .runtimeMetadata, .Sendable, .testable, .typeWrapper, .typeWrapperIgnored, .UIApplicationMain, .unsafe_no_objc_tagged_pointer, .usableFromInline, .warn_unqualified_access:
       // No arguments
@@ -207,7 +211,6 @@ extension Parser {
       // Virtual attributes that should not be parsed
       break
     // MARK: - Other
-    case ._backDeploy: break  // Back deploy syntax
     case ._expose:
       // @_expose(<language>)
       // @_expose(Cxx, "cxxName")
@@ -869,6 +872,34 @@ extension Parser {
         )
       )
     }
+  }
+}
+
+extension Parser {
+  mutating func parseBackDeployArguments() -> RawBackDeployAttributeSpecListSyntax {
+    let (unexpectedBeforeLabel, label) = self.expectContextualKeyword("before")
+    let (unexpectedBeforeColon, colon) = self.expect(.colon)
+    var elements: [RawBackDeployVersionArgumentSyntax] = []
+    var keepGoing: RawTokenSyntax? = nil
+    repeat {
+      let versionRestriction = self.parseAvailabilityMacro()
+      keepGoing = self.consume(if: .comma)
+      elements.append(
+        RawBackDeployVersionArgumentSyntax(
+          availabilityVersionRestriction: versionRestriction,
+          trailingComma: keepGoing,
+          arena: self.arena
+        )
+      )
+    } while keepGoing != nil
+    return RawBackDeployAttributeSpecListSyntax(
+      unexpectedBeforeLabel,
+      beforeLabel: label,
+      unexpectedBeforeColon,
+      colon: colon,
+      versionList: RawBackDeployVersionListSyntax(elements: elements, arena: self.arena),
+      arena: self.arena
+    )
   }
 }
 

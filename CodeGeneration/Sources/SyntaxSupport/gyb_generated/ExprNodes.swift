@@ -111,6 +111,22 @@ public let EXPR_NODES: [Node] = [
                kind: "Expr")
        ]),
 
+  Node(name: "BorrowExpr",
+       nameForDiagnostics: "'_borrow' expression",
+       kind: "Expr",
+       children: [
+         Child(name: "BorrowKeyword",
+               kind: "ContextualKeywordToken",
+               tokenChoices: [
+                 "ContextualKeyword"
+               ],
+               textChoices: [
+                 "_borrow"
+               ]),
+         Child(name: "Expression",
+               kind: "Expr")
+       ]),
+
   Node(name: "DeclNameArgument",
        nameForDiagnostics: nil,
        kind: "Syntax",

@@ -82,6 +82,8 @@ public enum SyntaxKind {
   
   case booleanLiteralExpr
   
+  case borrowExpr
+  
   case breakStmt
   
   case caseItemList

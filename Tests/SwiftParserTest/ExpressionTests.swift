@@ -771,6 +771,13 @@ final class ExpressionTests: XCTestCase {
     AssertParse("let b = (_move self).buffer")
   }
 
+  func testBorrowExpression() {
+    AssertParse("_borrow msg")
+    AssertParse("use(_borrow msg)")
+    AssertParse("_borrow msg")
+    AssertParse("let b = (_borrow self).buffer")
+  }
+
   func testCodeCompletionExpressions() {
     AssertParse("if !<#b1#> && !<#b2#> {}")
     AssertParse("if <#test#> {}")

@@ -107,6 +107,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/TryExprSyntax>
 - <doc:SwiftSyntax/AwaitExprSyntax>
 - <doc:SwiftSyntax/MoveExprSyntax>
+- <doc:SwiftSyntax/BorrowExprSyntax>
 - <doc:SwiftSyntax/IdentifierExprSyntax>
 - <doc:SwiftSyntax/SuperRefExprSyntax>
 - <doc:SwiftSyntax/NilLiteralExprSyntax>

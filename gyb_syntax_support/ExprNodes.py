@@ -62,6 +62,14 @@ EXPR_NODES = [
              Child('Expression', kind='Expr'),
          ]),
 
+    # The borrow expr
+    Node('BorrowExpr', name_for_diagnostics="'_borrow' expression", kind='Expr',
+         children=[
+             Child('BorrowKeyword', kind='ContextualKeywordToken',
+                   text_choices=['_borrow']),
+             Child('Expression', kind='Expr'),
+         ]),
+
     # declname-arguments -> '(' declname-argument-list ')'
     # declname-argument-list -> declname-argument*
     # declname-argument -> identifier ':'

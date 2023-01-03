@@ -81,6 +81,8 @@ public typealias BinaryOperatorExpr = BinaryOperatorExprSyntax
 
 public typealias BooleanLiteralExpr = BooleanLiteralExprSyntax
 
+public typealias BorrowExpr = BorrowExprSyntax
+
 public typealias BreakStmt = BreakStmtSyntax
 
 public typealias CaseItemList = CaseItemListSyntax

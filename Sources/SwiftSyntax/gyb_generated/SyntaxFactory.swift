@@ -467,6 +467,37 @@ public enum SyntaxFactory {
       return MoveExprSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on BorrowExprSyntax")
+  public static func makeBorrowExpr(_ unexpectedBeforeBorrowKeyword: UnexpectedNodesSyntax? = nil, borrowKeyword: TokenSyntax, _ unexpectedBetweenBorrowKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil) -> BorrowExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeBorrowKeyword?.raw,
+      borrowKeyword.raw,
+      unexpectedBetweenBorrowKeywordAndExpression?.raw,
+      expression.raw,
+      unexpectedAfterExpression?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.borrowExpr,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return BorrowExprSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on BorrowExprSyntax")
+  public static func makeBlankBorrowExpr(presence: SourcePresence = .present) -> BorrowExprSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .borrowExpr,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return BorrowExprSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on DeclNameArgumentSyntax")
   public static func makeDeclNameArgument(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedAfterColon: UnexpectedNodesSyntax? = nil) -> DeclNameArgumentSyntax {
     let layout: [RawSyntax?] = [

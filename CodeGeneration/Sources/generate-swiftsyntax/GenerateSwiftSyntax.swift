@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import ArgumentParser
+import Dispatch
 import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -22,6 +23,21 @@ private let swiftParserDir: String = "SwiftParser"
 private let swiftSyntaxDir: String = "SwiftSyntax"
 private let swiftSyntaxBuilderDir: String = "SwiftSyntaxBuilder"
 
+struct TemplateSpec {
+  let sourceFileGenerator: () -> SourceFileSyntax
+  var sourceFile: SourceFileSyntax {
+    return self.sourceFileGenerator()
+  }
+  let module: String
+  let filename: String
+
+  init(sourceFile: @escaping @autoclosure () -> SourceFileSyntax, module: String, filename: String) {
+    self.sourceFileGenerator = sourceFile
+    self.module = module
+    self.filename = filename
+  }
+}
+
 @main
 struct GenerateSwiftSyntax: ParsableCommand {
   @Argument(help: "The path to the source directory where the source files are to be generated")
@@ -31,33 +47,45 @@ struct GenerateSwiftSyntax: ParsableCommand {
   var verbose: Bool = false
     
   func run() throws {
-    let templates: [(sourceFile: SourceFileSyntax, module: String, filename: String)] = [
-      (basicFormatFile, swiftBasicFormatDir, "BasicFormat.swift"),
-      (syntaxClassificationFile, IDEUtilsDir, "SyntaxClassification.swift"),
-      (declarationAttributeFile, swiftParserDir, "DeclarationAttribute.swift"),
-      (declarationModifierFile, swiftParserDir, "DeclarationModifier.swift"),
-      (parserEntryFile, swiftParserDir, "Parser+Entry.swift"),
-      (typeAttributeFile, swiftParserDir, "TypeAttribute.swift"),
-      (miscFile, swiftSyntaxDir, "Misc.swift"),
-      (syntaxBaseNodesFile, swiftSyntaxDir, "SyntaxBaseNodes.swift"),
-      (syntaxBaseNodesFile, swiftSyntaxDir, "SyntaxBaseNodes.swift"),
-      (syntaxEnumFile, swiftSyntaxDir, "SyntaxEnum.swift"),
-      (syntaxKindFile, swiftSyntaxDir, "SyntaxKind.swift"),
-      (buildableCollectionNodesFile, swiftSyntaxBuilderDir, "BuildableCollectionNodes.swift"),
-      (buildableNodesFile, swiftSyntaxBuilderDir, "BuildableNodes.swift"),
-      (resultBuildersFile, swiftSyntaxBuilderDir, "ResultBuilders.swift"),
-      (syntaxExpressibleByStringInterpolationConformancesFile, swiftSyntaxBuilderDir, "SyntaxExpressibleByStringInterpolationConformances.swift"),
-      (tokenFile, swiftSyntaxBuilderDir, "Token.swift"),
-      (typealiasesFile, swiftSyntaxBuilderDir, "Typealiases.swift"),
+    let templates: [TemplateSpec] = [
+      TemplateSpec(sourceFile: basicFormatFile, module: swiftBasicFormatDir, filename: "BasicFormat.swift"),
+      TemplateSpec(sourceFile: syntaxClassificationFile, module: IDEUtilsDir, filename: "SyntaxClassification.swift"),
+      TemplateSpec(sourceFile: declarationAttributeFile, module: swiftParserDir, filename: "DeclarationAttribute.swift"),
+      TemplateSpec(sourceFile: declarationModifierFile, module: swiftParserDir, filename: "DeclarationModifier.swift"),
+      TemplateSpec(sourceFile: parserEntryFile, module: swiftParserDir, filename: "Parser+Entry.swift"),
+      TemplateSpec(sourceFile: typeAttributeFile, module: swiftParserDir, filename: "TypeAttribute.swift"),
+      TemplateSpec(sourceFile: miscFile, module: swiftSyntaxDir, filename: "Misc.swift"),
+      TemplateSpec(sourceFile: syntaxBaseNodesFile, module: swiftSyntaxDir, filename: "SyntaxBaseNodes.swift"),
+      TemplateSpec(sourceFile: syntaxBaseNodesFile, module: swiftSyntaxDir, filename: "SyntaxBaseNodes.swift"),
+      TemplateSpec(sourceFile: syntaxEnumFile, module: swiftSyntaxDir, filename: "SyntaxEnum.swift"),
+      TemplateSpec(sourceFile: syntaxKindFile, module: swiftSyntaxDir, filename: "SyntaxKind.swift"),
+      TemplateSpec(sourceFile: buildableCollectionNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableCollectionNodes.swift"),
+      TemplateSpec(sourceFile: buildableNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableNodes.swift"),
+      TemplateSpec(sourceFile: resultBuildersFile, module: swiftSyntaxBuilderDir, filename: "ResultBuilders.swift"),
+      TemplateSpec(sourceFile: syntaxExpressibleByStringInterpolationConformancesFile, module: swiftSyntaxBuilderDir, filename: "SyntaxExpressibleByStringInterpolationConformances.swift"),
+      TemplateSpec(sourceFile: tokenFile, module: swiftSyntaxBuilderDir, filename: "Token.swift"),
+      TemplateSpec(sourceFile: typealiasesFile, module: swiftSyntaxBuilderDir, filename: "Typealiases.swift"),
     ]
-    
-    for template in templates {
-      try generateTemplate(
-        sourceFile: template.sourceFile,
-        module: template.module,
-        filename: template.filename,
-        destination: URL(fileURLWithPath: generatedPath),
-        verbose: verbose)
+
+    var errors: [Error] = []
+    DispatchQueue.concurrentPerform(iterations: templates.count) { index in
+      let template = templates[index]
+      do {
+        try generateTemplate(
+          sourceFile: template.sourceFile,
+          module: template.module,
+          filename: template.filename,
+          destination: URL(fileURLWithPath: generatedPath),
+          verbose: verbose
+        )
+      } catch {
+        errors.append(error)
+      }
+    }
+
+    if let firstError = errors.first {
+      // TODO: It would be nice if we could emit all errors
+      throw firstError
     }
   }
   

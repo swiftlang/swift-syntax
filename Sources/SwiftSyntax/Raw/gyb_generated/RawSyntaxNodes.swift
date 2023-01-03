@@ -462,21 +462,17 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     item: Item,
     _ unexpectedBetweenItemAndSemicolon: RawUnexpectedNodesSyntax? = nil,
     semicolon: RawTokenSyntax?,
-    _ unexpectedBetweenSemicolonAndErrorTokens: RawUnexpectedNodesSyntax? = nil,
-    errorTokens: RawSyntax?,
-    _ unexpectedAfterErrorTokens: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .codeBlockItem, uninitializedCount: 7, arena: arena) { layout in
+      kind: .codeBlockItem, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeItem?.raw
       layout[1] = item.raw
       layout[2] = unexpectedBetweenItemAndSemicolon?.raw
       layout[3] = semicolon?.raw
-      layout[4] = unexpectedBetweenSemicolonAndErrorTokens?.raw
-      layout[5] = errorTokens?.raw
-      layout[6] = unexpectedAfterErrorTokens?.raw
+      layout[4] = unexpectedAfterSemicolon?.raw
     }
     self.init(raw: raw)
   }
@@ -493,14 +489,8 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
   public var semicolon: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenSemicolonAndErrorTokens: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  public var errorTokens: RawSyntax? {
-    layoutView.children[5]
-  }
-  public var unexpectedAfterErrorTokens: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

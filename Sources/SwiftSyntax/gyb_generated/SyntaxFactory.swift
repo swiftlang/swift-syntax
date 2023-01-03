@@ -123,15 +123,13 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on CodeBlockItemSyntax")
-  public static func makeCodeBlockItem(_ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil, item: Syntax, _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil, semicolon: TokenSyntax?, _ unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? = nil, errorTokens: Syntax?, _ unexpectedAfterErrorTokens: UnexpectedNodesSyntax? = nil) -> CodeBlockItemSyntax {
+  public static func makeCodeBlockItem(_ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil, item: Syntax, _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil, semicolon: TokenSyntax?, _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil) -> CodeBlockItemSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeItem?.raw,
       item.raw,
       unexpectedBetweenItemAndSemicolon?.raw,
       semicolon?.raw,
-      unexpectedBetweenSemicolonAndErrorTokens?.raw,
-      errorTokens?.raw,
-      unexpectedAfterErrorTokens?.raw,
+      unexpectedAfterSemicolon?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItem,
@@ -148,8 +146,6 @@ public enum SyntaxFactory {
         from: [
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
-        nil,
-        nil,
         nil,
         nil,
         nil,

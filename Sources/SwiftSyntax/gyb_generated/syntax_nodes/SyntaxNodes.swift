@@ -129,28 +129,24 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public init<E: SyntaxProtocol>(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil,
     item: Item,
     _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
     semicolon: TokenSyntax? = nil,
-    _ unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? = nil,
-    errorTokens: E? = nil,
-    _ unexpectedAfterErrorTokens: UnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed 
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeItem, item, unexpectedBetweenItemAndSemicolon, semicolon, unexpectedBetweenSemicolonAndErrorTokens, errorTokens, unexpectedAfterErrorTokens))) { (arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeItem, item, unexpectedBetweenItemAndSemicolon, semicolon, unexpectedAfterSemicolon))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeItem?.raw,
         item.raw,
         unexpectedBetweenItemAndSemicolon?.raw,
         semicolon?.raw,
-        unexpectedBetweenSemicolonAndErrorTokens?.raw,
-        errorTokens?.raw,
-        unexpectedAfterErrorTokens?.raw,
+        unexpectedAfterSemicolon?.raw,
       ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.codeBlockItem, from: layout, arena: arena,
@@ -158,40 +154,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
-  }
-
-  /// This initializer exists solely because Swift 5.6 does not support
-  /// `Optional<ConcreteType>.none` as a default value of a generic parameter.
-  /// The above initializer thus defaults to `nil` instead, but that means it
-  /// is not actually callable when either not passing the defaulted parameter,
-  /// or passing `nil`.
-  ///
-  /// Hack around that limitation using this initializer, which takes a
-  /// `Missing*` syntax node instead. `Missing*` is used over the base type as
-  /// the base type would allow implicit conversion from a string literal,
-  /// which the above initializer doesn't support.
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil,
-    item: Item,
-    _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
-    semicolon: TokenSyntax? = nil,
-    _ unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? = nil,
-    errorTokens: MissingSyntax? = nil,
-    _ unexpectedAfterErrorTokens: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      unexpectedBeforeItem,
-      item: item,
-      unexpectedBetweenItemAndSemicolon,
-      semicolon: semicolon,
-      unexpectedBetweenSemicolonAndErrorTokens,
-      errorTokens: Optional<Syntax>.none,
-      unexpectedAfterErrorTokens,
-      trailingTrivia: trailingTrivia
-    )
   }
 
   public var unexpectedBeforeItem: UnexpectedNodesSyntax? {
@@ -281,66 +243,24 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     return CodeBlockItemSyntax(newData)
   }
 
-  public var unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? {
+  public var unexpectedAfterSemicolon: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenSemicolonAndErrorTokens(value)
+      self = withUnexpectedAfterSemicolon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenSemicolonAndErrorTokens` replaced.
-  /// - param newChild: The new `unexpectedBetweenSemicolonAndErrorTokens` to replace the node's
-  ///                   current `unexpectedBetweenSemicolonAndErrorTokens`, if present.
-  public func withUnexpectedBetweenSemicolonAndErrorTokens(_ newChild: UnexpectedNodesSyntax?) -> CodeBlockItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedAfterSemicolon` replaced.
+  /// - param newChild: The new `unexpectedAfterSemicolon` to replace the node's
+  ///                   current `unexpectedAfterSemicolon`, if present.
+  public func withUnexpectedAfterSemicolon(_ newChild: UnexpectedNodesSyntax?) -> CodeBlockItemSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 4, with: raw, arena: arena)
-    return CodeBlockItemSyntax(newData)
-  }
-
-  public var errorTokens: Syntax? {
-    get {
-      let childData = data.child(at: 5, parent: Syntax(self))
-      if childData == nil { return nil }
-      return Syntax(childData!)
-    }
-    set(value) {
-      self = withErrorTokens(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `errorTokens` replaced.
-  /// - param newChild: The new `errorTokens` to replace the node's
-  ///                   current `errorTokens`, if present.
-  public func withErrorTokens(_ newChild: Syntax?) -> CodeBlockItemSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
-    return CodeBlockItemSyntax(newData)
-  }
-
-  public var unexpectedAfterErrorTokens: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedAfterErrorTokens(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedAfterErrorTokens` replaced.
-  /// - param newChild: The new `unexpectedAfterErrorTokens` to replace the node's
-  ///                   current `unexpectedAfterErrorTokens`, if present.
-  public func withUnexpectedAfterErrorTokens(_ newChild: UnexpectedNodesSyntax?) -> CodeBlockItemSyntax {
-    let arena = SyntaxArena()
-    let raw = newChild?.raw
-    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
     return CodeBlockItemSyntax(newData)
   }
 
@@ -350,9 +270,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
       \Self.item,
       \Self.unexpectedBetweenItemAndSemicolon,
       \Self.semicolon,
-      \Self.unexpectedBetweenSemicolonAndErrorTokens,
-      \Self.errorTokens,
-      \Self.unexpectedAfterErrorTokens,
+      \Self.unexpectedAfterSemicolon,
     ])
   }
 
@@ -368,10 +286,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
       return nil
     case 4:
       return nil
-    case 5:
-      return nil
-    case 6:
-      return nil
     default:
       fatalError("Invalid index")
     }
@@ -385,9 +299,7 @@ extension CodeBlockItemSyntax: CustomReflectable {
       "item": Syntax(item).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenItemAndSemicolon": unexpectedBetweenItemAndSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "semicolon": semicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenSemicolonAndErrorTokens": unexpectedBetweenSemicolonAndErrorTokens.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "errorTokens": errorTokens.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedAfterErrorTokens": unexpectedAfterErrorTokens.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterSemicolon": unexpectedAfterSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

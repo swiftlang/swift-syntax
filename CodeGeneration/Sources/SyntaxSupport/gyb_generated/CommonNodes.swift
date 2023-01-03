@@ -97,10 +97,7 @@ public let COMMON_NODES: [Node] = [
                isOptional: true,
                tokenChoices: [
                  "Semicolon"
-               ]),
-         Child(name: "ErrorTokens",
-               kind: "Syntax",
-               isOptional: true)
+               ])
        ],
        omitWhenEmpty: true),
 

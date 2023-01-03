@@ -406,10 +406,9 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     case `decl`(RawDeclSyntax)
     case `stmt`(RawStmtSyntax)
     case `expr`(RawExprSyntax)
-    case `tokenList`(RawTokenListSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawDeclSyntax.isKindOf(raw) || RawStmtSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw) || RawTokenListSyntax.isKindOf(raw)
+      return RawDeclSyntax.isKindOf(raw) || RawStmtSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -417,7 +416,6 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
       case .decl(let node): return node.raw
       case .stmt(let node): return node.raw
       case .expr(let node): return node.raw
-      case .tokenList(let node): return node.raw
       }
     }
 
@@ -432,10 +430,6 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
       }
       if let node = RawExprSyntax(other) {
         self = .expr(node)
-        return
-      }
-      if let node = RawTokenListSyntax(other) {
-        self = .tokenList(node)
         return
       }
       return nil

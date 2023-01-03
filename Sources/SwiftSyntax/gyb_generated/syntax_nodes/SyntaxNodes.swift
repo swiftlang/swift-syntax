@@ -72,13 +72,11 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     case `decl`(DeclSyntax)
     case `stmt`(StmtSyntax)
     case `expr`(ExprSyntax)
-    case `tokenList`(TokenListSyntax)
     public var _syntaxNode: Syntax {
       switch self {
       case .decl(let node): return node._syntaxNode
       case .stmt(let node): return node._syntaxNode
       case .expr(let node): return node._syntaxNode
-      case .tokenList(let node): return node._syntaxNode
       }
     }
     init(_ data: SyntaxData) { self.init(Syntax(data))! }
@@ -90,9 +88,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     }
     public init<Node: ExprSyntaxProtocol>(_ node: Node) {
       self = .expr(ExprSyntax(node))
-    }
-    public init(_ node: TokenListSyntax) {
-      self = .tokenList(node)
     }
     public init?<S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(DeclSyntax.self) {
@@ -107,10 +102,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
         self = .expr(node)
         return
       }
-      if let node = node.as(TokenListSyntax.self) {
-        self = .tokenList(node)
-        return
-      }
       return nil
     }
 
@@ -119,7 +110,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
         .node(DeclSyntax.self),
         .node(StmtSyntax.self),
         .node(ExprSyntax.self),
-        .node(TokenListSyntax.self),
       ])
     }
   }

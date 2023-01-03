@@ -1793,6 +1793,303 @@ extension DictionaryElementSyntax: CustomReflectable {
   }
 }
 
+// MARK: - ClosureCaptureItemSpecifierSyntax
+
+public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  public init?<S: SyntaxProtocol>(_ node: S) {
+    guard node.raw.kind == .closureCaptureItemSpecifier else { return nil }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// Creates a `ClosureCaptureItemSpecifierSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .closureCaptureItemSpecifier)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
+    specifier: TokenSyntax,
+    _ unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil,
+    detail: TokenSyntax? = nil,
+    _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax? = nil,
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeSpecifier, specifier, unexpectedBetweenSpecifierAndLeftParen, leftParen, unexpectedBetweenLeftParenAndDetail, detail, unexpectedBetweenDetailAndRightParen, rightParen, unexpectedAfterRightParen))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeSpecifier?.raw,
+        specifier.raw,
+        unexpectedBetweenSpecifierAndLeftParen?.raw,
+        leftParen?.raw,
+        unexpectedBetweenLeftParenAndDetail?.raw,
+        detail?.raw,
+        unexpectedBetweenDetailAndRightParen?.raw,
+        rightParen?.raw,
+        unexpectedAfterRightParen?.raw,
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.closureCaptureItemSpecifier, from: layout, arena: arena,
+        leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+
+  public var unexpectedBeforeSpecifier: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeSpecifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeSpecifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeSpecifier` to replace the node's
+  ///                   current `unexpectedBeforeSpecifier`, if present.
+  public func withUnexpectedBeforeSpecifier(_ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 0, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var specifier: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSpecifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `specifier` replaced.
+  /// - param newChild: The new `specifier` to replace the node's
+  ///                   current `specifier`, if present.
+  public func withSpecifier(_ newChild: TokenSyntax) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild.raw
+    let newData = data.replacingChild(at: 1, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenSpecifierAndLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenSpecifierAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenSpecifierAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenSpecifierAndLeftParen`, if present.
+  public func withUnexpectedBetweenSpecifierAndLeftParen(_ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 2, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var leftParen: TokenSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftParen` replaced.
+  /// - param newChild: The new `leftParen` to replace the node's
+  ///                   current `leftParen`, if present.
+  public func withLeftParen(_ newChild: TokenSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 3, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenLeftParenAndDetail(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndDetail` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndDetail` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndDetail`, if present.
+  public func withUnexpectedBetweenLeftParenAndDetail(_ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 4, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var detail: TokenSyntax? {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDetail(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `detail` replaced.
+  /// - param newChild: The new `detail` to replace the node's
+  ///                   current `detail`, if present.
+  public func withDetail(_ newChild: TokenSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 5, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenDetailAndRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenDetailAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenDetailAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenDetailAndRightParen`, if present.
+  public func withUnexpectedBetweenDetailAndRightParen(_ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 6, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var rightParen: TokenSyntax? {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightParen` replaced.
+  /// - param newChild: The new `rightParen` to replace the node's
+  ///                   current `rightParen`, if present.
+  public func withRightParen(_ newChild: TokenSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 7, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedAfterRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedAfterRightParen` replaced.
+  /// - param newChild: The new `unexpectedAfterRightParen` to replace the node's
+  ///                   current `unexpectedAfterRightParen`, if present.
+  public func withUnexpectedAfterRightParen(_ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSpecifierSyntax {
+    let arena = SyntaxArena()
+    let raw = newChild?.raw
+    let newData = data.replacingChild(at: 8, with: raw, arena: arena)
+    return ClosureCaptureItemSpecifierSyntax(newData)
+  }
+
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+      \Self.unexpectedBeforeSpecifier,
+      \Self.specifier,
+      \Self.unexpectedBetweenSpecifierAndLeftParen,
+      \Self.leftParen,
+      \Self.unexpectedBetweenLeftParenAndDetail,
+      \Self.detail,
+      \Self.unexpectedBetweenDetailAndRightParen,
+      \Self.rightParen,
+      \Self.unexpectedAfterRightParen,
+    ])
+  }
+
+  public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
+    switch index.data?.indexInParent {
+    case 0:
+      return nil
+    case 1:
+      return nil
+    case 2:
+      return nil
+    case 3:
+      return nil
+    case 4:
+      return nil
+    case 5:
+      return nil
+    case 6:
+      return nil
+    case 7:
+      return nil
+    case 8:
+      return nil
+    default:
+      fatalError("Invalid index")
+    }
+  }
+}
+
+extension ClosureCaptureItemSpecifierSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeSpecifier": unexpectedBeforeSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "specifier": Syntax(specifier).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenSpecifierAndLeftParen": unexpectedBetweenSpecifierAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndDetail": unexpectedBetweenLeftParenAndDetail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "detail": detail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDetailAndRightParen": unexpectedBetweenDetailAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedAfterRightParen": unexpectedAfterRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - ClosureCaptureItemSyntax
 
 public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
@@ -1814,7 +2111,7 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
-    specifier: TokenListSyntax? = nil,
+    specifier: ClosureCaptureItemSpecifierSyntax? = nil,
     _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax? = nil,
     _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil,
@@ -1871,40 +2168,21 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureCaptureItemSyntax(newData)
   }
 
-  public var specifier: TokenListSyntax? {
+  public var specifier: ClosureCaptureItemSpecifierSyntax? {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenListSyntax(childData!)
+      return ClosureCaptureItemSpecifierSyntax(childData!)
     }
     set(value) {
       self = withSpecifier(value)
     }
   }
 
-  /// Adds the provided `SpecifierToken` to the node's `specifier`
-  /// collection.
-  /// - param element: The new `SpecifierToken` to add to the node's
-  ///                  `specifier` collection.
-  /// - returns: A copy of the receiver with the provided `SpecifierToken`
-  ///            appended to its `specifier` collection.
-  public func addSpecifierToken(_ element: TokenSyntax) -> ClosureCaptureItemSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
-        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
-    return ClosureCaptureItemSyntax(newData)
-  }
-
   /// Returns a copy of the receiver with its `specifier` replaced.
   /// - param newChild: The new `specifier` to replace the node's
   ///                   current `specifier`, if present.
-  public func withSpecifier(_ newChild: TokenListSyntax?) -> ClosureCaptureItemSyntax {
+  public func withSpecifier(_ newChild: ClosureCaptureItemSpecifierSyntax?) -> ClosureCaptureItemSyntax {
     let arena = SyntaxArena()
     let raw = newChild?.raw
     let newData = data.replacingChild(at: 1, with: raw, arena: arena)

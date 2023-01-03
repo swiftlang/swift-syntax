@@ -301,13 +301,6 @@ extension SwitchCaseListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `TokenList` represents a collection of `TokenSyntax`
-extension TokenListSyntax: ExpressibleByArrayLiteral {
-  public init(arrayLiteral elements: Element...) {
-    self.init(elements)
-  }
-}
-
 /// `TupleExprElementList` represents a collection of `TupleExprElementSyntax`
 extension TupleExprElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {

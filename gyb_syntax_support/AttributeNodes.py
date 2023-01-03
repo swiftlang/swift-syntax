@@ -2,10 +2,6 @@ from .Child import Child
 from .Node import Node  # noqa: I201
 
 ATTRIBUTE_NODES = [
-    # token-list -> token? token-list?
-    Node('TokenList', name_for_diagnostics='token list', kind='SyntaxCollection',
-         element='Token'),
-
     # attribute -> '@' identifier '('?
     #              ( identifier
     #                | string-literal

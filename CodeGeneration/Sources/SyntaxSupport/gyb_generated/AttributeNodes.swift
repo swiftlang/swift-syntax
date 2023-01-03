@@ -13,11 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 public let ATTRIBUTE_NODES: [Node] = [
-  Node(name: "TokenList",
-       nameForDiagnostics: "token list",
-       kind: "SyntaxCollection",
-       element: "Token"),
-
   Node(name: "Attribute",
        nameForDiagnostics: "attribute",
        description: "An `@` attribute.",

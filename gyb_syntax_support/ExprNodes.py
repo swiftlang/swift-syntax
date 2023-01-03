@@ -374,13 +374,19 @@ EXPR_NODES = [
              Child('Type', kind='Type'),
          ]),
 
+    Node('ClosureCaptureItemSpecifier', name_for_diagnostics='closure capture specifier', kind='Syntax',
+         children=[
+             Child('Specifier', kind='ContextualKeywordToken', text_choices=['weak', 'unowned']),
+             Child('LeftParen', kind='LeftParenToken', is_optional=True),
+             Child('Detail', kind='ContextualKeywordToken', is_optional=True, text_choices=['safe', 'unsafe']),
+             Child('RightParen', kind='RightParenToken', is_optional=True),
+         ]),
+
     Node('ClosureCaptureItem', name_for_diagnostics='closure capture item',
          kind='Syntax',
          traits=['WithTrailingComma'],
          children=[
-             # FIXME: Add a 'CaptureSpecifier' node kind for `Specifier`.
-             Child("Specifier", kind='TokenList',
-                   collection_element_name='SpecifierToken', is_optional=True),
+             Child('Specifier', kind='ClosureCaptureItemSpecifier', is_optional=True),
              Child("Name", kind='IdentifierToken', is_optional=True),
              Child('AssignToken', kind='EqualToken', is_optional=True),
              Child("Expression", kind='Expr'),

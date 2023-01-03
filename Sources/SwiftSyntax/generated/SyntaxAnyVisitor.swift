@@ -385,6 +385,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ClosureCaptureItemSpecifierSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1878,14 +1886,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: ThrowStmtSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: TokenListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

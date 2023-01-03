@@ -659,6 +659,37 @@ public let EXPR_NODES: [Node] = [
                kind: "Type")
        ]),
 
+  Node(name: "ClosureCaptureItemSpecifier",
+       nameForDiagnostics: "closure capture specifier",
+       kind: "Syntax",
+       children: [
+         Child(name: "Specifier",
+               kind: "ContextualKeywordToken",
+               textChoices: [
+                 "weak",
+                 "unowned"
+               ]),
+         Child(name: "LeftParen",
+               kind: "LeftParenToken",
+               isOptional: true,
+               tokenChoices: [
+                 "LeftParen"
+               ]),
+         Child(name: "Detail",
+               kind: "ContextualKeywordToken",
+               isOptional: true,
+               textChoices: [
+                 "safe",
+                 "unsafe"
+               ]),
+         Child(name: "RightParen",
+               kind: "RightParenToken",
+               isOptional: true,
+               tokenChoices: [
+                 "RightParen"
+               ])
+       ]),
+
   Node(name: "ClosureCaptureItem",
        nameForDiagnostics: "closure capture item",
        kind: "Syntax",
@@ -667,9 +698,8 @@ public let EXPR_NODES: [Node] = [
        ],
        children: [
          Child(name: "Specifier",
-               kind: "TokenList",
-               isOptional: true,
-               collectionElementName: "SpecifierToken"),
+               kind: "ClosureCaptureItemSpecifier",
+               isOptional: true),
          Child(name: "Name",
                kind: "IdentifierToken",
                isOptional: true,

@@ -63,7 +63,7 @@ public extension HasTrailingOptionalCodeBlock where Self: SyntaxExpressibleByStr
   }
 }
 
-extension AccessorDeclSyntax: HasTrailingOptionalCodeBlock {}
+extension AccessorDecl: HasTrailingOptionalCodeBlock {}
 extension DeinitializerDecl: HasTrailingOptionalCodeBlock {}
 extension FunctionDecl: HasTrailingOptionalCodeBlock {}
 extension InitializerDecl: HasTrailingOptionalCodeBlock {}
@@ -87,3 +87,23 @@ extension EnumDecl: HasTrailingMemberDeclBlock {}
 extension ExtensionDecl: HasTrailingMemberDeclBlock {}
 extension ProtocolDecl: HasTrailingMemberDeclBlock {}
 extension StructDecl: HasTrailingMemberDeclBlock {}
+
+// MARK: - IfStmt
+// IfStmtSyntax is a special scenario as we also have the `else` body or an if-else
+// So we cannot conform to `HasTrailingCodeBlock`
+
+public extension IfStmt {
+  init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList, @CodeBlockItemListBuilder `else` elseBuilder: () -> CodeBlockItemList? = { nil }) {
+    self = "\(raw: signature) {}"
+    self.body = CodeBlock(statements: bodyBuilder())
+    self.elseBody = elseBuilder().map { .codeBlock(CodeBlock(statements: $0)) }
+    self.elseKeyword = elseBody != nil ? .elseKeyword() : nil
+  }
+
+  init(_ signature: String, @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList, elseIf: IfStmt) {
+    self = "\(raw: signature) {}"
+    self.body = CodeBlock(statements: bodyBuilder())
+    self.elseBody = .ifStmt(elseIf)
+    self.elseKeyword = elseBody != nil ? .elseKeyword() : nil
+  }
+}

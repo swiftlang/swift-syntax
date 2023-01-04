@@ -28,17 +28,17 @@ final class ArrayExprTests: XCTestCase {
     let builder = ArrayExpr("""
       [
         1,
-        "23",
+        #"2"3"#,
         4,
-      #"5⃣️"#,
+      "五",
       ]
       """)
     AssertBuildResult(builder, """
       [
           1,
-          "23",
+          #"2"3"#,
           4,
-          #"5⃣️"#,
+          "五",
       ]
       """)
   }

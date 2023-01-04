@@ -33,7 +33,7 @@ final class DictionaryExprTests: XCTestCase {
     let builder = DictionaryExpr("""
       [
         1:1,
-      2: "2⃣️",
+      2: "二",
         "three": 3,
       4:
         #"f"o"u"r"#,
@@ -42,7 +42,7 @@ final class DictionaryExprTests: XCTestCase {
     AssertBuildResult(builder, """
       [
           1: 1,
-          2: "2⃣️",
+          2: "二",
           "three": 3,
           4:
               #"f"o"u"r"#,

@@ -380,7 +380,8 @@ public let EXPR_NODES: [Node] = [
                ]),
          Child(name: "Elements",
                kind: "ArrayElementList",
-               collectionElementName: "Element"),
+               collectionElementName: "Element",
+               isIndented: true),
          Child(name: "RightSquare",
                kind: "RightSquareBracketToken",
                tokenChoices: [
@@ -406,7 +407,8 @@ public let EXPR_NODES: [Node] = [
                          "Colon"
                        ]),
                  Child(name: "Elements",
-                       kind: "DictionaryElementList")
+                       kind: "DictionaryElementList",
+                       isIndented: true)
                ]),
          Child(name: "RightSquare",
                kind: "RightSquareBracketToken",
@@ -477,7 +479,8 @@ public let EXPR_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "ValueExpression",
-               kind: "Expr"),
+               kind: "Expr",
+               isIndented: true),
          Child(name: "TrailingComma",
                kind: "CommaToken",
                isOptional: true,

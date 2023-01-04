@@ -223,7 +223,7 @@ EXPR_NODES = [
          children=[
              Child('LeftSquare', kind='LeftSquareBracketToken'),
              Child('Elements', kind='ArrayElementList',
-                   collection_element_name='Element'),
+                   collection_element_name='Element', is_indented=True),
              Child('RightSquare', kind='RightSquareBracketToken'),
          ]),
 
@@ -234,7 +234,7 @@ EXPR_NODES = [
              Child('Content', kind='Syntax',
                    node_choices=[
                        Child('Colon', kind='ColonToken'),
-                       Child('Elements', kind='DictionaryElementList'),
+                       Child('Elements', kind='DictionaryElementList', is_indented=True),
                    ]),
              Child('RightSquare', kind='RightSquareBracketToken'),
          ]),
@@ -270,7 +270,7 @@ EXPR_NODES = [
          children=[
              Child('KeyExpression', kind='Expr', name_for_diagnostics='key'),
              Child('Colon', kind='ColonToken'),
-             Child('ValueExpression', kind='Expr', name_for_diagnostics='value'),
+             Child('ValueExpression', kind='Expr', name_for_diagnostics='value', is_indented=True),
              Child('TrailingComma', kind='CommaToken', is_optional=True),
          ]),
 

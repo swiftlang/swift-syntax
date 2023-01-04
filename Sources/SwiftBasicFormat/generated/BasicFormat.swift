@@ -72,9 +72,13 @@ open class BasicFormat: SyntaxRewriter {
   
   open func shouldIndent(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
+    case \ArrayExprSyntax.elements: 
+      return true
     case \ClosureExprSyntax.statements: 
       return true
     case \CodeBlockSyntax.statements: 
+      return true
+    case \DictionaryElementSyntax.valueExpression: 
       return true
     case \FunctionCallExprSyntax.argumentList: 
       return true

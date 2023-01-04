@@ -114,18 +114,21 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   }
 
   ${node.generate_initializer_decl(optional_base_as_missing=False, current_indentation="  ")} {
+%   parameters = ', '.join([child.swift_name for child in node.children])
+    // Extend the lifetime of all parameters so their arenas don't get destroyed 
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (${parameters}))) { (arena, _) in
 %     if node.children:
-    let layout: [RawSyntax?] = [
+      let layout: [RawSyntax?] = [
 %       for child in node.children:
 %         if child.is_optional:
-      ${child.swift_name}?.raw,
+        ${child.swift_name}?.raw,
 %         else:
-      ${child.swift_name}.raw,
+        ${child.swift_name}.raw,
 %         end
 %       end
-    ]
+      ]
 %     end
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
 %     if node.children:
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.${node.swift_syntax_kind}, from: layout, arena: arena,

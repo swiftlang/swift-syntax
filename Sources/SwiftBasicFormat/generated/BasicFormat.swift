@@ -80,6 +80,8 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case \DictionaryElementSyntax.valueExpression: 
       return true
+    case \DictionaryExprSyntax.content: 
+      return true
     case \FunctionCallExprSyntax.argumentList: 
       return true
     case \FunctionTypeSyntax.arguments: 

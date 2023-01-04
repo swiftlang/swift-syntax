@@ -234,8 +234,8 @@ EXPR_NODES = [
              Child('Content', kind='Syntax',
                    node_choices=[
                        Child('Colon', kind='ColonToken'),
-                       Child('Elements', kind='DictionaryElementList', is_indented=True),
-                   ]),
+                       Child('Elements', kind='DictionaryElementList'),
+                   ], is_indented=True),
              Child('RightSquare', kind='RightSquareBracketToken'),
          ]),
 

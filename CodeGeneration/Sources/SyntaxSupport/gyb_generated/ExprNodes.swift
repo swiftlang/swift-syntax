@@ -407,9 +407,9 @@ public let EXPR_NODES: [Node] = [
                          "Colon"
                        ]),
                  Child(name: "Elements",
-                       kind: "DictionaryElementList",
-                       isIndented: true)
-               ]),
+                       kind: "DictionaryElementList")
+               ],
+               isIndented: true),
          Child(name: "RightSquare",
                kind: "RightSquareBracketToken",
                tokenChoices: [

@@ -87,6 +87,8 @@ text editor, or IDE.
 - [SwiftParser](Sources/SwiftParser/SwiftParser.docc)
 - [SwiftOperators](Sources/SwiftOperators/SwiftOperators.docc)
 
+Examples of how to use SwiftSyntax can be found in [Snippets](Snippets).
+
 ## Contributing
 
 Start contributing to SwiftSyntax see [this guide](CONTRIBUTING.md) for more information.

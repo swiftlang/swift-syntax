@@ -1440,18 +1440,6 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  public static func stringInterpolationAnchorToken(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .stringInterpolationAnchor,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-    )
-  }
   public static func yieldToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],

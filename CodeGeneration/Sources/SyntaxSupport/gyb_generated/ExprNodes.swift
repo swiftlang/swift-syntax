@@ -979,9 +979,9 @@ public let EXPR_NODES: [Node] = [
                kind: "TupleExprElementList",
                collectionElementName: "Expression"),
          Child(name: "RightParen",
-               kind: "StringInterpolationAnchorToken",
+               kind: "RightParenToken",
                tokenChoices: [
-                 "StringInterpolationAnchor"
+                 "RightParen"
                ],
                classification: "StringInterpolationAnchor",
                forceClassification: true)

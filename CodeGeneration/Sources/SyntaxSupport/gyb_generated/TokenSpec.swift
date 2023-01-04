@@ -318,7 +318,6 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   MiscSpec(name: "ContextualKeyword", kind: "contextual_keyword", nameForDiagnostics: "keyword", classification: "Keyword"),
   MiscSpec(name: "RawStringDelimiter", kind: "raw_string_delimiter", nameForDiagnostics: "raw string delimiter"),
   MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
-  MiscSpec(name: "StringInterpolationAnchor", kind: "string_interpolation_anchor", nameForDiagnostics: "string interpolation anchor", text: ")", classification: "StringInterpolationAnchor"),
   MiscSpec(name: "Yield", kind: "kw_yield", nameForDiagnostics: "yield", text: "yield"),
 ]
 

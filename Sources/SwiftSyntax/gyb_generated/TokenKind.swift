@@ -133,7 +133,6 @@ public enum TokenKind: Hashable {
   case contextualKeyword(String)
   case rawStringDelimiter(String)
   case stringSegment(String)
-  case stringInterpolationAnchor
   case yield
 
   /// Initializes a keyword token kind from its string representation. If the
@@ -421,7 +420,6 @@ public enum TokenKind: Hashable {
     case .contextualKeyword(let text): return text
     case .rawStringDelimiter(let text): return text
     case .stringSegment(let text): return text
-    case .stringInterpolationAnchor: return ")"
     case .yield: return "yield"
     }
   }
@@ -551,7 +549,6 @@ public enum TokenKind: Hashable {
     case .contextualKeyword: return false
     case .rawStringDelimiter: return false
     case .stringSegment: return false
-    case .stringInterpolationAnchor: return false
     case .yield: return false
     }
   }
@@ -681,7 +678,6 @@ public enum TokenKind: Hashable {
     case .contextualKeyword: return false
     case .rawStringDelimiter: return false
     case .stringSegment: return false
-    case .stringInterpolationAnchor: return false
     case .yield: return false
     }
   }
@@ -806,7 +802,6 @@ public enum TokenKind: Hashable {
     case .contextualKeyword(_): return "contextual_keyword"
     case .rawStringDelimiter(_): return "raw_string_delimiter"
     case .stringSegment(_): return "string_segment"
-    case .stringInterpolationAnchor: return "string_interpolation_anchor"
     case .yield: return "kw_yield"
     }
   }
@@ -931,7 +926,6 @@ public enum TokenKind: Hashable {
     case .contextualKeyword(let text): return SourceLength(of: text)
     case .rawStringDelimiter(let text): return SourceLength(of: text)
     case .stringSegment(let text): return SourceLength(of: text)
-    case .stringInterpolationAnchor: return SourceLength(utf8Length: 1)
     case .yield: return SourceLength(utf8Length: 5)
     }
   }
@@ -1072,7 +1066,6 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.stringSegment(let lhsText), .stringSegment(let rhsText)):
       return lhsText == rhsText
-    case (.stringInterpolationAnchor, .stringInterpolationAnchor): return true
     case (.yield, .yield): return true
     default: return false
     }
@@ -1200,7 +1193,6 @@ public enum RawTokenKind: Equatable, Hashable {
   case contextualKeyword
   case rawStringDelimiter
   case stringSegment
-  case stringInterpolationAnchor
   case yield
 
   @_spi(RawSyntax)
@@ -1310,7 +1302,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundImageLiteralKeyword: return "#imageLiteral"
     case .poundColorLiteralKeyword: return "#colorLiteral"
     case .poundHasSymbolKeyword: return "#_hasSymbol"
-    case .stringInterpolationAnchor: return ")"
     case .yield: return "yield"
     default: return nil
     }
@@ -1436,7 +1427,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .contextualKeyword: return "keyword"
     case .rawStringDelimiter: return "raw string delimiter"
     case .stringSegment: return "string segment"
-    case .stringInterpolationAnchor: return "string interpolation anchor"
     case .yield: return "yield"
     }
   }
@@ -1566,7 +1556,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .contextualKeyword: return false
     case .rawStringDelimiter: return false
     case .stringSegment: return false
-    case .stringInterpolationAnchor: return false
     case .yield: return false
     }
   }
@@ -1696,7 +1685,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .contextualKeyword: return false
     case .rawStringDelimiter: return false
     case .stringSegment: return false
-    case .stringInterpolationAnchor: return false
     case .yield: return false
     }
   }
@@ -2189,9 +2177,6 @@ extension TokenKind {
       return .rawStringDelimiter(text)
     case .stringSegment:
       return .stringSegment(text)
-    case .stringInterpolationAnchor:
-      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .stringInterpolationAnchor
     case .yield:
       assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .yield
@@ -2321,7 +2306,6 @@ extension TokenKind {
     case .contextualKeyword(let str): return (.contextualKeyword, str)
     case .rawStringDelimiter(let str): return (.rawStringDelimiter, str)
     case .stringSegment(let str): return (.stringSegment, str)
-    case .stringInterpolationAnchor: return (.stringInterpolationAnchor, nil)
     case .yield: return (.yield, nil)
     }
   }

@@ -2134,7 +2134,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.stringInterpolationAnchor, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena),
         nil,
       ], arena: arena))
       return ExpressionSegmentSyntax(data)
@@ -9829,15 +9829,6 @@ public enum SyntaxFactory {
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.stringSegment(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.stringInterpolationAnchorToken instead")
-  public static func makeStringInterpolationAnchorToken(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []
-  ) -> TokenSyntax {
-    return makeToken(.stringInterpolationAnchor, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

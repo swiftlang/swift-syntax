@@ -540,7 +540,7 @@ extension ExpressionSegment {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBackslash: UnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndDelimiter: UnexpectedNodes? = nil, delimiter: String?, unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndExpressions: UnexpectedNodes? = nil, unexpectedBetweenExpressionsAndRightParen: UnexpectedNodes? = nil, rightParen: Token = Token.`stringInterpolationAnchor`, @TupleExprElementListBuilder expressionsBuilder: () -> TupleExprElementListSyntax = {
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeBackslash: UnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndDelimiter: UnexpectedNodes? = nil, delimiter: String?, unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndExpressions: UnexpectedNodes? = nil, unexpectedBetweenExpressionsAndRightParen: UnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder expressionsBuilder: () -> TupleExprElementListSyntax = {
       TupleExprElementListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter.map { 

@@ -64,13 +64,11 @@ final class VariableTests: XCTestCase {
         PatternBinding(
           pattern: PatternSyntax("a"),
           initializer: InitializerClause(
-            value: ArrayExpr(
-              leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)
-            ) {
+            value: ArrayExpr {
               for i in 1...3 {
                 ArrayElement(
                   expression: IntegerLiteralExpr(i),
-                  trailingComma: .comma.withTrailingTrivia(.newline)
+                  trailingComma: .comma.withTrailingTrivia(.spaces(3))
                 )
               }
             }
@@ -81,11 +79,7 @@ final class VariableTests: XCTestCase {
     AssertBuildResult(
       buildable,
       """
-      let a = [
-      1,
-      2,
-      3,
-      ]
+      let a = [1,   2,   3,   ]
       """
     )
   }

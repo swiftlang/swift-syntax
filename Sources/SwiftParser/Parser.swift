@@ -29,11 +29,14 @@
 /// from a bad parse should be left `nonmutating` to indicate that they do not
 /// consume tokens.
 ///
-/// Token consumption is generally conditional via ``TokenConsumer/consume(if:)``
-/// or unconditional via `consumeAnyToken()`. During parsing, it is
-/// also useful to assert that the current token matches some expected structure
-/// via ``TokenConsumer/eat(_:)``, which acts like ``TokenConsumer/consume(if:)``,
-/// but asserts if the parsed token did not match the expected kind.
+/// Token consumption is generally either unconditional via ``TokenConsumer/consumeAnyToken()``
+/// or conditional via a combination of ``TokenConsumer/at(_:where:)``
+/// and `TokenConsumer.eat(_:)`. When parsing conditionally, `at` returns a
+/// handle that is passed to `eat`. This ensures that any structure that is
+/// checked for is actually parsed by the parser at that position. If the parser
+/// detects any unexpected structure, an assertion is raised. To perform
+/// conditional consumption and validation in one step, use `consume(if:)` for
+/// one kind of token, or `consume(ifAny:)` to consume many kinds of tokens.
 ///
 /// It can also be useful to expect the presence of certain structural elements.
 /// For example, a function that parses the content of code items might expect
@@ -43,7 +46,7 @@
 ///     /*  */
 ///     let rbrace = self.expect(.rightBrace)
 ///
-/// Unlike ``TokenConsumer/eat(_:)``, `expect(_:)` returns
+/// Unlike ``TokenConsumer/eat(_:)``, ``Parser/expect(_:remapping:)`` returns
 /// a `missing` token of the given kind. This allows the tree to remain
 /// well-formed even when the input text is not, all without affecting
 /// source fidelity.

@@ -1,0 +1,15 @@
+@Tutorials(name: "SwiftSyntax") {
+  @Intro(title: "Introduction to SwiftSyntax") {
+    SwiftSyntax provides the foundation for tools that inspect, manipulate,
+    and transform Swift source code.
+  }
+  
+  @Chapter(name: "SwiftSyntax By Example") {
+    @Image(source: "swift-syntax.png", alt: "")
+    
+    Explore the SwiftSyntax API by building a tool that sorts imports in a 
+    Swift file.
+    
+    @TutorialReference(tutorial: "doc:SwiftSyntax-By-Example")
+  }
+}

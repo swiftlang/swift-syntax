@@ -60,18 +60,18 @@ private class InitializerExprFormat: BasicFormat {
 private extension TriviaPiece {
   var initializerExpr: ExprSyntax {
     let (label, value) = Mirror(reflecting: self).children.first!
-    let arg: Expr
+    let arg: ExprSyntax
     switch value {
     case let value as String:
-      arg = Expr(literal: value)
+      arg = ExprSyntax(literal: value)
     case let value as Int:
-      arg = Expr(literal: value)
+      arg = ExprSyntax(literal: value)
     default:
       fatalError("Unknown associated value type")
     }
     return ExprSyntax(
-      FunctionCallExpr(callee: MemberAccessExpr(name: label!)) {
-        TupleExprElement(expression: arg)
+      FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: label!)) {
+        TupleExprElementSyntax(expression: arg)
       }
     )
   }
@@ -82,17 +82,17 @@ private extension Trivia {
     if pieces.count == 1 {
       switch pieces.first {
       case .spaces(1):
-        return ExprSyntax(MemberAccessExpr(name: "space"))
+        return ExprSyntax(MemberAccessExprSyntax(name: "space"))
       case .newlines(1):
-        return ExprSyntax(MemberAccessExpr(name: "newline"))
+        return ExprSyntax(MemberAccessExprSyntax(name: "newline"))
       default:
         break
       }
     }
     return ExprSyntax(
-      ArrayExpr {
+      ArrayExprSyntax {
         for piece in pieces {
-          ArrayElement(expression: piece.initializerExpr)
+          ArrayElementSyntax(expression: piece.initializerExpr)
         }
       }
     )
@@ -113,12 +113,12 @@ extension SyntaxProtocol {
     if self.isCollection {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
-        FunctionCallExpr(callee: IdentifierExpr(identifier: .identifier(typeName))) {
-          TupleExprElement(
-            expression: ArrayExpr {
+        FunctionCallExprSyntax(callee: IdentifierExprSyntax(identifier: .identifier(typeName))) {
+          TupleExprElementSyntax(
+            expression: ArrayExprSyntax {
               for child in mirror.children {
                 let value = child.value as! SyntaxProtocol?
-                ArrayElement(expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExpr()))
+                ArrayElementSyntax(expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExprSyntax()))
               }
             }
           )
@@ -140,31 +140,31 @@ extension SyntaxProtocol {
         requiresExplicitText = true
       }
       return ExprSyntax(
-        FunctionCallExpr(callee: MemberAccessExpr(name: tokenInitializerName)) {
+        FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: tokenInitializerName)) {
           if requiresExplicitText {
-            TupleExprElement(
-              expression: StringLiteralExpr(content: token.text)
+            TupleExprElementSyntax(
+              expression: StringLiteralExprSyntax(content: token.text)
             )
           }
           if includeTrivia && !token.leadingTrivia.isEmpty {
-            TupleExprElement(
+            TupleExprElementSyntax(
               label: .identifier("leadingTrivia"),
               colon: .colon,
               expression: token.leadingTrivia.initializerExpr
             )
           }
           if includeTrivia && !token.trailingTrivia.isEmpty {
-            TupleExprElement(
+            TupleExprElementSyntax(
               label: .identifier("trailingTrivia"),
               colon: .colon,
               expression: token.trailingTrivia.initializerExpr
             )
           }
           if token.presence != .present {
-            TupleExprElement(
+            TupleExprElementSyntax(
               label: .identifier("presence"),
               colon: .colon,
-              expression: MemberAccessExpr(name: "missing")
+              expression: MemberAccessExprSyntax(name: "missing")
             )
           }
         }
@@ -172,16 +172,16 @@ extension SyntaxProtocol {
     } else {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
-        FunctionCallExpr(callee: IdentifierExpr(identifier: .identifier(typeName))) {
+        FunctionCallExprSyntax(callee: IdentifierExprSyntax(identifier: .identifier(typeName))) {
           for child in mirror.children {
             let label = child.label!
             let value = child.value as! SyntaxProtocol?
             let isUnexpected = label.hasPrefix("unexpected")
             if !isUnexpected || value != nil {
-              TupleExprElement(
+              TupleExprElementSyntax(
                 label: isUnexpected ? nil : .identifier(label),
                 colon: isUnexpected ? nil : .colon,
-                expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExpr())
+                expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExprSyntax())
               )
             }
           }

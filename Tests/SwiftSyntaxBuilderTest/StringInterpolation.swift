@@ -261,16 +261,16 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testParserBuilderInStringInterpolation() {
-    let cases = SwitchCaseList {
+    let cases = SwitchCaseListSyntax {
       for i in 0..<2 {
-        SwitchCase(
+        SwitchCaseSyntax(
           """
           case \(raw: i):
             return \(raw: i + 1)
           """
         )
       }
-      SwitchCase(
+      SwitchCaseSyntax(
         """
         default:
           return -1
@@ -306,16 +306,16 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testParserBuilderInStringInterpolationLiteral() {
-    let cases = SwitchCaseList {
+    let cases = SwitchCaseListSyntax {
       for i in 0..<2 {
-        SwitchCase(
+        SwitchCaseSyntax(
           """
           case \(literal: i):
             return \(literal: i + 1)
           """
         )
       }
-      SwitchCase(
+      SwitchCaseSyntax(
         """
         default:
           return -1
@@ -352,16 +352,16 @@ final class StringInterpolationTests: XCTestCase {
 
   @available(*, deprecated)
   func testParserBuilderInStringInterpolationDeprecated() {
-    let cases = SwitchCaseList {
+    let cases = SwitchCaseListSyntax {
       for i in 0..<2 {
-        SwitchCase(
+        SwitchCaseSyntax(
           """
           case \(i):
             return \(i + 1)
           """
         )
       }
-      SwitchCase(
+      SwitchCaseSyntax(
         """
         default:
           return -1
@@ -397,8 +397,8 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testStringInterpolationInBuilder() {
-    let ext = ExtensionDecl(extendedType: TypeSyntax("MyType")) {
-      FunctionDecl(
+    let ext = ExtensionDeclSyntax(extendedType: TypeSyntax("MyType")) {
+      FunctionDeclSyntax(
         """
         ///
         /// Satisfies conformance to `SyntaxBuildable`.

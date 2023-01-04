@@ -17,11 +17,11 @@ import SwiftSyntaxBuilder
 final class ImportTests: XCTestCase {
   func testImport() {
     let leadingTrivia = Trivia.unexpectedText("␣")
-    let identifier = Token.identifier("SwiftSyntax")
+    let identifier = TokenSyntax.identifier("SwiftSyntax")
 
-    let importDecl = ImportDecl(
+    let importDecl = ImportDeclSyntax(
       leadingTrivia: leadingTrivia,
-      path: AccessPath([AccessPathComponent(name: identifier)])
+      path: AccessPathSyntax([AccessPathComponentSyntax(name: identifier)])
     )
 
     AssertBuildResult(importDecl, "␣import SwiftSyntax")

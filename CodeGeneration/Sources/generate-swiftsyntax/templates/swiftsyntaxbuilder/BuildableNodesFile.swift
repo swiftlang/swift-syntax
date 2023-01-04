@@ -30,7 +30,7 @@ let buildableNodesFile = SourceFile {
       let docComment: SwiftSyntax.Trivia = node.documentation.isEmpty ? [] : .docLineComment("/// \(node.documentation)") + .newline
       ExtensionDecl(
         leadingTrivia: docComment,
-        extendedType: SimpleTypeIdentifier(name: .identifier(type.shorthandName)),
+        extendedType: SimpleTypeIdentifier(name: .identifier(type.syntaxBaseName)),
         inheritanceClause: hasTrailingComma ? TypeInheritanceClause { InheritedType(typeName: Type("HasTrailingComma")) } : nil
       ) {
         if let convenienceInit = convenienceInit {
@@ -113,7 +113,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       // Allow initializing identifiers and other tokens without default text with a String
       shouldCreateInitializer = true
       let paramType = child.type.optionalWrapped(type: "\(raw: token.associatedValueClass ?? "String")" as TypeSyntax)
-      let tokenExpr = MemberAccessExpr("Token.\(raw: token.swiftKind.withFirstCharacterLowercased.backticked)")
+      let tokenExpr = MemberAccessExpr("TokenSyntax.\(raw: token.swiftKind.withFirstCharacterLowercased.backticked)")
       if child.type.isOptional {
         produceExpr = Expr(FunctionCallExpr("\(raw: child.swiftName).map { \(tokenExpr)($0) }"))
       } else {

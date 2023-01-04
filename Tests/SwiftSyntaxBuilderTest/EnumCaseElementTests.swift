@@ -17,26 +17,26 @@ import SwiftSyntaxBuilder
 final class EnumCaseElementTests: XCTestCase {
   func testEnumInit() {
     let leadingTrivia = Trivia.unexpectedText("␣")
-    let buildable = EnumDecl(
+    let buildable = EnumDeclSyntax(
       leadingTrivia: leadingTrivia,
       identifier: "Greeting",
-      inheritanceClause: TypeInheritanceClause {
-        InheritedType(typeName: Type("String"))
-        InheritedType(typeName: Type("Codable"))
-        InheritedType(typeName: Type("Equatable"))
+      inheritanceClause: TypeInheritanceClauseSyntax {
+        InheritedTypeSyntax(typeName: TypeSyntax("String"))
+        InheritedTypeSyntax(typeName: TypeSyntax("Codable"))
+        InheritedTypeSyntax(typeName: TypeSyntax("Equatable"))
       }
     ) {
-      MemberDeclListItem(
-        decl: EnumCaseDecl {
-          EnumCaseElement(
+      MemberDeclListItemSyntax(
+        decl: EnumCaseDeclSyntax {
+          EnumCaseElementSyntax(
             identifier: "goodMorning",
-            rawValue: InitializerClause(value: StringLiteralExpr(content: "Good Morning"))
+            rawValue: InitializerClauseSyntax(value: StringLiteralExprSyntax(content: "Good Morning"))
           )
-          EnumCaseElement(
+          EnumCaseElementSyntax(
             identifier: "helloWorld",
-            rawValue: InitializerClause(value: StringLiteralExpr(content: "Hello World"))
+            rawValue: InitializerClauseSyntax(value: StringLiteralExprSyntax(content: "Hello World"))
           )
-          EnumCaseElement(identifier: "hi")
+          EnumCaseElementSyntax(identifier: "hi")
         }
       )
     }

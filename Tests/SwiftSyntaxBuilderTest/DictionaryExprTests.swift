@@ -16,21 +16,21 @@ import SwiftSyntaxBuilder
 
 final class DictionaryExprTests: XCTestCase {
   func testPlainDictionaryExpr() {
-    let buildable = DictionaryExpr {
+    let buildable = DictionaryExprSyntax {
       for i in 1...3 {
-        DictionaryElement(keyExpression: IntegerLiteralExpr(i), valueExpression: IntegerLiteralExpr(i))
+        DictionaryElementSyntax(keyExpression: IntegerLiteralExprSyntax(i), valueExpression: IntegerLiteralExprSyntax(i))
       }
     }
     AssertBuildResult(buildable, "[1: 1, 2: 2, 3: 3]")
   }
 
   func testEmptyDictionaryExpr() {
-    let buildable = DictionaryExpr()
+    let buildable = DictionaryExprSyntax()
     AssertBuildResult(buildable, "[:]")
   }
 
   func testMultilineDictionaryLiteral() {
-    let builder = DictionaryExpr(
+    let builder = DictionaryExprSyntax(
       """
       [
         1:1,

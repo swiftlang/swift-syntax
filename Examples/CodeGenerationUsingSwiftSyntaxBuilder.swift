@@ -1,3 +1,4 @@
+import SwiftSyntax
 import SwiftSyntaxBuilder
 
 extension String {
@@ -44,12 +45,12 @@ struct Main {
       "age": "Int",
     ]
 
-    let source = SourceFile {
-      StructDecl(identifier: "Person") {
+    let source = SourceFileSyntax {
+      StructDeclSyntax(identifier: "Person") {
         for (propertyName, propertyType) in properties {
-          VariableDecl("var \(raw: propertyName): \(raw: propertyType)")
+          VariableDeclSyntax("var \(raw: propertyName): \(raw: propertyType)")
 
-          FunctionDecl("""
+          FunctionDeclSyntax("""
             func with\(raw: propertyName.withFirstLetterUppercased())(_ \(raw: propertyName): \(raw: propertyType)) -> Person {
               var result = self
               result.\(raw: propertyName) = \(raw: propertyName)

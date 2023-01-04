@@ -20,19 +20,19 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
     @CodeBlockItemListBuilder
-    func buildInnerCodeBlockItemList() -> CodeBlockItemList {
-      FunctionCallExpr(callee: ExprSyntax("innerBuilder"))
+    func buildInnerCodeBlockItemList() -> CodeBlockItemListSyntax {
+      FunctionCallExprSyntax(callee: ExprSyntax("innerBuilder"))
     }
 
     @CodeBlockItemListBuilder
-    func buildOuterCodeBlockItemList() -> CodeBlockItemList {
-      FunctionCallExpr(callee: ExprSyntax("outerBuilder"))
+    func buildOuterCodeBlockItemList() -> CodeBlockItemListSyntax {
+      FunctionCallExprSyntax(callee: ExprSyntax("outerBuilder"))
 
       buildInnerCodeBlockItemList()
     }
 
-    let codeBlock = CodeBlock(leadingTrivia: leadingTrivia) {
-      FunctionCallExpr(callee: ExprSyntax("outsideBuilder"))
+    let codeBlock = CodeBlockSyntax(leadingTrivia: leadingTrivia) {
+      FunctionCallExprSyntax(callee: ExprSyntax("outsideBuilder"))
       buildOuterCodeBlockItemList()
     }
 

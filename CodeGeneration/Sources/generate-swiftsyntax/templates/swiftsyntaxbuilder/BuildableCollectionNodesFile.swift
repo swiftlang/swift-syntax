@@ -27,7 +27,7 @@ let buildableCollectionNodesFile = SourceFile {
 
     let docComment = node.documentation.isEmpty ? "" : "/// \(node.documentation)\n"
     // Generate collection node struct
-    ExtensionDecl("\(docComment)extension \(node.type.shorthandName): ExpressibleByArrayLiteral") {
+    ExtensionDecl("\(docComment)extension \(node.type.syntaxBaseName): ExpressibleByArrayLiteral") {
       // Generate initializers
       if elementType.isBaseType && node.collectionElementChoices?.isEmpty ?? true {
         InitializerDecl(

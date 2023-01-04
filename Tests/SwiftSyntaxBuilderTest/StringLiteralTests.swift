@@ -24,12 +24,12 @@ final class StringLiteralTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (value, expected) = testCase
-      let string = Token.stringSegment(value)
-      let segment = StringSegment(content: string)
-      let builder = StringLiteralExpr(
+      let string = TokenSyntax.stringSegment(value)
+      let segment = StringSegmentSyntax(content: string)
+      let builder = StringLiteralExprSyntax(
         leadingTrivia: leadingTrivia,
         openQuote: .stringQuote,
-        segments: StringLiteralSegments([.stringSegment(segment)]),
+        segments: StringLiteralSegmentsSyntax([.stringSegment(segment)]),
         closeQuote: .stringQuote
       )
 
@@ -39,14 +39,14 @@ final class StringLiteralTests: XCTestCase {
 
   func testRegular() {
     AssertBuildResult(
-      StringLiteralExpr(content: "foobar"),
+      StringLiteralExprSyntax(content: "foobar"),
       """
       "foobar"
       """
     )
 
     AssertBuildResult(
-      StringLiteralExpr(content: "##foobar"),
+      StringLiteralExprSyntax(content: "##foobar"),
       """
       "##foobar"
       """
@@ -55,7 +55,7 @@ final class StringLiteralTests: XCTestCase {
 
   func testEscapeLiteral() {
     AssertBuildResult(
-      StringLiteralExpr(content: #""""foobar""#),
+      StringLiteralExprSyntax(content: #""""foobar""#),
       ##"""
       #""""foobar""#
       """##
@@ -64,7 +64,7 @@ final class StringLiteralTests: XCTestCase {
 
   func testEscapePounds() {
     AssertBuildResult(
-      StringLiteralExpr(content: ###"#####"foobar"##foobar"#foobar"###),
+      StringLiteralExprSyntax(content: ###"#####"foobar"##foobar"#foobar"###),
       #####"""
       ###"#####"foobar"##foobar"#foobar"###
       """#####
@@ -73,7 +73,7 @@ final class StringLiteralTests: XCTestCase {
 
   func testEscapeInteropolation() {
     AssertBuildResult(
-      StringLiteralExpr(content: ###"\##(foobar)\#(foobar)"###),
+      StringLiteralExprSyntax(content: ###"\##(foobar)\#(foobar)"###),
       ####"""
       ###"\##(foobar)\#(foobar)"###
       """####
@@ -82,28 +82,28 @@ final class StringLiteralTests: XCTestCase {
 
   func testEscapeBackslash() {
     AssertBuildResult(
-      StringLiteralExpr(content: #"\"#),
+      StringLiteralExprSyntax(content: #"\"#),
       ##"""
       #"\"#
       """##
     )
 
     AssertBuildResult(
-      StringLiteralExpr(content: ##"\#n"##),
+      StringLiteralExprSyntax(content: ##"\#n"##),
       ##"""
       ##"\#n"##
       """##
     )
 
     AssertBuildResult(
-      StringLiteralExpr(content: ##"\#\"##),
+      StringLiteralExprSyntax(content: ##"\#\"##),
       ##"""
       ##"\#\"##
       """##
     )
 
     AssertBuildResult(
-      StringLiteralExpr(content: ##"\#"##),
+      StringLiteralExprSyntax(content: ##"\#"##),
       ##"""
       ##"\#"##
       """##
@@ -112,24 +112,24 @@ final class StringLiteralTests: XCTestCase {
 
   func testNewlines() {
     AssertBuildResult(
-      StringLiteralExpr(content: "linux\nwindows\r\nunicode\u{2028}a"),
+      StringLiteralExprSyntax(content: "linux\nwindows\r\nunicode\u{2028}a"),
       #""linux\nwindows\r\nunicode\u{2028}a""#
     )
 
     AssertBuildResult(
-      StringLiteralExpr(content: "\\linux\nwindows\r\nunicode\u{2028}a"),
+      StringLiteralExprSyntax(content: "\\linux\nwindows\r\nunicode\u{2028}a"),
       ##"#"\linux\#nwindows\#r\#nunicode\#u{2028}a"#"##
     )
   }
 
   func testNul() {
     AssertBuildResult(
-      StringLiteralExpr(content: "before\0after"),
+      StringLiteralExprSyntax(content: "before\0after"),
       #""before\0after""#
     )
 
     AssertBuildResult(
-      StringLiteralExpr(content: "\\before\0after"),
+      StringLiteralExprSyntax(content: "\\before\0after"),
       ##"#"\before\#0after"#"##
     )
   }
@@ -137,12 +137,12 @@ final class StringLiteralTests: XCTestCase {
   func testControlChars() {
     // Note that tabs do *not* get escaped.
     AssertBuildResult(
-      StringLiteralExpr(content: "before\u{07}\t\u{7f}after"),
+      StringLiteralExprSyntax(content: "before\u{07}\t\u{7f}after"),
       #""before\u{7}\#t\u{7f}after""#
     )
 
     AssertBuildResult(
-      StringLiteralExpr(content: "\\before\u{07}\t\u{7f}after"),
+      StringLiteralExprSyntax(content: "\\before\u{07}\t\u{7f}after"),
       ##"#"\before\#u{7}\##t\#u{7f}after"#"##
     )
   }

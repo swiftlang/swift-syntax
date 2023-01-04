@@ -16,28 +16,28 @@ import SwiftSyntaxBuilder
 
 final class ExtensionDeclTests: XCTestCase {
   func testExtensionDecl() {
-    let keywords = ["associatedtype", "class"].map { keyword -> VariableDecl in
+    let keywords = ["associatedtype", "class"].map { keyword -> VariableDeclSyntax in
       // We need to use `CodeBlock` here to ensure there is braces around.
-      let body = CodeBlock {
-        FunctionCallExpr(callee: MemberAccessExpr(base: "TokenSyntax", name: "\(keyword)Keyword"))
+      let body = CodeBlockSyntax {
+        FunctionCallExprSyntax(callee: MemberAccessExprSyntax(base: "TokenSyntax", name: "\(keyword)Keyword"))
       }
 
-      return VariableDecl(
-        modifiers: [DeclModifier(name: .keyword(.public))],
+      return VariableDeclSyntax(
+        modifiers: [DeclModifierSyntax(name: .keyword(.public))],
         letOrVarKeyword: .var
       ) {
-        PatternBinding(
+        PatternBindingSyntax(
           pattern: PatternSyntax("`\(raw: keyword)`"),
-          typeAnnotation: TypeAnnotation(type: Type("TokenSyntax")),
+          typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("TokenSyntax")),
           accessor: .getter(body)
         )
 
       }
     }
-    let members = MemberDeclList(keywords.map { MemberDeclListItem(decl: $0) })
-    let buildable = ExtensionDecl(
-      extendedType: Type("TokenSyntax"),
-      members: MemberDeclBlock(members: members)
+    let members = MemberDeclListSyntax(keywords.map { MemberDeclListItemSyntax(decl: $0) })
+    let buildable = ExtensionDeclSyntax(
+      extendedType: TypeSyntax("TokenSyntax"),
+      members: MemberDeclBlockSyntax(members: members)
     )
 
     AssertBuildResult(

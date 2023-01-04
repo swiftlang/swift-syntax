@@ -152,117 +152,117 @@ public extension TokenSyntax {
   }
   
   /// The `#keyPath` keyword
-  static var `poundKeyPath`: Token {
+  static var `poundKeyPath`: TokenSyntax {
     return .poundKeyPathKeyword()
   }
   
   /// The `#line` keyword
-  static var `poundLine`: Token {
+  static var `poundLine`: TokenSyntax {
     return .poundLineKeyword()
   }
   
   /// The `#selector` keyword
-  static var `poundSelector`: Token {
+  static var `poundSelector`: TokenSyntax {
     return .poundSelectorKeyword()
   }
   
   /// The `#file` keyword
-  static var `poundFile`: Token {
+  static var `poundFile`: TokenSyntax {
     return .poundFileKeyword()
   }
   
   /// The `#fileID` keyword
-  static var `poundFileID`: Token {
+  static var `poundFileID`: TokenSyntax {
     return .poundFileIDKeyword()
   }
   
   /// The `#filePath` keyword
-  static var `poundFilePath`: Token {
+  static var `poundFilePath`: TokenSyntax {
     return .poundFilePathKeyword()
   }
   
   /// The `#column` keyword
-  static var `poundColumn`: Token {
+  static var `poundColumn`: TokenSyntax {
     return .poundColumnKeyword()
   }
   
   /// The `#function` keyword
-  static var `poundFunction`: Token {
+  static var `poundFunction`: TokenSyntax {
     return .poundFunctionKeyword()
   }
   
   /// The `#dsohandle` keyword
-  static var `poundDsohandle`: Token {
+  static var `poundDsohandle`: TokenSyntax {
     return .poundDsohandleKeyword()
   }
   
   /// The `#assert` keyword
-  static var `poundAssert`: Token {
+  static var `poundAssert`: TokenSyntax {
     return .poundAssertKeyword()
   }
   
   /// The `#sourceLocation` keyword
-  static var `poundSourceLocation`: Token {
+  static var `poundSourceLocation`: TokenSyntax {
     return .poundSourceLocationKeyword()
   }
   
   /// The `#warning` keyword
-  static var `poundWarning`: Token {
+  static var `poundWarning`: TokenSyntax {
     return .poundWarningKeyword()
   }
   
   /// The `#error` keyword
-  static var `poundError`: Token {
+  static var `poundError`: TokenSyntax {
     return .poundErrorKeyword()
   }
   
   /// The `#if` keyword
-  static var `poundIf`: Token {
+  static var `poundIf`: TokenSyntax {
     return .poundIfKeyword()
   }
   
   /// The `#else` keyword
-  static var `poundElse`: Token {
+  static var `poundElse`: TokenSyntax {
     return .poundElseKeyword()
   }
   
   /// The `#elseif` keyword
-  static var `poundElseif`: Token {
+  static var `poundElseif`: TokenSyntax {
     return .poundElseifKeyword()
   }
   
   /// The `#endif` keyword
-  static var `poundEndif`: Token {
+  static var `poundEndif`: TokenSyntax {
     return .poundEndifKeyword()
   }
   
   /// The `#available` keyword
-  static var `poundAvailable`: Token {
+  static var `poundAvailable`: TokenSyntax {
     return .poundAvailableKeyword()
   }
   
   /// The `#unavailable` keyword
-  static var `poundUnavailable`: Token {
+  static var `poundUnavailable`: TokenSyntax {
     return .poundUnavailableKeyword()
   }
   
   /// The `#fileLiteral` keyword
-  static var `poundFileLiteral`: Token {
+  static var `poundFileLiteral`: TokenSyntax {
     return .poundFileLiteralKeyword()
   }
   
   /// The `#imageLiteral` keyword
-  static var `poundImageLiteral`: Token {
+  static var `poundImageLiteral`: TokenSyntax {
     return .poundImageLiteralKeyword()
   }
   
   /// The `#colorLiteral` keyword
-  static var `poundColorLiteral`: Token {
+  static var `poundColorLiteral`: TokenSyntax {
     return .poundColorLiteralKeyword()
   }
   
   /// The `#_hasSymbol` keyword
-  static var `poundHasSymbol`: Token {
+  static var `poundHasSymbol`: TokenSyntax {
     return .poundHasSymbolKeyword()
   }
   

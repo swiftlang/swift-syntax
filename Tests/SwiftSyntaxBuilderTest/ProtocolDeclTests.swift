@@ -16,8 +16,8 @@ import SwiftSyntaxBuilder
 
 final class ProtocolDeclTests: XCTestCase {
   func testProtocolDecl() {
-    let buildable = ProtocolDecl("public protocol DeclListBuildable") {
-      FunctionDecl("func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]")
+    let buildable = ProtocolDeclSyntax("public protocol DeclListBuildable") {
+      FunctionDeclSyntax("func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]")
     }
 
     AssertBuildResult(

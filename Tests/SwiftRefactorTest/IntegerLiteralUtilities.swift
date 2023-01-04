@@ -19,16 +19,16 @@ import _SwiftSyntaxTestSupport
 
 final class IntegerLiteralUtilitiesTest: XCTestCase {
   func testRadixMatching() {
-    XCTAssertEqual(("0b1010101" as IntegerLiteralExpr).radix, .binary)
-    XCTAssertEqual(("0xFF" as IntegerLiteralExpr).radix, .hex)
-    XCTAssertEqual(("0o777" as IntegerLiteralExpr).radix, .octal)
-    XCTAssertEqual(("42" as IntegerLiteralExpr).radix, .decimal)
+    XCTAssertEqual(("0b1010101" as IntegerLiteralExprSyntax).radix, .binary)
+    XCTAssertEqual(("0xFF" as IntegerLiteralExprSyntax).radix, .hex)
+    XCTAssertEqual(("0o777" as IntegerLiteralExprSyntax).radix, .octal)
+    XCTAssertEqual(("42" as IntegerLiteralExprSyntax).radix, .decimal)
   }
 
   func testSplit() {
-    XCTAssertEqual(("0b1010101" as IntegerLiteralExpr).split().prefix, "0b")
-    XCTAssertEqual(("0xFF" as IntegerLiteralExpr).split().prefix, "0x")
-    XCTAssertEqual(("0o777" as IntegerLiteralExpr).split().prefix, "0o")
-    XCTAssertEqual(("42" as IntegerLiteralExpr).split().prefix, "")
+    XCTAssertEqual(("0b1010101" as IntegerLiteralExprSyntax).split().prefix, "0b")
+    XCTAssertEqual(("0xFF" as IntegerLiteralExprSyntax).split().prefix, "0x")
+    XCTAssertEqual(("0o777" as IntegerLiteralExprSyntax).split().prefix, "0o")
+    XCTAssertEqual(("42" as IntegerLiteralExprSyntax).split().prefix, "")
   }
 }

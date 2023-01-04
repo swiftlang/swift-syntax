@@ -16,13 +16,13 @@ import SwiftSyntaxBuilder
 
 final class CustomAttributeTests: XCTestCase {
   func testCustomAttributeConvenienceInitializer() {
-    let testCases: [UInt: (Attribute, String)] = [
-      #line: (Attribute(attributeName: Type("Test")), "@Test"),
-      #line: (Attribute("WithParens") {}, "@WithParens()"),
+    let testCases: [UInt: (AttributeSyntax, String)] = [
+      #line: (AttributeSyntax(attributeName: TypeSyntax("Test")), "@Test"),
+      #line: (AttributeSyntax("WithParens") {}, "@WithParens()"),
       #line: (
-        Attribute("WithArgs") {
-          TupleExprElement(expression: Expr("value1"))
-          TupleExprElement(label: "labelled", expression: Expr("value2"))
+        AttributeSyntax("WithArgs") {
+          TupleExprElementSyntax(expression: ExprSyntax("value1"))
+          TupleExprElementSyntax(label: "labelled", expression: ExprSyntax("value2"))
         }, "@WithArgs(value1, labelled: value2)"
       ),
     ]

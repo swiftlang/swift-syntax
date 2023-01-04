@@ -1068,7 +1068,8 @@ public let DECL_NODES: [Node] = [
   Node(name: "AccessorList",
        nameForDiagnostics: nil,
        kind: "SyntaxCollection",
-       element: "AccessorDecl"),
+       element: "AccessorDecl",
+       elementsSeparatedByNewline: true),
 
   Node(name: "AccessorBlock",
        nameForDiagnostics: nil,
@@ -1084,12 +1085,14 @@ public let DECL_NODES: [Node] = [
                ]),
          Child(name: "Accessors",
                kind: "AccessorList",
-               collectionElementName: "Accessor"),
+               collectionElementName: "Accessor",
+               isIndented: true),
          Child(name: "RightBrace",
                kind: "RightBraceToken",
                tokenChoices: [
                  "RightBrace"
-               ])
+               ],
+               requiresLeadingNewline: true)
        ]),
 
   Node(name: "PatternBinding",

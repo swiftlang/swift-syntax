@@ -590,14 +590,14 @@ DECL_NODES = [
          ]),
 
     Node('AccessorList', name_for_diagnostics=None, kind="SyntaxCollection",
-         element='AccessorDecl'),
+         element='AccessorDecl', elements_separated_by_newline=True),
 
     Node('AccessorBlock', name_for_diagnostics=None, kind="Syntax", traits=['Braced'],
          children=[
              Child('LeftBrace', kind='LeftBraceToken'),
              Child('Accessors', kind='AccessorList',
-                   collection_element_name='Accessor'),
-             Child('RightBrace', kind='RightBraceToken'),
+                   collection_element_name='Accessor', is_indented=True),
+             Child('RightBrace', kind='RightBraceToken', requires_leading_newline=True),
          ]),
 
     # Pattern: Type = Value { get {} },

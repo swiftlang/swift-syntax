@@ -155,6 +155,9 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
+    if token.tokenKind == .colon && token.parent?.kind == .dictionaryExpr {
+      return false
+    }
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
     case (.asKeyword, .exclamationMark), 
      (.asKeyword, .postfixQuestionMark), 

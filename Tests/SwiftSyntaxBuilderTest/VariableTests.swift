@@ -54,7 +54,7 @@ final class VariableTests: XCTestCase {
       )
     }
 
-    AssertBuildResult(buildable, "␣var d: [String: Int] = [: ]")
+    AssertBuildResult(buildable, "␣var d: [String: Int] = [:]")
   }
 
   func testVariableDeclWithExplicitTrailingCommas() {

@@ -23,10 +23,10 @@ final class DictionaryExprTests: XCTestCase {
     }
     AssertBuildResult(buildable, "[1: 1, 2: 2, 3: 3]")
   }
-  
+
   func testEmptyDictionaryExpr() {
     let buildable = DictionaryExpr()
-    AssertBuildResult(buildable, "[: ]")
+    AssertBuildResult(buildable, "[:]")
   }
 
   func testMultilineDictionaryLiteral() {

@@ -943,4 +943,11 @@ DECL_NODES = [
                    collection_element_name='AdditionalTrailingClosure',
                    is_optional=True),
          ]),
+
+    # <#content#>
+    Node('EditorPlaceholderDecl', name_for_diagnostics='editor placeholder',
+         kind='Decl',
+         children=[
+             Child('Identifier', kind='IdentifierToken'),
+         ]),
 ]

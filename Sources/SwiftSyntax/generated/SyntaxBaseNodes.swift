@@ -69,7 +69,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public init?<S: SyntaxProtocol>(_ node: S) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundErrorDecl, .poundSourceLocation, .poundWarningDecl, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
+    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundErrorDecl, .poundSourceLocation, .poundWarningDecl, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
       self._syntaxNode = node._syntaxNode
     default: 
       return nil
@@ -82,7 +82,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     #if DEBUG
     switch data.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundErrorDecl, .poundSourceLocation, .poundWarningDecl, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
+    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundErrorDecl, .poundSourceLocation, .poundWarningDecl, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl: 
       break 
     default: 
       fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
@@ -123,6 +123,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         .node(AssociatedtypeDeclSyntax.self), 
         .node(ClassDeclSyntax.self), 
         .node(DeinitializerDeclSyntax.self), 
+        .node(EditorPlaceholderDeclSyntax.self), 
         .node(EnumCaseDeclSyntax.self), 
         .node(EnumDeclSyntax.self), 
         .node(ExtensionDeclSyntax.self), 

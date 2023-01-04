@@ -188,6 +188,8 @@ public enum SyntaxKind {
   
   case dynamicReplacementArguments
   
+  case editorPlaceholderDecl
+  
   case editorPlaceholderExpr
   
   case effectsArguments

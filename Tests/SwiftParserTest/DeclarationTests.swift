@@ -1335,13 +1335,26 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
-  func testFoo() {
+  func testClassWithPrivateSet() {
     AssertParse(
       """
       struct Properties {
         class private(set) var privateSetterCustomNames: Bool
       }
       """
+    )
+  }
+
+  func testEditorPlaceholderInMemberDeclList() {
+    AssertParse(
+      """
+      class Foo {
+        <#code#>
+      }
+      """,
+      substructure: Syntax(
+        MemberDeclListItemSyntax(decl: EditorPlaceholderDeclSyntax(identifier: .identifier("<#code#>")))
+      )
     )
   }
 }

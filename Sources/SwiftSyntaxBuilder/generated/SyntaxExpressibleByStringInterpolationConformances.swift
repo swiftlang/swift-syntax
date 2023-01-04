@@ -145,6 +145,9 @@ extension DiscardAssignmentExprSyntax: SyntaxExpressibleByStringInterpolation {
 extension DoStmtSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 
+extension EditorPlaceholderDeclSyntax: SyntaxExpressibleByStringInterpolation { 
+}
+
 extension EditorPlaceholderExprSyntax: SyntaxExpressibleByStringInterpolation { 
 }
 

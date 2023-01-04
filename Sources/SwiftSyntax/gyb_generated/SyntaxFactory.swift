@@ -4848,6 +4848,33 @@ public enum SyntaxFactory {
       return MacroExpansionDeclSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on EditorPlaceholderDeclSyntax")
+  public static func makeEditorPlaceholderDecl(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil) -> EditorPlaceholderDeclSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeIdentifier?.raw,
+      identifier.raw,
+      unexpectedAfterIdentifier?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.editorPlaceholderDecl,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return EditorPlaceholderDeclSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on EditorPlaceholderDeclSyntax")
+  public static func makeBlankEditorPlaceholderDecl(presence: SourcePresence = .present) -> EditorPlaceholderDeclSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .editorPlaceholderDecl,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        nil,
+      ], arena: arena))
+      return EditorPlaceholderDeclSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on TokenListSyntax")
   public static func makeTokenList(
     _ elements: [TokenSyntax]) -> TokenListSyntax {

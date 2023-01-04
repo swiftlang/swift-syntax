@@ -104,6 +104,7 @@ extension Syntax {
         .node(DocumentationAttributeArgumentSyntax.self), 
         .node(DocumentationAttributeArgumentsSyntax.self), 
         .node(DynamicReplacementArgumentsSyntax.self), 
+        .node(EditorPlaceholderDeclSyntax.self), 
         .node(EditorPlaceholderExprSyntax.self), 
         .node(EffectsArgumentsSyntax.self), 
         .node(EnumCaseDeclSyntax.self), 
@@ -457,6 +458,8 @@ extension SyntaxKind {
       return DocumentationAttributeArgumentsSyntax.self
     case .dynamicReplacementArguments: 
       return DynamicReplacementArgumentsSyntax.self
+    case .editorPlaceholderDecl: 
+      return EditorPlaceholderDeclSyntax.self
     case .editorPlaceholderExpr: 
       return EditorPlaceholderExprSyntax.self
     case .effectsArguments: 
@@ -984,6 +987,8 @@ extension SyntaxKind {
       return "@_documentation arguments"
     case .dynamicReplacementArguments: 
       return "@_dynamicReplacement argument"
+    case .editorPlaceholderDecl: 
+      return "editor placeholder"
     case .editorPlaceholderExpr: 
       return "editor placeholder"
     case .effectsArguments: 

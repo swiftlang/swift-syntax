@@ -124,12 +124,7 @@ let basicFormatFile = SourceFile {
     FunctionDecl("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
       SwitchStmt("""
         switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-        case (.identifier, .leftAngle),
-             (.identifier, .rightAngle),
-             (.rightAngle, .exclamationMark),
-             (.rightAngle, .rightBrace),
-             (.rightSquareBracket, .rightAngle),
-             (.postfixQuestionMark, .rightAngle):
+        case (.postfixQuestionMark, .rightAngle):
           return false
         case (.leftParen, .spacedBinaryOperator("*")):
           return false
@@ -168,12 +163,6 @@ let basicFormatFile = SourceFile {
              (.exclamationMark, .period),
              (.initKeyword, .leftParen),
              (.initKeyword, .postfixQuestionMark),
-             (.rightAngle, .exclamationMark),
-             (.leftAngle, .identifier),
-             (.leftAngle, .leftSquareBracket),
-             (.leftAngle, .leftBrace),
-             (.rightAngle, .leftParen),
-             (.rightAngle, .postfixQuestionMark),
              (.postfixQuestionMark, .leftParen),
              (.postfixQuestionMark, .rightAngle),
              (.postfixQuestionMark, .rightParen),

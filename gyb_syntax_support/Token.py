@@ -254,10 +254,8 @@ SYNTAX_TOKENS = [
     Punctuator('RightBrace', 'r_brace', text='}'),
     Punctuator('LeftSquareBracket', 'l_square', text='['),
     Punctuator('RightSquareBracket', 'r_square', text=']'),
-    Punctuator('LeftAngle', 'l_angle', text='<', requires_leading_space=True,
-               requires_trailing_space=True),
-    Punctuator('RightAngle', 'r_angle', text='>', requires_leading_space=True,
-               requires_trailing_space=True),
+    Punctuator('LeftAngle', 'l_angle', text='<'),
+    Punctuator('RightAngle', 'r_angle', text='>'),
 
     Punctuator('Period', 'period', text='.'),
     Punctuator('Comma', 'comma', text=',', requires_trailing_space=True),

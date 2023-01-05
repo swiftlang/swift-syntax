@@ -131,12 +131,7 @@ open class BasicFormat: SyntaxRewriter {
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
     switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-    case (.identifier, .leftAngle), 
-     (.identifier, .rightAngle), 
-     (.rightAngle, .exclamationMark), 
-     (.rightAngle, .rightBrace), 
-     (.rightSquareBracket, .rightAngle), 
-     (.postfixQuestionMark, .rightAngle): 
+    case (.postfixQuestionMark, .rightAngle): 
       return false
     case (.leftParen, .spacedBinaryOperator("*")): 
       return false
@@ -151,10 +146,6 @@ open class BasicFormat: SyntaxRewriter {
     case .catchKeyword: 
       return true
     case .leftBrace: 
-      return true
-    case .leftAngle: 
-      return true
-    case .rightAngle: 
       return true
     case .equal: 
       return true
@@ -179,12 +170,6 @@ open class BasicFormat: SyntaxRewriter {
      (.exclamationMark, .period), 
      (.initKeyword, .leftParen), 
      (.initKeyword, .postfixQuestionMark), 
-     (.rightAngle, .exclamationMark), 
-     (.leftAngle, .identifier), 
-     (.leftAngle, .leftSquareBracket), 
-     (.leftAngle, .leftBrace), 
-     (.rightAngle, .leftParen), 
-     (.rightAngle, .postfixQuestionMark), 
      (.postfixQuestionMark, .leftParen), 
      (.postfixQuestionMark, .rightAngle), 
      (.postfixQuestionMark, .rightParen), 
@@ -286,10 +271,6 @@ open class BasicFormat: SyntaxRewriter {
     case .throwsKeyword: 
       return true
     case .wildcardKeyword: 
-      return true
-    case .leftAngle: 
-      return true
-    case .rightAngle: 
       return true
     case .comma: 
       return true

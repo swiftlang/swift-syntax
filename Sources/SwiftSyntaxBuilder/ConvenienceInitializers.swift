@@ -376,7 +376,7 @@ extension TernaryExpr {
 extension TupleExprElement {
   /// A convenience initializer that allows passing in label as an optional string.
   /// The presence of the colon will be inferred based on the presence of the label.
-  public init(label: String? = nil, expression: ExprSyntax) {
+  public init<E: ExprSyntaxProtocol>(label: String? = nil, expression: E) {
     self.init(
       label: label.map { .identifier($0) },
       colon: label == nil ? nil : .colonToken(),

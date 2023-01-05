@@ -21,8 +21,8 @@ final class CustomAttributeTests: XCTestCase {
       #line: (CustomAttribute("WithParens") {}, "@WithParens()"),
       #line: (
         CustomAttribute("WithArgs") {
-          TupleExprElement(expression: "value1")
-          TupleExprElement(label: "labelled", expression: "value2")
+          TupleExprElement(expression: Expr("value1"))
+          TupleExprElement(label: "labelled", expression: Expr("value2"))
         }, "@WithArgs(value1, labelled: value2)"
       ),
     ]

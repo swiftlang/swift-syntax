@@ -109,7 +109,7 @@ public enum TokenKind: Hashable {
   
   case floatingLiteral(String)
   
-  case stringLiteral(String)
+  case stringLiteralContents(String)
   
   case regexLiteral(String)
   
@@ -294,7 +294,7 @@ public enum TokenKind: Hashable {
       return text
     case .floatingLiteral(let text): 
       return text
-    case .stringLiteral(let text): 
+    case .stringLiteralContents(let text): 
       return text
     case .regexLiteral(let text): 
       return text
@@ -547,7 +547,7 @@ public enum TokenKind: Hashable {
       return false
     case .floatingLiteral: 
       return false
-    case .stringLiteral: 
+    case .stringLiteralContents: 
       return false
     case .regexLiteral: 
       return false
@@ -685,7 +685,7 @@ public enum TokenKind: Hashable {
       return false
     case .floatingLiteral: 
       return false
-    case .stringLiteral: 
+    case .stringLiteralContents: 
       return false
     case .regexLiteral: 
       return false
@@ -820,7 +820,7 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.floatingLiteral(let lhsText), .floatingLiteral(let rhsText)): 
       return lhsText == rhsText
-    case (.stringLiteral(let lhsText), .stringLiteral(let rhsText)): 
+    case (.stringLiteralContents(let lhsText), .stringLiteralContents(let rhsText)): 
       return lhsText == rhsText
     case (.regexLiteral(let lhsText), .regexLiteral(let rhsText)): 
       return lhsText == rhsText
@@ -957,7 +957,7 @@ public enum RawTokenKind: Equatable, Hashable {
   
   case floatingLiteral
   
-  case stringLiteral
+  case stringLiteralContents
   
   case regexLiteral
   
@@ -1199,7 +1199,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"integer literal"#
     case .floatingLiteral: 
       return #"floating literal"#
-    case .stringLiteral: 
+    case .stringLiteralContents: 
       return #"string literal"#
     case .regexLiteral: 
       return #"regex literal"#
@@ -1337,7 +1337,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .floatingLiteral: 
       return false
-    case .stringLiteral: 
+    case .stringLiteralContents: 
       return false
     case .regexLiteral: 
       return false
@@ -1475,7 +1475,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .floatingLiteral: 
       return false
-    case .stringLiteral: 
+    case .stringLiteralContents: 
       return false
     case .regexLiteral: 
       return false
@@ -1771,8 +1771,8 @@ extension TokenKind {
       return .integerLiteral(text)
     case .floatingLiteral: 
       return .floatingLiteral(text)
-    case .stringLiteral: 
-      return .stringLiteral(text)
+    case .stringLiteralContents: 
+      return .stringLiteralContents(text)
     case .regexLiteral: 
       return .regexLiteral(text)
     case .unknown: 
@@ -1908,8 +1908,8 @@ extension TokenKind {
       return (.integerLiteral, str)
     case .floatingLiteral(let str): 
       return (.floatingLiteral, str)
-    case .stringLiteral(let str): 
-      return (.stringLiteral, str)
+    case .stringLiteralContents(let str): 
+      return (.stringLiteralContents, str)
     case .regexLiteral(let str): 
       return (.regexLiteral, str)
     case .unknown(let str): 

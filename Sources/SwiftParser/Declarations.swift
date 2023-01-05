@@ -1251,7 +1251,7 @@ extension Parser {
     /// consumes the entire regex literal, we're done.
     return self.currentToken.tokenText.withBuffer {
       (buffer: UnsafeBufferPointer<UInt8>) -> Bool in
-      var cursor = Lexer.Cursor(input: buffer, previous: 0)
+      var cursor = Lexer.Cursor(input: buffer, previous: 0, state: .normal)
       guard buffer[0] == UInt8(ascii: "/") else { return false }
       switch cursor.lexOperatorIdentifier(cursor, cursor).tokenKind {
       case .unknown:
@@ -2151,19 +2151,7 @@ extension Parser {
     }
 
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let stringLiteral: RawStringLiteralExprSyntax
-    if self.at(.stringLiteral) {
-      stringLiteral = self.parseStringLiteral()
-    } else {
-      stringLiteral = RawStringLiteralExprSyntax(
-        openDelimiter: nil,
-        openQuote: RawTokenSyntax(missing: .stringQuote, arena: self.arena),
-        segments: RawStringLiteralSegmentsSyntax(elements: [], arena: self.arena),
-        closeQuote: RawTokenSyntax(missing: .stringQuote, arena: self.arena),
-        closeDelimiter: nil,
-        arena: self.arena
-      )
-    }
+    let stringLiteral = self.parseStringLiteral()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
     switch directive {

@@ -1136,7 +1136,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.stringLiteral, _)?:
+    case (.stringLiteralContents, _)?, (.rawStringDelimiter, _)?, (.stringQuote, _)?, (.multilineStringQuote, _)?, (.singleQuote, _)?:
       return RawExprSyntax(self.parseStringLiteral())
     case (.regexLiteral, _)?:
       return RawExprSyntax(self.parseRegexLiteral())
@@ -1436,83 +1436,67 @@ extension Parser {
   ///     escaped-newline → escape-sequence inline-spaces? line-break
   @_spi(RawSyntax)
   public mutating func parseStringLiteral() -> RawStringLiteralExprSyntax {
-    var text = self.currentToken.wholeText[self.currentToken.textRange]
-
     /// Parse opening raw string delimiter if exist.
-    let openDelimiter = self.parseStringLiteralDelimiter(at: .leading, text: text)
-    if let openDelimiter = openDelimiter {
-      text = text.dropFirst(openDelimiter.tokenText.count)
-    }
+    let openDelimiter = self.consume(if: .rawStringDelimiter)
 
     /// Parse open quote.
-    let openQuote =
-      self.parseStringLiteralQuote(
-        at: openDelimiter != nil ? .leadingRaw : .leading,
-        text: text,
-        wantsMultiline: self.currentToken.isMultilineStringLiteral
-      ) ?? RawTokenSyntax(missing: .stringQuote, arena: arena)
-    if !openQuote.isMissing {
-      text = text.dropFirst(openQuote.tokenText.count)
-    }
+    let (unexpectedBeforeOpenQuote, openQuote) = self.expectAny([.stringQuote, .multilineStringQuote, .singleQuote], default: .stringQuote)
 
     /// Parse segments.
-    let (segments, closeStart) = self.parseStringLiteralSegments(
-      text,
-      openQuote,
-      openDelimiter?.tokenText ?? ""
-    )
-    text = text[closeStart...]
+    let text = self.currentToken.wholeText[...]
+    let segments: RawStringLiteralSegmentsSyntax
+    if self.at(.stringLiteralContents) {
+      (segments, _) = self.parseStringLiteralSegments(
+        text: text,
+        allowsMultiline: openQuote.tokenKind == .multilineStringQuote,
+        delimiter: openDelimiter?.tokenText ?? ""
+      )
+      /// Discard the raw string literal token and create the structed string
+      /// literal expression.
+      /// FIXME: We should not instantiate `RawTokenSyntax` and discard it here.
+      _ = self.consumeAnyToken()
+    } else {
+      segments = RawStringLiteralSegmentsSyntax(elements: [], arena: self.arena)
+    }
 
     /// Parse close quote.
-    let closeQuote =
-      self.parseStringLiteralQuote(
-        at: openDelimiter != nil ? .trailingRaw : .trailing,
-        text: text,
-        wantsMultiline: self.currentToken.isMultilineStringLiteral
-      ) ?? RawTokenSyntax(missing: openQuote.tokenKind, arena: arena)
-    if !closeQuote.isMissing {
-      text = text.dropFirst(closeQuote.tokenText.count)
-    }
+    let (unexpectedBeforeCloseQuote, closeQuote) = self.expect(openQuote.tokenKind)
+
     /// Parse closing raw string delimiter if exist.
-    let closeDelimiter: RawTokenSyntax?
-    if let delimiter = self.parseStringLiteralDelimiter(
-      at: .trailing,
-      text: text
-    ) {
-      closeDelimiter = delimiter
-    } else if let openDelimiter = openDelimiter {
-      closeDelimiter = RawTokenSyntax(
-        missing: .rawStringDelimiter,
-        text: openDelimiter.tokenText,
-        arena: arena
-      )
+    var unexpectedCloseDelimiter: RawTokenSyntax? = nil
+    var closeDelimiter: RawTokenSyntax?
+    if self.at(.rawStringDelimiter) && self.currentToken.leadingTriviaText == "" {
+      closeDelimiter = self.consumeAnyToken()
     } else {
       closeDelimiter = nil
     }
-    assert(
-      (openDelimiter == nil) == (closeDelimiter == nil),
-      "existence of open/close delimiter should match"
-    )
-    if let closeDelimiter = closeDelimiter, !closeDelimiter.isMissing {
-      text = text.dropFirst(closeDelimiter.byteLength)
+
+    switch (openDelimiter, closeDelimiter) {
+    case (nil, nil):
+      break  // good, no raw delimiters on either side
+    case (let open?, nil):
+      closeDelimiter = missingToken(.rawStringDelimiter, text: open.tokenText)
+    case (nil, .some):
+      unexpectedCloseDelimiter = closeDelimiter
+      closeDelimiter = nil
+    case (let open?, let close?):
+      if open.tokenText == close.tokenText {
+        break  // good, same delimiter on both sides
+      } else {
+        unexpectedCloseDelimiter = closeDelimiter
+        closeDelimiter = missingToken(.rawStringDelimiter, text: open.tokenText)
+      }
     }
-
-    assert(
-      text.isEmpty,
-      "string literal parsing should consume all the literal text"
-    )
-
-    /// Discard the raw string literal token and create the structed string
-    /// literal expression.
-    /// FIXME: We should not instantiate `RawTokenSyntax` and discard it here.
-    _ = self.consumeAnyToken()
 
     /// Construct the literal expression.
     return RawStringLiteralExprSyntax(
       openDelimiter: openDelimiter,
+      unexpectedBeforeOpenQuote,
       openQuote: openQuote,
       segments: segments,
+      unexpectedBeforeCloseQuote,
       closeQuote: closeQuote,
+      RawUnexpectedNodesSyntax([unexpectedCloseDelimiter], arena: self.arena),
       closeDelimiter: closeDelimiter,
       arena: self.arena
     )
@@ -1687,12 +1671,10 @@ extension Parser {
   ///   - closer: opening quote token.
   ///   - delimiter: opening custom string delimiter or empty string.
   mutating func parseStringLiteralSegments(
-    _ text: Slice<SyntaxText>,
-    _ closer: RawTokenSyntax,
-    _ delimiter: SyntaxText
+    text: Slice<SyntaxText>,
+    allowsMultiline: Bool,
+    delimiter: SyntaxText
   ) -> (RawStringLiteralSegmentsSyntax, SyntaxText.Index) {
-    let allowsMultiline = closer.tokenKind == .multilineStringQuote
-
     var segments = [RawStringLiteralSegmentsSyntax.Element]()
     var segment = text
     var stringLiteralSegmentStart = segment.startIndex
@@ -1736,7 +1718,10 @@ extension Parser {
       let contentSize = content.withBuffer { buf in
         Lexer.lexToEndOfInterpolatedExpression(buf, allowsMultiline)
       }
-      let contentEnd = text.index(contentStart, offsetBy: contentSize)
+      var contentEnd = text.index(contentStart, offsetBy: contentSize)
+      if contentEnd == text.endIndex {
+        contentEnd = text.index(before: text.endIndex)
+      }
 
       do {
         // `\`
@@ -1817,13 +1802,7 @@ extension Parser {
       // trim `##`.
       segment = text[stringLiteralSegmentStart..<text.index(segment.endIndex, offsetBy: -delimiter.count)]
 
-      if (SyntaxText(rebasing: segment).hasSuffix(closer.tokenText)) {
-        // trim `"`.
-        segment = text[stringLiteralSegmentStart..<text.index(segment.endIndex, offsetBy: -closer.tokenText.count)]
-      } else {
-        // If `"` is not found, eat the rest.
-        segment = text[stringLiteralSegmentStart...]
-      }
+      segment = text[stringLiteralSegmentStart...]
     }
 
     assert(segments.count % 2 == 0)

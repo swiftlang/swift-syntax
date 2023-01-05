@@ -154,7 +154,7 @@ extension Parser {
     if !self.at(.rightParen) {
       let (unexpectedBeforeFile, file) = self.expectIdentifier()
       let (unexpectedBeforeFileColon, fileColon) = self.expect(.colon)
-      let (unexpectedBeforeFileName, fileName) = self.expect(.stringLiteral)
+      let fileName = self.parseStringLiteral()
       let (unexpectedBeforeComma, comma) = self.expect(.comma)
 
       let (unexpectedBeforeLine, line) = self.expectIdentifier()
@@ -166,7 +166,6 @@ extension Parser {
         fileArgLabel: file,
         unexpectedBeforeFileColon,
         fileArgColon: fileColon,
-        unexpectedBeforeFileName,
         fileName: fileName,
         unexpectedBeforeComma,
         comma: comma,

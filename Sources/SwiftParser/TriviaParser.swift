@@ -20,7 +20,8 @@ public struct TriviaParser {
     var pieces: [RawTriviaPiece] = []
     var cursor = Lexer.Cursor(
       input: UnsafeBufferPointer(start: source.baseAddress, count: source.count),
-      previous: 0
+      previous: 0,
+      state: .normal
     )
 
     while true {

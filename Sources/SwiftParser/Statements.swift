@@ -1182,9 +1182,9 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let condition = self.parseExpression()
     let comma = self.consume(if: .comma)
-    let message: RawTokenSyntax?
+    let message: RawStringLiteralExprSyntax?
     if comma != nil {
-      message = self.consumeAnyToken()
+      message = self.parseStringLiteral()
     } else {
       message = nil
     }

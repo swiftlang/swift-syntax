@@ -242,7 +242,7 @@ extension RawTokenKind {
       return .integerLiteral
     case .floatingLiteral: 
       return .floatingLiteral
-    case .stringLiteral: 
+    case .stringLiteralContents: 
       return .stringLiteral
     case .regexLiteral: 
       return .none

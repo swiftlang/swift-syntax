@@ -354,6 +354,21 @@ extension ParseDiagnosticsGenerator {
         let fixIt = FixIt(message: .removeExtraneousWhitespace, changes: changes)
         addDiagnostic(invalidToken, .invalidWhitespaceAfterPeriod, fixIts: [fixIt], handledNodes: [unexpectedTokens.id])
       }
+    } else if node.rawTokenKind == .rawStringDelimiter, invalidToken.rawTokenKind == .rawStringDelimiter {
+      let fixIt = FixIt(
+        message: .removeExtraneousDelimiters,
+        changes: [
+          .makeMissing(invalidToken),
+          .makePresentBeforeTrivia(node),
+        ]
+      )
+      addDiagnostic(
+        invalidToken,
+        position: invalidToken.positionAfterSkippingLeadingTrivia.advanced(by: node.contentLength.utf8Length),
+        .tooManyClosingRawStringDelimiters,
+        fixIts: [fixIt],
+        handledNodes: [unexpectedTokens.id]
+      )
     } else {
       _ = handleMissingSyntax(node)
     }

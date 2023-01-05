@@ -83,7 +83,9 @@ public class LexerTests: XCTestCase {
       "\u{1234}"
       """#,
       lexemes: [
-        LexemeSpec(.stringLiteral, text: #""\u{1234}""#)
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: #"\u{1234}"#),
+        LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
 
@@ -93,7 +95,9 @@ public class LexerTests: XCTestCase {
       """#,
       lexemes: [
         // FIXME: We should diagnose invalid unicode characters in string literals
-        LexemeSpec(.stringLiteral, text: #""\u{12341234}""#)
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: #"\u{12341234}"#),
+        LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
   }
@@ -175,7 +179,11 @@ public class LexerTests: XCTestCase {
       ###"this is a ##"raw"## string"###
       """,
       lexemes: [
-        LexemeSpec(.stringLiteral, text: ####"###"this is a ##"raw"## string"###"####)
+        LexemeSpec(.rawStringDelimiter, text: "###"),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: ###"this is a ##"raw"## string"###),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.rawStringDelimiter, text: "###"),
       ]
     )
 
@@ -184,7 +192,11 @@ public class LexerTests: XCTestCase {
       #"#"abc"#
       """,
       lexemes: [
-        LexemeSpec(.stringLiteral, text: ####"#"#"abc"#"####)
+        LexemeSpec(.rawStringDelimiter, text: "#"),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: #"#"abc"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.rawStringDelimiter, text: "#"),
       ]
     )
 
@@ -193,7 +205,11 @@ public class LexerTests: XCTestCase {
       ###"##"abc"###
       """,
       lexemes: [
-        LexemeSpec(.stringLiteral, text: ####"###"##"abc"###"####)
+        LexemeSpec(.rawStringDelimiter, text: "###"),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: #"##"abc"#),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.rawStringDelimiter, text: "###"),
       ]
     )
 
@@ -202,9 +218,11 @@ public class LexerTests: XCTestCase {
       ##"""abc"####
       """#####,
       lexemes: [
-        LexemeSpec(.stringLiteral, text: ###"##"""abc"##"###),
-        LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.pound, text: "#"),
+        LexemeSpec(.rawStringDelimiter, text: "##"),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: ###"""abc"###),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.rawStringDelimiter, text: "####"),
       ]
     )
   }
@@ -265,7 +283,9 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.leftBrace, text: "{"),
         LexemeSpec(.identifier, leading: "\n    ", text: "print", flags: [.isAtStartOfLine]),
         LexemeSpec(.leftParen, text: "("),
-        LexemeSpec(.stringLiteral, text: "\"Hello World\""),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: "Hello World"),
+        LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.rightParen, text: ")"),
         LexemeSpec(.rightBrace, leading: "\n  ", text: "}", flags: [.isAtStartOfLine]),
         LexemeSpec(.rightBrace, leading: "\n", text: "}", flags: [.isAtStartOfLine]),
@@ -470,7 +490,9 @@ public class LexerTests: XCTestCase {
       "\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
       """#,
       lexemes: [
-        LexemeSpec(.stringLiteral, text: #""\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))""#)
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: #"\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"#),
+        LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
   }
@@ -590,7 +612,9 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.identifier, text: "myString"),
         LexemeSpec(.binaryOperator, text: "=="),
-        LexemeSpec(.stringLiteral, text: #""""#),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: ""),
+        LexemeSpec(.stringQuote, text: #"""#),
       ]
     )
   }
@@ -707,6 +731,19 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "0x147AD1️⃣G0",
       lexemes: [LexemeSpec(.integerLiteral, text: "0x147ADG0", error: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal")]
+    )
+  }
+
+  func testStringLiteralWithBlockCommentStart() {
+    AssertLexemes(
+      """
+      "/*"
+      """,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringLiteralContents, text: "/*"),
+        LexemeSpec(.stringQuote, text: #"""#),
+      ]
     )
   }
 }

@@ -45,6 +45,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                        kind: "TupleExprElementList"),
                  Child(name: "Token",
                        kind: "Token"),
+                 Child(name: "String",
+                       kind: "StringLiteralExpr"),
                  Child(name: "Availability",
                        kind: "AvailabilitySpecList"),
                  Child(name: "SpecializeArguments",
@@ -513,11 +515,8 @@ public let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "MangledName",
-               kind: "StringLiteralToken",
-               description: "The mangled name of a declaration.",
-               tokenChoices: [
-                 "StringLiteral"
-               ]),
+               kind: "StringLiteralExpr",
+               description: "The mangled name of a declaration."),
          Child(name: "Comma",
                kind: "CommaToken",
                tokenChoices: [
@@ -571,11 +570,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "CTypeString",
-               kind: "StringLiteralToken",
-               isOptional: true,
-               tokenChoices: [
-                 "StringLiteral"
-               ])
+               kind: "StringLiteralExpr",
+               isOptional: true)
        ]),
 
   Node(name: "ConventionWitnessMethodAttributeArguments",
@@ -614,11 +610,8 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "Comma"
                ]),
          Child(name: "CxxName",
-               kind: "StringLiteralToken",
-               isOptional: true,
-               tokenChoices: [
-                 "StringLiteral"
-               ])
+               kind: "StringLiteralExpr",
+               isOptional: true)
        ]),
 
   Node(name: "OriginallyDefinedInArguments",
@@ -640,10 +633,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "ModuleName",
-               kind: "StringLiteralToken",
-               tokenChoices: [
-                 "StringLiteral"
-               ]),
+               kind: "StringLiteralExpr"),
          Child(name: "Comma",
                kind: "CommaToken",
                tokenChoices: [
@@ -673,10 +663,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "Filename",
-               kind: "StringLiteralToken",
-               tokenChoices: [
-                 "StringLiteral"
-               ])
+               kind: "StringLiteralExpr")
        ]),
 
   Node(name: "DynamicReplacementArguments",
@@ -720,10 +707,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "Message",
-               kind: "StringLiteralToken",
-               tokenChoices: [
-                 "StringLiteral"
-               ])
+               kind: "StringLiteralExpr")
        ]),
 
   Node(name: "EffectsArguments",
@@ -754,11 +738,16 @@ public let ATTRIBUTE_NODES: [Node] = [
                  "Colon"
                ]),
          Child(name: "Value",
-               kind: "Token",
-               tokenChoices: [
-                 "Identifier",
-                 "Keyword",
-                 "StringLiteral"
+               kind: "Syntax",
+               nodeChoices: [
+                 Child(name: "Token",
+                       kind: "Token",
+                       tokenChoices: [
+                         "Identifier",
+                         "Keyword"
+                       ]),
+                 Child(name: "String",
+                       kind: "StringLiteralExpr")
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",

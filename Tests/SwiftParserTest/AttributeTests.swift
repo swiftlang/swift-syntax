@@ -310,7 +310,7 @@ final class AttributeTests: XCTestCase {
     )
   }
 
-  func testObjcImplementationAttribute() throws {
+  func testObjcImplementationAttribute() {
     AssertParse(
       """
       @_objcImplementation extension MyClass {
@@ -338,6 +338,12 @@ final class AttributeTests: XCTestCase {
       """
       @_silgen_name("testExclusivityBogusPC")
       private static func _testExclusivityBogusPC()
+      """
+    )
+
+    AssertParse(
+      """
+      @_silgen_name("") func foo() {}
       """
     )
   }
@@ -390,7 +396,7 @@ final class AttributeTests: XCTestCase {
       @_expose(Cxx, 1️⃣baz) func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected string literal in @_expose arguments"),
+        DiagnosticSpec(message: "expected string literal to end @_expose arguments"),
         DiagnosticSpec(message: "unexpected code 'baz' in attribute"),
       ]
     )
@@ -462,7 +468,7 @@ final class AttributeTests: XCTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected string literal in @_unavailableFromAsync argument"),
+        DiagnosticSpec(message: "expected string literal to end @_unavailableFromAsync argument"),
         DiagnosticSpec(message: "unexpected code 'abc' in attribute"),
       ]
     )

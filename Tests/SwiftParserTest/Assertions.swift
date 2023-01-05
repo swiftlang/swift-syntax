@@ -74,7 +74,10 @@ private func AssertTokens(
 ) {
   guard actual.count == expected.count else {
     return XCTFail(
-      "Expected \(expected.count) tokens but got \(actual.count)",
+      """
+      Expected \(expected.count) tokens but got \(actual.count):
+      \(actual.map(\.debugDescription).joined(separator: "\n"))
+      """,
       file: file,
       line: line
     )

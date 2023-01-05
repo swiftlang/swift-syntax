@@ -338,7 +338,7 @@ STMT_NODES = [
                    description='The assertion condition.'),
              Child('Comma', kind='CommaToken', is_optional=True,
                    description='The comma after the assertion condition.'),
-             Child('Message', kind='StringLiteralToken', name_for_diagnostics='message', is_optional=True,
+             Child('Message', kind='StringLiteralExpr', name_for_diagnostics='message', is_optional=True,
                    description='The assertion message.'),
              Child('RightParen', kind='RightParenToken'),
          ]),

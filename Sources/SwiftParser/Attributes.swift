@@ -284,7 +284,7 @@ extension Parser {
       }
     case ._cdecl, ._silgen_name:
       return parseAttribute(argumentMode: .required) { parser in
-        return .token(parser.consume(if: .stringLiteral) ?? parser.missingToken(.stringLiteral))
+        return .string(parser.parseStringLiteral())
       }
     case ._implements:
       return parseAttribute(argumentMode: .required) { parser in
@@ -292,11 +292,7 @@ extension Parser {
       }
     case ._semantics:
       return parseAttribute(argumentMode: .required) { parser in
-        if let value = parser.consume(if: .stringLiteral) {
-          return .token(value)
-        } else {
-          return .token(parser.missingToken(.stringLiteral))
-        }
+        return .string(parser.parseStringLiteral())
       }
     case ._backDeploy:
       return parseAttribute(argumentMode: .required) { parser in
@@ -854,11 +850,10 @@ extension Parser {
 
 extension Parser {
   mutating func parseOpaqueReturnTypeOfAttributeArguments() -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    let (unexpectedBeforeString, mangledName) = self.expect(.stringLiteral)
+    let mangledName = self.parseStringLiteral()
     let (unexpectedBeforeComma, comma) = self.expect(.comma)
     let (unexpectedBeforeOrdinal, ordinal) = self.expect(.integerLiteral)
     return RawOpaqueReturnTypeOfAttributeArgumentsSyntax(
-      unexpectedBeforeString,
       mangledName: mangledName,
       unexpectedBeforeComma,
       comma: comma,
@@ -890,20 +885,18 @@ extension Parser {
       let cTypeLabel: RawTokenSyntax?
       let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
       let colon: RawTokenSyntax?
-      let unexpectedBeforeCTypeString: RawUnexpectedNodesSyntax?
-      let cTypeString: RawTokenSyntax?
+      let cTypeString: RawStringLiteralExprSyntax?
       if self.at(.comma) {
         (unexpectedBeforeComma, comma) = self.expect(.comma)
         cTypeLabel = self.consumeAnyToken()
         (unexpectedBeforeColon, colon) = self.expect(.colon)
-        (unexpectedBeforeCTypeString, cTypeString) = self.expect(.stringLiteral)
+        cTypeString = self.parseStringLiteral()
       } else {
         unexpectedBeforeComma = nil
         comma = nil
         cTypeLabel = nil
         unexpectedBeforeColon = nil
         colon = nil
-        unexpectedBeforeCTypeString = nil
         cTypeString = nil
       }
       return .conventionArguments(
@@ -914,7 +907,6 @@ extension Parser {
           cTypeLabel: cTypeLabel,
           unexpectedBeforeColon,
           colon: colon,
-          unexpectedBeforeCTypeString,
           cTypeString: cTypeString,
           arena: self.arena
         )
@@ -961,22 +953,19 @@ extension Parser {
     }
     let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
     let comma: RawTokenSyntax?
-    let unexpectedBeforeCxxName: RawUnexpectedNodesSyntax?
-    let cxxName: RawTokenSyntax?
+    let cxxName: RawStringLiteralExprSyntax?
     if self.at(.comma) {
       (unexpectedBeforeComma, comma) = self.expect(.comma)
-      (unexpectedBeforeCxxName, cxxName) = self.expect(.stringLiteral)
+      cxxName = self.parseStringLiteral()
     } else {
       unexpectedBeforeComma = nil
       comma = nil
-      unexpectedBeforeCxxName = nil
       cxxName = nil
     }
     return RawExposeAttributeArgumentsSyntax(
       language: language,
       unexpectedBeforeComma,
       comma: comma,
-      unexpectedBeforeCxxName,
       cxxName: cxxName,
       arena: self.arena
     )
@@ -987,7 +976,7 @@ extension Parser {
   mutating func parseOriginallyDefinedInArguments() -> RawOriginallyDefinedInArgumentsSyntax {
     let (unexpectedBeforeModuleLabel, moduleLabel) = self.expect(.keyword(.module), remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let (unexpectedBeforeModuleName, moduleName) = self.expect(.stringLiteral)
+    let moduleName = self.parseStringLiteral()
     let (unexpectedBeforeComma, comma) = self.expect(.comma)
 
     var platforms: [RawAvailabilityVersionRestrictionListEntrySyntax] = []
@@ -1009,7 +998,6 @@ extension Parser {
       moduleLabel: moduleLabel,
       unexpectedBeforeColon,
       colon: colon,
-      unexpectedBeforeModuleName,
       moduleName: moduleName,
       unexpectedBeforeComma,
       comma: comma,
@@ -1023,13 +1011,12 @@ extension Parser {
   mutating func parseUnderscorePrivateAttributeArguments() -> RawUnderscorePrivateAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.sourceFile), remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let (unexpectedBeforeFilename, filename) = self.expect(.stringLiteral)
+    let filename = self.parseStringLiteral()
     return RawUnderscorePrivateAttributeArgumentsSyntax(
       unexpectedBeforeLabel,
       sourceFileLabel: label,
       unexpectedBeforeColon,
       colon: colon,
-      unexpectedBeforeFilename,
       filename: filename,
       arena: self.arena
     )
@@ -1066,13 +1053,12 @@ extension Parser {
   mutating func parseUnavailableFromAsyncArguments() -> RawUnavailableFromAsyncArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.message), remapping: .identifier)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let (unexpectedBeforeMessage, message) = self.expect(.stringLiteral)
+    let message = self.parseStringLiteral()
     return RawUnavailableFromAsyncArgumentsSyntax(
       unexpectedBeforeLabel,
       messageLabel: label,
       unexpectedBeforeColon,
       colon: colon,
-      unexpectedBeforeMessage,
       message: message,
       arena: self.arena
     )
@@ -1088,15 +1074,22 @@ extension Parser {
       let (unexpectedBeforeLabel, label) = self.expectAny([.keyword(.visibility), .keyword(.metadata)], default: .keyword(.visibility))
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let unexpectedBeforeValue: RawUnexpectedNodesSyntax?
-      let value: RawTokenSyntax
+      let value: RawDocumentationAttributeArgumentSyntax.Value
       switch label.tokenText {
       case "visibility":
-        (unexpectedBeforeValue, value) = self.expectAny([.keyword(.open), .keyword(.public), .keyword(.internal), .keyword(.fileprivate), .keyword(.private)], default: .keyword(.internal))
+        let (unexpected, token) = self.expectAny([.keyword(.open), .keyword(.public), .keyword(.internal), .keyword(.fileprivate), .keyword(.private)], default: .keyword(.internal))
+        unexpectedBeforeValue = unexpected
+        value = .token(token)
       case "metadata":
-        (unexpectedBeforeValue, value) = self.expectAny([.stringLiteral, .identifier], default: .stringLiteral)
+        unexpectedBeforeValue = nil
+        if let identifier = self.consume(if: .identifier) {
+          value = .token(identifier)
+        } else {
+          value = .string(self.parseStringLiteral())
+        }
       default:
         unexpectedBeforeValue = nil
-        value = missingToken(.identifier)
+        value = .token(missingToken(.identifier))
       }
       keepGoing = self.consume(if: .comma)
       arguments.append(

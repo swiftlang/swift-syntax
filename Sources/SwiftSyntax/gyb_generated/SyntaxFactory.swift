@@ -3027,7 +3027,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on PoundSourceLocationArgsSyntax")
-  public static func makePoundSourceLocationArgs(_ unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? = nil, fileArgLabel: TokenSyntax, _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil, fileArgColon: TokenSyntax, _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil, fileName: TokenSyntax, _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil, lineArgLabel: TokenSyntax, _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil, lineArgColon: TokenSyntax, _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil, lineNumber: TokenSyntax, _ unexpectedAfterLineNumber: UnexpectedNodesSyntax? = nil) -> PoundSourceLocationArgsSyntax {
+  public static func makePoundSourceLocationArgs(_ unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? = nil, fileArgLabel: TokenSyntax, _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil, fileArgColon: TokenSyntax, _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil, fileName: StringLiteralExprSyntax, _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil, lineArgLabel: TokenSyntax, _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil, lineArgColon: TokenSyntax, _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil, lineNumber: TokenSyntax, _ unexpectedAfterLineNumber: UnexpectedNodesSyntax? = nil) -> PoundSourceLocationArgsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeFileArgLabel?.raw,
       fileArgLabel.raw,
@@ -3063,7 +3063,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
         nil,
@@ -5572,7 +5572,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on OpaqueReturnTypeOfAttributeArgumentsSyntax")
-  public static func makeOpaqueReturnTypeOfAttributeArguments(_ unexpectedBeforeMangledName: UnexpectedNodesSyntax? = nil, mangledName: TokenSyntax, _ unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? = nil, ordinal: TokenSyntax, _ unexpectedAfterOrdinal: UnexpectedNodesSyntax? = nil) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+  public static func makeOpaqueReturnTypeOfAttributeArguments(_ unexpectedBeforeMangledName: UnexpectedNodesSyntax? = nil, mangledName: StringLiteralExprSyntax, _ unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? = nil, ordinal: TokenSyntax, _ unexpectedAfterOrdinal: UnexpectedNodesSyntax? = nil) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeMangledName?.raw,
       mangledName.raw,
@@ -5596,7 +5596,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .opaqueReturnTypeOfAttributeArguments,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
         nil,
@@ -5607,7 +5607,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on ConventionAttributeArgumentsSyntax")
-  public static func makeConventionAttributeArguments(_ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil, conventionLabel: TokenSyntax, _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil, cTypeLabel: TokenSyntax?, _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil, cTypeString: TokenSyntax?, _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil) -> ConventionAttributeArgumentsSyntax {
+  public static func makeConventionAttributeArguments(_ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil, conventionLabel: TokenSyntax, _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil, cTypeLabel: TokenSyntax?, _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil, cTypeString: StringLiteralExprSyntax?, _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil) -> ConventionAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeConventionLabel?.raw,
       conventionLabel.raw,
@@ -5685,7 +5685,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on ExposeAttributeArgumentsSyntax")
-  public static func makeExposeAttributeArguments(_ unexpectedBeforeLanguage: UnexpectedNodesSyntax? = nil, language: TokenSyntax, _ unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? = nil, cxxName: TokenSyntax?, _ unexpectedAfterCxxName: UnexpectedNodesSyntax? = nil) -> ExposeAttributeArgumentsSyntax {
+  public static func makeExposeAttributeArguments(_ unexpectedBeforeLanguage: UnexpectedNodesSyntax? = nil, language: TokenSyntax, _ unexpectedBetweenLanguageAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndCxxName: UnexpectedNodesSyntax? = nil, cxxName: StringLiteralExprSyntax?, _ unexpectedAfterCxxName: UnexpectedNodesSyntax? = nil) -> ExposeAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLanguage?.raw,
       language.raw,
@@ -5720,7 +5720,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on OriginallyDefinedInArgumentsSyntax")
-  public static func makeOriginallyDefinedInArguments(_ unexpectedBeforeModuleLabel: UnexpectedNodesSyntax? = nil, moduleLabel: TokenSyntax, _ unexpectedBetweenModuleLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndModuleName: UnexpectedNodesSyntax? = nil, moduleName: TokenSyntax, _ unexpectedBetweenModuleNameAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndPlatforms: UnexpectedNodesSyntax? = nil, platforms: AvailabilityVersionRestrictionListSyntax, _ unexpectedAfterPlatforms: UnexpectedNodesSyntax? = nil) -> OriginallyDefinedInArgumentsSyntax {
+  public static func makeOriginallyDefinedInArguments(_ unexpectedBeforeModuleLabel: UnexpectedNodesSyntax? = nil, moduleLabel: TokenSyntax, _ unexpectedBetweenModuleLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndModuleName: UnexpectedNodesSyntax? = nil, moduleName: StringLiteralExprSyntax, _ unexpectedBetweenModuleNameAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndPlatforms: UnexpectedNodesSyntax? = nil, platforms: AvailabilityVersionRestrictionListSyntax, _ unexpectedAfterPlatforms: UnexpectedNodesSyntax? = nil) -> OriginallyDefinedInArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeModuleLabel?.raw,
       moduleLabel.raw,
@@ -5752,7 +5752,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: arena),
         nil,
@@ -5763,7 +5763,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on UnderscorePrivateAttributeArgumentsSyntax")
-  public static func makeUnderscorePrivateAttributeArguments(_ unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? = nil, sourceFileLabel: TokenSyntax, _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil, filename: TokenSyntax, _ unexpectedAfterFilename: UnexpectedNodesSyntax? = nil) -> UnderscorePrivateAttributeArgumentsSyntax {
+  public static func makeUnderscorePrivateAttributeArguments(_ unexpectedBeforeSourceFileLabel: UnexpectedNodesSyntax? = nil, sourceFileLabel: TokenSyntax, _ unexpectedBetweenSourceFileLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndFilename: UnexpectedNodesSyntax? = nil, filename: StringLiteralExprSyntax, _ unexpectedAfterFilename: UnexpectedNodesSyntax? = nil) -> UnderscorePrivateAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeSourceFileLabel?.raw,
       sourceFileLabel.raw,
@@ -5791,7 +5791,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
         nil,
       ], arena: arena))
       return UnderscorePrivateAttributeArgumentsSyntax(data)
@@ -5833,7 +5833,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on UnavailableFromAsyncArgumentsSyntax")
-  public static func makeUnavailableFromAsyncArguments(_ unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? = nil, messageLabel: TokenSyntax, _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil, message: TokenSyntax, _ unexpectedAfterMessage: UnexpectedNodesSyntax? = nil) -> UnavailableFromAsyncArgumentsSyntax {
+  public static func makeUnavailableFromAsyncArguments(_ unexpectedBeforeMessageLabel: UnexpectedNodesSyntax? = nil, messageLabel: TokenSyntax, _ unexpectedBetweenMessageLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndMessage: UnexpectedNodesSyntax? = nil, message: StringLiteralExprSyntax, _ unexpectedAfterMessage: UnexpectedNodesSyntax? = nil) -> UnavailableFromAsyncArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeMessageLabel?.raw,
       messageLabel.raw,
@@ -5861,7 +5861,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: arena),
         nil,
       ], arena: arena))
       return UnavailableFromAsyncArgumentsSyntax(data)
@@ -5888,7 +5888,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on DocumentationAttributeArgumentSyntax")
-  public static func makeDocumentationAttributeArgument(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, value: TokenSyntax, _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> DocumentationAttributeArgumentSyntax {
+  public static func makeDocumentationAttributeArgument(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, value: Syntax, _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil) -> DocumentationAttributeArgumentSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLabel?.raw,
       label.raw,
@@ -5918,7 +5918,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missing, arena: arena),
         nil,
         nil,
         nil,
@@ -7051,7 +7051,7 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on PoundAssertStmtSyntax")
-  public static func makePoundAssertStmt(_ unexpectedBeforePoundAssert: UnexpectedNodesSyntax? = nil, poundAssert: TokenSyntax, _ unexpectedBetweenPoundAssertAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax, _ unexpectedBetweenConditionAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndMessage: UnexpectedNodesSyntax? = nil, message: TokenSyntax?, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> PoundAssertStmtSyntax {
+  public static func makePoundAssertStmt(_ unexpectedBeforePoundAssert: UnexpectedNodesSyntax? = nil, poundAssert: TokenSyntax, _ unexpectedBetweenPoundAssertAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax, _ unexpectedBetweenConditionAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndMessage: UnexpectedNodesSyntax? = nil, message: StringLiteralExprSyntax?, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil) -> PoundAssertStmtSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundAssert?.raw,
       poundAssert.raw,
@@ -9150,13 +9150,13 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  @available(*, deprecated, message: "Use TokenSyntax.stringLiteral instead")
-  public static func makeStringLiteral(
+  @available(*, deprecated, message: "Use TokenSyntax.stringLiteralContents instead")
+  public static func makeStringLiteralContents(
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.stringLiteral(text), presence: .present,
+    return makeToken(.stringLiteralContents(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

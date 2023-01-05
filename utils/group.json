@@ -51,7 +51,8 @@
     "Utils.swift",
   ],
   "Parse": [
-    "IncrementalParseTransition.swift"
+    "IncrementalParseTransition.swift",
+    "LexerError.swift",
   ],
   "Internal": [
     "SyntaxArena.swift",

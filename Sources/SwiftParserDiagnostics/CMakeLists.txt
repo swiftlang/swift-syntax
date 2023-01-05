@@ -8,6 +8,7 @@
 
 add_swift_host_library(SwiftParserDiagnostics
   DiagnosticExtensions.swift
+  LexerDiagnosticMessages.swift
   MissingNodesError.swift
   ParserDiagnosticMessages.swift
   ParseDiagnosticsGenerator.swift

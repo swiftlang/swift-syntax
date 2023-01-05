@@ -169,6 +169,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
     return nil
   }
+
+  /// If the token has a lexical error, the type of the error.
+  public var lexerError: LexerError? {
+    return tokenView.lexerError
+  }
 }
 
 extension TokenSyntax: CustomReflectable {

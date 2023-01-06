@@ -92,8 +92,8 @@ final class DoStmtTests: XCTestCase {
           ThrowStmt(expression: MemberAccessExpr(base: "Error4", name: "error3"))
         },
         CatchClause {
-          FunctionCallExpr(callee: ExprSyntax("print")) {
-            TupleExprElement(expression: "error")
+          FunctionCallExprSyntax(callee: ExprSyntax("print")) {
+            TupleExprElementSyntax(expression: Expr("error"))
           }
         },
       ]
@@ -142,8 +142,8 @@ final class DoStmtTests: XCTestCase {
           ThrowStmt(expression: MemberAccessExpr(base: "Error4", name: "error3"))
         },
         CatchClause {
-          FunctionCallExpr(callee: ExprSyntax("print")) {
-            TupleExprElement(expression: "error")
+          FunctionCallExprSyntax(callee: ExprSyntax("print")) {
+            TupleExprElementSyntax(expression: Expr("error"))
           }
         },
       ]

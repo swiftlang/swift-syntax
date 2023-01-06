@@ -531,11 +531,6 @@ public extension TokenSyntax {
     return .poundHasSymbolKeyword()
   }
   
-  /// The `)` token
-  static var `stringInterpolationAnchor`: TokenSyntax {
-    return .stringInterpolationAnchorToken()
-  }
-  
   /// The `yield` token
   static var `yield`: TokenSyntax {
     return .yieldToken()

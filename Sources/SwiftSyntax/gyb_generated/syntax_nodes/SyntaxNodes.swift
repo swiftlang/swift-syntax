@@ -3612,7 +3612,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil,
     expressions: TupleExprElementListSyntax,
     _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax = .stringInterpolationAnchorToken(),
+    rightParen: TokenSyntax = .rightParenToken(),
     _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -3858,7 +3858,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(_ newChild: TokenSyntax?) -> ExpressionSegmentSyntax {
     let arena = SyntaxArena()
-    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringInterpolationAnchor, arena: arena)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: arena)
     let newData = data.replacingChild(at: 9, with: raw, arena: arena)
     return ExpressionSegmentSyntax(newData)
   }

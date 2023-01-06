@@ -374,8 +374,6 @@ extension RawTokenKind {
       return .none
     case .stringSegment: 
       return .stringLiteral
-    case .stringInterpolationAnchor: 
-      return .stringInterpolationAnchor
     case .yield: 
       return .none
     case .eof: 

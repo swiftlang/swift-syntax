@@ -114,7 +114,7 @@ public enum TokenPrecedence: Comparable {
       // '_' can occur in types to replace a type identifier
       .wildcardKeyword,
       // String segment, string interpolation anchor and pound don't really fit anywhere else
-      .pound, .stringInterpolationAnchor, .stringSegment:
+      .pound, .stringSegment:
       self = .identifierLike
 
     // MARK: Expr keyword

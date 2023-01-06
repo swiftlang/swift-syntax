@@ -32,7 +32,7 @@ function(add_swift_host_library name)
 
   # Install the Swift module into the appropriate location.
   set_target_properties(${name}
-    PROPERTIES Swift_MODULE_DIRECTORY ${module_base}
+    PROPERTIES Swift_MODULE_DIRECTORY ${module_dir}
   )
 
   # Configure the emission of the Swift module files.

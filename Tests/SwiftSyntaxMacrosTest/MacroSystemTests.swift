@@ -154,12 +154,12 @@ extension SimpleDiagnosticMessage: FixItMessage {
   var fixItID: MessageID { diagnosticID }
 }
 
-public struct ErrorMacro: ExpressionMacro {
+public struct ErrorMacro: FreestandingDeclarationMacro {
   public static func expansion(
-    of macro: MacroExpansionExprSyntax,
+    of node: MacroExpansionDeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> ExprSyntax {
-    guard let firstElement = macro.argumentList.first,
+  ) throws -> [DeclSyntax] {
+    guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
       stringLiteral.segments.count == 1,
@@ -170,7 +170,7 @@ public struct ErrorMacro: ExpressionMacro {
 
     context.diagnose(
       Diagnostic(
-        node: Syntax(macro),
+        node: Syntax(node),
         message: SimpleDiagnosticMessage(
           message: messageString.content.description,
           diagnosticID: MessageID(domain: "test", id: "error"),
@@ -179,7 +179,31 @@ public struct ErrorMacro: ExpressionMacro {
       )
     )
 
-    return "()"
+    return []
+  }
+}
+
+struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
+  static func expansion(
+    of node: MacroExpansionDeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    guard let firstElement = node.argumentList.first,
+      let stringLiteral = firstElement.expression
+        .as(StringLiteralExprSyntax.self),
+      stringLiteral.segments.count == 1,
+      case let .stringSegment(prefix) = stringLiteral.segments[0]
+    else {
+      throw CustomError.message(
+        "#bitwidthNumberedStructs macro requires a string literal")
+    }
+
+    return [8, 16, 32, 64].map { bitwidth in
+      """
+
+      struct \(raw: prefix)\(raw: String(bitwidth)) { }
+      """
+    }
   }
 }
 
@@ -243,6 +267,7 @@ public let testMacros: [String: Macro.Type] = [
   "imageLiteral": ImageLiteralMacro.self,
   "stringify": StringifyMacro.self,
   "myError": ErrorMacro.self,
+  "bitwidthNumberedStructs": DefineBitwidthNumberedStructsMacro.self,
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -320,18 +345,44 @@ final class MacroSystemTests: XCTestCase {
     AssertMacroExpansion(
       macros: testMacros,
       """
-      _ = #myError("please don't do that")
-      _ = #myError(bad)
+      #myError("please don't do that")
+      struct X {
+        func f() { }
+        #myError(bad)
+        func g() {
+          #myError("worse")
+        }
+      }
       """,
       """
-      _ = ()
-      _ = #myError(bad)
+
+      struct X {
+        func f() { }
+        func g() {
+        }
+      }
       """,
       diagnosticStrings: [
         "please don't do that",
         "#error macro requires a string literal",
+        "worse",
       ]
     )
   }
 
+  func testBitwidthNumberedStructsExpansion() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      #bitwidthNumberedStructs("MyInt")
+      """,
+      """
+
+      struct MyInt8 { }
+      struct MyInt16 { }
+      struct MyInt32 { }
+      struct MyInt64 { }
+      """
+    )
+  }
 }

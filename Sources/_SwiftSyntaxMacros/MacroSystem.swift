@@ -86,18 +86,75 @@ class MacroApplication: SyntaxRewriter {
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
     var newItems: [CodeBlockItemSyntax] = []
     for item in node {
+      // Expand declaration macros that were parsed as macro expansion
+      // expressions in this context.
+      if case let .expr(exprItem) = item.item,
+         let exprExpansion = exprItem.as(MacroExpansionExprSyntax.self),
+         let macro = macroSystem.macros[exprExpansion.macro.text],
+         let freestandingMacro = macro as? FreestandingDeclarationMacro.Type {
+        do {
+          let expandedDecls = try freestandingMacro.expansion(
+            of: exprExpansion.asMacroExpansionDecl(), in: &context
+          )
+
+          newItems.append(contentsOf: expandedDecls.map { decl in
+            CodeBlockItemSyntax(item: .decl(decl))
+          })
+        } catch {
+          // Record the error
+          context.diagnose(
+            Diagnostic(
+              node: Syntax(node),
+              message: ThrownErrorDiagnostic(message: String(describing: error))
+            )
+          )
+        }
+
+        continue
+      }
+
       // Recurse on the child node.
       let newItem = visit(item.item)
-
-      // Flatten if we get code block item list syntax back.
-      if let itemList = newItem.as(CodeBlockItemListSyntax.self) {
-        newItems.append(contentsOf: itemList)
-      } else {
-        newItems.append(item.withItem(newItem))
-      }
+      newItems.append(item.withItem(newItem))
     }
 
     return CodeBlockItemListSyntax(newItems)
+  }
+
+  override func visit(_ node: MemberDeclListSyntax) -> MemberDeclListSyntax {
+    var newItems: [MemberDeclListItemSyntax] = []
+    for item in node {
+        // Expand declaration macros, which produce zero or more declarations.
+      if let declExpansion = item.decl.as(MacroExpansionDeclSyntax.self),
+         let macro = macroSystem.macros[declExpansion.macro.text],
+         let freestandingMacro = macro as? FreestandingDeclarationMacro.Type {
+        do {
+          let expandedDecls = try freestandingMacro.expansion(
+            of: declExpansion, in: &context
+          )
+
+          newItems.append(contentsOf: expandedDecls.map { decl in
+            MemberDeclListItemSyntax(decl: decl)
+          })
+        } catch {
+            // Record the error
+          context.diagnose(
+            Diagnostic(
+              node: Syntax(node),
+              message: ThrownErrorDiagnostic(message: String(describing: error))
+            )
+          )
+        }
+
+        continue
+      }
+
+      // Recurse on the child node.
+      let newDecl = visit(item.decl)
+      newItems.append(item.withDecl(newDecl))
+    }
+
+    return .init(newItems)
   }
 }
 

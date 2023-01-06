@@ -141,7 +141,7 @@ final class VariableTests: XCTestCase {
 
   func testAccessorList() {
     let buildable = VariableDecl(name: "test", type: TypeAnnotation(type: Type("Int"))) {
-      AccessorDecl(accessorKind: .contextualKeyword("get"),  asyncKeyword: nil) {
+      AccessorDecl(accessorKind: .contextualKeyword("get"), asyncKeyword: nil) {
         SequenceExpr {
           IntegerLiteralExpr(4)
           BinaryOperatorExpr(text: "+")

@@ -30,7 +30,8 @@ final class DictionaryExprTests: XCTestCase {
   }
 
   func testMultilineDictionaryLiteral() {
-    let builder = DictionaryExpr("""
+    let builder = DictionaryExpr(
+      """
       [
         1:1,
       2: "二",
@@ -38,8 +39,11 @@ final class DictionaryExprTests: XCTestCase {
       4:
         #"f"o"u"r"#,
       ]
-      """)
-    AssertBuildResult(builder, """
+      """
+    )
+    AssertBuildResult(
+      builder,
+      """
       [
           1: 1,
           2: "二",
@@ -47,6 +51,7 @@ final class DictionaryExprTests: XCTestCase {
           4:
               #"f"o"u"r"#,
       ]
-      """)
+      """
+    )
   }
 }

@@ -25,21 +25,26 @@ final class ArrayExprTests: XCTestCase {
   }
 
   func testMultilineArrayLiteral() {
-    let builder = ArrayExpr("""
+    let builder = ArrayExpr(
+      """
       [
         1,
         #"2"3"#,
         4,
       "五",
       ]
-      """)
-    AssertBuildResult(builder, """
+      """
+    )
+    AssertBuildResult(
+      builder,
+      """
       [
           1,
           #"2"3"#,
           4,
           "五",
       ]
-      """)
+      """
+    )
   }
 }

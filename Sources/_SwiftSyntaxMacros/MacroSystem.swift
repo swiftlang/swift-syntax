@@ -190,7 +190,8 @@ class MacroApplication: SyntaxRewriter {
     // Visit the node first.
 
     guard let visitedFunc = visitedNode.as(FunctionDeclSyntax.self),
-          let attributes = visitedFunc.attributes else {
+      let attributes = visitedFunc.attributes
+    else {
       return visitedNode
     }
 
@@ -201,7 +202,8 @@ class MacroApplication: SyntaxRewriter {
       }
 
       guard let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
-            let macro = macroSystem.macros[attributeName] else {
+        let macro = macroSystem.macros[attributeName]
+      else {
         return true
       }
 

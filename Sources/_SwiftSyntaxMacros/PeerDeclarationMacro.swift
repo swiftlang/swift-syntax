@@ -8,7 +8,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import SwiftParser
 
 public protocol PeerDeclarationMacro: DeclarationMacro {
   /// Expand a macro described by the given custom attribute and

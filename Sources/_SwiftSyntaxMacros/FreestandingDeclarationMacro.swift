@@ -8,7 +8,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import SwiftParser
 
 /// Describes a macro that forms declarations.
 public protocol FreestandingDeclarationMacro: DeclarationMacro {

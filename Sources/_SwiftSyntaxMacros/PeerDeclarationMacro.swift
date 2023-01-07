@@ -10,12 +10,16 @@
 import SwiftSyntax
 import SwiftParser
 
-/// Describes a macro that forms declarations.
-public protocol FreestandingDeclarationMacro: DeclarationMacro {
-  /// Expand a macro described by the given freestanding macro expansion
-  /// declaration within the given context to produce a set of declarations.
+public protocol PeerDeclarationMacro: DeclarationMacro {
+  /// Expand a macro described by the given custom attribute and
+  /// attached to the given declaration and evaluated within a
+  /// particular expansion context.
+  ///
+  /// The macro expansion can introduce "peer" declarations that sit alongside
+  /// the
   static func expansion(
-    of node: MacroExpansionDeclSyntax,
+    of node: CustomAttributeSyntax,
+    attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
   ) throws -> [DeclSyntax]
 }

@@ -120,6 +120,16 @@ class MacroApplication: SyntaxRewriter {
       // Recurse on the child node.
       let newItem = visit(item.item)
       newItems.append(item.withItem(newItem))
+
+      // Expand any peer declarations triggered by macros used as attributes.
+      if case let .decl(decl) = item.item {
+        let peers = expandPeers(of: decl)
+        newItems.append(
+          contentsOf: peers.map {
+            newDecl in CodeBlockItemSyntax(item: .decl(newDecl))
+          }
+        )
+      }
     }
 
     return CodeBlockItemListSyntax(newItems)
@@ -160,9 +170,96 @@ class MacroApplication: SyntaxRewriter {
       // Recurse on the child node.
       let newDecl = visit(item.decl)
       newItems.append(item.withDecl(newDecl))
+
+      // Expand any peer declarations triggered by macros used as attributes.
+      let peers = expandPeers(of: item.decl)
+      newItems.append(
+        contentsOf: peers.map {
+          newDecl in MemberDeclListItemSyntax(decl: newDecl)
+        }
+      )
     }
 
     return .init(newItems)
+  }
+
+  override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
+    let visitedNode = super.visit(node)
+
+    // FIXME: Generalize this to DeclSyntax, once we have attributes.
+    // Visit the node first.
+
+    guard let visitedFunc = visitedNode.as(FunctionDeclSyntax.self),
+      let attributes = visitedFunc.attributes
+    else {
+      return visitedNode
+    }
+
+    // Remove any attached attributes.
+    let newAttributes = attributes.filter {
+      guard case let .customAttribute(customAttr) = $0 else {
+        return true
+      }
+
+      guard let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+        let macro = macroSystem.macros[attributeName]
+      else {
+        return true
+      }
+
+      return !(macro is PeerDeclarationMacro.Type)
+    }
+
+    if newAttributes.isEmpty {
+      return DeclSyntax(visitedFunc.withAttributes(nil))
+    }
+
+    return DeclSyntax(visitedFunc.withAttributes(AttributeListSyntax(newAttributes)))
+  }
+}
+
+extension MacroApplication {
+  // If any of the custom attributes associated with the given declaration
+  // refer to "peer" declaration macros, expand them and return the resulting
+  // set of peer declarations.
+  private func expandPeers(of decl: DeclSyntax) -> [DeclSyntax] {
+    // Dig out the attribute list.
+    // FIXME: We should have a better way to get the attributes from any
+    // declaration.
+    guard
+      let attributes =
+        (decl.children(viewMode: .sourceAccurate).compactMap {
+          $0.as(AttributeListSyntax.self)
+        }).first
+    else {
+      return []
+    }
+
+    var peers: [DeclSyntax] = []
+    for attribute in attributes {
+      guard case let .customAttribute(customAttribute) = attribute,
+        let attributeName = customAttribute.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+        let macro = macroSystem.macros[attributeName],
+        let peerMacro = macro as? PeerDeclarationMacro.Type
+      else {
+        continue
+      }
+
+      do {
+        let newPeers = try peerMacro.expansion(of: customAttribute, attachedTo: decl, in: &context)
+        peers.append(contentsOf: newPeers)
+      } catch {
+        // Record the error
+        context.diagnose(
+          Diagnostic(
+            node: Syntax(attribute),
+            message: ThrownErrorDiagnostic(message: String(describing: error))
+          )
+        )
+      }
+    }
+
+    return peers
   }
 }
 

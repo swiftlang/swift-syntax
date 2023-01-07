@@ -13,6 +13,7 @@ add_swift_host_library(_SwiftSyntaxMacros
   Macro.swift
   MacroExpansionContext.swift
   MacroSystem.swift
+  PeerDeclarationMacro.swift
   Syntax+MacroEvaluation.swift
 )
 

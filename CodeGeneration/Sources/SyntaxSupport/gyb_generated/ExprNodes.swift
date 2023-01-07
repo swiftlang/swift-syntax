@@ -229,6 +229,19 @@ public let EXPR_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "PackExpansionExpr",
+       nameForDiagnostics: nil,
+       kind: "Expr",
+       children: [
+         Child(name: "RepeatKeyword",
+               kind: "RepeatToken",
+               tokenChoices: [
+                 "Repeat"
+               ]),
+         Child(name: "PatternExpr",
+               kind: "Expr")
+       ]),
+
   Node(name: "PackElementExpr",
        nameForDiagnostics: nil,
        kind: "Expr",

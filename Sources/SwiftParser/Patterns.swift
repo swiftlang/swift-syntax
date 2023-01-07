@@ -373,7 +373,7 @@ extension Parser.Lookahead {
     // If the next token can be an argument label, we might have a name.
     if nextTok.canBeArgumentLabel(allowDollarIdentifier: true) {
       // If the first name wasn't "isolated", we're done.
-      if !self.atContextualKeyword("isolated") && !self.atContextualKeyword("some") && !self.atContextualKeyword("any") && !self.atContextualKeyword("each") {
+      if !self.atContextualKeyword("isolated") && !self.atContextualKeyword("some") && !self.atContextualKeyword("any") && !self.atContextualKeyword("each") && !self.at(.repeatKeyword) {
         return true
       }
 

@@ -723,6 +723,37 @@ public enum SyntaxFactory {
       return AssignmentExprSyntax(data)
     }
   }
+  @available(*, deprecated, message: "Use initializer on PackExpansionExprSyntax")
+  public static func makePackExpansionExpr(_ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil, patternExpr: ExprSyntax, _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil) -> PackExpansionExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeRepeatKeyword?.raw,
+      repeatKeyword.raw,
+      unexpectedBetweenRepeatKeywordAndPatternExpr?.raw,
+      patternExpr.raw,
+      unexpectedAfterPatternExpr?.raw,
+    ]
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let raw = RawSyntax.makeLayout(kind: SyntaxKind.packExpansionExpr,
+        from: layout, arena: arena)
+      let data = SyntaxData.forRoot(raw)
+      return PackExpansionExprSyntax(data)
+    }
+  }
+
+  @available(*, deprecated, message: "Use initializer on PackExpansionExprSyntax")
+  public static func makeBlankPackExpansionExpr(presence: SourcePresence = .present) -> PackExpansionExprSyntax {
+    return withExtendedLifetime(SyntaxArena()) { arena in
+      let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packExpansionExpr,
+        from: [
+        nil,
+        RawSyntax.makeMissingToken(kind: TokenKind.repeatKeyword, arena: arena),
+        nil,
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
+        nil,
+      ], arena: arena))
+      return PackExpansionExprSyntax(data)
+    }
+  }
   @available(*, deprecated, message: "Use initializer on PackElementExprSyntax")
   public static func makePackElementExpr(_ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil, eachKeyword: TokenSyntax, _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil, packRefExpr: ExprSyntax, _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil) -> PackElementExprSyntax {
     let layout: [RawSyntax?] = [
@@ -7858,13 +7889,13 @@ public enum SyntaxFactory {
     }
   }
   @available(*, deprecated, message: "Use initializer on PackExpansionTypeSyntax")
-  public static func makePackExpansionType(_ unexpectedBeforePatternType: UnexpectedNodesSyntax? = nil, patternType: TypeSyntax, _ unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax, _ unexpectedAfterEllipsis: UnexpectedNodesSyntax? = nil) -> PackExpansionTypeSyntax {
+  public static func makePackExpansionType(_ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil, patternType: TypeSyntax, _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil) -> PackExpansionTypeSyntax {
     let layout: [RawSyntax?] = [
-      unexpectedBeforePatternType?.raw,
+      unexpectedBeforeRepeatKeyword?.raw,
+      repeatKeyword.raw,
+      unexpectedBetweenRepeatKeywordAndPatternType?.raw,
       patternType.raw,
-      unexpectedBetweenPatternTypeAndEllipsis?.raw,
-      ellipsis.raw,
-      unexpectedAfterEllipsis?.raw,
+      unexpectedAfterPatternType?.raw,
     ]
     return withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.packExpansionType,
@@ -7880,9 +7911,9 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packExpansionType,
         from: [
         nil,
-        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.repeatKeyword, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.ellipsis, arena: arena),
+        RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
         nil,
       ], arena: arena))
       return PackExpansionTypeSyntax(data)

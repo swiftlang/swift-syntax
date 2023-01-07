@@ -219,6 +219,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `PackExpansionExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PackExpansionExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `PackElementExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2218,6 +2225,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAssignmentExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = AssignmentExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPackExpansionExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = PackExpansionExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4681,6 +4698,8 @@ open class SyntaxRewriter {
       return visitImplDiscardAssignmentExprSyntax
     case .assignmentExpr:
       return visitImplAssignmentExprSyntax
+    case .packExpansionExpr:
+      return visitImplPackExpansionExprSyntax
     case .packElementExpr:
       return visitImplPackElementExprSyntax
     case .sequenceExpr:
@@ -5222,6 +5241,8 @@ open class SyntaxRewriter {
       return visitImplDiscardAssignmentExprSyntax(data)
     case .assignmentExpr:
       return visitImplAssignmentExprSyntax(data)
+    case .packExpansionExpr:
+      return visitImplPackExpansionExprSyntax(data)
     case .packElementExpr:
       return visitImplPackElementExprSyntax(data)
     case .sequenceExpr:

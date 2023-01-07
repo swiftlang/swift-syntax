@@ -369,6 +369,8 @@ public typealias OptionalType = OptionalTypeSyntax
 
 public typealias PackElementExpr = PackElementExprSyntax
 
+public typealias PackExpansionExpr = PackExpansionExprSyntax
+
 public typealias PackExpansionType = PackExpansionTypeSyntax
 
 public typealias PackReferenceType = PackReferenceTypeSyntax

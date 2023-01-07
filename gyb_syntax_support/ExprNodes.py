@@ -128,6 +128,13 @@ EXPR_NODES = [
              Child('AssignToken', kind='EqualToken'),
          ]),
 
+    # A pack expansion expr spelled with 'repeat'.
+    Node('PackExpansionExpr', name_for_diagnostics=None, kind='Expr',
+         children=[
+             Child('RepeatKeyword', kind='RepeatToken'),
+             Child('PatternExpr', kind='Expr'),
+         ]),
+
     # A pack element expr spelled with 'each'.
     Node('PackElementExpr', name_for_diagnostics=None, kind='Expr',
          children=[

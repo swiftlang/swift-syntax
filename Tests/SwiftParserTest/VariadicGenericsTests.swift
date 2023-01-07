@@ -269,3 +269,318 @@ final class VariadicGenericsTests: XCTestCase {
     )
   }
 }
+
+final class TypeParameterPackTests: XCTestCase {
+  func testParameterPacks1() {
+    AssertParse(
+      """
+      func f1<T...>() -> repeat each T {}
+      """
+    )
+  }
+  func testParameterPacks2() {
+    AssertParse(
+      """
+      func f2<T...>() -> (repeat each T) {}
+      """
+    )
+  }
+  func testParameterPacks3() {
+    AssertParse(
+      """
+      func f3<T...>() -> G<repeat each T> {}
+      """
+    )
+  }
+  func testParameterPacks4() {
+    AssertParse(
+      """
+      protocol P {
+        associatedtype T1️⃣...
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "associated types cannot be variadic",
+          fixIts: ["remove '...'"]
+        )
+      ]
+    )
+  }
+  func testParameterPacks5() {
+    AssertParse(
+      """
+      typealias Alias<T...> = (repeat each T)
+      """
+    )
+  }
+  func testParameterPacks6() {
+    AssertParse(
+      """
+      struct S<T...> {}
+      """
+    )
+  }
+  func testParameterPacks7() {
+    AssertParse(
+      """
+      struct S<T, U...> {}
+      """
+    )
+  }
+  func testParameterPacks8() {
+    AssertParse(
+      """
+      struct S<T..., U> {}
+      """
+    )
+  }
+  func testParameterPacks9() {
+    AssertParse(
+      """
+      struct S<T...:P, U> {}
+      """
+    )
+  }
+  func testParameterPacks10() {
+    AssertParse(
+      """
+      struct S<T... :P, U> {}
+      """
+    )
+  }
+  func testParameterPacks11() {
+    AssertParse(
+      """
+      struct S<T...: P> {}
+      """
+    )
+  }
+  func testParameterPacks12() {
+    AssertParse(
+      """
+      struct S<T... : P> {}
+      """
+    )
+  }
+  func testParameterPacks13() {
+    AssertParse(
+      """
+      func foo<T...>(_ x: repeat each T) {}
+      """
+    )
+  }
+  func testParameterPacks14() {
+    AssertParse(
+      """
+      func foo<T...:P>(_ x: repeat each T) {}
+      """
+    )
+  }
+  func testParameterPacks15() {
+    AssertParse(
+      """
+      func foo<T... :P>(_ x: repeat each T) {}
+      """
+    )
+  }
+  func testParameterPacks16() {
+    AssertParse(
+      """
+      func foo<T... : P>(_ x: repeat each T) {}
+      """
+    )
+  }
+  func testParameterPacks17() {
+    AssertParse(
+      """
+      func foo<T...: P>(_ x: repeat each T) {}
+      """
+    )
+  }
+  func testParameterPacks18() {
+    AssertParse(
+      """
+      func foo<T, U, V...>(x: T, y: U, z: repeat each V) { }
+      """
+    )
+  }
+  func testParameterPacks19() {
+    AssertParse(
+      """
+      func foo<T, U..., V>(x: T, y: repeat each U, z: V) { }
+      """
+    )
+  }
+  func testParameterPacks20() {
+    AssertParse(
+      """
+      func foo<T..., U..., V...>(x: repeat each T, y: repeat each U, z: repeat each V) { }
+      """
+    )
+  }
+  func testParameterPacks21() {
+    AssertParse(
+      """
+      enum E<T...> {
+        case f1(_: repeat each T)
+      }
+      """
+    )
+  }
+  func testParameterPacks22() {
+    AssertParse(
+      """
+      enum E<T...> {
+        case f2(_: G<repeat each T>)
+      }
+      """
+    )
+  }
+  func testParameterPacks23() {
+    AssertParse(
+      """
+      enum E<T...> {
+        var x: repeat each T { fatalError() }
+      }
+      """
+    )
+  }
+  func testParameterPacks24() {
+    AssertParse(
+      """
+      enum E<T...> {
+        var x: (repeat each T) { fatalError() }
+      }
+      """
+    )
+  }
+  func testParameterPacks25() {
+    AssertParse(
+      """
+      enum E<T...> {
+        subscript(_: repeat each T) -> Int { fatalError() }
+      }
+      """
+    )
+  }
+  func testParameterPacks26() {
+    AssertParse(
+      """
+      enum E<T...> {
+        subscript() -> repeat each T { fatalError() }
+      }
+      """
+    )
+  }
+  func testParameterPacks27() {
+    AssertParse(
+      """
+      enum E<T...> {
+        subscript() -> (repeat each T) { fatalError() }
+      }
+      """
+    )
+  }
+
+  func testVariadicTypes() {
+    AssertParse(
+      """
+      let _: G< > = G()
+      let _: G<repeat each T> = G()
+      let _: G<Int, repeat each T> = G()
+      let _ = G< >.self
+      let _ = G<repeat each T>.self
+      let _ = G<Int, repeat each T>.self
+      """
+    )
+
+  }
+
+  func testMissingCommaInType() throws {
+    AssertParse(
+      """
+      var foo: (Int)
+      """
+    )
+
+    AssertParse(
+      """
+      var foo: (Int, Int)
+      """
+    )
+
+    AssertParse(
+      """
+      var foo: (bar: Int 1️⃣bar2: Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ]
+    )
+
+    AssertParse(
+      """
+      var foo: (bar: Int 1️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ]
+    )
+
+    AssertParse(
+      """
+      var foo: (a 1️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in tuple type")
+      ]
+    )
+
+    AssertParse(
+      """
+      var foo: (A 1️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ]
+    )
+
+    AssertParse(
+      """
+      var foo: (_ 1️⃣a 2️⃣Int)
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in tuple type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type"),
+      ]
+    )
+
+    AssertParse(
+      """
+      var foo: (Array<Foo> 1️⃣Array<Bar>)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ]
+    )
+
+    AssertParse(
+      """
+      var foo: (a 1️⃣Array<Bar>)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in tuple type")
+      ]
+    )
+
+    AssertParse(
+      """
+      var foo: (Array<Foo> 1️⃣a)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ',' in tuple type")
+      ]
+    )
+  }
+}

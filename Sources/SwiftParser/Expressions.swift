@@ -516,7 +516,8 @@ extension Parser {
     // 'repeat' is the start of a pack expansion expression.
     if (self.at(.repeatKeyword)) {
       return RawExprSyntax(
-        parsePackExpansionExpr(flavor, pattern: pattern))
+        parsePackExpansionExpr(flavor, pattern: pattern)
+      )
     }
 
     switch self.at(anyIn: ExpressionPrefixOperator.self) {
@@ -1389,7 +1390,8 @@ extension Parser {
     return RawPackExpansionExprSyntax(
       repeatKeyword: repeatKeyword,
       patternExpr: patternExpr,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 }
 

@@ -7,7 +7,9 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_host_library(_SwiftSyntaxMacros
+  DeclarationMacro.swift
   ExpressionMacro.swift
+  FreestandingDeclarationMacro.swift
   Macro.swift
   MacroExpansionContext.swift
   MacroSystem.swift

@@ -208,6 +208,117 @@ struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
   }
 }
 
+public struct AddCompletionHandler: PeerDeclarationMacro {
+  public static func expansion(
+    of node: CustomAttributeSyntax,
+    attachedTo declaration: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    // Only on functions at the moment. We could handle initializers as well
+    // with a bit of work.
+    guard let funcDecl = declaration.as(FunctionDeclSyntax.self) else {
+      throw CustomError.message("@addCompletionHandler only works on functions")
+    }
+
+    // This only makes sense for async functions.
+    if funcDecl.signature.asyncOrReasyncKeyword == nil {
+      throw CustomError.message(
+        "@addCompletionHandler requires an async function"
+      )
+    }
+
+    // Form the completion handler parameter.
+    let resultType: TypeSyntax? = funcDecl.signature.output?.returnType.withoutTrivia()
+
+    let completionHandlerParam =
+      FunctionParameterSyntax(
+        firstName: .identifier("completionHandler"),
+        colon: .colonToken(trailingTrivia: .space),
+        type: "(\(resultType ?? "")) -> Void" as TypeSyntax
+      )
+
+    // Add the completion handler parameter to the parameter list.
+    let parameterList = funcDecl.signature.input.parameterList
+    let newParameterList: FunctionParameterListSyntax
+    if let lastParam = parameterList.last {
+      // We need to add a trailing comma to the preceding list.
+      newParameterList = parameterList.removingLast()
+        .appending(
+          lastParam.withTrailingComma(
+            .commaToken(trailingTrivia: .space)
+          )
+        )
+        .appending(completionHandlerParam)
+    } else {
+      newParameterList = parameterList.appending(completionHandlerParam)
+    }
+
+    let callArguments: [String] = try parameterList.map { param in
+      guard let argName = param.secondName ?? param.firstName else {
+        throw CustomError.message(
+          "@addCompletionHandler argument must have a name"
+        )
+      }
+
+      if let paramName = param.firstName, paramName.text != "_" {
+        return "\(paramName.withoutTrivia()): \(argName.withoutTrivia())"
+      }
+
+      return "\(argName.withoutTrivia())"
+    }
+
+    let call: ExprSyntax =
+      "\(funcDecl.identifier)(\(raw: callArguments.joined(separator: ", ")))"
+
+    // FIXME: We should make CodeBlockSyntax ExpressibleByStringInterpolation,
+    // so that the full body could go here.
+    let newBody: ExprSyntax =
+      """
+
+        Task {
+          completionHandler(await \(call))
+        }
+
+      """
+
+    // Drop the @addCompletionHandler attribute from the new declaration.
+    let newAttributeList = AttributeListSyntax(
+      funcDecl.attributes?.filter {
+        guard case let .customAttribute(customAttr) = $0 else {
+          return true
+        }
+
+        return customAttr != node
+      } ?? []
+    )
+
+    let newFunc =
+      funcDecl
+      .withSignature(
+        funcDecl.signature
+          .withAsyncOrReasyncKeyword(nil)  // drop async
+          .withOutput(nil)  // drop result type
+          .withInput(  // add completion handler parameter
+            funcDecl.signature.input.withParameterList(newParameterList)
+              .withoutTrailingTrivia()
+          )
+      )
+      .withBody(
+        CodeBlockSyntax(
+          leftBrace: .leftBraceToken(leadingTrivia: .space),
+          statements: CodeBlockItemListSyntax(
+            [CodeBlockItemSyntax(item: .expr(newBody))]
+          ),
+          rightBrace: .rightBraceToken(leadingTrivia: .newline)
+        )
+      )
+      .withAttributes(newAttributeList)
+      .withLeadingTrivia(.newlines(2))
+
+    return [DeclSyntax(newFunc)]
+  }
+}
+
 // MARK: Assertion helper functions
 
 /// Assert that expanding the given macros in the original source produces
@@ -269,6 +380,7 @@ public let testMacros: [String: Macro.Type] = [
   "stringify": StringifyMacro.self,
   "myError": ErrorMacro.self,
   "bitwidthNumberedStructs": DefineBitwidthNumberedStructsMacro.self,
+  "addCompletionHandler": AddCompletionHandler.self,
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -383,6 +495,26 @@ final class MacroSystemTests: XCTestCase {
       struct MyInt16 { }
       struct MyInt32 { }
       struct MyInt64 { }
+      """
+    )
+  }
+
+  func testAddCompletionHandler() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      @addCompletionHandler
+      func f(a: Int, for b: String, _ value: Double) async -> String { }
+      """,
+      """
+      @addCompletionHandler
+      func f(a: Int, for b: String, _ value: Double) async -> String { }
+
+      func f(a: Int, for b: String, _ value: Double, completionHandler: (String) -> Void) {
+        Task {
+          completionHandler(await f(a: a, for: b, value))
+        }
+      }
       """
     )
   }

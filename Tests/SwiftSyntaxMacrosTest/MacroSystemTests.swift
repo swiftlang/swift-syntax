@@ -195,7 +195,8 @@ struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
       case let .stringSegment(prefix) = stringLiteral.segments[0]
     else {
       throw CustomError.message(
-        "#bitwidthNumberedStructs macro requires a string literal")
+        "#bitwidthNumberedStructs macro requires a string literal"
+      )
     }
 
     return [8, 16, 32, 64].map { bitwidth in

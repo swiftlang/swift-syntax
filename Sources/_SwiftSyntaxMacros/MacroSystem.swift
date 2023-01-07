@@ -182,6 +182,38 @@ class MacroApplication: SyntaxRewriter {
 
     return .init(newItems)
   }
+
+  override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
+    let visitedNode = super.visit(node)
+
+    // FIXME: Generalize this to DeclSyntax, once we have attributes.
+    // Visit the node first.
+
+    guard let visitedFunc = visitedNode.as(FunctionDeclSyntax.self),
+          let attributes = visitedFunc.attributes else {
+      return visitedNode
+    }
+
+    // Remove any attached attributes.
+    let newAttributes = attributes.filter {
+      guard case let .customAttribute(customAttr) = $0 else {
+        return true
+      }
+
+      guard let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+            let macro = macroSystem.macros[attributeName] else {
+        return true
+      }
+
+      return !(macro is PeerDeclarationMacro.Type)
+    }
+
+    if newAttributes.isEmpty {
+      return DeclSyntax(visitedFunc.withAttributes(nil))
+    }
+
+    return DeclSyntax(visitedFunc.withAttributes(AttributeListSyntax(newAttributes)))
+  }
 }
 
 extension MacroApplication {

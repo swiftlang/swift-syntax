@@ -507,7 +507,7 @@ final class MacroSystemTests: XCTestCase {
       func f(a: Int, for b: String, _ value: Double) async -> String { }
       """,
       """
-      @addCompletionHandler
+
       func f(a: Int, for b: String, _ value: Double) async -> String { }
 
       func f(a: Int, for b: String, _ value: Double, completionHandler: (String) -> Void) {

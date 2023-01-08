@@ -52,7 +52,7 @@ let miscFile = SourceFile {
       name: IdentifierPattern("syntaxNodeType"),
       type: TypeAnnotation(
         colon: .colon,
-        type: MemberTypeIdentifier("SyntaxProtocol.Type")
+        type: MetatypeTypeSyntax("SyntaxProtocol.Type")
       )
     ) {
       SwitchStmt(expression: Expr("self")) {

@@ -62,12 +62,10 @@ let syntaxClassificationFile = SourceFile {
             parentKind: SyntaxKind, indexInParent: Int, childKind: SyntaxKind
           ) -> (SyntaxClassification, Bool)?
         """) {
-          IfStmt(
-            leadingTrivia: [.docLineComment("// Separate checks for token nodes (most common checks) versus checks for layout nodes."), .newlines(1)],
-            conditions: ConditionElementList {
-              ConditionElement(condition: .expression("childKind == .token"))
-            }
-          ) {
+          IfStmtSyntax("""
+            // Separate checks for token nodes (most common checks) versus checks for layout nodes.
+            if childKind == .token
+            """) {
             SwitchStmtSyntax(expression: ExprSyntax("(parentKind, indexInParent)")) {
               for childClassification in node_child_classifications where childClassification.isToken {
                 SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {
@@ -77,7 +75,7 @@ let syntaxClassificationFile = SourceFile {
               
               SwitchCaseSyntax("default: return nil")
             }
-          } elseBody: {
+          } else: {
             SwitchStmtSyntax(expression: ExprSyntax("(parentKind, indexInParent)")) {
               for childClassification in node_child_classifications where !childClassification.isToken {
                 SwitchCaseSyntax("case (.\(raw: childClassification.parent.swiftSyntaxKind), \(raw: childClassification.childIndex)):") {

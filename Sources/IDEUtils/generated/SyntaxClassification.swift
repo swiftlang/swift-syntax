@@ -120,7 +120,7 @@ extension SyntaxClassification {
       default: 
         return nil
       }
-    } else {
+    }else {
       switch (parentKind, indexInParent) {
       case (.backDeployVersionArgument, 1): 
         return (.keyword, false)

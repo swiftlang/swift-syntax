@@ -137,6 +137,13 @@ let basicFormatFile = SourceFile {
     }
 
     FunctionDecl("open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool") {
+      IfStmt("""
+        // Format `[:]` as-is.
+        if token.tokenKind == .colon && token.parent?.kind == .dictionaryExpr {
+          return false
+        }
+        """)
+
       SwitchStmt("""
         switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
         case (.asKeyword, .exclamationMark),
@@ -150,7 +157,7 @@ let basicFormatFile = SourceFile {
           break
         }
         """)
-      
+
       SwitchStmt(expression: Expr("token.tokenKind")) {
         for token in SYNTAX_TOKENS {
           if token.requiresTrailingSpace {

@@ -72,9 +72,15 @@ open class BasicFormat: SyntaxRewriter {
   
   open func shouldIndent(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
+    case \ArrayExprSyntax.elements: 
+      return true
     case \ClosureExprSyntax.statements: 
       return true
     case \CodeBlockSyntax.statements: 
+      return true
+    case \DictionaryElementSyntax.valueExpression: 
+      return true
+    case \DictionaryExprSyntax.content: 
       return true
     case \FunctionCallExprSyntax.argumentList: 
       return true
@@ -149,6 +155,10 @@ open class BasicFormat: SyntaxRewriter {
   }
   
   open func requiresTrailingSpace(_ token: TokenSyntax) -> Bool {
+    // Format `[:]` as-is.
+    if token.tokenKind == .colon && token.parent?.kind == .dictionaryExpr {
+      return false
+    }
     switch (token.tokenKind, token.nextToken(viewMode: .sourceAccurate)?.tokenKind) {
     case (.asKeyword, .exclamationMark), 
      (.asKeyword, .postfixQuestionMark), 

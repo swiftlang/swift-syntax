@@ -154,11 +154,11 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
     )
   ) {
     FunctionCallExpr(callee: Expr("self.init")) {
-      TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
+      TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
       for arg in delegatedInitArgs {
         arg
       }
-      TupleExprElement(label: "trailingTrivia", expression: "trailingTrivia")
+      TupleExprElementSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
     }
   }
 }

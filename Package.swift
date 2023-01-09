@@ -70,7 +70,6 @@ let package = Package(
         "SyntaxNodes.swift.gyb.template",
         "SyntaxRewriter.swift.gyb",
         "TokenKind.swift.gyb",
-        "Tokens.swift.gyb",
         "Trivia.swift.gyb",
       ],
       swiftSettings: swiftSyntaxSwiftSettings

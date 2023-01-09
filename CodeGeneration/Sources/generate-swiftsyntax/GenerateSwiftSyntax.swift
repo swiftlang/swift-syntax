@@ -45,7 +45,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
 
   @Flag(help: "Enable verbose output")
   var verbose: Bool = false
-    
+
   func run() throws {
     let templates: [TemplateSpec] = [
       TemplateSpec(sourceFile: basicFormatFile, module: swiftBasicFormatDir, filename: "BasicFormat.swift"),
@@ -62,6 +62,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
       TemplateSpec(sourceFile: syntaxTraitsFile, module: swiftSyntaxDir, filename: "SyntaxTraits.swift"),
       TemplateSpec(sourceFile: syntaxTransformFile, module: swiftSyntaxDir, filename: "SyntaxTransform.swift"),
       TemplateSpec(sourceFile: syntaxVisitorFile, module: swiftSyntaxDir, filename: "SyntaxVisitor.swift"),
+      TemplateSpec(sourceFile: tokensFile, module: swiftSyntaxDir, filename: "Tokens.swift"),
       TemplateSpec(sourceFile: buildableCollectionNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableCollectionNodes.swift"),
       TemplateSpec(sourceFile: buildableNodesFile, module: swiftSyntaxBuilderDir, filename: "BuildableNodes.swift"),
       TemplateSpec(sourceFile: resultBuildersFile, module: swiftSyntaxBuilderDir, filename: "ResultBuilders.swift"),
@@ -91,7 +92,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
       throw firstError
     }
   }
-  
+
   private func generateTemplate(
     sourceFile: SourceFileSyntax,
     module: String,
@@ -103,12 +104,12 @@ struct GenerateSwiftSyntax: ParsableCommand {
         withIntermediateDirectories: true,
         attributes: nil
       )
-      
+
       let fileURL = destination
         .appendingPathComponent(module)
         .appendingPathComponent("generated")
         .appendingPathComponent(filename)
-      
+
       if verbose {
         print("Generating \(fileURL.path)...")
       }

@@ -17,17 +17,6 @@ import Utils
 
 let tokensFile = SourceFile(
   leadingTrivia: .docLineComment(generateCopyrightHeader(for: "generate-swiftsyntax"))) {
-    FunctionDecl("""
-    fileprivate func defaultTrivia(presence: SourcePresence, trivia: Trivia) -> Trivia {
-      switch presence {
-      case .present:
-        return trivia
-      case .missing:
-        return []
-      }
-    }
-    """)
-    
     ExtensionDecl("extension TokenSyntax") {
       for token in SYNTAX_TOKENS {
         if token.isKeyword {

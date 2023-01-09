@@ -14,15 +14,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-fileprivate func defaultTrivia(presence: SourcePresence, trivia: Trivia) -> Trivia {
-  switch presence {
-  case .present: 
-    return trivia
-  case .missing: 
-    return []
-  }
-}
-
 extension TokenSyntax {
   public static func associatedtypeKeyword(
     leadingTrivia: Trivia = [], 

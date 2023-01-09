@@ -41,7 +41,7 @@ add_swift_host_library(SwiftSyntax
   gyb_generated/SyntaxRewriter.swift
   generated/SyntaxTraits.swift
   generated/SyntaxTransform.swift
-  gyb_generated/SyntaxVisitor.swift
+  generated/SyntaxVisitor.swift
   gyb_generated/TokenKind.swift
   gyb_generated/Tokens.swift
   gyb_generated/Trivia.swift

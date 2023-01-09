@@ -124,9 +124,7 @@ let basicFormatFile = SourceFile {
     FunctionDecl("open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool") {
       SwitchStmt("""
         switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-        case (.postfixQuestionMark, .rightAngle): // Ensures there is not space in `MyGeneric<Foo?>`
-          return false
-        case (.leftParen, .spacedBinaryOperator("*")):
+        case (.leftParen, .spacedBinaryOperator):
           return false
         default:
           break
@@ -169,7 +167,7 @@ let basicFormatFile = SourceFile {
              (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
              (.tryKeyword, .postfixQuestionMark): // Ensures there is not space in `try?`
           return false
-        case (.spacedBinaryOperator("*"), .comma):
+        case (.spacedBinaryOperator, .comma):
           return false
         default:
           break

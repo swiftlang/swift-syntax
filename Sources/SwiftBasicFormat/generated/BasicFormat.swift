@@ -131,9 +131,7 @@ open class BasicFormat: SyntaxRewriter {
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
     switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-    case (.postfixQuestionMark, .rightAngle): // Ensures there is not space in `MyGeneric<Foo?>`
-      return false
-    case (.leftParen, .spacedBinaryOperator("*")): 
+    case (.leftParen, .spacedBinaryOperator): 
       return false
     default: 
       break 
@@ -176,7 +174,7 @@ open class BasicFormat: SyntaxRewriter {
      (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
      (.tryKeyword, .postfixQuestionMark): // Ensures there is not space in `try?`
       return false
-    case (.spacedBinaryOperator("*"), .comma): 
+    case (.spacedBinaryOperator, .comma): 
       return false
     default: 
       break 

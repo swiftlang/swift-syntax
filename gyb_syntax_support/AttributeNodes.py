@@ -6,10 +6,6 @@ ATTRIBUTE_NODES = [
     Node('TokenList', name_for_diagnostics='token list', kind='SyntaxCollection',
          element='Token'),
 
-    # token-list -> token token-list?
-    Node('NonEmptyTokenList', name_for_diagnostics='token list',
-         kind='SyntaxCollection', element='Token', omit_when_empty=True),
-
     Node('CustomAttribute', name_for_diagnostics='attribute', kind='Syntax',
          description='''
          A custom `@` attribute.
@@ -402,25 +398,6 @@ ATTRIBUTE_NODES = [
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
                    ]),
-             Child('Arguments', name_for_diagnostics='arguments', kind='DeclNameArguments',
-                   is_optional=True, description='''
-                   The argument labels of the referenced function, optionally
-                   specified.
-                   '''),
-         ]),
-
-    # func-decl-name -> (identifier | operator) decl-name-arguments?
-    # NOTE: This is duplicated with `DeclName` above. Change `DeclName`
-    # description and use it if possible.
-    Node('FunctionDeclName', kind='Syntax',
-         name_for_diagnostics='function declaration name',
-         description='A function declaration name (e.g. `foo(_:_:)`).',
-         children=[
-             Child('Name', kind='Token', name_for_diagnostics='base name', 
-                  token_choices=['IdentifierToken', 'PrefixOperatorToken', 'SpacedBinaryOperatorToken'],
-                   description='''
-                   The base name of the referenced function.
-                   '''),
              Child('Arguments', name_for_diagnostics='arguments', kind='DeclNameArguments',
                    is_optional=True, description='''
                    The argument labels of the referenced function, optionally

@@ -100,13 +100,6 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundColumnExprSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: PoundColumnExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
-  }
-
   /// Visit a `TupleExprElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -245,13 +238,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: ExprListSyntax) -> ExprListSyntax {
     return Syntax(visitChildren(node)).cast(ExprListSyntax.self)
-  }
-
-  /// Visit a `SymbolicReferenceExprSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: SymbolicReferenceExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
   }
 
   /// Visit a `PrefixOperatorExprSyntax`.
@@ -863,13 +849,6 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `AccessLevelModifierSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: AccessLevelModifierSyntax) -> AccessLevelModifierSyntax {
-    return Syntax(visitChildren(node)).cast(AccessLevelModifierSyntax.self)
-  }
-
   /// Visit a `AccessPathComponentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1066,13 +1045,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(TokenListSyntax.self)
   }
 
-  /// Visit a `NonEmptyTokenListSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: NonEmptyTokenListSyntax) -> NonEmptyTokenListSyntax {
-    return Syntax(visitChildren(node)).cast(NonEmptyTokenListSyntax.self)
-  }
-
   /// Visit a `CustomAttributeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1206,13 +1178,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(QualifiedDeclNameSyntax.self)
   }
 
-  /// Visit a `FunctionDeclNameSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: FunctionDeclNameSyntax) -> FunctionDeclNameSyntax {
-    return Syntax(visitChildren(node)).cast(FunctionDeclNameSyntax.self)
-  }
-
   /// Visit a `BackDeployAttributeSpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1280,13 +1245,6 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeferStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(visitChildren(node))
-  }
-
-  /// Visit a `ExpressionStmtSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ExpressionStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node))
   }
 
@@ -1442,13 +1400,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: ConditionElementListSyntax) -> ConditionElementListSyntax {
     return Syntax(visitChildren(node)).cast(ConditionElementListSyntax.self)
-  }
-
-  /// Visit a `DeclarationStmtSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: DeclarationStmtSyntax) -> StmtSyntax {
-    return StmtSyntax(visitChildren(node))
   }
 
   /// Visit a `ThrowStmtSyntax`.
@@ -1766,13 +1717,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(TypeAnnotationSyntax.self)
   }
 
-  /// Visit a `EnumCasePatternSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: EnumCasePatternSyntax) -> PatternSyntax {
-    return PatternSyntax(visitChildren(node))
-  }
-
   /// Visit a `IsTypePatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1780,24 +1724,10 @@ open class SyntaxRewriter {
     return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `OptionalPatternSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: OptionalPatternSyntax) -> PatternSyntax {
-    return PatternSyntax(visitChildren(node))
-  }
-
   /// Visit a `IdentifierPatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IdentifierPatternSyntax) -> PatternSyntax {
-    return PatternSyntax(visitChildren(node))
-  }
-
-  /// Visit a `AsTypePatternSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: AsTypePatternSyntax) -> PatternSyntax {
     return PatternSyntax(visitChildren(node))
   }
 
@@ -2063,16 +1993,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPoundColumnExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PoundColumnExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleExprElementListSyntax(_ data: SyntaxData) -> Syntax {
     let node = TupleExprElementListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -2265,16 +2185,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExprListSyntax(_ data: SyntaxData) -> Syntax {
     let node = ExprListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSymbolicReferenceExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SymbolicReferenceExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3153,16 +3063,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessLevelModifierSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessLevelModifierSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessPathComponentSyntax(_ data: SyntaxData) -> Syntax {
     let node = AccessPathComponentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3443,16 +3343,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplNonEmptyTokenListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = NonEmptyTokenListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCustomAttributeSyntax(_ data: SyntaxData) -> Syntax {
     let node = CustomAttributeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3643,16 +3533,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionDeclNameSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionDeclNameSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
     let node = BackDeployAttributeSpecListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3745,16 +3625,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeferStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = DeferStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExpressionStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExpressionStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -3975,16 +3845,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConditionElementListSyntax(_ data: SyntaxData) -> Syntax {
     let node = ConditionElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclarationStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclarationStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4443,16 +4303,6 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumCasePatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumCasePatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIsTypePatternSyntax(_ data: SyntaxData) -> Syntax {
     let node = IsTypePatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4463,28 +4313,8 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOptionalPatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OptionalPatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIdentifierPatternSyntax(_ data: SyntaxData) -> Syntax {
     let node = IdentifierPatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer { visitPost(node._syntaxNode) }
-    if let newNode = visitAny(node._syntaxNode) { return newNode }
-    return Syntax(visit(node))
-  }
-
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAsTypePatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AsTypePatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer { visitPost(node._syntaxNode) }
@@ -4664,8 +4494,6 @@ open class SyntaxRewriter {
       return visitImplUnexpectedNodesSyntax
     case .inOutExpr:
       return visitImplInOutExprSyntax
-    case .poundColumnExpr:
-      return visitImplPoundColumnExprSyntax
     case .tupleExprElementList:
       return visitImplTupleExprElementListSyntax
     case .arrayElementList:
@@ -4706,8 +4534,6 @@ open class SyntaxRewriter {
       return visitImplSequenceExprSyntax
     case .exprList:
       return visitImplExprListSyntax
-    case .symbolicReferenceExpr:
-      return visitImplSymbolicReferenceExprSyntax
     case .prefixOperatorExpr:
       return visitImplPrefixOperatorExprSyntax
     case .binaryOperatorExpr:
@@ -4882,8 +4708,6 @@ open class SyntaxRewriter {
       return visitImplDeinitializerDeclSyntax
     case .subscriptDecl:
       return visitImplSubscriptDeclSyntax
-    case .accessLevelModifier:
-      return visitImplAccessLevelModifierSyntax
     case .accessPathComponent:
       return visitImplAccessPathComponentSyntax
     case .accessPath:
@@ -4940,8 +4764,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax
     case .tokenList:
       return visitImplTokenListSyntax
-    case .nonEmptyTokenList:
-      return visitImplNonEmptyTokenListSyntax
     case .customAttribute:
       return visitImplCustomAttributeSyntax
     case .attribute:
@@ -4980,8 +4802,6 @@ open class SyntaxRewriter {
       return visitImplDerivativeRegistrationAttributeArgumentsSyntax
     case .qualifiedDeclName:
       return visitImplQualifiedDeclNameSyntax
-    case .functionDeclName:
-      return visitImplFunctionDeclNameSyntax
     case .backDeployAttributeSpecList:
       return visitImplBackDeployAttributeSpecListSyntax
     case .backDeployVersionList:
@@ -5002,8 +4822,6 @@ open class SyntaxRewriter {
       return visitImplWhileStmtSyntax
     case .deferStmt:
       return visitImplDeferStmtSyntax
-    case .expressionStmt:
-      return visitImplExpressionStmtSyntax
     case .switchCaseList:
       return visitImplSwitchCaseListSyntax
     case .repeatWhileStmt:
@@ -5048,8 +4866,6 @@ open class SyntaxRewriter {
       return visitImplHasSymbolConditionSyntax
     case .conditionElementList:
       return visitImplConditionElementListSyntax
-    case .declarationStmt:
-      return visitImplDeclarationStmtSyntax
     case .throwStmt:
       return visitImplThrowStmtSyntax
     case .ifStmt:
@@ -5140,16 +4956,10 @@ open class SyntaxRewriter {
       return visitImplNamedOpaqueReturnTypeSyntax
     case .typeAnnotation:
       return visitImplTypeAnnotationSyntax
-    case .enumCasePattern:
-      return visitImplEnumCasePatternSyntax
     case .isTypePattern:
       return visitImplIsTypePatternSyntax
-    case .optionalPattern:
-      return visitImplOptionalPatternSyntax
     case .identifierPattern:
       return visitImplIdentifierPatternSyntax
-    case .asTypePattern:
-      return visitImplAsTypePatternSyntax
     case .tuplePattern:
       return visitImplTuplePatternSyntax
     case .wildcardPattern:
@@ -5207,8 +5017,6 @@ open class SyntaxRewriter {
       return visitImplUnexpectedNodesSyntax(data)
     case .inOutExpr:
       return visitImplInOutExprSyntax(data)
-    case .poundColumnExpr:
-      return visitImplPoundColumnExprSyntax(data)
     case .tupleExprElementList:
       return visitImplTupleExprElementListSyntax(data)
     case .arrayElementList:
@@ -5249,8 +5057,6 @@ open class SyntaxRewriter {
       return visitImplSequenceExprSyntax(data)
     case .exprList:
       return visitImplExprListSyntax(data)
-    case .symbolicReferenceExpr:
-      return visitImplSymbolicReferenceExprSyntax(data)
     case .prefixOperatorExpr:
       return visitImplPrefixOperatorExprSyntax(data)
     case .binaryOperatorExpr:
@@ -5425,8 +5231,6 @@ open class SyntaxRewriter {
       return visitImplDeinitializerDeclSyntax(data)
     case .subscriptDecl:
       return visitImplSubscriptDeclSyntax(data)
-    case .accessLevelModifier:
-      return visitImplAccessLevelModifierSyntax(data)
     case .accessPathComponent:
       return visitImplAccessPathComponentSyntax(data)
     case .accessPath:
@@ -5483,8 +5287,6 @@ open class SyntaxRewriter {
       return visitImplMacroExpansionDeclSyntax(data)
     case .tokenList:
       return visitImplTokenListSyntax(data)
-    case .nonEmptyTokenList:
-      return visitImplNonEmptyTokenListSyntax(data)
     case .customAttribute:
       return visitImplCustomAttributeSyntax(data)
     case .attribute:
@@ -5523,8 +5325,6 @@ open class SyntaxRewriter {
       return visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
     case .qualifiedDeclName:
       return visitImplQualifiedDeclNameSyntax(data)
-    case .functionDeclName:
-      return visitImplFunctionDeclNameSyntax(data)
     case .backDeployAttributeSpecList:
       return visitImplBackDeployAttributeSpecListSyntax(data)
     case .backDeployVersionList:
@@ -5545,8 +5345,6 @@ open class SyntaxRewriter {
       return visitImplWhileStmtSyntax(data)
     case .deferStmt:
       return visitImplDeferStmtSyntax(data)
-    case .expressionStmt:
-      return visitImplExpressionStmtSyntax(data)
     case .switchCaseList:
       return visitImplSwitchCaseListSyntax(data)
     case .repeatWhileStmt:
@@ -5591,8 +5389,6 @@ open class SyntaxRewriter {
       return visitImplHasSymbolConditionSyntax(data)
     case .conditionElementList:
       return visitImplConditionElementListSyntax(data)
-    case .declarationStmt:
-      return visitImplDeclarationStmtSyntax(data)
     case .throwStmt:
       return visitImplThrowStmtSyntax(data)
     case .ifStmt:
@@ -5683,16 +5479,10 @@ open class SyntaxRewriter {
       return visitImplNamedOpaqueReturnTypeSyntax(data)
     case .typeAnnotation:
       return visitImplTypeAnnotationSyntax(data)
-    case .enumCasePattern:
-      return visitImplEnumCasePatternSyntax(data)
     case .isTypePattern:
       return visitImplIsTypePatternSyntax(data)
-    case .optionalPattern:
-      return visitImplOptionalPatternSyntax(data)
     case .identifierPattern:
       return visitImplIdentifierPatternSyntax(data)
-    case .asTypePattern:
-      return visitImplAsTypePatternSyntax(data)
     case .tuplePattern:
       return visitImplTuplePatternSyntax(data)
     case .wildcardPattern:

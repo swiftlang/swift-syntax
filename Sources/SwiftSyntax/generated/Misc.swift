@@ -19,7 +19,6 @@ extension Syntax {
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(TokenSyntax.self), 
-      .node(AccessLevelModifierSyntax.self), 
       .node(AccessPathComponentSyntax.self), 
       .node(AccessPathSyntax.self), 
       .node(AccessorBlockSyntax.self), 
@@ -33,7 +32,6 @@ extension Syntax {
       .node(ArrayTypeSyntax.self), 
       .node(ArrowExprSyntax.self), 
       .node(AsExprSyntax.self), 
-      .node(AsTypePatternSyntax.self), 
       .node(AssignmentExprSyntax.self), 
       .node(AssociatedtypeDeclSyntax.self), 
       .node(AttributeListSyntax.self), 
@@ -88,7 +86,6 @@ extension Syntax {
       .node(DeclNameArgumentSyntax.self), 
       .node(DeclNameArgumentsSyntax.self), 
       .node(DeclNameSyntax.self), 
-      .node(DeclarationStmtSyntax.self), 
       .node(DeferStmtSyntax.self), 
       .node(DeinitializerDeclSyntax.self), 
       .node(DerivativeRegistrationAttributeArgumentsSyntax.self), 
@@ -109,19 +106,16 @@ extension Syntax {
       .node(EnumCaseDeclSyntax.self), 
       .node(EnumCaseElementListSyntax.self), 
       .node(EnumCaseElementSyntax.self), 
-      .node(EnumCasePatternSyntax.self), 
       .node(EnumDeclSyntax.self), 
       .node(ExprListSyntax.self), 
       .node(ExpressionPatternSyntax.self), 
       .node(ExpressionSegmentSyntax.self), 
-      .node(ExpressionStmtSyntax.self), 
       .node(ExtensionDeclSyntax.self), 
       .node(FallthroughStmtSyntax.self), 
       .node(FloatLiteralExprSyntax.self), 
       .node(ForInStmtSyntax.self), 
       .node(ForcedValueExprSyntax.self), 
       .node(FunctionCallExprSyntax.self), 
-      .node(FunctionDeclNameSyntax.self), 
       .node(FunctionDeclSyntax.self), 
       .node(FunctionParameterListSyntax.self), 
       .node(FunctionParameterSyntax.self), 
@@ -188,7 +182,6 @@ extension Syntax {
       .node(NamedAttributeStringArgumentSyntax.self), 
       .node(NamedOpaqueReturnTypeSyntax.self), 
       .node(NilLiteralExprSyntax.self), 
-      .node(NonEmptyTokenListSyntax.self), 
       .node(ObjCSelectorPieceSyntax.self), 
       .node(ObjCSelectorSyntax.self), 
       .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self), 
@@ -196,7 +189,6 @@ extension Syntax {
       .node(OperatorPrecedenceAndTypesSyntax.self), 
       .node(OptionalBindingConditionSyntax.self), 
       .node(OptionalChainingExprSyntax.self), 
-      .node(OptionalPatternSyntax.self), 
       .node(OptionalTypeSyntax.self), 
       .node(PackElementExprSyntax.self), 
       .node(PackExpansionExprSyntax.self), 
@@ -208,7 +200,6 @@ extension Syntax {
       .node(PostfixIfConfigExprSyntax.self), 
       .node(PostfixUnaryExprSyntax.self), 
       .node(PoundAssertStmtSyntax.self), 
-      .node(PoundColumnExprSyntax.self), 
       .node(PoundErrorDeclSyntax.self), 
       .node(PoundSourceLocationArgsSyntax.self), 
       .node(PoundSourceLocationSyntax.self), 
@@ -248,7 +239,6 @@ extension Syntax {
       .node(SwitchCaseSyntax.self), 
       .node(SwitchDefaultLabelSyntax.self), 
       .node(SwitchStmtSyntax.self), 
-      .node(SymbolicReferenceExprSyntax.self), 
       .node(TargetFunctionEntrySyntax.self), 
       .node(TernaryExprSyntax.self), 
       .node(ThrowStmtSyntax.self), 
@@ -292,8 +282,6 @@ extension SyntaxKind {
     switch self {
     case .token: 
       return TokenSyntax.self
-    case .accessLevelModifier: 
-      return AccessLevelModifierSyntax.self
     case .accessPathComponent: 
       return AccessPathComponentSyntax.self
     case .accessPath: 
@@ -320,8 +308,6 @@ extension SyntaxKind {
       return ArrowExprSyntax.self
     case .asExpr: 
       return AsExprSyntax.self
-    case .asTypePattern: 
-      return AsTypePatternSyntax.self
     case .assignmentExpr: 
       return AssignmentExprSyntax.self
     case .associatedtypeDecl: 
@@ -430,8 +416,6 @@ extension SyntaxKind {
       return DeclNameArgumentsSyntax.self
     case .declName: 
       return DeclNameSyntax.self
-    case .declarationStmt: 
-      return DeclarationStmtSyntax.self
     case .deferStmt: 
       return DeferStmtSyntax.self
     case .deinitializerDecl: 
@@ -472,8 +456,6 @@ extension SyntaxKind {
       return EnumCaseElementListSyntax.self
     case .enumCaseElement: 
       return EnumCaseElementSyntax.self
-    case .enumCasePattern: 
-      return EnumCasePatternSyntax.self
     case .enumDecl: 
       return EnumDeclSyntax.self
     case .exprList: 
@@ -482,8 +464,6 @@ extension SyntaxKind {
       return ExpressionPatternSyntax.self
     case .expressionSegment: 
       return ExpressionSegmentSyntax.self
-    case .expressionStmt: 
-      return ExpressionStmtSyntax.self
     case .extensionDecl: 
       return ExtensionDeclSyntax.self
     case .fallthroughStmt: 
@@ -496,8 +476,6 @@ extension SyntaxKind {
       return ForcedValueExprSyntax.self
     case .functionCallExpr: 
       return FunctionCallExprSyntax.self
-    case .functionDeclName: 
-      return FunctionDeclNameSyntax.self
     case .functionDecl: 
       return FunctionDeclSyntax.self
     case .functionParameterList: 
@@ -630,8 +608,6 @@ extension SyntaxKind {
       return NamedOpaqueReturnTypeSyntax.self
     case .nilLiteralExpr: 
       return NilLiteralExprSyntax.self
-    case .nonEmptyTokenList: 
-      return NonEmptyTokenListSyntax.self
     case .objCSelectorPiece: 
       return ObjCSelectorPieceSyntax.self
     case .objCSelector: 
@@ -646,8 +622,6 @@ extension SyntaxKind {
       return OptionalBindingConditionSyntax.self
     case .optionalChainingExpr: 
       return OptionalChainingExprSyntax.self
-    case .optionalPattern: 
-      return OptionalPatternSyntax.self
     case .optionalType: 
       return OptionalTypeSyntax.self
     case .packElementExpr: 
@@ -670,8 +644,6 @@ extension SyntaxKind {
       return PostfixUnaryExprSyntax.self
     case .poundAssertStmt: 
       return PoundAssertStmtSyntax.self
-    case .poundColumnExpr: 
-      return PoundColumnExprSyntax.self
     case .poundErrorDecl: 
       return PoundErrorDeclSyntax.self
     case .poundSourceLocationArgs: 
@@ -750,8 +722,6 @@ extension SyntaxKind {
       return SwitchDefaultLabelSyntax.self
     case .switchStmt: 
       return SwitchStmtSyntax.self
-    case .symbolicReferenceExpr: 
-      return SymbolicReferenceExprSyntax.self
     case .targetFunctionEntry: 
       return TargetFunctionEntrySyntax.self
     case .ternaryExpr: 
@@ -829,8 +799,6 @@ extension SyntaxKind {
     switch self {
     case .token: 
       return "token"
-    case .accessLevelModifier: 
-      return "access level modifier"
     case .accessPathComponent: 
       return nil
     case .accessPath: 
@@ -857,8 +825,6 @@ extension SyntaxKind {
       return nil
     case .asExpr: 
       return "'as' expression"
-    case .asTypePattern: 
-      return "'as' pattern"
     case .assignmentExpr: 
       return nil
     case .associatedtypeDecl: 
@@ -967,8 +933,6 @@ extension SyntaxKind {
       return nil
     case .declName: 
       return "declaration name"
-    case .declarationStmt: 
-      return "declaration"
     case .deferStmt: 
       return "'defer' statement"
     case .deinitializerDecl: 
@@ -1009,8 +973,6 @@ extension SyntaxKind {
       return nil
     case .enumCaseElement: 
       return nil
-    case .enumCasePattern: 
-      return "enum case pattern"
     case .enumDecl: 
       return "enum"
     case .exprList: 
@@ -1019,8 +981,6 @@ extension SyntaxKind {
       return "pattern"
     case .expressionSegment: 
       return nil
-    case .expressionStmt: 
-      return "expression"
     case .extensionDecl: 
       return "extension"
     case .fallthroughStmt: 
@@ -1033,8 +993,6 @@ extension SyntaxKind {
       return "force unwrap"
     case .functionCallExpr: 
       return "function call"
-    case .functionDeclName: 
-      return "function declaration name"
     case .functionDecl: 
       return "function"
     case .functionParameterList: 
@@ -1167,8 +1125,6 @@ extension SyntaxKind {
       return "named opaque return type"
     case .nilLiteralExpr: 
       return nil
-    case .nonEmptyTokenList: 
-      return "token list"
     case .objCSelectorPiece: 
       return "Objective-C selector piece"
     case .objCSelector: 
@@ -1183,8 +1139,6 @@ extension SyntaxKind {
       return "optional binding"
     case .optionalChainingExpr: 
       return "optional chaining"
-    case .optionalPattern: 
-      return "optional pattern"
     case .optionalType: 
       return "optional type"
     case .packElementExpr: 
@@ -1207,8 +1161,6 @@ extension SyntaxKind {
       return "postfix expression"
     case .poundAssertStmt: 
       return "'#assert' directive"
-    case .poundColumnExpr: 
-      return nil
     case .poundErrorDecl: 
       return "'#error' directive"
     case .poundSourceLocationArgs: 
@@ -1287,8 +1239,6 @@ extension SyntaxKind {
       return nil
     case .switchStmt: 
       return "'switch' statement"
-    case .symbolicReferenceExpr: 
-      return nil
     case .targetFunctionEntry: 
       return "attribute argument"
     case .ternaryExpr: 

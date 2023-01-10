@@ -15,15 +15,6 @@
 
 import SwiftSyntax
 
-extension AccessLevelModifier {
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeName: UnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndModifier: UnexpectedNodes? = nil, modifier: DeclModifierDetail? = nil, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndModifier, modifier: modifier, trailingTrivia: trailingTrivia)
-  }
-}
-
 extension AccessPathComponent {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -512,15 +503,6 @@ extension EnumCaseElement: HasTrailingComma {
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
     return withTrailingComma(withComma ? .commaToken() : nil)
-  }
-}
-
-extension EnumCasePattern {
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeType: UnexpectedNodes? = nil, type: TypeSyntaxProtocol? = nil, unexpectedBetweenTypeAndPeriod: UnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndCaseName: UnexpectedNodes? = nil, caseName: String, unexpectedBetweenCaseNameAndAssociatedTuple: UnexpectedNodes? = nil, associatedTuple: TuplePattern? = nil, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeType, type: TypeSyntax(fromProtocol: type), unexpectedBetweenTypeAndPeriod, period: period, unexpectedBetweenPeriodAndCaseName, caseName: Token.`identifier`(caseName), unexpectedBetweenCaseNameAndAssociatedTuple, associatedTuple: associatedTuple, trailingTrivia: trailingTrivia)
   }
 }
 
@@ -1165,15 +1147,6 @@ extension SwitchStmt {
       SwitchCaseListSyntax([])
     }, trailingTrivia: Trivia? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSwitchKeyword, switchKeyword: switchKeyword, unexpectedBetweenSwitchKeywordAndExpression, expression: ExprSyntax(fromProtocol: expression), unexpectedBetweenExpressionAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndCases, cases: casesBuilder(), unexpectedBetweenCasesAndRightBrace, rightBrace: rightBrace, trailingTrivia: trailingTrivia)
-  }
-}
-
-extension SymbolicReferenceExpr {
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeIdentifier: UnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodes? = nil, genericArgumentClause: GenericArgumentClause? = nil, trailingTrivia: Trivia? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericArgumentClause, genericArgumentClause: genericArgumentClause, trailingTrivia: trailingTrivia)
   }
 }
 

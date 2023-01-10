@@ -28,18 +28,6 @@ open class SyntaxVisitor {
     visit(node.data)
   }
   
-  /// Visiting `AccessLevelModifierSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AccessLevelModifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `AccessLevelModifierSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AccessLevelModifierSyntax) {
-  }
-  
   /// Visiting `AccessPathComponentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -194,18 +182,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `AsExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AsExprSyntax) {
-  }
-  
-  /// Visiting `AsTypePatternSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AsTypePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `AsTypePatternSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AsTypePatternSyntax) {
   }
   
   /// Visiting `AssignmentExprSyntax` specifically.
@@ -856,18 +832,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DeclNameSyntax) {
   }
   
-  /// Visiting `DeclarationStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DeclarationStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `DeclarationStmtSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DeclarationStmtSyntax) {
-  }
-  
   /// Visiting `DeferStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1108,18 +1072,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: EnumCaseElementSyntax) {
   }
   
-  /// Visiting `EnumCasePatternSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: EnumCasePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `EnumCasePatternSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: EnumCasePatternSyntax) {
-  }
-  
   /// Visiting `EnumDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1166,18 +1118,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `ExpressionSegmentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionSegmentSyntax) {
-  }
-  
-  /// Visiting `ExpressionStmtSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `ExpressionStmtSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ExpressionStmtSyntax) {
   }
   
   /// Visiting `ExtensionDeclSyntax` specifically.
@@ -1250,18 +1190,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `FunctionCallExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionCallExprSyntax) {
-  }
-  
-  /// Visiting `FunctionDeclNameSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: FunctionDeclNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `FunctionDeclNameSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: FunctionDeclNameSyntax) {
   }
   
   /// Visiting `FunctionDeclSyntax` specifically.
@@ -2056,18 +1984,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: NilLiteralExprSyntax) {
   }
   
-  /// Visiting `NonEmptyTokenListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: NonEmptyTokenListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `NonEmptyTokenListSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: NonEmptyTokenListSyntax) {
-  }
-  
   /// Visiting `ObjCSelectorPieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2150,18 +2066,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `OptionalChainingExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalChainingExprSyntax) {
-  }
-  
-  /// Visiting `OptionalPatternSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: OptionalPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `OptionalPatternSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: OptionalPatternSyntax) {
   }
   
   /// Visiting `OptionalTypeSyntax` specifically.
@@ -2294,18 +2198,6 @@ open class SyntaxVisitor {
   /// The function called after visiting `PoundAssertStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PoundAssertStmtSyntax) {
-  }
-  
-  /// Visiting `PoundColumnExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `PoundColumnExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundColumnExprSyntax) {
   }
   
   /// Visiting `PoundErrorDeclSyntax` specifically.
@@ -2776,18 +2668,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SwitchStmtSyntax) {
   }
   
-  /// Visiting `SymbolicReferenceExprSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting `SymbolicReferenceExprSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SymbolicReferenceExprSyntax) {
-  }
-  
   /// Visiting `TargetFunctionEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3221,17 +3101,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessLevelModifierSyntax(_ data: SyntaxData) {
-    let node = AccessLevelModifierSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessPathComponentSyntax(_ data: SyntaxData) {
     let node = AccessPathComponentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3366,17 +3235,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAsExprSyntax(_ data: SyntaxData) {
     let node = AsExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAsTypePatternSyntax(_ data: SyntaxData) {
-    let node = AsTypePatternSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3980,17 +3838,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclarationStmtSyntax(_ data: SyntaxData) {
-    let node = DeclarationStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeferStmtSyntax(_ data: SyntaxData) {
     let node = DeferStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4211,17 +4058,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumCasePatternSyntax(_ data: SyntaxData) {
-    let node = EnumCasePatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEnumDeclSyntax(_ data: SyntaxData) {
     let node = EnumDeclSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4257,17 +4093,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) {
     let node = ExpressionSegmentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExpressionStmtSyntax(_ data: SyntaxData) {
-    let node = ExpressionStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4334,17 +4159,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) {
     let node = FunctionCallExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionDeclNameSyntax(_ data: SyntaxData) {
-    let node = FunctionDeclNameSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5080,17 +4894,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplNonEmptyTokenListSyntax(_ data: SyntaxData) {
-    let node = NonEmptyTokenListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplObjCSelectorPieceSyntax(_ data: SyntaxData) {
     let node = ObjCSelectorPieceSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5159,17 +4962,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplOptionalChainingExprSyntax(_ data: SyntaxData) {
     let node = OptionalChainingExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOptionalPatternSyntax(_ data: SyntaxData) {
-    let node = OptionalPatternSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5291,17 +5083,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundAssertStmtSyntax(_ data: SyntaxData) {
     let node = PoundAssertStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundColumnExprSyntax(_ data: SyntaxData) {
-    let node = PoundColumnExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5740,17 +5521,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSymbolicReferenceExprSyntax(_ data: SyntaxData) {
-    let node = SymbolicReferenceExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTargetFunctionEntrySyntax(_ data: SyntaxData) {
     let node = TargetFunctionEntrySyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6142,8 +5912,6 @@ open class SyntaxVisitor {
       _ = visit(node)
       // No children to visit.
       visitPost(node)
-    case .accessLevelModifier: 
-      visitImplAccessLevelModifierSyntax(data)
     case .accessPathComponent: 
       visitImplAccessPathComponentSyntax(data)
     case .accessPath: 
@@ -6170,8 +5938,6 @@ open class SyntaxVisitor {
       visitImplArrowExprSyntax(data)
     case .asExpr: 
       visitImplAsExprSyntax(data)
-    case .asTypePattern: 
-      visitImplAsTypePatternSyntax(data)
     case .assignmentExpr: 
       visitImplAssignmentExprSyntax(data)
     case .associatedtypeDecl: 
@@ -6280,8 +6046,6 @@ open class SyntaxVisitor {
       visitImplDeclNameArgumentsSyntax(data)
     case .declName: 
       visitImplDeclNameSyntax(data)
-    case .declarationStmt: 
-      visitImplDeclarationStmtSyntax(data)
     case .deferStmt: 
       visitImplDeferStmtSyntax(data)
     case .deinitializerDecl: 
@@ -6322,8 +6086,6 @@ open class SyntaxVisitor {
       visitImplEnumCaseElementListSyntax(data)
     case .enumCaseElement: 
       visitImplEnumCaseElementSyntax(data)
-    case .enumCasePattern: 
-      visitImplEnumCasePatternSyntax(data)
     case .enumDecl: 
       visitImplEnumDeclSyntax(data)
     case .exprList: 
@@ -6332,8 +6094,6 @@ open class SyntaxVisitor {
       visitImplExpressionPatternSyntax(data)
     case .expressionSegment: 
       visitImplExpressionSegmentSyntax(data)
-    case .expressionStmt: 
-      visitImplExpressionStmtSyntax(data)
     case .extensionDecl: 
       visitImplExtensionDeclSyntax(data)
     case .fallthroughStmt: 
@@ -6346,8 +6106,6 @@ open class SyntaxVisitor {
       visitImplForcedValueExprSyntax(data)
     case .functionCallExpr: 
       visitImplFunctionCallExprSyntax(data)
-    case .functionDeclName: 
-      visitImplFunctionDeclNameSyntax(data)
     case .functionDecl: 
       visitImplFunctionDeclSyntax(data)
     case .functionParameterList: 
@@ -6480,8 +6238,6 @@ open class SyntaxVisitor {
       visitImplNamedOpaqueReturnTypeSyntax(data)
     case .nilLiteralExpr: 
       visitImplNilLiteralExprSyntax(data)
-    case .nonEmptyTokenList: 
-      visitImplNonEmptyTokenListSyntax(data)
     case .objCSelectorPiece: 
       visitImplObjCSelectorPieceSyntax(data)
     case .objCSelector: 
@@ -6496,8 +6252,6 @@ open class SyntaxVisitor {
       visitImplOptionalBindingConditionSyntax(data)
     case .optionalChainingExpr: 
       visitImplOptionalChainingExprSyntax(data)
-    case .optionalPattern: 
-      visitImplOptionalPatternSyntax(data)
     case .optionalType: 
       visitImplOptionalTypeSyntax(data)
     case .packElementExpr: 
@@ -6520,8 +6274,6 @@ open class SyntaxVisitor {
       visitImplPostfixUnaryExprSyntax(data)
     case .poundAssertStmt: 
       visitImplPoundAssertStmtSyntax(data)
-    case .poundColumnExpr: 
-      visitImplPoundColumnExprSyntax(data)
     case .poundErrorDecl: 
       visitImplPoundErrorDeclSyntax(data)
     case .poundSourceLocationArgs: 
@@ -6600,8 +6352,6 @@ open class SyntaxVisitor {
       visitImplSwitchDefaultLabelSyntax(data)
     case .switchStmt: 
       visitImplSwitchStmtSyntax(data)
-    case .symbolicReferenceExpr: 
-      visitImplSymbolicReferenceExprSyntax(data)
     case .targetFunctionEntry: 
       visitImplTargetFunctionEntrySyntax(data)
     case .ternaryExpr: 

@@ -88,9 +88,7 @@ public let COMMON_NODES: [Node] = [
                  Child(name: "Expr",
                        kind: "Expr"),
                  Child(name: "TokenList",
-                       kind: "TokenList"),
-                 Child(name: "NonEmptyTokenList",
-                       kind: "NonEmptyTokenList")
+                       kind: "TokenList")
                ]),
          Child(name: "Semicolon",
                kind: "SemicolonToken",

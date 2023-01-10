@@ -61,12 +61,14 @@ public class SyntaxChildrenTests: XCTestCase {
   }
 
   public func testMissingNodes() throws {
-    let node = DeclarationStmtSyntax(declaration: MissingDeclSyntax())
+    let node = ReturnStmtSyntax(returnKeyword: .return, expression: ExprSyntax(MissingExprSyntax()))
 
     var sourceAccurateIt = node.children(viewMode: .sourceAccurate).makeIterator()
-    try XCTAssertNext(&sourceAccurateIt) { $0.is(MissingDeclSyntax.self) }
+    try XCTAssertNext(&sourceAccurateIt) { $0.is(TokenSyntax.self) }
+    try XCTAssertNext(&sourceAccurateIt) { $0.is(MissingExprSyntax.self) }
 
     var fixedUpIt = node.children(viewMode: .fixedUp).makeIterator()
-    try XCTAssertNext(&fixedUpIt) { $0.is(MissingDeclSyntax.self) }
+    try XCTAssertNext(&fixedUpIt) { $0.is(TokenSyntax.self) }
+    try XCTAssertNext(&fixedUpIt) { $0.is(MissingExprSyntax.self) }
   }
 }

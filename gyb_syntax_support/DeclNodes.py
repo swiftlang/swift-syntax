@@ -513,19 +513,6 @@ DECL_NODES = [
                       Child('Getter', kind='CodeBlock')]),
          ]),
 
-    # access-level-modifier -> 'private' | 'private' '(' 'set' ')'
-    #                        | 'fileprivate' | 'fileprivate' '(' 'set' ')'
-    #                        | 'internal' | 'internal' '(' 'set' ')'
-    #                        | 'public' | 'public' '(' 'set' ')'
-    #                        | 'open' | 'open' '(' 'set' ')'
-    Node('AccessLevelModifier', name_for_diagnostics='access level modifier',
-         kind='Syntax',
-         children=[
-             Child('Name', kind='IdentifierToken', name_for_diagnostics='name',),
-             Child('Modifier', kind='DeclModifierDetail',
-                   is_optional=True),
-         ]),
-
     # FIXME: technically misnamed; should be "ImportPathComponent"
     Node('AccessPathComponent', name_for_diagnostics=None, kind='Syntax',
          children=[

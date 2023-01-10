@@ -10,12 +10,6 @@ EXPR_NODES = [
              Child('Expression', kind='Expr'),
          ]),
 
-    # A #column expression.
-    Node('PoundColumnExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('PoundColumn', kind='PoundColumnToken'),
-         ]),
-
     Node('TupleExprElementList', name_for_diagnostics=None, kind='SyntaxCollection',
          element='TupleExprElement'),
 
@@ -157,14 +151,6 @@ EXPR_NODES = [
          A list of expressions connected by operators. This list is contained
          by a `SequenceExprSyntax`.
          '''),
-
-    # symbolic-reference-expression -> identifier generic-argument-clause?
-    Node('SymbolicReferenceExpr', name_for_diagnostics=None, kind='Expr',
-         children=[
-             Child('Identifier', kind='IdentifierToken'),
-             Child('GenericArgumentClause', kind='GenericArgumentClause',
-                   is_optional=True),
-         ]),
 
     # A prefix operator expression.
     # -x

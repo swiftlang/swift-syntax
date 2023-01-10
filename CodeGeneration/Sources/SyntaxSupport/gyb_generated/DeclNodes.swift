@@ -919,20 +919,6 @@ public let DECL_NODES: [Node] = [
                ])
        ]),
 
-  Node(name: "AccessLevelModifier",
-       nameForDiagnostics: "access level modifier",
-       kind: "Syntax",
-       children: [
-         Child(name: "Name",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
-         Child(name: "Modifier",
-               kind: "DeclModifierDetail",
-               isOptional: true)
-       ]),
-
   Node(name: "AccessPathComponent",
        nameForDiagnostics: nil,
        kind: "Syntax",

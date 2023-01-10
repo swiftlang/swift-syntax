@@ -231,13 +231,6 @@ extension MultipleTrailingClosureElementList: ExpressibleByArrayLiteral {
   }
 }
 
-/// `NonEmptyTokenList` represents a collection of `TokenSyntax`
-extension NonEmptyTokenList: ExpressibleByArrayLiteral {
-  public init(arrayLiteral elements: Element...) {
-    self.init(elements)
-  }
-}
-
 /// `ObjCSelector` represents a collection of `ObjCSelectorPieceSyntax`
 extension ObjCSelector: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {

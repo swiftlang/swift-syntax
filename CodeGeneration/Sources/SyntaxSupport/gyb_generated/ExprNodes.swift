@@ -26,17 +26,6 @@ public let EXPR_NODES: [Node] = [
                kind: "Expr")
        ]),
 
-  Node(name: "PoundColumnExpr",
-       nameForDiagnostics: nil,
-       kind: "Expr",
-       children: [
-         Child(name: "PoundColumn",
-               kind: "PoundColumnToken",
-               tokenChoices: [
-                 "PoundColumn"
-               ])
-       ]),
-
   Node(name: "TupleExprElementList",
        nameForDiagnostics: nil,
        kind: "SyntaxCollection",
@@ -273,20 +262,6 @@ public let EXPR_NODES: [Node] = [
        kind: "SyntaxCollection",
        element: "Expr",
        elementName: "Expression"),
-
-  Node(name: "SymbolicReferenceExpr",
-       nameForDiagnostics: nil,
-       kind: "Expr",
-       children: [
-         Child(name: "Identifier",
-               kind: "IdentifierToken",
-               tokenChoices: [
-                 "Identifier"
-               ]),
-         Child(name: "GenericArgumentClause",
-               kind: "GenericArgumentClause",
-               isOptional: true)
-       ]),
 
   Node(name: "PrefixOperatorExpr",
        nameForDiagnostics: "prefix operator expression",

@@ -27,5 +27,5 @@ public protocol MemberDeclarationMacro: DeclarationMacro {
     of node: CustomAttributeSyntax,
     attachedTo declaration: DeclSyntax,
     in context: inout MacroExpansionContext
-  ) throws -> [MemberDeclListItemSyntax]
+  ) throws -> [DeclSyntax]
 }

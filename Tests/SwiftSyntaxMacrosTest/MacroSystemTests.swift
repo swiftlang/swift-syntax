@@ -325,25 +325,10 @@ public struct AddBackingStorage: MemberDeclarationMacro {
     attachedTo decl: DeclSyntax,
     in context: inout
     MacroExpansionContext)
-  throws -> [MemberDeclListItemSyntax] {
-    let identifierPattern = IdentifierPatternSyntax(
-      identifier: .identifier("_storage")
-    )
-      .withLeadingTrivia(.space)
-
-    let pattern = PatternBindingSyntax(
-      pattern: identifierPattern,
-      typeAnnotation: TypeAnnotationSyntax(
-        colon: .colonToken(trailingTrivia: .space),
-        type: SimpleTypeIdentifierSyntax(name: .identifier("Storage<Self>"))
-      )
-    )
-    return [.init(
-        decl: VariableDeclSyntax(
-        letOrVarKeyword: TokenSyntax(.varKeyword, presence: .present),
-        bindings: PatternBindingListSyntax([pattern])
-      ))
-      .withLeadingTrivia([.newlines(1), .spaces(2)])
+  throws -> [DeclSyntax] {
+    let storage: DeclSyntax = "var _storage: Storage<Self>"
+    return [
+      storage.withLeadingTrivia([.newlines(1), .spaces(2)])
     ]
   }
 }

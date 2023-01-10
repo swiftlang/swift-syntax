@@ -334,8 +334,8 @@ extension MacroApplication {
     }
 
     // FIXME: Is there a better way to add N members to a decl?
-    return decl.withMembers(newMembers.reduce(decl.members) { partialMembers, memberListItem in
-      partialMembers.addMember(memberListItem)
+    return decl.withMembers(newMembers.reduce(decl.members) { partialMembers, newMember in
+      partialMembers.addMember(.init(decl: newMember))
     })
   }
 }

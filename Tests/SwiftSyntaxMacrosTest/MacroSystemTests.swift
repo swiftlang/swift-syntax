@@ -323,9 +323,10 @@ public struct AddBackingStorage: MemberDeclarationMacro {
   public static func expansion(
     of node: CustomAttributeSyntax,
     attachedTo decl: DeclSyntax,
-    in context: inout
-    MacroExpansionContext)
-  throws -> [DeclSyntax] {
+    in context: inout MacroExpansionContext
+  )
+    throws -> [DeclSyntax]
+  {
     let storage: DeclSyntax = "var _storage: Storage<Self>"
     return [
       storage.withLeadingTrivia([.newlines(1), .spaces(2)])

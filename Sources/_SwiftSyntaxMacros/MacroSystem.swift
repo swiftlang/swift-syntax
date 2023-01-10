@@ -106,8 +106,7 @@ class MacroApplication: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerDeclarationMacro.Type ||
-                 macro is MemberDeclarationMacro.Type)
+        return !(macro is PeerDeclarationMacro.Type || macro is MemberDeclarationMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -259,18 +258,20 @@ class MacroApplication: SyntaxRewriter {
 
 extension MacroApplication {
   private func getMacroAttributes<MacroType>(
-    attachedTo decl: DeclSyntax, ofType: MacroType.Type
+    attachedTo decl: DeclSyntax,
+    ofType: MacroType.Type
   ) -> [(CustomAttributeSyntax, MacroType)] {
     guard let attributedNode = decl.asProtocol(AttributedSyntax.self),
-          let attributes = attributedNode.attributes else {
+      let attributes = attributedNode.attributes
+    else {
       return []
     }
 
     return attributes.compactMap {
       guard case let .customAttribute(customAttr) = $0,
-            let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
-            let macro = macroSystem.macros[attributeName],
-            let macroType = macro as? MacroType
+        let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+        let macro = macroSystem.macros[attributeName],
+        let macroType = macro as? MacroType
       else {
         return nil
       }
@@ -312,9 +313,13 @@ extension MacroApplication {
     let macroAttributes = getMacroAttributes(attachedTo: DeclSyntax(decl), ofType: MemberDeclarationMacro.Type.self)
     for (attribute, memberMacro) in macroAttributes {
       do {
-        try newMembers.append(contentsOf: memberMacro.expansion(of: attribute,
-                                                                attachedTo: DeclSyntax(decl),
-                                                                in: &context))
+        try newMembers.append(
+          contentsOf: memberMacro.expansion(
+            of: attribute,
+            attachedTo: DeclSyntax(decl),
+            in: &context
+          )
+        )
       } catch {
         // Record the error
         context.diagnose(
@@ -327,9 +332,11 @@ extension MacroApplication {
     }
 
     // FIXME: Is there a better way to add N members to a decl?
-    return decl.withMembers(newMembers.reduce(decl.members) { partialMembers, newMember in
-      partialMembers.addMember(.init(decl: newMember))
-    })
+    return decl.withMembers(
+      newMembers.reduce(decl.members) { partialMembers, newMember in
+        partialMembers.addMember(.init(decl: newMember))
+      }
+    )
   }
 }
 

@@ -137,7 +137,7 @@ open class BasicFormat: SyntaxRewriter {
   
   open func requiresLeadingSpace(_ token: TokenSyntax) -> Bool {
     switch (token.previousToken(viewMode: .sourceAccurate)?.tokenKind, token.tokenKind) {
-    case (.leftParen, .spacedBinaryOperator): 
+    case (.leftParen, .binaryOperator):  // Ensures there is no space in @available(*, deprecated)
       return false
     default: 
       break 
@@ -155,7 +155,7 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .arrow: 
       return true
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return true
     default: 
       return false
@@ -178,9 +178,8 @@ open class BasicFormat: SyntaxRewriter {
      (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
      (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
      (.tryKeyword, .exclamationMark), // Ensures there is not space in `try!`
-     (.tryKeyword, .postfixQuestionMark): // Ensures there is not space in `try?`
-      return false
-    case (.spacedBinaryOperator, .comma): 
+     (.tryKeyword, .postfixQuestionMark), // Ensures there is not space in `try?`
+     (.binaryOperator, .comma): // Ensures there is no space in @available(*, deprecated)
       return false
     default: 
       break 
@@ -334,7 +333,7 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .poundHasSymbolKeyword: 
       return true
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return true
     case .contextualKeyword(.async): 
       return true

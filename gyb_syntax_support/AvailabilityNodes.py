@@ -22,7 +22,7 @@ AVAILABILITY_NODES = [
                    description='The actual argument',
                    node_choices=[
                        Child('Token', kind='Token', 
-                             token_choices=['SpacedBinaryOperatorToken', 'IdentifierToken']),
+                             token_choices=['BinaryOperatorToken', 'IdentifierToken']),
                        Child('AvailabilityVersionRestriction',
                              kind='AvailabilityVersionRestriction'),
                        Child('AvailabilityLabeledArgument',

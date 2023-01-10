@@ -337,7 +337,7 @@ public class LexerTests: XCTestCase {
       "#/abc\n/#",
       lexemes: [
         LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.identifier, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\n", text: "/", flags: [.isAtStartOfLine]),
         LexemeSpec(.pound, text: "#"),
@@ -347,7 +347,7 @@ public class LexerTests: XCTestCase {
       "#/abc\r/#",
       lexemes: [
         LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.identifier, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\r", text: "/", flags: [.isAtStartOfLine]),
         LexemeSpec(.pound, text: "#"),
@@ -484,11 +484,11 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, text: "reduced"),
         LexemeSpec(.period, text: "."),
         LexemeSpec(.identifier, text: "count", trailing: " "),
-        LexemeSpec(.spacedBinaryOperator, text: "/", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "/", trailing: " "),
         LexemeSpec(.integerLiteral, text: "2"),
         LexemeSpec(.comma, text: ",", trailing: " "),
         LexemeSpec(.identifier, text: "chunkSize", trailing: " "),
-        LexemeSpec(.spacedBinaryOperator, text: "/", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "/", trailing: " "),
         LexemeSpec(.integerLiteral, text: "2"),
         LexemeSpec(.rightParen, text: ")"),
       ]
@@ -510,7 +510,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.leftBrace, text: "{"),
         LexemeSpec(.returnKeyword, leading: "\n  ", text: "return", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.integerLiteral, text: "0", trailing: " "),
-        LexemeSpec(.spacedBinaryOperator, text: "/"),
+        LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.identifier, leading: "\n         ", text: "x", flags: [.isAtStartOfLine]),
         LexemeSpec(.rightBrace, leading: "\n", text: "}", flags: [.isAtStartOfLine]),
         LexemeSpec(.eof, leading: "\n\n///", text: "", flags: [.isAtStartOfLine]),
@@ -521,7 +521,7 @@ public class LexerTests: XCTestCase {
       "n /= 2 // foo",
       lexemes: [
         LexemeSpec(.identifier, text: "n", trailing: " "),
-        LexemeSpec(.spacedBinaryOperator, text: "/=", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "/=", trailing: " "),
         LexemeSpec(.integerLiteral, text: "2", trailing: " // foo"),
       ]
     )
@@ -534,13 +534,13 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.identifier, text: "white"),
         LexemeSpec(.colon, text: ":", trailing: " "),
         LexemeSpec(.floatingLiteral, text: "216.0"),
-        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.floatingLiteral, text: "255.0"),
         LexemeSpec(.comma, text: ",", trailing: " "),
         LexemeSpec(.identifier, text: "alpha"),
         LexemeSpec(.colon, text: ":", trailing: " "),
         LexemeSpec(.floatingLiteral, text: "44.0"),
-        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.floatingLiteral, text: "255.0"),
         LexemeSpec(.rightParen, text: ")"),
       ]
@@ -550,9 +550,9 @@ public class LexerTests: XCTestCase {
       "#/abc|#def/",
       lexemes: [
         LexemeSpec(.pound, text: "#"),
-        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.binaryOperator, text: "/"),
         LexemeSpec(.identifier, text: "abc"),
-        LexemeSpec(.unspacedBinaryOperator, text: "|"),
+        LexemeSpec(.binaryOperator, text: "|"),
         LexemeSpec(.pound, text: "#"),
         LexemeSpec(.identifier, text: "def"),
         LexemeSpec(.postfixOperator, text: "/"),
@@ -576,7 +576,7 @@ public class LexerTests: XCTestCase {
       "y\u{fffe} + z",
       lexemes: [
         LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} "),
-        LexemeSpec(.spacedBinaryOperator, text: "+", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "+", trailing: " "),
         LexemeSpec(.identifier, text: "z"),
       ]
     )
@@ -589,7 +589,7 @@ public class LexerTests: XCTestCase {
       """,
       lexemes: [
         LexemeSpec(.identifier, text: "myString"),
-        LexemeSpec(.unspacedBinaryOperator, text: "=="),
+        LexemeSpec(.binaryOperator, text: "=="),
         LexemeSpec(.stringLiteral, text: #""""#),
       ]
     )
@@ -601,7 +601,7 @@ public class LexerTests: XCTestCase {
       lexemes: [
         LexemeSpec(.prefixOperator, text: "!"),
         LexemeSpec(.identifier, text: "<#b1#>", trailing: " "),
-        LexemeSpec(.spacedBinaryOperator, text: "&&", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "&&", trailing: " "),
         LexemeSpec(.prefixOperator, text: "!"),
         LexemeSpec(.identifier, text: "<#b2#>"),
       ]
@@ -646,7 +646,7 @@ public class LexerTests: XCTestCase {
       "/*X_START*/x/*X_END*/ + /*Y_START*/y/*Y_END*/",
       lexemes: [
         LexemeSpec(.identifier, leading: "/*X_START*/", text: "x", trailing: "/*X_END*/ "),
-        LexemeSpec(.spacedBinaryOperator, text: "+", trailing: " /*Y_START*/"),
+        LexemeSpec(.binaryOperator, text: "+", trailing: " /*Y_START*/"),
         LexemeSpec(.identifier, text: "y", trailing: "/*Y_END*/"),
       ]
     )

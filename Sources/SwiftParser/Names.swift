@@ -67,7 +67,7 @@ extension Parser {
     if self.at(.identifier) || self.at(any: [.selfKeyword, .capitalSelfKeyword, .initKeyword]) {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
-      ident = self.consumeAnyToken(remapping: .unspacedBinaryOperator)
+      ident = self.consumeAnyToken(remapping: .binaryOperator)
     } else if flags.contains(.keywords) && self.currentToken.rawTokenKind.isKeyword {
       ident = self.consumeAnyToken(remapping: .identifier)
     } else {

@@ -17,7 +17,7 @@
 
 extension BinaryOperatorExpr {
   public init(text: String) {
-    self.init(operatorToken: .spacedBinaryOperator(text))
+    self.init(operatorToken: .binaryOperator(text))
   }
 }
 

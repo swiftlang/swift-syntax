@@ -239,16 +239,6 @@ public enum SyntaxFactory {
                           trailingTrivia: trailingTrivia)
   }
 
-  @available(*, deprecated, message: "Use TokenSyntax.spacedBinaryOperator")
-  public static func makeBinaryOperator(_ name: String,
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeToken(.spacedBinaryOperator(name),
-                     presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-
   @available(*, deprecated, message: "Use initializer on StringLiteralExprSyntax")
   public static func makeStringLiteralExpr(_ text: String,
     leadingTrivia: Trivia = [],

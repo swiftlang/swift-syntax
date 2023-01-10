@@ -1276,7 +1276,7 @@ extension Parser.Lookahead {
         // context. We always consider it an apply expression of a function
         // called `yield` for the purposes of the parse.
         return false
-      case .spacedBinaryOperator, .unspacedBinaryOperator:
+      case .binaryOperator:
         // 'yield &= x' treats yield as an identifier.
         return false
       default:

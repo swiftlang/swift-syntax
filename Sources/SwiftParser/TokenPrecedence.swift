@@ -125,7 +125,7 @@ public enum TokenPrecedence: Comparable {
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
       .rethrowsKeyword, .throwsKeyword,
       // Operators can occur inside expressions
-      .postfixOperator, .prefixOperator, .spacedBinaryOperator, .unspacedBinaryOperator,
+      .postfixOperator, .prefixOperator, .binaryOperator,
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
       .anyKeyword, .inoutKeyword,
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.

@@ -817,7 +817,7 @@ final class ExpressionTests: XCTestCase {
   func testOperatorReference() {
     AssertParse(
       "reduce(0, 1️⃣+)",
-      substructure: Syntax(TokenSyntax.unspacedBinaryOperator("+")),
+      substructure: Syntax(TokenSyntax.binaryOperator("+")),
       substructureAfterMarker: "1️⃣"
     )
   }

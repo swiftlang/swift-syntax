@@ -812,8 +812,7 @@ public let DECL_NODES: [Node] = [
                kind: "Token",
                tokenChoices: [
                  "Identifier",
-                 "UnspacedBinaryOperator",
-                 "SpacedBinaryOperator",
+                 "BinaryOperator",
                  "PrefixOperator",
                  "PostfixOperator"
                ]),
@@ -1312,8 +1311,7 @@ public let DECL_NODES: [Node] = [
          Child(name: "Identifier",
                kind: "Token",
                tokenChoices: [
-                 "UnspacedBinaryOperator",
-                 "SpacedBinaryOperator",
+                 "BinaryOperator",
                  "PrefixOperator",
                  "PostfixOperator"
                ],

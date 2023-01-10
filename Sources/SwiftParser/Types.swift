@@ -1050,13 +1050,8 @@ extension Parser {
 }
 
 extension Lexer.Lexeme {
-  var isBinaryOperator: Bool {
-    return self.rawTokenKind == .spacedBinaryOperator
-      || self.rawTokenKind == .unspacedBinaryOperator
-  }
-
   var isAnyOperator: Bool {
-    return self.isBinaryOperator
+    return self.rawTokenKind == .binaryOperator
       || self.rawTokenKind == .postfixOperator
       || self.rawTokenKind == .prefixOperator
   }
@@ -1079,10 +1074,9 @@ extension Lexer.Lexeme {
       .postfixQuestionMark,
       .colon:
       return true
-    case .spacedBinaryOperator:
+    case .binaryOperator:
       return self.tokenText == "&"
-    case .unspacedBinaryOperator,
-      .postfixOperator:
+    case .postfixOperator:
       return false
     case .leftParen, .leftSquareBracket:
       // These only apply to the generic type if they don't start a new line.

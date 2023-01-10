@@ -167,7 +167,7 @@ public let EXPR_NODES: [Node] = [
                  "Self",
                  "CapitalSelf",
                  "DollarIdentifier",
-                 "SpacedBinaryOperator"
+                 "BinaryOperator"
                ]),
          Child(name: "DeclNameArguments",
                kind: "DeclNameArguments",
@@ -282,7 +282,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "OperatorToken",
-               kind: "BinaryOperatorToken")
+               kind: "BinaryOperatorToken",
+               tokenChoices: [
+                 "BinaryOperator"
+               ])
        ]),
 
   Node(name: "ArrowExpr",
@@ -1080,7 +1083,7 @@ public let EXPR_NODES: [Node] = [
                  "Self",
                  "CapitalSelf",
                  "DollarIdentifier",
-                 "SpacedBinaryOperator",
+                 "BinaryOperator",
                  "IntegerLiteral"
                ]),
          Child(name: "DeclNameArguments",

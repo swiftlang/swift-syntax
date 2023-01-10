@@ -223,9 +223,7 @@ public enum TokenKind: Hashable {
   
   case identifier(String)
   
-  case unspacedBinaryOperator(String)
-  
-  case spacedBinaryOperator(String)
+  case binaryOperator(String)
   
   case postfixOperator(String)
   
@@ -626,9 +624,7 @@ public enum TokenKind: Hashable {
       return text
     case .identifier(let text): 
       return text
-    case .unspacedBinaryOperator(let text): 
-      return text
-    case .spacedBinaryOperator(let text): 
+    case .binaryOperator(let text): 
       return text
     case .postfixOperator(let text): 
       return text
@@ -1097,9 +1093,7 @@ public enum TokenKind: Hashable {
       return false
     case .identifier: 
       return false
-    case .unspacedBinaryOperator: 
-      return false
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return false
     case .postfixOperator: 
       return false
@@ -1345,9 +1339,7 @@ public enum TokenKind: Hashable {
       return false
     case .identifier: 
       return false
-    case .unspacedBinaryOperator: 
-      return false
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return false
     case .postfixOperator: 
       return false
@@ -1590,9 +1582,7 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.identifier(let lhsText), .identifier(let rhsText)): 
       return lhsText == rhsText
-    case (.unspacedBinaryOperator(let lhsText), .unspacedBinaryOperator(let rhsText)): 
-      return lhsText == rhsText
-    case (.spacedBinaryOperator(let lhsText), .spacedBinaryOperator(let rhsText)): 
+    case (.binaryOperator(let lhsText), .binaryOperator(let rhsText)): 
       return lhsText == rhsText
     case (.postfixOperator(let lhsText), .postfixOperator(let rhsText)): 
       return lhsText == rhsText
@@ -1837,9 +1827,7 @@ public enum RawTokenKind: Equatable, Hashable {
   
   case identifier
   
-  case unspacedBinaryOperator
-  
-  case spacedBinaryOperator
+  case binaryOperator
   
   case postfixOperator
   
@@ -2297,9 +2285,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"token"#
     case .identifier: 
       return #"identifier"#
-    case .unspacedBinaryOperator: 
-      return #"binary operator"#
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return #"binary operator"#
     case .postfixOperator: 
       return #"postfix operator"#
@@ -2545,9 +2531,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .identifier: 
       return false
-    case .unspacedBinaryOperator: 
-      return false
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return false
     case .postfixOperator: 
       return false
@@ -2793,9 +2777,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .identifier: 
       return false
-    case .unspacedBinaryOperator: 
-      return false
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return false
     case .postfixOperator: 
       return false
@@ -3380,10 +3362,8 @@ extension TokenKind {
       return .unknown(text)
     case .identifier: 
       return .identifier(text)
-    case .unspacedBinaryOperator: 
-      return .unspacedBinaryOperator(text)
-    case .spacedBinaryOperator: 
-      return .spacedBinaryOperator(text)
+    case .binaryOperator: 
+      return .binaryOperator(text)
     case .postfixOperator: 
       return .postfixOperator(text)
     case .prefixOperator: 
@@ -3628,10 +3608,8 @@ extension TokenKind {
       return (.unknown, str)
     case .identifier(let str): 
       return (.identifier, str)
-    case .unspacedBinaryOperator(let str): 
-      return (.unspacedBinaryOperator, str)
-    case .spacedBinaryOperator(let str): 
-      return (.spacedBinaryOperator, str)
+    case .binaryOperator(let str): 
+      return (.binaryOperator, str)
     case .postfixOperator(let str): 
       return (.postfixOperator, str)
     case .prefixOperator(let str): 

@@ -393,8 +393,7 @@ ATTRIBUTE_NODES = [
                    ''',
                    token_choices=[
                        'IdentifierToken',
-                       'UnspacedBinaryOperatorToken',
-                       'SpacedBinaryOperatorToken',
+                       'BinaryOperatorToken',
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
                    ]),

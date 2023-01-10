@@ -39,8 +39,7 @@ GENERIC_NODES = [
              Child('LeftTypeIdentifier', kind='Type', name_for_diagnostics='left-hand type'),
              Child('EqualityToken', kind='Token',
                    token_choices=[
-                       'SpacedBinaryOperatorToken',
-                       'UnspacedBinaryOperatorToken',
+                       'BinaryOperatorToken',
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
                    ]),

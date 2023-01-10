@@ -1249,7 +1249,7 @@ final class DeclarationTests: XCTestCase {
                       decl: Decl(
                         FunctionDeclSyntax(
                           funcKeyword: .funcKeyword(presence: .missing),
-                          identifier: .spacedBinaryOperator("^"),
+                          identifier: .binaryOperator("^"),
                           signature: FunctionSignatureSyntax(
                             input: ParameterClauseSyntax(
                               leftParen: .leftParenToken(presence: .missing),

@@ -446,8 +446,7 @@ DECL_NODES = [
              Child('Identifier', kind='Token',
                    token_choices=[
                        'IdentifierToken',
-                       'UnspacedBinaryOperatorToken',
-                       'SpacedBinaryOperatorToken',
+                       'BinaryOperatorToken',
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
                    ]),
@@ -741,8 +740,7 @@ DECL_NODES = [
              Child('Identifier', kind='Token',
                    classification='OperatorIdentifier',
                    token_choices=[
-                       'UnspacedBinaryOperatorToken',
-                       'SpacedBinaryOperatorToken',
+                       'BinaryOperatorToken',
                        'PrefixOperatorToken',
                        'PostfixOperatorToken',
                    ]),

@@ -1438,28 +1438,14 @@ extension TokenSyntax {
     )
   }
   
-  public static func unspacedBinaryOperator(
+  public static func binaryOperator(
     _ text: String, 
     leadingTrivia: Trivia = [], 
     trailingTrivia: Trivia = [], 
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .unspacedBinaryOperator(text), 
-      leadingTrivia: leadingTrivia, 
-      trailingTrivia: trailingTrivia, 
-      presence: presence
-    )
-  }
-  
-  public static func spacedBinaryOperator(
-    _ text: String, 
-    leadingTrivia: Trivia = [], 
-    trailingTrivia: Trivia = [], 
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .spacedBinaryOperator(text), 
+      .binaryOperator(text), 
       leadingTrivia: leadingTrivia, 
       trailingTrivia: trailingTrivia, 
       presence: presence

@@ -95,26 +95,6 @@ enum AccessorKind: RawTokenKindSubset {
   }
 }
 
-enum BinaryOperator: RawTokenKindSubset {
-  case spacedBinaryOperator
-  case unspacedBinaryOperator
-
-  init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.rawTokenKind {
-    case .spacedBinaryOperator: self = .spacedBinaryOperator
-    case .unspacedBinaryOperator: self = .unspacedBinaryOperator
-    default: return nil
-    }
-  }
-
-  var rawTokenKind: RawTokenKind {
-    switch self {
-    case .spacedBinaryOperator: return .spacedBinaryOperator
-    case .unspacedBinaryOperator: return .unspacedBinaryOperator
-    }
-  }
-}
-
 enum CanBeStatementStart: RawTokenKindSubset {
   case breakKeyword
   case continueKeyword
@@ -460,15 +440,13 @@ enum IdentifierOrRethrowsTokens: RawTokenKindSubset {
 }
 
 enum Operator: RawTokenKindSubset {
-  case spacedBinaryOperator
-  case unspacedBinaryOperator
+  case binaryOperator
   case postfixOperator
   case prefixOperator
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme.rawTokenKind {
-    case .spacedBinaryOperator: self = .spacedBinaryOperator
-    case .unspacedBinaryOperator: self = .unspacedBinaryOperator
+    case .binaryOperator: self = .binaryOperator
     case .postfixOperator: self = .postfixOperator
     case .prefixOperator: self = .prefixOperator
     default: return nil
@@ -477,8 +455,7 @@ enum Operator: RawTokenKindSubset {
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .spacedBinaryOperator: return .spacedBinaryOperator
-    case .unspacedBinaryOperator: return .unspacedBinaryOperator
+    case .binaryOperator: return .binaryOperator
     case .postfixOperator: return .postfixOperator
     case .prefixOperator: return .prefixOperator
     }
@@ -536,7 +513,7 @@ enum OperatorLike: RawTokenKindSubset {
 
   var precedence: TokenPrecedence? {
     switch self {
-    case .regexLiteral: return TokenPrecedence(.spacedBinaryOperator)
+    case .regexLiteral: return TokenPrecedence(.binaryOperator)
     default: return nil
     }
   }

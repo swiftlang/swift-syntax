@@ -319,6 +319,35 @@ public struct AddCompletionHandler: PeerDeclarationMacro {
   }
 }
 
+public struct AddBackingStorage: MemberDeclarationMacro {
+  public static func expansion(
+    of node: CustomAttributeSyntax,
+    attachedTo decl: DeclSyntax,
+    in context: inout
+    MacroExpansionContext)
+  throws -> [MemberDeclListItemSyntax] {
+    let identifierPattern = IdentifierPatternSyntax(
+      identifier: .identifier("_storage")
+    )
+      .withLeadingTrivia(.space)
+
+    let pattern = PatternBindingSyntax(
+      pattern: identifierPattern,
+      typeAnnotation: TypeAnnotationSyntax(
+        colon: .colonToken(trailingTrivia: .space),
+        type: SimpleTypeIdentifierSyntax(name: .identifier("Storage<Self>"))
+      )
+    )
+    return [.init(
+        decl: VariableDeclSyntax(
+        letOrVarKeyword: TokenSyntax(.varKeyword, presence: .present),
+        bindings: PatternBindingListSyntax([pattern])
+      ))
+      .withLeadingTrivia([.newlines(1), .spaces(2)])
+    ]
+  }
+}
+
 // MARK: Assertion helper functions
 
 /// Assert that expanding the given macros in the original source produces
@@ -381,6 +410,7 @@ public let testMacros: [String: Macro.Type] = [
   "myError": ErrorMacro.self,
   "bitwidthNumberedStructs": DefineBitwidthNumberedStructsMacro.self,
   "addCompletionHandler": AddCompletionHandler.self,
+  "addBackingStorage": AddBackingStorage.self,
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -514,6 +544,25 @@ final class MacroSystemTests: XCTestCase {
         Task {
           completionHandler(await f(a: a, for: b, value))
         }
+      }
+      """
+    )
+  }
+
+  func testAddBackingStorage() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      @addBackingStorage
+      struct S {
+        var value: Int
+      }
+      """,
+      """
+
+      struct S {
+        var value: Int
+        var _storage: Storage<Self>
       }
       """
     )

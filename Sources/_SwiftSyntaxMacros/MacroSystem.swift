@@ -106,7 +106,8 @@ class MacroApplication: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerDeclarationMacro.Type)
+        return !(macro is PeerDeclarationMacro.Type ||
+                 macro is MemberDeclarationMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -218,6 +219,26 @@ class MacroApplication: SyntaxRewriter {
 
     return .init(newItems)
   }
+
+  override func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(expandMembers(of: node))
+  }
+
+  override func visit(_ node: StructDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(expandMembers(of: node))
+  }
+
+  override func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(expandMembers(of: node))
+  }
+
+  override func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(expandMembers(of: node))
+  }
+
+  override func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(expandMembers(of: node))
+  }
 }
 
 extension MacroApplication {
@@ -262,6 +283,48 @@ extension MacroApplication {
     }
 
     return peers
+  }
+
+  /// Expands any attached custom attributes that refer to member declaration macros,
+  /// and returns result of adding those members to the given declaration.
+  private func expandMembers<Decl: DeclGroupSyntax & DeclSyntaxProtocol>(of decl: Decl) -> Decl {
+    guard
+      let attributes =
+        (decl.children(viewMode: .sourceAccurate).compactMap {
+          $0.as(AttributeListSyntax.self)
+        }).first
+    else {
+      return decl
+    }
+
+    var newMembers: [DeclSyntax] = []
+    for attribute in attributes {
+      guard case let .customAttribute(customAttribute) = attribute,
+            let attributeName = customAttribute.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+            let macro = macroSystem.macros[attributeName],
+            let memberMacro = macro as? MemberDeclarationMacro.Type else {
+        continue
+      }
+
+      do {
+        try newMembers.append(contentsOf: memberMacro.expansion(of: customAttribute,
+                                                                attachedTo: DeclSyntax(decl),
+                                                                in: &context))
+      } catch {
+        // Record the error
+        context.diagnose(
+          Diagnostic(
+            node: Syntax(attribute),
+            message: ThrownErrorDiagnostic(message: String(describing: error))
+          )
+        )
+      }
+    }
+
+    // FIXME: Is there a better way to add N members to a decl?
+    return decl.withMembers(newMembers.reduce(decl.members) { partialMembers, memberListItem in
+      partialMembers.addMember(memberListItem)
+    })
   }
 }
 

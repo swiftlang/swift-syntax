@@ -7,10 +7,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-import SwiftParser
-import SwiftDiagnostics
-
 /// Describes a macro that forms declarations.
 public protocol DeclarationMacro: Macro {
 }

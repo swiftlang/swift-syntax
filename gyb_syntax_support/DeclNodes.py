@@ -16,7 +16,7 @@ DECL_NODES = [
     #                            type-assignment
     # typealias-name -> identifier
     Node('TypealiasDecl', name_for_diagnostics='typealias declaration', kind='Decl',
-         traits=['IdentifiedDecl'],
+         traits=['IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -37,7 +37,7 @@ DECL_NODES = [
     #                                 generic-where-clause?
     # associatedtype-name -> identifier
     Node('AssociatedtypeDecl', name_for_diagnostics='associatedtype declaration',
-         kind='Decl', traits=['IdentifiedDecl'],
+         kind='Decl', traits=['IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -217,7 +217,7 @@ DECL_NODES = [
     #                     '{' class-members '}'
     # class-name -> identifier
     Node('ClassDecl', name_for_diagnostics='class', kind='Decl',
-         traits=['DeclGroup', 'IdentifiedDecl'],
+         traits=['DeclGroup', 'IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -242,7 +242,7 @@ DECL_NODES = [
     #                     '{' actor-members '}'
     # actor-name -> identifier
     Node('ActorDecl', name_for_diagnostics='actor', kind='Decl',
-         traits=['DeclGroup', 'IdentifiedDecl'],
+         traits=['DeclGroup', 'IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -267,7 +267,7 @@ DECL_NODES = [
     #                         '{' struct-members '}'
     # struct-name -> identifier
     Node('StructDecl', name_for_diagnostics='struct', kind='Decl',
-         traits=['DeclGroup', 'IdentifiedDecl'],
+         traits=['DeclGroup', 'IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -285,7 +285,7 @@ DECL_NODES = [
          ]),
 
     Node('ProtocolDecl', name_for_diagnostics='protocol', kind='Decl',
-         traits=['DeclGroup', 'IdentifiedDecl'],
+         traits=['DeclGroup', 'IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -311,7 +311,7 @@ DECL_NODES = [
     #                            '{' extension-members '}'
     # extension-name -> identifier
     Node('ExtensionDecl', name_for_diagnostics='extension', kind='Decl',
-         traits=['DeclGroup'],
+         traits=['DeclGroup', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -376,7 +376,7 @@ DECL_NODES = [
     # external-parameter-name? local-parameter-name ':'
     #   type '...'? '='? expression? ','?
     Node('FunctionParameter', name_for_diagnostics='parameter', kind='Syntax',
-         traits=['WithTrailingComma'],
+         traits=['WithTrailingComma', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -436,7 +436,7 @@ DECL_NODES = [
          element_name='Modifier'),
 
     Node('FunctionDecl', name_for_diagnostics='function', kind='Decl',
-         traits=['IdentifiedDecl'],
+         traits=['IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -461,6 +461,7 @@ DECL_NODES = [
          ]),
 
     Node('InitializerDecl', name_for_diagnostics='initializer', kind='Decl',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -484,6 +485,7 @@ DECL_NODES = [
          ]),
 
     Node('DeinitializerDecl', name_for_diagnostics='deinitializer', kind='Decl',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -494,6 +496,7 @@ DECL_NODES = [
          ]),
 
     Node('SubscriptDecl', name_for_diagnostics='subscript', kind='Decl',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -525,6 +528,7 @@ DECL_NODES = [
          element='AccessPathComponent'),
 
     Node('ImportDecl', name_for_diagnostics='import', kind='Decl',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -551,6 +555,7 @@ DECL_NODES = [
          ]),
 
     Node('AccessorDecl', name_for_diagnostics='accessor', kind='Decl',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -605,6 +610,7 @@ DECL_NODES = [
          element='PatternBinding'),
 
     Node('VariableDecl', name_for_diagnostics='variable', kind='Decl',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),
@@ -650,6 +656,7 @@ DECL_NODES = [
          `EnumCaseElement`s inside, each declaring a different case of the
          enum.
          ''',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True,
@@ -669,7 +676,7 @@ DECL_NODES = [
          ]),
 
     Node('EnumDecl', name_for_diagnostics='enum', kind='Decl',
-         traits=['IdentifiedDecl'],
+         traits=['IdentifiedDecl', 'Attributed'],
          description='A Swift `enum` declaration.',
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
@@ -715,7 +722,7 @@ DECL_NODES = [
 
     # operator-decl -> attribute? modifiers? 'operator' operator
     Node('OperatorDecl', name_for_diagnostics='operator declaration', kind='Decl',
-         traits=['IdentifiedDecl'],
+         traits=['IdentifiedDecl', 'Attributed'],
          description='A Swift `operator` declaration.',
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
@@ -777,7 +784,7 @@ DECL_NODES = [
     #                            identifier '{' precedence-group-attribute-list
     #                            '}'
     Node('PrecedenceGroupDecl', name_for_diagnostics='precedencegroup', kind='Decl',
-         traits=['IdentifiedDecl'],
+         traits=['IdentifiedDecl', 'Attributed'],
          description='A Swift `precedencegroup` declaration.',
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
@@ -904,7 +911,7 @@ DECL_NODES = [
          ]),
 
     Node('MacroDecl', name_for_diagnostics='macro', kind='Decl',
-         traits=['IdentifiedDecl'],
+         traits=['IdentifiedDecl', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),

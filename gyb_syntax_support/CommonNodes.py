@@ -13,7 +13,9 @@ COMMON_NODES = [
     Node('Pattern', name_for_diagnostics='pattern', kind='Syntax',
          parser_function='parsePattern'),
     Node('Missing', name_for_diagnostics=None, kind='Syntax'),
-    Node('MissingDecl', name_for_diagnostics='declaration', kind='Decl', children=[
+    Node('MissingDecl', name_for_diagnostics='declaration', kind='Decl',
+         traits=['Attributed'],
+         children=[
         Child('Attributes', kind='AttributeList',
               collection_element_name='Attribute', is_optional=True),
         Child('Modifiers', kind='ModifierList',

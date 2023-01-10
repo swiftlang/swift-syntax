@@ -355,6 +355,9 @@ public let TYPE_NODES: [Node] = [
   Node(name: "AttributedType",
        nameForDiagnostics: "type",
        kind: "Type",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Specifier",
                kind: "Token",

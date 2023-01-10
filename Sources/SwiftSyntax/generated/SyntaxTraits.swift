@@ -1,5 +1,29 @@
 
 
+// MARK: - AttributedSyntax
+
+public protocol AttributedSyntax: SyntaxProtocol {
+  var attributes: AttributeListSyntax? { get }
+  
+  func withAttributes(_ newChild: AttributeListSyntax?) -> Self
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `AttributedSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_ : AttributedSyntax.Protocol) -> Bool {
+    return self.asProtocol(AttributedSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `AttributedSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_ : AttributedSyntax.Protocol) -> AttributedSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? AttributedSyntax
+  }
+}
+
 // MARK: - DeclGroupSyntax
 
 public protocol DeclGroupSyntax: SyntaxProtocol {
@@ -187,16 +211,22 @@ public extension SyntaxProtocol {
 extension AccessorBlockSyntax: BracedSyntax {
 }
 
+extension AccessorDeclSyntax: AttributedSyntax {
+}
+
 extension AccessorParameterSyntax: ParenthesizedSyntax {
 }
 
-extension ActorDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {
+extension ActorDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension ArrayElementSyntax: WithTrailingCommaSyntax {
 }
 
-extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax {
+extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
+}
+
+extension AttributedTypeSyntax: AttributedSyntax {
 }
 
 extension CaseItemSyntax: WithTrailingCommaSyntax {
@@ -208,7 +238,7 @@ extension CatchClauseSyntax: WithCodeBlockSyntax {
 extension CatchItemSyntax: WithTrailingCommaSyntax {
 }
 
-extension ClassDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {
+extension ClassDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {
@@ -218,6 +248,9 @@ extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {
 }
 
 extension ClosureParamSyntax: WithTrailingCommaSyntax {
+}
+
+extension ClosureSignatureSyntax: AttributedSyntax {
 }
 
 extension CodeBlockSyntax: BracedSyntax, WithStatementsSyntax {
@@ -235,6 +268,9 @@ extension DeclNameArgumentsSyntax: ParenthesizedSyntax {
 extension DeferStmtSyntax: WithCodeBlockSyntax {
 }
 
+extension DeinitializerDeclSyntax: AttributedSyntax {
+}
+
 extension DictionaryElementSyntax: WithTrailingCommaSyntax {
 }
 
@@ -244,25 +280,28 @@ extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {
 extension DoStmtSyntax: WithCodeBlockSyntax {
 }
 
+extension EnumCaseDeclSyntax: AttributedSyntax {
+}
+
 extension EnumCaseElementSyntax: WithTrailingCommaSyntax {
 }
 
-extension EnumDeclSyntax: IdentifiedDeclSyntax {
+extension EnumDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension ExpressionSegmentSyntax: ParenthesizedSyntax {
 }
 
-extension ExtensionDeclSyntax: DeclGroupSyntax {
+extension ExtensionDeclSyntax: DeclGroupSyntax, AttributedSyntax {
 }
 
 extension ForInStmtSyntax: WithCodeBlockSyntax {
 }
 
-extension FunctionDeclSyntax: IdentifiedDeclSyntax {
+extension FunctionDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
 }
 
-extension FunctionParameterSyntax: WithTrailingCommaSyntax {
+extension FunctionParameterSyntax: WithTrailingCommaSyntax, AttributedSyntax {
 }
 
 extension FunctionTypeSyntax: ParenthesizedSyntax {
@@ -271,7 +310,7 @@ extension FunctionTypeSyntax: ParenthesizedSyntax {
 extension GenericArgumentSyntax: WithTrailingCommaSyntax {
 }
 
-extension GenericParameterSyntax: WithTrailingCommaSyntax {
+extension GenericParameterSyntax: WithTrailingCommaSyntax, AttributedSyntax {
 }
 
 extension GenericRequirementSyntax: WithTrailingCommaSyntax {
@@ -283,19 +322,28 @@ extension GuardStmtSyntax: WithCodeBlockSyntax {
 extension IfStmtSyntax: WithCodeBlockSyntax {
 }
 
+extension ImportDeclSyntax: AttributedSyntax {
+}
+
 extension InheritedTypeSyntax: WithTrailingCommaSyntax {
+}
+
+extension InitializerDeclSyntax: AttributedSyntax {
 }
 
 extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {
 }
 
-extension MacroDeclSyntax: IdentifiedDeclSyntax {
+extension MacroDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension MemberDeclBlockSyntax: BracedSyntax {
 }
 
-extension OperatorDeclSyntax: IdentifiedDeclSyntax {
+extension MissingDeclSyntax: AttributedSyntax {
+}
+
+extension OperatorDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension ParameterClauseSyntax: ParenthesizedSyntax {
@@ -313,13 +361,13 @@ extension PoundSourceLocationSyntax: ParenthesizedSyntax {
 extension PoundWarningDeclSyntax: ParenthesizedSyntax {
 }
 
-extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax {
+extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension PrimaryAssociatedTypeSyntax: WithTrailingCommaSyntax {
 }
 
-extension ProtocolDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {
+extension ProtocolDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {
@@ -328,7 +376,10 @@ extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {
 extension SourceFileSyntax: WithStatementsSyntax {
 }
 
-extension StructDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {
+extension StructDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
+}
+
+extension SubscriptDeclSyntax: AttributedSyntax {
 }
 
 extension SwitchCaseSyntax: WithStatementsSyntax {
@@ -358,7 +409,10 @@ extension TupleTypeElementSyntax: WithTrailingCommaSyntax {
 extension TupleTypeSyntax: ParenthesizedSyntax {
 }
 
-extension TypealiasDeclSyntax: IdentifiedDeclSyntax {
+extension TypealiasDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
+}
+
+extension VariableDeclSyntax: AttributedSyntax {
 }
 
 extension WhileStmtSyntax: WithCodeBlockSyntax {

@@ -419,6 +419,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 ### Traits
 
+- <doc:SwiftSyntax/AttributedSyntax>
 - <doc:SwiftSyntax/DeclGroupSyntax>
 - <doc:SwiftSyntax/BracedSyntax>
 - <doc:SwiftSyntax/IdentifiedDeclSyntax>

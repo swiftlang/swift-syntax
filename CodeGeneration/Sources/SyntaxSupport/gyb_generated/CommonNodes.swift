@@ -45,6 +45,9 @@ public let COMMON_NODES: [Node] = [
   Node(name: "MissingDecl",
        nameForDiagnostics: "declaration",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",

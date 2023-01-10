@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import SwiftParser
 
 /// Describes a macro that is explicitly expanded as an expression.
 public protocol ExpressionMacro: Macro {

@@ -71,7 +71,7 @@ GENERIC_NODES = [
     #                    | type-name : type-identifier
     #                    | type-name : protocol-composition-type
     Node('GenericParameter', name_for_diagnostics='generic parameter', kind='Syntax',
-         traits=['WithTrailingComma'],
+         traits=['WithTrailingComma', 'Attributed'],
          children=[
              Child('Attributes', kind='AttributeList',
                    collection_element_name='Attribute', is_optional=True),

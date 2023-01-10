@@ -286,7 +286,7 @@ extension EnumCaseDeclSyntax: AttributedSyntax {
 extension EnumCaseElementSyntax: WithTrailingCommaSyntax {
 }
 
-extension EnumDeclSyntax: IdentifiedDeclSyntax, AttributedSyntax {
+extension EnumDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, AttributedSyntax {
 }
 
 extension ExpressionSegmentSyntax: ParenthesizedSyntax {

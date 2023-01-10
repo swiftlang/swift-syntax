@@ -1237,6 +1237,7 @@ public let DECL_NODES: [Node] = [
        description: "A Swift `enum` declaration.",
        kind: "Decl",
        traits: [
+         "DeclGroup",
          "IdentifiedDecl",
          "Attributed"
        ],

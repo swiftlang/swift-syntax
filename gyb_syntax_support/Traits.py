@@ -9,6 +9,11 @@ class Trait(object):
 
 
 TRAITS = [
+    Trait('Attributed',
+          children=[
+              Child('Attributes', kind='AttributeList', is_optional=True),
+          ]),
+
     Trait('DeclGroup',
           children=[
               Child('Attributes', kind='AttributeList', is_optional=True),

@@ -434,6 +434,7 @@ EXPR_NODES = [
          element='ClosureParam'),
 
     Node('ClosureSignature', name_for_diagnostics='closure signature', kind='Syntax',
+         traits=['Attributed'],
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),

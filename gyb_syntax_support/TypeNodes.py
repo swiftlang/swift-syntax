@@ -196,6 +196,7 @@ TYPE_NODES = [
     # attributed-type -> type-specifier? attribute-list? type
     # type-specifier -> 'inout' | '__owned' | '__unowned'
     Node('AttributedType', name_for_diagnostics='type', kind='Type',
+         traits=['Attributed'],
          children=[
              Child('Specifier', kind='Token',
                    text_choices=['inout', '__shared', '__owned'],

@@ -240,6 +240,10 @@ class MacroApplication: SyntaxRewriter {
     return visit(declGroup: node)
   }
 
+  override func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
+    return visit(declGroup: node)
+  }
+
   override func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
     return visit(declGroup: node)
   }

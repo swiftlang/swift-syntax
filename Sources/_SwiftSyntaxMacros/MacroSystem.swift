@@ -63,6 +63,7 @@ struct MacroSystem {
 class MacroApplication: SyntaxRewriter {
   let macroSystem: MacroSystem
   var context: MacroExpansionContext
+  var skipNodes: Set<Syntax> = []
 
   init(
     macroSystem: MacroSystem,
@@ -73,14 +74,49 @@ class MacroApplication: SyntaxRewriter {
   }
 
   override func visitAny(_ node: Syntax) -> Syntax? {
-    guard node.evaluatedMacroName != nil else {
+    if skipNodes.contains(node) {
       return nil
     }
 
-    return node.evaluateMacro(
-      with: macroSystem,
-      context: &context
-    )
+    if node.evaluatedMacroName != nil {
+      return node.evaluateMacro(
+        with: macroSystem,
+        context: &context
+      )
+    }
+
+    if let declSyntax = node.as(DeclSyntax.self),
+      let attributedNode = node.asProtocol(AttributedSyntax.self),
+      let attributes = attributedNode.attributes
+    {
+      // Visit the node.
+      skipNodes.insert(node)
+      let visitedNode = self.visit(declSyntax).asProtocol(AttributedSyntax.self)!
+      skipNodes.remove(node)
+
+      // Remove any attached attributes.
+      let newAttributes = attributes.filter {
+        guard case let .customAttribute(customAttr) = $0 else {
+          return true
+        }
+
+        guard let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+          let macro = macroSystem.macros[attributeName]
+        else {
+          return true
+        }
+
+        return !(macro is PeerDeclarationMacro.Type)
+      }
+
+      if newAttributes.isEmpty {
+        return Syntax(visitedNode.withAttributes(nil))
+      }
+
+      return Syntax(visitedNode.withAttributes(AttributeListSyntax(newAttributes)))
+    }
+
+    return nil
   }
 
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
@@ -181,40 +217,6 @@ class MacroApplication: SyntaxRewriter {
     }
 
     return .init(newItems)
-  }
-
-  override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
-    let visitedNode = super.visit(node)
-
-    // FIXME: Generalize this to DeclSyntax, once we have attributes.
-    // Visit the node first.
-
-    guard let visitedFunc = visitedNode.as(FunctionDeclSyntax.self),
-      let attributes = visitedFunc.attributes
-    else {
-      return visitedNode
-    }
-
-    // Remove any attached attributes.
-    let newAttributes = attributes.filter {
-      guard case let .customAttribute(customAttr) = $0 else {
-        return true
-      }
-
-      guard let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
-        let macro = macroSystem.macros[attributeName]
-      else {
-        return true
-      }
-
-      return !(macro is PeerDeclarationMacro.Type)
-    }
-
-    if newAttributes.isEmpty {
-      return DeclSyntax(visitedFunc.withAttributes(nil))
-    }
-
-    return DeclSyntax(visitedFunc.withAttributes(AttributeListSyntax(newAttributes)))
   }
 }
 

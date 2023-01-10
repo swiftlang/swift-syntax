@@ -110,10 +110,10 @@ class MacroApplication: SyntaxRewriter {
       }
 
       if newAttributes.isEmpty {
-        return Syntax(visitedNode.withAttributes(nil))
+        return Syntax(fromProtocol: visitedNode.withAttributes(nil))
       }
 
-      return Syntax(visitedNode.withAttributes(AttributeListSyntax(newAttributes)))
+      return Syntax(fromProtocol: visitedNode.withAttributes(AttributeListSyntax(newAttributes)))
     }
 
     return nil

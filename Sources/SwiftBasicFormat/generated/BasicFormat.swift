@@ -72,6 +72,8 @@ open class BasicFormat: SyntaxRewriter {
   
   open func shouldIndent(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
+    case \AccessorBlockSyntax.accessors: 
+      return true
     case \ArrayExprSyntax.elements: 
       return true
     case \ClosureExprSyntax.statements: 
@@ -103,6 +105,8 @@ open class BasicFormat: SyntaxRewriter {
   
   open func requiresLeadingNewline(_ keyPath: AnyKeyPath) -> Bool {
     switch keyPath {
+    case \AccessorBlockSyntax.rightBrace: 
+      return true
     case \ClosureExprSyntax.rightBrace: 
       return true
     case \CodeBlockSyntax.rightBrace: 
@@ -118,6 +122,8 @@ open class BasicFormat: SyntaxRewriter {
   
   open func childrenSeparatedByNewline(_ node: Syntax) -> Bool {
     switch node.as(SyntaxEnum.self) {
+    case .accessorList: 
+      return true
     case .codeBlockItemList: 
       return true
     case .memberDeclList: 

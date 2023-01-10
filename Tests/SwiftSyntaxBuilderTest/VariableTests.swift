@@ -139,6 +139,33 @@ final class VariableTests: XCTestCase {
     )
   }
 
+  func testAccessorList() {
+    let buildable = VariableDecl(name: "test", type: TypeAnnotation(type: Type("Int"))) {
+      AccessorDecl(accessorKind: .contextualKeyword("get"), asyncKeyword: nil) {
+        SequenceExpr {
+          IntegerLiteralExpr(4)
+          BinaryOperatorExpr(text: "+")
+          IntegerLiteralExpr(5)
+        }
+      }
+
+      AccessorDecl(accessorKind: .contextualKeyword("willSet"), asyncKeyword: nil) {}
+    }
+
+    AssertBuildResult(
+      buildable,
+      """
+      var test: Int {
+          get {
+              4 + 5
+          }
+          willSet {
+          }
+      }
+      """
+    )
+  }
+
   func testAttributedVariables() {
     let testCases: [UInt: (VariableDecl, String)] = [
       #line: (

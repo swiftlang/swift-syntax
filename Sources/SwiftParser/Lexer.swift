@@ -24,7 +24,7 @@ public struct Lexer {
   /// represents a fully identified, meaningful part of the input text that
   /// will can be consumed by a ``Parser``.
   public struct Lexeme: CustomDebugStringConvertible {
-    public struct Flags: OptionSet {
+    public struct Flags: OptionSet, CustomDebugStringConvertible {
       public var rawValue: UInt8
 
       public init(rawValue: UInt8) {
@@ -34,6 +34,20 @@ public struct Lexer {
       public static let isAtStartOfLine = Flags(rawValue: 1 << 0)
       public static let isMultilineStringLiteral = Flags(rawValue: 1 << 1)
       public static let isErroneous = Flags(rawValue: 1 << 2)
+
+      public var debugDescription: String {
+        var descriptionComponents: [String] = []
+        if self.contains(.isAtStartOfLine) {
+          descriptionComponents.append("isAtStartOfLine")
+        }
+        if self.contains(.isMultilineStringLiteral) {
+          descriptionComponents.append("isMultilineStringLiteral")
+        }
+        if self.contains(.isErroneous) {
+          descriptionComponents.append("isErroneous")
+        }
+        return "[\(descriptionComponents.joined(separator: ", "))]"
+      }
     }
 
     @_spi(RawSyntax)

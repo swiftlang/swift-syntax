@@ -14,321 +14,234 @@ import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
 
-private func lexeme(
-  _ kind: RawTokenKind,
-  _ wholeText: SyntaxText,
-  leadingLength: Int = 0,
-  trailingLength: Int = 0
-) -> Lexer.Lexeme {
-  return Lexer.Lexeme(
-    tokenKind: kind,
-    flags: [.isAtStartOfLine],
-    start: wholeText.baseAddress!,
-    leadingTriviaLength: leadingLength,
-    textLength: wholeText.count - leadingLength - trailingLength,
-    trailingTriviaLength: trailingLength
-  )
-}
-
 public class LexerTests: XCTestCase {
   func testIdentifiers() {
-    var data =
-      """
-      Hello World
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.identifier, "Hello ", trailingLength: 1),
-          lexeme(.identifier, "World"),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "Hello World",
+      lexemes: [
+        LexemeSpec(.identifier, text: "Hello", trailing: " "),
+        LexemeSpec(.identifier, text: "World"),
+      ]
+    )
   }
 
   func testEscapedIdentifiers() {
-    var data =
-      """
-      `Hello` `World` `$`
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.identifier, "`Hello` ", trailingLength: 1),
-          lexeme(.identifier, "`World` ", trailingLength: 1),
-          lexeme(.identifier, "`$`"),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "`Hello` `World` `$`",
+      lexemes: [
+        LexemeSpec(.identifier, text: "`Hello`", trailing: " "),
+        LexemeSpec(.identifier, text: "`World`", trailing: " "),
+        LexemeSpec(.identifier, text: "`$`"),
+      ]
+    )
   }
 
   func testBlockComments() {
-    do {
-      var data =
-        """
-        /*/ */
-        func not_doc5() {}
-        """
+    AssertLexemes(
+      """
+      /*/ */
+      func not_doc5() {}
+      """,
+      lexemes: [
+        LexemeSpec(.funcKeyword, leading: "/*/ */\n", text: "func", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.identifier, text: "not_doc5"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.rightParen, text: ")", trailing: " "),
+        LexemeSpec(.leftBrace, text: "{"),
+        LexemeSpec(.rightBrace, text: "}"),
+      ]
+    )
 
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.funcKeyword, "/*/ */\nfunc ", leadingLength: 7, trailingLength: 1),
-            lexeme(.identifier, "not_doc5"),
-            lexeme(.leftParen, "("),
-            lexeme(.rightParen, ") ", trailingLength: 1),
-            lexeme(.leftBrace, "{"),
-            lexeme(.rightBrace, "}"),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
-
-    do {
-      var data =
-        """
-        /* */
-        /**/
-        /* /* */ */
-        """
-
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.eof, "/* */\n/**/\n/* /* */ */", leadingLength: 22)
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      """
+      /* */
+      /**/
+      /* /* */ */
+      """,
+      lexemes: [
+        LexemeSpec(.eof, leading: "/* */\n/**/\n/* /* */ */", text: "", flags: [.isAtStartOfLine])
+      ]
+    )
   }
 
   func testDeepTupleAccess() {
-    var data =
-      #"""
-      x.1.0
-      """#
-
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.identifier, "x"),
-          lexeme(.period, "."),
-          lexeme(.integerLiteral, "1"),
-          lexeme(.period, "."),
-          lexeme(.integerLiteral, "0"),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "x.1.0",
+      lexemes: [
+        LexemeSpec(.identifier, text: "x"),
+        LexemeSpec(.period, text: "."),
+        LexemeSpec(.integerLiteral, text: "1"),
+        LexemeSpec(.period, text: "."),
+        LexemeSpec(.integerLiteral, text: "0"),
+      ]
+    )
   }
 
   func testUnicodeLiteral() {
-    do {
-      var data =
-        #"""
-        "\u{1234}"
-        """#
+    AssertLexemes(
+      #"""
+      "\u{1234}"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringLiteral, text: #""\u{1234}""#)
+      ]
+    )
 
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.stringLiteral, #""\u{1234}""#),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
-
-    do {
-      var data =
-        #"""
-        "\u{12341234}"
-        """#
-
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.stringLiteral, #""\u{12341234}""#),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      #"""
+      "\u{12341234}"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringLiteral, text: #""\u{12341234}""#, flags: [.isErroneous])
+      ]
+    )
   }
 
   func testNumberLiterals() {
-    var data =
-      """
-      1234567890
-      0b1010101
-      0xABC
-      1.0
-      1.0e10
-      1.0E10
-      0xfeed_beef
-      0xff.0p2
-      -0xff.0p2
-      +0xff.0p2
-      0x1.921fb4p1
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.integerLiteral, "1234567890"),
-          lexeme(.integerLiteral, "\n0b1010101", leadingLength: 1),
-          lexeme(.integerLiteral, "\n0xABC", leadingLength: 1),
-          lexeme(.floatingLiteral, "\n1.0", leadingLength: 1),
-          lexeme(.floatingLiteral, "\n1.0e10", leadingLength: 1),
-          lexeme(.floatingLiteral, "\n1.0E10", leadingLength: 1),
-          lexeme(.integerLiteral, "\n0xfeed_beef", leadingLength: 1),
-          lexeme(.floatingLiteral, "\n0xff.0p2", leadingLength: 1),
-          lexeme(.prefixOperator, "\n-", leadingLength: 1),
-          lexeme(.floatingLiteral, "0xff.0p2"),
-          lexeme(.prefixOperator, "\n+", leadingLength: 1),
-          lexeme(.floatingLiteral, "0xff.0p2"),
-          lexeme(.floatingLiteral, "\n0x1.921fb4p1", leadingLength: 1),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "1234567890",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "1234567890")
+      ]
+    )
+    AssertLexemes(
+      "0b1010101",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0b1010101")
+      ]
+    )
+    AssertLexemes(
+      "0xABC",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0xABC")
+      ]
+    )
+    AssertLexemes(
+      "1.0",
+      lexemes: [
+        LexemeSpec(.floatingLiteral, text: "1.0")
+      ]
+    )
+    AssertLexemes(
+      "1.0e10",
+      lexemes: [
+        LexemeSpec(.floatingLiteral, text: "1.0e10")
+      ]
+    )
+    AssertLexemes(
+      "1.0E10",
+      lexemes: [
+        LexemeSpec(.floatingLiteral, text: "1.0E10")
+      ]
+    )
+    AssertLexemes(
+      "0xfeed_beef",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "0xfeed_beef")
+      ]
+    )
+    AssertLexemes(
+      "0xff.0p2",
+      lexemes: [
+        LexemeSpec(.floatingLiteral, text: "0xff.0p2")
+      ]
+    )
+    AssertLexemes(
+      "-0xff.0p2",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "-"),
+        LexemeSpec(.floatingLiteral, text: "0xff.0p2"),
+      ]
+    )
+    AssertLexemes(
+      "+0xff.0p2",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "+"),
+        LexemeSpec(.floatingLiteral, text: "0xff.0p2"),
+      ]
+    )
+    AssertLexemes(
+      "0x1.921fb4p1",
+      lexemes: [
+        LexemeSpec(.floatingLiteral, text: "0x1.921fb4p1")
+      ]
+    )
   }
 
   func testRawStringLiterals() {
-    do {
-      var data =
-        """
-        ###"this is a ##"raw"## string"###
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.stringLiteral, ####"###"this is a ##"raw"## string"###"####),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      """
+      ###"this is a ##"raw"## string"###
+      """,
+      lexemes: [
+        LexemeSpec(.stringLiteral, text: ####"###"this is a ##"raw"## string"###"####)
+      ]
+    )
 
-    do {
-      var data =
-        """
-        #"#"abc"#
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.stringLiteral, ####"#"#"abc"#"####),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      """
+      #"#"abc"#
+      """,
+      lexemes: [
+        LexemeSpec(.stringLiteral, text: ####"#"#"abc"#"####)
+      ]
+    )
 
-    do {
-      var data =
-        """
-        ###"##"abc"###
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.stringLiteral, ####"###"##"abc"###"####),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      """
+      ###"##"abc"###
+      """,
+      lexemes: [
+        LexemeSpec(.stringLiteral, text: ####"###"##"abc"###"####)
+      ]
+    )
 
-    do {
-      var data =
-        #####"""
-        ##"""abc"####
-        """#####
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.stringLiteral, ###"##"""abc"##"###),
-            lexeme(.pound, "#"),
-            lexeme(.pound, "#"),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      #####"""
+      ##"""abc"####
+      """#####,
+      lexemes: [
+        LexemeSpec(.stringLiteral, text: ###"##"""abc"##"###),
+        LexemeSpec(.pound, text: "#"),
+        LexemeSpec(.pound, text: "#"),
+      ]
+    )
   }
 
   func testShebang() {
-    var data =
+    AssertLexemes(
       """
       #!/usr/bin/swiftc
       let x = 42
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.letKeyword, "#!/usr/bin/swiftc\nlet ", leadingLength: 18, trailingLength: 1),
-          lexeme(.identifier, "x ", trailingLength: 1),
-          lexeme(.equal, "= ", trailingLength: 1),
-          lexeme(.integerLiteral, "42"),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+      """,
+      lexemes: [
+        LexemeSpec(.letKeyword, leading: "#!/usr/bin/swiftc\n", text: "let", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.identifier, text: "x", trailing: " "),
+        LexemeSpec(.equal, text: "=", trailing: " "),
+        LexemeSpec(.integerLiteral, text: "42"),
+      ]
+    )
   }
 
   func testDocComment() {
-    var data =
+    AssertLexemes(
       """
       /** hello */
       var x: Int
       /* regular comment */
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.varKeyword, "/** hello */\nvar ", leadingLength: 13, trailingLength: 1),
-          lexeme(.identifier, "x"),
-          lexeme(.colon, ": ", trailingLength: 1),
-          lexeme(.identifier, "Int"),
-          lexeme(.eof, "\n/* regular comment */", leadingLength: 22),
-        ]
-      )
-    }
+      """,
+      lexemes: [
+        LexemeSpec(.varKeyword, leading: "/** hello */\n", text: "var", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.identifier, text: "x"),
+        LexemeSpec(.colon, text: ":", trailing: " "),
+        LexemeSpec(.identifier, text: "Int"),
+        LexemeSpec(.eof, leading: "\n/* regular comment */", text: "", flags: [.isAtStartOfLine]),
+      ]
+    )
   }
 
   func testMain() {
-    var data =
+    AssertLexemes(
       """
       /* TestApp */
       @main struct TestApp {
@@ -336,554 +249,406 @@ public class LexerTests: XCTestCase {
           print("Hello World")
         }
       }
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.atSign, "/* TestApp */\n@", leadingLength: 14),
-          lexeme(.identifier, "main ", trailingLength: 1),
-          lexeme(.structKeyword, "struct ", trailingLength: 1),
-          lexeme(.identifier, "TestApp ", trailingLength: 1),
-          lexeme(.leftBrace, "{"),
-          lexeme(.staticKeyword, "\n  static ", leadingLength: 3, trailingLength: 1),
-          lexeme(.funcKeyword, "func ", trailingLength: 1),
-          lexeme(.identifier, "main"),
-          lexeme(.leftParen, "("),
-          lexeme(.rightParen, ") ", trailingLength: 1),
-          lexeme(.leftBrace, "{"),
-          lexeme(.identifier, "\n    print", leadingLength: 5),
-          lexeme(.leftParen, "("),
-          lexeme(.stringLiteral, "\"Hello World\""),
-          lexeme(.rightParen, ")"),
-          lexeme(.rightBrace, "\n  }", leadingLength: 3),
-          lexeme(.rightBrace, "\n}", leadingLength: 1),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+      """,
+      lexemes: [
+        LexemeSpec(.atSign, leading: "/* TestApp */\n", text: "@", flags: [.isAtStartOfLine]),
+        LexemeSpec(.identifier, text: "main", trailing: " "),
+        LexemeSpec(.structKeyword, text: "struct", trailing: " "),
+        LexemeSpec(.identifier, text: "TestApp", trailing: " "),
+        LexemeSpec(.leftBrace, text: "{"),
+        LexemeSpec(.staticKeyword, leading: "\n  ", text: "static", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.funcKeyword, text: "func", trailing: " "),
+        LexemeSpec(.identifier, text: "main"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.rightParen, text: ")", trailing: " "),
+        LexemeSpec(.leftBrace, text: "{"),
+        LexemeSpec(.identifier, leading: "\n    ", text: "print", flags: [.isAtStartOfLine]),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.stringLiteral, text: "\"Hello World\""),
+        LexemeSpec(.rightParen, text: ")"),
+        LexemeSpec(.rightBrace, leading: "\n  ", text: "}", flags: [.isAtStartOfLine]),
+        LexemeSpec(.rightBrace, leading: "\n", text: "}", flags: [.isAtStartOfLine]),
+      ]
+    )
   }
 
   func testRegexLexing() {
-    let fixtures: [(String, [Lexer.Lexeme])] = [
-      (
-        "/abc/",
-        [
-          lexeme(.regexLiteral, "/abc/"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "#/abc/#",
-        [
-          lexeme(.regexLiteral, "#/abc/#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "###/abc/###",
-        [
-          lexeme(.regexLiteral, "###/abc/###"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        """
-        #/
-        a
-        b
-        /#
-        """,
-        [
-          lexeme(.regexLiteral, "#/\na\nb\n/#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "#/ \na\nb\n  /#",
-        [
-          lexeme(.regexLiteral, "#/ \na\nb\n  /#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "##/ \na\nb\n  /##",
-        [
-          lexeme(.regexLiteral, "##/ \na\nb\n  /##"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "#/abc/def/#",
-        [
-          lexeme(.regexLiteral, "#/abc/def/#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "#/abc\\/#def/#",
-        [
-          lexeme(.regexLiteral, "#/abc\\/#def/#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "#/abc|#def/#",
-        [
-          lexeme(.regexLiteral, "#/abc|#def/#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "#/abc\n/#",
-        [
-          lexeme(.pound, "#"),
-          lexeme(.unspacedBinaryOperator, "/"),
-          lexeme(.identifier, "abc"),
-          lexeme(.prefixOperator, "\n/", leadingLength: 1),
-          lexeme(.pound, "#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "#/abc\r/#",
-        [
-          lexeme(.pound, "#"),
-          lexeme(.unspacedBinaryOperator, "/"),
-          lexeme(.identifier, "abc"),
-          lexeme(.prefixOperator, "\r/", leadingLength: 1),
-          lexeme(.pound, "#"),
-          lexeme(.eof, ""),
-        ]
-      ),
-      (
-        "/a)/",
-        [
-          lexeme(.prefixOperator, "/"),
-          lexeme(.identifier, "a"),
-          lexeme(.rightParen, ")"),
-          lexeme(.postfixOperator, "/"),
-          lexeme(.eof, ""),
-        ]
-      ),
-    ]
-    for (fixture, expectation) in fixtures {
-      var fixture = fixture
-      fixture.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(lexemes, expectation)
-      }
-    }
+    AssertLexemes(
+      "/abc/",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "/abc/")
+      ]
+    )
+    AssertLexemes(
+      "#/abc/#",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "#/abc/#")
+      ]
+    )
+    AssertLexemes(
+      "###/abc/###",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "###/abc/###")
+      ]
+    )
+    AssertLexemes(
+      """
+      #/
+      a
+      b
+      /#
+      """,
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "#/\na\nb\n/#")
+      ]
+    )
+    AssertLexemes(
+      "#/ \na\nb\n  /#",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "#/ \na\nb\n  /#")
+      ]
+    )
+    AssertLexemes(
+      "##/ \na\nb\n  /##",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "##/ \na\nb\n  /##")
+      ]
+    )
+    AssertLexemes(
+      "#/abc/def/#",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "#/abc/def/#")
+      ]
+    )
+    AssertLexemes(
+      "#/abc\\/#def/#",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "#/abc\\/#def/#")
+      ]
+    )
+    AssertLexemes(
+      "#/abc|#def/#",
+      lexemes: [
+        LexemeSpec(.regexLiteral, text: "#/abc|#def/#")
+      ]
+    )
+    AssertLexemes(
+      "#/abc\n/#",
+      lexemes: [
+        LexemeSpec(.pound, text: "#"),
+        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.identifier, text: "abc"),
+        LexemeSpec(.prefixOperator, leading: "\n", text: "/", flags: [.isAtStartOfLine]),
+        LexemeSpec(.pound, text: "#"),
+      ]
+    )
+    AssertLexemes(
+      "#/abc\r/#",
+      lexemes: [
+        LexemeSpec(.pound, text: "#"),
+        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.identifier, text: "abc"),
+        LexemeSpec(.prefixOperator, leading: "\r", text: "/", flags: [.isAtStartOfLine]),
+        LexemeSpec(.pound, text: "#"),
+      ]
+    )
+    AssertLexemes(
+      "/a)/",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "/"),
+        LexemeSpec(.identifier, text: "a"),
+        LexemeSpec(.rightParen, text: ")"),
+        LexemeSpec(.postfixOperator, text: "/"),
+      ]
+    )
   }
 
   func testUnexpectedLexing() {
-    var data = "static func �() {}"
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.staticKeyword, "static ", trailingLength: 1),
-          lexeme(.funcKeyword, "func �", trailingLength: 4),
-          lexeme(.leftParen, "("),
-          lexeme(.rightParen, ") ", trailingLength: 1),
-          lexeme(.leftBrace, "{"),
-          lexeme(.rightBrace, "}"),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "static func �() {}",
+      lexemes: [
+        LexemeSpec(.staticKeyword, text: "static", trailing: " "),
+        LexemeSpec(.funcKeyword, text: "func", trailing: " �"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.rightParen, text: ")", trailing: " "),
+        LexemeSpec(.leftBrace, text: "{"),
+        LexemeSpec(.rightBrace, text: "}"),
+      ]
+    )
   }
 
   func testBOMLexing() {
     let bom: Unicode.Scalar = "\u{feff}"
-    var data =
-      """
-      \(bom)Hello
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.identifier, "\u{feff}Hello", leadingLength: 3),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "\(bom)Hello",
+      lexemes: [
+        LexemeSpec(.identifier, leading: "\u{feff}", text: "Hello")
+      ]
+    )
   }
 
   func testConflictLexing() {
-    do {
-      var data = """
-        // diff3-style conflict markers
+    AssertLexemes(
+      """
+      // diff3-style conflict markers
 
-        <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
-        var a : String = "A"
-        var b : String = "b"
-        =======
-        var a : String = "a"
-        var b : String = "B"
-        >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(
-              .eof,
-              """
-              // diff3-style conflict markers
+      <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
+      var a : String = "A"
+      var b : String = "b"
+      =======
+      var a : String = "a"
+      var b : String = "B"
+      >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+      """,
+      lexemes: [
+        LexemeSpec(
+          .eof,
+          leading:
+            """
+            // diff3-style conflict markers
 
-              <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
-              var a : String = "A"
-              var b : String = "b"
-              =======
-              var a : String = "a"
-              var b : String = "B"
-              >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
-              """,
-              leadingLength: 300
-            )
-          ]
+            <<<<<<< HEAD:conflict_markers.swift // expected-error {{source control conflict marker in source file}}
+            var a : String = "A"
+            var b : String = "b"
+            =======
+            var a : String = "a"
+            var b : String = "B"
+            >>>>>>> 18844bc65229786b96b89a9fc7739c0fc897905e:conflict_markers.swift
+            """,
+          text: "",
+          flags: [.isAtStartOfLine]
         )
-      }
+      ]
+    )
 
-    }
+    AssertLexemes(
+      """
+      // Perforce-style conflict markers
 
-    do {
-      var data = """
-        // Perforce-style conflict markers
+      >>>> ORIGINAL
+      var a : String = "A"
+      var b : String = "B"
+      ==== THEIRS
+      var a : String = "A"
+      var b : String = "b"
+      ==== YOURS
+      var a : String = "a"
+      var b : String = "B"
+      <<<<
 
-        >>>> ORIGINAL
-        var a : String = "A"
-        var b : String = "B"
-        ==== THEIRS
-        var a : String = "A"
-        var b : String = "b"
-        ==== YOURS
-        var a : String = "a"
-        var b : String = "B"
-        <<<<
+      """,
+      lexemes: [
+        LexemeSpec(
+          .eof,
+          leading:
+            """
+            // Perforce-style conflict markers
 
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(
-              .eof,
-              """
-              // Perforce-style conflict markers
+            >>>> ORIGINAL
+            var a : String = "A"
+            var b : String = "B"
+            ==== THEIRS
+            var a : String = "A"
+            var b : String = "b"
+            ==== YOURS
+            var a : String = "a"
+            var b : String = "B"
+            <<<<
 
-              >>>> ORIGINAL
-              var a : String = "A"
-              var b : String = "B"
-              ==== THEIRS
-              var a : String = "A"
-              var b : String = "b"
-              ==== YOURS
-              var a : String = "a"
-              var b : String = "B"
-              <<<<
-
-              """,
-              leadingLength: 204
-            )
-          ]
+            """,
+          text: "",
+          flags: [.isAtStartOfLine]
         )
-      }
-    }
+      ]
+    )
   }
 
   func testUnicodeStringLiteralLexing() {
-    do {
-      var data =
-        #"""
-        "\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
-        """#
-      let lexemes = data.withUTF8 { buf in
-        Lexer.lex(buf)
-      }
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.stringLiteral, #""\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))""#),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      #"""
+      "\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
+      """#,
+      lexemes: [
+        LexemeSpec(.stringLiteral, text: #""\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))""#)
+      ]
+    )
   }
 
   func testNotARegex() {
-    do {
-      var data =
-        """
-        min(reduced.count / 2, chunkSize / 2)
-        """
-      let lexemes = data.withUTF8 { buf in
-        Lexer.lex(buf)
+    AssertLexemes(
+      "min(reduced.count / 2, chunkSize / 2)",
+      lexemes: [
+        LexemeSpec(.identifier, text: "min"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.identifier, text: "reduced"),
+        LexemeSpec(.period, text: "."),
+        LexemeSpec(.identifier, text: "count", trailing: " "),
+        LexemeSpec(.spacedBinaryOperator, text: "/", trailing: " "),
+        LexemeSpec(.integerLiteral, text: "2"),
+        LexemeSpec(.comma, text: ",", trailing: " "),
+        LexemeSpec(.identifier, text: "chunkSize", trailing: " "),
+        LexemeSpec(.spacedBinaryOperator, text: "/", trailing: " "),
+        LexemeSpec(.integerLiteral, text: "2"),
+        LexemeSpec(.rightParen, text: ")"),
+      ]
+    )
+    AssertLexemes(
+      """
+      var x: Int {
+        return 0 /
+               x
       }
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.identifier, "min"),
-          lexeme(.leftParen, "("),
-          lexeme(.identifier, "reduced"),
-          lexeme(.period, "."),
-          lexeme(.identifier, "count ", trailingLength: 1),
-          lexeme(.spacedBinaryOperator, "/ ", trailingLength: 1),
-          lexeme(.integerLiteral, "2"),
-          lexeme(.comma, ", ", trailingLength: 1),
-          lexeme(.identifier, "chunkSize ", trailingLength: 1),
-          lexeme(.spacedBinaryOperator, "/ ", trailingLength: 1),
-          lexeme(.integerLiteral, "2"),
-          lexeme(.rightParen, ")"),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
 
-    do {
-      var data =
-        """
-        var x: Int {
-          return 0 /
-                 x
-        }
+      ///
+      """,
+      lexemes: [
+        LexemeSpec(.varKeyword, text: "var", trailing: " "),
+        LexemeSpec(.identifier, text: "x"),
+        LexemeSpec(.colon, text: ":", trailing: " "),
+        LexemeSpec(.identifier, text: "Int", trailing: " "),
+        LexemeSpec(.leftBrace, text: "{"),
+        LexemeSpec(.returnKeyword, leading: "\n  ", text: "return", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.integerLiteral, text: "0", trailing: " "),
+        LexemeSpec(.spacedBinaryOperator, text: "/"),
+        LexemeSpec(.identifier, leading: "\n         ", text: "x", flags: [.isAtStartOfLine]),
+        LexemeSpec(.rightBrace, leading: "\n", text: "}", flags: [.isAtStartOfLine]),
+        LexemeSpec(.eof, leading: "\n\n///", text: "", flags: [.isAtStartOfLine]),
+      ]
+    )
 
-        ///
-        """
-      let lexemes = data.withUTF8 { buf in
-        Lexer.lex(buf)
-      }
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.varKeyword, "var ", trailingLength: 1),
-          lexeme(.identifier, "x"),
-          lexeme(.colon, ": ", trailingLength: 1),
-          lexeme(.identifier, "Int ", trailingLength: 1),
-          lexeme(.leftBrace, "{"),
-          lexeme(.returnKeyword, "\n  return ", leadingLength: 3, trailingLength: 1),
-          lexeme(.integerLiteral, "0 ", trailingLength: 1),
-          lexeme(.spacedBinaryOperator, "/", trailingLength: 0),
-          lexeme(.identifier, "\n         x", leadingLength: 10),
-          lexeme(.rightBrace, "\n}", leadingLength: 1),
-          lexeme(.eof, "\n\n///", leadingLength: 5),
-        ]
-      )
-    }
+    AssertLexemes(
+      "n /= 2 // foo",
+      lexemes: [
+        LexemeSpec(.identifier, text: "n", trailing: " "),
+        LexemeSpec(.spacedBinaryOperator, text: "/=", trailing: " "),
+        LexemeSpec(.integerLiteral, text: "2", trailing: " // foo"),
+      ]
+    )
 
-    do {
-      var data =
-        """
-        n /= 2 // foo
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.identifier, "n ", trailingLength: 1),
-            lexeme(.spacedBinaryOperator, "/= ", trailingLength: 1),
-            lexeme(.integerLiteral, "2 // foo", trailingLength: 7),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      "UIColor(white: 216.0/255.0, alpha: 44.0/255.0)",
+      lexemes: [
+        LexemeSpec(.identifier, text: "UIColor"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.identifier, text: "white"),
+        LexemeSpec(.colon, text: ":", trailing: " "),
+        LexemeSpec(.floatingLiteral, text: "216.0"),
+        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.floatingLiteral, text: "255.0"),
+        LexemeSpec(.comma, text: ",", trailing: " "),
+        LexemeSpec(.identifier, text: "alpha"),
+        LexemeSpec(.colon, text: ":", trailing: " "),
+        LexemeSpec(.floatingLiteral, text: "44.0"),
+        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.floatingLiteral, text: "255.0"),
+        LexemeSpec(.rightParen, text: ")"),
+      ]
+    )
 
-    do {
-      var data =
-        """
-        UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.identifier, "UIColor"),
-            lexeme(.leftParen, "("),
-            lexeme(.identifier, "white"),
-            lexeme(.colon, ": ", trailingLength: 1),
-            lexeme(.floatingLiteral, "216.0"),
-            lexeme(.unspacedBinaryOperator, "/"),
-            lexeme(.floatingLiteral, "255.0"),
-            lexeme(.comma, ", ", trailingLength: 1),
-            lexeme(.identifier, "alpha"),
-            lexeme(.colon, ": ", trailingLength: 1),
-            lexeme(.floatingLiteral, "44.0"),
-            lexeme(.unspacedBinaryOperator, "/"),
-            lexeme(.floatingLiteral, "255.0"),
-            lexeme(.rightParen, ")"),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
-
-    do {
-      var data =
-        """
-        #/abc|#def/
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.pound, "#"),
-            lexeme(.unspacedBinaryOperator, "/"),
-            lexeme(.identifier, "abc"),
-            lexeme(.unspacedBinaryOperator, "|"),
-            lexeme(.pound, "#"),
-            lexeme(.identifier, "def"),
-            lexeme(.postfixOperator, "/"),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      "#/abc|#def/",
+      lexemes: [
+        LexemeSpec(.pound, text: "#"),
+        LexemeSpec(.unspacedBinaryOperator, text: "/"),
+        LexemeSpec(.identifier, text: "abc"),
+        LexemeSpec(.unspacedBinaryOperator, text: "|"),
+        LexemeSpec(.pound, text: "#"),
+        LexemeSpec(.identifier, text: "def"),
+        LexemeSpec(.postfixOperator, text: "/"),
+      ]
+    )
   }
 
   func testUnicodeReplcementsInStream() {
-    do {
-      var data =
-        """
-        () -> (\u{feff})
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.leftParen, "("),
-            lexeme(.rightParen, ") ", trailingLength: 1),
-            lexeme(.arrow, "-> ", trailingLength: 1),
-            lexeme(.leftParen, "(\u{feff}", trailingLength: 3),
-            lexeme(.rightParen, ")"),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      "() -> (\u{feff})",
+      lexemes: [
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.rightParen, text: ")", trailing: " "),
+        LexemeSpec(.arrow, text: "->", trailing: " "),
+        LexemeSpec(.leftParen, text: "(", trailing: "\u{feff}"),
+        LexemeSpec(.rightParen, text: ")"),
+      ]
+    )
 
-    do {
-      var data =
-        """
-        y\u{fffe} + z
-        """
-      data.withUTF8 { buf in
-        let lexemes = Lexer.lex(buf)
-        AssertEqualTokens(
-          lexemes,
-          [
-            lexeme(.identifier, "y\u{fffe} ", trailingLength: 4),
-            lexeme(.spacedBinaryOperator, "+ ", trailingLength: 1),
-            lexeme(.identifier, "z"),
-            lexeme(.eof, ""),
-          ]
-        )
-      }
-    }
+    AssertLexemes(
+      "y\u{fffe} + z",
+      lexemes: [
+        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} "),
+        LexemeSpec(.spacedBinaryOperator, text: "+", trailing: " "),
+        LexemeSpec(.identifier, text: "z"),
+      ]
+    )
   }
 
   func testOperators() {
-    var data =
+    AssertLexemes(
       """
       myString==""
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.identifier, "myString"),
-          lexeme(.unspacedBinaryOperator, "=="),
-          lexeme(.stringLiteral, #""""#),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+      """,
+      lexemes: [
+        LexemeSpec(.identifier, text: "myString"),
+        LexemeSpec(.unspacedBinaryOperator, text: "=="),
+        LexemeSpec(.stringLiteral, text: #""""#),
+      ]
+    )
   }
 
   func testEditorPlaceholders() {
-    var data =
-      """
-      !<#b1#> && !<#b2#>
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.prefixOperator, "!"),
-          lexeme(.identifier, "<#b1#> ", trailingLength: 1),
-          lexeme(.spacedBinaryOperator, "&& ", trailingLength: 1),
-          lexeme(.prefixOperator, "!"),
-          lexeme(.identifier, "<#b2#>"),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "!<#b1#> && !<#b2#>",
+      lexemes: [
+        LexemeSpec(.prefixOperator, text: "!"),
+        LexemeSpec(.identifier, text: "<#b1#>", trailing: " "),
+        LexemeSpec(.spacedBinaryOperator, text: "&&", trailing: " "),
+        LexemeSpec(.prefixOperator, text: "!"),
+        LexemeSpec(.identifier, text: "<#b2#>"),
+      ]
+    )
   }
 
   func testCommentAttribution() {
-    var data =
+    AssertLexemes(
       """
       func foo() { // comment
           // new comment
           bar()
       }
-      """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.funcKeyword, "func ", trailingLength: 1),
-          lexeme(.identifier, "foo"),
-          lexeme(.leftParen, "("),
-          lexeme(.rightParen, ") ", trailingLength: 1),
-          lexeme(.leftBrace, "{ // comment", trailingLength: 11),
-          lexeme(
-            .identifier,
-            """
+      """,
+      lexemes: [
+        LexemeSpec(.funcKeyword, text: "func", trailing: " "),
+        LexemeSpec(.identifier, text: "foo"),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.rightParen, text: ")", trailing: " "),
+        LexemeSpec(.leftBrace, text: "{", trailing: " // comment"),
+        LexemeSpec(
+          .identifier,
+          leading: """
 
                 // new comment
-                bar
+                \
+
             """,
-            leadingLength: 24
-          ),
-          lexeme(.leftParen, "("),
-          lexeme(.rightParen, ")"),
-          lexeme(.rightBrace, "\n}", leadingLength: 1),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+          text: "bar",
+          flags: [.isAtStartOfLine]
+        ),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.rightParen, text: ")"),
+        LexemeSpec(.rightBrace, leading: "\n", text: "}", flags: [.isAtStartOfLine]),
+      ]
+    )
   }
 
   func testCommentAttribution2() {
     // Example from https://forums.swift.org/t/changing-comment-trivia-attribution-from-trailing-trivia-to-leading-trivia/50773
-    var data = "/*X_START*/x/*X_END*/ + /*Y_START*/y/*Y_END*/"
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(
-        lexemes,
-        [
-          lexeme(.identifier, "/*X_START*/x/*X_END*/ ", leadingLength: 11, trailingLength: 10),
-          lexeme(.spacedBinaryOperator, "+ /*Y_START*/", trailingLength: 12),
-          lexeme(.identifier, "y/*Y_END*/", trailingLength: 9),
-          lexeme(.eof, ""),
-        ]
-      )
-    }
+    AssertLexemes(
+      "/*X_START*/x/*X_END*/ + /*Y_START*/y/*Y_END*/",
+      lexemes: [
+        LexemeSpec(.identifier, leading: "/*X_START*/", text: "x", trailing: "/*X_END*/ "),
+        LexemeSpec(.spacedBinaryOperator, text: "+", trailing: " /*Y_START*/"),
+        LexemeSpec(.identifier, text: "y", trailing: "/*Y_END*/"),
+      ]
+    )
   }
 
   func testNumericLiteralDiagnostics() {
@@ -934,22 +699,5 @@ public class LexerTests: XCTestCase {
         DiagnosticSpec(locationMarker: "5️⃣", message: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal"),
       ]
     )
-  }
-}
-
-extension Lexer {
-  fileprivate static func lex(
-    _ input: UnsafeBufferPointer<UInt8>,
-    from startIndex: Int = 0
-  ) -> [Self.Lexeme] {
-    var lexemes = [Lexeme]()
-    for token in Lexer.tokenize(input, from: startIndex) {
-      lexemes.append(token)
-
-      guard token.tokenKind != .eof else {
-        break
-      }
-    }
-    return lexemes
   }
 }

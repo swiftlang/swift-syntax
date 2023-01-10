@@ -220,24 +220,36 @@ class MacroApplication: SyntaxRewriter {
     return .init(newItems)
   }
 
+  func visit<DeclType: DeclGroupSyntax & DeclSyntaxProtocol>(
+    declGroup: DeclType
+  ) -> DeclSyntax {
+    // Expand any attached member macros.
+    let expandedDeclGroup = expandMembers(of: declGroup)
+
+    // Recurse into member decls.
+    let newMembers = visit(expandedDeclGroup.members)
+
+    return DeclSyntax(expandedDeclGroup.withMembers(newMembers))
+  }
+
   override func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(expandMembers(of: node))
+    return visit(declGroup: node)
   }
 
   override func visit(_ node: StructDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(expandMembers(of: node))
+    return visit(declGroup: node)
   }
 
   override func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(expandMembers(of: node))
+    return visit(declGroup: node)
   }
 
   override func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(expandMembers(of: node))
+    return visit(declGroup: node)
   }
 
   override func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(expandMembers(of: node))
+    return visit(declGroup: node)
   }
 }
 

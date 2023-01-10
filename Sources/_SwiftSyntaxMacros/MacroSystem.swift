@@ -258,35 +258,36 @@ class MacroApplication: SyntaxRewriter {
 }
 
 extension MacroApplication {
-  private func getAttributes(attachedTo decl: DeclSyntax) -> AttributeListSyntax? {
-    // Dig out the attribute list.
-    // FIXME: We should have a better way to get the attributes from any
-    // declaration.
-    return (decl.children(viewMode: .sourceAccurate).compactMap {
-      $0.as(AttributeListSyntax.self)
-    }).first
+  private func getMacroAttributes<MacroType>(
+    attachedTo decl: DeclSyntax, ofType: MacroType.Type
+  ) -> [(CustomAttributeSyntax, MacroType)] {
+    guard let attributedNode = decl.asProtocol(AttributedSyntax.self),
+          let attributes = attributedNode.attributes else {
+      return []
+    }
+
+    return attributes.compactMap {
+      guard case let .customAttribute(customAttr) = $0,
+            let attributeName = customAttr.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
+            let macro = macroSystem.macros[attributeName],
+            let macroType = macro as? MacroType
+      else {
+        return nil
+      }
+
+      return (customAttr, macroType)
+    }
   }
 
   // If any of the custom attributes associated with the given declaration
   // refer to "peer" declaration macros, expand them and return the resulting
   // set of peer declarations.
   private func expandPeers(of decl: DeclSyntax) -> [DeclSyntax] {
-    guard let attributes = getAttributes(attachedTo: decl) else {
-      return []
-    }
-
     var peers: [DeclSyntax] = []
-    for attribute in attributes {
-      guard case let .customAttribute(customAttribute) = attribute,
-        let attributeName = customAttribute.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
-        let macro = macroSystem.macros[attributeName],
-        let peerMacro = macro as? PeerDeclarationMacro.Type
-      else {
-        continue
-      }
-
+    let macroAttributes = getMacroAttributes(attachedTo: decl, ofType: PeerDeclarationMacro.Type.self)
+    for (attribute, peerMacro) in macroAttributes {
       do {
-        let newPeers = try peerMacro.expansion(of: customAttribute, attachedTo: decl, in: &context)
+        let newPeers = try peerMacro.expansion(of: attribute, attachedTo: decl, in: &context)
         peers.append(contentsOf: newPeers)
       } catch {
         // Record the error
@@ -304,22 +305,14 @@ extension MacroApplication {
 
   /// Expands any attached custom attributes that refer to member declaration macros,
   /// and returns result of adding those members to the given declaration.
-  private func expandMembers<Decl: DeclGroupSyntax & DeclSyntaxProtocol>(of decl: Decl) -> Decl {
-    guard let attributes = getAttributes(attachedTo: DeclSyntax(decl)) else {
-      return decl
-    }
-
+  private func expandMembers<Decl: DeclGroupSyntax & DeclSyntaxProtocol>(
+    of decl: Decl
+  ) -> Decl {
     var newMembers: [DeclSyntax] = []
-    for attribute in attributes {
-      guard case let .customAttribute(customAttribute) = attribute,
-            let attributeName = customAttribute.attributeName.as(SimpleTypeIdentifierSyntax.self)?.name.text,
-            let macro = macroSystem.macros[attributeName],
-            let memberMacro = macro as? MemberDeclarationMacro.Type else {
-        continue
-      }
-
+    let macroAttributes = getMacroAttributes(attachedTo: DeclSyntax(decl), ofType: MemberDeclarationMacro.Type.self)
+    for (attribute, memberMacro) in macroAttributes {
       do {
-        try newMembers.append(contentsOf: memberMacro.expansion(of: customAttribute,
+        try newMembers.append(contentsOf: memberMacro.expansion(of: attribute,
                                                                 attachedTo: DeclSyntax(decl),
                                                                 in: &context))
       } catch {

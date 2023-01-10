@@ -30,7 +30,8 @@ public let DECL_NODES: [Node] = [
        nameForDiagnostics: "typealias declaration",
        kind: "Decl",
        traits: [
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -65,7 +66,8 @@ public let DECL_NODES: [Node] = [
        nameForDiagnostics: "associatedtype declaration",
        kind: "Decl",
        traits: [
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -454,7 +456,8 @@ public let DECL_NODES: [Node] = [
        kind: "Decl",
        traits: [
          "DeclGroup",
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -493,7 +496,8 @@ public let DECL_NODES: [Node] = [
        kind: "Decl",
        traits: [
          "DeclGroup",
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -535,7 +539,8 @@ public let DECL_NODES: [Node] = [
        kind: "Decl",
        traits: [
          "DeclGroup",
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -574,7 +579,8 @@ public let DECL_NODES: [Node] = [
        kind: "Decl",
        traits: [
          "DeclGroup",
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -612,7 +618,8 @@ public let DECL_NODES: [Node] = [
        nameForDiagnostics: "extension",
        kind: "Decl",
        traits: [
-         "DeclGroup"
+         "DeclGroup",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -721,7 +728,8 @@ public let DECL_NODES: [Node] = [
        nameForDiagnostics: "parameter",
        kind: "Syntax",
        traits: [
-         "WithTrailingComma"
+         "WithTrailingComma",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -783,7 +791,8 @@ public let DECL_NODES: [Node] = [
        nameForDiagnostics: "function",
        kind: "Decl",
        traits: [
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -824,6 +833,9 @@ public let DECL_NODES: [Node] = [
   Node(name: "InitializerDecl",
        nameForDiagnostics: "initializer",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",
@@ -862,6 +874,9 @@ public let DECL_NODES: [Node] = [
   Node(name: "DeinitializerDecl",
        nameForDiagnostics: "deinitializer",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",
@@ -884,6 +899,9 @@ public let DECL_NODES: [Node] = [
   Node(name: "SubscriptDecl",
        nameForDiagnostics: "subscript",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",
@@ -958,6 +976,9 @@ public let DECL_NODES: [Node] = [
   Node(name: "ImportDecl",
        nameForDiagnostics: "import",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",
@@ -1017,6 +1038,9 @@ public let DECL_NODES: [Node] = [
   Node(name: "AccessorDecl",
        nameForDiagnostics: "accessor",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",
@@ -1132,6 +1156,9 @@ public let DECL_NODES: [Node] = [
   Node(name: "VariableDecl",
        nameForDiagnostics: "variable",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",
@@ -1193,6 +1220,9 @@ public let DECL_NODES: [Node] = [
        nameForDiagnostics: "enum case",
        description: "A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.",
        kind: "Decl",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",
@@ -1221,7 +1251,8 @@ public let DECL_NODES: [Node] = [
        description: "A Swift `enum` declaration.",
        kind: "Decl",
        traits: [
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -1268,7 +1299,8 @@ public let DECL_NODES: [Node] = [
        description: "A Swift `operator` declaration.",
        kind: "Decl",
        traits: [
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -1350,7 +1382,8 @@ public let DECL_NODES: [Node] = [
        description: "A Swift `precedencegroup` declaration.",
        kind: "Decl",
        traits: [
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",
@@ -1509,7 +1542,8 @@ public let DECL_NODES: [Node] = [
        nameForDiagnostics: "macro",
        kind: "Decl",
        traits: [
-         "IdentifiedDecl"
+         "IdentifiedDecl",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",

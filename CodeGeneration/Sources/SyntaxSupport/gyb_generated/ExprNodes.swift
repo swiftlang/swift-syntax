@@ -745,6 +745,9 @@ public let EXPR_NODES: [Node] = [
   Node(name: "ClosureSignature",
        nameForDiagnostics: "closure signature",
        kind: "Syntax",
+       traits: [
+         "Attributed"
+       ],
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",

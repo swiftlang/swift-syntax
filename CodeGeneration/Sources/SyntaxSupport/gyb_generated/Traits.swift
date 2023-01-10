@@ -25,6 +25,11 @@ public class Trait {
 }
 
 public let TRAITS: [Trait] = [
+  Trait(traitName: "Attributed",
+        children: [
+          Child(name: "Attributes", kind: "AttributeList", isOptional: true),
+        ]
+  ),
   Trait(traitName: "DeclGroup",
         children: [
           Child(name: "Attributes", kind: "AttributeList", isOptional: true),

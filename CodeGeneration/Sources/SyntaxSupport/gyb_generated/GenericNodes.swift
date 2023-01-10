@@ -133,7 +133,8 @@ public let GENERIC_NODES: [Node] = [
        nameForDiagnostics: "generic parameter",
        kind: "Syntax",
        traits: [
-         "WithTrailingComma"
+         "WithTrailingComma",
+         "Attributed"
        ],
        children: [
          Child(name: "Attributes",

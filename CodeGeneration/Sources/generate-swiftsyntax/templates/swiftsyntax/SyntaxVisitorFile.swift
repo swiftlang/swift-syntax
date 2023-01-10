@@ -34,15 +34,6 @@ let syntaxVisitorFile = SourceFileSyntax {
 
     DeclSyntax(
       """
-      @available(*, deprecated, message: "Use init(viewMode:) instead")
-      public convenience init() {
-        self.init(viewMode: .sourceAccurate)
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
       public init(viewMode: SyntaxTreeViewMode) {
         self.viewMode = viewMode
       }

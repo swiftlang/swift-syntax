@@ -255,11 +255,6 @@ extension SyntaxProtocol {
 }
 
 public extension SyntaxProtocol {
-  @available(*, deprecated, message: "Use children(viewMode:) instead")
-  var children: SyntaxChildren {
-    return children(viewMode: .sourceAccurate)
-  }
-
   /// A sequence over the `present` children of this node.
   func children(viewMode: SyntaxTreeViewMode) -> SyntaxChildren {
     return SyntaxChildren(_syntaxNode, viewMode: viewMode)
@@ -521,12 +516,6 @@ public extension SyntaxProtocol {
       this = parent
     }
     return this
-  }
-
-  /// Sequence of tokens that are part of this Syntax node.
-  @available(*, deprecated, message: "Use tokens(viewMode:) instead")
-  var tokens: TokenSequence {
-    return tokens(viewMode: .sourceAccurate)
   }
 
   /// Sequence of tokens that are part of this Syntax node.

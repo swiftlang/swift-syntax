@@ -52,28 +52,6 @@ public final class IncrementalParseTransition {
   /// - Parameters:
   ///   - previousTree: The previous tree to do lookups on.
   ///   - edits: The edits that have occurred since the last parse that resulted
-  ///            in the new source that is about to be parsed. There is a strict
-  ///            requirement for the array of edits to:
-  ///              1. not be overlapping.
-  ///              2. should be in increasing source offset order.
-  ///   - reusedNodeDelegate: Optional delegate to accept information about the
-  ///                         reused regions and nodes.
-  @available(*, deprecated, message: "Use the initializer taking 'ConcurrentEdits' instead")
-  public convenience init(
-    previousTree: SourceFileSyntax,
-    edits: [SourceEdit],
-    reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil
-  ) {
-    self.init(
-      previousTree: previousTree,
-      edits: try! ConcurrentEdits(concurrent: edits),
-      reusedNodeDelegate: reusedNodeDelegate
-    )
-  }
-
-  /// - Parameters:
-  ///   - previousTree: The previous tree to do lookups on.
-  ///   - edits: The edits that have occurred since the last parse that resulted
   ///            in the new source that is about to be parsed.
   ///   - reusedNodeDelegate: Optional delegate to accept information about the
   ///                         reused regions and nodes.

@@ -258,19 +258,20 @@ class MacroApplication: SyntaxRewriter {
 }
 
 extension MacroApplication {
+  private func getAttributes(attachedTo decl: DeclSyntax) -> AttributeListSyntax? {
+    // Dig out the attribute list.
+    // FIXME: We should have a better way to get the attributes from any
+    // declaration.
+    return (decl.children(viewMode: .sourceAccurate).compactMap {
+      $0.as(AttributeListSyntax.self)
+    }).first
+  }
+
   // If any of the custom attributes associated with the given declaration
   // refer to "peer" declaration macros, expand them and return the resulting
   // set of peer declarations.
   private func expandPeers(of decl: DeclSyntax) -> [DeclSyntax] {
-    // Dig out the attribute list.
-    // FIXME: We should have a better way to get the attributes from any
-    // declaration.
-    guard
-      let attributes =
-        (decl.children(viewMode: .sourceAccurate).compactMap {
-          $0.as(AttributeListSyntax.self)
-        }).first
-    else {
+    guard let attributes = getAttributes(attachedTo: decl) else {
       return []
     }
 
@@ -304,12 +305,7 @@ extension MacroApplication {
   /// Expands any attached custom attributes that refer to member declaration macros,
   /// and returns result of adding those members to the given declaration.
   private func expandMembers<Decl: DeclGroupSyntax & DeclSyntaxProtocol>(of decl: Decl) -> Decl {
-    guard
-      let attributes =
-        (decl.children(viewMode: .sourceAccurate).compactMap {
-          $0.as(AttributeListSyntax.self)
-        }).first
-    else {
+    guard let attributes = getAttributes(attachedTo: DeclSyntax(decl)) else {
       return decl
     }
 

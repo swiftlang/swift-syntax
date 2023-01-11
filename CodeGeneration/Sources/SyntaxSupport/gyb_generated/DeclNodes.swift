@@ -1026,6 +1026,7 @@ public let DECL_NODES: [Node] = [
        traits: [
          "Attributed"
        ],
+       parserFunction: "parseAccessorDecl",
        children: [
          Child(name: "Attributes",
                kind: "AttributeList",

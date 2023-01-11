@@ -212,10 +212,18 @@ extension Parser {
     var loopProgress = LoopProgressCondition()
     repeat {
       let condition = self.parseConditionElement()
+      let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
       keepGoing = self.consume(if: .comma)
+      if keepGoing == nil, let andOperator = self.consumeIfContextualPunctuator("&&") {
+        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([andOperator], arena: self.arena)
+        keepGoing = missingToken(.comma)
+      } else {
+        unexpectedBeforeKeepGoing = nil
+      }
       elements.append(
         RawConditionElementSyntax(
           condition: condition,
+          unexpectedBeforeKeepGoing,
           trailingComma: keepGoing,
           arena: self.arena
         )

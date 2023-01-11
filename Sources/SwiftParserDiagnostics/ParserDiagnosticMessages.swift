@@ -134,6 +134,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var invalidWhitespaceAfterPeriod: Self {
     .init("extraneous whitespace after '.' is not permitted")
   }
+  public static var joinConditionsUsingComma: Self {
+    .init("expected ',' joining parts of a multi-clause condition")
+  }
   public static var missingColonAndExprInTernaryExpr: Self {
     .init("expected ':' and expression after '? ...' in ternary expression")
   }

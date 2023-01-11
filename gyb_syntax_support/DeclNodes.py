@@ -676,7 +676,7 @@ DECL_NODES = [
          ]),
 
     Node('EnumDecl', name_for_diagnostics='enum', kind='Decl',
-         traits=['IdentifiedDecl', 'Attributed'],
+         traits=['DeclGroup', 'IdentifiedDecl', 'Attributed'],
          description='A Swift `enum` declaration.',
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',

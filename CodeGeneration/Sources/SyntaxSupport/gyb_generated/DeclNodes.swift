@@ -147,10 +147,10 @@ public let DECL_NODES: [Node] = [
          Child(name: "Input",
                kind: "ParameterClause"),
          Child(name: "AsyncOrReasyncKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "async",
@@ -509,9 +509,9 @@ public let DECL_NODES: [Node] = [
                isOptional: true,
                collectionElementName: "Modifier"),
          Child(name: "ActorKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "actor"
@@ -1055,10 +1055,10 @@ public let DECL_NODES: [Node] = [
                kind: "AccessorParameter",
                isOptional: true),
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "async"
@@ -1544,9 +1544,9 @@ public let DECL_NODES: [Node] = [
                isOptional: true,
                collectionElementName: "Modifier"),
          Child(name: "MacroKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "macro"

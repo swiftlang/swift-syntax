@@ -257,7 +257,7 @@ extension Parser {
         case .equal: return .equal
         case .isKeyword: return .isKeyword
         case .asKeyword: return .asKeyword
-        case .async: return .contextualKeyword(.async)
+        case .async: return .keyword(.async)
         case .arrow: return .arrow
         case .throwsKeyword: return .throwsKeyword
         }
@@ -345,7 +345,7 @@ extension Parser {
         return nil
       }
     case (.arrow, _)?, (.throwsKeyword, _)?:
-      var asyncKeyword = self.consume(if: .contextualKeyword(.async))
+      var asyncKeyword = self.consume(if: .keyword(.async))
 
       var throwsKeyword = self.consume(if: .throwsKeyword)
 
@@ -356,10 +356,10 @@ extension Parser {
       // missing into the ArrowExprSyntax. This reflect the semantics the user
       // originally intended.
       var effectModifiersAfterArrow: [RawTokenSyntax] = []
-      if let asyncAfterArrow = self.consume(if: .contextualKeyword(.async)) {
+      if let asyncAfterArrow = self.consume(if: .keyword(.async)) {
         effectModifiersAfterArrow.append(asyncAfterArrow)
         if asyncKeyword == nil {
-          asyncKeyword = missingToken(.contextualKeyword(.async), text: "async")
+          asyncKeyword = missingToken(.keyword(.async), text: "async")
         }
       }
       if let throwsAfterArrow = self.consume(if: .throwsKeyword) {
@@ -421,7 +421,7 @@ extension Parser {
     }
 
     switch self.at(anyIn: AwaitTryMove.self) {
-    case (.awaitContextualKeyword, let handle)?:
+    case (.awaitKeyword, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -452,7 +452,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._moveContextualKeyword, let handle)?:
+    case (._moveKeyword, let handle)?:
       let moveTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -466,7 +466,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._borrowContextualKeyword, let handle)?:
+    case (._borrowKeyword, let handle)?:
       let borrowTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -1176,12 +1176,12 @@ extension Parser {
       // 'each <identifier>' is a pack element expr, and 'any <identifier>'
       // is an existential type expr.
       if self.peek().rawTokenKind == .identifier, !self.peek().isAtStartOfLine {
-        if self.at(.contextualKeyword(.any)) {
+        if self.at(.keyword(.any)) {
           let ty = self.parseType()
           return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))
         }
 
-        if let each = self.consume(if: .contextualKeyword(.each)) {
+        if let each = self.consume(if: .keyword(.each)) {
           let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
           return RawExprSyntax(
             RawPackElementExprSyntax(
@@ -2330,16 +2330,16 @@ extension Parser {
     do {
       // Check for the strength specifier: "weak", "unowned", or
       // "unowned(safe/unsafe)".
-      if let weakContextualKeyword = self.consume(if: .contextualKeyword(.weak)) {
-        specifiers.append(weakContextualKeyword)
-      } else if let unownedContextualKeyword = self.consume(if: .contextualKeyword(.unowned)) {
-        specifiers.append(unownedContextualKeyword)
+      if let weakKeyword = self.consume(if: .keyword(.weak)) {
+        specifiers.append(weakKeyword)
+      } else if let unownedKeyword = self.consume(if: .keyword(.unowned)) {
+        specifiers.append(unownedKeyword)
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
           if self.currentToken.tokenText == "safe" {
-            specifiers.append(self.expectWithoutRecovery(.contextualKeyword(.safe)))
+            specifiers.append(self.expectWithoutRecovery(.keyword(.safe)))
           } else {
-            specifiers.append(self.expectWithoutRecovery(.contextualKeyword(.unsafe)))
+            specifiers.append(self.expectWithoutRecovery(.keyword(.unsafe)))
           }
           specifiers.append(self.expectWithoutRecovery(.rightParen))
         }

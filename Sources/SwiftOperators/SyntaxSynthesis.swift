@@ -48,7 +48,7 @@ extension PrecedenceRelation {
     indentation: Int = 4
   ) -> PrecedenceGroupRelationSyntax {
     PrecedenceGroupRelationSyntax(
-      higherThanOrLowerThan: .contextualKeyword(
+      higherThanOrLowerThan: .keyword(
         kind.keyword,
         leadingTrivia: [.newlines(1), .spaces(indentation)]
       ),

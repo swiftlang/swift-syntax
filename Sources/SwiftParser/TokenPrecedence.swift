@@ -121,7 +121,7 @@ public enum TokenPrecedence: Comparable {
     case  // Keywords
     .asKeyword, .isKeyword, .tryKeyword,
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
-      .contextualKeyword,
+      .keyword,
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
       .rethrowsKeyword, .throwsKeyword,
       // Operators can occur inside expressions

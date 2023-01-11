@@ -163,31 +163,31 @@ enum DeclarationModifier: RawTokenKindSubset {
     case .classKeyword: 
       return .classKeyword
     case .final: 
-      return .contextualKeyword(.final)
+      return .keyword(.final)
     case .required: 
-      return .contextualKeyword(.required)
+      return .keyword(.required)
     case .optional: 
-      return .contextualKeyword(.optional)
+      return .keyword(.optional)
     case .lazy: 
-      return .contextualKeyword(.lazy)
+      return .keyword(.lazy)
     case .dynamic: 
-      return .contextualKeyword(.dynamic)
+      return .keyword(.dynamic)
     case .infix: 
-      return .contextualKeyword(.infix)
+      return .keyword(.infix)
     case .prefix: 
-      return .contextualKeyword(.prefix)
+      return .keyword(.prefix)
     case .postfix: 
-      return .contextualKeyword(.postfix)
+      return .keyword(.postfix)
     case .__consuming: 
-      return .contextualKeyword(.__consuming)
+      return .keyword(.__consuming)
     case .mutating: 
-      return .contextualKeyword(.mutating)
+      return .keyword(.mutating)
     case .nonmutating: 
-      return .contextualKeyword(.nonmutating)
+      return .keyword(.nonmutating)
     case .convenience: 
-      return .contextualKeyword(.convenience)
+      return .keyword(.convenience)
     case .override: 
-      return .contextualKeyword(.override)
+      return .keyword(.override)
     case .privateKeyword: 
       return .privateKeyword
     case .fileprivateKeyword: 
@@ -197,33 +197,33 @@ enum DeclarationModifier: RawTokenKindSubset {
     case .publicKeyword: 
       return .publicKeyword
     case .package: 
-      return .contextualKeyword(.package)
+      return .keyword(.package)
     case .open: 
-      return .contextualKeyword(.open)
+      return .keyword(.open)
     case .__setter_access: 
-      return .contextualKeyword(.__setter_access)
+      return .keyword(.__setter_access)
     case .weak: 
-      return .contextualKeyword(.weak)
+      return .keyword(.weak)
     case .unowned: 
-      return .contextualKeyword(.unowned)
+      return .keyword(.unowned)
     case .`rethrows`: 
-      return .contextualKeyword(.`rethrows`)
+      return .keyword(.`rethrows`)
     case .indirect: 
-      return .contextualKeyword(.indirect)
+      return .keyword(.indirect)
     case .isolated: 
-      return .contextualKeyword(.isolated)
+      return .keyword(.isolated)
     case .async: 
-      return .contextualKeyword(.async)
+      return .keyword(.async)
     case .reasync: 
-      return .contextualKeyword(.reasync)
+      return .keyword(.reasync)
     case .nonisolated: 
-      return .contextualKeyword(.nonisolated)
+      return .keyword(.nonisolated)
     case .distributed: 
-      return .contextualKeyword(.distributed)
+      return .keyword(.distributed)
     case ._const: 
-      return .contextualKeyword(._const)
+      return .keyword(._const)
     case ._local: 
-      return .contextualKeyword(._local)
+      return .keyword(._local)
     }
   }
 }

@@ -134,7 +134,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
-    if let each = consume(if: .contextualKeyword(.each)) {
+    if let each = consume(if: .keyword(.each)) {
       let packType = parseSimpleType()
       return RawTypeSyntax(
         RawPackReferenceTypeSyntax(
@@ -145,7 +145,7 @@ extension Parser {
       )
     }
 
-    let someOrAny = self.consume(ifAny: [.contextualKeyword(.some), .contextualKeyword(.any)])
+    let someOrAny = self.consume(ifAny: [.keyword(.some), .keyword(.any)])
 
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
@@ -264,8 +264,8 @@ extension Parser {
             )
           )
           break
-        } else if self.at(.contextualKeyword(.Type)) || self.at(.contextualKeyword(.Protocol)) {
-          let typeOrProtocol = self.consume(if: .contextualKeyword(.Type)) ?? self.consume(if: .contextualKeyword(.Protocol))!
+        } else if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
+          let typeOrProtocol = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
           base = RawTypeSyntax(
             RawMetatypeTypeSyntax(
               baseType: base,
@@ -662,7 +662,7 @@ extension Parser.Lookahead {
   mutating func skipTypeAttributeList() {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
-    while self.at(anyIn: TypeSpecifier.self) != nil || self.at(.contextualKeyword(.isolated)) || self.at(.contextualKeyword(._const)),
+    while self.at(anyIn: TypeSpecifier.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
       specifierProgress.evaluate(currentToken)
     {
       self.consumeAnyToken()
@@ -704,7 +704,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseSimpleOrCompositionType() -> Bool {
-    if self.at(.contextualKeyword(.some)) || self.at(.contextualKeyword(.any)) || self.at(.contextualKeyword(.each)) {
+    if self.at(.keyword(.some)) || self.at(.keyword(.any)) || self.at(.keyword(.each)) {
       self.consumeAnyToken()
     }
 
@@ -761,7 +761,7 @@ extension Parser.Lookahead {
     while loopCondition.evaluate(currentToken) {
       if self.at(.period) {
         self.consumeAnyToken()
-        if self.at(.contextualKeyword(.Type)) || self.at(.contextualKeyword(.Protocol)) {
+        if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
           self.consumeAnyToken()
           continue
         }
@@ -934,7 +934,7 @@ extension Parser {
       specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
     }
     var extraneousSpecifiers: [RawTokenSyntax] = []
-    while let extraSpecifier = self.consume(ifAny: [.inoutKeyword, .contextualKeyword(.__shared), .contextualKeyword(.__owned), .contextualKeyword(.isolated), .contextualKeyword(._const)]) {
+    while let extraSpecifier = self.consume(ifAny: [.inoutKeyword, .keyword(.__shared), .keyword(.__owned), .keyword(.isolated), .keyword(._const)]) {
       if specifier == nil {
         specifier = extraSpecifier
       } else {

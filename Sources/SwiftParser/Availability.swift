@@ -102,13 +102,13 @@ extension Parser {
 
     var rawTokenKind: RawTokenKind {
       switch self {
-      case .message: return .contextualKeyword(.message)
-      case .renamed: return .contextualKeyword(.renamed)
-      case .introduced: return .contextualKeyword(.introduced)
-      case .deprecated: return .contextualKeyword(.deprecated)
-      case .obsoleted: return .contextualKeyword(.obsoleted)
-      case .unavailable: return .contextualKeyword(.unavailable)
-      case .noasync: return .contextualKeyword(.noasync)
+      case .message: return .keyword(.message)
+      case .renamed: return .keyword(.renamed)
+      case .introduced: return .keyword(.introduced)
+      case .deprecated: return .keyword(.deprecated)
+      case .obsoleted: return .keyword(.obsoleted)
+      case .unavailable: return .keyword(.unavailable)
+      case .noasync: return .keyword(.noasync)
       }
     }
   }
@@ -221,7 +221,7 @@ extension Parser {
     }
 
     if self.at(any: [.identifier, .wildcardKeyword]) {
-      if self.at(.contextualKeyword(.swift)) || self.at(.contextualKeyword(._PackageDescription)) {
+      if self.at(.keyword(.swift)) || self.at(.keyword(._PackageDescription)) {
         return .availabilityVersionRestriction(self.parsePlatformAgnosticVersionConstraintSpec())
       }
     }

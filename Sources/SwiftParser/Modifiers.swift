@@ -44,7 +44,7 @@ extension Parser {
         // treat 'class' as a modifier in the case of a following CC
         // token, we cannot be sure there is no intention to override
         // or witness something static.
-        if lookahead.atStartOfDeclaration() || lookahead.at(.contextualKeyword(.override)) {
+        if lookahead.atStartOfDeclaration() || lookahead.at(.keyword(.override)) {
           let classKeyword = self.eat(handle)
           elements.append(
             RawDeclModifierSyntax(
@@ -110,7 +110,7 @@ extension Parser {
   }
 
   mutating func parseUnownedModifier() -> RawDeclModifierSyntax {
-    let (unexpectedBeforeKeyword, keyword) = self.expect(.contextualKeyword(.unowned))
+    let (unexpectedBeforeKeyword, keyword) = self.expect(.keyword(.unowned))
 
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {
@@ -128,7 +128,7 @@ extension Parser {
   }
 
   mutating func parsePackageAccessLevelModifier() -> RawDeclModifierSyntax {
-    let (unexpectedBeforeName, name) = self.expect(.contextualKeyword(.package))
+    let (unexpectedBeforeName, name) = self.expect(.keyword(.package))
     let details = self.parseAccessModifierDetails()
     return RawDeclModifierSyntax(
       unexpectedBeforeName,
@@ -139,7 +139,7 @@ extension Parser {
   }
 
   mutating func parseOpenAccessLevelModifier() -> RawDeclModifierSyntax {
-    let (unexpectedBeforeName, name) = self.expect(.contextualKeyword(.open))
+    let (unexpectedBeforeName, name) = self.expect(.keyword(.open))
     let details = self.parseAccessModifierDetails()
     return RawDeclModifierSyntax(
       unexpectedBeforeName,
@@ -170,12 +170,12 @@ extension Parser {
 
     let unexpectedBeforeDetail: RawUnexpectedNodesSyntax?
     let detail: RawTokenSyntax
-    if let setHandle = canRecoverTo(.contextualKeyword(.set), recoveryPrecedence: .weakBracketClose) {
+    if let setHandle = canRecoverTo(.keyword(.set), recoveryPrecedence: .weakBracketClose) {
       (unexpectedBeforeDetail, detail) = eat(setHandle)
     } else {
       unexpectedBeforeDetail = nil
       detail = RawTokenSyntax(
-        missing: .contextualKeyword(.set),
+        missing: .keyword(.set),
         text: "set",
         arena: arena
       )

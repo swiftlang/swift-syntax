@@ -1494,14 +1494,14 @@ extension TokenSyntax {
     )
   }
   
-  public static func contextualKeyword(
+  public static func keyword(
     _ value: Keyword, 
     leadingTrivia: Trivia = [], 
     trailingTrivia: Trivia = [], 
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .contextualKeyword(value), 
+      .keyword(value), 
       leadingTrivia: leadingTrivia, 
       trailingTrivia: trailingTrivia, 
       presence: presence

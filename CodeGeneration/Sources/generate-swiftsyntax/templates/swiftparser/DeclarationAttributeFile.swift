@@ -60,11 +60,11 @@ let declarationAttributeFile = SourceFile {
         SwitchStmt(switchKeyword: .switch, expression: Expr("self")) {
           for attribute in DECL_ATTR_KINDS {
             SwitchCase("case .\(raw: attribute.swiftName):") {
-              ReturnStmt("return .contextualKeyword(.\(raw: attribute.name))")
+              ReturnStmt("return .keyword(.\(raw: attribute.name))")
             }
           }
           SwitchCase("case ._spi_available:") {
-            ReturnStmt("return .contextualKeyword(._spi_available)")
+            ReturnStmt("return .keyword(._spi_available)")
           }
         }
       }

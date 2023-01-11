@@ -43,7 +43,7 @@ EXPR_NODES = [
     # await foo()
     Node('AwaitExpr', name_for_diagnostics="'await' expression", kind='Expr',
          children=[
-             Child('AwaitKeyword', kind='ContextualKeywordToken',
+             Child('AwaitKeyword', kind='KeywordToken',
                    text_choices=['await']),
              Child('Expression', kind='Expr'),
          ]),
@@ -51,7 +51,7 @@ EXPR_NODES = [
     # The move expr
     Node('MoveExpr', name_for_diagnostics="'_move' expression", kind='Expr',
          children=[
-             Child('MoveKeyword', kind='ContextualKeywordToken',
+             Child('MoveKeyword', kind='KeywordToken',
                    text_choices=['_move']),
              Child('Expression', kind='Expr'),
          ]),
@@ -59,7 +59,7 @@ EXPR_NODES = [
     # The borrow expr
     Node('BorrowExpr', name_for_diagnostics="'_borrow' expression", kind='Expr',
          children=[
-             Child('BorrowKeyword', kind='ContextualKeywordToken',
+             Child('BorrowKeyword', kind='KeywordToken',
                    text_choices=['_borrow']),
              Child('Expression', kind='Expr'),
          ]),
@@ -132,7 +132,7 @@ EXPR_NODES = [
     # A pack element expr spelled with 'each'.
     Node('PackElementExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('EachKeyword', kind='ContextualKeywordToken',
+             Child('EachKeyword', kind='KeywordToken',
                    text_choices=['each']),
              Child('PackRefExpr', kind='Expr'),
          ]),
@@ -175,7 +175,7 @@ EXPR_NODES = [
     # NOTE: This appears only in SequenceExpr.
     Node('ArrowExpr', name_for_diagnostics=None, kind='Expr',
          children=[
-             Child('AsyncKeyword', kind='ContextualKeywordToken',
+             Child('AsyncKeyword', kind='KeywordToken',
                    text_choices=['async'], is_optional=True),
              Child('ThrowsToken', kind='ThrowsToken',
                    is_optional=True),
@@ -431,7 +431,7 @@ EXPR_NODES = [
                        Child('SimpleInput', kind='ClosureParamList'),
                        Child('Input', kind='ParameterClause'),
                    ]),
-             Child('AsyncKeyword', kind='ContextualKeywordToken',
+             Child('AsyncKeyword', kind='KeywordToken',
                    text_choices=['async'], is_optional=True),
              Child('ThrowsTok', kind='ThrowsToken', is_optional=True),
              Child('Output', kind='ReturnClause', is_optional=True),

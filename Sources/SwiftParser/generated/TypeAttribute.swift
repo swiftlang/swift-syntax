@@ -76,29 +76,29 @@ extension Parser {
     var rawTokenKind: RawTokenKind {
       switch self {
       case .autoclosure: 
-        return .contextualKeyword(.autoclosure)
+        return .keyword(.autoclosure)
       case .convention: 
-        return .contextualKeyword(.convention)
+        return .keyword(.convention)
       case .noescape: 
-        return .contextualKeyword(.noescape)
+        return .keyword(.noescape)
       case .escaping: 
-        return .contextualKeyword(.escaping)
+        return .keyword(.escaping)
       case .differentiable: 
-        return .contextualKeyword(.differentiable)
+        return .keyword(.differentiable)
       case .noDerivative: 
-        return .contextualKeyword(.noDerivative)
+        return .keyword(.noDerivative)
       case .async: 
-        return .contextualKeyword(.async)
+        return .keyword(.async)
       case .Sendable: 
-        return .contextualKeyword(.Sendable)
+        return .keyword(.Sendable)
       case .unchecked: 
-        return .contextualKeyword(.unchecked)
+        return .keyword(.unchecked)
       case ._local: 
-        return .contextualKeyword(._local)
+        return .keyword(._local)
       case ._noMetadata: 
-        return .contextualKeyword(._noMetadata)
+        return .keyword(._noMetadata)
       case ._opaqueReturnTypeOf: 
-        return .contextualKeyword(._opaqueReturnTypeOf)
+        return .keyword(._opaqueReturnTypeOf)
       }
     }
   }

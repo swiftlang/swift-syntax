@@ -71,8 +71,7 @@ extension TokenConsumer {
   }
 
   /// Returns whether the kind of the current token is any of the given
-  /// kinds or a contextual keyword with text in `contextualKeywords` and
-  /// additionally satisfies `condition`.
+  /// kinds and additionally satisfies `condition`.
   ///
   /// - Parameter kinds: The kinds to test for.
   /// - Parameter condition: An additional condition that must be satisfied for
@@ -109,7 +108,7 @@ extension TokenConsumer {
     } else if let remappedKind = handle.remappedKind {
       assert(self.at(handle.tokenKind))
       return consumeAnyToken(remapping: remappedKind)
-    } else if case .contextualKeyword = handle.tokenKind {
+    } else if case .keyword = handle.tokenKind {
       // We support remapping identifiers to contextual keywords
       assert(self.currentToken.rawTokenKind == .identifier || self.currentToken.rawTokenKind == handle.tokenKind)
       return consumeAnyToken(remapping: handle.tokenKind)
@@ -145,7 +144,7 @@ extension TokenConsumer {
     if self.at(kind, where: condition) {
       if let remapping = remapping {
         return self.consumeAnyToken(remapping: remapping)
-      } else if case .contextualKeyword = kind {
+      } else if case .keyword = kind {
         // We support remapping identifiers to contextual keywords
         return self.consumeAnyToken(remapping: kind)
       } else {
@@ -165,8 +164,7 @@ extension TokenConsumer {
   }
 
   /// Examines the current token and consumes it if is any of the given
-  /// kinds or a contextual keyword with text in `contextualKeywords` and
-  /// additionally satisfies `condition`.
+  /// kinds and additionally satisfies `condition`.
   ///
   /// - Parameter kind: The kinds of token to consume.
   /// - Parameter condition: An additional condition that must be satisfied for

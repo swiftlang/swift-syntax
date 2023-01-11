@@ -54,7 +54,7 @@ let declarationModifierFile = SourceFile {
             if attribute.swiftName.hasSuffix("Keyword") {
               ReturnStmt("return .\(raw: attribute.swiftName)")
             } else {
-              ReturnStmt("return .contextualKeyword(.\(raw: attribute.swiftName))")
+              ReturnStmt("return .keyword(.\(raw: attribute.swiftName))")
             }
           }
         }

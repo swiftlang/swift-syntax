@@ -73,9 +73,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AwaitKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "await"
@@ -89,9 +89,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "MoveKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "_move"
@@ -105,9 +105,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "BorrowKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "_borrow"
@@ -236,9 +236,9 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "EachKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "each"
@@ -293,10 +293,10 @@ public let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "async"
@@ -744,10 +744,10 @@ public let EXPR_NODES: [Node] = [
                        kind: "ParameterClause")
                ]),
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeywordToken",
+               kind: "KeywordToken",
                isOptional: true,
                tokenChoices: [
-                 "ContextualKeyword"
+                 "Keyword"
                ],
                textChoices: [
                  "async"

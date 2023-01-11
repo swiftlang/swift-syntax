@@ -355,7 +355,7 @@ SYNTAX_TOKENS = [
     Misc('DollarIdentifier', 'dollarident', name_for_diagnostics='dollar identifier',
          classification='DollarIdentifier'),
 
-    Misc('ContextualKeyword', 'contextual_keyword', name_for_diagnostics='keyword',
+    Misc('Keyword', 'keyword', name_for_diagnostics='keyword',
          classification='Keyword', associated_value_class='Keyword'),
     Misc('RawStringDelimiter', 'raw_string_delimiter',
          name_for_diagnostics='raw string delimiter'),

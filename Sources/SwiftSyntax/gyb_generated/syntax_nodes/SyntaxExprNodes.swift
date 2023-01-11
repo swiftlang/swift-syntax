@@ -512,7 +512,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAwaitKeyword: UnexpectedNodesSyntax? = nil,
-    awaitKeyword: TokenSyntax = .contextualKeyword(.await),
+    awaitKeyword: TokenSyntax = .keyword(.await),
     _ unexpectedBetweenAwaitKeywordAndExpression: UnexpectedNodesSyntax? = nil,
     expression: E,
     _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
@@ -700,7 +700,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil,
-    moveKeyword: TokenSyntax = .contextualKeyword(._move),
+    moveKeyword: TokenSyntax = .keyword(._move),
     _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil,
     expression: E,
     _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
@@ -888,7 +888,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init<E: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeBorrowKeyword: UnexpectedNodesSyntax? = nil,
-    borrowKeyword: TokenSyntax = .contextualKeyword(._borrow),
+    borrowKeyword: TokenSyntax = .keyword(._borrow),
     _ unexpectedBetweenBorrowKeywordAndExpression: UnexpectedNodesSyntax? = nil,
     expression: E,
     _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
@@ -1993,7 +1993,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init<P: ExprSyntaxProtocol>(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
-    eachKeyword: TokenSyntax = .contextualKeyword(.each),
+    eachKeyword: TokenSyntax = .keyword(.each),
     _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil,
     packRefExpr: P,
     _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil,

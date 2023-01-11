@@ -276,7 +276,7 @@ extension Lexer.Lexeme {
 
   func isContextualKeyword(_ name: SyntaxText) -> Bool {
     switch self.rawTokenKind {
-    case .identifier, .contextualKeyword:
+    case .identifier, .keyword:
       return self.tokenText == name
     default:
       return false
@@ -285,7 +285,7 @@ extension Lexer.Lexeme {
 
   func isContextualKeyword(_ names: [SyntaxText]) -> Bool {
     switch self.rawTokenKind {
-    case .identifier, .contextualKeyword:
+    case .identifier, .keyword:
       return names.contains(self.tokenText)
     default:
       return false

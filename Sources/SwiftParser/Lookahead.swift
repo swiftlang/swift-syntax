@@ -286,7 +286,7 @@ extension Parser.Lookahead {
     }
 
     // Check if we have 'didSet'/'willSet' after attributes.
-    return lookahead.at(any: [.contextualKeyword(.didSet), .contextualKeyword(.willSet)])
+    return lookahead.at(any: [.keyword(.didSet), .keyword(.willSet)])
   }
 }
 

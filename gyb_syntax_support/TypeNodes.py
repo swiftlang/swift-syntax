@@ -122,7 +122,7 @@ TYPE_NODES = [
     # pack-reference-type -> 'each' type
     Node('PackReferenceType', name_for_diagnostics='pack reference', kind='Type',
          children=[
-             Child('EachKeyword', kind='ContextualKeyworkToken',
+             Child('EachKeyword', kind='KeyworkToken',
                    text_choices=['each'], is_optional=False),
              Child('PackType', kind='Type')
          ]),
@@ -180,7 +180,7 @@ TYPE_NODES = [
              Child('Arguments', kind='TupleTypeElementList',
                    collection_element_name='Argument', is_indented=True),
              Child('RightParen', kind='RightParenToken'),
-             Child('AsyncKeyword', kind='ContextualKeyworkToken',
+             Child('AsyncKeyword', kind='KeyworkToken',
                    text_choices=['async'], is_optional=True),
              Child('ThrowsOrRethrowsKeyword', kind='Token',
                    is_optional=True,

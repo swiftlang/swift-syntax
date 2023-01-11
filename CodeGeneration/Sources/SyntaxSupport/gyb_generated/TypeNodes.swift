@@ -220,7 +220,7 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "EachKeyword",
-               kind: "ContextualKeyworkToken",
+               kind: "KeyworkToken",
                textChoices: [
                  "each"
                ]),
@@ -330,7 +330,7 @@ public let TYPE_NODES: [Node] = [
                  "RightParen"
                ]),
          Child(name: "AsyncKeyword",
-               kind: "ContextualKeyworkToken",
+               kind: "KeyworkToken",
                isOptional: true,
                textChoices: [
                  "async"

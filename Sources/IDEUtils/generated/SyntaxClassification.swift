@@ -366,7 +366,7 @@ extension RawTokenKind {
       return .operatorIdentifier
     case .dollarIdentifier: 
       return .dollarIdentifier
-    case .contextualKeyword: 
+    case .keyword: 
       return .keyword
     case .rawStringDelimiter: 
       return .none

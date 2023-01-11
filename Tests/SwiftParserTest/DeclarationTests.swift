@@ -967,11 +967,11 @@ final class DeclarationTests: XCTestCase {
   func testReturnAsyncContextualKeyword() {
     AssertParse(
       ##"""
-      if let async = self.consumeIfContextualKeyword("async") {
+      if let async = self.consume(if: .keyword(.async)) {
         return async
       }
 
-      if let reasync = self.consumeIfContextualKeyword("reasync") {
+      if let reasync = self.consume(if: .keyword(.reasync)) {
         return reasync
       }
       """##

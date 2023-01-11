@@ -401,7 +401,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .awaitExpr,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(.await), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.await), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
         nil,
@@ -432,7 +432,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .moveExpr,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(._move), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(._move), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
         nil,
@@ -463,7 +463,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .borrowExpr,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(._borrow), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(._borrow), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
         nil,
@@ -750,7 +750,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packElementExpr,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(.each), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.each), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: arena),
         nil,
@@ -3284,7 +3284,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(.actor), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.actor), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -4777,7 +4777,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(.macro), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.macro), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -9524,13 +9524,13 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  @available(*, deprecated, message: "Use TokenSyntax.contextualKeyword instead")
-  public static func makeContextualKeyword(
+  @available(*, deprecated, message: "Use TokenSyntax.keyword instead")
+  public static func makeKeyword(
     _ value: Keyword,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.contextualKeyword(value), presence: .present,
+    return makeToken(.keyword(value), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

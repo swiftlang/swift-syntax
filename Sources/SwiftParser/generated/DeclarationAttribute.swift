@@ -454,217 +454,217 @@ extension Parser {
     var rawTokenKind: RawTokenKind {
       switch self {
       case ._silgen_name: 
-        return .contextualKeyword(._silgen_name)
+        return .keyword(._silgen_name)
       case .available: 
-        return .contextualKeyword(.available)
+        return .keyword(.available)
       case .objc: 
-        return .contextualKeyword(.objc)
+        return .keyword(.objc)
       case .dynamicCallable: 
-        return .contextualKeyword(.dynamicCallable)
+        return .keyword(.dynamicCallable)
       case .main: 
-        return .contextualKeyword(.main)
+        return .keyword(.main)
       case ._exported: 
-        return .contextualKeyword(._exported)
+        return .keyword(._exported)
       case .dynamicMemberLookup: 
-        return .contextualKeyword(.dynamicMemberLookup)
+        return .keyword(.dynamicMemberLookup)
       case .NSCopying: 
-        return .contextualKeyword(.NSCopying)
+        return .keyword(.NSCopying)
       case .IBAction: 
-        return .contextualKeyword(.IBAction)
+        return .keyword(.IBAction)
       case .IBDesignable: 
-        return .contextualKeyword(.IBDesignable)
+        return .keyword(.IBDesignable)
       case .IBInspectable: 
-        return .contextualKeyword(.IBInspectable)
+        return .keyword(.IBInspectable)
       case .IBOutlet: 
-        return .contextualKeyword(.IBOutlet)
+        return .keyword(.IBOutlet)
       case .NSManaged: 
-        return .contextualKeyword(.NSManaged)
+        return .keyword(.NSManaged)
       case .LLDBDebuggerFunction: 
-        return .contextualKeyword(.LLDBDebuggerFunction)
+        return .keyword(.LLDBDebuggerFunction)
       case .UIApplicationMain: 
-        return .contextualKeyword(.UIApplicationMain)
+        return .keyword(.UIApplicationMain)
       case .unsafe_no_objc_tagged_pointer: 
-        return .contextualKeyword(.unsafe_no_objc_tagged_pointer)
+        return .keyword(.unsafe_no_objc_tagged_pointer)
       case .inline: 
-        return .contextualKeyword(.inline)
+        return .keyword(.inline)
       case ._semantics: 
-        return .contextualKeyword(._semantics)
+        return .keyword(._semantics)
       case ._transparent: 
-        return .contextualKeyword(._transparent)
+        return .keyword(._transparent)
       case .requires_stored_property_inits: 
-        return .contextualKeyword(.requires_stored_property_inits)
+        return .keyword(.requires_stored_property_inits)
       case .nonobjc: 
-        return .contextualKeyword(.nonobjc)
+        return .keyword(.nonobjc)
       case ._fixed_layout: 
-        return .contextualKeyword(._fixed_layout)
+        return .keyword(._fixed_layout)
       case .inlinable: 
-        return .contextualKeyword(.inlinable)
+        return .keyword(.inlinable)
       case ._specialize: 
-        return .contextualKeyword(._specialize)
+        return .keyword(._specialize)
       case .objcMembers: 
-        return .contextualKeyword(.objcMembers)
+        return .keyword(.objcMembers)
       case ._compilerInitialized: 
-        return .contextualKeyword(._compilerInitialized)
+        return .keyword(._compilerInitialized)
       case ._hasStorage: 
-        return .contextualKeyword(._hasStorage)
+        return .keyword(._hasStorage)
       case .__raw_doc_comment: 
-        return .contextualKeyword(.__raw_doc_comment)
+        return .keyword(.__raw_doc_comment)
       case ._effects: 
-        return .contextualKeyword(._effects)
+        return .keyword(._effects)
       case .__objc_bridged: 
-        return .contextualKeyword(.__objc_bridged)
+        return .keyword(.__objc_bridged)
       case .NSApplicationMain: 
-        return .contextualKeyword(.NSApplicationMain)
+        return .keyword(.NSApplicationMain)
       case ._objc_non_lazy_realization: 
-        return .contextualKeyword(._objc_non_lazy_realization)
+        return .keyword(._objc_non_lazy_realization)
       case .__synthesized_protocol: 
-        return .contextualKeyword(.__synthesized_protocol)
+        return .keyword(.__synthesized_protocol)
       case .testable: 
-        return .contextualKeyword(.testable)
+        return .keyword(.testable)
       case ._alignment: 
-        return .contextualKeyword(._alignment)
+        return .keyword(._alignment)
       case .atRethrows: 
-        return .contextualKeyword(.rethrows)
+        return .keyword(.rethrows)
       case ._swift_native_objc_runtime_base: 
-        return .contextualKeyword(._swift_native_objc_runtime_base)
+        return .keyword(._swift_native_objc_runtime_base)
       case .warn_unqualified_access: 
-        return .contextualKeyword(.warn_unqualified_access)
+        return .keyword(.warn_unqualified_access)
       case ._show_in_interface: 
-        return .contextualKeyword(._show_in_interface)
+        return .keyword(._show_in_interface)
       case ._cdecl: 
-        return .contextualKeyword(._cdecl)
+        return .keyword(._cdecl)
       case .usableFromInline: 
-        return .contextualKeyword(.usableFromInline)
+        return .keyword(.usableFromInline)
       case .discardableResult: 
-        return .contextualKeyword(.discardableResult)
+        return .keyword(.discardableResult)
       case .GKInspectable: 
-        return .contextualKeyword(.GKInspectable)
+        return .keyword(.GKInspectable)
       case ._implements: 
-        return .contextualKeyword(._implements)
+        return .keyword(._implements)
       case ._objcRuntimeName: 
-        return .contextualKeyword(._objcRuntimeName)
+        return .keyword(._objcRuntimeName)
       case ._staticInitializeObjCMetadata: 
-        return .contextualKeyword(._staticInitializeObjCMetadata)
+        return .keyword(._staticInitializeObjCMetadata)
       case ._restatedObjCConformance: 
-        return .contextualKeyword(._restatedObjCConformance)
+        return .keyword(._restatedObjCConformance)
       case ._objcImplementation: 
-        return .contextualKeyword(._objcImplementation)
+        return .keyword(._objcImplementation)
       case ._optimize: 
-        return .contextualKeyword(._optimize)
+        return .keyword(._optimize)
       case ._clangImporterSynthesizedType: 
-        return .contextualKeyword(._clangImporterSynthesizedType)
+        return .keyword(._clangImporterSynthesizedType)
       case ._weakLinked: 
-        return .contextualKeyword(._weakLinked)
+        return .keyword(._weakLinked)
       case .frozen: 
-        return .contextualKeyword(.frozen)
+        return .keyword(.frozen)
       case ._frozen: 
-        return .contextualKeyword(._frozen)
+        return .keyword(._frozen)
       case ._forbidSerializingReference: 
-        return .contextualKeyword(._forbidSerializingReference)
+        return .keyword(._forbidSerializingReference)
       case ._hasInitialValue: 
-        return .contextualKeyword(._hasInitialValue)
+        return .keyword(._hasInitialValue)
       case ._nonoverride: 
-        return .contextualKeyword(._nonoverride)
+        return .keyword(._nonoverride)
       case ._dynamicReplacement: 
-        return .contextualKeyword(._dynamicReplacement)
+        return .keyword(._dynamicReplacement)
       case ._borrowed: 
-        return .contextualKeyword(._borrowed)
+        return .keyword(._borrowed)
       case ._private: 
-        return .contextualKeyword(._private)
+        return .keyword(._private)
       case ._alwaysEmitIntoClient: 
-        return .contextualKeyword(._alwaysEmitIntoClient)
+        return .keyword(._alwaysEmitIntoClient)
       case ._implementationOnly: 
-        return .contextualKeyword(._implementationOnly)
+        return .keyword(._implementationOnly)
       case ._custom: 
-        return .contextualKeyword(._custom)
+        return .keyword(._custom)
       case .propertyWrapper: 
-        return .contextualKeyword(.propertyWrapper)
+        return .keyword(.propertyWrapper)
       case ._disfavoredOverload: 
-        return .contextualKeyword(._disfavoredOverload)
+        return .keyword(._disfavoredOverload)
       case .resultBuilder: 
-        return .contextualKeyword(.resultBuilder)
+        return .keyword(.resultBuilder)
       case ._projectedValueProperty: 
-        return .contextualKeyword(._projectedValueProperty)
+        return .keyword(._projectedValueProperty)
       case ._nonEphemeral: 
-        return .contextualKeyword(._nonEphemeral)
+        return .keyword(._nonEphemeral)
       case .differentiable: 
-        return .contextualKeyword(.differentiable)
+        return .keyword(.differentiable)
       case ._hasMissingDesignatedInitializers: 
-        return .contextualKeyword(._hasMissingDesignatedInitializers)
+        return .keyword(._hasMissingDesignatedInitializers)
       case ._inheritsConvenienceInitializers: 
-        return .contextualKeyword(._inheritsConvenienceInitializers)
+        return .keyword(._inheritsConvenienceInitializers)
       case ._typeEraser: 
-        return .contextualKeyword(._typeEraser)
+        return .keyword(._typeEraser)
       case .IBSegueAction: 
-        return .contextualKeyword(.IBSegueAction)
+        return .keyword(.IBSegueAction)
       case ._originallyDefinedIn: 
-        return .contextualKeyword(._originallyDefinedIn)
+        return .keyword(._originallyDefinedIn)
       case .derivative: 
-        return .contextualKeyword(.derivative)
+        return .keyword(.derivative)
       case ._spi: 
-        return .contextualKeyword(._spi)
+        return .keyword(._spi)
       case .transpose: 
-        return .contextualKeyword(.transpose)
+        return .keyword(.transpose)
       case .noDerivative: 
-        return .contextualKeyword(.noDerivative)
+        return .keyword(.noDerivative)
       case .globalActor: 
-        return .contextualKeyword(.globalActor)
+        return .keyword(.globalActor)
       case ._specializeExtension: 
-        return .contextualKeyword(._specializeExtension)
+        return .keyword(._specializeExtension)
       case .Sendable: 
-        return .contextualKeyword(.Sendable)
+        return .keyword(.Sendable)
       case ._marker: 
-        return .contextualKeyword(._marker)
+        return .keyword(._marker)
       case .atReasync: 
-        return .contextualKeyword(.reasync)
+        return .keyword(.reasync)
       case ._unsafeInheritExecutor: 
-        return .contextualKeyword(._unsafeInheritExecutor)
+        return .keyword(._unsafeInheritExecutor)
       case ._implicitSelfCapture: 
-        return .contextualKeyword(._implicitSelfCapture)
+        return .keyword(._implicitSelfCapture)
       case ._inheritActorContext: 
-        return .contextualKeyword(._inheritActorContext)
+        return .keyword(._inheritActorContext)
       case ._eagerMove: 
-        return .contextualKeyword(._eagerMove)
+        return .keyword(._eagerMove)
       case ._noEagerMove: 
-        return .contextualKeyword(._noEagerMove)
+        return .keyword(._noEagerMove)
       case ._assemblyVision: 
-        return .contextualKeyword(._assemblyVision)
+        return .keyword(._assemblyVision)
       case ._nonSendable: 
-        return .contextualKeyword(._nonSendable)
+        return .keyword(._nonSendable)
       case ._noImplicitCopy: 
-        return .contextualKeyword(._noImplicitCopy)
+        return .keyword(._noImplicitCopy)
       case ._noLocks: 
-        return .contextualKeyword(._noLocks)
+        return .keyword(._noLocks)
       case ._noAllocation: 
-        return .contextualKeyword(._noAllocation)
+        return .keyword(._noAllocation)
       case .preconcurrency: 
-        return .contextualKeyword(.preconcurrency)
+        return .keyword(.preconcurrency)
       case ._unavailableFromAsync: 
-        return .contextualKeyword(._unavailableFromAsync)
+        return .keyword(._unavailableFromAsync)
       case .exclusivity: 
-        return .contextualKeyword(.exclusivity)
+        return .keyword(.exclusivity)
       case ._backDeploy: 
-        return .contextualKeyword(._backDeploy)
+        return .keyword(._backDeploy)
       case ._moveOnly: 
-        return .contextualKeyword(._moveOnly)
+        return .keyword(._moveOnly)
       case ._alwaysEmitConformanceMetadata: 
-        return .contextualKeyword(._alwaysEmitConformanceMetadata)
+        return .keyword(._alwaysEmitConformanceMetadata)
       case ._expose: 
-        return .contextualKeyword(._expose)
+        return .keyword(._expose)
       case .typeWrapper: 
-        return .contextualKeyword(.typeWrapper)
+        return .keyword(.typeWrapper)
       case ._spiOnly: 
-        return .contextualKeyword(._spiOnly)
+        return .keyword(._spiOnly)
       case ._documentation: 
-        return .contextualKeyword(._documentation)
+        return .keyword(._documentation)
       case .typeWrapperIgnored: 
-        return .contextualKeyword(.typeWrapperIgnored)
+        return .keyword(.typeWrapperIgnored)
       case ._noMetadata: 
-        return .contextualKeyword(._noMetadata)
+        return .keyword(._noMetadata)
       case .runtimeMetadata: 
-        return .contextualKeyword(.runtimeMetadata)
+        return .keyword(.runtimeMetadata)
       case ._spi_available: 
-        return .contextualKeyword(._spi_available)
+        return .keyword(._spi_available)
       }
     }
   }

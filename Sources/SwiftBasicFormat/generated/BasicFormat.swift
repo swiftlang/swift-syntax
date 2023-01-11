@@ -335,7 +335,7 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .binaryOperator: 
       return true
-    case .contextualKeyword(.async): 
+    case .keyword(.async): 
       return true
     default: 
       return false

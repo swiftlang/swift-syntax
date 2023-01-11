@@ -83,7 +83,7 @@ extension TokenConsumer {
       declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
     }
     switch declStartKeyword {
-    case .actorContextualKeyword:
+    case .actorKeyword:
       // actor Foo {}
       if subparser.peek().rawTokenKind == .identifier {
         return true
@@ -102,7 +102,7 @@ extension TokenConsumer {
       return false
     case .initKeyword:
       return allowInitDecl
-    case .macroContextualKeyword:
+    case .macroKeyword:
       // macro Foo ...
       return subparser.peek().rawTokenKind == .identifier
     case .some(_):
@@ -244,9 +244,9 @@ extension Parser {
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
     case (.precedencegroupKeyword, let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
-    case (.actorContextualKeyword, let handle)?:
+    case (.actorKeyword, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.macroContextualKeyword, let handle)?:
+    case (.macroKeyword, let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case nil:
       if inMemberDeclList {
@@ -515,13 +515,13 @@ extension Parser {
 
     var rawTokenKind: RawTokenKind {
       switch self {
-      case .trivialLayout: return .contextualKeyword(._Trivial)
-      case .trivialAtMostLayout: return .contextualKeyword(._TrivialAtMost)
-      case .unknownLayout: return .contextualKeyword(._UnknownLayout)
-      case .refCountedObjectLayout: return .contextualKeyword(._RefCountedObject)
-      case .nativeRefCountedObjectLayout: return .contextualKeyword(._NativeRefCountedObject)
-      case .classLayout: return .contextualKeyword(._Class)
-      case .nativeClassLayout: return .contextualKeyword(._NativeClass)
+      case .trivialLayout: return .keyword(._Trivial)
+      case .trivialAtMostLayout: return .keyword(._TrivialAtMost)
+      case .unknownLayout: return .keyword(._UnknownLayout)
+      case .refCountedObjectLayout: return .keyword(._RefCountedObject)
+      case .nativeRefCountedObjectLayout: return .keyword(._NativeRefCountedObject)
+      case .classLayout: return .keyword(._Class)
+      case .nativeClassLayout: return .keyword(._NativeClass)
       }
     }
 
@@ -1309,9 +1309,9 @@ extension Parser {
     let input = self.parseParameterClause(for: .functionParameters)
 
     let async: RawTokenSyntax?
-    if let asyncTok = self.consume(if: .contextualKeyword(.async)) {
+    if let asyncTok = self.consume(if: .keyword(.async)) {
       async = asyncTok
-    } else if let reasync = self.consume(if: .contextualKeyword(.reasync)) {
+    } else if let reasync = self.consume(if: .keyword(.reasync)) {
       async = reasync
     } else {
       async = nil
@@ -1549,7 +1549,7 @@ extension Parser {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
-    let hasModifier = look.consume(ifAny: [.contextualKeyword(.mutating), .contextualKeyword(.nonmutating), .contextualKeyword(.__consuming)]) != nil
+    let hasModifier = look.consume(ifAny: [.keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming)]) != nil
     guard let (kind, handle) = look.at(anyIn: AccessorKind.self) ?? forcedKind else {
       return nil
     }
@@ -1581,12 +1581,12 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
     // 'async'
-    if let async = self.consume(if: .contextualKeyword(.async)) {
+    if let async = self.consume(if: .keyword(.async)) {
       return async
     }
 
     // 'reasync'
-    if let reasync = self.consume(if: .contextualKeyword(.reasync)) {
+    if let reasync = self.consume(if: .keyword(.reasync)) {
       return reasync
     }
 
@@ -1615,7 +1615,7 @@ extension Parser {
 
   /// Parse an accessor.
   mutating func parseAccessorDecl() -> RawAccessorDeclSyntax {
-    let forcedHandle = TokenConsumptionHandle(tokenKind: .contextualKeyword(.get), missing: true)
+    let forcedHandle = TokenConsumptionHandle(tokenKind: .keyword(.get), missing: true)
     let introducer = parseAccessorIntroducer(forcedKind: (.get, forcedHandle))!
     return parseAccessorDecl(introducer: introducer)
   }
@@ -2007,10 +2007,10 @@ extension Parser {
 
       var rawTokenKind: RawTokenKind {
         switch self {
-        case .associativity: return .contextualKeyword(.associativity)
-        case .assignment: return .contextualKeyword(.assignment)
-        case .higherThan: return .contextualKeyword(.higherThan)
-        case .lowerThan: return .contextualKeyword(.lowerThan)
+        case .associativity: return .keyword(.associativity)
+        case .assignment: return .keyword(.assignment)
+        case .higherThan: return .keyword(.higherThan)
+        case .lowerThan: return .keyword(.lowerThan)
         }
       }
     }

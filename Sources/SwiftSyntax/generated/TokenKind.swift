@@ -231,7 +231,7 @@ public enum TokenKind: Hashable {
   
   case dollarIdentifier(String)
   
-  case contextualKeyword(Keyword)
+  case keyword(Keyword)
   
   case rawStringDelimiter(String)
   
@@ -632,7 +632,7 @@ public enum TokenKind: Hashable {
       return text
     case .dollarIdentifier(let text): 
       return text
-    case .contextualKeyword(let assoc): 
+    case .keyword(let assoc): 
       return String(syntaxText: assoc.defaultText)
     case .rawStringDelimiter(let text): 
       return text
@@ -855,7 +855,7 @@ public enum TokenKind: Hashable {
       return #"#colorLiteral"#
     case .poundHasSymbolKeyword: 
       return #"#_hasSymbol"#
-    case .contextualKeyword(let assoc): 
+    case .keyword(let assoc): 
       return assoc.defaultText
     case .yield: 
       return #"yield"#
@@ -1101,7 +1101,7 @@ public enum TokenKind: Hashable {
       return false
     case .dollarIdentifier: 
       return false
-    case .contextualKeyword: 
+    case .keyword: 
       return false
     case .rawStringDelimiter: 
       return false
@@ -1347,7 +1347,7 @@ public enum TokenKind: Hashable {
       return false
     case .dollarIdentifier: 
       return false
-    case .contextualKeyword: 
+    case .keyword: 
       return false
     case .rawStringDelimiter: 
       return false
@@ -1590,7 +1590,7 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.dollarIdentifier(let lhsText), .dollarIdentifier(let rhsText)): 
       return lhsText == rhsText
-    case (.contextualKeyword(let lhsText), .contextualKeyword(let rhsText)): 
+    case (.keyword(let lhsText), .keyword(let rhsText)): 
       return lhsText == rhsText
     case (.rawStringDelimiter(let lhsText), .rawStringDelimiter(let rhsText)): 
       return lhsText == rhsText
@@ -1835,7 +1835,7 @@ public enum RawTokenKind: Equatable, Hashable {
   
   case dollarIdentifier
   
-  case contextualKeyword(Keyword)
+  case keyword(Keyword)
   
   case rawStringDelimiter
   
@@ -2054,7 +2054,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"#colorLiteral"#
     case .poundHasSymbolKeyword: 
       return #"#_hasSymbol"#
-    case .contextualKeyword(let assoc): 
+    case .keyword(let assoc): 
       return assoc.defaultText
     case .yield: 
       return #"yield"#
@@ -2293,7 +2293,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"prefix operator"#
     case .dollarIdentifier: 
       return #"dollar identifier"#
-    case .contextualKeyword: 
+    case .keyword: 
       return #"keyword"#
     case .rawStringDelimiter: 
       return #"raw string delimiter"#
@@ -2539,7 +2539,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .dollarIdentifier: 
       return false
-    case .contextualKeyword: 
+    case .keyword: 
       return false
     case .rawStringDelimiter: 
       return false
@@ -2785,7 +2785,7 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .dollarIdentifier: 
       return false
-    case .contextualKeyword: 
+    case .keyword: 
       return false
     case .rawStringDelimiter: 
       return false
@@ -3370,9 +3370,9 @@ extension TokenKind {
       return .prefixOperator(text)
     case .dollarIdentifier: 
       return .dollarIdentifier(text)
-    case .contextualKeyword(let assoc): 
+    case .keyword(let assoc): 
       assert(text.isEmpty || String(syntaxText: assoc.defaultText) == text)
-      return .contextualKeyword(assoc)
+      return .keyword(assoc)
     case .rawStringDelimiter: 
       return .rawStringDelimiter(text)
     case .stringSegment: 
@@ -3616,8 +3616,8 @@ extension TokenKind {
       return (.prefixOperator, str)
     case .dollarIdentifier(let str): 
       return (.dollarIdentifier, str)
-    case .contextualKeyword(let assoc): 
-      return (.contextualKeyword(assoc), String(syntaxText: assoc.defaultText))
+    case .keyword(let assoc): 
+      return (.keyword(assoc), String(syntaxText: assoc.defaultText))
     case .rawStringDelimiter(let str): 
       return (.rawStringDelimiter, str)
     case .stringSegment(let str): 

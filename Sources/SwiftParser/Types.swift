@@ -241,7 +241,7 @@ extension Parser {
       base = RawTypeSyntax(self.parseTupleTypeBody())
     case .leftSquareBracket:
       base = RawTypeSyntax(self.parseCollectionType())
-    case .wildcardKeyword:
+    case .wildcard:
       base = RawTypeSyntax(self.parsePlaceholderType())
     default:
       return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
@@ -396,7 +396,7 @@ extension Parser {
   ///     placeholder-type → wildcard
   @_spi(RawSyntax)
   public mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
-    let (unexpectedBeforeName, name) = self.expect(.wildcardKeyword)
+    let (unexpectedBeforeName, name) = self.expect(.wildcard)
     // FIXME: Need a better syntax node than this
     return RawSimpleTypeIdentifierSyntax(
       unexpectedBeforeName,
@@ -749,7 +749,7 @@ extension Parser.Lookahead {
       guard self.consume(if: .rightSquareBracket) != nil else {
         return false
       }
-    case .wildcardKeyword:
+    case .wildcard:
       self.consumeAnyToken()
     case .keyword(.repeat):
       return true

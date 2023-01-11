@@ -112,7 +112,7 @@ public enum TokenPrecedence: Comparable {
       // Identifiers
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
-      .wildcardKeyword,
+      .wildcard,
       // String segment, string interpolation anchor and pound don't really fit anywhere else
       .pound, .stringSegment:
       self = .identifierLike

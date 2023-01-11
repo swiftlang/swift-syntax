@@ -31,7 +31,7 @@ extension Parser {
         self.missingToken(.identifier, text: nil)
       )
     } else {
-      if let wildcardToken = self.consume(if: .wildcardKeyword) {
+      if let wildcardToken = self.consume(if: .wildcard) {
         return (nil, wildcardToken)
       }
       return (nil, self.consumeAnyToken(remapping: .identifier))
@@ -263,7 +263,7 @@ extension Lexer.Lexeme {
       return false
     }
     switch self.rawTokenKind {
-    case .identifier, .wildcardKeyword:
+    case .identifier, .wildcard:
       // Identifiers, escaped identifiers, and '_' can be argument labels.
       return true
     case .dollarIdentifier:

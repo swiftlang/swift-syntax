@@ -1669,6 +1669,8 @@ extension Lexer.Cursor {
       return Lexer.Result(keywordKind)
     } else if let keyword = Keyword(text), keyword.isLexerClassified {
       return Lexer.Result(.keyword(keyword))
+    } else if text == "_" {
+      return Lexer.Result(.wildcard)
     } else {
       return Lexer.Result(.identifier)
     }

@@ -5,7 +5,7 @@
 public enum TokenKind: Hashable {
   case eof
   
-  case wildcardKeyword
+  case wildcard
   
   case leftParen
   
@@ -135,8 +135,6 @@ public enum TokenKind: Hashable {
   /// given string is not a keyword, this function returns `nil`.
   public init?(keyword: String) {
     switch keyword {
-    case "_": 
-      self = .wildcardKeyword
     case "#keyPath": 
       self = .poundKeyPathKeyword
     case "#line": 
@@ -192,7 +190,7 @@ public enum TokenKind: Hashable {
   @_spi(Testing) 
   public var text: String {
     switch self {
-    case .wildcardKeyword: 
+    case .wildcard: 
       return #"_"#
     case .leftParen: 
       return #"("#
@@ -327,7 +325,7 @@ public enum TokenKind: Hashable {
   @_spi(RawSyntax) 
   public var defaultText: SyntaxText? {
     switch self {
-    case .wildcardKeyword: 
+    case .wildcard: 
       return #"_"#
     case .leftParen: 
       return #"("#
@@ -445,8 +443,8 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .wildcardKeyword: 
-      return true
+    case .wildcard: 
+      return false
     case .leftParen: 
       return false
     case .rightParen: 
@@ -583,7 +581,7 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .wildcardKeyword: 
+    case .wildcard: 
       return false
     case .leftParen: 
       return true
@@ -718,7 +716,7 @@ extension TokenKind: Equatable {
     switch (lhs, rhs) {
     case (.eof, .eof): 
       return true
-    case (.wildcardKeyword, .wildcardKeyword): 
+    case (.wildcard, .wildcard): 
       return true
     case (.leftParen, .leftParen): 
       return true
@@ -855,7 +853,7 @@ extension TokenKind: Equatable {
 public enum RawTokenKind: Equatable, Hashable {
   case eof
   
-  case wildcardKeyword
+  case wildcard
   
   case leftParen
   
@@ -986,7 +984,7 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return ""
-    case .wildcardKeyword: 
+    case .wildcard: 
       return #"_"#
     case .leftParen: 
       return #"("#
@@ -1097,8 +1095,8 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return "end of file"
-    case .wildcardKeyword: 
-      return #"_"#
+    case .wildcard: 
+      return #"wildcard"#
     case .leftParen: 
       return #"("#
     case .rightParen: 
@@ -1235,8 +1233,8 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return false
-    case .wildcardKeyword: 
-      return true
+    case .wildcard: 
+      return false
     case .leftParen: 
       return false
     case .rightParen: 
@@ -1373,7 +1371,7 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return false
-    case .wildcardKeyword: 
+    case .wildcard: 
       return false
     case .leftParen: 
       return true
@@ -1505,13 +1503,6 @@ public enum RawTokenKind: Equatable, Hashable {
   @_spi(RawSyntax)
   public init?(keyword text: SyntaxText) {
     switch text.count {
-    case 1: 
-      switch text {
-      case "_": 
-        self = .wildcardKeyword
-      default: 
-        return nil
-      }
     case 3: 
       switch text {
       case "#if": 
@@ -1626,9 +1617,9 @@ extension TokenKind {
     switch rawKind {
     case .eof: 
       return .eof
-    case .wildcardKeyword: 
+    case .wildcard: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .wildcardKeyword
+      return .wildcard
     case .leftParen: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .leftParen
@@ -1813,8 +1804,8 @@ extension TokenKind {
     switch self {
     case .eof: 
       return (.eof, nil)
-    case .wildcardKeyword: 
-      return (.wildcardKeyword, nil)
+    case .wildcard: 
+      return (.wildcard, nil)
     case .leftParen: 
       return (.leftParen, nil)
     case .rightParen: 

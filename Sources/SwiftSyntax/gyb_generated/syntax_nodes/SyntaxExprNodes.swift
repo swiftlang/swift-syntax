@@ -1535,7 +1535,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
-    wildcard: TokenSyntax = .wildcardKeyword(),
+    wildcard: TokenSyntax = .wildcardToken(),
     _ unexpectedAfterWildcard: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {

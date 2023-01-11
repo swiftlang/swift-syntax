@@ -185,8 +185,6 @@ open class BasicFormat: SyntaxRewriter {
       break 
     }
     switch token.tokenKind {
-    case .wildcardKeyword: 
-      return true
     case .comma: 
       return true
     case .colon: 

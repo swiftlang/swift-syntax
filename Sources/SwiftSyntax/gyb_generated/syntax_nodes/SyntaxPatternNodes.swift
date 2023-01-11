@@ -665,7 +665,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
-    wildcard: TokenSyntax = .wildcardKeyword(),
+    wildcard: TokenSyntax = .wildcardToken(),
     _ unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
     typeAnnotation: TypeAnnotationSyntax? = nil,
     _ unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? = nil,

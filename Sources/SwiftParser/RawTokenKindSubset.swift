@@ -698,7 +698,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case stringLiteral
   case superKeyword
   case trueKeyword
-  case wildcardKeyword
+  case wildcard
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
@@ -721,7 +721,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case RawTokenKindMatch(.stringLiteral): self = .stringLiteral
     case RawTokenKindMatch(.super): self = .superKeyword
     case RawTokenKindMatch(.true): self = .trueKeyword
-    case RawTokenKindMatch(.wildcardKeyword): self = .wildcardKeyword
+    case RawTokenKindMatch(.wildcard): self = .wildcard
     default: return nil
     }
   }
@@ -747,7 +747,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
     case .stringLiteral: return .stringLiteral
     case .superKeyword: return .keyword(.super)
     case .trueKeyword: return .keyword(.true)
-    case .wildcardKeyword: return .wildcardKeyword
+    case .wildcard: return .wildcard
     }
   }
 }

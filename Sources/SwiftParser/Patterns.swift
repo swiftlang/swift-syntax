@@ -48,7 +48,7 @@ extension Parser {
   public mutating func parsePattern() -> RawPatternSyntax {
     enum ExpectedTokens: RawTokenKindSubset {
       case leftParen
-      case wildcardKeyword
+      case wildcard
       case identifier
       case dollarIdentifier  // For recovery
       case letKeyword
@@ -57,7 +57,7 @@ extension Parser {
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme.rawTokenKind {
         case .leftParen: self = .leftParen
-        case .wildcardKeyword: self = .wildcardKeyword
+        case .wildcard: self = .wildcard
         case .identifier: self = .identifier
         case .dollarIdentifier: self = .dollarIdentifier
         case .keyword(.let): self = .letKeyword
@@ -69,7 +69,7 @@ extension Parser {
       var rawTokenKind: RawTokenKind {
         switch self {
         case .leftParen: return .leftParen
-        case .wildcardKeyword: return .wildcardKeyword
+        case .wildcard: return .wildcard
         case .identifier: return .identifier
         case .dollarIdentifier: return .dollarIdentifier
         case .letKeyword: return .keyword(.let)
@@ -92,7 +92,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.wildcardKeyword, let handle)?:
+    case (.wildcard, let handle)?:
       let wildcard = self.eat(handle)
       return RawPatternSyntax(
         RawWildcardPatternSyntax(
@@ -290,7 +290,7 @@ extension Parser.Lookahead {
   mutating func canParsePattern() -> Bool {
     enum PatternStartTokens: RawTokenKindSubset {
       case identifier
-      case wildcardKeyword
+      case wildcard
       case letKeyword
       case varKeyword
       case leftParen
@@ -298,7 +298,7 @@ extension Parser.Lookahead {
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme.rawTokenKind {
         case .identifier: self = .identifier
-        case .wildcardKeyword: self = .wildcardKeyword
+        case .wildcard: self = .wildcard
         case .keyword(.let): self = .letKeyword
         case .keyword(.var): self = .varKeyword
         case .leftParen: self = .leftParen
@@ -309,7 +309,7 @@ extension Parser.Lookahead {
       var rawTokenKind: RawTokenKind {
         switch self {
         case .identifier: return .identifier
-        case .wildcardKeyword: return .wildcardKeyword
+        case .wildcard: return .wildcard
         case .letKeyword: return .keyword(.let)
         case .varKeyword: return .keyword(.var)
         case .leftParen: return .leftParen
@@ -319,7 +319,7 @@ extension Parser.Lookahead {
 
     switch self.at(anyIn: PatternStartTokens.self) {
     case (.identifier, let handle)?,
-      (.wildcardKeyword, let handle)?:
+      (.wildcard, let handle)?:
       self.eat(handle)
       return true
     case (.letKeyword, let handle)?,

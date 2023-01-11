@@ -15,13 +15,13 @@
 //===----------------------------------------------------------------------===//
 
 extension TokenSyntax {
-  public static func wildcardKeyword(
+  public static func wildcardToken(
     leadingTrivia: Trivia = [], 
     trailingTrivia: Trivia = [], 
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .wildcardKeyword, 
+      .wildcard, 
       leadingTrivia: leadingTrivia, 
       trailingTrivia: trailingTrivia, 
       presence: presence

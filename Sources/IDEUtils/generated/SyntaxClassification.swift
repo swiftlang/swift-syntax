@@ -140,8 +140,8 @@ extension SyntaxClassification {
 extension RawTokenKind {
   internal var classification: SyntaxClassification {
     switch self {
-    case .wildcardKeyword: 
-      return .keyword
+    case .wildcard: 
+      return .none
     case .leftParen: 
       return .none
     case .rightParen: 

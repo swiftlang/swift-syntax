@@ -185,7 +185,7 @@ class Misc(Token):
 
 SYNTAX_TOKENS = [
     # Pattern keywords
-    PatternKeyword('Wildcard', '_'),
+    Misc('Wildcard', '_', text='_', name_for_diagnostics='wildcard'),
 
     # Punctuators
     Punctuator('LeftParen', 'l_paren', text='('),

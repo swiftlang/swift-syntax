@@ -663,7 +663,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .discardAssignmentExpr,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.wildcardKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.wildcard, arena: arena),
         nil,
       ], arena: arena))
       return DiscardAssignmentExprSyntax(data)
@@ -8216,7 +8216,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .wildcardPattern,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.wildcardKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.wildcard, arena: arena),
         nil,
         nil,
         nil,
@@ -8497,12 +8497,12 @@ public enum SyntaxFactory {
 /// MARK: Token Creation APIs
 
 
-  @available(*, deprecated, message: "Use TokenSyntax.wildcardKeywordKeyword instead")
-  public static func makeWildcardKeyword(
+  @available(*, deprecated, message: "Use TokenSyntax.wildcardToken instead")
+  public static func makeWildcardToken(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.wildcardKeyword, presence: .present,
+    return makeToken(.wildcard, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

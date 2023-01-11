@@ -81,7 +81,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionParameterSyntax(
-          firstName: .wildcardKeyword(),
+          firstName: .wildcard,
           secondName: .identifier("default"),
           colon: .colonToken(),
           type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))

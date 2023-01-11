@@ -250,14 +250,14 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case nil:
       if inMemberDeclList {
-        let isProbablyVarDecl = self.at(any: [.identifier, .wildcardKeyword]) && self.peek().rawTokenKind.is(any: [.colon, .equal, .comma])
-        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(any: [.identifier, .wildcardKeyword])
+        let isProbablyVarDecl = self.at(any: [.identifier, .wildcard]) && self.peek().rawTokenKind.is(any: [.colon, .equal, .comma])
+        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(any: [.identifier, .wildcard])
 
         if isProbablyVarDecl || isProbablyTupleDecl {
           return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.keyword(.var))))
         }
 
-        let isProbablyFuncDecl = self.at(any: [.identifier, .wildcardKeyword]) || self.at(anyIn: Operator.self) != nil
+        let isProbablyFuncDecl = self.at(any: [.identifier, .wildcard]) || self.at(anyIn: Operator.self) != nil
 
         if isProbablyFuncDecl {
           return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))

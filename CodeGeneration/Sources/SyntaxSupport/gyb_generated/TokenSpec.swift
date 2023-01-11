@@ -204,7 +204,7 @@ public class LiteralSpec: TokenSpec { }
 public class MiscSpec: TokenSpec { }
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
-  PatternKeywordSpec(name: "Wildcard", text: "_", requiresTrailingSpace: true),
+  MiscSpec(name: "Wildcard", kind: "_", nameForDiagnostics: "wildcard", text: "_"),
   PunctuatorSpec(name: "LeftParen", kind: "l_paren", text: "("),
   PunctuatorSpec(name: "RightParen", kind: "r_paren", text: ")"),
   PunctuatorSpec(name: "LeftBrace", kind: "l_brace", text: "{", requiresLeadingSpace: true),

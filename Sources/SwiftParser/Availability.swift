@@ -220,7 +220,7 @@ extension Parser {
       return .token(star)
     }
 
-    if self.at(any: [.identifier, .wildcardKeyword]) {
+    if self.at(any: [.identifier, .wildcard]) {
       if self.at(.keyword(.swift)) || self.at(.keyword(._PackageDescription)) {
         return .availabilityVersionRestriction(self.parsePlatformAgnosticVersionConstraintSpec())
       }
@@ -230,7 +230,7 @@ extension Parser {
   }
 
   mutating func parsePlatformAgnosticVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
-    let (unexpectedBeforePlatform, platform) = self.expectAny([.identifier, .wildcardKeyword], default: .identifier)
+    let (unexpectedBeforePlatform, platform) = self.expectAny([.identifier, .wildcard], default: .identifier)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
       unexpectedBeforePlatform,

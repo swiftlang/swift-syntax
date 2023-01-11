@@ -16,9 +16,9 @@
 import SwiftSyntax
 
 public extension TokenSyntax {
-  /// The `_` keyword
-  static var `wildcard`: Token {
-    return .wildcardKeyword()
+  /// The `_` token
+  static var `wildcard`: TokenSyntax {
+    return .wildcardToken()
   }
   
   /// The `(` token

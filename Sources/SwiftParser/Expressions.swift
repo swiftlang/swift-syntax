@@ -1201,7 +1201,7 @@ extension Parser {
       return RawExprSyntax(RawTypeExprSyntax(type: anyType, arena: self.arena))
     case (.dollarIdentifier, _)?:
       return RawExprSyntax(self.parseAnonymousClosureArgument())
-    case (.wildcardKeyword, let handle)?:  // _
+    case (.wildcard, let handle)?:  // _
       let wild = self.eat(handle)
       return RawExprSyntax(
         RawDiscardAssignmentExprSyntax(
@@ -2174,7 +2174,7 @@ extension Parser {
     // If we have a leading token that may be part of the closure signature, do a
     // speculative parse to validate it and look for 'in'.
     guard
-      self.at(any: [.atSign, .leftParen, .leftSquareBracket, .wildcardKeyword])
+      self.at(any: [.atSign, .leftParen, .leftSquareBracket, .wildcard])
         || self.at(.identifier)
     else {
       // No closure signature.
@@ -2276,7 +2276,7 @@ extension Parser {
               unexpected = nil
               name = identifier
             } else {
-              (unexpected, name) = self.expect(.wildcardKeyword)
+              (unexpected, name) = self.expect(.wildcard)
             }
             keepGoing = consume(if: .comma)
             params.append(
@@ -2634,13 +2634,13 @@ extension Parser.Lookahead {
         }
       }
       // Okay, we have a closure signature.
-    } else if lookahead.at(.identifier) || lookahead.at(.wildcardKeyword) {
+    } else if lookahead.at(.identifier) || lookahead.at(.wildcard) {
       // Parse identifier (',' identifier)*
       lookahead.consumeAnyToken()
 
       var parametersProgress = LoopProgressCondition()
       while lookahead.consume(if: .comma) != nil && parametersProgress.evaluate(lookahead.currentToken) {
-        if lookahead.at(.identifier) || lookahead.at(.wildcardKeyword) {
+        if lookahead.at(.identifier) || lookahead.at(.wildcard) {
           lookahead.consumeAnyToken()
           continue
         }

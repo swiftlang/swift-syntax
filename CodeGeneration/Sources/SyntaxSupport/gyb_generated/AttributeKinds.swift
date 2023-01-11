@@ -1437,7 +1437,7 @@ public let DECL_MODIFIER_KINDS: [Attribute] = [
   BuiltinDeclModifier(name: "static",
                 swiftName: "`static`"),
   BuiltinDeclModifier(name: "class",
-                swiftName: "classKeyword"),
+                swiftName: "`class`"),
   ContextualSimpleDeclAttribute(name: "final",
                 className: "Final",
                 options: 

@@ -19,7 +19,7 @@ extension Operator {
     let modifiers = ModifierListSyntax(
       [DeclModifierSyntax(name: .identifier("\(kind)"))]
     )
-    let operatorKeyword = TokenSyntax.operatorKeyword(leadingTrivia: .space)
+    let operatorKeyword = TokenSyntax.keyword(.operator, leadingTrivia: .space)
     let identifierSyntax =
       TokenSyntax.identifier(name, leadingTrivia: .space)
     let precedenceGroupSyntax = precedenceGroup.map { groupName in
@@ -70,7 +70,7 @@ extension PrecedenceGroup {
   public func synthesizedSyntax(
     indentation: Int = 4
   ) -> PrecedenceGroupDeclSyntax {
-    let precedencegroupKeyword = TokenSyntax.precedencegroupKeyword()
+    let precedencegroupKeyword = TokenSyntax.keyword(.precedencegroup)
     let identifierSyntax =
       TokenSyntax.identifier(name, leadingTrivia: .space)
     let leftBrace = TokenSyntax.leftBraceToken(leadingTrivia: .space)

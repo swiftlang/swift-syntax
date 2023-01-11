@@ -32,7 +32,7 @@ extension TokenConsumer {
     case nil:
       break
     }
-    if self.at(.atSign) || self.at(.inoutKeyword) {
+    if self.at(.atSign) || self.at(.keyword(.inout)) {
       var backtrack = self.lookahead()
       if backtrack.canParseType() {
         return true
@@ -407,7 +407,7 @@ extension Parser {
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // Try to parse '@' sign or 'inout' as a attributed typerepr.
-    if self.at(any: [.atSign, .inoutKeyword]) {
+    if self.at(any: [.atSign, .keyword(.inout)]) {
       var backtrack = self.lookahead()
       if backtrack.canParseType() {
         let type = self.parseType()

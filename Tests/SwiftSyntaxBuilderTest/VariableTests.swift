@@ -71,7 +71,7 @@ final class VariableTests: XCTestCase {
 
   func testVariableDeclWithExplicitTrailingCommas() {
     let buildable = VariableDecl(
-      letOrVarKeyword: .let,
+      letOrVarKeyword: .keyword(.let),
       bindings: [
         PatternBinding(
           pattern: PatternSyntax("a"),

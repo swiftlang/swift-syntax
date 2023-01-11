@@ -134,10 +134,13 @@ public let PATTERN_NODES: [Node] = [
        kind: "Pattern",
        children: [
          Child(name: "LetOrVarKeyword",
-               kind: "Token",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Let",
-                 "Var"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "let",
+                 "var"
                ]),
          Child(name: "ValuePattern",
                kind: "Pattern")

@@ -22,7 +22,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('TypealiasKeyword', kind='TypealiasToken'),
+             Child('TypealiasKeyword', kind='KeywordToken', text_choices=['typealias']),
              Child('Identifier', kind='IdentifierToken'),
              Child('GenericParameterClause', kind='GenericParameterClause', name_for_diagnostics='generic parameter clause',
                    is_optional=True),
@@ -43,7 +43,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('AssociatedtypeKeyword', kind='AssociatedtypeToken'),
+             Child('AssociatedtypeKeyword', kind='KeywordToken', text_choices=['associatedtype']),
              Child('Identifier', kind='IdentifierToken'),
              Child('InheritanceClause', kind='TypeInheritanceClause', name_for_diagnostics='inheritance clause',
                    is_optional=True),
@@ -223,7 +223,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('ClassKeyword', kind='ClassToken'),
+             Child('ClassKeyword', kind='KeywordToken', text_choices=['class']),
              Child('Identifier', kind='IdentifierToken'),
              Child('GenericParameterClause', kind='GenericParameterClause', name_for_diagnostics='generic parameter clause',
                    is_optional=True),
@@ -273,7 +273,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('StructKeyword', kind='StructToken'),
+             Child('StructKeyword', kind='KeywordToken', text_choices=['struct']),
              Child('Identifier', kind='IdentifierToken'),
              Child('GenericParameterClause', kind='GenericParameterClause', name_for_diagnostics='generic parameter clause',
                    is_optional=True),
@@ -291,7 +291,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('ProtocolKeyword', kind='ProtocolToken'),
+             Child('ProtocolKeyword', kind='KeywordToken', text_choices=['protocol']),
              Child('Identifier', kind='IdentifierToken'),
              Child('PrimaryAssociatedTypeClause',
                    kind='PrimaryAssociatedTypeClause',
@@ -317,7 +317,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('ExtensionKeyword', kind='ExtensionToken'),
+             Child('ExtensionKeyword', kind='KeywordToken', text_choices=['extension']),
              Child('ExtendedType', kind='Type'),
              Child('InheritanceClause', kind='TypeInheritanceClause', name_for_diagnostics='inheritance clause',
                    is_optional=True),
@@ -442,7 +442,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('FuncKeyword', kind='FuncToken'),
+             Child('FuncKeyword', kind='KeywordToken', text_choices=['func']),
              Child('Identifier', kind='Token',
                    token_choices=[
                        'IdentifierToken',
@@ -466,7 +466,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('InitKeyword', kind='InitToken'),
+             Child('InitKeyword', kind='KeywordToken', text_choices=['init']),
              Child('OptionalMark', kind='Token',
                    token_choices=[
                        'PostfixQuestionMarkToken',
@@ -490,7 +490,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('DeinitKeyword', kind='DeinitToken'),
+             Child('DeinitKeyword', kind='KeywordToken', text_choices=['deinit']),
              Child('Body', kind='CodeBlock', is_optional=True),
          ]),
 
@@ -501,7 +501,7 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('SubscriptKeyword', kind='SubscriptToken'),
+             Child('SubscriptKeyword', kind='KeywordToken', text_choices=['subscript']),
              Child('GenericParameterClause', kind='GenericParameterClause', name_for_diagnostics='generic parameter clause',
                    is_optional=True),
              Child('Indices', kind='ParameterClause'),
@@ -533,12 +533,11 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('ImportTok', kind='ImportToken'),
-             Child('ImportKind', kind='Token', is_optional=True,
-                   token_choices=[
-                      'TypealiasToken', 'StructToken', 'ClassToken',
-                      'EnumToken', 'ProtocolToken', 'VarToken', 'LetToken',
-                      'FuncToken',
+             Child('ImportTok', kind='KeywordToken', text_choices=['import']),
+             Child('ImportKind', kind='KeywordToken', is_optional=True,
+                   text_choices=[
+                      'typealias', 'struct', 'class', 'enum', 'protocol', 'var',
+                      'let', 'func',
                    ]),
              Child('Path', kind='AccessPath',
                    collection_element_name='PathComponent'),
@@ -616,9 +615,9 @@ DECL_NODES = [
                    collection_element_name='Attribute', is_optional=True),
              Child('Modifiers', kind='ModifierList', name_for_diagnostics='modifiers',
                    collection_element_name='Modifier', is_optional=True),
-             Child('LetOrVarKeyword', kind='Token',
-                   token_choices=[
-                       'LetToken', 'VarToken',
+             Child('LetOrVarKeyword', kind='KeywordToken',
+                   text_choices=[
+                       'let', 'var',
                    ]),
              Child('Bindings', kind='PatternBindingList',
                    collection_element_name='Binding'),
@@ -689,7 +688,7 @@ DECL_NODES = [
                    description='''
                    The declaration modifiers applied to the enum declaration.
                    '''),
-             Child('EnumKeyword', kind='EnumToken',
+             Child('EnumKeyword', kind='KeywordToken', text_choices=['enum'],
                    description='''
                    The `enum` keyword for this declaration.
                    '''),
@@ -737,7 +736,7 @@ DECL_NODES = [
                    The declaration modifiers applied to the 'operator'
                    declaration.
                    '''),
-             Child('OperatorKeyword', kind='OperatorToken'),
+             Child('OperatorKeyword', kind='KeywordToken', text_choices=['operator']),
              Child('Identifier', kind='Token',
                    classification='OperatorIdentifier',
                    token_choices=[
@@ -797,7 +796,7 @@ DECL_NODES = [
                    The declaration modifiers applied to the 'precedencegroup'
                    declaration.
                    '''),
-             Child('PrecedencegroupKeyword', kind='PrecedencegroupToken'),
+             Child('PrecedencegroupKeyword', kind='KeywordToken', text_choices=['precedencegroup']),
              Child('Identifier', kind='IdentifierToken',
                    description='''
                    The name of this precedence group.

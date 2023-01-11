@@ -2598,7 +2598,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.typealiasKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.typealias), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -2649,7 +2649,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.associatedtypeKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.associatedtype), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -3229,7 +3229,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.classKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.class), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -3339,7 +3339,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.structKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.struct), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -3394,7 +3394,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.protocolKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.protocol), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -3447,7 +3447,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.extensionKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.extension), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
         nil,
@@ -3727,7 +3727,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.funcKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.func), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -3782,7 +3782,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.initKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.`init`), arena: arena),
         nil,
         nil,
         nil,
@@ -3829,7 +3829,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.deinitKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.deinit), arena: arena),
         nil,
         nil,
         nil,
@@ -3876,7 +3876,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.subscriptKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.subscript), arena: arena),
         nil,
         nil,
         nil,
@@ -3976,7 +3976,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.importKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.import), arena: arena),
         nil,
         nil,
         nil,
@@ -4221,7 +4221,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.let), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.patternBindingList, arena: arena),
         nil,
@@ -4366,7 +4366,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.enumKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.enum), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -4415,7 +4415,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.operatorKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.operator), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.binaryOperator(""), arena: arena),
         nil,
@@ -4548,7 +4548,7 @@ public enum SyntaxFactory {
         nil,
         nil,
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.precedencegroupKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.precedencegroup), arena: arena),
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: arena),
         nil,
@@ -6477,7 +6477,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .optionalBindingCondition,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.let), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena),
         nil,
@@ -7404,7 +7404,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .classRestrictionType,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.classKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.class), arena: arena),
         nil,
       ], arena: arena))
       return ClassRestrictionTypeSyntax(data)
@@ -8333,7 +8333,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .valueBindingPattern,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.keyword(.let), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: arena),
         nil,
@@ -8497,159 +8497,6 @@ public enum SyntaxFactory {
 /// MARK: Token Creation APIs
 
 
-  @available(*, deprecated, message: "Use TokenSyntax.associatedtypeKeywordKeyword instead")
-  public static func makeAssociatedtypeKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.associatedtypeKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.classKeywordKeyword instead")
-  public static func makeClassKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.classKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.deinitKeywordKeyword instead")
-  public static func makeDeinitKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.deinitKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.enumKeywordKeyword instead")
-  public static func makeEnumKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.enumKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.extensionKeywordKeyword instead")
-  public static func makeExtensionKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.extensionKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.funcKeywordKeyword instead")
-  public static func makeFuncKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.funcKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.importKeywordKeyword instead")
-  public static func makeImportKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.importKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.initKeywordKeyword instead")
-  public static func makeInitKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.initKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.inoutKeywordKeyword instead")
-  public static func makeInoutKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.inoutKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.letKeywordKeyword instead")
-  public static func makeLetKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.letKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.operatorKeywordKeyword instead")
-  public static func makeOperatorKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.operatorKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.precedencegroupKeywordKeyword instead")
-  public static func makePrecedencegroupKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.precedencegroupKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.protocolKeywordKeyword instead")
-  public static func makeProtocolKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.protocolKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.structKeywordKeyword instead")
-  public static func makeStructKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.structKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.subscriptKeywordKeyword instead")
-  public static func makeSubscriptKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.subscriptKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.typealiasKeywordKeyword instead")
-  public static func makeTypealiasKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.typealiasKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.varKeywordKeyword instead")
-  public static func makeVarKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.varKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
   @available(*, deprecated, message: "Use TokenSyntax.deferKeywordKeyword instead")
   public static func makeDeferKeyword(
     leadingTrivia: Trivia = [],

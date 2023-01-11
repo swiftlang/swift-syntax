@@ -41,13 +41,13 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTokenKind() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f"), keyword: .classKeyword()))
+    let expected = Syntax(makeFunc(identifier: .identifier("f"), keyword: .keyword(.class)))
 
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .token)
-      XCTAssertEqual(Syntax(diff.baseline).as(TokenSyntax.self)?.tokenKind, .classKeyword)
-      XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .funcKeyword)
+      XCTAssertEqual(Syntax(diff.baseline).as(TokenSyntax.self)?.tokenKind, .keyword(.class))
+      XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .keyword(.func))
     }
 
     let actual = Syntax(makeFunc(identifier: .identifier("f")))
@@ -182,7 +182,7 @@ public class SyntaxComparisonTests: XCTestCase {
   /// the start, not the entire body).
   private func makeFunc(
     identifier: TokenSyntax,
-    keyword: TokenSyntax = .funcKeyword(),
+    keyword: TokenSyntax = .keyword(.func),
     body: CodeBlockSyntax? = nil,
     indent: Int = 0
   ) -> FunctionDeclSyntax {

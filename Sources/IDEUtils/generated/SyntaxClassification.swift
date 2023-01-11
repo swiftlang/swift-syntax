@@ -140,40 +140,6 @@ extension SyntaxClassification {
 extension RawTokenKind {
   internal var classification: SyntaxClassification {
     switch self {
-    case .associatedtypeKeyword: 
-      return .keyword
-    case .classKeyword: 
-      return .keyword
-    case .deinitKeyword: 
-      return .keyword
-    case .enumKeyword: 
-      return .keyword
-    case .extensionKeyword: 
-      return .keyword
-    case .funcKeyword: 
-      return .keyword
-    case .importKeyword: 
-      return .keyword
-    case .initKeyword: 
-      return .keyword
-    case .inoutKeyword: 
-      return .keyword
-    case .letKeyword: 
-      return .keyword
-    case .operatorKeyword: 
-      return .keyword
-    case .precedencegroupKeyword: 
-      return .keyword
-    case .protocolKeyword: 
-      return .keyword
-    case .structKeyword: 
-      return .keyword
-    case .subscriptKeyword: 
-      return .keyword
-    case .typealiasKeyword: 
-      return .keyword
-    case .varKeyword: 
-      return .keyword
     case .deferKeyword: 
       return .keyword
     case .ifKeyword: 

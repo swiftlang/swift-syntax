@@ -204,23 +204,6 @@ public class LiteralSpec: TokenSpec { }
 public class MiscSpec: TokenSpec { }
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
-  DeclKeywordSpec(name: "Associatedtype", text: "associatedtype", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Class", text: "class", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Deinit", text: "deinit", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Enum", text: "enum", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Extension", text: "extension", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Func", text: "func", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Import", text: "import", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Init", text: "init", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Inout", text: "inout", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Let", text: "let", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Operator", text: "operator", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Precedencegroup", text: "precedencegroup", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Protocol", text: "protocol", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Struct", text: "struct", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Subscript", text: "subscript", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Typealias", text: "typealias", requiresTrailingSpace: true),
-  DeclKeywordSpec(name: "Var", text: "var", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Defer", text: "defer", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "If", text: "if", requiresTrailingSpace: true),
   StmtKeywordSpec(name: "Guard", text: "guard", requiresTrailingSpace: true),

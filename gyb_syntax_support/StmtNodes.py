@@ -214,10 +214,8 @@ STMT_NODES = [
     Node('OptionalBindingCondition', name_for_diagnostics="optional binding",
          kind='Syntax',
          children=[
-             Child('LetOrVarKeyword', kind='Token',
-                   token_choices=[
-                       'LetToken', 'VarToken',
-                   ]),
+             Child('LetOrVarKeyword', kind='KeywordToken',
+                   text_choices=['let', 'var']),
              Child('Pattern', kind='Pattern'),
              Child('TypeAnnotation', kind='TypeAnnotation',
                    is_optional=True),

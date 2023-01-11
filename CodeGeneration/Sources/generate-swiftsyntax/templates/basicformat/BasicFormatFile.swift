@@ -159,8 +159,8 @@ let basicFormatFile = SourceFile {
              (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
              (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
              (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
-             (.initKeyword, .leftParen), // Ensures there is not space in `init()`
-             (.initKeyword, .postfixQuestionMark), // Ensures there is not space in `init?`
+             (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
+             (.keyword(.`init`), .postfixQuestionMark), // Ensures there is not space in `init?`
              (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
              (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
              (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`

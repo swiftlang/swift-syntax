@@ -737,7 +737,7 @@ DECL_MODIFIER_KINDS = [
     # serialized directly into the ASTs they are attached to rather than using
     # the generic attribute serialization infrastructure.
     BuiltinDeclModifier('static', swift_name='`static`'),
-    BuiltinDeclModifier('class', swift_name='classKeyword'),
+    BuiltinDeclModifier('class', swift_name='`class`'),
 
     ContextualSimpleDeclAttribute('final', 'Final',
                                   OnClass,  OnFunc,  OnAccessor,  OnVar,  OnSubscript,

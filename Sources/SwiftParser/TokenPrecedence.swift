@@ -126,7 +126,7 @@ public enum TokenPrecedence: Comparable {
       // Operators can occur inside expressions
       .postfixOperator, .prefixOperator, .binaryOperator,
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
-      .anyKeyword, .inoutKeyword,
+      .anyKeyword, .keyword(.inout),
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
       .whereKeyword,
       // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
@@ -189,17 +189,17 @@ public enum TokenPrecedence: Comparable {
 
     // MARK: Decl keywords
     case  // Types
-    .associatedtypeKeyword, .classKeyword, .enumKeyword, .extensionKeyword, .protocolKeyword, .structKeyword, .typealiasKeyword,
+    .keyword(.associatedtype), .keyword(.class), .keyword(.enum), .keyword(.extension), .keyword(.protocol), .keyword(.struct), .keyword(.typealias),
       // Access modifiers
       .keyword(.fileprivate), .keyword(.internal), .keyword(.private), .keyword(.public), .keyword(.static),
       // Functions
-      .deinitKeyword, .funcKeyword, .initKeyword, .subscriptKeyword,
+      .keyword(.deinit), .keyword(.func), .keyword(.`init`), .keyword(.subscript),
       // Variables
-      .letKeyword, .varKeyword,
+      .keyword(.let), .keyword(.var),
       // Operator stuff
-      .operatorKeyword, .precedencegroupKeyword,
+      .keyword(.operator), .keyword(.precedencegroup),
       // Misc
-      .importKeyword:
+      .keyword(.import):
       self = .declKeyword
     case .keyword:
       // Treat all keywords that weren't handled above as expression keywords as a fallback option.

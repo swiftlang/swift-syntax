@@ -59,9 +59,12 @@ public let TYPE_NODES: [Node] = [
        kind: "Type",
        children: [
          Child(name: "ClassKeyword",
-               kind: "ClassToken",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Class"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "class"
                ])
        ]),
   
@@ -237,10 +240,7 @@ public let TYPE_NODES: [Node] = [
        children: [
          Child(name: "InOut",
                kind: "InoutToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Inout"
-               ]),
+               isOptional: true),
          Child(name: "Name",
                kind: "Token",
                isOptional: true,

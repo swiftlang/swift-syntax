@@ -249,7 +249,7 @@ extension Parser {
 
     // Parse the basic expression case.  If we have a leading let/var/case
     // keyword or an assignment, then we know this is a binding.
-    guard self.at(any: [.letKeyword, .varKeyword, .caseKeyword]) else {
+    guard self.at(any: [.keyword(.let), .keyword(.var), .caseKeyword]) else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern
@@ -266,7 +266,7 @@ extension Parser {
     }
 
     // We're parsing a conditional binding.
-    assert(self.at(any: [.letKeyword, .varKeyword, .caseKeyword]))
+    assert(self.at(any: [.keyword(.let), .keyword(.var), .caseKeyword]))
     enum BindingKind {
       case pattern(RawTokenSyntax, RawPatternSyntax)
       case optional(RawTokenSyntax, RawPatternSyntax)

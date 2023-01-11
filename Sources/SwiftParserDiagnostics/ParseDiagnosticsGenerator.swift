@@ -451,7 +451,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let inheritedTypeName = node.inheritedType?.as(SimpleTypeIdentifierSyntax.self)?.name {
       exchangeTokens(
         unexpected: node.unexpectedBetweenColonAndInheritedType,
-        unexpectedTokenCondition: { $0.tokenKind == .classKeyword },
+        unexpectedTokenCondition: { $0.tokenKind == .keyword(.class) },
         correctTokens: [inheritedTypeName],
         message: { _ in StaticParserError.classConstraintCanOnlyBeUsedInProtocol },
         moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: inheritedTypeName) }

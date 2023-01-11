@@ -27,7 +27,7 @@ final class StatementTests: XCTestCase {
             ConditionElementSyntax(
               condition: .init(
                 OptionalBindingConditionSyntax(
-                  letOrVarKeyword: .letKeyword(),
+                  letOrVarKeyword: .keyword(.let),
                   pattern: IdentifierPatternSyntax(identifier: .identifier("baz"))
                 )
               )
@@ -53,7 +53,7 @@ final class StatementTests: XCTestCase {
             ConditionElementSyntax(
               condition: .init(
                 OptionalBindingConditionSyntax(
-                  letOrVarKeyword: .letKeyword(),
+                  letOrVarKeyword: .keyword(.let),
                   pattern: IdentifierPatternSyntax(identifier: .selfKeyword()),
                   initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .selfKeyword()))
                 )

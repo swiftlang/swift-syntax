@@ -172,8 +172,8 @@ open class BasicFormat: SyntaxRewriter {
      (.asKeyword, .postfixQuestionMark), // Ensures there is not space in `as?`
      (.exclamationMark, .leftParen), // Ensures there is not space in `myOptionalClosure!()`
      (.exclamationMark, .period), // Ensures there is not space in `myOptionalBar!.foo()`
-     (.initKeyword, .leftParen), // Ensures there is not space in `init()`
-     (.initKeyword, .postfixQuestionMark), // Ensures there is not space in `init?`
+     (.keyword(.`init`), .leftParen), // Ensures there is not space in `init()`
+     (.keyword(.`init`), .postfixQuestionMark), // Ensures there is not space in `init?`
      (.postfixQuestionMark, .leftParen), // Ensures there is not space in `init?()`
      (.postfixQuestionMark, .rightAngle), // Ensures there is not space in `ContiguousArray<RawSyntax?>`
      (.postfixQuestionMark, .rightParen), // Ensures there is not space in `myOptionalClosure?()`
@@ -185,40 +185,6 @@ open class BasicFormat: SyntaxRewriter {
       break 
     }
     switch token.tokenKind {
-    case .associatedtypeKeyword: 
-      return true
-    case .classKeyword: 
-      return true
-    case .deinitKeyword: 
-      return true
-    case .enumKeyword: 
-      return true
-    case .extensionKeyword: 
-      return true
-    case .funcKeyword: 
-      return true
-    case .importKeyword: 
-      return true
-    case .initKeyword: 
-      return true
-    case .inoutKeyword: 
-      return true
-    case .letKeyword: 
-      return true
-    case .operatorKeyword: 
-      return true
-    case .precedencegroupKeyword: 
-      return true
-    case .protocolKeyword: 
-      return true
-    case .structKeyword: 
-      return true
-    case .subscriptKeyword: 
-      return true
-    case .typealiasKeyword: 
-      return true
-    case .varKeyword: 
-      return true
     case .deferKeyword: 
       return true
     case .ifKeyword: 
@@ -325,19 +291,51 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .binaryOperator: 
       return true
+    case .keyword(.`associatedtype`): 
+      return true
     case .keyword(.`class`): 
+      return true
+    case .keyword(.`deinit`): 
+      return true
+    case .keyword(.`enum`): 
+      return true
+    case .keyword(.`extension`): 
       return true
     case .keyword(.`fileprivate`): 
       return true
+    case .keyword(.`func`): 
+      return true
+    case .keyword(.`import`): 
+      return true
+    case .keyword(.`init`): 
+      return true
+    case .keyword(.`inout`): 
+      return true
     case .keyword(.`internal`): 
       return true
+    case .keyword(.`let`): 
+      return true
+    case .keyword(.`operator`): 
+      return true
+    case .keyword(.`precedencegroup`): 
+      return true
     case .keyword(.`private`): 
+      return true
+    case .keyword(.`protocol`): 
       return true
     case .keyword(.`public`): 
       return true
     case .keyword(.`rethrows`): 
       return true
     case .keyword(.`static`): 
+      return true
+    case .keyword(.`struct`): 
+      return true
+    case .keyword(.`subscript`): 
+      return true
+    case .keyword(.`typealias`): 
+      return true
+    case .keyword(.`var`): 
       return true
     case .keyword(.async): 
       return true

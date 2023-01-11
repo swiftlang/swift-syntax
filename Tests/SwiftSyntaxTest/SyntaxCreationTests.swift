@@ -14,7 +14,7 @@ import XCTest
 import SwiftSyntax
 
 fileprivate func cannedStructDecl() -> StructDeclSyntax {
-  let structKW = TokenSyntax.structKeyword(trailingTrivia: .space)
+  let structKW = TokenSyntax.keyword(.struct, trailingTrivia: .space)
   let fooID = TokenSyntax.identifier("Foo", trailingTrivia: .space)
   let rBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newline)
   let members = MemberDeclBlockSyntax(
@@ -77,7 +77,7 @@ public class SyntaxCreationTests: XCTestCase {
   }
 
   public func testTokenSyntax() {
-    let tok = TokenSyntax.structKeyword(trailingTrivia: .space)
+    let tok = TokenSyntax.keyword(.struct, trailingTrivia: .space)
     XCTAssertEqual("\(tok)", "struct ")
     XCTAssertEqual(tok.presence, .present)
 

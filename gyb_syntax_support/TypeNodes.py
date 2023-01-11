@@ -33,7 +33,7 @@ TYPE_NODES = [
     # class-restriction-type -> 'class'
     Node('ClassRestrictionType', name_for_diagnostics=None, kind='Type',
          children=[
-             Child('ClassKeyword', kind='ClassToken'),
+             Child('ClassKeyword', kind='KeywordToken', text_choices=['class']),
          ]),
     # array-type -> '[' type ']'
     Node('ArrayType', name_for_diagnostics='array type', kind='Type',

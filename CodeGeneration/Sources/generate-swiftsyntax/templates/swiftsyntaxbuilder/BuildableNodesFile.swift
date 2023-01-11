@@ -109,7 +109,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
         "@\(builderInitializableType.resultBuilderBaseName) \(child.swiftName)Builder: () -> \(builderInitializableType.syntax) = \(defaultArgument)",
         for: .functionParameters
       ))
-    } else if let token = child.type.token, token.text == nil {
+    } else if let token = child.type.token, token.text == nil, (child.textChoices.count != 1 || token.associatedValueClass == nil) {
       // Allow initializing identifiers and other tokens without default text with a String
       shouldCreateInitializer = true
       let paramType = child.type.optionalWrapped(type: "\(raw: token.associatedValueClass ?? "String")" as TypeSyntax)
@@ -126,7 +126,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
         firstName: .identifier(child.swiftName),
         colon: .colon,
         type: child.parameterType,
-        defaultArgument: child.type.defaultInitialization.map { InitializerClause(value: $0) }
+        defaultArgument: child.defaultInitialization.map { InitializerClause(value: $0) }
       ))
     }
     delegatedInitArgs.append(TupleExprElement(label: child.isUnexpectedNodes ? nil : child.swiftName, expression: produceExpr))

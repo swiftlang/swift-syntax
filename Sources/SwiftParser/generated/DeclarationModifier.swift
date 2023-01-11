@@ -19,7 +19,7 @@
 enum DeclarationModifier: RawTokenKindSubset {
   case `static`
   
-  case classKeyword
+  case `class`
   
   case final
   
@@ -87,8 +87,8 @@ enum DeclarationModifier: RawTokenKindSubset {
     switch lexeme {
     case RawTokenKindMatch(.`static`): 
       self = .`static`
-    case RawTokenKindMatch(.classKeyword): 
-      self = .classKeyword
+    case RawTokenKindMatch(.`class`): 
+      self = .`class`
     case RawTokenKindMatch(.final): 
       self = .final
     case RawTokenKindMatch(.required): 
@@ -160,8 +160,8 @@ enum DeclarationModifier: RawTokenKindSubset {
     switch self {
     case .`static`: 
       return .keyword(.`static`)
-    case .classKeyword: 
-      return .classKeyword
+    case .`class`: 
+      return .keyword(.`class`)
     case .final: 
       return .keyword(.final)
     case .required: 

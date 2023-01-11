@@ -205,6 +205,8 @@ public enum Keyword: StaticString {
   
   case assignment
   
+  case `associatedtype`
+  
   case associativity
   
   case async
@@ -222,6 +224,8 @@ public enum Keyword: StaticString {
   case convenience
   
   case convention
+  
+  case `deinit`
   
   case deprecated
   
@@ -243,17 +247,23 @@ public enum Keyword: StaticString {
   
   case each
   
+  case `enum`
+  
   case escaping
   
   case exclusivity
   
   case exported
   
+  case `extension`
+  
   case `fileprivate`
   
   case final
   
   case frozen
+  
+  case `func`
   
   case get
   
@@ -273,13 +283,19 @@ public enum Keyword: StaticString {
   
   case IBSegueAction
   
+  case `import`
+  
   case indirect
   
   case infix
   
+  case `init`
+  
   case inlinable
   
   case inline
+  
+  case `inout`
   
   case `internal`
   
@@ -290,6 +306,8 @@ public enum Keyword: StaticString {
   case kind
   
   case lazy
+  
+  case `let`
   
   case LLDBDebuggerFunction
   
@@ -335,6 +353,8 @@ public enum Keyword: StaticString {
   
   case open
   
+  case `operator`
+  
   case optional
   
   case override
@@ -342,6 +362,8 @@ public enum Keyword: StaticString {
   case package
   
   case postfix
+  
+  case `precedencegroup`
   
   case preconcurrency
   
@@ -352,6 +374,8 @@ public enum Keyword: StaticString {
   case propertyWrapper
   
   case `Protocol`
+  
+  case `protocol`
   
   case `public`
   
@@ -385,6 +409,10 @@ public enum Keyword: StaticString {
   
   case `static`
   
+  case `struct`
+  
+  case `subscript`
+  
   case swift
   
   case target
@@ -394,6 +422,8 @@ public enum Keyword: StaticString {
   case transpose
   
   case `Type`
+  
+  case `typealias`
   
   case typeWrapper
   
@@ -416,6 +446,8 @@ public enum Keyword: StaticString {
   case unsafeMutableAddress
   
   case usableFromInline
+  
+  case `var`
   
   case warn_unqualified_access
   
@@ -444,10 +476,14 @@ public enum Keyword: StaticString {
         self = .any
       case "get": 
         self = .get
+      case "let": 
+        self = .`let`
       case "set": 
         self = .set
       case "spi": 
         self = .spi
+      case "var": 
+        self = .`var`
       case "wrt": 
         self = .wrt
       default: 
@@ -459,6 +495,12 @@ public enum Keyword: StaticString {
         self = ._spi
       case "each": 
         self = .each
+      case "enum": 
+        self = .`enum`
+      case "func": 
+        self = .`func`
+      case "init": 
+        self = .`init`
       case "kind": 
         self = .kind
       case "lazy": 
@@ -498,6 +540,8 @@ public enum Keyword: StaticString {
         self = .final
       case "infix": 
         self = .infix
+      case "inout": 
+        self = .`inout`
       case "macro": 
         self = .macro
       case "swift": 
@@ -517,10 +561,14 @@ public enum Keyword: StaticString {
         self = ._const
       case "_local": 
         self = ._local
+      case "deinit": 
+        self = .`deinit`
       case "didSet": 
         self = .didSet
       case "frozen": 
         self = .frozen
+      case "import": 
+        self = .`import`
       case "inline": 
         self = .inline
       case "prefix": 
@@ -529,6 +577,8 @@ public enum Keyword: StaticString {
         self = .`public`
       case "static": 
         self = .`static`
+      case "struct": 
+        self = .`struct`
       case "target": 
         self = .target
       case "unsafe": 
@@ -615,12 +665,16 @@ public enum Keyword: StaticString {
         self = .mutating
       case "noescape": 
         self = .noescape
+      case "operator": 
+        self = .`operator`
       case "optional": 
         self = .optional
       case "override": 
         self = .override
       case "Protocol": 
         self = .`Protocol`
+      case "protocol": 
+        self = .`protocol`
       case "required": 
         self = .required
       case "rethrows": 
@@ -644,6 +698,8 @@ public enum Keyword: StaticString {
         self = ._optimize
       case "available": 
         self = .available
+      case "extension": 
+        self = .`extension`
       case "inlinable": 
         self = .inlinable
       case "lowerThan": 
@@ -656,8 +712,12 @@ public enum Keyword: StaticString {
         self = .obsoleted
       case "spiModule": 
         self = .spiModule
+      case "subscript": 
+        self = .`subscript`
       case "transpose": 
         self = .transpose
+      case "typealias": 
+        self = .`typealias`
       case "unchecked": 
         self = .unchecked
       default: 
@@ -787,6 +847,8 @@ public enum Keyword: StaticString {
         self = ._TrivialAtMost
       case "_UnknownLayout": 
         self = ._UnknownLayout
+      case "associatedtype": 
+        self = .`associatedtype`
       case "differentiable": 
         self = .differentiable
       case "preconcurrency": 
@@ -806,6 +868,8 @@ public enum Keyword: StaticString {
         self = ._noImplicitCopy
       case "dynamicCallable": 
         self = .dynamicCallable
+      case "precedencegroup": 
+        self = .`precedencegroup`
       case "propertyWrapper": 
         self = .propertyWrapper
       case "runtimeMetadata": 
@@ -994,19 +1058,51 @@ public enum Keyword: StaticString {
   /// This is true for keywords that used to be considered non-contextual.
   public var isLexerClassified: Bool {
     switch self {
+    case .`associatedtype`: 
+      return true
     case .`class`: 
+      return true
+    case .`deinit`: 
+      return true
+    case .`enum`: 
+      return true
+    case .`extension`: 
       return true
     case .`fileprivate`: 
       return true
+    case .`func`: 
+      return true
+    case .`import`: 
+      return true
+    case .`init`: 
+      return true
+    case .`inout`: 
+      return true
     case .`internal`: 
       return true
+    case .`let`: 
+      return true
+    case .`operator`: 
+      return true
+    case .`precedencegroup`: 
+      return true
     case .`private`: 
+      return true
+    case .`protocol`: 
       return true
     case .`public`: 
       return true
     case .`rethrows`: 
       return true
     case .`static`: 
+      return true
+    case .`struct`: 
+      return true
+    case .`subscript`: 
+      return true
+    case .`typealias`: 
+      return true
+    case .`var`: 
       return true
     default: 
       return false

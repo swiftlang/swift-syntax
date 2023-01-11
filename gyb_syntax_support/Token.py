@@ -184,25 +184,6 @@ class Misc(Token):
 
 
 SYNTAX_TOKENS = [
-    # Keywords that start decls
-    DeclKeyword('Associatedtype', 'associatedtype'),
-    DeclKeyword('Class', 'class'),
-    DeclKeyword('Deinit', 'deinit'),
-    DeclKeyword('Enum', 'enum'),
-    DeclKeyword('Extension', 'extension'),
-    DeclKeyword('Func', 'func'),
-    DeclKeyword('Import', 'import'),
-    DeclKeyword('Init', 'init'),
-    DeclKeyword('Inout', 'inout'),
-    DeclKeyword('Let', 'let'),
-    DeclKeyword('Operator', 'operator'),
-    DeclKeyword('Precedencegroup', 'precedencegroup'),
-    DeclKeyword('Protocol', 'protocol'),
-    DeclKeyword('Struct', 'struct'),
-    DeclKeyword('Subscript', 'subscript'),
-    DeclKeyword('Typealias', 'typealias'),
-    DeclKeyword('Var', 'var'),
-
     # Statement keywords
     StmtKeyword('Defer', 'defer'),
     StmtKeyword('If', 'if'),

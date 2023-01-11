@@ -37,9 +37,9 @@ extension Parser {
             arena: self.arena
           )
         )
-      case (.classKeyword, let handle)?:
+      case (.class, let handle)?:
         var lookahead = self.lookahead()
-        lookahead.eat(.classKeyword)
+        lookahead.eat(.keyword(.class))
         // When followed by an 'override' or CC token inside a class,
         // treat 'class' as a modifier in the case of a following CC
         // token, we cannot be sure there is no intention to override

@@ -796,7 +796,7 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     repeat {
       // The contextual inout marker is part of argument lists.
-      _ = self.consume(if: .inoutKeyword)
+      _ = self.consume(if: .keyword(.inout))
 
       // If the tuple element starts with "ident :", then it is followed
       // by a type annotation.
@@ -934,7 +934,7 @@ extension Parser {
       specifier = missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText)
     }
     var extraneousSpecifiers: [RawTokenSyntax] = []
-    while let extraSpecifier = self.consume(ifAny: [.inoutKeyword, .keyword(.__shared), .keyword(.__owned), .keyword(.isolated), .keyword(._const)]) {
+    while let extraSpecifier = self.consume(ifAny: [.keyword(.inout), .keyword(.__shared), .keyword(.__owned), .keyword(.isolated), .keyword(._const)]) {
       if specifier == nil {
         specifier = extraSpecifier
       } else {

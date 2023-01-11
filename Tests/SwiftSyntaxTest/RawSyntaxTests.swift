@@ -15,7 +15,7 @@ import XCTest
 
 fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
   let structKW = RawTokenSyntax(
-    kind: .structKeyword,
+    kind: .keyword(.struct),
     text: arena.intern("struct"),
     leadingTriviaPieces: [],
     trailingTriviaPieces: [.spaces(1)],

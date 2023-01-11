@@ -5,40 +5,6 @@
 public enum TokenKind: Hashable {
   case eof
   
-  case associatedtypeKeyword
-  
-  case classKeyword
-  
-  case deinitKeyword
-  
-  case enumKeyword
-  
-  case extensionKeyword
-  
-  case funcKeyword
-  
-  case importKeyword
-  
-  case initKeyword
-  
-  case inoutKeyword
-  
-  case letKeyword
-  
-  case operatorKeyword
-  
-  case precedencegroupKeyword
-  
-  case protocolKeyword
-  
-  case structKeyword
-  
-  case subscriptKeyword
-  
-  case typealiasKeyword
-  
-  case varKeyword
-  
   case deferKeyword
   
   case ifKeyword
@@ -233,40 +199,6 @@ public enum TokenKind: Hashable {
   /// given string is not a keyword, this function returns `nil`.
   public init?(keyword: String) {
     switch keyword {
-    case "associatedtype": 
-      self = .associatedtypeKeyword
-    case "class": 
-      self = .classKeyword
-    case "deinit": 
-      self = .deinitKeyword
-    case "enum": 
-      self = .enumKeyword
-    case "extension": 
-      self = .extensionKeyword
-    case "func": 
-      self = .funcKeyword
-    case "import": 
-      self = .importKeyword
-    case "init": 
-      self = .initKeyword
-    case "inout": 
-      self = .inoutKeyword
-    case "let": 
-      self = .letKeyword
-    case "operator": 
-      self = .operatorKeyword
-    case "precedencegroup": 
-      self = .precedencegroupKeyword
-    case "protocol": 
-      self = .protocolKeyword
-    case "struct": 
-      self = .structKeyword
-    case "subscript": 
-      self = .subscriptKeyword
-    case "typealias": 
-      self = .typealiasKeyword
-    case "var": 
-      self = .varKeyword
     case "defer": 
       self = .deferKeyword
     case "if": 
@@ -386,40 +318,6 @@ public enum TokenKind: Hashable {
   @_spi(Testing) 
   public var text: String {
     switch self {
-    case .associatedtypeKeyword: 
-      return #"associatedtype"#
-    case .classKeyword: 
-      return #"class"#
-    case .deinitKeyword: 
-      return #"deinit"#
-    case .enumKeyword: 
-      return #"enum"#
-    case .extensionKeyword: 
-      return #"extension"#
-    case .funcKeyword: 
-      return #"func"#
-    case .importKeyword: 
-      return #"import"#
-    case .initKeyword: 
-      return #"init"#
-    case .inoutKeyword: 
-      return #"inout"#
-    case .letKeyword: 
-      return #"let"#
-    case .operatorKeyword: 
-      return #"operator"#
-    case .precedencegroupKeyword: 
-      return #"precedencegroup"#
-    case .protocolKeyword: 
-      return #"protocol"#
-    case .structKeyword: 
-      return #"struct"#
-    case .subscriptKeyword: 
-      return #"subscript"#
-    case .typealiasKeyword: 
-      return #"typealias"#
-    case .varKeyword: 
-      return #"var"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -619,40 +517,6 @@ public enum TokenKind: Hashable {
   @_spi(RawSyntax) 
   public var defaultText: SyntaxText? {
     switch self {
-    case .associatedtypeKeyword: 
-      return #"associatedtype"#
-    case .classKeyword: 
-      return #"class"#
-    case .deinitKeyword: 
-      return #"deinit"#
-    case .enumKeyword: 
-      return #"enum"#
-    case .extensionKeyword: 
-      return #"extension"#
-    case .funcKeyword: 
-      return #"func"#
-    case .importKeyword: 
-      return #"import"#
-    case .initKeyword: 
-      return #"init"#
-    case .inoutKeyword: 
-      return #"inout"#
-    case .letKeyword: 
-      return #"let"#
-    case .operatorKeyword: 
-      return #"operator"#
-    case .precedencegroupKeyword: 
-      return #"precedencegroup"#
-    case .protocolKeyword: 
-      return #"protocol"#
-    case .structKeyword: 
-      return #"struct"#
-    case .subscriptKeyword: 
-      return #"subscript"#
-    case .typealiasKeyword: 
-      return #"typealias"#
-    case .varKeyword: 
-      return #"var"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -835,40 +699,6 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .associatedtypeKeyword: 
-      return true
-    case .classKeyword: 
-      return true
-    case .deinitKeyword: 
-      return true
-    case .enumKeyword: 
-      return true
-    case .extensionKeyword: 
-      return true
-    case .funcKeyword: 
-      return true
-    case .importKeyword: 
-      return true
-    case .initKeyword: 
-      return true
-    case .inoutKeyword: 
-      return true
-    case .letKeyword: 
-      return true
-    case .operatorKeyword: 
-      return true
-    case .precedencegroupKeyword: 
-      return true
-    case .protocolKeyword: 
-      return true
-    case .structKeyword: 
-      return true
-    case .subscriptKeyword: 
-      return true
-    case .typealiasKeyword: 
-      return true
-    case .varKeyword: 
-      return true
     case .deferKeyword: 
       return true
     case .ifKeyword: 
@@ -1071,40 +901,6 @@ public enum TokenKind: Hashable {
     switch self {
     case .eof: 
       return false
-    case .associatedtypeKeyword: 
-      return false
-    case .classKeyword: 
-      return false
-    case .deinitKeyword: 
-      return false
-    case .enumKeyword: 
-      return false
-    case .extensionKeyword: 
-      return false
-    case .funcKeyword: 
-      return false
-    case .importKeyword: 
-      return false
-    case .initKeyword: 
-      return false
-    case .inoutKeyword: 
-      return false
-    case .letKeyword: 
-      return false
-    case .operatorKeyword: 
-      return false
-    case .precedencegroupKeyword: 
-      return false
-    case .protocolKeyword: 
-      return false
-    case .structKeyword: 
-      return false
-    case .subscriptKeyword: 
-      return false
-    case .typealiasKeyword: 
-      return false
-    case .varKeyword: 
-      return false
     case .deferKeyword: 
       return false
     case .ifKeyword: 
@@ -1303,40 +1099,6 @@ extension TokenKind: Equatable {
   public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
     case (.eof, .eof): 
-      return true
-    case (.associatedtypeKeyword, .associatedtypeKeyword): 
-      return true
-    case (.classKeyword, .classKeyword): 
-      return true
-    case (.deinitKeyword, .deinitKeyword): 
-      return true
-    case (.enumKeyword, .enumKeyword): 
-      return true
-    case (.extensionKeyword, .extensionKeyword): 
-      return true
-    case (.funcKeyword, .funcKeyword): 
-      return true
-    case (.importKeyword, .importKeyword): 
-      return true
-    case (.initKeyword, .initKeyword): 
-      return true
-    case (.inoutKeyword, .inoutKeyword): 
-      return true
-    case (.letKeyword, .letKeyword): 
-      return true
-    case (.operatorKeyword, .operatorKeyword): 
-      return true
-    case (.precedencegroupKeyword, .precedencegroupKeyword): 
-      return true
-    case (.protocolKeyword, .protocolKeyword): 
-      return true
-    case (.structKeyword, .structKeyword): 
-      return true
-    case (.subscriptKeyword, .subscriptKeyword): 
-      return true
-    case (.typealiasKeyword, .typealiasKeyword): 
-      return true
-    case (.varKeyword, .varKeyword): 
       return true
     case (.deferKeyword, .deferKeyword): 
       return true
@@ -1539,40 +1301,6 @@ extension TokenKind: Equatable {
 public enum RawTokenKind: Equatable, Hashable {
   case eof
   
-  case associatedtypeKeyword
-  
-  case classKeyword
-  
-  case deinitKeyword
-  
-  case enumKeyword
-  
-  case extensionKeyword
-  
-  case funcKeyword
-  
-  case importKeyword
-  
-  case initKeyword
-  
-  case inoutKeyword
-  
-  case letKeyword
-  
-  case operatorKeyword
-  
-  case precedencegroupKeyword
-  
-  case protocolKeyword
-  
-  case structKeyword
-  
-  case subscriptKeyword
-  
-  case typealiasKeyword
-  
-  case varKeyword
-  
   case deferKeyword
   
   case ifKeyword
@@ -1768,40 +1496,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return ""
-    case .associatedtypeKeyword: 
-      return #"associatedtype"#
-    case .classKeyword: 
-      return #"class"#
-    case .deinitKeyword: 
-      return #"deinit"#
-    case .enumKeyword: 
-      return #"enum"#
-    case .extensionKeyword: 
-      return #"extension"#
-    case .funcKeyword: 
-      return #"func"#
-    case .importKeyword: 
-      return #"import"#
-    case .initKeyword: 
-      return #"init"#
-    case .inoutKeyword: 
-      return #"inout"#
-    case .letKeyword: 
-      return #"let"#
-    case .operatorKeyword: 
-      return #"operator"#
-    case .precedencegroupKeyword: 
-      return #"precedencegroup"#
-    case .protocolKeyword: 
-      return #"protocol"#
-    case .structKeyword: 
-      return #"struct"#
-    case .subscriptKeyword: 
-      return #"subscript"#
-    case .typealiasKeyword: 
-      return #"typealias"#
-    case .varKeyword: 
-      return #"var"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -1977,40 +1671,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return "end of file"
-    case .associatedtypeKeyword: 
-      return #"associatedtype"#
-    case .classKeyword: 
-      return #"class"#
-    case .deinitKeyword: 
-      return #"deinit"#
-    case .enumKeyword: 
-      return #"enum"#
-    case .extensionKeyword: 
-      return #"extension"#
-    case .funcKeyword: 
-      return #"func"#
-    case .importKeyword: 
-      return #"import"#
-    case .initKeyword: 
-      return #"init"#
-    case .inoutKeyword: 
-      return #"inout"#
-    case .letKeyword: 
-      return #"let"#
-    case .operatorKeyword: 
-      return #"operator"#
-    case .precedencegroupKeyword: 
-      return #"precedencegroup"#
-    case .protocolKeyword: 
-      return #"protocol"#
-    case .structKeyword: 
-      return #"struct"#
-    case .subscriptKeyword: 
-      return #"subscript"#
-    case .typealiasKeyword: 
-      return #"typealias"#
-    case .varKeyword: 
-      return #"var"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -2213,40 +1873,6 @@ public enum RawTokenKind: Equatable, Hashable {
     switch self {
     case .eof: 
       return false
-    case .associatedtypeKeyword: 
-      return true
-    case .classKeyword: 
-      return true
-    case .deinitKeyword: 
-      return true
-    case .enumKeyword: 
-      return true
-    case .extensionKeyword: 
-      return true
-    case .funcKeyword: 
-      return true
-    case .importKeyword: 
-      return true
-    case .initKeyword: 
-      return true
-    case .inoutKeyword: 
-      return true
-    case .letKeyword: 
-      return true
-    case .operatorKeyword: 
-      return true
-    case .precedencegroupKeyword: 
-      return true
-    case .protocolKeyword: 
-      return true
-    case .structKeyword: 
-      return true
-    case .subscriptKeyword: 
-      return true
-    case .typealiasKeyword: 
-      return true
-    case .varKeyword: 
-      return true
     case .deferKeyword: 
       return true
     case .ifKeyword: 
@@ -2448,40 +2074,6 @@ public enum RawTokenKind: Equatable, Hashable {
   public var isPunctuation: Bool {
     switch self {
     case .eof: 
-      return false
-    case .associatedtypeKeyword: 
-      return false
-    case .classKeyword: 
-      return false
-    case .deinitKeyword: 
-      return false
-    case .enumKeyword: 
-      return false
-    case .extensionKeyword: 
-      return false
-    case .funcKeyword: 
-      return false
-    case .importKeyword: 
-      return false
-    case .initKeyword: 
-      return false
-    case .inoutKeyword: 
-      return false
-    case .letKeyword: 
-      return false
-    case .operatorKeyword: 
-      return false
-    case .precedencegroupKeyword: 
-      return false
-    case .protocolKeyword: 
-      return false
-    case .structKeyword: 
-      return false
-    case .subscriptKeyword: 
-      return false
-    case .typealiasKeyword: 
-      return false
-    case .varKeyword: 
       return false
     case .deferKeyword: 
       return false
@@ -2703,10 +2295,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 3: 
       switch text {
-      case "let": 
-        self = .letKeyword
-      case "var": 
-        self = .varKeyword
       case "for": 
         self = .forKeyword
       case "Any": 
@@ -2722,12 +2310,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 4: 
       switch text {
-      case "enum": 
-        self = .enumKeyword
-      case "func": 
-        self = .funcKeyword
-      case "init": 
-        self = .initKeyword
       case "else": 
         self = .elseKeyword
       case "case": 
@@ -2743,10 +2325,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 5: 
       switch text {
-      case "class": 
-        self = .classKeyword
-      case "inout": 
-        self = .inoutKeyword
       case "defer": 
         self = .deferKeyword
       case "guard": 
@@ -2776,12 +2354,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 6: 
       switch text {
-      case "deinit": 
-        self = .deinitKeyword
-      case "import": 
-        self = .importKeyword
-      case "struct": 
-        self = .structKeyword
       case "repeat": 
         self = .repeatKeyword
       case "return": 
@@ -2814,10 +2386,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 8: 
       switch text {
-      case "operator": 
-        self = .operatorKeyword
-      case "protocol": 
-        self = .protocolKeyword
       case "continue": 
         self = .continueKeyword
       case "rethrows": 
@@ -2831,12 +2399,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 9: 
       switch text {
-      case "extension": 
-        self = .extensionKeyword
-      case "subscript": 
-        self = .subscriptKeyword
-      case "typealias": 
-        self = .typealiasKeyword
       case "#selector": 
         self = .poundSelectorKeyword
       case "#filePath": 
@@ -2882,17 +2444,8 @@ public enum RawTokenKind: Equatable, Hashable {
       default: 
         return nil
       }
-    case 14: 
-      switch text {
-      case "associatedtype": 
-        self = .associatedtypeKeyword
-      default: 
-        return nil
-      }
     case 15: 
       switch text {
-      case "precedencegroup": 
-        self = .precedencegroupKeyword
       case "#sourceLocation": 
         self = .poundSourceLocationKeyword
       default: 
@@ -2911,57 +2464,6 @@ extension TokenKind {
     switch rawKind {
     case .eof: 
       return .eof
-    case .associatedtypeKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .associatedtypeKeyword
-    case .classKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .classKeyword
-    case .deinitKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .deinitKeyword
-    case .enumKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .enumKeyword
-    case .extensionKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .extensionKeyword
-    case .funcKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .funcKeyword
-    case .importKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .importKeyword
-    case .initKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .initKeyword
-    case .inoutKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .inoutKeyword
-    case .letKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .letKeyword
-    case .operatorKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .operatorKeyword
-    case .precedencegroupKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .precedencegroupKeyword
-    case .protocolKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .protocolKeyword
-    case .structKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .structKeyword
-    case .subscriptKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .subscriptKeyword
-    case .typealiasKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .typealiasKeyword
-    case .varKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .varKeyword
     case .deferKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .deferKeyword
@@ -3245,40 +2747,6 @@ extension TokenKind {
     switch self {
     case .eof: 
       return (.eof, nil)
-    case .associatedtypeKeyword: 
-      return (.associatedtypeKeyword, nil)
-    case .classKeyword: 
-      return (.classKeyword, nil)
-    case .deinitKeyword: 
-      return (.deinitKeyword, nil)
-    case .enumKeyword: 
-      return (.enumKeyword, nil)
-    case .extensionKeyword: 
-      return (.extensionKeyword, nil)
-    case .funcKeyword: 
-      return (.funcKeyword, nil)
-    case .importKeyword: 
-      return (.importKeyword, nil)
-    case .initKeyword: 
-      return (.initKeyword, nil)
-    case .inoutKeyword: 
-      return (.inoutKeyword, nil)
-    case .letKeyword: 
-      return (.letKeyword, nil)
-    case .operatorKeyword: 
-      return (.operatorKeyword, nil)
-    case .precedencegroupKeyword: 
-      return (.precedencegroupKeyword, nil)
-    case .protocolKeyword: 
-      return (.protocolKeyword, nil)
-    case .structKeyword: 
-      return (.structKeyword, nil)
-    case .subscriptKeyword: 
-      return (.subscriptKeyword, nil)
-    case .typealiasKeyword: 
-      return (.typealiasKeyword, nil)
-    case .varKeyword: 
-      return (.varKeyword, nil)
     case .deferKeyword: 
       return (.deferKeyword, nil)
     case .ifKeyword: 

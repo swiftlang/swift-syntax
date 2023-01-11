@@ -60,8 +60,8 @@ extension Parser {
         case .wildcardKeyword: self = .wildcardKeyword
         case .identifier: self = .identifier
         case .dollarIdentifier: self = .dollarIdentifier
-        case .letKeyword: self = .letKeyword
-        case .varKeyword: self = .varKeyword
+        case .keyword(.let): self = .letKeyword
+        case .keyword(.var): self = .varKeyword
         default: return nil
         }
       }
@@ -72,8 +72,8 @@ extension Parser {
         case .wildcardKeyword: return .wildcardKeyword
         case .identifier: return .identifier
         case .dollarIdentifier: return .dollarIdentifier
-        case .letKeyword: return .letKeyword
-        case .varKeyword: return .varKeyword
+        case .letKeyword: return .keyword(.let)
+        case .varKeyword: return .keyword(.var)
         }
       }
     }
@@ -299,8 +299,8 @@ extension Parser.Lookahead {
         switch lexeme.rawTokenKind {
         case .identifier: self = .identifier
         case .wildcardKeyword: self = .wildcardKeyword
-        case .letKeyword: self = .letKeyword
-        case .varKeyword: self = .varKeyword
+        case .keyword(.let): self = .letKeyword
+        case .keyword(.var): self = .varKeyword
         case .leftParen: self = .leftParen
         default: return nil
         }
@@ -310,8 +310,8 @@ extension Parser.Lookahead {
         switch self {
         case .identifier: return .identifier
         case .wildcardKeyword: return .wildcardKeyword
-        case .letKeyword: return .letKeyword
-        case .varKeyword: return .varKeyword
+        case .letKeyword: return .keyword(.let)
+        case .varKeyword: return .keyword(.var)
         case .leftParen: return .leftParen
         }
       }

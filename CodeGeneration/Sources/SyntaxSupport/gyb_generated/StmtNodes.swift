@@ -427,10 +427,13 @@ public let STMT_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "LetOrVarKeyword",
-               kind: "Token",
+               kind: "KeywordToken",
                tokenChoices: [
-                 "Let",
-                 "Var"
+                 "Keyword"
+               ],
+               textChoices: [
+                 "let",
+                 "var"
                ]),
          Child(name: "Pattern",
                kind: "Pattern"),

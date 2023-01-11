@@ -17,8 +17,8 @@ import SwiftSyntaxParser
 public class TokenTests: XCTestCase {
 
   public func testKeywordKinds() {
-    XCTAssertTrue(TokenKind.operatorKeyword.isLexerClassifiedKeyword)
-    XCTAssertTrue(TokenKind.funcKeyword.isLexerClassifiedKeyword)
+    XCTAssertTrue(TokenKind.keyword(.operator).isLexerClassifiedKeyword)
+    XCTAssertTrue(TokenKind.keyword(.func).isLexerClassifiedKeyword)
     XCTAssertFalse(TokenKind.leftAngle.isLexerClassifiedKeyword)
     XCTAssertFalse(TokenKind.rightAngle.isLexerClassifiedKeyword)
   }
@@ -66,23 +66,6 @@ public class TokenTests: XCTestCase {
 
   public func testKeywordRoundTripping() throws {
     let someKeywords = [
-      TokenKind.associatedtypeKeyword,
-      TokenKind.classKeyword,
-      TokenKind.deinitKeyword,
-      TokenKind.enumKeyword,
-      TokenKind.extensionKeyword,
-      TokenKind.funcKeyword,
-      TokenKind.importKeyword,
-      TokenKind.initKeyword,
-      TokenKind.inoutKeyword,
-      TokenKind.letKeyword,
-      TokenKind.operatorKeyword,
-      TokenKind.precedencegroupKeyword,
-      TokenKind.protocolKeyword,
-      TokenKind.structKeyword,
-      TokenKind.subscriptKeyword,
-      TokenKind.typealiasKeyword,
-      TokenKind.varKeyword,
       TokenKind.deferKeyword,
       TokenKind.ifKeyword,
       TokenKind.guardKeyword,

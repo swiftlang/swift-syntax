@@ -16,7 +16,7 @@ extension DeclarationModifier {
   var canHaveParenthesizedArgument: Bool {
     switch self {
     case .__consuming, .__setter_access, ._const, ._local, .async,
-      .classKeyword, .convenience, .distributed, .dynamic, .final,
+      .class, .convenience, .distributed, .dynamic, .final,
       .indirect, .infix, .isolated, .lazy, .mutating, .nonisolated,
       .nonmutating, .optional, .override, .postfix, .prefix, .reasync,
       .required, .rethrows, .static, .weak:
@@ -50,7 +50,7 @@ extension TokenConsumer {
     if subparser.currentToken.isLexerClassifiedKeyword || subparser.currentToken.rawTokenKind == .identifier {
       var modifierProgress = LoopProgressCondition()
       while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
-        modifierKind != .classKeyword,
+        modifierKind != .class,
         modifierProgress.evaluate(subparser.currentToken)
       {
         subparser.eat(handle)
@@ -254,13 +254,13 @@ extension Parser {
         let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(any: [.identifier, .wildcardKeyword])
 
         if isProbablyVarDecl || isProbablyTupleDecl {
-          return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.varKeyword)))
+          return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, .missing(.keyword(.var))))
         }
 
         let isProbablyFuncDecl = self.at(any: [.identifier, .wildcardKeyword]) || self.at(anyIn: Operator.self) != nil
 
         if isProbablyFuncDecl {
-          return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.funcKeyword)))
+          return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
         }
       }
       return RawDeclSyntax(
@@ -304,7 +304,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseImportKind() -> RawTokenSyntax? {
-    return self.consume(ifAny: [.typealiasKeyword, .structKeyword, .classKeyword, .enumKeyword, .protocolKeyword, .varKeyword, .letKeyword, .funcKeyword])
+    return self.consume(ifAny: [.keyword(.typealias), .keyword(.struct), .keyword(.class), .keyword(.enum), .keyword(.protocol), .keyword(.var), .keyword(.let), .keyword(.func)])
   }
 
   @_spi(RawSyntax)
@@ -425,10 +425,10 @@ extension Parser {
         let unexpectedBeforeInherited: RawUnexpectedNodesSyntax?
         let inherited: RawTypeSyntax?
         if colon != nil {
-          if self.at(any: [.identifier, .protocolKeyword, .anyKeyword]) {
+          if self.at(any: [.identifier, .keyword(.protocol), .anyKeyword]) {
             unexpectedBeforeInherited = nil
             inherited = self.parseType()
-          } else if let classKeyword = self.consume(if: .classKeyword) {
+          } else if let classKeyword = self.consume(if: .keyword(.class)) {
             unexpectedBeforeInherited = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
             inherited = RawTypeSyntax(
               RawSimpleTypeIdentifierSyntax(

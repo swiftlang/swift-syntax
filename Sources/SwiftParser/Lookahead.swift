@@ -138,7 +138,7 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   mutating func skipTypeAttribute() {
     // These are keywords that we accept as attribute names.
-    guard self.at(.identifier) || self.at(any: [.inKeyword, .inoutKeyword]) else {
+    guard self.at(.identifier) || self.at(any: [.inKeyword, .keyword(.inout)]) else {
       return
     }
 

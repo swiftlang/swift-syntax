@@ -566,7 +566,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeClassKeyword: UnexpectedNodesSyntax? = nil,
-    classKeyword: TokenSyntax = .classKeyword(),
+    classKeyword: TokenSyntax = .keyword(.class),
     _ unexpectedAfterClassKeyword: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {

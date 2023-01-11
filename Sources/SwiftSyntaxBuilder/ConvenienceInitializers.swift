@@ -393,7 +393,7 @@ extension VariableDecl {
     leadingTrivia: Trivia = [],
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    _ letOrVarKeyword: Token,
+    _ letOrVarKeyword: Keyword,
     name: IdentifierPattern,
     type: TypeAnnotation? = nil,
     initializer: InitializerClause? = nil

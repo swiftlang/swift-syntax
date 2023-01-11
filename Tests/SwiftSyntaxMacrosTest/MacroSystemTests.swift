@@ -403,6 +403,70 @@ public struct AddBackingStorage: MemberDeclarationMacro {
   }
 }
 
+public struct WrapAllProperties: MemberAttributeMacro {
+  public static func expansion(
+    of node: CustomAttributeSyntax,
+    attachedTo decl: DeclSyntax,
+    annotating member: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [CustomAttributeSyntax] {
+    guard member.is(VariableDeclSyntax.self) else {
+      return []
+    }
+
+    return [
+      CustomAttributeSyntax(
+        attributeName: SimpleTypeIdentifierSyntax(
+          name: .identifier("Wrapper")
+        )
+      )
+      .withLeadingTrivia([.newlines(1), .spaces(2)])
+    ]
+  }
+}
+
+public struct WrapStoredProperties: MemberAttributeMacro {
+  public static func expansion(
+    of node: CustomAttributeSyntax,
+    attachedTo decl: DeclSyntax,
+    annotating member: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [CustomAttributeSyntax] {
+    guard let property = member.as(VariableDeclSyntax.self),
+      property.bindings.count == 1
+    else {
+      return []
+    }
+
+    let binding = property.bindings.first!
+    switch binding.accessor {
+    case .none:
+      break
+    case .accessors(let node):
+      for accessor in node.accessors {
+        switch accessor.accessorKind.tokenKind {
+        case .contextualKeyword(.get), .contextualKeyword(.set):
+          return []
+        default:
+          break
+        }
+      }
+      break
+    case .getter:
+      return []
+    }
+
+    return [
+      CustomAttributeSyntax(
+        attributeName: SimpleTypeIdentifierSyntax(
+          name: .identifier("Wrapper")
+        )
+      )
+      .withLeadingTrivia([.newlines(1), .spaces(2)])
+    ]
+  }
+}
+
 // MARK: Assertion helper functions
 
 /// Assert that expanding the given macros in the original source produces
@@ -467,6 +531,8 @@ public let testMacros: [String: Macro.Type] = [
   "wrapProperty": PropertyWrapper.self,
   "addCompletionHandler": AddCompletionHandler.self,
   "addBackingStorage": AddBackingStorage.self,
+  "wrapAllProperties": WrapAllProperties.self,
+  "wrapStoredProperties": WrapStoredProperties.self,
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -641,6 +707,82 @@ final class MacroSystemTests: XCTestCase {
       struct S {
         var value: Int
         var _storage: Storage<Self>
+      }
+      """
+    )
+  }
+
+  func testWrapAllProperties() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      @wrapAllProperties
+      struct Point {
+        var x: Int
+        var y: Int
+        var description: String { "" }
+        var computed: Int {
+          get { 0 }
+          set {}
+        }
+
+        func test() {}
+      }
+      """,
+      """
+
+      struct Point {
+        @Wrapper
+        var x: Int
+        @Wrapper
+        var y: Int
+        @Wrapper
+        var description: String { "" }
+        @Wrapper
+        var computed: Int {
+          get { 0 }
+          set {}
+        }
+
+        func test() {}
+      }
+      """
+    )
+
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      @wrapStoredProperties
+      struct Point {
+        var x: Int
+        var y: Int
+
+        var description: String { "" }
+
+        var computed: Int {
+          get { 0 }
+          set {}
+        }
+
+        func test() {}
+      }
+      """,
+      """
+
+      struct Point {
+        @Wrapper
+        var x: Int
+        @Wrapper
+        var y: Int
+
+        var description: String { "" }
+
+        var computed: Int {
+          get { 0 }
+          set {}
+        }
+
+        func test() {}
       }
       """
     )

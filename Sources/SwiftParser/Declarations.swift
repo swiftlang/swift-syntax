@@ -1547,12 +1547,14 @@ extension Parser {
     var token: RawTokenSyntax
   }
 
-  mutating func parseAccessorIntroducer() -> AccessorIntroducer? {
+  mutating func parseAccessorIntroducer(
+    forcedKind: (AccessorKind, TokenConsumptionHandle)? = nil
+  ) -> AccessorIntroducer? {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
     let hasModifier = look.consume(ifAny: [.contextualKeyword(.mutating), .contextualKeyword(.nonmutating), .contextualKeyword(.__consuming)]) != nil
-    guard let (kind, handle) = look.at(anyIn: AccessorKind.self) else {
+    guard let (kind, handle) = look.at(anyIn: AccessorKind.self) ?? forcedKind else {
       return nil
     }
 
@@ -1615,15 +1617,17 @@ extension Parser {
     return specifiers
   }
 
-  /// Parse the body of a variable declaration. This can include explicit
-  /// getters, setters, and observers, or the body of a computed property.
+  /// Parse an accessor.
+  mutating func parseAccessorDecl() -> RawAccessorDeclSyntax {
+    let introducer = parseAccessorIntroducer(forcedKind: (.get, TokenConsumptionHandle(tokenKind: .contextualKeyword, missing: true)))!
+    return parseAccessorDecl(introducer: introducer)
+  }
+
+  /// Parse an accessor once we know we have an introducer
   ///
   /// Grammar
   /// =======
   ///
-  ///     getter-setter-block → code-block
-  ///     getter-setter-block → { getter-clause setter-clause opt }
-  ///     getter-setter-block → { setter-clause getter-clause }
   ///     getter-clause → attributes opt mutation-modifier opt get code-block
   ///     setter-clause → attributes opt mutation-modifier opt set setter-name opt code-block
   ///     setter-name → ( identifier )
@@ -1635,6 +1639,63 @@ extension Parser {
   ///     willSet-didSet-block → { didSet-clause willSet-clause opt }
   ///     willSet-clause → attributes opt willSet setter-name opt code-block
   ///     didSet-clause → attributes opt didSet setter-name opt code-block
+  private mutating func parseAccessorDecl(
+    introducer: AccessorIntroducer
+  ) -> RawAccessorDeclSyntax {
+    // 'set' and 'willSet' can have an optional name.  This isn't valid in a
+    // protocol, but we parse and then reject it for better QoI.
+    //
+    //     set-name    ::= '(' identifier ')'
+    let parameter: RawAccessorParameterSyntax?
+    if [AccessorKind.set, .willSet, .didSet].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
+      let (unexpectedBeforeName, name) = self.expectIdentifier()
+      let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
+      parameter = RawAccessorParameterSyntax(
+        leftParen: lparen,
+        unexpectedBeforeName,
+        name: name,
+        unexpectedBeforeRParen,
+        rightParen: rparen,
+        arena: self.arena
+      )
+    } else {
+      parameter = nil
+    }
+
+    // Next, parse effects specifiers. While it's only valid to have them
+    // on 'get' accessors, we also emit diagnostics if they show up on others.
+    let asyncKeyword: RawTokenSyntax?
+    let throwsKeyword: RawTokenSyntax?
+    if self.at(anyIn: EffectsSpecifier.self) != nil {
+      asyncKeyword = self.parseEffectsSpecifier()
+      throwsKeyword = self.parseEffectsSpecifier()
+    } else {
+      asyncKeyword = nil
+      throwsKeyword = nil
+    }
+
+    let body = self.parseOptionalCodeBlock()
+    return RawAccessorDeclSyntax(
+      attributes: introducer.attributes,
+      modifier: introducer.modifier,
+      accessorKind: introducer.token,
+      parameter: parameter,
+      asyncKeyword: asyncKeyword,
+      throwsKeyword: throwsKeyword,
+      body: body,
+      arena: self.arena
+    )
+  }
+
+  /// Parse the body of a variable declaration. This can include explicit
+  /// getters, setters, and observers, or the body of a computed property.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     getter-setter-block → code-block
+  ///     getter-setter-block → { getter-clause setter-clause opt }
+  ///     getter-setter-block → { setter-clause getter-clause }
   @_spi(RawSyntax)
   public mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessor {
     // Parse getter and setter.
@@ -1689,52 +1750,7 @@ extension Parser {
           )
         }
 
-        // 'set' and 'willSet' can have an optional name.  This isn't valid in a
-        // protocol, but we parse and then reject it for better QoI.
-        //
-        //     set-name    ::= '(' identifier ')'
-        let parameter: RawAccessorParameterSyntax?
-        if [AccessorKind.set, .willSet, .didSet].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
-          let (unexpectedBeforeName, name) = self.expectIdentifier()
-          let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-          parameter = RawAccessorParameterSyntax(
-            leftParen: lparen,
-            unexpectedBeforeName,
-            name: name,
-            unexpectedBeforeRParen,
-            rightParen: rparen,
-            arena: self.arena
-          )
-        } else {
-          parameter = nil
-        }
-
-        // Next, parse effects specifiers. While it's only valid to have them
-        // on 'get' accessors, we also emit diagnostics if they show up on others.
-        let asyncKeyword: RawTokenSyntax?
-        let throwsKeyword: RawTokenSyntax?
-        if self.at(anyIn: EffectsSpecifier.self) != nil {
-          asyncKeyword = self.parseEffectsSpecifier()
-          throwsKeyword = self.parseEffectsSpecifier()
-        } else {
-          asyncKeyword = nil
-          throwsKeyword = nil
-        }
-
-        let body = self.parseOptionalCodeBlock()
-
-        elements.append(
-          RawAccessorDeclSyntax(
-            attributes: introducer.attributes,
-            modifier: introducer.modifier,
-            accessorKind: introducer.token,
-            parameter: parameter,
-            asyncKeyword: asyncKeyword,
-            throwsKeyword: throwsKeyword,
-            body: body,
-            arena: self.arena
-          )
-        )
+        elements.append(parseAccessorDecl(introducer: introducer))
       }
     }
 

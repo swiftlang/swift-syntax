@@ -556,6 +556,7 @@ DECL_NODES = [
 
     Node('AccessorDecl', name_for_diagnostics='accessor', kind='Decl',
          traits=['Attributed'],
+         parser_function='parseAccessorDecl',
          children=[
              Child('Attributes', kind='AttributeList', name_for_diagnostics='attributes',
                    collection_element_name='Attribute', is_optional=True),

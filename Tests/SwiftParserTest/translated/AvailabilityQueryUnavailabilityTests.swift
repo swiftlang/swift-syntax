@@ -360,8 +360,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: '||' cannot be used in an availability condition
-        DiagnosticSpec(message: "unexpected code '|| iOS 8.0' in availability condition")
+        DiagnosticSpec(message: "expected ',' joining platforms in availability condition")
       ]
     )
   }

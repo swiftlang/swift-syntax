@@ -32,10 +32,18 @@ extension Parser {
           entry = self.parseAvailabilitySpec()
         }
 
+        let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
         keepGoing = self.consume(if: .comma)
+        if keepGoing == nil, let orOperator = self.consumeIfContextualPunctuator("||") {
+          unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax([orOperator], arena: self.arena)
+          keepGoing = missingToken(.comma)
+        } else {
+          unexpectedBeforeKeepGoing = nil
+        }
         elements.append(
           RawAvailabilityArgumentSyntax(
             entry: entry,
+            unexpectedBeforeKeepGoing,
             trailingComma: keepGoing,
             arena: self.arena
           )

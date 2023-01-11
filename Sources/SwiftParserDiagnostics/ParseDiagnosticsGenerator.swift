@@ -312,6 +312,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let trailingComma = node.trailingComma {
+      exchangeTokens(
+        unexpected: node.unexpectedBetweenEntryAndTrailingComma,
+        unexpectedTokenCondition: { $0.text == "||" },
+        correctTokens: [node.trailingComma],
+        message: { _ in .joinPlatformsUsingComma },
+        moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacement: trailingComma) }
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

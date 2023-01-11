@@ -200,7 +200,7 @@ public class SyntaxCreationTests: XCTestCase {
     )
     let operatorNames = ["==", "!=", "+", "-", "*", "/", "<", ">", "<=", ">="]
     operatorNames.forEach { operatorName in
-      let operatorToken = TokenSyntax.spacedBinaryOperator(operatorName, leadingTrivia: .space, trailingTrivia: .space)
+      let operatorToken = TokenSyntax.binaryOperator(operatorName, leadingTrivia: .space, trailingTrivia: .space)
       let operatorExpr = BinaryOperatorExprSyntax(operatorToken: operatorToken)
       let exprList = ExprListSyntax([
         ExprSyntax(first),

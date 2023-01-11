@@ -55,8 +55,8 @@ final class TypeCompositionTests: XCTestCase {
         substructure: Syntax(
           CompositionTypeSyntax(
             elements: .init([
-              CompositionTypeElementSyntax(type: componentSyntax, ampersand: .spacedBinaryOperator("&")),
-              CompositionTypeElementSyntax(type: componentSyntax, ampersand: .spacedBinaryOperator("&")),
+              CompositionTypeElementSyntax(type: componentSyntax, ampersand: .binaryOperator("&")),
+              CompositionTypeElementSyntax(type: componentSyntax, ampersand: .binaryOperator("&")),
               CompositionTypeElementSyntax(type: componentSyntax),
             ])
           )

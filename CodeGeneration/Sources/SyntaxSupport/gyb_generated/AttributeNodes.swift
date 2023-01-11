@@ -514,8 +514,7 @@ public let ATTRIBUTE_NODES: [Node] = [
                description: "The base name of the referenced function.",
                tokenChoices: [
                  "Identifier",
-                 "UnspacedBinaryOperator",
-                 "SpacedBinaryOperator",
+                 "BinaryOperator",
                  "PrefixOperator",
                  "PostfixOperator"
                ]),

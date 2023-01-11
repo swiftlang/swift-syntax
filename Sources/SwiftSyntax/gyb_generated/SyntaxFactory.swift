@@ -857,7 +857,7 @@ public enum SyntaxFactory {
       let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .binaryOperatorExpr,
         from: [
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.binaryOperator(""), arena: arena),
         nil,
       ], arena: arena))
       return BinaryOperatorExprSyntax(data)
@@ -4417,7 +4417,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeMissingToken(kind: TokenKind.operatorKeyword, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.unspacedBinaryOperator(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.binaryOperator(""), arena: arena),
         nil,
         nil,
         nil,
@@ -7023,7 +7023,7 @@ public enum SyntaxFactory {
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
         nil,
-        RawSyntax.makeMissingToken(kind: TokenKind.spacedBinaryOperator(""), arena: arena),
+        RawSyntax.makeMissingToken(kind: TokenKind.binaryOperator(""), arena: arena),
         nil,
         RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: arena),
         nil,
@@ -9484,23 +9484,13 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  @available(*, deprecated, message: "Use TokenSyntax.unspacedBinaryOperator instead")
-  public static func makeUnspacedBinaryOperator(
-    _ text: String,
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []
-  ) -> TokenSyntax {
-    return makeToken(.unspacedBinaryOperator(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.spacedBinaryOperator instead")
-  public static func makeSpacedBinaryOperator(
+  @available(*, deprecated, message: "Use TokenSyntax.binaryOperator instead")
+  public static func makeBinaryOperator(
     _ text: String,
     leadingTrivia: Trivia = .space,
     trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
-    return makeToken(.spacedBinaryOperator(text), presence: .present,
+    return makeToken(.binaryOperator(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
@@ -9644,16 +9634,6 @@ public enum SyntaxFactory {
     trailingTrivia: Trivia = []) -> TokenSyntax {
     return makeIdentifier("Protocol", leadingTrivia: leadingTrivia,
                           trailingTrivia: trailingTrivia)
-  }
-
-  @available(*, deprecated, message: "Use TokenSyntax.spacedBinaryOperator")
-  public static func makeBinaryOperator(_ name: String,
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeToken(.spacedBinaryOperator(name),
-                     presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
   }
 
   @available(*, deprecated, message: "Use initializer on StringLiteralExprSyntax")

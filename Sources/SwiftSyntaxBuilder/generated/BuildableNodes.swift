@@ -150,6 +150,15 @@ extension BackDeployAttributeSpecList {
   }
 }
 
+extension BinaryOperatorExpr {
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(leadingTrivia: Trivia? = nil, unexpectedBeforeOperatorToken: UnexpectedNodes? = nil, operatorToken: String, trailingTrivia: Trivia? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOperatorToken, operatorToken: Token.`binaryOperator`(operatorToken), trailingTrivia: trailingTrivia)
+  }
+}
+
 extension BorrowExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders

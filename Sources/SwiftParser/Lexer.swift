@@ -1791,11 +1791,7 @@ extension Lexer.Cursor {
     }
 
     if leftBound == rightBound {
-      if leftBound {
-        return Lexer.Result(.unspacedBinaryOperator)
-      } else {
-        return Lexer.Result(.spacedBinaryOperator)
-      }
+      return Lexer.Result(.binaryOperator)
     } else if leftBound {
       return Lexer.Result(.postfixOperator)
     } else {

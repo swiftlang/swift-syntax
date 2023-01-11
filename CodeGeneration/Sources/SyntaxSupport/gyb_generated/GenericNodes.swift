@@ -67,8 +67,7 @@ public let GENERIC_NODES: [Node] = [
          Child(name: "EqualityToken",
                kind: "Token",
                tokenChoices: [
-                 "SpacedBinaryOperator",
-                 "UnspacedBinaryOperator",
+                 "BinaryOperator",
                  "PrefixOperator",
                  "PostfixOperator"
                ]),

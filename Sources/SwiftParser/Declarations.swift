@@ -572,16 +572,14 @@ extension Parser {
 
         enum ExpectedTokenKind: RawTokenKindSubset {
           case colon
-          case spacedBinaryOperator
-          case unspacedBinaryOperator
+          case binaryOperator
           case postfixOperator
           case prefixOperator
 
           init?(lexeme: Lexer.Lexeme) {
             switch (lexeme.rawTokenKind, lexeme.tokenText) {
             case (.colon, _): self = .colon
-            case (.spacedBinaryOperator, "=="): self = .spacedBinaryOperator
-            case (.unspacedBinaryOperator, "=="): self = .unspacedBinaryOperator
+            case (.binaryOperator, "=="): self = .binaryOperator
             case (.postfixOperator, "=="): self = .postfixOperator
             case (.prefixOperator, "=="): self = .prefixOperator
             default: return nil
@@ -591,8 +589,7 @@ extension Parser {
           var rawTokenKind: RawTokenKind {
             switch self {
             case .colon: return .colon
-            case .spacedBinaryOperator: return .spacedBinaryOperator
-            case .unspacedBinaryOperator: return .unspacedBinaryOperator
+            case .binaryOperator: return .binaryOperator
             case .postfixOperator: return .postfixOperator
             case .prefixOperator: return .prefixOperator
             }
@@ -664,8 +661,7 @@ extension Parser {
               )
             )
           }
-        case (.spacedBinaryOperator, let handle)?,
-          (.unspacedBinaryOperator, let handle)?,
+        case (.binaryOperator, let handle)?,
           (.postfixOperator, let handle)?,
           (.prefixOperator, let handle)?:
           let equal = self.eat(handle)
@@ -1271,7 +1267,7 @@ extension Parser {
         name = SyntaxText(rebasing: name.dropLast())
       }
       unexpectedBeforeIdentifier = nil
-      identifier = self.consumePrefix(name, as: .spacedBinaryOperator)
+      identifier = self.consumePrefix(name, as: .binaryOperator)
     } else {
       (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
     }
@@ -1846,7 +1842,7 @@ extension Parser {
       } else {
         unexpectedBeforeName = nil
       }
-      name = missingToken(.spacedBinaryOperator, text: nil)
+      name = missingToken(.binaryOperator, text: nil)
     }
 
     // Eat any subsequent tokens that are not separated to the operator by trivia.

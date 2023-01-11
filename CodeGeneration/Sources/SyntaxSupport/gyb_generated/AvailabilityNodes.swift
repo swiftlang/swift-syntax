@@ -30,7 +30,7 @@ public let AVAILABILITY_NODES: [Node] = [
                  Child(name: "Token",
                        kind: "Token",
                        tokenChoices: [
-                         "SpacedBinaryOperator",
+                         "BinaryOperator",
                          "Identifier"
                        ]),
                  Child(name: "AvailabilityVersionRestriction",

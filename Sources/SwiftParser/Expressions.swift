@@ -227,8 +227,7 @@ extension Parser {
     pattern: PatternContext
   ) -> (operator: RawExprSyntax, rhs: RawExprSyntax?)? {
     enum ExpectedTokenKind: RawTokenKindSubset {
-      case spacedBinaryOperator
-      case unspacedBinaryOperator
+      case binaryOperator
       case infixQuestionMark
       case equal
       case isKeyword
@@ -239,8 +238,7 @@ extension Parser {
 
       init?(lexeme: Lexer.Lexeme) {
         switch lexeme {
-        case RawTokenKindMatch(.spacedBinaryOperator): self = .spacedBinaryOperator
-        case RawTokenKindMatch(.unspacedBinaryOperator): self = .unspacedBinaryOperator
+        case RawTokenKindMatch(.binaryOperator): self = .binaryOperator
         case RawTokenKindMatch(.infixQuestionMark): self = .infixQuestionMark
         case RawTokenKindMatch(.equal): self = .equal
         case RawTokenKindMatch(.isKeyword): self = .isKeyword
@@ -254,8 +252,7 @@ extension Parser {
 
       var rawTokenKind: RawTokenKind {
         switch self {
-        case .spacedBinaryOperator: return .spacedBinaryOperator
-        case .unspacedBinaryOperator: return .unspacedBinaryOperator
+        case .binaryOperator: return .binaryOperator
         case .infixQuestionMark: return .infixQuestionMark
         case .equal: return .equal
         case .isKeyword: return .isKeyword
@@ -268,7 +265,7 @@ extension Parser {
     }
 
     switch self.at(anyIn: ExpectedTokenKind.self) {
-    case (.spacedBinaryOperator, let handle)?, (.unspacedBinaryOperator, let handle)?:
+    case (.binaryOperator, let handle)?:
       // Parse the operator.
       let operatorToken = self.eat(handle)
       let op = RawBinaryOperatorExprSyntax(operatorToken: operatorToken, arena: arena)
@@ -1047,7 +1044,7 @@ extension Parser {
       if self.at(any: [
         .postfixOperator, .postfixQuestionMark,
         .exclamationMark, .prefixOperator,
-        .unspacedBinaryOperator,
+        .binaryOperator,
       ]),
         let numComponents = getNumOptionalKeyPathPostfixComponents(
           self.currentToken.tokenText
@@ -2413,7 +2410,7 @@ extension Parser {
       // this case lexes as a binary operator because it neither leads nor
       // follows a proper subexpression.
       let expr: RawExprSyntax
-      if self.at(anyIn: BinaryOperator.self) != nil
+      if self.at(.binaryOperator)
         && (self.peek().rawTokenKind == .comma || self.peek().rawTokenKind == .rightParen || self.peek().rawTokenKind == .rightSquareBracket)
       {
         let (ident, args) = self.parseDeclNameRef(.operators)
@@ -2574,8 +2571,7 @@ extension Parser.Lookahead {
       .colon,
       .equal,
       .postfixOperator,
-      .spacedBinaryOperator,
-      .unspacedBinaryOperator:
+      .binaryOperator:
       return !backtrack.currentToken.isAtStartOfLine
     default:
       return false

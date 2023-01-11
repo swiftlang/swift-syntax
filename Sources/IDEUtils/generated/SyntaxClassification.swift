@@ -358,9 +358,7 @@ extension RawTokenKind {
       return .none
     case .identifier: 
       return .identifier
-    case .unspacedBinaryOperator: 
-      return .operatorIdentifier
-    case .spacedBinaryOperator: 
+    case .binaryOperator: 
       return .operatorIdentifier
     case .postfixOperator: 
       return .operatorIdentifier

@@ -421,4 +421,22 @@ final class StringInterpolationTests: XCTestCase {
       """
     )
   }
+
+  func testAccessorInterpolation() {
+    let setter: AccessorDeclSyntax =
+      """
+      set(newValue) {
+        _storage = newValue
+      }
+      """
+    XCTAssertTrue(setter.is(AccessorDeclSyntax.self))
+    AssertStringsEqualWithDiff(
+      setter.description,
+      """
+      set(newValue) {
+        _storage = newValue
+      }
+      """
+    )
+  }
 }

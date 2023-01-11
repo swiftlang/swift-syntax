@@ -100,7 +100,7 @@ final class VariadicGenericsTests: XCTestCase {
     )
   }
 
-  func testEachExprContextualKeyword() {
+  func testEachExprKeyword() {
     let callExpr = FunctionCallExprSyntax(
       calledExpression: IdentifierExprSyntax(
         identifier: .identifier("each")

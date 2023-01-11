@@ -261,7 +261,7 @@ extension Parser.Lookahead {
     // If we have a 'didSet' or a 'willSet' label, disambiguate immediately as
     // an accessor block.
     let nextToken = self.peek()
-    if nextToken.isContextualKeyword(["didSet", "willSet"]) {
+    if RawTokenKindMatch(.keyword(.didSet)) ~= nextToken || RawTokenKindMatch(.keyword(.willSet)) ~= nextToken {
       return true
     }
 

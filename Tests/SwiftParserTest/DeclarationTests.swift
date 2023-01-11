@@ -964,7 +964,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse("public class Foo: Superclass {}")
   }
 
-  func testReturnAsyncContextualKeyword() {
+  func testReturnVariableNamedAsync() {
     AssertParse(
       ##"""
       if let async = self.consume(if: .keyword(.async)) {

@@ -208,6 +208,44 @@ struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
   }
 }
 
+public struct PropertyWrapper: AccessorDeclarationMacro {
+  public static func expansion(
+    of node: CustomAttributeSyntax,
+    attachedTo declaration: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [AccessorDeclSyntax] {
+    guard let varDecl = declaration.as(VariableDeclSyntax.self),
+       let binding = varDecl.bindings.first,
+       let identifier =     binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
+       let type = binding.typeAnnotation?.type,
+       binding.accessor == nil else {
+      return []
+    }
+
+    guard let wrapperTypeNameExpr = node.argumentList?.first?.expression,
+       let stringLiteral = wrapperTypeNameExpr.as(StringLiteralExprSyntax.self),
+       stringLiteral.segments.count == 1,
+       case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first else {
+      return []
+    }
+
+    return [
+      """
+
+        get {
+          _\(identifier).wrappedValue
+        }
+      """,
+      """
+
+        set {
+          _\(identifier).wrappedValue = newValue
+        }
+      """
+    ]
+  }
+}
+
 public struct AddCompletionHandler: PeerDeclarationMacro {
   public static func expansion(
     of node: CustomAttributeSyntax,
@@ -395,6 +433,7 @@ public let testMacros: [String: Macro.Type] = [
   "stringify": StringifyMacro.self,
   "myError": ErrorMacro.self,
   "bitwidthNumberedStructs": DefineBitwidthNumberedStructsMacro.self,
+  "wrapProperty" : PropertyWrapper.self,
   "addCompletionHandler": AddCompletionHandler.self,
   "addBackingStorage": AddBackingStorage.self,
 ]
@@ -513,6 +552,26 @@ final class MacroSystemTests: XCTestCase {
       struct MyInt64 { }
       """
     )
+  }
+
+  func testPropertyWrapper() {
+    AssertMacroExpansion(
+      macros: testMacros,
+      """
+      @wrapProperty("MyWrapperType")
+      var x: Int
+      """,
+      """
+
+      var x: Int {
+        get {
+          _x.wrappedValue
+        }
+        set {
+          _x.wrappedValue = newValue
+        }
+      }
+      """)
   }
 
   func testAddCompletionHandler() {

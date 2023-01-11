@@ -208,7 +208,9 @@ struct DefineBitwidthNumberedStructsMacro: FreestandingDeclarationMacro {
   }
 }
 
-public struct PropertyWrapper: AccessorDeclarationMacro {
+public struct PropertyWrapper { }
+
+extension PropertyWrapper: AccessorDeclarationMacro {
   public static func expansion(
     of node: CustomAttributeSyntax,
     attachedTo declaration: DeclSyntax,
@@ -217,15 +219,7 @@ public struct PropertyWrapper: AccessorDeclarationMacro {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
        let binding = varDecl.bindings.first,
        let identifier =     binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-       let type = binding.typeAnnotation?.type,
        binding.accessor == nil else {
-      return []
-    }
-
-    guard let wrapperTypeNameExpr = node.argumentList?.first?.expression,
-       let stringLiteral = wrapperTypeNameExpr.as(StringLiteralExprSyntax.self),
-       stringLiteral.segments.count == 1,
-       case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first else {
       return []
     }
 
@@ -241,6 +235,40 @@ public struct PropertyWrapper: AccessorDeclarationMacro {
         set {
           _\(identifier).wrappedValue = newValue
         }
+      """
+    ]
+  }
+}
+
+extension PropertyWrapper: PeerDeclarationMacro {
+  public static func expansion(
+    of node: CustomAttributeSyntax,
+    attachedTo declaration: DeclSyntax,
+    in context: inout MacroExpansionContext
+  ) throws -> [SwiftSyntax.DeclSyntax] {
+    guard let varDecl = declaration.as(VariableDeclSyntax.self),
+       let binding = varDecl.bindings.first,
+       let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
+       let type = binding.typeAnnotation?.type,
+       binding.accessor == nil else {
+      return []
+    }
+
+    guard let wrapperTypeNameExpr = node.argumentList?.first?.expression,
+       let stringLiteral = wrapperTypeNameExpr.as(StringLiteralExprSyntax.self),
+       stringLiteral.segments.count == 1,
+       case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first else {
+      return []
+    }
+
+    let storageType: TypeSyntax = "\(wrapperTypeNameSegment.content)<\(type)>"
+    let storageName = "_\(identifier)"
+
+    return [
+      """
+
+      private var \(raw: storageName): \(storageType)
+
       """
     ]
   }
@@ -571,6 +599,7 @@ final class MacroSystemTests: XCTestCase {
           _x.wrappedValue = newValue
         }
       }
+      private var _x: MyWrapperType<Int>
       """)
   }
 

@@ -140,30 +140,6 @@ let tokenKindFile = SourceFileSyntax {
     
     VariableDeclSyntax(
       modifiers: [DeclModifierSyntax(name: .public)],
-      name: IdentifierPatternSyntax("kind"),
-      type: TypeAnnotationSyntax(type: TypeSyntax("String"))
-    ) {
-      SwitchStmtSyntax(expression: ExprSyntax("self")) {
-        SwitchCaseSyntax("case .eof:") {
-          ReturnStmtSyntax(#"return "eof""#)
-        }
-        
-        for token in SYNTAX_TOKENS {
-          if token.text == nil {
-            SwitchCaseSyntax("case .\(raw: token.swiftKind)(_):") {
-              ReturnStmtSyntax("return \"\(raw: token.kind)\"")
-            }
-          } else {
-            SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-              ReturnStmtSyntax("return \"\(raw: token.kind)\"")
-            }
-          }
-        }
-      }
-    }
-    
-    VariableDeclSyntax(
-      modifiers: [DeclModifierSyntax(name: .public)],
       name: IdentifierPatternSyntax("sourceLength"),
       type: TypeAnnotationSyntax(type: TypeSyntax("SourceLength"))
     ) {

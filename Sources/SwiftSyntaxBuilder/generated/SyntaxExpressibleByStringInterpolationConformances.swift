@@ -26,7 +26,12 @@ extension SyntaxParseable {
   }
 }
 
-extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation { 
+extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation {
+  public init(stringInterpolationOrThrow stringInterpolation: SyntaxStringInterpolation) throws {
+    self = try performParse(source: stringInterpolation.sourceText, parse: { parser in 
+        return Self.parse(from: &parser)
+      })
+  }
 }
 
 extension ActorDeclSyntax: SyntaxExpressibleByStringInterpolation { 

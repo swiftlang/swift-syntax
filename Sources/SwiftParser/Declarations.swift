@@ -1619,7 +1619,8 @@ extension Parser {
 
   /// Parse an accessor.
   mutating func parseAccessorDecl() -> RawAccessorDeclSyntax {
-    let introducer = parseAccessorIntroducer(forcedKind: (.get, TokenConsumptionHandle(tokenKind: .contextualKeyword, missing: true)))!
+    let forcedHandle = TokenConsumptionHandle(tokenKind: .contextualKeyword(.get), missing: true)
+    let introducer = parseAccessorIntroducer(forcedKind: (.get, forcedHandle))!
     return parseAccessorDecl(introducer: introducer)
   }
 

@@ -497,7 +497,7 @@ extension YieldStmtSyntax: SyntaxExpressibleByStringInterpolation {
 
 // TODO: This should be fileprivate, but is currently used in
 // `ConvenienceInitializers.swift`. See the corresponding TODO there.
-func performParse < SyntaxType: SyntaxProtocol > (source: [UInt8], parse: (inout Parser) throws -> SyntaxType) throws -> SyntaxType {
+func performParse<SyntaxType: SyntaxProtocol>(source: [UInt8], parse: (inout Parser) throws -> SyntaxType) throws -> SyntaxType {
   return try source.withUnsafeBufferPointer { buffer in 
     var parser = Parser(buffer)
     // FIXME: When the parser supports incremental parsing, put the

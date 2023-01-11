@@ -3,7 +3,9 @@
 // MARK: - AttributedSyntax
 
 public protocol AttributedSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? { get }
+  var attributes: AttributeListSyntax? { 
+    get 
+  }
   
   func withAttributes(_ newChild: AttributeListSyntax?) -> Self
 }
@@ -27,15 +29,21 @@ public extension SyntaxProtocol {
 // MARK: - DeclGroupSyntax
 
 public protocol DeclGroupSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? { get }
+  var attributes: AttributeListSyntax? { 
+    get 
+  }
   
   func withAttributes(_ newChild: AttributeListSyntax?) -> Self
   
-  var modifiers: ModifierListSyntax? { get }
+  var modifiers: ModifierListSyntax? { 
+    get 
+  }
   
   func withModifiers(_ newChild: ModifierListSyntax?) -> Self
   
-  var members: MemberDeclBlockSyntax { get }
+  var members: MemberDeclBlockSyntax { 
+    get 
+  }
   
   func withMembers(_ newChild: MemberDeclBlockSyntax) -> Self
 }
@@ -59,11 +67,15 @@ public extension SyntaxProtocol {
 // MARK: - BracedSyntax
 
 public protocol BracedSyntax: SyntaxProtocol {
-  var leftBrace: TokenSyntax { get }
+  var leftBrace: TokenSyntax { 
+    get 
+  }
   
   func withLeftBrace(_ newChild: TokenSyntax) -> Self
   
-  var rightBrace: TokenSyntax { get }
+  var rightBrace: TokenSyntax { 
+    get 
+  }
   
   func withRightBrace(_ newChild: TokenSyntax) -> Self
 }
@@ -87,7 +99,9 @@ public extension SyntaxProtocol {
 // MARK: - IdentifiedDeclSyntax
 
 public protocol IdentifiedDeclSyntax: SyntaxProtocol {
-  var identifier: TokenSyntax { get }
+  var identifier: TokenSyntax { 
+    get 
+  }
   
   func withIdentifier(_ newChild: TokenSyntax) -> Self
 }
@@ -111,7 +125,9 @@ public extension SyntaxProtocol {
 // MARK: - WithCodeBlockSyntax
 
 public protocol WithCodeBlockSyntax: SyntaxProtocol {
-  var body: CodeBlockSyntax { get }
+  var body: CodeBlockSyntax { 
+    get 
+  }
   
   func withBody(_ newChild: CodeBlockSyntax) -> Self
 }
@@ -135,11 +151,15 @@ public extension SyntaxProtocol {
 // MARK: - ParenthesizedSyntax
 
 public protocol ParenthesizedSyntax: SyntaxProtocol {
-  var leftParen: TokenSyntax { get }
+  var leftParen: TokenSyntax { 
+    get 
+  }
   
   func withLeftParen(_ newChild: TokenSyntax) -> Self
   
-  var rightParen: TokenSyntax { get }
+  var rightParen: TokenSyntax { 
+    get 
+  }
   
   func withRightParen(_ newChild: TokenSyntax) -> Self
 }
@@ -163,7 +183,9 @@ public extension SyntaxProtocol {
 // MARK: - WithTrailingCommaSyntax
 
 public protocol WithTrailingCommaSyntax: SyntaxProtocol {
-  var trailingComma: TokenSyntax? { get }
+  var trailingComma: TokenSyntax? { 
+    get 
+  }
   
   func withTrailingComma(_ newChild: TokenSyntax?) -> Self
 }
@@ -187,7 +209,9 @@ public extension SyntaxProtocol {
 // MARK: - WithStatementsSyntax
 
 public protocol WithStatementsSyntax: SyntaxProtocol {
-  var statements: CodeBlockItemListSyntax { get }
+  var statements: CodeBlockItemListSyntax { 
+    get 
+  }
   
   func withStatements(_ newChild: CodeBlockItemListSyntax) -> Self
 }

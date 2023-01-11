@@ -87,17 +87,21 @@ let syntaxBaseNodesFile = SourceFile(leadingTrivia: [.blockComment(generateCopyr
         }
         """)
       
-      InitializerDecl("public init?<S: SyntaxProtocol>(_ node: S)") {
-        SwitchStmt(expression: MemberAccessExpr("node.raw.kind")) {
-          SwitchCaseList {
-            SwitchCase(
+      InitializerDeclSyntax("public init?<S: SyntaxProtocol>(_ node: S)") {
+        SwitchStmt(expression: MemberAccessExprSyntax("node.raw.kind")) {
+          SwitchCaseListSyntax {
+            SwitchCaseSyntax(
               label: .case(SwitchCaseLabel {
                 for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
-                  CaseItem(
-                    pattern: EnumCasePattern(
-                      period: .period,
-                      caseName: .identifier(childNode.swiftSyntaxKind))
-                  )
+                    CaseItemSyntax(
+                        pattern: ExpressionPatternSyntax(
+                            expression: MemberAccessExprSyntax(
+                                base: nil,
+                                dot: .periodToken(),
+                                name: .identifier(childNode.swiftSyntaxKind)
+                            )
+                        )
+                    )
                 }
               })) {
                 Expr("self._syntaxNode = node._syntaxNode")
@@ -127,11 +131,15 @@ let syntaxBaseNodesFile = SourceFile(leadingTrivia: [.blockComment(generateCopyr
                     SwitchCase(
                       label: .case(SwitchCaseLabel {
                         for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
-                          CaseItem(
-                            pattern: EnumCasePatternSyntax(
-                              period: .period,
-                              caseName: .identifier(childNode.swiftSyntaxKind))
-                          )
+                            CaseItemSyntax(
+                                pattern: ExpressionPatternSyntax(
+                                    expression: MemberAccessExprSyntax(
+                                        base: nil,
+                                        dot: .periodToken(),
+                                        name: .identifier(childNode.swiftSyntaxKind)
+                                    )
+                                )
+                            )
                         }
                       })) {
                         BreakStmt()

@@ -16,7 +16,9 @@
 
 public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {
   /// The number of elements, `present` or `missing`, in this collection.
-  var count: Int { get }
+  var count: Int { 
+    get 
+  }
 }
 
 public extension SyntaxCollection {
@@ -36,10 +38,10 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .accessPath else { 
       return nil 
     }
@@ -77,7 +79,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `AccessPathSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AccessPathSyntax {
+    _ layout: [RawSyntax? ]) -> AccessPathSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -198,22 +200,22 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `AccessPathSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `AccessPathSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -241,7 +243,7 @@ extension AccessPathSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -281,7 +283,7 @@ extension AccessPathSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -298,10 +300,10 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .accessorList else { 
       return nil 
     }
@@ -339,7 +341,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `AccessorListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AccessorListSyntax {
+    _ layout: [RawSyntax? ]) -> AccessorListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -460,22 +462,22 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `AccessorListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `AccessorListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -503,7 +505,7 @@ extension AccessorListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -543,7 +545,7 @@ extension AccessorListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -560,10 +562,10 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .arrayElementList else { 
       return nil 
     }
@@ -601,7 +603,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `ArrayElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ArrayElementListSyntax {
+    _ layout: [RawSyntax? ]) -> ArrayElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -722,22 +724,22 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `ArrayElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `ArrayElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -765,7 +767,7 @@ extension ArrayElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -805,7 +807,7 @@ extension ArrayElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -843,7 +845,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       self = .ifConfigDecl(node)
     }
     
-    public init? < S: SyntaxProtocol > (_ node: S) {
+    public init? <S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(AttributeSyntax.self) {
         self = .attribute(node)
         return 
@@ -857,8 +859,8 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .node(AttributeSyntax.self), 
-        .node(IfConfigDeclSyntax.self)])
+          .node(AttributeSyntax.self), 
+          .node(IfConfigDeclSyntax.self)])
     }
   }
   
@@ -866,10 +868,10 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .attributeList else { 
       return nil 
     }
@@ -907,7 +909,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `AttributeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AttributeListSyntax {
+    _ layout: [RawSyntax? ]) -> AttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1028,22 +1030,22 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `AttributeListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `AttributeListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1071,7 +1073,7 @@ extension AttributeListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -1111,7 +1113,7 @@ extension AttributeListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -1128,10 +1130,10 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .availabilitySpecList else { 
       return nil 
     }
@@ -1169,7 +1171,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `AvailabilitySpecListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
+    _ layout: [RawSyntax? ]) -> AvailabilitySpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1290,22 +1292,22 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `AvailabilitySpecListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `AvailabilitySpecListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1333,7 +1335,7 @@ extension AvailabilitySpecListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -1373,7 +1375,7 @@ extension AvailabilitySpecListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -1390,10 +1392,10 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .availabilityVersionRestrictionList else { 
       return nil 
     }
@@ -1431,7 +1433,7 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   ///                     collection.
   /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> AvailabilityVersionRestrictionListSyntax {
+    _ layout: [RawSyntax? ]) -> AvailabilityVersionRestrictionListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1552,22 +1554,22 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `AvailabilityVersionRestrictionListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `AvailabilityVersionRestrictionListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1595,7 +1597,7 @@ extension AvailabilityVersionRestrictionListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -1635,7 +1637,7 @@ extension AvailabilityVersionRestrictionListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -1652,10 +1654,10 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .caseItemList else { 
       return nil 
     }
@@ -1693,7 +1695,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `CaseItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CaseItemListSyntax {
+    _ layout: [RawSyntax? ]) -> CaseItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -1814,22 +1816,22 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `CaseItemListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `CaseItemListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -1857,7 +1859,7 @@ extension CaseItemListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -1897,7 +1899,7 @@ extension CaseItemListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -1914,10 +1916,10 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .catchClauseList else { 
       return nil 
     }
@@ -1955,7 +1957,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `CatchClauseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CatchClauseListSyntax {
+    _ layout: [RawSyntax? ]) -> CatchClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2076,22 +2078,22 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `CatchClauseListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `CatchClauseListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2119,7 +2121,7 @@ extension CatchClauseListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -2159,7 +2161,7 @@ extension CatchClauseListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -2176,10 +2178,10 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .catchItemList else { 
       return nil 
     }
@@ -2217,7 +2219,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `CatchItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CatchItemListSyntax {
+    _ layout: [RawSyntax? ]) -> CatchItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2338,22 +2340,22 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `CatchItemListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `CatchItemListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2381,7 +2383,7 @@ extension CatchItemListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -2421,7 +2423,7 @@ extension CatchItemListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -2438,10 +2440,10 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .closureCaptureItemList else { 
       return nil 
     }
@@ -2479,7 +2481,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
+    _ layout: [RawSyntax? ]) -> ClosureCaptureItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2600,22 +2602,22 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `ClosureCaptureItemListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `ClosureCaptureItemListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2643,7 +2645,7 @@ extension ClosureCaptureItemListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -2683,7 +2685,7 @@ extension ClosureCaptureItemListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -2700,10 +2702,10 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .closureParamList else { 
       return nil 
     }
@@ -2741,7 +2743,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `ClosureParamListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ClosureParamListSyntax {
+    _ layout: [RawSyntax? ]) -> ClosureParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -2862,22 +2864,22 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `ClosureParamListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `ClosureParamListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -2905,7 +2907,7 @@ extension ClosureParamListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -2945,7 +2947,7 @@ extension ClosureParamListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -2962,10 +2964,10 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .codeBlockItemList else { 
       return nil 
     }
@@ -3003,7 +3005,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `CodeBlockItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
+    _ layout: [RawSyntax? ]) -> CodeBlockItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3124,22 +3126,22 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `CodeBlockItemListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `CodeBlockItemListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3167,7 +3169,7 @@ extension CodeBlockItemListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -3207,7 +3209,7 @@ extension CodeBlockItemListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -3224,10 +3226,10 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .compositionTypeElementList else { 
       return nil 
     }
@@ -3265,7 +3267,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   ///                     collection.
   /// - Returns: A new `CompositionTypeElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
+    _ layout: [RawSyntax? ]) -> CompositionTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3386,22 +3388,22 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `CompositionTypeElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `CompositionTypeElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3429,7 +3431,7 @@ extension CompositionTypeElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -3469,7 +3471,7 @@ extension CompositionTypeElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -3486,10 +3488,10 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .conditionElementList else { 
       return nil 
     }
@@ -3527,7 +3529,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `ConditionElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ConditionElementListSyntax {
+    _ layout: [RawSyntax? ]) -> ConditionElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3648,22 +3650,22 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `ConditionElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `ConditionElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3691,7 +3693,7 @@ extension ConditionElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -3731,7 +3733,7 @@ extension ConditionElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -3748,10 +3750,10 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .declNameArgumentList else { 
       return nil 
     }
@@ -3789,7 +3791,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `DeclNameArgumentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
+    _ layout: [RawSyntax? ]) -> DeclNameArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -3910,22 +3912,22 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `DeclNameArgumentListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `DeclNameArgumentListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -3953,7 +3955,7 @@ extension DeclNameArgumentListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -3993,7 +3995,7 @@ extension DeclNameArgumentListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -4010,10 +4012,10 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .designatedTypeList else { 
       return nil 
     }
@@ -4051,7 +4053,7 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `DesignatedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
+    _ layout: [RawSyntax? ]) -> DesignatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4172,22 +4174,22 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `DesignatedTypeListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `DesignatedTypeListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -4215,7 +4217,7 @@ extension DesignatedTypeListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -4255,7 +4257,7 @@ extension DesignatedTypeListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -4272,10 +4274,10 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .dictionaryElementList else { 
       return nil 
     }
@@ -4313,7 +4315,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `DictionaryElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
+    _ layout: [RawSyntax? ]) -> DictionaryElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4434,22 +4436,22 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `DictionaryElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `DictionaryElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -4477,7 +4479,7 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -4517,7 +4519,7 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -4534,10 +4536,10 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .differentiabilityParamList else { 
       return nil 
     }
@@ -4575,7 +4577,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   ///                     collection.
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
+    _ layout: [RawSyntax? ]) -> DifferentiabilityParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4696,22 +4698,22 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `DifferentiabilityParamListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `DifferentiabilityParamListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -4739,7 +4741,7 @@ extension DifferentiabilityParamListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -4779,7 +4781,7 @@ extension DifferentiabilityParamListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -4793,10 +4795,10 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .documentationAttributeArguments else { 
       return nil 
     }
@@ -4834,7 +4836,7 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   ///                     collection.
   /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DocumentationAttributeArgumentsSyntax {
+    _ layout: [RawSyntax? ]) -> DocumentationAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -4955,22 +4957,22 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `DocumentationAttributeArgumentsSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `DocumentationAttributeArgumentsSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -4998,7 +5000,7 @@ extension DocumentationAttributeArgumentsSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -5038,7 +5040,7 @@ extension DocumentationAttributeArgumentsSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -5052,10 +5054,10 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .effectsArguments else { 
       return nil 
     }
@@ -5093,7 +5095,7 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `EffectsArgumentsSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EffectsArgumentsSyntax {
+    _ layout: [RawSyntax? ]) -> EffectsArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5214,22 +5216,22 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `EffectsArgumentsSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `EffectsArgumentsSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -5257,7 +5259,7 @@ extension EffectsArgumentsSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -5297,7 +5299,7 @@ extension EffectsArgumentsSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -5311,10 +5313,10 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .enumCaseElementList else { 
       return nil 
     }
@@ -5352,7 +5354,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `EnumCaseElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
+    _ layout: [RawSyntax? ]) -> EnumCaseElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5473,22 +5475,22 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `EnumCaseElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `EnumCaseElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -5516,7 +5518,7 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -5556,7 +5558,7 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -5570,10 +5572,10 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .exprList else { 
       return nil 
     }
@@ -5611,7 +5613,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `ExprListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ExprListSyntax {
+    _ layout: [RawSyntax? ]) -> ExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5732,22 +5734,22 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `ExprListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `ExprListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -5775,7 +5777,7 @@ extension ExprListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -5815,7 +5817,7 @@ extension ExprListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -5832,10 +5834,10 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .functionParameterList else { 
       return nil 
     }
@@ -5873,7 +5875,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `FunctionParameterListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
+    _ layout: [RawSyntax? ]) -> FunctionParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -5994,22 +5996,22 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `FunctionParameterListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `FunctionParameterListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -6037,7 +6039,7 @@ extension FunctionParameterListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -6077,7 +6079,7 @@ extension FunctionParameterListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -6094,10 +6096,10 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .genericArgumentList else { 
       return nil 
     }
@@ -6135,7 +6137,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `GenericArgumentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
+    _ layout: [RawSyntax? ]) -> GenericArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6256,22 +6258,22 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `GenericArgumentListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `GenericArgumentListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -6299,7 +6301,7 @@ extension GenericArgumentListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -6339,7 +6341,7 @@ extension GenericArgumentListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -6356,10 +6358,10 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .genericParameterList else { 
       return nil 
     }
@@ -6397,7 +6399,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `GenericParameterListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericParameterListSyntax {
+    _ layout: [RawSyntax? ]) -> GenericParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6518,22 +6520,22 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `GenericParameterListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `GenericParameterListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -6561,7 +6563,7 @@ extension GenericParameterListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -6601,7 +6603,7 @@ extension GenericParameterListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -6618,10 +6620,10 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .genericRequirementList else { 
       return nil 
     }
@@ -6659,7 +6661,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `GenericRequirementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
+    _ layout: [RawSyntax? ]) -> GenericRequirementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -6780,22 +6782,22 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `GenericRequirementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `GenericRequirementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -6823,7 +6825,7 @@ extension GenericRequirementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -6863,7 +6865,7 @@ extension GenericRequirementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -6880,10 +6882,10 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .ifConfigClauseList else { 
       return nil 
     }
@@ -6921,7 +6923,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `IfConfigClauseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
+    _ layout: [RawSyntax? ]) -> IfConfigClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7042,22 +7044,22 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `IfConfigClauseListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `IfConfigClauseListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -7085,7 +7087,7 @@ extension IfConfigClauseListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -7125,7 +7127,7 @@ extension IfConfigClauseListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -7142,10 +7144,10 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .inheritedTypeList else { 
       return nil 
     }
@@ -7183,7 +7185,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `InheritedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
+    _ layout: [RawSyntax? ]) -> InheritedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7304,22 +7306,22 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `InheritedTypeListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `InheritedTypeListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -7347,7 +7349,7 @@ extension InheritedTypeListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -7387,7 +7389,7 @@ extension InheritedTypeListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -7404,10 +7406,10 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .keyPathComponentList else { 
       return nil 
     }
@@ -7445,7 +7447,7 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `KeyPathComponentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> KeyPathComponentListSyntax {
+    _ layout: [RawSyntax? ]) -> KeyPathComponentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7566,22 +7568,22 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `KeyPathComponentListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `KeyPathComponentListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -7609,7 +7611,7 @@ extension KeyPathComponentListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -7649,7 +7651,7 @@ extension KeyPathComponentListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -7666,10 +7668,10 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .memberDeclList else { 
       return nil 
     }
@@ -7707,7 +7709,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `MemberDeclListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> MemberDeclListSyntax {
+    _ layout: [RawSyntax? ]) -> MemberDeclListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -7828,22 +7830,22 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `MemberDeclListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `MemberDeclListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -7871,7 +7873,7 @@ extension MemberDeclListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -7911,7 +7913,7 @@ extension MemberDeclListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -7928,10 +7930,10 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .modifierList else { 
       return nil 
     }
@@ -7969,7 +7971,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `ModifierListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ModifierListSyntax {
+    _ layout: [RawSyntax? ]) -> ModifierListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8090,22 +8092,22 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `ModifierListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `ModifierListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -8133,7 +8135,7 @@ extension ModifierListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -8173,7 +8175,7 @@ extension ModifierListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -8190,10 +8192,10 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .multipleTrailingClosureElementList else { 
       return nil 
     }
@@ -8231,7 +8233,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   ///                     collection.
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
+    _ layout: [RawSyntax? ]) -> MultipleTrailingClosureElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8352,22 +8354,22 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `MultipleTrailingClosureElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `MultipleTrailingClosureElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -8395,7 +8397,7 @@ extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -8435,7 +8437,7 @@ extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -8452,10 +8454,10 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .objCSelector else { 
       return nil 
     }
@@ -8493,7 +8495,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `ObjCSelectorSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
+    _ layout: [RawSyntax? ]) -> ObjCSelectorSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8614,22 +8616,22 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `ObjCSelectorSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `ObjCSelectorSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -8657,7 +8659,7 @@ extension ObjCSelectorSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -8697,7 +8699,7 @@ extension ObjCSelectorSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -8714,10 +8716,10 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .patternBindingList else { 
       return nil 
     }
@@ -8755,7 +8757,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `PatternBindingListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PatternBindingListSyntax {
+    _ layout: [RawSyntax? ]) -> PatternBindingListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -8876,22 +8878,22 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `PatternBindingListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `PatternBindingListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -8919,7 +8921,7 @@ extension PatternBindingListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -8959,7 +8961,7 @@ extension PatternBindingListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -9005,7 +9007,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       self = .precedenceGroupAssociativity(node)
     }
     
-    public init? < S: SyntaxProtocol > (_ node: S) {
+    public init? <S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(PrecedenceGroupRelationSyntax.self) {
         self = .precedenceGroupRelation(node)
         return 
@@ -9023,9 +9025,9 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .node(PrecedenceGroupRelationSyntax.self), 
-        .node(PrecedenceGroupAssignmentSyntax.self), 
-        .node(PrecedenceGroupAssociativitySyntax.self)])
+          .node(PrecedenceGroupRelationSyntax.self), 
+          .node(PrecedenceGroupAssignmentSyntax.self), 
+          .node(PrecedenceGroupAssociativitySyntax.self)])
     }
   }
   
@@ -9033,10 +9035,10 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .precedenceGroupAttributeList else { 
       return nil 
     }
@@ -9074,7 +9076,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   ///                     collection.
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
+    _ layout: [RawSyntax? ]) -> PrecedenceGroupAttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9195,22 +9197,22 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupAttributeListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupAttributeListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -9238,7 +9240,7 @@ extension PrecedenceGroupAttributeListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -9278,7 +9280,7 @@ extension PrecedenceGroupAttributeListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -9295,10 +9297,10 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .precedenceGroupNameList else { 
       return nil 
     }
@@ -9336,7 +9338,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
+    _ layout: [RawSyntax? ]) -> PrecedenceGroupNameListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9457,22 +9459,22 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupNameListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `PrecedenceGroupNameListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -9500,7 +9502,7 @@ extension PrecedenceGroupNameListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -9540,7 +9542,7 @@ extension PrecedenceGroupNameListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -9557,10 +9559,10 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .primaryAssociatedTypeList else { 
       return nil 
     }
@@ -9598,7 +9600,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   ///                     collection.
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
+    _ layout: [RawSyntax? ]) -> PrimaryAssociatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -9719,22 +9721,22 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `PrimaryAssociatedTypeListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `PrimaryAssociatedTypeListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -9762,7 +9764,7 @@ extension PrimaryAssociatedTypeListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -9802,7 +9804,7 @@ extension PrimaryAssociatedTypeListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -9853,7 +9855,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
       self = .genericWhereClause(node)
     }
     
-    public init? < S: SyntaxProtocol > (_ node: S) {
+    public init? <S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(LabeledSpecializeEntrySyntax.self) {
         self = .labeledSpecializeEntry(node)
         return 
@@ -9875,10 +9877,10 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .node(LabeledSpecializeEntrySyntax.self), 
-        .node(AvailabilityEntrySyntax.self), 
-        .node(TargetFunctionEntrySyntax.self), 
-        .node(GenericWhereClauseSyntax.self)])
+          .node(LabeledSpecializeEntrySyntax.self), 
+          .node(AvailabilityEntrySyntax.self), 
+          .node(TargetFunctionEntrySyntax.self), 
+          .node(GenericWhereClauseSyntax.self)])
     }
   }
   
@@ -9886,10 +9888,10 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .specializeAttributeSpecList else { 
       return nil 
     }
@@ -9927,7 +9929,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   ///                     collection.
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
+    _ layout: [RawSyntax? ]) -> SpecializeAttributeSpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -10048,22 +10050,22 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `SpecializeAttributeSpecListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `SpecializeAttributeSpecListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -10091,7 +10093,7 @@ extension SpecializeAttributeSpecListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -10131,7 +10133,7 @@ extension SpecializeAttributeSpecListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -10169,7 +10171,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
       self = .expressionSegment(node)
     }
     
-    public init? < S: SyntaxProtocol > (_ node: S) {
+    public init? <S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(StringSegmentSyntax.self) {
         self = .stringSegment(node)
         return 
@@ -10183,8 +10185,8 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .node(StringSegmentSyntax.self), 
-        .node(ExpressionSegmentSyntax.self)])
+          .node(StringSegmentSyntax.self), 
+          .node(ExpressionSegmentSyntax.self)])
     }
   }
   
@@ -10192,10 +10194,10 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .stringLiteralSegments else { 
       return nil 
     }
@@ -10233,7 +10235,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
+    _ layout: [RawSyntax? ]) -> StringLiteralSegmentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -10354,22 +10356,22 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `StringLiteralSegmentsSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `StringLiteralSegmentsSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -10397,7 +10399,7 @@ extension StringLiteralSegmentsSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -10437,7 +10439,7 @@ extension StringLiteralSegmentsSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -10475,7 +10477,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       self = .ifConfigDecl(node)
     }
     
-    public init? < S: SyntaxProtocol > (_ node: S) {
+    public init? <S: SyntaxProtocol>(_ node: S) {
       if let node = node.as(SwitchCaseSyntax.self) {
         self = .switchCase(node)
         return 
@@ -10489,8 +10491,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-        .node(SwitchCaseSyntax.self), 
-        .node(IfConfigDeclSyntax.self)])
+          .node(SwitchCaseSyntax.self), 
+          .node(IfConfigDeclSyntax.self)])
     }
   }
   
@@ -10498,10 +10500,10 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .switchCaseList else { 
       return nil 
     }
@@ -10539,7 +10541,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `SwitchCaseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
+    _ layout: [RawSyntax? ]) -> SwitchCaseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -10660,22 +10662,22 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `SwitchCaseListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `SwitchCaseListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -10703,7 +10705,7 @@ extension SwitchCaseListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -10743,7 +10745,7 @@ extension SwitchCaseListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -10760,10 +10762,10 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .tokenList else { 
       return nil 
     }
@@ -10801,7 +10803,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `TokenListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TokenListSyntax {
+    _ layout: [RawSyntax? ]) -> TokenListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -10922,22 +10924,22 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `TokenListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `TokenListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -10965,7 +10967,7 @@ extension TokenListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -11005,7 +11007,7 @@ extension TokenListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -11022,10 +11024,10 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .tupleExprElementList else { 
       return nil 
     }
@@ -11063,7 +11065,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `TupleExprElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
+    _ layout: [RawSyntax? ]) -> TupleExprElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -11184,22 +11186,22 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `TupleExprElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `TupleExprElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -11227,7 +11229,7 @@ extension TupleExprElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -11267,7 +11269,7 @@ extension TupleExprElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -11284,10 +11286,10 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .tuplePatternElementList else { 
       return nil 
     }
@@ -11325,7 +11327,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `TuplePatternElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
+    _ layout: [RawSyntax? ]) -> TuplePatternElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -11446,22 +11448,22 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `TuplePatternElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `TuplePatternElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -11489,7 +11491,7 @@ extension TuplePatternElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -11529,7 +11531,7 @@ extension TuplePatternElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -11546,10 +11548,10 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .tupleTypeElementList else { 
       return nil 
     }
@@ -11587,7 +11589,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `TupleTypeElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
+    _ layout: [RawSyntax? ]) -> TupleTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -11708,22 +11710,22 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `TupleTypeElementListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `TupleTypeElementListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -11751,7 +11753,7 @@ extension TupleTypeElementListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -11791,7 +11793,7 @@ extension TupleTypeElementListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -11805,10 +11807,10 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .unexpectedNodes else { 
       return nil 
     }
@@ -11846,7 +11848,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `UnexpectedNodesSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
+    _ layout: [RawSyntax? ]) -> UnexpectedNodesSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -11967,22 +11969,22 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `UnexpectedNodesSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `UnexpectedNodesSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -12010,7 +12012,7 @@ extension UnexpectedNodesSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -12050,7 +12052,7 @@ extension UnexpectedNodesSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }
@@ -12067,10 +12069,10 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
+    data.raw.layoutView! 
   }
   
-  public init? < S: SyntaxProtocol > (_ node: S) {
+  public init? <S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .yieldExprList else { 
       return nil 
     }
@@ -12108,7 +12110,7 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   ///                     collection.
   /// - Returns: A new `YieldExprListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> YieldExprListSyntax {
+    _ layout: [RawSyntax? ]) -> YieldExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     let newData = data.replacingSelf(newRaw, arena: arena)
@@ -12229,22 +12231,22 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   
   /// The leading trivia (spaces, newlines, etc.) associated with this `YieldExprListSyntax`.
   public var leadingTrivia: Trivia? {
-  get {
-    return raw.formLeadingTrivia()
-  }
-  set {
-    self = withLeadingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
   
   /// The trailing trivia (spaces, newlines, etc.) associated with this `YieldExprListSyntax`.
   public var trailingTrivia: Trivia? {
-  get {
-    return raw.formTrailingTrivia()
-  }
-  set {
-    self = withTrailingTrivia(newValue ?? [])
-  }
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
   
   public func childNameForDiagnostics(_ index: SyntaxChildrenIndex) -> String? {
@@ -12272,7 +12274,7 @@ extension YieldExprListSyntax: BidirectionalCollection {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
       return Element(data)
     }
@@ -12312,7 +12314,7 @@ extension YieldExprListSyntax: BidirectionalCollection {
   
   public subscript (position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw! , info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
     return Element(data)
   }

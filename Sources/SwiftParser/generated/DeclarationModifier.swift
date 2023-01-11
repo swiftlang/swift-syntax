@@ -17,7 +17,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 enum DeclarationModifier: RawTokenKindSubset {
-  case staticKeyword
+  case `static`
   
   case classKeyword
   
@@ -47,13 +47,13 @@ enum DeclarationModifier: RawTokenKindSubset {
   
   case override
   
-  case privateKeyword
+  case `private`
   
-  case fileprivateKeyword
+  case `fileprivate`
   
-  case internalKeyword
+  case `internal`
   
-  case publicKeyword
+  case `public`
   
   case package
   
@@ -85,8 +85,8 @@ enum DeclarationModifier: RawTokenKindSubset {
   
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme {
-    case RawTokenKindMatch(.staticKeyword): 
-      self = .staticKeyword
+    case RawTokenKindMatch(.`static`): 
+      self = .`static`
     case RawTokenKindMatch(.classKeyword): 
       self = .classKeyword
     case RawTokenKindMatch(.final): 
@@ -115,14 +115,14 @@ enum DeclarationModifier: RawTokenKindSubset {
       self = .convenience
     case RawTokenKindMatch(.override): 
       self = .override
-    case RawTokenKindMatch(.privateKeyword): 
-      self = .privateKeyword
-    case RawTokenKindMatch(.fileprivateKeyword): 
-      self = .fileprivateKeyword
-    case RawTokenKindMatch(.internalKeyword): 
-      self = .internalKeyword
-    case RawTokenKindMatch(.publicKeyword): 
-      self = .publicKeyword
+    case RawTokenKindMatch(.`private`): 
+      self = .`private`
+    case RawTokenKindMatch(.`fileprivate`): 
+      self = .`fileprivate`
+    case RawTokenKindMatch(.`internal`): 
+      self = .`internal`
+    case RawTokenKindMatch(.`public`): 
+      self = .`public`
     case RawTokenKindMatch(.package): 
       self = .package
     case RawTokenKindMatch(.open): 
@@ -158,8 +158,8 @@ enum DeclarationModifier: RawTokenKindSubset {
   
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .staticKeyword: 
-      return .staticKeyword
+    case .`static`: 
+      return .keyword(.`static`)
     case .classKeyword: 
       return .classKeyword
     case .final: 
@@ -188,14 +188,14 @@ enum DeclarationModifier: RawTokenKindSubset {
       return .keyword(.convenience)
     case .override: 
       return .keyword(.override)
-    case .privateKeyword: 
-      return .privateKeyword
-    case .fileprivateKeyword: 
-      return .fileprivateKeyword
-    case .internalKeyword: 
-      return .internalKeyword
-    case .publicKeyword: 
-      return .publicKeyword
+    case .`private`: 
+      return .keyword(.`private`)
+    case .`fileprivate`: 
+      return .keyword(.`fileprivate`)
+    case .`internal`: 
+      return .keyword(.`internal`)
+    case .`public`: 
+      return .keyword(.`public`)
     case .package: 
       return .keyword(.package)
     case .open: 

@@ -1665,7 +1665,13 @@ extension Lexer.Cursor {
     self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
 
     let text = tokStart.textUpTo(self)
-    return Lexer.Result(RawTokenKind(keyword: text) ?? .identifier)
+    if let keywordKind = RawTokenKind(keyword: text) {
+      return Lexer.Result(keywordKind)
+    } else if let keyword = Keyword(text), keyword.isLexerClassified {
+      return Lexer.Result(.keyword(keyword))
+    } else {
+      return Lexer.Result(.identifier)
+    }
   }
 
   mutating func lexEscapedIdentifier(_ Quote: Lexer.Cursor) -> Lexer.Result {

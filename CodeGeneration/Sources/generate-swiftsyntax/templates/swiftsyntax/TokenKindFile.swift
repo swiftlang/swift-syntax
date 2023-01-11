@@ -134,10 +134,13 @@ let tokenKindFile = SourceFileSyntax {
           ReturnStmtSyntax("return false")
         }
         
-        for token in SYNTAX_TOKENS {
+        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             ReturnStmtSyntax("return \(raw: token.isKeyword)")
           }
+        }
+        SwitchCaseSyntax("case .keyword(let keyword):") {
+          ReturnStmtSyntax("return keyword.isLexerClassified")
         }
       }
     }
@@ -283,10 +286,13 @@ let tokenKindFile = SourceFileSyntax {
           ReturnStmtSyntax("return false")
         }
         
-        for token in SYNTAX_TOKENS {
+        for token in SYNTAX_TOKENS where token.swiftKind != "keyword" {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             ReturnStmtSyntax("return \(raw: token.isKeyword)")
           }
+        }
+        SwitchCaseSyntax("case .keyword(let keyword):") {
+          ReturnStmtSyntax("return keyword.isLexerClassified")
         }
       }
     }

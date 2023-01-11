@@ -257,7 +257,7 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.structKeyword, text: "struct", trailing: " "),
         LexemeSpec(.identifier, text: "TestApp", trailing: " "),
         LexemeSpec(.leftBrace, text: "{"),
-        LexemeSpec(.staticKeyword, leading: "\n  ", text: "static", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.keyword(.static), leading: "\n  ", text: "static", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.funcKeyword, text: "func", trailing: " "),
         LexemeSpec(.identifier, text: "main"),
         LexemeSpec(.leftParen, text: "("),
@@ -368,7 +368,7 @@ public class LexerTests: XCTestCase {
     AssertLexemes(
       "static func �() {}",
       lexemes: [
-        LexemeSpec(.staticKeyword, text: "static", trailing: " "),
+        LexemeSpec(.keyword(.static), text: "static", trailing: " "),
         LexemeSpec(.funcKeyword, text: "func", trailing: " �"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),

@@ -8650,51 +8650,6 @@ public enum SyntaxFactory {
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  @available(*, deprecated, message: "Use TokenSyntax.fileprivateKeywordKeyword instead")
-  public static func makeFileprivateKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.fileprivateKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.internalKeywordKeyword instead")
-  public static func makeInternalKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.internalKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.privateKeywordKeyword instead")
-  public static func makePrivateKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.privateKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.publicKeywordKeyword instead")
-  public static func makePublicKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.publicKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  @available(*, deprecated, message: "Use TokenSyntax.staticKeywordKeyword instead")
-  public static func makeStaticKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
-  ) -> TokenSyntax {
-    return makeToken(.staticKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
   @available(*, deprecated, message: "Use TokenSyntax.deferKeywordKeyword instead")
   public static func makeDeferKeyword(
     leadingTrivia: Trivia = [],

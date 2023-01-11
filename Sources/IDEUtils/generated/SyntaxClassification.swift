@@ -174,16 +174,6 @@ extension RawTokenKind {
       return .keyword
     case .varKeyword: 
       return .keyword
-    case .fileprivateKeyword: 
-      return .keyword
-    case .internalKeyword: 
-      return .keyword
-    case .privateKeyword: 
-      return .keyword
-    case .publicKeyword: 
-      return .keyword
-    case .staticKeyword: 
-      return .keyword
     case .deferKeyword: 
       return .keyword
     case .ifKeyword: 

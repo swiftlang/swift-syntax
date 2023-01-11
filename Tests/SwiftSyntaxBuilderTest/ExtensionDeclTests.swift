@@ -23,7 +23,7 @@ final class ExtensionDeclTests: XCTestCase {
       }
 
       return VariableDecl(
-        modifiers: [DeclModifier(name: .public)],
+        modifiers: [DeclModifier(name: .keyword(.public))],
         letOrVarKeyword: .var
       ) {
         PatternBinding(

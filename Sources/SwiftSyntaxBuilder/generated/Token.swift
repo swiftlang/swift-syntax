@@ -101,31 +101,6 @@ public extension TokenSyntax {
     return .varKeyword()
   }
   
-  /// The `fileprivate` keyword
-  static var `fileprivate`: Token {
-    return .fileprivateKeyword()
-  }
-  
-  /// The `internal` keyword
-  static var `internal`: Token {
-    return .internalKeyword()
-  }
-  
-  /// The `private` keyword
-  static var `private`: Token {
-    return .privateKeyword()
-  }
-  
-  /// The `public` keyword
-  static var `public`: Token {
-    return .publicKeyword()
-  }
-  
-  /// The `static` keyword
-  static var `static`: Token {
-    return .staticKeyword()
-  }
-  
   /// The `defer` keyword
   static var `defer`: Token {
     return .deferKeyword()

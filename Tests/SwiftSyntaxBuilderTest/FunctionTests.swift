@@ -153,7 +153,7 @@ final class FunctionTests: XCTestCase {
       ),
       #line: (
         FunctionDeclSyntax(
-          modifiers: [DeclModifier(name: .public), DeclModifier(name: .static)],
+          modifiers: [DeclModifier(name: .keyword(.public)), DeclModifier(name: .keyword(.static))],
           identifier: Token.identifier("=="),
           signature: FunctionSignatureSyntax(
             input: ParameterClauseSyntax(
@@ -186,7 +186,7 @@ final class FunctionTests: XCTestCase {
       ),
       #line: (
         FunctionDeclSyntax(
-          modifiers: [DeclModifierSyntax(name: .public), DeclModifierSyntax(name: .static)],
+          modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
           identifier: Token.identifier("=="),
           signature: FunctionSignatureSyntax(
             input: ParameterClauseSyntax(

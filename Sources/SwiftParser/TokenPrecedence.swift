@@ -121,7 +121,6 @@ public enum TokenPrecedence: Comparable {
     case  // Keywords
     .asKeyword, .isKeyword, .tryKeyword,
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
-      .keyword,
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
       .rethrowsKeyword, .throwsKeyword,
       // Operators can occur inside expressions
@@ -192,7 +191,7 @@ public enum TokenPrecedence: Comparable {
     case  // Types
     .associatedtypeKeyword, .classKeyword, .enumKeyword, .extensionKeyword, .protocolKeyword, .structKeyword, .typealiasKeyword,
       // Access modifiers
-      .fileprivateKeyword, .internalKeyword, .privateKeyword, .publicKeyword, .staticKeyword,
+      .keyword(.fileprivate), .keyword(.internal), .keyword(.private), .keyword(.public), .keyword(.static),
       // Functions
       .deinitKeyword, .funcKeyword, .initKeyword, .subscriptKeyword,
       // Variables
@@ -202,6 +201,10 @@ public enum TokenPrecedence: Comparable {
       // Misc
       .importKeyword:
       self = .declKeyword
+    case .keyword:
+      // Treat all keywords that weren't handled above as expression keywords as a fallback option.
+      // FIXME: We should assign a token precedence to all keywords
+      self = .exprKeyword
     }
   }
 }

@@ -203,12 +203,6 @@ SYNTAX_TOKENS = [
     DeclKeyword('Typealias', 'typealias'),
     DeclKeyword('Var', 'var'),
 
-    DeclKeyword('Fileprivate', 'fileprivate'),
-    DeclKeyword('Internal', 'internal'),
-    DeclKeyword('Private', 'private'),
-    DeclKeyword('Public', 'public'),
-    DeclKeyword('Static', 'static'),
-
     # Statement keywords
     StmtKeyword('Defer', 'defer'),
     StmtKeyword('If', 'if'),

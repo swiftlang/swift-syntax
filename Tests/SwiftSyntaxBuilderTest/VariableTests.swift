@@ -231,7 +231,7 @@ final class VariableTests: XCTestCase {
               TupleExprElement(expression: Expr("value"))
             }
           },
-          modifiers: [DeclModifier(name: .public)],
+          modifiers: [DeclModifier(name: .keyword(.public))],
           .let,
           name: "z",
           type: TypeAnnotation(type: Type("Float"))

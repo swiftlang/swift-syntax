@@ -39,16 +39,6 @@ public enum TokenKind: Hashable {
   
   case varKeyword
   
-  case fileprivateKeyword
-  
-  case internalKeyword
-  
-  case privateKeyword
-  
-  case publicKeyword
-  
-  case staticKeyword
-  
   case deferKeyword
   
   case ifKeyword
@@ -277,16 +267,6 @@ public enum TokenKind: Hashable {
       self = .typealiasKeyword
     case "var": 
       self = .varKeyword
-    case "fileprivate": 
-      self = .fileprivateKeyword
-    case "internal": 
-      self = .internalKeyword
-    case "private": 
-      self = .privateKeyword
-    case "public": 
-      self = .publicKeyword
-    case "static": 
-      self = .staticKeyword
     case "defer": 
       self = .deferKeyword
     case "if": 
@@ -440,16 +420,6 @@ public enum TokenKind: Hashable {
       return #"typealias"#
     case .varKeyword: 
       return #"var"#
-    case .fileprivateKeyword: 
-      return #"fileprivate"#
-    case .internalKeyword: 
-      return #"internal"#
-    case .privateKeyword: 
-      return #"private"#
-    case .publicKeyword: 
-      return #"public"#
-    case .staticKeyword: 
-      return #"static"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -683,16 +653,6 @@ public enum TokenKind: Hashable {
       return #"typealias"#
     case .varKeyword: 
       return #"var"#
-    case .fileprivateKeyword: 
-      return #"fileprivate"#
-    case .internalKeyword: 
-      return #"internal"#
-    case .privateKeyword: 
-      return #"private"#
-    case .publicKeyword: 
-      return #"public"#
-    case .staticKeyword: 
-      return #"static"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -909,16 +869,6 @@ public enum TokenKind: Hashable {
       return true
     case .varKeyword: 
       return true
-    case .fileprivateKeyword: 
-      return true
-    case .internalKeyword: 
-      return true
-    case .privateKeyword: 
-      return true
-    case .publicKeyword: 
-      return true
-    case .staticKeyword: 
-      return true
     case .deferKeyword: 
       return true
     case .ifKeyword: 
@@ -1101,14 +1051,14 @@ public enum TokenKind: Hashable {
       return false
     case .dollarIdentifier: 
       return false
-    case .keyword: 
-      return false
     case .rawStringDelimiter: 
       return false
     case .stringSegment: 
       return false
     case .yield: 
       return false
+    case .keyword(let keyword): 
+      return keyword.isLexerClassified
     }
   }
   
@@ -1154,16 +1104,6 @@ public enum TokenKind: Hashable {
     case .typealiasKeyword: 
       return false
     case .varKeyword: 
-      return false
-    case .fileprivateKeyword: 
-      return false
-    case .internalKeyword: 
-      return false
-    case .privateKeyword: 
-      return false
-    case .publicKeyword: 
-      return false
-    case .staticKeyword: 
       return false
     case .deferKeyword: 
       return false
@@ -1397,16 +1337,6 @@ extension TokenKind: Equatable {
     case (.typealiasKeyword, .typealiasKeyword): 
       return true
     case (.varKeyword, .varKeyword): 
-      return true
-    case (.fileprivateKeyword, .fileprivateKeyword): 
-      return true
-    case (.internalKeyword, .internalKeyword): 
-      return true
-    case (.privateKeyword, .privateKeyword): 
-      return true
-    case (.publicKeyword, .publicKeyword): 
-      return true
-    case (.staticKeyword, .staticKeyword): 
       return true
     case (.deferKeyword, .deferKeyword): 
       return true
@@ -1643,16 +1573,6 @@ public enum RawTokenKind: Equatable, Hashable {
   
   case varKeyword
   
-  case fileprivateKeyword
-  
-  case internalKeyword
-  
-  case privateKeyword
-  
-  case publicKeyword
-  
-  case staticKeyword
-  
   case deferKeyword
   
   case ifKeyword
@@ -1882,16 +1802,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"typealias"#
     case .varKeyword: 
       return #"var"#
-    case .fileprivateKeyword: 
-      return #"fileprivate"#
-    case .internalKeyword: 
-      return #"internal"#
-    case .privateKeyword: 
-      return #"private"#
-    case .publicKeyword: 
-      return #"public"#
-    case .staticKeyword: 
-      return #"static"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -2101,16 +2011,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return #"typealias"#
     case .varKeyword: 
       return #"var"#
-    case .fileprivateKeyword: 
-      return #"fileprivate"#
-    case .internalKeyword: 
-      return #"internal"#
-    case .privateKeyword: 
-      return #"private"#
-    case .publicKeyword: 
-      return #"public"#
-    case .staticKeyword: 
-      return #"static"#
     case .deferKeyword: 
       return #"defer"#
     case .ifKeyword: 
@@ -2347,16 +2247,6 @@ public enum RawTokenKind: Equatable, Hashable {
       return true
     case .varKeyword: 
       return true
-    case .fileprivateKeyword: 
-      return true
-    case .internalKeyword: 
-      return true
-    case .privateKeyword: 
-      return true
-    case .publicKeyword: 
-      return true
-    case .staticKeyword: 
-      return true
     case .deferKeyword: 
       return true
     case .ifKeyword: 
@@ -2539,14 +2429,14 @@ public enum RawTokenKind: Equatable, Hashable {
       return false
     case .dollarIdentifier: 
       return false
-    case .keyword: 
-      return false
     case .rawStringDelimiter: 
       return false
     case .stringSegment: 
       return false
     case .yield: 
       return false
+    case .keyword(let keyword): 
+      return keyword.isLexerClassified
     }
   }
   
@@ -2592,16 +2482,6 @@ public enum RawTokenKind: Equatable, Hashable {
     case .typealiasKeyword: 
       return false
     case .varKeyword: 
-      return false
-    case .fileprivateKeyword: 
-      return false
-    case .internalKeyword: 
-      return false
-    case .privateKeyword: 
-      return false
-    case .publicKeyword: 
-      return false
-    case .staticKeyword: 
       return false
     case .deferKeyword: 
       return false
@@ -2902,10 +2782,6 @@ public enum RawTokenKind: Equatable, Hashable {
         self = .importKeyword
       case "struct": 
         self = .structKeyword
-      case "public": 
-        self = .publicKeyword
-      case "static": 
-        self = .staticKeyword
       case "repeat": 
         self = .repeatKeyword
       case "return": 
@@ -2923,8 +2799,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 7: 
       switch text {
-      case "private": 
-        self = .privateKeyword
       case "default": 
         self = .defaultKeyword
       case "#fileID": 
@@ -2944,8 +2818,6 @@ public enum RawTokenKind: Equatable, Hashable {
         self = .operatorKeyword
       case "protocol": 
         self = .protocolKeyword
-      case "internal": 
-        self = .internalKeyword
       case "continue": 
         self = .continueKeyword
       case "rethrows": 
@@ -2985,8 +2857,6 @@ public enum RawTokenKind: Equatable, Hashable {
       }
     case 11: 
       switch text {
-      case "fileprivate": 
-        self = .fileprivateKeyword
       case "fallthrough": 
         self = .fallthroughKeyword
       case "#_hasSymbol": 
@@ -3092,21 +2962,6 @@ extension TokenKind {
     case .varKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .varKeyword
-    case .fileprivateKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .fileprivateKeyword
-    case .internalKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .internalKeyword
-    case .privateKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .privateKeyword
-    case .publicKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .publicKeyword
-    case .staticKeyword: 
-      assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
-      return .staticKeyword
     case .deferKeyword: 
       assert(text.isEmpty || rawKind.defaultText.map(String.init ) == text)
       return .deferKeyword
@@ -3424,16 +3279,6 @@ extension TokenKind {
       return (.typealiasKeyword, nil)
     case .varKeyword: 
       return (.varKeyword, nil)
-    case .fileprivateKeyword: 
-      return (.fileprivateKeyword, nil)
-    case .internalKeyword: 
-      return (.internalKeyword, nil)
-    case .privateKeyword: 
-      return (.privateKeyword, nil)
-    case .publicKeyword: 
-      return (.publicKeyword, nil)
-    case .staticKeyword: 
-      return (.staticKeyword, nil)
     case .deferKeyword: 
       return (.deferKeyword, nil)
     case .ifKeyword: 

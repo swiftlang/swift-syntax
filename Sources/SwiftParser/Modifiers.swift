@@ -19,16 +19,16 @@ extension Parser {
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
       switch self.at(anyIn: DeclarationModifier.self) {
-      case (.privateKeyword, _)?,
-        (.fileprivateKeyword, _)?,
-        (.internalKeyword, _)?,
-        (.publicKeyword, _)?:
+      case (.private, _)?,
+        (.fileprivate, _)?,
+        (.internal, _)?,
+        (.public, _)?:
         elements.append(parseAccessLevelModifier())
       case (.package, _)?:
         elements.append(parsePackageAccessLevelModifier())
       case (.open, _)?:
         elements.append(parseOpenAccessLevelModifier())
-      case (.staticKeyword, let handle)?:
+      case (.static, let handle)?:
         let staticKeyword = self.eat(handle)
         elements.append(
           RawDeclModifierSyntax(
@@ -151,8 +151,8 @@ extension Parser {
 
   mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
     let (unexpectedBeforeName, name) = expectAny(
-      [.privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword],
-      default: .internalKeyword
+      [.keyword(.private), .keyword(.fileprivate), .keyword(.internal), .keyword(.public)],
+      default: .keyword(.internal)
     )
     let details = self.parseAccessModifierDetails()
     return RawDeclModifierSyntax(

@@ -19,10 +19,10 @@ extension DeclarationModifier {
       .classKeyword, .convenience, .distributed, .dynamic, .final,
       .indirect, .infix, .isolated, .lazy, .mutating, .nonisolated,
       .nonmutating, .optional, .override, .postfix, .prefix, .reasync,
-      .required, .rethrows, .staticKeyword, .weak:
+      .required, .rethrows, .static, .weak:
       return false
-    case .fileprivateKeyword, .internalKeyword, .package, .open, .privateKeyword,
-      .publicKeyword, .unowned:
+    case .fileprivate, .internal, .package, .open, .private,
+      .public, .unowned:
       return true
     }
   }

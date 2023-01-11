@@ -219,16 +219,6 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .varKeyword: 
       return true
-    case .fileprivateKeyword: 
-      return true
-    case .internalKeyword: 
-      return true
-    case .privateKeyword: 
-      return true
-    case .publicKeyword: 
-      return true
-    case .staticKeyword: 
-      return true
     case .deferKeyword: 
       return true
     case .ifKeyword: 
